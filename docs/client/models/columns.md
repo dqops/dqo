@@ -113,40 +113,6 @@ Container of data quality partitioned checks on a column level that are checking
 
 ___
 
-## ColumnListModel
-Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
-|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](./common.md#physicaltablename)*|
-|<span class="no-wrap-code">`column_name`</span>|Column names.|*string*|
-|<span class="no-wrap-code">`sql_expression`</span>|SQL expression.|*string*|
-|<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
-|<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the column. Data quality checks will not be executed.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the column has any checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the column has any profiling checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the column has any monitoring checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the column has any partition checks configured.|*boolean*|
-|<span class="no-wrap-code">[`type_snapshot`](../../reference/yaml/TableYaml.md#columntypesnapshotspec)</span>|Column data type that was retrieved when the table metadata was imported.|*[ColumnTypeSnapshotSpec](../../reference/yaml/TableYaml.md#columntypesnapshotspec)*|
-|<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`run_partition_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`collect_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collector within this column.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
-|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete the column.|*boolean*|
-|<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
-|<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
-|<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
-
-
-___
-
 ## ColumnModel
 Table model that returns the specification of a single column in the REST Api.
 

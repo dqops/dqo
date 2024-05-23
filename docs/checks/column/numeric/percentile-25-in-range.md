@@ -136,15 +136,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -153,17 +154,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -171,13 +173,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -188,7 +190,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -196,9 +197,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -209,15 +207,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -226,17 +225,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -244,13 +244,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -261,7 +261,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -269,9 +268,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -367,15 +363,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -384,32 +381,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -420,18 +417,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -492,15 +484,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -509,17 +502,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -527,13 +521,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -544,7 +538,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -552,9 +545,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -565,24 +555,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -594,8 +586,8 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -606,13 +598,12 @@ spec:
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -625,13 +616,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                            NULL) AS actual_value
+                        NULL
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -641,15 +632,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -658,32 +650,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -694,18 +686,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -762,15 +749,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -779,17 +767,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -797,13 +786,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -812,8 +801,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -822,11 +810,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -838,15 +823,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -855,17 +841,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -873,13 +860,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -888,8 +875,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -898,11 +884,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -1010,15 +993,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1027,32 +1011,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1061,22 +1045,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -1142,15 +1121,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1159,17 +1139,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1177,13 +1158,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1192,8 +1173,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -1202,11 +1182,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -1218,24 +1195,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -1247,8 +1226,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -1259,13 +1238,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -1276,8 +1254,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM(
@@ -1285,9 +1262,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                ,
-                CAST(() AS DATETIME)
-                            ) AS actual_value
+                        analyzed_table.[country],
+                        analyzed_table.[state]
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -1296,15 +1273,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1313,32 +1291,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1347,22 +1325,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -1497,15 +1470,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1514,17 +1488,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1532,13 +1507,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1549,7 +1524,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -1557,9 +1531,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -1570,15 +1541,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1587,17 +1559,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1605,13 +1578,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1622,7 +1595,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -1630,9 +1602,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -1728,15 +1697,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1745,32 +1715,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1781,18 +1751,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -1853,15 +1818,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -1870,17 +1836,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -1888,13 +1855,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -1905,7 +1872,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -1913,9 +1879,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -1926,24 +1889,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -1955,8 +1920,8 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -1967,13 +1932,12 @@ spec:
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -1986,13 +1950,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                            NULL) AS actual_value
+                        NULL
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -2002,15 +1966,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2019,32 +1984,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2055,18 +2020,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -2124,15 +2084,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2141,17 +2102,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2159,13 +2121,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2174,8 +2136,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2184,11 +2145,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2200,15 +2158,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2217,17 +2176,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2235,13 +2195,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2250,8 +2210,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2260,11 +2219,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2372,15 +2328,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2389,32 +2346,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2423,22 +2380,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2504,15 +2456,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2521,17 +2474,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2539,13 +2493,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2554,8 +2508,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -2564,11 +2517,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2580,24 +2530,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -2609,8 +2561,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -2621,13 +2573,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -2638,8 +2589,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM(
@@ -2647,9 +2597,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                ,
-                CAST(() AS DATETIME)
-                            ) AS actual_value
+                        analyzed_table.[country],
+                        analyzed_table.[state]
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -2658,15 +2608,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2675,32 +2626,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2709,22 +2660,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -2859,15 +2805,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2876,17 +2823,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2894,13 +2842,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2911,7 +2859,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -2919,9 +2866,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -2932,15 +2876,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -2949,17 +2894,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -2967,13 +2913,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -2984,7 +2930,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -2992,9 +2937,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -3090,15 +3032,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3107,32 +3050,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3143,18 +3086,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -3215,15 +3153,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3232,17 +3171,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3250,13 +3190,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3267,7 +3207,6 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE(
@@ -3275,9 +3214,6 @@ spec:
                     0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             ```
@@ -3288,24 +3224,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -3317,8 +3255,8 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -3329,13 +3267,12 @@ spec:
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -3348,13 +3285,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                            NULL) AS actual_value
+                        NULL
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -3364,15 +3301,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3381,32 +3319,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3417,18 +3355,13 @@ spec:
             ```sql
             SELECT
                 MAX(nested_table.actual_value) AS actual_value
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
                         NULL
-                        
-                        
-                        
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             ```
@@ -3486,15 +3419,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3503,17 +3437,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3521,13 +3456,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3536,8 +3471,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -3546,11 +3480,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -3562,15 +3493,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3579,17 +3511,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3597,13 +3530,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3612,8 +3545,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -3622,11 +3554,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -3734,15 +3663,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3751,32 +3681,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3785,22 +3715,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -3866,15 +3791,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -3883,17 +3809,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -3901,13 +3828,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -3916,8 +3843,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -3926,11 +3852,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -3942,24 +3865,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -3971,8 +3896,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -3983,13 +3908,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -4000,8 +3924,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2
             FROM(
@@ -4009,9 +3932,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                ,
-                CAST(() AS DATETIME)
-                            ) AS actual_value
+                        analyzed_table.[country],
+                        analyzed_table.[state]
+                    ) AS actual_value
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             ```
     ??? example "Trino"
@@ -4020,15 +3943,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4037,32 +3961,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4071,22 +3995,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                MAX(nested_table.actual_value) AS actual_value
-                ,
+                MAX(nested_table.actual_value) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2
@@ -4231,15 +4150,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4248,17 +4168,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4266,13 +4187,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4285,21 +4206,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4311,15 +4228,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4328,17 +4246,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4346,13 +4265,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4365,21 +4284,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4490,15 +4405,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4507,32 +4423,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4545,22 +4461,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table."date_column" AS date),
-                 CAST(analyzed_table."date_column" AS date)
-                        
+                        CAST(analyzed_table."date_column" AS date),
+                         CAST(analyzed_table."date_column" AS date)
                     ) AS actual_value,
-                CAST(analyzed_table."date_column" AS date) AS time_period,
-                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                    CAST(analyzed_table."date_column" AS date) AS time_period,
+                    CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4630,15 +4541,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4647,17 +4559,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4665,13 +4578,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4684,21 +4597,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4710,24 +4619,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -4739,8 +4650,8 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -4751,13 +4662,12 @@ spec:
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -4777,11 +4687,11 @@ spec:
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                CAST(analyzed_table.[date_column] AS date),
-                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
-                            ) AS actual_value,
-                CAST(analyzed_table.[date_column] AS date) AS time_period,
-                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
+                        CAST(analyzed_table.[date_column] AS date),
+                        CAST(CAST(analyzed_table.[date_column] AS date) AS DATETIME)
+                    ) AS actual_value,
+                    CAST(analyzed_table.[date_column] AS date) AS time_period,
+                    CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
             ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
@@ -4793,15 +4703,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4810,32 +4721,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4848,22 +4759,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table."date_column" AS date),
-                 CAST(analyzed_table."date_column" AS date)
-                        
+                        CAST(analyzed_table."date_column" AS date),
+                         CAST(analyzed_table."date_column" AS date)
                     ) AS actual_value,
-                CAST(analyzed_table."date_column" AS date) AS time_period,
-                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                    CAST(analyzed_table."date_column" AS date) AS time_period,
+                    CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4932,15 +4838,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -4949,17 +4856,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -4967,13 +4875,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -4984,8 +4892,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -4994,16 +4901,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5014,15 +4918,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5031,17 +4936,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -5049,13 +4955,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5066,8 +4972,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -5076,16 +4981,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5200,15 +5102,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5217,32 +5120,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5253,27 +5156,22 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
-                ,
+                nested_table."time_period_utc" AS time_period_utc,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table."date_column" AS date),
-                 CAST(analyzed_table."date_column" AS date)
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        CAST(analyzed_table."date_column" AS date),
+                         CAST(analyzed_table."date_column" AS date),
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value,
-                CAST(analyzed_table."date_column" AS date) AS time_period,
-                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                    CAST(analyzed_table."date_column" AS date) AS time_period,
+                    CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5342,15 +5240,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5359,17 +5258,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -5377,13 +5277,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5394,8 +5294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -5404,16 +5303,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table.`date_column` AS DATE),
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        CAST(analyzed_table.`date_column` AS DATE),
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5424,24 +5320,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -5453,8 +5351,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -5465,13 +5363,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -5492,11 +5389,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                CAST(analyzed_table.[date_column] AS date),
-                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME)
-                            ) AS actual_value,
-                CAST(analyzed_table.[date_column] AS date) AS time_period,
-                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
+                        CAST(analyzed_table.[date_column] AS date),
+                        CAST(CAST(analyzed_table.[date_column] AS date) AS DATETIME),
+                        analyzed_table.[country],
+                        analyzed_table.[state]
+                    ) AS actual_value,
+                    CAST(analyzed_table.[date_column] AS date) AS time_period,
+                    CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
                 analyzed_table.[country] AS grouping_level_1,
@@ -5511,15 +5410,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5528,32 +5428,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5564,27 +5464,22 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
-                ,
+                nested_table."time_period_utc" AS time_period_utc,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                CAST(analyzed_table."date_column" AS date),
-                 CAST(analyzed_table."date_column" AS date)
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        CAST(analyzed_table."date_column" AS date),
+                         CAST(analyzed_table."date_column" AS date),
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value,
-                CAST(analyzed_table."date_column" AS date) AS time_period,
-                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                    CAST(analyzed_table."date_column" AS date) AS time_period,
+                    CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5728,15 +5623,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5745,17 +5641,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -5763,13 +5660,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5782,21 +5679,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH),
-                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH))
-                        
+                        DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH),
+                        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH))
                     ) AS actual_value,
-                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
+                    DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5808,15 +5701,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -5825,17 +5719,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -5843,13 +5738,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -5862,21 +5757,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
-                        
+                        DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5987,15 +5878,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6004,32 +5896,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6042,22 +5934,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
-                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
-                        
+                        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                         DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                    CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6127,15 +6014,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6144,17 +6032,18 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -6162,13 +6051,13 @@ spec:
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6181,21 +6070,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                
             FROM(
                 SELECT
                     PERCENTILE(
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
-                        
+                        DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6207,24 +6092,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -6236,8 +6123,8 @@ spec:
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -6248,13 +6135,12 @@ spec:
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -6274,11 +6160,11 @@ spec:
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1),
-                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME)
-                            ) AS actual_value,
-                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
-                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
+                        DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1),
+                        CAST(DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS DATETIME)
+                    ) AS actual_value,
+                    DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+                    CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
             ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
@@ -6290,15 +6176,16 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6307,32 +6194,32 @@ spec:
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6345,22 +6232,17 @@ spec:
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
-                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
-                        
+                        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                         DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                    CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6429,15 +6311,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6446,17 +6329,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -6464,13 +6348,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6481,8 +6365,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -6491,16 +6374,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH),
-                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH),
+                        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
+                    DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6511,15 +6391,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6528,17 +6409,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -6546,13 +6428,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6563,8 +6445,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -6573,16 +6454,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6697,15 +6575,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6714,32 +6593,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6750,27 +6629,22 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
-                ,
+                nested_table."time_period_utc" AS time_period_utc,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
-                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                         DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                    CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6839,15 +6713,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -6856,17 +6731,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.`time_period` AS time_period,
                 nested_table.`time_period_utc` AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
@@ -6874,13 +6750,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ({{ lib.render_target_column('analyzed_table')}}),
                     {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -6891,8 +6767,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
-                ,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2
             FROM(
@@ -6901,16 +6776,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     (analyzed_table.`target_column`),
                     0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
-                        
-                analyzed_table.`country` AS grouping_level_1
-                analyzed_table.`state` AS grouping_level_2
+                        DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))),
+                        analyzed_table.`country`,
+                        analyzed_table.`state`
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                 FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6921,24 +6793,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if time_series is not none -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
-                    {{- indentation -}}{{- lib.render_time_dimension_expression(table_alias_prefix) -}},{{ lib.eol() -}}
-                    {{- indentation -}}CAST(({{- lib.render_time_dimension_expression(table_alias_prefix) -}}) AS DATETIME)
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}CAST({{ lib.render_time_dimension_expression(table_alias_prefix) }} AS DATETIME)
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-                {%- if data_groupings is not none and (data_groupings | length()) > 0 -%}
-                    {%- for attribute in data_groupings -%}
-                        {%- with data_grouping_level = data_groupings[attribute] -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                             {%- if data_grouping_level.source == 'tag' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
                             {%- elif data_grouping_level.source == 'column_value' -%}
-                                {{- lib.eol() -}}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_grouping_level.column) }}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
@@ -6950,8 +6824,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{- "," if lib.time_series is not none else "" }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table.[time_period] AS time_period,
                 nested_table.[time_period_utc] AS time_period_utc
                 {%- endif -%}
@@ -6962,13 +6836,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}})
                     OVER (PARTITION BY
                         {%- if lib.data_groupings is none and lib.time_series is none %}
-                            NULL
-                        {%- else -%}
-                            {{render_local_time_dimension_projection('analyzed_table')}}
-                            {{render_local_data_grouping_projections('analyzed_table') }}
+                        NULL
                         {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {% if lib.time_series is not none or (data_groupings is not none and (data_groupings | length()) > 0) -%}
@@ -6989,11 +6862,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     PERCENTILE_CONT(0.25)
                     WITHIN GROUP (ORDER BY analyzed_table.[target_column])
                     OVER (PARTITION BY
-                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1),
-                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME)
-                            ) AS actual_value,
-                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
-                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
+                        DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1),
+                        CAST(DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS DATETIME),
+                        analyzed_table.[country],
+                        analyzed_table.[state]
+                    ) AS actual_value,
+                    DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+                    CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
             GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
                 analyzed_table.[country] AS grouping_level_1,
@@ -7008,15 +6883,16 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.time_series is not none -%}
                     {{- lib.eol() -}}
                     {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
                     {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                    {{- "," if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -}}
                 {%- endif -%}
             {%- endmacro -%}
             
-            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '            ') -%}
                 {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
                     {%- for attribute in lib.data_groupings -%}
                         {%- with data_grouping_level = lib.data_groupings[attribute] -%}
@@ -7025,32 +6901,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                             {%- elif data_grouping_level.source == 'column_value' -%}
                                 {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
                             {%- endif -%}
-                        {%- endwith %} AS grouping_{{ attribute }}
+                            {{ "," if not loop.last }}
+                        {%- endwith %}
                     {%- endfor -%}
                 {%- endif -%}
             {%- endmacro -%}
             
             SELECT
-                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none }}
-                {% if lib.time_series is not none -%}
+                MAX(nested_table.actual_value) AS actual_value {{-"," if lib.time_series is not none -}}
+                {% if lib.time_series is not none %}
                 nested_table."time_period" AS time_period,
                 nested_table."time_period_utc" AS time_period_utc
-                {% endif %}
+                {%- endif -%}
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }}
-                    )
+                        {{ parameters.percentile_value }})
                     OVER (PARTITION BY
-                        {% if lib.data_groupings is none and lib.time_series is none -%}
-                            NULL
-                        {% endif %}
-                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {%- if lib.data_groupings is none and lib.time_series is none %}
+                        NULL
+                        {%- endif -%}
+                        {{render_local_time_dimension_projection('analyzed_table') -}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
                     ) AS actual_value
-                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation='        ') }}
                 FROM {{ lib.render_target_table() }} AS analyzed_table
                 {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
             {{- lib.render_group_by() -}}
@@ -7061,27 +6937,22 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table."time_period" AS time_period,
-                nested_table."time_period_utc" AS time_period_utc
-                ,
+                nested_table."time_period_utc" AS time_period_utc,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2
             FROM(
                 SELECT
-                   APPROX_PERCENTILE(
+                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.25
-                    )
+                        0.25)
                     OVER (PARTITION BY
-                        
-                        
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
-                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
-                        
-                analyzed_table."country" AS grouping_level_1
-                analyzed_table."state" AS grouping_level_2
+                        DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                         DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                        analyzed_table."country",
+                        analyzed_table."state"
                     ) AS actual_value,
-                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                    DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                    CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

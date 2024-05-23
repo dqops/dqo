@@ -81,7 +81,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                    WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                         THEN 1
                     ELSE 0
                 END

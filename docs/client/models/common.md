@@ -436,6 +436,157 @@ Model depicting a named data quality check that can potentially be enabled, rega
 
 ___
 
+## PhysicalTableName
+Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|
+
+
+___
+
+## RuleSeverityLevel
+Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>error<br/>fatal<br/>|
+
+___
+
+## CheckResultStatus
+Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>error<br/>fatal<br/>execution_error<br/>|
+
+___
+
+## CheckCurrentDataQualityStatusModel
+The most recent data quality status for a single data quality check.
+ If data grouping is enabled, this model will return the highest data quality issue status from all
+ data quality results for all data groups.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`current_severity`](#checkresultstatus)</span>|The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[CheckResultStatus](#checkresultstatus)*|
+|<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">`column_name`</span>|Optional column name for column-level data quality checks.|*string*|
+|<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|The check type: profiling, monitoring, partitioned.|*[CheckType](./common.md#checktype)*|
+|<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The check time scale for *monitoring* and *partitioned* check types. The time scales are *daily* and *monthly*. The profiling checks do not have a time scale.|*[CheckTimeScale](./common.md#checktimescale)*|
+|<span class="no-wrap-code">`category`</span>|Check category name, such as nulls, schema, strings, volume.|*string*|
+|<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension, such as Completeness, Uniqueness, Validity.|*string*|
+|<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|
+|<span class="no-wrap-code">`valid_results`</span>|The number of most recent valid data quality checks that passed without raising any issues.|*integer*|
+|<span class="no-wrap-code">`warnings`</span>|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`errors`</span>|The number of most recent data quality checks that failed by raising an error severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`fatals`</span>|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`execution_errors`</span>|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated.|*integer*|
+
+
+___
+
+## DimensionCurrentDataQualityStatusModel
+A model that describes the current data quality status for a single data quality dimension.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`dimension`</span>|Data quality dimension name. The most popular dimensions are: Completeness, Uniqueness, Timeliness, Validity, Consistency, Accuracy, Availability.|*string*|
+|<span class="no-wrap-code">[`current_severity`](./common.md#ruleseveritylevel)</span>|The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the table for one data quality dimension. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|
+|<span class="no-wrap-code">`valid_results`</span>|The number of most recent valid data quality checks that passed without raising any issues.|*integer*|
+|<span class="no-wrap-code">`warnings`</span>|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`errors`</span>|The number of most recent data quality checks that failed by raising an error severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`fatals`</span>|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`execution_errors`</span>|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a table must be updated.|*integer*|
+|<span class="no-wrap-code">`data_quality_kpi`</span>|Data quality KPI score for the data quality dimension, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.|*double*|
+
+
+___
+
+## ColumnCurrentDataQualityStatusModel
+The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`current_severity`](#ruleseveritylevel)</span>|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|
+|<span class="no-wrap-code">`valid_results`</span>|The number of most recent valid data quality checks that passed without raising any issues.|*integer*|
+|<span class="no-wrap-code">`warnings`</span>|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`errors`</span>|The number of most recent data quality checks that failed by raising an error severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`fatals`</span>|The number of most recent data quality checks that failed by raising a fatal severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`execution_errors`</span>|The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated.|*integer*|
+|<span class="no-wrap-code">`data_quality_kpi`</span>|Data quality KPI score for the column, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.|*double*|
+|<span class="no-wrap-code">`checks`</span>|The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses that describe the most current status.|*Dict[string, [CheckCurrentDataQualityStatusModel](#checkcurrentdataqualitystatusmodel)]*|
+|<span class="no-wrap-code">`dimensions`</span>|Dictionary of the current data quality statues for each data quality dimension.|*Dict[string, [DimensionCurrentDataQualityStatusModel](#dimensioncurrentdataqualitystatusmodel)]*|
+
+
+___
+
+## ColumnListModel
+Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">[`table`](#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](#physicaltablename)*|
+|<span class="no-wrap-code">`column_name`</span>|Column names.|*string*|
+|<span class="no-wrap-code">`sql_expression`</span>|SQL expression.|*string*|
+|<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
+|<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the column. Data quality checks will not be executed.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the column has any checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the column has any profiling checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the column has any monitoring checks configured.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the column has any partition checks configured.|*boolean*|
+|<span class="no-wrap-code">[`type_snapshot`](../../reference/yaml/TableYaml.md#columntypesnapshotspec)</span>|Column data type that was retrieved when the table metadata was imported.|*[ColumnTypeSnapshotSpec](../../reference/yaml/TableYaml.md#columntypesnapshotspec)*|
+|<span class="no-wrap-code">[`data_quality_status`](#columncurrentdataqualitystatusmodel)</span>|The current data quality status for the column, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the column.|*[ColumnCurrentDataQualityStatusModel](#columncurrentdataqualitystatusmodel)*|
+|<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_partition_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`collect_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collector within this column.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
+|<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete the column.|*boolean*|
+|<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
+|<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
+|<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
+
+
+___
+
 ## ProviderType
 Data source provider type (dialect type).
   We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.
@@ -506,21 +657,6 @@ Identifies a single job.
 
 ___
 
-## PhysicalTableName
-Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
-|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|
-
-
-___
-
 ## ProfilingTimePeriodTruncation
 The time period for profiling checks (millisecond, daily, monthly, weekly, hourly).
  The default profiling check stores one value per month. When profiling checks is re-executed during the month,
@@ -547,7 +683,7 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">`table_hash`</span>|Table hash that identifies the table using a unique hash code.|*long*|
-|<span class="no-wrap-code">[`target`](#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name).|*[PhysicalTableName](#physicaltablename)*|
+|<span class="no-wrap-code">[`target`](./common.md#physicaltablename)</span>|Physical table details (a physical schema name and a physical table name).|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the table. Data quality checks will not be executed.|*boolean*|
 |<span class="no-wrap-code">`stage`</span>|Stage name.|*string*|
 |<span class="no-wrap-code">`filter`</span>|SQL WHERE clause added to the sensor queries.|*string*|
