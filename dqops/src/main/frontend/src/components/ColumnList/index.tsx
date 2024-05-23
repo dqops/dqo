@@ -168,7 +168,12 @@ function ColumnList({
               </tr>
             </thead>
             {loading ? (
-              <Loader isFull={false} className="w-8 h-8 fill-green-700 mt-5" />
+              <div className="ml-5 flex items-start justify-normal">
+                <Loader
+                  isFull={false}
+                  className="w-8 h-8 fill-green-700 mt-5"
+                />
+              </div>
             ) : (
               <tbody>
                 {columns.map((item, index) => (
