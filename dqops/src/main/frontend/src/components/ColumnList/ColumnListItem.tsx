@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-tailwind/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -136,13 +137,13 @@ export default function SchemaTableItem({
   };
 
   return (
-    <tr className="text-sm my-3">
+    <tr className="text-xs my-3">
       {(!checkTypes || !connection || !schema) && (
         <>
           {!connection && (
             <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
               <Button
-                className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start "
+                className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start "
                 label={item.connection_name}
                 onClick={() => goToConnection(item)}
               />
@@ -150,7 +151,7 @@ export default function SchemaTableItem({
           )}
           <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
             <Button
-              className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
+              className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
               label={item.schema}
               onClick={() => goToSchema(item)}
             />
@@ -159,55 +160,80 @@ export default function SchemaTableItem({
       )}
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
           label={item.table?.table_name}
           onClick={() => goToTable(item, checkTypes)}
         />
       </td>
       <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
         <Button
-          className="ml-4 !px-0 underline cursor-pointer text-sm py-0 text-start"
+          className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
           label={item.column_name}
           onClick={() => goToColumn(item, checkTypes)}
         />
       </td>{' '}
-      <td className="px-4 text-sm content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2">
         {prepareString(item.type_snapshot?.column_type, 15)}
       </td>
-      <td className="px-4 text-sm content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (
-        <SchemaTableItemDimensions item={item} dimensionKeys={dimensionKeys} />
+        <>
+          <SchemaTableItemDimensions
+            item={item}
+            dimensionKeys={dimensionKeys}
+          />
+          <td>
+            <div className="flex gap-x-2 items-center justify-center mx-3">
+              <Tooltip
+                content={'Add a new connection and manage its settings'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="data_sources"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.SOURCES)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Profiling'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="profiling"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.PROFILING)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Monitoring Checks'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="monitoring_checks"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.MONITORING)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Partitioned Checks'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <SvgIcon
+                  name="partitioned_checks"
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+                />
+              </Tooltip>
+            </div>
+          </td>
+        </>
       ) : (
         <td className="content-start pt-2">
           <SvgIcon name="hourglass" className="w-4 h-4" />
         </td>
       )}
-      <td>
-        <div className="flex gap-x-2 items-center justify-center mr-3">
-          <SvgIcon
-            name="data_sources"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.SOURCES)}
-          />
-          <SvgIcon
-            name="profiling"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PROFILING)}
-          />
-          <SvgIcon
-            name="monitoring_checks"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.MONITORING)}
-          />
-          <SvgIcon
-            name="partitioned_checks"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
-          />
-        </div>
-      </td>
     </tr>
   );
 }

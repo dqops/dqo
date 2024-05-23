@@ -1,25 +1,14 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { ColumnListModel, LabelModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
-import SvgIcon from '../SvgIcon';
+
+import Loader from '../Loader';
 import ColumnListItem from './ColumnListItem';
-function getValueForKey<T>(obj: T, key: string): string | undefined {
-  const keys = key.split('.');
-  let value: any = obj;
-
-  for (const k of keys) {
-    value = value?.[k];
-    if (value === undefined) {
-      break;
-    }
-  }
-
-  return value?.toString();
-}
+import renderItem from './renderItem';
 
 type TButtonTabs = {
   label: string;
@@ -51,27 +40,27 @@ const headeritems: TButtonTabs[] = [
     label: 'Labels',
     value: 'labels'
   },
-  { label: 'Data Quality KPI', value: 'data-quality-kpi', sortable: false }
+  { label: 'Data Quality KPI', value: 'data-quality-kpi' }
 ];
 
 type TColumnListProps = {
   columns: TColumnWithSchema[];
-  setColumns: any;
   filters: any;
   onChangeFilters: (filters: any) => void;
   labels: TLabel[];
   onChangeLabels: (index: number) => void;
+  loading: boolean;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
 
 function ColumnList({
   columns,
-  setColumns,
   filters,
   onChangeFilters,
   labels,
-  onChangeLabels
+  onChangeLabels,
+  loading
 }: TColumnListProps) {
   const {
     checkTypes,
@@ -82,48 +71,6 @@ function ColumnList({
     connection: string;
     schema: string;
   } = useDecodedParams();
-  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
-
-  const renderItem = (
-    label: string,
-    key: string,
-    sortable?: boolean,
-    toRotate?: boolean
-  ) => {
-    const sortTables = (key: string): void => {
-      setColumns((prev: any) => {
-        const array = [...prev];
-        array.sort((a, b) => {
-          const valueA = getValueForKey(a, key);
-          const valueB = getValueForKey(b, key);
-
-          return sortingDir === 'asc'
-            ? (valueA || '').localeCompare(valueB || '')
-            : (valueB || '').localeCompare(valueA || '');
-        });
-
-        setSortingDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        return array;
-      });
-    };
-    return (
-      <th
-        className="px-4 cursor-pointer"
-        onClick={() => sortable !== false && sortTables(key)}
-        key={key}
-      >
-        <div className="flex text-sm items-center relative">
-          <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
-          {sortable !== false && (
-            <div className="flex flex-col items-center">
-              <SvgIcon name="chevron-up" className="w-3 h-2" />
-              <SvgIcon name="chevron-down" className="w-3 h-2" />
-            </div>
-          )}
-        </div>
-      </th>
-    );
-  };
 
   const getDimensionKey = () => {
     const uniqueDimensions: string[] = [];
@@ -158,20 +105,17 @@ function ColumnList({
     ...basicDimensionTypes.map((x) => ({
       label: x,
       value: x,
-      sortable: false,
       toRotate: true
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
-      sortable: false,
       toRotate: true
     })),
     {
       label: 'Actions',
-      value: 'actions',
-      sortable: false
+      value: 'actions'
     }
   ];
 
@@ -191,7 +135,7 @@ function ColumnList({
         <div className="w-[280px]">
           <SectionWrapper
             title="Filter by labels"
-            className="text-sm w-[250px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[250px] mx-4 mb-4 mt-6 "
           >
             {labels.map((label, index) => (
               <div
@@ -212,47 +156,51 @@ function ColumnList({
         </div>
 
         <div className="overflow-x-auto">
-          <table>
+          <table className="absolute top-25">
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(
-                      item.label,
-                      item.value,
-                      item.sortable,
-                      item.toRotate
-                    )
+                    renderItem(item.label, item.value, item.toRotate)
                 )}
               </tr>
             </thead>
-            <tbody>
-              {columns.map((item, index) => (
-                <ColumnListItem
-                  key={index}
-                  item={item}
-                  dimensionKeys={getDimensionKey()}
+            {loading ? (
+              <div className="ml-5 flex items-start justify-normal">
+                <Loader
+                  isFull={false}
+                  className="w-8 h-8 fill-green-700 mt-5"
                 />
-              ))}
-            </tbody>
+              </div>
+            ) : (
+              <tbody>
+                {columns.map((item, index) => (
+                  <ColumnListItem
+                    key={index}
+                    item={item}
+                    dimensionKeys={getDimensionKey()}
+                  />
+                ))}
+              </tbody>
+            )}
+            <div className="px-4 my-5 pb-6 flex justify-end">
+              <Pagination
+                page={filters.page || 1}
+                pageSize={filters.pageSize || 50}
+                isEnd={isEnd}
+                totalPages={10}
+                onChange={(page, pageSize) =>
+                  onChangeFilters({
+                    page,
+                    pageSize
+                  })
+                }
+              />
+            </div>
           </table>
         </div>
-      </div>
-      <div className="px-4 my-5">
-        <Pagination
-          page={filters.page || 1}
-          pageSize={filters.pageSize || 50}
-          isEnd={isEnd}
-          totalPages={10}
-          onChange={(page, pageSize) =>
-            onChangeFilters({
-              page,
-              pageSize
-            })
-          }
-        />
       </div>
     </div>
   );

@@ -1,28 +1,38 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { LabelModel, TableListModel } from '../../../api';
-import { LabelsApiClient, SearchApiClient } from '../../../services/apiClient';
-import { useDecodedParams } from '../../../utils';
-import Button from '../../Button';
-import ColumnList from '../../ColumnList';
-import Input from '../../Input';
+import { LabelModel, TableListModel } from '../../api';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
+import TableList from '../../components/TableList';
+import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 type TSearchFilters = {
+  connection?: string | undefined;
   schema?: string | undefined;
   table?: string | undefined;
-  column?: string | undefined;
-  columnType?: string | undefined;
 };
 
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
 
-export default function ConnectionColumns() {
-  const { connection }: { connection: string } = useDecodedParams();
-  const [columns, setColumns] = useState<TTableWithSchema[]>([]);
+export default function TableListView() {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+  } = useDecodedParams();
+  const [tables, setTables] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
       ...prev,
@@ -44,44 +54,38 @@ export default function ConnectionColumns() {
       .filter((x) => x.clicked && x.label)
       .map((x) => x.label)
       .filter((x): x is string => typeof x === 'string');
-    getColumns(filteredlabels);
+    getTables(filteredlabels);
     setLabels(arr);
   };
 
-  const getColumns = async (labels: string[] = []) => {
+  const getTables = async (labels: string[] = []) => {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
-    const res = await SearchApiClient.findColumns(
-      connection,
-      addPrefix(searchFilters.schema ?? ''),
+    setLoading(true);
+    const res = await SearchApiClient.findTables(
+      connection ?? addPrefix(searchFilters.connection ?? ''),
+      schema ?? addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
-      addPrefix(searchFilters.column ?? ''),
-      searchFilters.columnType?.length
-        ? addPrefix(searchFilters.columnType ?? '')
-        : undefined,
       labels,
       filters.page,
       filters.pageSize,
-      filters.checkType
-    );
+      (checkTypes === CheckTypes.SOURCES
+        ? CheckTypes.MONITORING
+        : checkTypes) ?? filters.checkType
+    ).finally(() => setLoading(false));
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
-      const jItem = {
-        ...item,
-        schema: item.table?.schema_name,
-        table_name: item.table?.table_name,
-        column_type: item.type_snapshot?.column_type
-      };
+      const jItem = { ...item, schema: item.target?.schema_name };
       arr.push(jItem);
     });
-    setColumns(arr);
+    setTables(arr);
     return arr;
   };
 
   useEffect(() => {
     const getLabels = () => {
-      LabelsApiClient.getAllLabelsForColumns().then((res) => {
+      LabelsApiClient.getAllLabelsForTables().then((res) => {
         const array: TLabel[] = res.data.map((item) => {
           return { ...item, clicked: false };
         });
@@ -90,8 +94,8 @@ export default function ConnectionColumns() {
     };
 
     const fetchData = async () => {
-      const columns = await getColumns();
-      refetchTables(columns);
+      const tables = await getTables();
+      refetchTables(tables);
     };
 
     fetchData();
@@ -101,7 +105,7 @@ export default function ConnectionColumns() {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        getColumns(
+        getTables(
           labels
             .filter((x) => x.clicked && x.label)
             .map((x) => x.label)
@@ -117,46 +121,47 @@ export default function ConnectionColumns() {
     };
   }, [searchFilters]);
 
-  const refetchTables = (columns?: TableListModel[]) => {
-    const shouldRefetch = columns?.some((table) => !table?.data_quality_status);
+  const refetchTables = (tables?: TableListModel[]) => {
+    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
 
     if (shouldRefetch) {
       setTimeout(() => {
-        getColumns();
+        getTables();
       }, 5000);
     }
   };
 
   return (
     <>
-      <div className="flex items-center justify-between bg-white">
+      <div className="flex items-center justify-between bg-white w-full">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
-          <Input
-            label="Schema name"
-            value={searchFilters.schema}
-            onChange={(e) => onChangeSearchFilters({ schema: e.target.value })}
-          />
+          {!connection && (
+            <Input
+              label="Connection name"
+              value={searchFilters.connection}
+              onChange={(e) =>
+                onChangeSearchFilters({ connection: e.target.value })
+              }
+            />
+          )}
+          {!schema && (
+            <Input
+              label="Schema name"
+              value={searchFilters.schema}
+              onChange={(e) =>
+                onChangeSearchFilters({ schema: e.target.value })
+              }
+            />
+          )}
           <Input
             label="Table name"
             value={searchFilters.table}
             onChange={(e) => onChangeSearchFilters({ table: e.target.value })}
           />
-          <Input
-            label="Column name"
-            value={searchFilters.column}
-            onChange={(e) => onChangeSearchFilters({ column: e.target.value })}
-          />
-          <Input
-            label="Column type"
-            value={searchFilters.columnType}
-            onChange={(e) =>
-              onChangeSearchFilters({ columnType: e.target.value })
-            }
-          />
           <Button
             label="Search"
             onClick={() => {
-              getColumns(
+              getTables(
                 labels
                   .filter((x) => x.clicked && x.label)
                   .map((x) => x.label)
@@ -168,11 +173,16 @@ export default function ConnectionColumns() {
           />
         </div>
         <Button
-          label="Refresh"
           color="primary"
-          className="mb-2 mt-5 mr-4"
+          leftIcon={
+            <SvgIcon
+              name="sync"
+              className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
+            />
+          }
+          className="mb-4 mt-7 !mr-8 pr-0 pl-3 z-[1]"
           onClick={() =>
-            getColumns(
+            getTables(
               labels
                 .filter((x) => x.clicked && x.label)
                 .map((x) => x.label)
@@ -181,13 +191,13 @@ export default function ConnectionColumns() {
           }
         />
       </div>
-      <ColumnList
-        columns={columns}
-        setColumns={setColumns}
+      <TableList
+        tables={tables}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );

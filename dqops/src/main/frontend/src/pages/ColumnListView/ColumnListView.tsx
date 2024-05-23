@@ -4,9 +4,12 @@ import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 
 type TSearchFilters = {
+  connection?: string | undefined;
+  schema?: string | undefined;
   table?: string | undefined;
   column?: string | undefined;
   columnType?: string | undefined;
@@ -15,13 +18,18 @@ type TSearchFilters = {
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
 
-export default function SchemaColumns() {
-  const { connection, schema }: { connection: string; schema: string } =
+export default function ColumnListView() {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useDecodedParams();
   const [columns, setColumns] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onChangeFilters = (obj: Partial<any>) => {
     setFilters((prev: any) => ({
@@ -52,9 +60,10 @@ export default function SchemaColumns() {
     const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
+    setLoading(true);
     const res = await SearchApiClient.findColumns(
-      connection,
-      schema,
+      connection ?? addPrefix(searchFilters.connection ?? ''),
+      schema ?? addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
       addPrefix(searchFilters.column ?? ''),
       searchFilters.columnType?.length
@@ -63,8 +72,10 @@ export default function SchemaColumns() {
       labels,
       filters.page,
       filters.pageSize,
-      filters.checkType
-    );
+      (checkTypes === CheckTypes.SOURCES
+        ? CheckTypes.MONITORING
+        : checkTypes) ?? filters.checkType
+    ).finally(() => setLoading(false));
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
       const jItem = {
@@ -131,6 +142,24 @@ export default function SchemaColumns() {
     <>
       <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+          {!connection && (
+            <Input
+              label="Connection name"
+              value={searchFilters.connection}
+              onChange={(e) =>
+                onChangeSearchFilters({ connection: e.target.value })
+              }
+            />
+          )}
+          {!schema && (
+            <Input
+              label="Schema name"
+              value={searchFilters.schema}
+              onChange={(e) =>
+                onChangeSearchFilters({ schema: e.target.value })
+              }
+            />
+          )}
           <Input
             label="Table name"
             value={searchFilters.table}
@@ -165,7 +194,7 @@ export default function SchemaColumns() {
         <Button
           label="Refresh"
           color="primary"
-          className="mb-2 mt-5 mr-4"
+          className="mb-2 mt-5 mr-4 z-[1]"
           onClick={() =>
             getColumns(
               labels
@@ -178,11 +207,11 @@ export default function SchemaColumns() {
       </div>
       <ColumnList
         columns={columns}
-        setColumns={setColumns}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}
         onChangeLabels={onChangeLabels}
+        loading={loading}
       />
     </>
   );

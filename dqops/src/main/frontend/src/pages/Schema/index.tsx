@@ -12,9 +12,9 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import ColumnListView from '../ColumnListView/ColumnListView';
+import TableListView from '../TableListView/TableListView';
 import { MultiChecks } from './MultiCheck/MultiChecks';
-import SchemaColumns from './SchemaColumns';
-import { SchemaTables } from './SchemaTables';
 
 const SchemaPage = () => {
   const {
@@ -118,12 +118,12 @@ const SchemaPage = () => {
       </div>
       {activeTab === 'tables' && (
         <div className="p-4">
-          <SchemaTables />
+          <TableListView />
         </div>
       )}
       {activeTab === 'columns' && (
         <div className="p-4">
-          <SchemaColumns />
+          <ColumnListView />
         </div>
       )}
       {activeTab === 'import-tables' && <SourceTablesView />}
