@@ -6,8 +6,8 @@ import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
+import ColumnListView from '../ColumnListView/ColumnListView';
 import TableListView from '../TableListView/TableListView';
-import GlobalColumns from './GlobalColumns';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
@@ -35,7 +35,7 @@ const HomePage = () => {
       </div>
       {activeTab === '/home' && <StaticHomePage />}
       {activeTab === '/tables' && <TableListView />}
-      {activeTab === '/columns' && <GlobalColumns />}
+      {activeTab === '/columns' && <ColumnListView />}
     </div>
   );
 };

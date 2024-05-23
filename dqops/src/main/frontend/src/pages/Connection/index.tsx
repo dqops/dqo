@@ -2,7 +2,6 @@ import qs from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import ConnectionColumns from '../../components/Connection/ConnectionView/ConnectionColumns';
 import ConnectionCommentView from '../../components/Connection/ConnectionView/ConnectionCommentView';
 import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
 import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
@@ -21,6 +20,7 @@ import {
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import ColumnListView from '../ColumnListView/ColumnListView';
 import TableListView from '../TableListView/TableListView';
 
 const initSourceTabs = [
@@ -216,7 +216,7 @@ const ConnectionPage = () => {
         )}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
         {activeTab === 'tables' && <TableListView />}
-        {activeTab === 'columns' && <ConnectionColumns />}
+        {activeTab === 'columns' && <ColumnListView />}
       </div>
     </>
   );

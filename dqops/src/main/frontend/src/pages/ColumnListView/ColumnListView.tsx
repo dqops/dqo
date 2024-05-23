@@ -4,6 +4,8 @@ import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 
 type TSearchFilters = {
   connection?: string | undefined;
@@ -16,7 +18,13 @@ type TSearchFilters = {
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
 
-export default function GlobalTables() {
+export default function ColumnListView() {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useDecodedParams();
   const [columns, setColumns] = useState<TTableWithSchema[]>([]);
   const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
   const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
@@ -54,8 +62,8 @@ export default function GlobalTables() {
     };
     setLoading(true);
     const res = await SearchApiClient.findColumns(
-      addPrefix(searchFilters.connection ?? ''),
-      addPrefix(searchFilters.schema ?? ''),
+      connection ?? addPrefix(searchFilters.connection ?? ''),
+      schema ?? addPrefix(searchFilters.schema ?? ''),
       addPrefix(searchFilters.table ?? ''),
       addPrefix(searchFilters.column ?? ''),
       searchFilters.columnType?.length
@@ -64,7 +72,9 @@ export default function GlobalTables() {
       labels,
       filters.page,
       filters.pageSize,
-      filters.checkType
+      (checkTypes === CheckTypes.SOURCES
+        ? CheckTypes.MONITORING
+        : checkTypes) ?? filters.checkType
     ).finally(() => setLoading(false));
     const arr: TTableWithSchema[] = [];
     res.data.forEach((item) => {
@@ -132,18 +142,24 @@ export default function GlobalTables() {
     <>
       <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
-          <Input
-            label="Connection name"
-            value={searchFilters.connection}
-            onChange={(e) =>
-              onChangeSearchFilters({ connection: e.target.value })
-            }
-          />
-          <Input
-            label="Schema name"
-            value={searchFilters.schema}
-            onChange={(e) => onChangeSearchFilters({ schema: e.target.value })}
-          />
+          {!connection && (
+            <Input
+              label="Connection name"
+              value={searchFilters.connection}
+              onChange={(e) =>
+                onChangeSearchFilters({ connection: e.target.value })
+              }
+            />
+          )}
+          {!schema && (
+            <Input
+              label="Schema name"
+              value={searchFilters.schema}
+              onChange={(e) =>
+                onChangeSearchFilters({ schema: e.target.value })
+              }
+            />
+          )}
           <Input
             label="Table name"
             value={searchFilters.table}
