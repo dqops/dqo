@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { LabelModel, TableListModel } from '../../../api';
-import { LabelsApiClient, SearchApiClient } from '../../../services/apiClient';
-import { CheckTypes } from '../../../shared/routes';
-import { useDecodedParams } from '../../../utils';
-import Button from '../../Button';
-import Input from '../../Input';
-import TableList from '../../TableList';
+import { LabelModel, TableListModel } from '../../api';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import TableList from '../../components/TableList';
+import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
+
+type TSearchFilters = {
+  connection?: string | undefined;
+  schema?: string | undefined;
+  table?: string | undefined;
+};
+
 type TLabel = LabelModel & { clicked: boolean };
 type TTableWithSchema = TableListModel & { schema?: string };
-export default function ConnectionTables() {
+
+export default function TableListView() {
   const {
     checkTypes,
-    connection
+    connection,
+    schema
   }: {
     checkTypes: CheckTypes;
     connection: string;
+    schema: string;
   } = useDecodedParams();
-  const [tables, setTables] = useState<TableListModel[]>([]);
-  const [filters, setFilters] = useState<any>({
-    page: 1,
-    pageSize: 50,
-    checkType: checkTypes == CheckTypes.SOURCES ? undefined : checkTypes
-  });
-  const [table, setTable] = useState<string>();
-  const [schema, setSchema] = useState<string>();
+  const [tables, setTables] = useState<TTableWithSchema[]>([]);
+  const [filters, setFilters] = useState<any>({ page: 1, pageSize: 50 });
+  const [searchFilters, setSearchFilters] = useState<TSearchFilters>({});
   const [labels, setLabels] = useState<TLabel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const onChangeFilters = (obj: Partial<any>) => {
@@ -33,63 +38,50 @@ export default function ConnectionTables() {
     }));
   };
 
+  const onChangeSearchFilters = (obj: Partial<TSearchFilters>) => {
+    setSearchFilters((prev) => ({
+      ...prev,
+      ...obj
+    }));
+  };
+
   const onChangeLabels = (index: number) => {
     const arr = [...labels];
     arr[index] = { ...arr[index], clicked: !arr[index].clicked };
-
     const filteredlabels: string[] = arr
       .filter((x) => x.clicked && x.label)
       .map((x) => x.label)
       .filter((x): x is string => typeof x === 'string');
-
     getTables(filteredlabels);
     setLabels(arr);
   };
 
   const getTables = async (labels: string[] = []) => {
-    const addPrefix = (str?: string) => {
-      if (!str) return undefined;
+    const addPrefix = (str: string) => {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     setLoading(true);
-    return SearchApiClient.findTables(
-      connection,
-      addPrefix(schema),
-      addPrefix(table),
+    const res = await SearchApiClient.findTables(
+      connection ?? addPrefix(searchFilters.connection ?? ''),
+      schema ?? addPrefix(searchFilters.schema ?? ''),
+      addPrefix(searchFilters.table ?? ''),
       labels,
       filters.page,
       filters.pageSize,
-      filters.checkType
-    )
-      .then((res) => {
-        const arr: TTableWithSchema[] = [];
-        res.data.forEach((item) => {
-          const jItem = { ...item, schema: item.target?.schema_name };
-          arr.push(jItem);
-        });
-        setTables(arr);
-        return arr;
-      })
-      .finally(() => setLoading(false));
-  };
-
-  const refetchTables = (tables?: TableListModel[]) => {
-    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
-
-    if (shouldRefetch) {
-      setTimeout(() => {
-        getTables();
-      }, 5000);
-    }
+      (checkTypes === CheckTypes.SOURCES
+        ? CheckTypes.MONITORING
+        : checkTypes) ?? filters.checkType
+    ).finally(() => setLoading(false));
+    const arr: TTableWithSchema[] = [];
+    res.data.forEach((item) => {
+      const jItem = { ...item, schema: item.target?.schema_name };
+      arr.push(jItem);
+    });
+    setTables(arr);
+    return arr;
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const tables = await getTables();
-      refetchTables(tables);
-    };
-
-    fetchData();
     const getLabels = () => {
       LabelsApiClient.getAllLabelsForTables().then((res) => {
         const array: TLabel[] = res.data.map((item) => {
@@ -98,8 +90,15 @@ export default function ConnectionTables() {
         setLabels(array);
       });
     };
+
+    const fetchData = async () => {
+      const tables = await getTables();
+      refetchTables(tables);
+    };
+
+    fetchData();
     getLabels();
-  }, [connection, filters]);
+  }, [filters]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -118,32 +117,55 @@ export default function ConnectionTables() {
     return () => {
       document.removeEventListener('keypress', handleKeyPress);
     };
-  }, [table, schema]);
+  }, [searchFilters]);
+
+  const refetchTables = (tables?: TableListModel[]) => {
+    const shouldRefetch = tables?.some((table) => !table?.data_quality_status);
+
+    if (shouldRefetch) {
+      setTimeout(() => {
+        getTables();
+      }, 5000);
+    }
+  };
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
-          <Input
-            label="Schema name"
-            value={schema}
-            onChange={(e) => setSchema(e.target.value)}
-          />
+          {!connection && (
+            <Input
+              label="Connection name"
+              value={searchFilters.connection}
+              onChange={(e) =>
+                onChangeSearchFilters({ connection: e.target.value })
+              }
+            />
+          )}
+          {!schema && (
+            <Input
+              label="Schema name"
+              value={searchFilters.schema}
+              onChange={(e) =>
+                onChangeSearchFilters({ schema: e.target.value })
+              }
+            />
+          )}
           <Input
             label="Table name"
-            value={table}
-            onChange={(e) => setTable(e.target.value)}
+            value={searchFilters.table}
+            onChange={(e) => onChangeSearchFilters({ table: e.target.value })}
           />
           <Button
             label="Search"
-            onClick={() =>
+            onClick={() => {
               getTables(
                 labels
                   .filter((x) => x.clicked && x.label)
                   .map((x) => x.label)
                   .filter((x): x is string => typeof x === 'string')
-              )
-            }
+              );
+            }}
             color="primary"
             className="mt-5"
           />
