@@ -178,36 +178,41 @@ export default function SchemaTableItem({
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (
-        <SchemaTableItemDimensions item={item} dimensionKeys={dimensionKeys} />
+        <>
+          <SchemaTableItemDimensions
+            item={item}
+            dimensionKeys={dimensionKeys}
+          />
+          <td>
+            <div className="flex gap-x-2 items-center justify-center mr-3">
+              <SvgIcon
+                name="data_sources"
+                className="w-5 h-5"
+                onClick={() => goToColumn(item, CheckTypes.SOURCES)}
+              />
+              <SvgIcon
+                name="profiling"
+                className="w-5 h-5"
+                onClick={() => goToColumn(item, CheckTypes.PROFILING)}
+              />
+              <SvgIcon
+                name="monitoring_checks"
+                className="w-5 h-5"
+                onClick={() => goToColumn(item, CheckTypes.MONITORING)}
+              />
+              <SvgIcon
+                name="partitioned_checks"
+                className="w-5 h-5"
+                onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
+              />
+            </div>
+          </td>
+        </>
       ) : (
         <td className="content-start pt-2">
           <SvgIcon name="hourglass" className="w-4 h-4" />
         </td>
       )}
-      <td>
-        <div className="flex gap-x-2 items-center justify-center mr-3">
-          <SvgIcon
-            name="data_sources"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.SOURCES)}
-          />
-          <SvgIcon
-            name="profiling"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PROFILING)}
-          />
-          <SvgIcon
-            name="monitoring_checks"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.MONITORING)}
-          />
-          <SvgIcon
-            name="partitioned_checks"
-            className="w-5 h-5"
-            onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
-          />
-        </div>
-      </td>
     </tr>
   );
 }
