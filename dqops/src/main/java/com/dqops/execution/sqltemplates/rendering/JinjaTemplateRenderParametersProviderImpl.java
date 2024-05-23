@@ -88,7 +88,7 @@ public class JinjaTemplateRenderParametersProviderImpl implements JinjaTemplateR
                         duckdbParametersSpec, tableWrapper.getSpec());
                 if (duckdbFilesFormatType != null && fileFormatSpec != null && !referencedTableFileFormatSpec.getFilePaths().isEmpty()) {
                     ReferencedTableParameters sensorParametersCloned = (ReferencedTableParameters) sensorRunParameters.getSensorParameters().deepClone();
-                    String tableFile = referencedTableFileFormatSpec.buildTableOptionsString(duckdbParametersSpec, tableSpec);
+                    String tableFile = referencedTableFileFormatSpec.buildTableOptionsString(duckdbParametersSpec, tableWrapper.getSpec());
                     sensorParametersCloned.setReferencedTable(tableFile);
                     result.setParameters((AbstractSensorParametersSpec)sensorParametersCloned);
                 }
