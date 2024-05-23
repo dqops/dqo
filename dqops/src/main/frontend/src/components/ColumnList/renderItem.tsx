@@ -11,7 +11,7 @@ const renderItem = (label: string, key: string, toRotate?: boolean) => {
     absoluteBottomLeft: {
       position: 'absolute',
       bottom: 2,
-      left: 36
+      left: 30
     }
   };
 
