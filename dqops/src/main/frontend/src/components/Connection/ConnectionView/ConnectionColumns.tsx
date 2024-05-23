@@ -183,7 +183,6 @@ export default function ConnectionColumns() {
       </div>
       <ColumnList
         columns={columns}
-        setColumns={setColumns}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}

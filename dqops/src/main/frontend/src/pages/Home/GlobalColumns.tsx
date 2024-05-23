@@ -189,7 +189,6 @@ export default function GlobalTables() {
       </div>
       <ColumnList
         columns={columns}
-        setColumns={setColumns}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}

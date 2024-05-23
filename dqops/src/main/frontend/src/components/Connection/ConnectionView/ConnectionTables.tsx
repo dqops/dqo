@@ -161,7 +161,6 @@ export default function ConnectionTables() {
       </div>
       <TableList
         tables={tables}
-        setTables={setTables}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}

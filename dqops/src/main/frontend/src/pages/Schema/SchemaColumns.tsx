@@ -178,7 +178,6 @@ export default function SchemaColumns() {
       </div>
       <ColumnList
         columns={columns}
-        setColumns={setColumns}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}

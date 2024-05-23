@@ -166,7 +166,6 @@ export default function GlobalTables() {
       </div>
       <TableList
         tables={tables}
-        setTables={setTables}
         filters={filters}
         onChangeFilters={onChangeFilters}
         labels={labels}

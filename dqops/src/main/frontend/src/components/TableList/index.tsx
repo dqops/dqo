@@ -1,26 +1,11 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import SchemaTableItem from '../../pages/Schema/SchemaTableItem';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import LabelsSectionWrapper from '../LabelsSectionWrapper/LabelsSectionWrapper';
 import { Pagination } from '../Pagination';
-import SvgIcon from '../SvgIcon';
-
-function getValueForKey<T>(obj: T, key: string): string | undefined {
-  const keys = key.split('.');
-  let value: any = obj;
-
-  for (const k of keys) {
-    value = value?.[k];
-    if (value === undefined) {
-      break;
-    }
-  }
-
-  return value?.toString();
-}
 
 type TButtonTabs = {
   label: string;
@@ -49,7 +34,6 @@ const headeritems: TButtonTabs[] = [
 
 type TTableListProps = {
   tables: TTableWithSchema[];
-  setTables: any;
   filters: any;
   onChangeFilters: (filters: any) => void;
   labels: TLabel[];
@@ -60,7 +44,6 @@ type TLabel = LabelModel & { clicked: boolean };
 
 export default function index({
   tables,
-  setTables,
   filters,
   onChangeFilters,
   labels,
@@ -75,44 +58,12 @@ export default function index({
     connection: string;
     schema: string;
   } = useDecodedParams();
-  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
 
-  const renderItem = (
-    label: string,
-    key: string,
-    sortable?: boolean,
-    toRotate?: boolean
-  ) => {
-    const sortTables = (key: string): void => {
-      setTables((prev: any) => {
-        const array = [...prev];
-        array.sort((a, b) => {
-          const valueA = getValueForKey(a, key);
-          const valueB = getValueForKey(b, key);
-
-          return sortingDir === 'asc'
-            ? (valueA || '').localeCompare(valueB || '')
-            : (valueB || '').localeCompare(valueA || '');
-        });
-
-        setSortingDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        return array;
-      });
-    };
+  const renderItem = (label: string, key: string, toRotate?: boolean) => {
     return (
-      <th
-        className="px-4 cursor-pointer"
-        onClick={() => sortable !== false && sortTables(key)}
-        key={key}
-      >
+      <th className="px-4" key={key}>
         <div className="flex text-sm items-center relative">
           <span className={clsx(toRotate ? ' z-9' : '')}>{label}</span>
-          {sortable !== false && (
-            <div className="flex flex-col items-center">
-              <SvgIcon name="chevron-up" className="w-3 h-2" />
-              <SvgIcon name="chevron-down" className="w-3 h-2" />
-            </div>
-          )}
         </div>
       </th>
     );
@@ -187,12 +138,7 @@ export default function index({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(
-                      item.label,
-                      item.value,
-                      item.sortable,
-                      item.toRotate
-                    )
+                    renderItem(item.label, item.value, item.toRotate)
                 )}
               </tr>
             </thead>
@@ -208,7 +154,7 @@ export default function index({
           </table>
         </div>
       </div>
-      <div className="px-4 my-5">
+      <div className="px-4 my-5 pb-6">
         <Pagination
           page={filters.page || 1}
           pageSize={filters.pageSize || 50}
