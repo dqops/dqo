@@ -209,7 +209,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">`storage_type`</span>|The storage type.|*enum*|*local*<br/>*s3*<br/>*azure*<br/>| | |
 |<span class="no-wrap-code ">`aws_authentication_mode`</span>|The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
-|<span class="no-wrap-code ">`azure_authentication_mode`</span>|The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>| | |
+|<span class="no-wrap-code ">`azure_authentication_mode`</span>|The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*connection_string*<br/>*credential_chain*<br/>*service_principal*<br/>*default_credentials*<br/>| | |
 |<span class="no-wrap-code ">`user`</span>|DuckDB user name for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|DuckDB password for a remote storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`region`</span>|The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
@@ -400,7 +400,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`disable_encryption`</span>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.|*boolean*| | | |
-|<span class="no-wrap-code ">`authentication_mode`</span>|Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>| | |
+|<span class="no-wrap-code ">`authentication_mode`</span>|Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*active_directory_default*<br/>| | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 

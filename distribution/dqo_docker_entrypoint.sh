@@ -16,7 +16,7 @@
 #
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
-  export DQO_JAVA_OPTS=-XX:MaxRAMPercentage=80.0
+  export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=80.0"
 fi
 
 _term() {

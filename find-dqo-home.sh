@@ -30,16 +30,16 @@ fi
 
 if [ -z "$DQO_JAVA_OPTS" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    export DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0 -Djavax.net.ssl.trustStoreType=KeychainStore
+    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0 -Djavax.net.ssl.trustStoreType=KeychainStore"
   else
-    export DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0
+    export DQO_JAVA_OPTS="-XX:MaxRAMPercentage=60.0"
   fi
 fi
 
 # Figure out where java is.
 export DQO_RUNNER=java
 if [ -n "$JAVA_HOME" ]; then
-  export DQO_RUNNER=$JAVA_HOME/bin/java
+  export DQO_RUNNER="$JAVA_HOME/bin/java"
 else
   printenv DQO_RUNNER >> /dev/null
 

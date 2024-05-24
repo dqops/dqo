@@ -3487,6 +3487,26 @@
             "types" : [ "string" ]
           },
           "extensions" : { }
+        }, {
+          "name" : "dataQualityStatus",
+          "in" : "query",
+          "description" : "Optional parameter to opt out from retrieving the most recent data quality status for the column. By default, DQOps calculates the data quality status from the data quality results.",
+          "schema" : {
+            "type" : "boolean",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -18112,6 +18132,148 @@
       },
       "extensions" : { }
     },
+    "api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/disable" : {
+      "post" : {
+        "tags" : [ "Incidents" ],
+        "summary" : "disableChecksForIncident",
+        "description" : "Disables all data quality checks that caused a given data quality incident.",
+        "operationId" : "disableChecksForIncident",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "year",
+          "in" : "path",
+          "description" : "Year when the incident was first seen",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "month",
+          "in" : "path",
+          "description" : "Month when the incident was first seen",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "incidentId",
+          "in" : "path",
+          "description" : "Incident id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Data quality checks related to the incident successfully disabled",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/recalibrate" : {
+      "post" : {
+        "tags" : [ "Incidents" ],
+        "summary" : "recalibrateChecksForIncident",
+        "description" : "Recalibrates all data quality checks that caused a given data quality incident to generate less issues by changing the data quality rule parameters.",
+        "operationId" : "recalibrateChecksForIncident",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "year",
+          "in" : "path",
+          "description" : "Year when the incident was first seen",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "month",
+          "in" : "path",
+          "description" : "Month when the incident was first seen",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "incidentId",
+          "in" : "path",
+          "description" : "Incident id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Data quality checks related to the incident successfully recalibrated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram" : {
       "get" : {
         "tags" : [ "Incidents" ],
@@ -20073,6 +20235,148 @@
           "204" : {
             "description" : "Custom rule definition successfully deleted",
             "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/search/columns" : {
+      "get" : {
+        "tags" : [ "Search" ],
+        "summary" : "findColumns",
+        "description" : "Finds columns in any data source and schema",
+        "operationId" : "findColumns",
+        "parameters" : [ {
+          "name" : "connection",
+          "in" : "query",
+          "description" : "Optional connection name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schema",
+          "in" : "query",
+          "description" : "Optional schema name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "table",
+          "in" : "query",
+          "description" : "Optional table name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "column",
+          "in" : "query",
+          "description" : "Optional column name filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "columnType",
+          "in" : "query",
+          "description" : "Optional physical column's data type filter",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "Optional labels to filter the columns",
+          "style" : "FORM",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number, the first page is 1",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Page size, the default is 100 rows, but paging is disabled is neither page and limit parameters are provided",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkType",
+          "in" : "query",
+          "description" : "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type",
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ColumnListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
             "extensions" : { }
           }
         },
@@ -29063,6 +29367,14 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "data_quality_kpi" : {
+            "type" : "number",
+            "description" : "Data quality KPI score for the column, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100.",
+            "format" : "double",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "number" ]
+          },
           "checks" : {
             "type" : "object",
             "additionalProperties" : {
@@ -29146,6 +29458,11 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The number of data quality check execution errors that were reported due to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. When an execution error is reported, the configuration of a data quality check on a column must be updated."
+            },
+            "data_quality_kpi" : {
+              "type" : "number",
+              "format" : "double",
+              "description" : "Data quality KPI score for the column, measured as a percentage of passed data quality checks. DQOps counts data quality issues at a warning severity level as passed checks. The data quality KPI score is a value in the range 0..100."
             },
             "checks" : {
               "type" : "object",
@@ -36123,6 +36440,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "data_quality_status" : {
+            "$ref" : "#/components/schemas/ColumnCurrentDataQualityStatusModel",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "run_checks_job_template" : {
             "$ref" : "#/components/schemas/CheckSearchFilters",
             "extensions" : { },
@@ -36241,6 +36563,11 @@
               "description" : "Column data type that was retrieved when the table metadata was imported.",
               "$ref" : "#/components/schemas/ColumnTypeSnapshotSpec",
               "originalRef" : "#/components/schemas/ColumnTypeSnapshotSpec"
+            },
+            "data_quality_status" : {
+              "description" : "The current data quality status for the column, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the column.",
+              "$ref" : "#/components/schemas/ColumnCurrentDataQualityStatusModel",
+              "originalRef" : "#/components/schemas/ColumnCurrentDataQualityStatusModel"
             },
             "run_checks_job_template" : {
               "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.",
@@ -63328,7 +63655,7 @@
             "expected_datatype" : {
               "type" : "string",
               "description" : "Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - texts, 8 - mixed data types.",
-              "enum" : [ "integers", "floats", "dates", "datetimes", "booleans", "texts", "mixed" ]
+              "enum" : [ "integers", "floats", "dates", "datetimes", "timestamps", "booleans", "texts", "mixed" ]
             }
           }
         }
@@ -64478,7 +64805,7 @@
             "azure_authentication_mode" : {
               "type" : "string",
               "description" : "The authentication mode for Azure. Supports also a ${DUCKDB_AZURE_AUTHENTICATION_MODE} configuration with a custom environment variable.",
-              "enum" : [ "connection_string", "credential_chain", "service_principal" ]
+              "enum" : [ "connection_string", "credential_chain", "service_principal", "default_credentials" ]
             },
             "user" : {
               "type" : "string",
@@ -70529,7 +70856,7 @@
             "authentication_mode" : {
               "type" : "string",
               "description" : "Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
-              "enum" : [ "sql_password", "active_directory_password", "active_directory_service_principal", "default_credential" ]
+              "enum" : [ "sql_password", "active_directory_password", "active_directory_service_principal", "active_directory_default" ]
             },
             "properties" : {
               "type" : "object",
@@ -80359,7 +80686,7 @@
       "DetectedDatatypeCategory" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "integers", "floats", "dates", "datetimes", "booleans", "texts", "mixed" ]
+        "enum" : [ "integers", "floats", "dates", "datetimes", "timestamps", "booleans", "texts", "mixed" ]
       },
       "DqoUserRole" : {
         "type" : "string",
@@ -80394,7 +80721,7 @@
       "AzureAuthenticationMode" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "connection_string", "credential_chain", "service_principal" ]
+        "enum" : [ "connection_string", "credential_chain", "service_principal", "default_credentials" ]
       },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",
@@ -80474,7 +80801,7 @@
       "SqlServerAuthenticationMode" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "sql_password", "active_directory_password", "active_directory_service_principal", "default_credential" ]
+        "enum" : [ "sql_password", "active_directory_password", "active_directory_service_principal", "active_directory_default" ]
       },
       "StatisticsCollectorTarget" : {
         "type" : "string",

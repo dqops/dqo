@@ -9,6 +9,7 @@ class DetectedDatatypeCategory(str, Enum):
     INTEGERS = "integers"
     MIXED = "mixed"
     TEXTS = "texts"
+    TIMESTAMPS = "timestamps"
 
     def __str__(self) -> str:
         return str(self.value)

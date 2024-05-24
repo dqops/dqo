@@ -1,6 +1,11 @@
 import moment from 'moment/moment';
 import { useParams } from 'react-router-dom';
-import { ConnectionModel, ConnectionModelProviderTypeEnum, TableListModel } from '../api';
+import {
+  ConnectionModel,
+  ConnectionModelProviderTypeEnum,
+  TableListModel
+} from '../api';
+import { CheckTypes } from '../shared/routes';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -57,7 +62,7 @@ export const urlencodeEncoder = (url: string | undefined) => {
           break;
         // case '%25':
         //   decodedValue += '%';
-        //   break;  
+        //   break;
         default:
           decodedValue += encodedChar;
           break;
@@ -194,16 +199,20 @@ export const filterPathsDuckDbTable = (table: TableListModel) => {
       file_paths: table.file_format?.file_paths?.filter((x) => x)
     }
   };
-}
+};
 export const filterPropertiesDirectories = (db: ConnectionModel) => {
-  const directories = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.directories };
-  const properties = { ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.properties };
+  const directories = {
+    ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.directories
+  };
+  const properties = {
+    ...(db?.[db.provider_type as keyof ConnectionModel] as any)?.properties
+  };
   Object.keys(properties).forEach((key) => {
     if (!properties[key]) {
       delete properties[key];
     }
   });
- 
+
   if (db.provider_type === ConnectionModelProviderTypeEnum.duckdb) {
     Object.keys(directories).forEach((key) => {
       if (!directories[key]) {
@@ -216,14 +225,47 @@ export const filterPropertiesDirectories = (db: ConnectionModel) => {
         ...db.duckdb,
         directories,
         properties
-    }
+      }
+    };
   }
-}
-return {
-  ...db,
-  [db.provider_type as keyof ConnectionModel]: {
-    ...(db?.[db.provider_type as keyof ConnectionModel] as any),
-    properties
+  return {
+    ...db,
+    [db.provider_type as keyof ConnectionModel]: {
+      ...(db?.[db.provider_type as keyof ConnectionModel] as any),
+      properties
     }
+  };
+};
+
+export const getFirstLevelTableTab = (checkType: CheckTypes) => {
+  switch (checkType) {
+    case CheckTypes.SOURCES:
+      return 'detail';
+    case CheckTypes.PROFILING:
+      return 'statistics';
+    case CheckTypes.PARTITIONED:
+      return 'table-quality-status-daily';
+    case CheckTypes.MONITORING:
+      return 'table-quality-status-daily';
   }
-}
+};
+
+export const getFirstLevelColumnTab = (checkType: CheckTypes) => {
+  switch (checkType) {
+    case CheckTypes.SOURCES:
+      return 'detail';
+    case CheckTypes.PROFILING:
+      return 'statistics';
+    case CheckTypes.PARTITIONED:
+      return 'daily';
+    case CheckTypes.MONITORING:
+      return 'daily';
+  }
+};
+export const prepareString = (str: string | undefined, index: number) => {
+  if (!str) return;
+  if (str.length > index) {
+    return str.slice(0, index) + '...';
+  }
+  return str;
+};

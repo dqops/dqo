@@ -20,7 +20,7 @@ To navigate to the Basic data statistics section:
 
 3. Choose a table or column for which you wish to collect statistics. The **Basic data statistics** tab is the default selection for this section.
 
-    ![Navigate to statistics section](https://dqops.com/docs/images/working-with-dqo/statistics/table-statistics2.png){ loading=lazy; width="1200px" }
+    ![Navigate to statistics section](https://dqops.com/docs/images/working-with-dqo/statistics/table-statistics3.png){ loading=lazy; width="1200px" }
 
 
 ### **Collect statistics** 
@@ -29,7 +29,7 @@ To collect statistics for the entire table, click the **Collect statistics** but
 You can also select the check button in front of the column name to choose the columns for which you want to run statistics.  
 To collect statistics for a single column, click the **bar chart icon** located in the **Action** column.
 
-![Collect statistics](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics2.png){ loading=lazy; width="1200px" }
+![Collect statistics](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics3.png){ loading=lazy; width="1200px" }
 
 
 ### **Collect statistics from a tree view**
@@ -39,7 +39,7 @@ side of the screen. There are also additional parameters you can select.
 
 To do so, click on the three-dot icon and select the **Collect statistics** option.
 
-![Collect statistics from the tree view](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics-from-tree-view.png){ loading=lazy; width="1200px" }
+![Collect statistics from the tree view](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics-from-tree-view1.png){ loading=lazy; width="1200px" }
 
 A dialog box will appear where you can modify different options such as connection, schema and table name, and column name.
 There are also additional parameters when you can narrow the selection to the collector category, collector name, sensor
@@ -57,7 +57,7 @@ After selecting options simply click the **Collect statistics** button.
 Upon completion of the statistics collection, the results will be displayed. You can filter the columns by simply clicking on
 the sorting icon next to any column header
 
-![Statistics results](https://dqops.com/docs/images/working-with-dqo/statistics/statistics-results2.png){ loading=lazy; width="1200px" }
+![Statistics results](https://dqops.com/docs/images/working-with-dqo/statistics/statistics-results3.png){ loading=lazy; width="1200px" }
 
 The table or column summary statistics include the following fields.
 
@@ -69,6 +69,7 @@ In the **Table Statistics** box:
 
 In the summary table:
 
+- **Dimensions**: The circles represent the results from data quality checks for at least three dimensions: Completeness, Validity, and Consistency. The color of the circle represents the results: white for no checks were run, green for valid results, orange for error results, red for fatal error results, and grey for check execution errors. Hovering over a circle will display more details.
 - **Column name**: The name of the column in the selected table. Clicking on the column name will lead you to the detailed statistics.
 - **Detected data type**: The data type detected for STRING columns, which can be INTEGER, FLOAT, DATETIME, TIMESTAMP, BOOLEAN, STRING, or Mixed data types.
 - **Imported data type**: The physical data type retrieved from the database metadata, specific to the data source.
@@ -87,7 +88,7 @@ In the summary table:
 
 To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
 
-![Navigate to detailed statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-detailed-statistics2.png){ loading=lazy; width="1200px" }
+![Navigate to detailed statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-detailed-statistics3.png){ loading=lazy; width="1200px" }
 
 At the level of a single column, statistics provide more information than in the summary statistics and are grouped into:
 
@@ -100,7 +101,7 @@ At the level of a single column, statistics provide more information than in the
 Below there is a sample view of statistics at the level of a single column.
 Note that the results displayed may vary depending on the data type.
 
-![Column-level statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-column-statistics.png){ loading=lazy; width="1200px" }
+![Column-level statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-column-statistics1.png){ loading=lazy; width="1200px" }
 
 
 ## What's next

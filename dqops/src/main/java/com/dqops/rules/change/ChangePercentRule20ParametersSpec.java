@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.change;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -86,5 +87,25 @@ public class ChangePercentRule20ParametersSpec extends AbstractRuleParametersSpe
     @Override
     public String getRuleDefinitionName() {
         return "change/change_percent";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxPercent == null) {
+            return;
+        }
+
+        if (this.maxPercent == 0.0) {
+            this.maxPercent = checkResultsSingleCheck.getActualValueColumn().max() * 0.7;
+            return;
+        }
+
+        this.maxPercent = this.maxPercent * 1.3;
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.averages;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -104,5 +105,22 @@ public class BetweenPercentMovingAverage30DaysRule10ParametersSpec extends Abstr
     @Override
     public String getRuleDefinitionName() {
         return "averages/between_percent_moving_average_30_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxPercentAbove != null) {
+            this.maxPercentAbove *= 1.3;
+        }
+
+        if (this.maxPercentBelow != null) {
+            this.maxPercentBelow *= 1.3;
+        }
     }
 }

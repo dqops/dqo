@@ -17,6 +17,7 @@ package com.dqops.checks;
 
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import tech.tablesaw.api.IntColumn;
 
 import java.util.Objects;
 
@@ -455,5 +457,47 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @Override
     public boolean isDefault() {
         return false; // we serialize all checks, even when they have no parameters (because they are too simple to have parameters) and have no alert thresholds (because they are only capturing values)
+    }
+
+    /**
+     * Checks if any rules (warning, error, fatal) are configured.
+     * @return True when any severity rule is configured, false otherwise.
+     */
+    public boolean hasAnyRulesEnabled() {
+        return this.getWarning() != null || this.getError() != null || this.getFatal() != null;
+    }
+
+    /**
+     * Changes the rule parameters to decrease rule severity and generate less alerts.
+     * @param checkResultsSingleCheck History of check results for this check for the time period used for analysis.
+     */
+    public void decreaseCheckSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (checkResultsSingleCheck.isEmpty()) {
+            return;
+        }
+
+        if (checkResultsSingleCheck.getActualValueColumn().isNotMissing().isEmpty()) {
+            return; // no results, most calculations will fail
+        }
+
+        IntColumn severityColumn = checkResultsSingleCheck.getSeverityColumn();
+
+        if (this.getFatal() != null) {
+            if (!severityColumn.isEqualTo(3.0).isEmpty()) {
+                this.getFatal().decreaseRuleSensitivity(checkResultsSingleCheck);
+            }
+        }
+
+        if (this.getError() != null) {
+            if (!severityColumn.isEqualTo(2.0).isEmpty()) {
+                this.getError().decreaseRuleSensitivity(checkResultsSingleCheck);
+            }
+        }
+
+        if (this.getWarning() != null) {
+            if (!severityColumn.isEqualTo(1.0).isEmpty()) {
+                this.getWarning().decreaseRuleSensitivity(checkResultsSingleCheck);
+            }
+        }
     }
 }

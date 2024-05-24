@@ -34,8 +34,11 @@ import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Root user home model for reading and managing the definitions in the user's home.
@@ -675,6 +678,25 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Finds the first node on the path from the user home to the <code>leafNode</code> that is of <code>parentType</code> class.
+     * @param leafNode Leaf node to follow on the path.
+     * @param parentType Expected class type.
+     * @return Instance of a class of the target type.
+     * @param <T> Target type.
+     */
+    @Override
+    public <T extends HierarchyNode> T findNodeOnPathOfType(HierarchyNode leafNode, Class<T> parentType) {
+        List<HierarchyNode> nodesOnPath = List.of(leafNode.getHierarchyId().getNodesOnPath(this));
+        Optional<T> optionalTargetNode = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> parentType.isAssignableFrom(n.getClass()))
+                .map(n -> (T)n)
+                .findFirst();
+
+        return optionalTargetNode.orElse(null);
+    }
+
+    /**
      * Finds a column wrapper on the given hierarchy path.
      *
      * @param nestedHierarchyId Hierarchy id path to a check or any other element inside a connection / table / column.
@@ -787,5 +809,15 @@ public class UserHomeImpl implements UserHome, Cloneable {
                 }
             }
         }
+    }
+
+    /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        // do nothing, makes no sense
     }
 }

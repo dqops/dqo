@@ -22,10 +22,16 @@ import TableActionGroup from "./TableActionGroup";
 import { useDecodedParams } from "../../../utils";
 
 
-const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
-  label: item.charAt(0).toUpperCase() + item.slice(1),
-  value: item
-}));
+const minimumSeverityOptions = [
+  ...Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
+      label: item.charAt(0).toUpperCase() + item.slice(1),
+      value: item
+  })),
+  {
+    label: "Apply the severity filter at the connection level",
+    value: undefined
+  }
+];
 
 export const TableIncidentsNotificationsView = () => {
 
@@ -47,13 +53,19 @@ export const TableIncidentsNotificationsView = () => {
       ...obj,
     }));
   };
-  const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
-    label: item
-    .replace(/_(?=dimension)/, " / Quality ")
-    .replace(/_(?=(name|type|category))/g, " / Check ")
-    .replace(/^\w/g, c => c.toUpperCase()),
-    value: item
-  }));  
+  const groupLevelOptions = [
+    ...Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
+      label: item
+      .replace(/_(?=dimension)/, " / Quality ")
+      .replace(/_(?=(name|type|category))/g, " / Check ")
+      .replace(/^\w/g, c => c.toUpperCase()),
+      value: item
+    })),
+    {
+      label: "Apply incident grouping at a connection level",
+      value: undefined
+    }
+  ];  
 
   const onUpdate = () => {
     dispatch(updateTableIncidentGrouping(checkTypes, firstLevelActiveTab, connection, schema, table, incidentGrouping));
@@ -95,28 +107,6 @@ export const TableIncidentsNotificationsView = () => {
               checked={incidentGrouping?.divide_by_data_groups}
               onChange={(value) => onChange({ divide_by_data_groups: value })}
             />
-          </div>
-        </div>
-        <div className="flex items-center mb-4 gap-2 text-sm">
-          <p>Maximum incident duration</p>
-          <div className="flex gap-2 items-center">
-            <NumberInput
-              value={incidentGrouping?.max_incident_length_days}
-              onChange={(value) => onChange({ max_incident_length_days: value })}
-              disabled={userProfile.can_manage_data_sources !== true}
-            />
-            <span>days. After this time, DQOps creates a new incident.</span>
-          </div>
-        </div>
-        <div className="flex items-center mb-4 gap-2 text-sm">
-          <p>Mute data quality issues for</p>
-          <div className="flex gap-2 items-center">
-            <NumberInput
-              value={incidentGrouping?.mute_for_days}
-              onChange={() => {}}
-              disabled={userProfile.can_manage_data_sources !== true}
-            />
-            <span> days. If the incident is muted, DQOps will not create a new one.</span>
           </div>
         </div>
       </div>

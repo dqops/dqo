@@ -7,6 +7,9 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.check_search_filters import CheckSearchFilters
+    from ..models.column_current_data_quality_status_model import (
+        ColumnCurrentDataQualityStatusModel,
+    )
     from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
@@ -42,6 +45,9 @@ class ColumnListModel:
             has_any_configured_partition_checks (Union[Unset, bool]): True when the column has any partition checks
                 configured.
             type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
+            data_quality_status (Union[Unset, ColumnCurrentDataQualityStatusModel]): The column's most recent data quality
+                status. It is a summary of the results of the most recently executed data quality checks on the column. Verify
+                the value of the current_severity to see if there are any data quality issues on the column.
             run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
                 checks on which tables and columns should be executed.
             run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -71,6 +77,7 @@ class ColumnListModel:
     has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
     has_any_configured_partition_checks: Union[Unset, bool] = UNSET
     type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
+    data_quality_status: Union[Unset, "ColumnCurrentDataQualityStatusModel"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -106,6 +113,10 @@ class ColumnListModel:
         type_snapshot: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.type_snapshot, Unset):
             type_snapshot = self.type_snapshot.to_dict()
+
+        data_quality_status: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.data_quality_status, Unset):
+            data_quality_status = self.data_quality_status.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -177,6 +188,8 @@ class ColumnListModel:
             ] = has_any_configured_partition_checks
         if type_snapshot is not UNSET:
             field_dict["type_snapshot"] = type_snapshot
+        if data_quality_status is not UNSET:
+            field_dict["data_quality_status"] = data_quality_status
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -211,6 +224,9 @@ class ColumnListModel:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.column_current_data_quality_status_model import (
+            ColumnCurrentDataQualityStatusModel,
+        )
         from ..models.column_type_snapshot_spec import ColumnTypeSnapshotSpec
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
@@ -260,6 +276,15 @@ class ColumnListModel:
             type_snapshot = UNSET
         else:
             type_snapshot = ColumnTypeSnapshotSpec.from_dict(_type_snapshot)
+
+        _data_quality_status = d.pop("data_quality_status", UNSET)
+        data_quality_status: Union[Unset, ColumnCurrentDataQualityStatusModel]
+        if isinstance(_data_quality_status, Unset):
+            data_quality_status = UNSET
+        else:
+            data_quality_status = ColumnCurrentDataQualityStatusModel.from_dict(
+                _data_quality_status
+            )
 
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
@@ -346,6 +371,7 @@ class ColumnListModel:
             has_any_configured_monitoring_checks=has_any_configured_monitoring_checks,
             has_any_configured_partition_checks=has_any_configured_partition_checks,
             type_snapshot=type_snapshot,
+            data_quality_status=data_quality_status,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

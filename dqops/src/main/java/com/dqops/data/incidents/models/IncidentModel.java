@@ -16,16 +16,19 @@
 
 package com.dqops.data.incidents.models;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StringPatternComparer;
+import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.google.common.base.Strings;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
@@ -280,5 +283,24 @@ public class IncidentModel {
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
         }
+    }
+
+    /**
+     * Creates a check search filter that will find all data quality checks that are covered by this incident.
+     * @return Check search filter that matches all checks that are related to this incident.
+     */
+    public CheckSearchFilters toCheckSearchFilter() {
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setConnection(this.getConnection());
+        checkSearchFilters.setPhysicalTableName(new PhysicalTableName(this.schema, this.table));
+        checkSearchFilters.setQualityDimension(this.getQualityDimension());
+        checkSearchFilters.setCheckCategory(this.getCheckCategory());
+        checkSearchFilters.setCheckName(this.getCheckName());
+
+        if (!Strings.isNullOrEmpty(this.checkType)) {
+            checkSearchFilters.setCheckType(CheckType.valueOf(this.checkType));
+        }
+
+        return checkSearchFilters;
     }
 }

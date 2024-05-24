@@ -26,19 +26,11 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-    {%- if connection.duckdb.read_mode == 'in_memory' -%}
-        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
-    {%- else -%}
-       {{ table_from_files }}
-    {%- endif -%}
+   {{ table_from_files }}
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
-    {%- if connection.duckdb.read_mode == 'in_memory' -%}
-        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(referenced_table) }}
-    {%- else -%}
-       {{ referenced_table }}
-    {%- endif -%}
+   {{ referenced_table }}
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}

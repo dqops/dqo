@@ -222,7 +222,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -243,7 +243,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -783,7 +783,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -803,7 +803,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -1456,7 +1456,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -1477,7 +1477,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -2018,7 +2018,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -2038,7 +2038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -2691,7 +2691,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -2712,7 +2712,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -3253,7 +3253,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -3273,7 +3273,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -3944,7 +3944,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -3965,7 +3965,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -4568,7 +4568,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -4588,7 +4588,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -5283,7 +5283,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -5304,7 +5304,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -5907,7 +5907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER({{ lib.render_target_column('analyzed_table')}})) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END
@@ -5927,7 +5927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LOWER(analyzed_table."target_column") IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                            WHEN TRIM(LOWER(analyzed_table."target_column")) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
                                 THEN 1
                             ELSE 0
                         END

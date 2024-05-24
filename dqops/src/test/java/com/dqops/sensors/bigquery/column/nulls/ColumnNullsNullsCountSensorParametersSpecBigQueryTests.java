@@ -165,13 +165,9 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
                         WHEN %s IS NULL THEN 1
                         ELSE 0
                     END
-                ) AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+            WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -262,13 +258,11 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
                         ELSE 0
                     END
                 ) AS actual_value,
-                analyzed_table.`date2` AS grouping_level_1,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`date2` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -373,13 +367,11 @@ public class ColumnNullsNullsCountSensorParametersSpecBigQueryTests extends Base
                     END
                 ) AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
-                analyzed_table.`date4` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`date4` AS grouping_level_2
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

@@ -104,6 +104,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
+    @Override
+    public void createTable(TableSpec tableSpec) {
+        // nothing to do
+    }
+
+    @Override
+    public void loadData(TableSpec tableSpec, Table data) {
+        // nothing to do
+    }
+
     /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
@@ -117,10 +127,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
-
-        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            jdbcConnectionBuilder.append(":memory:");
-        }
 
         String database = this.getSecretValueProvider().expandValue(duckdbSpec.getDatabase(), secretValueLookupContext);
         if(database != null){
@@ -345,9 +351,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public List<SourceSchemaModel> listSchemas() {
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.listSchemas();
-        }
         Map<String, String> directories = duckdb.getDirectories();
         List<SourceSchemaModel> results = new ArrayList<>();
         directories.keySet().forEach(s -> {
@@ -371,10 +374,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             duckDbParameters = new DuckdbParametersSpec();
         }
 
-        if (duckDbParameters.getReadMode().equals(DuckdbReadMode.in_memory)) {
-            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
-            return sourceTableModels;
-        }
         if (duckDbParameters == null || duckDbParameters.getFilesFormatType() == null) {
             return new ArrayList<>();
         }
@@ -402,10 +401,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         assert !Strings.isNullOrEmpty(schemaName);
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
-
-        if (duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
-        }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 

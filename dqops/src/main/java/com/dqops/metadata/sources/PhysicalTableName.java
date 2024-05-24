@@ -107,6 +107,10 @@ public class PhysicalTableName implements Cloneable, Comparable<PhysicalTableNam
      * @return Physical table name or a pattern.
      */
     public static PhysicalTableName fromSchemaTableFilter(String schemaTableName) {
+        if (Strings.isNullOrEmpty(schemaTableName)) {
+            return null;
+        }
+
         int indexOfDot = schemaTableName.indexOf('.');
 
         if (indexOfDot == 0) {

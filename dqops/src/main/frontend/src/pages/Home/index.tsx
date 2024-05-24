@@ -6,12 +6,14 @@ import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
-import GlobalTables from './GlobalTables';
+import ColumnListView from '../ColumnListView/ColumnListView';
+import TableListView from '../TableListView/TableListView';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
   { label: 'Home', value: '/home' },
-  { label: 'Tables', value: '/tables' }
+  { label: 'Tables', value: '/tables' },
+  { label: 'Columns', value: '/columns' }
 ];
 const HomePage = () => {
   const { activeTab } = useSelector(
@@ -32,7 +34,8 @@ const HomePage = () => {
         <Tabs tabs={tabs} onChange={onChange} activeTab={activeTab} />
       </div>
       {activeTab === '/home' && <StaticHomePage />}
-      {activeTab === '/tables' && <GlobalTables />}
+      {activeTab === '/tables' && <TableListView />}
+      {activeTab === '/columns' && <ColumnListView />}
     </div>
   );
 };

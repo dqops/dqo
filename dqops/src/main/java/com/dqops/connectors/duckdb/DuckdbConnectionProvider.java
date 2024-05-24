@@ -105,7 +105,7 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec = new DuckdbParametersSpec();
             connectionSpec.setDuckdb(duckdbSpec);
         }
-        duckdbSpec.setReadMode(DuckdbReadMode.files);
+        duckdbSpec.setReadMode(DuckdbReadMode.in_memory);
 
 //        if (duckdbSpec.getReadMode() == null) {
 //            if (isHeadless) {
@@ -248,7 +248,13 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
                 throw new RuntimeException("Unbalanced values for " + mapping + "." +
                         "Ensure you provide directories in a schema=path pattern.");
             }
-            directories.put(schemaDirectory.get(0), schemaDirectory.get(1));
+
+            String schema = schemaDirectory.get(0);
+            String path = schemaDirectory.get(1);
+            if(directories.containsKey(schema)){
+                throw new RuntimeException("Schema to path is one-to-one mapping. You cannot add a second path: " + path + " to the schema: " + schema);
+            }
+            directories.put(schema, path);
         }
 
         return directories;

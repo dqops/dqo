@@ -555,7 +555,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 .minus(this.dqoIncidentsConfigurationProperties.getPartitionedChecksTimeWindowDays(), ChronoUnit.DAYS);
 
         if (filterParameters.getDays() != null) {
-            LocalDate earliestRequestedDate = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS).minus(filterParameters.getDays(), ChronoUnit.DAYS).toLocalDate();
+            LocalDate earliestRequestedDate = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS)
+                    .minus(filterParameters.getDays(), ChronoUnit.DAYS).toLocalDate();
             if (earliestRequestedDate.isAfter(startDay)) {
                 startDay = earliestRequestedDate;
             }
@@ -564,6 +565,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(defaultTimeZoneId).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startDay, endMonth)) {
             return new IncidentIssueHistogramModel();
+        }
+
+        Instant startTimestamp = firstSeen;
+        if (filterParameters.getDays() != null) {
+            startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
+                    .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
+                    .toInstant();
+
+            if (startTimestamp.isBefore(firstSeen)) {
+                startTimestamp = firstSeen;
+            }
         }
 
         IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
@@ -582,12 +594,6 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
 
             InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-            Instant startTimestamp = firstSeen;
-            if (filterParameters.getDays() != null) {
-                startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
-                        .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
-                        .toInstant();
-            }
 
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));

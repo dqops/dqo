@@ -24,8 +24,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
-import org.apache.parquet.Strings;
 
 /**
  * Target table search filters used to find tables in the DQOps metadata.
@@ -41,6 +41,12 @@ public class TableSearchFilters {
             "The schema and table name accept patterns both in the schema name and table name parts. " +
             "Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.")
     private String fullTableName;
+
+    /**
+     * Alternative identification of the full table name.
+     */
+    @JsonIgnore
+    private PhysicalTableName physicalTableName;
 
     @JsonPropertyDescription("A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, " +
             "the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.")
@@ -109,6 +115,26 @@ public class TableSearchFilters {
     }
 
     /**
+     * Returns a full physical table name, which is an alternative filter to find the tables.
+     * When the value is null, it is created from the full table name search pattern.
+     * @return Full table name as a physical table name.
+     */
+    public PhysicalTableName getPhysicalTableName() {
+        if (this.physicalTableName == null && !Strings.isNullOrEmpty(this.fullTableName)) {
+            this.physicalTableName = PhysicalTableName.fromSchemaTableFilter(this.fullTableName);
+        }
+        return this.physicalTableName;
+    }
+
+    /**
+     * Sets a filter to a physical table name.
+     * @param physicalTableName Physical table name.
+     */
+    public void setPhysicalTableName(PhysicalTableName physicalTableName) {
+        this.physicalTableName = physicalTableName;
+    }
+
+    /**
      * Sets the enabled search criteria. null - search is ignored on the enabled/disabled flags,
      * true - only enabled (not explicitly disabled) nodes are returned (disabled connection or table stops search for nested elements),
      * false - only nodes that are disabled are returned.
@@ -165,17 +191,20 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connection)) {
-            connectionNameSearchPattern = SearchPattern.create(false, connection);
+        if (this.connectionNameSearchPattern == null && !Strings.isNullOrEmpty(this.connection)) {
+            this.connectionNameSearchPattern = SearchPattern.create(false, this.connection);
         }
 
         return connectionNameSearchPattern;
     }
     
     protected void recreateSchemaTableNameSearchPatterns() {
-        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(fullTableName);
-        schemaNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getSchemaName());
-        tableNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getTableName());
+        PhysicalTableName parsedSchemaTableName = this.getPhysicalTableName();
+        if (parsedSchemaTableName == null) {
+            return;
+        }
+        this.schemaNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getSchemaName());
+        this.tableNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getTableName());
     }
 
     /**
@@ -185,7 +214,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaNameSearchPattern() {
-        if (schemaNameSearchPattern == null && !Strings.isNullOrEmpty(fullTableName)) {
+        if (this.schemaNameSearchPattern == null && this.getPhysicalTableName() != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -199,7 +228,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getTableNameSearchPattern() {
-        if (tableNameSearchPattern == null && !Strings.isNullOrEmpty(fullTableName)) {
+        if (tableNameSearchPattern == null && this.getPhysicalTableName() != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 

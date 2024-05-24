@@ -838,7 +838,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`column_list_model`](../models/columns.md#columnlistmodel)</span>||*[ColumnListModel](../models/columns.md#columnlistmodel)*|
+|<span class="no-wrap-code">[`column_list_model`](../models/common.md#columnlistmodel)</span>||*[ColumnListModel](../models/common.md#columnlistmodel)*|
 
 
 
@@ -6704,7 +6704,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`column_list_model`</span>||*List[[ColumnListModel](../models/columns.md#columnlistmodel)]*|
+|<span class="no-wrap-code">`column_list_model`</span>||*List[[ColumnListModel](../models/common.md#columnlistmodel)]*|
 
 
 
@@ -6716,6 +6716,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`data_quality_status`</span>|Optional parameter to opt out from retrieving the most recent data quality status for the column. By default, DQOps calculates the data quality status from the data quality results.|*boolean*| |
+|<span class="no-wrap-code">[`check_type`](../models/common.md#checktype)</span>|Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type|*[CheckType](../models/common.md#checktype)*| |
 
 
 
@@ -6805,6 +6807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns
+	from dqops.client.models import CheckType
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -6904,6 +6907,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns
+	from dqops.client.models import CheckType
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
@@ -7003,6 +7007,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns
+	from dqops.client.models import CheckType
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -7105,6 +7110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns
+	from dqops.client.models import CheckType
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -8377,7 +8383,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic column information to store|*[ColumnListModel](../models/columns.md#columnlistmodel)*| |
+|Basic column information to store|*[ColumnListModel](../models/common.md#columnlistmodel)*| |
 
 
 

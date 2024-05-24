@@ -44,15 +44,15 @@ export default function SchemaTableItemDimensions({
   return (
     <>
       {' '}
-      <td className="pl-4">
+      <td className="pl-4 text-xs">
         <div
           className={clsx(
-            'w-13 h-6 text-center flex items-center justify-center',
+            'w-10 h-4.5 text-center flex items-center justify-center',
             getColor(item.data_quality_status?.current_severity)
           )}
         >
           {item.data_quality_status?.data_quality_kpi !== undefined
-            ? item.data_quality_status?.data_quality_kpi.toPrecision(3) + '%'
+            ? Math.round(item.data_quality_status?.data_quality_kpi) + '%'
             : ''}
         </div>
       </td>
@@ -70,7 +70,7 @@ export default function SchemaTableItemDimensions({
         const hasNoSeverity = severityColor.length === 0;
 
         const dimensionsClassNames = clsx(
-          'w-13 h-6 text-center flex items-center justify-center',
+          'w-10 h-4.5 text-center flex items-center justify-center text-xs',
           {
             'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
             [severityColor]: !hasNoSeverity
@@ -92,9 +92,13 @@ export default function SchemaTableItemDimensions({
                 {(item.data_quality_status?.dimensions ?? {})?.[
                   dimensionKey as any
                 ]?.data_quality_kpi !== undefined
-                  ? (item.data_quality_status?.dimensions ?? {})?.[
-                      dimensionKey as any
-                    ].data_quality_kpi?.toPrecision(2 | 3) + '%'
+                  ? Math.round(
+                      Number(
+                        (item.data_quality_status?.dimensions ?? {})?.[
+                          dimensionKey as any
+                        ].data_quality_kpi
+                      )
+                    ) + '%'
                   : ''}
               </div>
             </Tooltip>
@@ -116,7 +120,7 @@ export default function SchemaTableItemDimensions({
               >
                 <div
                   className={clsx(
-                    'w-13 h-6 text-center flex items-center justify-center',
+                    'w-10 h-4.5 text-xs text-center flex items-center justify-center',
                     getColor(
                       (item.data_quality_status?.dimensions ?? {})?.[
                         dimensionKey as any
@@ -137,9 +141,13 @@ export default function SchemaTableItemDimensions({
                   {(item.data_quality_status?.dimensions ?? {})?.[
                     dimensionKey as any
                   ]?.data_quality_kpi !== undefined
-                    ? (item.data_quality_status?.dimensions ?? {})?.[
-                        dimensionKey as any
-                      ].data_quality_kpi?.toPrecision(2 | 3) + '%'
+                    ? Math.round(
+                        Number(
+                          (item.data_quality_status?.dimensions ?? {})?.[
+                            dimensionKey as any
+                          ].data_quality_kpi
+                        )
+                      ) + '%'
                     : ''}
                 </div>
               </Tooltip>

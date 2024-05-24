@@ -20,7 +20,9 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.sensors.ReferencedTableParameters;
 import com.dqops.utils.reflection.RequiredField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,7 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec extends AbstractSensorParametersSpec {
+public class ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec extends AbstractSensorParametersSpec
+        implements ReferencedTableParameters {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
@@ -61,6 +64,12 @@ public class ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec extends 
     }
 
     /**
+     * Alias on getForeignTable method for ReferencedTableParameters interface implementation
+     */
+    @JsonIgnore
+    public String getReferencedTable(){ return getForeignTable(); }
+
+    /**
      * Sets the table name.
      * @param foreignTable table name.
      */
@@ -68,6 +77,13 @@ public class ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec extends 
         this.setDirtyIf(!Objects.equals(this.foreignTable, foreignTable));
         this.foreignTable = foreignTable;
     }
+
+    /**
+     * Alias on setForeignTable method for ReferencedTableParameters interface implementation
+     * @param referencedTable table name.
+     */
+    @JsonIgnore
+    public void setReferencedTable(String referencedTable){ setForeignTable(referencedTable); }
 
     /**
      * Returns the column name.

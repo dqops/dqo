@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -85,5 +86,25 @@ public class MaxCountRule1ParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/max_count";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxCount == null) {
+            return;
+        }
+
+        if (this.maxCount < 5) {
+            this.maxCount = 5L;
+            return;
+        }
+
+        this.maxCount = (long)(maxCount * 1.5);
     }
 }

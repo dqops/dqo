@@ -51,7 +51,7 @@ public class DuckdbConnectionSpecObjectMother {
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
-                setReadMode(DuckdbReadMode.files);
+                setReadMode(DuckdbReadMode.in_memory);
                 setFilesFormatType(duckdbFilesFormatType);
                 setStorageType(DuckdbStorageType.local);
             }});
@@ -70,7 +70,7 @@ public class DuckdbConnectionSpecObjectMother {
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
-                setReadMode(DuckdbReadMode.files);
+                setReadMode(DuckdbReadMode.in_memory);
                 setFilesFormatType(duckdbFilesFormatType);
                 setStorageType(DuckdbStorageType.s3);
                 setUser("aws_example_key_id");
@@ -93,7 +93,7 @@ public class DuckdbConnectionSpecObjectMother {
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
-                setReadMode(DuckdbReadMode.files);
+                setReadMode(DuckdbReadMode.in_memory);
                 setFilesFormatType(duckdbFilesFormatType);
                 setStorageType(DuckdbStorageType.azure);
                 setAzureAuthenticationMode(azureAuthenticationMode);

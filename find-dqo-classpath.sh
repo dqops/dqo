@@ -40,9 +40,9 @@ if [ -e $(dirname $0)/dqops/pom.xml ]; then
     fi
 
     if [ -n "$DQO_PREPEND_CLASSES" ]; then
-        export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
+        export DQO_LAUNCH_CLASSPATH="$DQO_PREPEND_CLASSES:$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*"
     else
-        export DQO_LAUNCH_CLASSPATH=$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
+        export DQO_LAUNCH_CLASSPATH="$(dirname $0)/dqops/target/dqo-dqops-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*"
     fi
 else
 
@@ -52,9 +52,9 @@ else
     fi
 
     if [ -n "$DQO_PREPEND_CLASSES" ]; then
-        export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$DQO_HOME/jars/*
+        export DQO_LAUNCH_CLASSPATH="$DQO_PREPEND_CLASSES:$DQO_HOME/jars/*"
     else
-        export DQO_LAUNCH_CLASSPATH=$DQO_HOME/jars/*
+        export DQO_LAUNCH_CLASSPATH="$DQO_HOME/jars/*"
     fi
 fi
 

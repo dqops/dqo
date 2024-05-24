@@ -280,7 +280,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`highest_severity`](./check_results.md#ruleseveritylevel)</span>|The highest check severity for the data quality checks executed in this batch.|*[RuleSeverityLevel](./check_results.md#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`highest_severity`](./common.md#ruleseveritylevel)</span>|The highest check severity for the data quality checks executed in this batch.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">`executed_checks`</span>|The total count of all executed checks.|*integer*|
 |<span class="no-wrap-code">`valid_results`</span>|The total count of all checks that finished successfully (with no data quality issues).|*integer*|
 |<span class="no-wrap-code">`warnings`</span>|The total count of all invalid data quality checks that finished raising a warning.|*integer*|

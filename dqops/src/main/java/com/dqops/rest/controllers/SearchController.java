@@ -199,7 +199,7 @@ public class SearchController {
                                     CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                             tableListModel.getConnectionName(), tableListModel.getTarget());
                                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : new TableCurrentDataQualityStatusModel());
                                 }
                                 return tableListModel;
                             }));
@@ -319,7 +319,8 @@ public class SearchController {
             TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
             if (currentTableStatus != null) {
                 ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
-                listModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                listModel.setDataQualityStatus(columnQualityStatusModel != null ?
+                        columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
             }
         });
 
@@ -336,7 +337,8 @@ public class SearchController {
                                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
                                     if (currentTableStatus != null) {
                                         ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
-                                        listModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                                        listModel.setDataQualityStatus(columnQualityStatusModel != null ?
+                                                columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
                                     }
                                 }
                                 return listModel;

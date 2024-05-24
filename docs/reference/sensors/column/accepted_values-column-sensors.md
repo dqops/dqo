@@ -1076,9 +1076,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1089,30 +1089,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1139,9 +1141,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1168,10 +1170,12 @@ The templates used to generate the SQL query for each data source supported by D
     (
         SELECT
             top_col_values.top_value as top_value,
+            {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            {% endif -%}
+            RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1182,17 +1186,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
-    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+    {% macro render_grouping_columns() %}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
+    
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
+    
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {{ ',' }}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1211,16 +1230,18 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
                 ELSE NULL
             END
         ) AS actual_value,
-        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {%- if lib.time_series is not none -%} {{- "," }}
         top_values.time_period,
         top_values.time_period_utc
+        {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
@@ -1250,9 +1271,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1262,31 +1283,33 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1313,9 +1336,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1342,13 +1365,13 @@ The templates used to generate the SQL query for each data source supported by D
     FROM
     (
         SELECT
-                top_col_values.top_value as top_value,
-                {% if lib.time_series is not none -%}
-                top_col_values.time_period as time_period,
-                top_col_values.time_period_utc as time_period_utc,
-                {%- endif -%}
-                RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                    ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            top_col_values.top_value as top_value,
+            {% if lib.time_series is not none -%}
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            {% endif -%}
+            RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
             FROM
         (
             SELECT
@@ -1359,30 +1382,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                                PARTITION BY
-                            {%- else  -%}
-                                {{ ',' }}
-                            {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1409,9 +1434,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-            , top_values.time_period
-            , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1442,16 +1467,16 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period time_period,
             top_col_values.time_period_utc time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 {{ lib.render_target_column('analyzed_table') }} top_value,
                 COUNT(*) total_values
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
             FROM
             (
                 SELECT
@@ -1461,30 +1486,32 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                 FROM {{ lib.render_target_table() }} additional_table) analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) top_col_values
     ) top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1509,7 +1536,7 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('original_table') }}
         FROM {{ lib.render_target_table() }} original_table
         {{- lib.render_where_clause(table_alias_prefix='original_table') }}) analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -1517,10 +1544,10 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) actual_value,
         MAX({{ parameters.expected_values | length }}) expected_value
-        {% if lib.time_series is not none -%}
-            , top_values.time_period
-            , top_values.time_period_utc
-            {%- endif -%}
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
+        {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
@@ -1550,9 +1577,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1563,30 +1590,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-                    ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1605,7 +1634,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -1613,9 +1642,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1646,17 +1675,17 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 top_value,
                 COUNT(*) AS total_values
-                    {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
-                FROM (
+                {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+            FROM (
                     SELECT
                         original_table.*,
                         {{ lib.render_target_column('original_table') }} AS top_value
@@ -1666,30 +1695,32 @@ The templates used to generate the SQL query for each data source supported by D
                     {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                 ) analyzed_table
             {{- lib.render_where_clause(indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1708,7 +1739,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -1716,9 +1747,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1749,9 +1780,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1762,30 +1793,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1804,7 +1837,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -1812,9 +1845,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1845,9 +1878,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1858,30 +1891,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1900,7 +1935,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -1908,9 +1943,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
@@ -1940,9 +1975,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1953,30 +1988,32 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -1995,7 +2032,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -2003,10 +2040,10 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-            , top_values.time_period
-            , top_values.time_period_utc
-            {%- endif -%}
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
+        {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
     {%- endif -%}
@@ -2036,9 +2073,9 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif %}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -2049,27 +2086,31 @@ The templates used to generate the SQL query for each data source supported by D
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} {{ lib.render_target_column('analyzed_table') }}
+            GROUP BY {{ render_grouping_columns() -}} {{ lib.render_target_column('analyzed_table') }}
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series is not none and lib.time_series.mode is not none and lib.time_series.mode != 'current_time') %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+    
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
+    
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -2088,7 +2129,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT_BIG(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -2096,17 +2137,13 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length) > 0) -%}
-            {%- for attribute in lib.data_groupings -%}
-                {{','}} top_values.grouping_{{ attribute }}
-            {%- endfor -%}
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
-        {% if lib.time_series is not none %}
-        , top_values.time_period
-        , top_values.time_period_utc
-        {% endif %}
+        {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}
-    {%- endif %}
+    {%- endif -%}
     {% if lib.time_series is not none -%}
     GROUP BY time_period, time_period_utc
     {%- endif -%}
@@ -2140,17 +2177,17 @@ The templates used to generate the SQL query for each data source supported by D
             {% if lib.time_series is not none -%}
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
-            {%- endif -%}
+            {% endif -%}
             RANK() OVER({{- render_data_grouping('top_col_values', indentation = ' ', partition_by_enabled=true) }}
-                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
                 top_value,
                 COUNT(*) AS total_values
-                    {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
-                    {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
-                FROM (
+                {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+            FROM (
                     SELECT
                         original_table.*,
                         {{ lib.render_target_column('original_table') }} AS top_value
@@ -2160,30 +2197,32 @@ The templates used to generate the SQL query for each data source supported by D
                     {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                 ) analyzed_table
             {{- lib.render_where_clause(indentation = '        ') }}
-            GROUP BY {{ render_grouping_columns() }} top_value
-            ORDER BY {{ render_grouping_columns() }} total_values DESC
+            GROUP BY {{ render_grouping_columns() -}} top_value
+            ORDER BY {{ render_grouping_columns() -}} total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
     {%- endmacro -%}
     
     {% macro render_grouping_columns() %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none %}
-            {{ lib.render_grouping_column_names() }} {{ ',' }}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or lib.time_series is not none -%}
+            {{ lib.render_grouping_column_names() }} {{- ', ' -}}
         {%- endif -%}
     {% endmacro %}
     
     {%- macro render_data_grouping(table_alias_prefix = '', indentation = '', partition_by_enabled = false) -%}
     
-        {%- if lib.time_series is not none and partition_by_enabled == true -%}PARTITION BY top_col_values.time_period{%- endif -%}
+        {%- if partition_by_enabled == true -%}PARTITION BY
+            {%- if lib.time_series is not none -%}
+                {{" "}}top_col_values.time_period
+            {%- elif lib.data_groupings is none -%}
+                {{" "}}NULL
+            {%- endif -%}
+        {%- endif -%}
     
         {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
             {%- for attribute in lib.data_groupings -%}
-                {% if lib.time_series is none and loop.index == 1 and partition_by_enabled == true -%}
-                    PARTITION BY
-                {%- else  -%}
-                    {{ ',' }}
-                {%- endif -%}
+                {{- "" if loop.first and lib.time_series is none and partition_by_enabled else "," -}}
                 {%- with data_grouping_level = lib.data_groupings[attribute] -%}
                     {%- if data_grouping_level.source == 'tag' -%}
                         {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
@@ -2202,7 +2241,7 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else %}
+    {%- else %}
         COUNT(DISTINCT
             CASE
                 WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
@@ -2210,9 +2249,9 @@ The templates used to generate the SQL query for each data source supported by D
             END
         ) AS actual_value,
         MAX({{ parameters.expected_values | length }}) AS expected_value
-        {% if lib.time_series is not none -%}
-        , top_values.time_period
-        , top_values.time_period_utc
+        {%- if lib.time_series is not none -%} {{- "," }}
+        top_values.time_period,
+        top_values.time_period_utc
         {%- endif -%}
         {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
     {{ render_from_subquery() }}

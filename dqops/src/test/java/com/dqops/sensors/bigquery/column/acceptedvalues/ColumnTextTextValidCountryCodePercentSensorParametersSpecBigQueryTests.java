@@ -179,13 +179,9 @@ public class ColumnTextTextValidCountryCodePercentSensorParametersSpecBigQueryTe
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
-                END AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+            WHERE %6$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -291,13 +287,11 @@ public class ColumnTextTextValidCountryCodePercentSensorParametersSpecBigQueryTe
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
-                analyzed_table.`length_int` AS grouping_level_1,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`length_int` AS grouping_level_1
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
-            GROUP BY grouping_level_1, time_period, time_period_utc
-            ORDER BY grouping_level_1, time_period, time_period_utc""";
+            GROUP BY grouping_level_1
+            ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -421,13 +415,11 @@ public class ColumnTextTextValidCountryCodePercentSensorParametersSpecBigQueryTe
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
-                analyzed_table.`length_int` AS grouping_level_3,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`length_int` AS grouping_level_3
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
-            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
+            GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
+            ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -435,7 +427,7 @@ public class ColumnTextTextValidCountryCodePercentSensorParametersSpecBigQueryTe
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
-                this.getSubstitutedFilter("analyzed_table")
+                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 

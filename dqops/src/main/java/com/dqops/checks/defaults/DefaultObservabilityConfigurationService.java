@@ -16,7 +16,6 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;

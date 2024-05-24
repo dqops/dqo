@@ -5,16 +5,31 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.check_type import CheckType
 from ...models.column_list_model import ColumnListModel
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     connection_name: str,
     schema_name: str,
     table_name: str,
+    *,
+    data_quality_status: Union[Unset, None, bool] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Dict[str, Any]:
     pass
+
+    params: Dict[str, Any] = {}
+    params["dataQualityStatus"] = data_quality_status
+
+    json_check_type: Union[Unset, None, str] = UNSET
+    if not isinstance(check_type, Unset):
+        json_check_type = check_type.value if check_type else None
+
+    params["checkType"] = json_check_type
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "get",
@@ -23,6 +38,7 @@ def _get_kwargs(
             schemaName=schema_name,
             tableName=table_name,
         ),
+        "params": params,
     }
 
 
@@ -61,6 +77,8 @@ def sync_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
+    data_quality_status: Union[Unset, None, bool] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Response[List["ColumnListModel"]]:
     """getColumns
 
@@ -70,6 +88,8 @@ def sync_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
+        data_quality_status (Union[Unset, None, bool]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -83,6 +103,8 @@ def sync_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
+        data_quality_status=data_quality_status,
+        check_type=check_type,
     )
 
     response = client.get_httpx_client().request(
@@ -98,6 +120,8 @@ def sync(
     table_name: str,
     *,
     client: AuthenticatedClient,
+    data_quality_status: Union[Unset, None, bool] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Optional[List["ColumnListModel"]]:
     """getColumns
 
@@ -107,6 +131,8 @@ def sync(
         connection_name (str):
         schema_name (str):
         table_name (str):
+        data_quality_status (Union[Unset, None, bool]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -121,6 +147,8 @@ def sync(
         schema_name=schema_name,
         table_name=table_name,
         client=client,
+        data_quality_status=data_quality_status,
+        check_type=check_type,
     ).parsed
 
 
@@ -130,6 +158,8 @@ async def asyncio_detailed(
     table_name: str,
     *,
     client: AuthenticatedClient,
+    data_quality_status: Union[Unset, None, bool] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Response[List["ColumnListModel"]]:
     """getColumns
 
@@ -139,6 +169,8 @@ async def asyncio_detailed(
         connection_name (str):
         schema_name (str):
         table_name (str):
+        data_quality_status (Union[Unset, None, bool]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -152,6 +184,8 @@ async def asyncio_detailed(
         connection_name=connection_name,
         schema_name=schema_name,
         table_name=table_name,
+        data_quality_status=data_quality_status,
+        check_type=check_type,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -165,6 +199,8 @@ async def asyncio(
     table_name: str,
     *,
     client: AuthenticatedClient,
+    data_quality_status: Union[Unset, None, bool] = UNSET,
+    check_type: Union[Unset, None, CheckType] = UNSET,
 ) -> Optional[List["ColumnListModel"]]:
     """getColumns
 
@@ -174,6 +210,8 @@ async def asyncio(
         connection_name (str):
         schema_name (str):
         table_name (str):
+        data_quality_status (Union[Unset, None, bool]):
+        check_type (Union[Unset, None, CheckType]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -189,5 +227,7 @@ async def asyncio(
             schema_name=schema_name,
             table_name=table_name,
             client=client,
+            data_quality_status=data_quality_status,
+            check_type=check_type,
         )
     ).parsed

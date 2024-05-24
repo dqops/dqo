@@ -17,16 +17,16 @@ package com.dqops.duckdb.sensors.table.volume;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
-import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -46,15 +46,17 @@ public class DuckdbTableVolumeRowCountSensorParametersSpecIntegrationTest extend
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.duckdb);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableVolumeRowCountSensorParametersSpec();
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableVolumeProfilingChecksSpec category = new TableVolumeProfilingChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
-        category.setProfileRowCount(this.checkSpec);
+//        TableVolumeProfilingChecksSpec category = new TableVolumeProfilingChecksSpec();
+//        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
+//        category.setProfileRowCount(this.checkSpec);
     }
 
     @Test
