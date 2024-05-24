@@ -65,6 +65,7 @@ import { ReactComponent as JsonSvg } from './svg/json-icon.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
+import { ReactComponent as MinusSvg } from './svg/minus.svg';
 import { ReactComponent as MonitoringChecksSvg } from './svg/monitoring-checks.svg';
 import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
 import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
@@ -113,7 +114,6 @@ import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
 import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
-
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -234,7 +234,8 @@ const iconsMap: any = {
   data_sources: DataSourcesSvg,
   incidents: IncidentsSvg,
   monitoring_checks: MonitoringChecksSvg,
-  partitioned_checks: PartitionedChecksSvg
+  partitioned_checks: PartitionedChecksSvg,
+  minus: MinusSvg
 };
 
 interface SvgIconProps {
