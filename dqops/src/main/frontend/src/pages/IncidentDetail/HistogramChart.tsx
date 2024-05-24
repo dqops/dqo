@@ -8,6 +8,7 @@ import {
   getIncidentsHistograms,
   setIncidentsHistogramFilter
 } from '../../redux/actions/incidents.actions';
+import { IRootState } from '../../redux/reducers';
 import {
   IncidentHistogramFilter,
   IncidentIssueFilter
@@ -44,6 +45,7 @@ export const HistogramChart = ({
     histograms: IncidentIssueHistogramModel;
     histogramFilter: IncidentHistogramFilter;
   } = useSelector(getFirstLevelIncidentsState);
+  const { activeTab } = useSelector((state: IRootState) => state.incidents);
   const dispatch = useActionDispatch();
 
   useEffect(() => {
@@ -59,8 +61,9 @@ export const HistogramChart = ({
   }, [connection, year, month, incidentId, days]);
 
   useEffect(() => {
+    if (!histogramFilter) return;
     dispatch(getIncidentsHistograms(histogramFilter ?? {}));
-  }, [histogramFilter]);
+  }, [histogramFilter, activeTab]);
 
   const onChangeFilter = (obj: Partial<IncidentHistogramFilter>) => {
     dispatch(
