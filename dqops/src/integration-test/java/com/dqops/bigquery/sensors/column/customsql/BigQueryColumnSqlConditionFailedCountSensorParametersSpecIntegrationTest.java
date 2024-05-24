@@ -66,7 +66,7 @@ public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(14L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 }

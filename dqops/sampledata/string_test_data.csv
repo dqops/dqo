@@ -1,31 +1,31 @@
 id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surrounded_by_whitespace_ok:INTEGER,null_placeholder:STRING,null_placeholder_ok:INTEGER,boolean_placeholder:STRING,boolean_placeholder_ok:INTEGER,empty_percent:STRING,empty_percent_ok:INTEGER,range_numeric:DOUBLE,range_integers:INTEGER,date:LOCAL_DATE,boolean_type_placeholder:BOOLEAN
-1,allowed!#$characters@mail.com,1,  name,0,married,0,none,0,North Ridgeville,1,8.9,21520,2022-02-01,
-2,allowed%^&characters@mail.com,1, sur name ,0,married,0,true ,1,Point Pleasant Beach,1,56.43,21531,2022-02-02,0
-3,allowed*+characters@mail.com,1,advetising,1,married,0,false ,1,West Chicago,1,98.07,215417,2022-02-03,
-4,allowed-/=character@mail.com,1,,1,none,1,f,1,South Rockledge Street,1,,21522,2022-02-04,
-5,allowed?character@mail.com,1,Philade lphia,1,married,0,f,1,,0,34,21536,2022-02-05,
-6,allowed_character@mail.com,1,Alabama  ,0,married,0,y,1,Pumpkin Hill Drive,1,76.91,21550,2022-02-06,
-7,allowed`character@mail.com,1,Delaware,1,empty,1,y,1,,0,1.54,,2022-02-07,
-8,allowed{character@mail.com,1,North Dakota,1,married,0,n/a,0,Brookside Street,1,,2153888,2022-02-08,
-9,allowed}character@mail.com,1,Ohio,1,,1,y,1,West New York,1,56,21561,2022-02-09,
-10,allowed|character@mail.com,1,Alaska,1,undefined,1,yes,1,Margarets Avenue,1,78,86045,2022-02-10,
-11,allowed~character@mail.com,1,Arizona,1,married,0,no,1,Benton Harbor,1,,2345,2022-02-11,1
-12,dot.is.allowed.in.email@mail.com,1,,1,blank,1,no,1,Poplar Court,1,89.6,86435,2022-02-12,
-13,_specialcharonbeginning@mail.com,1,,1,married,0,no,1,Liberty Court,1,,86024,2022-02-13,1
-14,specialcharonend_@mail.com,1,Colorado,1,-,1,yes,1,,0,76,30601306,2022-02-14,
-15,invalid.single.char.top.domain@mail.a,0,Connecticu,1,missing,1,y,1,,0,34,3060830,2022-02-15,0
-16,.dot.before.email.allowed@gmail.com,1,Delaware,1,married,0,y,1,Branch Lane,1,21,30683,2022-02-16,0
-17,local.part.end.with.dot.not.allowed.@gmail.com,0,District of Columbia,1,null,1,t,1,West Airport Court,1,54.99,,2022-02-17,
-18,numbers.allowed.1234567890@mail.com,1,Florida,1,nan,1,t,1,Cypress Road,1,87.234,61914,2022-02-18,
-19,domain.test@mail.co.uk,1,Geor gia,1,married,0,f,1,Division Drive,1,87,61925,2022-02-19,
-20,domain.test@mail.com.pl,1,Hawaii  ,0,married,0,f,1,,0,,,2022-02-20,
-21,hypens.allowed.in.domain@coca-cola.com,1,Idaho,1,married,0,true ,1,,0,98.76,66552,2022-02-21,
-22,invalid.domain@mail_.com,0,Illinois,1,N/A,1,false ,1,Lincoln Street,1,34.6,66419,2022-02-22,
-23,invalid.domain@mail,0,Indiana,1,na,1,none,0,Green Hill,1,56.21,22801,2022-02-23,
-24,.@no.local.part.com,0,Iowa,1,n/d,0,okay,0,,0,76.09,22803,2022-02-24,0
-25,invalid.domain@.com,0,Kansas,1,married,0,1,1,West Windsor Road,1,89.23,765890,2022-02-25,1
-26,AaBbCcMmQqZz@lettersize.com,1,Kentucky,1,,1,0,1,Mulberry Ave.,1,123.65,86045,2022-02-01,
-27,invalid.email.mail.com,0,Louisiana,1,,1,1,1,,0,77,2345,2022-02-01,
-28,invalid@mail@mail.com,0,Tennessee,1,married,0,f,1,Summerhouse St.,1,432.98,86435,2022-02-01,
-29,12345678901234567890123456789012345678901234567890123456789012345@toolong.localpart.com,0,Texas,1,married,0,t,1,,0,34.12,86024,2022-02-01,
-30,domain.name.underscores.not.allowed@mail_box.com,0,Ut ah,1,married,0,t,1,Hill Field Ave.,1,678.43,30601,2022-02-01,1
+1,allowed!#$characters@mail.com,1,"  name",0,married,0,none,0,North Ridgeville,1,8.9,21520,2022-02-01,
+2,allowed%^&characters@mail.com,1," sur name ",0,married,0,true ,1,Point Pleasant Beach,1,56.43,21531,2022-02-02,0
+3,allowed*+characters@mail.com,1,"advetising",1,married,0,false ,1,West Chicago,1,98.07,215417,2022-02-03,
+4,allowed-/=character@mail.com,1,"",1,none,1,f,1,South Rockledge Street,1,,21522,2022-02-04,
+5,allowed?character@mail.com,1,"Philade lphia",1,married,0,f,1,,0,34,21536,2022-02-05,
+6,allowed_character@mail.com,1,"Alabama  ",0,married,0,y,1,Pumpkin Hill Drive,1,76.91,21550,2022-02-06,
+7,allowed`character@mail.com,1,"Delaware",1,empty,1,y,1,,0,1.54,,2022-02-07,
+8,allowed{character@mail.com,1,"North Dakota",1,married,0,n/a,0,Brookside Street,1,,2153888,2022-02-08,
+9,allowed}character@mail.com,1,"Ohio",1,,1,y,1,West New York,1,56,21561,2022-02-09,
+10,allowed|character@mail.com,1,"Alaska",1,undefined,1,yes,1,Margarets Avenue,1,78,86045,2022-02-10,
+11,allowed~character@mail.com,1,"Arizona",1,married,0,no,1,Benton Harbor,1,,2345,2022-02-11,1
+12,dot.is.allowed.in.email@mail.com,1,"",1,blank,1,no,1,Poplar Court,1,89.6,86435,2022-02-12,
+13,_specialcharonbeginning@mail.com,1,"",1,married,0,no,1,Liberty Court,1,,86024,2022-02-13,1
+14,specialcharonend_@mail.com,1,"Colorado",1,-,1,yes,1,,0,76,30601306,2022-02-14,
+15,invalid.single.char.top.domain@mail.a,0,"Connecticu",1,missing,1,y,1,,0,34,3060830,2022-02-15,0
+16,.dot.before.email.allowed@gmail.com,1,"Delaware",1,married,0,y,1,Branch Lane,1,21,30683,2022-02-16,0
+17,local.part.end.with.dot.not.allowed.@gmail.com,0,"District of Columbia",1,null,1,t,1,West Airport Court,1,54.99,,2022-02-17,
+18,numbers.allowed.1234567890@mail.com,1,"Florida",1,nan,1,t,1,Cypress Road,1,87.234,61914,2022-02-18,
+19,domain.test@mail.co.uk,1,"Geor gia",1,married,0,f,1,Division Drive,1,87,61925,2022-02-19,
+20,domain.test@mail.com.pl,1,"Hawaii  ",0,married,0,f,1,,0,,,2022-02-20,
+21,hypens.allowed.in.domain@coca-cola.com,1,"Idaho",1,married,0,true ,1,,0,98.76,66552,2022-02-21,
+22,invalid.domain@mail_.com,0,"Illinois",1,N/A,1,false ,1,Lincoln Street,1,34.6,66419,2022-02-22,
+23,invalid.domain@mail,0,"Indiana",1,na,1,none,0,Green Hill,1,56.21,22801,2022-02-23,
+24,.@no.local.part.com,0,"Iowa",1,n/d,0,okay,0,,0,76.09,22803,2022-02-24,0
+25,invalid.domain@.com,0,"Kansas",1,married,0,1,1,West Windsor Road,1,89.23,765890,2022-02-25,1
+26,AaBbCcMmQqZz@lettersize.com,1,"Kentucky",1,,1,0,1,Mulberry Ave.,1,123.65,86045,2022-02-01,
+27,invalid.email.mail.com,0,"Louisiana",1,,1,1,1,,0,77,2345,2022-02-01,
+28,invalid@mail@mail.com,0,"Tennessee",1,married,0,f,1,Summerhouse St.,1,432.98,86435,2022-02-01,
+29,12345678901234567890123456789012345678901234567890123456789012345@toolong.localpart.com,0,"Texas",1,married,0,t,1,,0,34.12,86024,2022-02-01,
+30,domain.name.underscores.not.allowed@mail_box.com,0,"Ut ah",1,married,0,t,1,Hill Field Ave.,1,678.43,30601,2022-02-01,1
