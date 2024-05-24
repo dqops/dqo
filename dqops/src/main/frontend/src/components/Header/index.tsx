@@ -209,7 +209,12 @@ const Header = () => {
       )}
       <div className="flex space-x-2">
         <div onClick={() => history.push(homeActiveTab ?? '/home')}>
-          <Logo className="w-30 cursor-pointer" />
+          <Logo
+            className={clsx(
+              'w-20 cursor-pointer',
+              location.pathname === homeActiveTab && 'w-30'
+            )}
+          />
         </div>
         <div className="flex items-center">
           <Tooltip
