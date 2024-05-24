@@ -60,22 +60,22 @@ const IncidentsTree = () => {
   };
 
   const openCorrectTabFromUrl = () => {
-    if (
-      window.location.pathname === '/incidents' ||
-      window.location.pathname === '/incidents/'
-    ) {
-      return;
-    }
+    // if (
+    //   window.location.pathname === '/incidents' ||
+    //   window.location.pathname === '/incidents/'
+    // ) {
+    //   return;
+    // }
 
     const path = window.location.pathname.split('/');
     const connection = path[2];
     const selectedConnection = connections.find(
       (x) => x.connection === connection
     );
-
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
     } else if (path[3]) {
+      console.log(selectedConnection, path);
       const connection = path[2] || '';
       const year = Number(path[3]);
       const month = Number(path[4]);
@@ -95,12 +95,16 @@ const IncidentsTree = () => {
         })
       );
 
-      dispatch(
-        setActiveFirstLevelTab(
-          ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
-        )
-      );
       history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
+    }
+    if (
+      activeTab &&
+      activeTab !== window.location.pathname &&
+      (window.location.pathname === '/incidents/' ||
+        window.location.pathname === '/incidents')
+    ) {
+      dispatch(setActiveFirstLevelTab(activeTab));
+      history.push(activeTab);
     }
   };
 

@@ -59,9 +59,7 @@ export const HistogramChart = ({
   }, [connection, year, month, incidentId, days]);
 
   useEffect(() => {
-    if (!histogramFilter) return;
-
-    dispatch(getIncidentsHistograms(histogramFilter));
+    dispatch(getIncidentsHistograms(histogramFilter ?? {}));
   }, [histogramFilter]);
 
   const onChangeFilter = (obj: Partial<IncidentHistogramFilter>) => {
