@@ -9,6 +9,7 @@ import {
   IncidentModelStatusEnum
 } from '../../api';
 import Button from '../../components/Button';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import Input from '../../components/Input';
 import { Pagination } from '../../components/Pagination';
@@ -94,7 +95,10 @@ export const IncidentDetail = () => {
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
   const [open, setOpen] = useState(false);
+  const [disableDialog, setDisableDialog] = useState(false);
+  const [recalibrateDialog, setRecalibrateDialog] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const {
@@ -254,6 +258,21 @@ export const IncidentDetail = () => {
     }
   ];
 
+  const disableIncident = async () => {
+    IncidentsApi.disableChecksForIncident(connection, year, month, incidentId);
+    setDisableDialog(false);
+  };
+
+  const recalibrateIncident = async () => {
+    IncidentsApi.recalibrateChecksForIncident(
+      connection,
+      year,
+      month,
+      incidentId
+    );
+    setRecalibrateDialog(false);
+  };
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -318,11 +337,41 @@ export const IncidentDetail = () => {
             {tableQualityStatusOptions
               ?.filter((y) => y.show)
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
-            <Button
-              label="Configure table notification"
-              color="primary"
-              onClick={goToConfigure}
-            ></Button>
+            <div className="flex items-center gap-x-2">
+              <Tooltip
+                content={'Disable'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <Button
+                  leftIcon={<SvgIcon name="stop" className="w-4 h-4" />}
+                  className="pr-2 py-2 pl-2 m-0 "
+                  color="primary"
+                  onClick={() => setDisableDialog(true)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Recalibrate'}
+                className="w-30 h-30 py-4 px-4 bg-gray-800"
+              >
+                <Button
+                  leftIcon={<SvgIcon name="minus" className="w-4 h-4" />}
+                  className="pr-2 py-2 pl-2 m-0 "
+                  color="primary"
+                  onClick={() => setRecalibrateDialog(true)}
+                />
+              </Tooltip>
+              <Tooltip
+                content={'Settings'}
+                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+              >
+                <Button
+                  leftIcon={<SvgIcon name="cog" className="w-4 h-4" />}
+                  className="pr-2 py-2 pl-2 m-0 "
+                  color="primary"
+                  onClick={goToConfigure}
+                />
+              </Tooltip>
+            </div>
           </div>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4 text-sm">
@@ -563,6 +612,18 @@ export const IncidentDetail = () => {
         onClose={() => setOpen(false)}
         onSubmit={handleAddIssueUrl}
         incident={incidentDetail}
+      />
+      <ConfirmDialog
+        open={disableDialog}
+        onClose={() => setDisableDialog(false)}
+        onConfirm={disableIncident}
+        message="Are you sure you want to disable checks for this incident?"
+      />
+      <ConfirmDialog
+        open={recalibrateDialog}
+        onClose={() => setRecalibrateDialog(false)}
+        onConfirm={recalibrateIncident}
+        message="Are you sure you want to recalibrate checks for this incident?"
       />
     </>
   );
