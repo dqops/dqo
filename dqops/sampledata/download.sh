@@ -48,3 +48,5 @@ curl "https://docs.google.com/spreadsheets/d/1bKI4BJKZ2KQtyQ14x2pSwrHYs_-bLuUjWV
 
 # Spreadsheet: https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g
 curl "https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g/export?exportFormat=csv" -o value_match_right_table.csv -L
+
+echo "This scirpt is obsolete !!! Please refer to the .cmd and update this script."
