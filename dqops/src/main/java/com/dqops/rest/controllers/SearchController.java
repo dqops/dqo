@@ -142,7 +142,7 @@ public class SearchController {
         if (Strings.isNullOrEmpty(tableNameFilter)) {
             tableNameFilter = "*";
         }
-        tableSearchFilters.setFullTableName(tableNameFilter + "." + schemaNameFilter);
+        tableSearchFilters.setFullTableName(schemaNameFilter + "." + tableNameFilter);
 
         if (label.isPresent() && label.get().size() > 0) {
             tableSearchFilters.setLabels(label.get().toArray(String[]::new));
@@ -269,7 +269,7 @@ public class SearchController {
         if (Strings.isNullOrEmpty(tableNameFilter)) {
             tableNameFilter = "*";
         }
-        columnSearchFilters.setSchemaTableName(tableNameFilter + "." + schemaNameFilter);
+        columnSearchFilters.setSchemaTableName(schemaNameFilter + "." + tableNameFilter);
 
         if (label.isPresent() && label.get().size() > 0) {
             columnSearchFilters.setColumnLabels(label.get().toArray(String[]::new));
