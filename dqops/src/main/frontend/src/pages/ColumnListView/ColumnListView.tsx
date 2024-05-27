@@ -6,6 +6,8 @@ import Input from '../../components/Input';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import SvgIcon from '../../components/SvgIcon';
+import clsx from 'clsx';
 
 type TSearchFilters = {
   connection?: string | undefined;
@@ -192,9 +194,14 @@ export default function ColumnListView() {
           />
         </div>
         <Button
-          label="Refresh"
           color="primary"
-          className="mb-2 mt-5 mr-4 z-[1]"
+          leftIcon={
+            <SvgIcon
+              name="sync"
+              className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
+            />
+          }
+          className="mb-4 mt-7 !mr-8 pr-0 pl-3 z-[1]"
           onClick={() =>
             getColumns(
               labels
