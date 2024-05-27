@@ -130,7 +130,7 @@ function ColumnList({
   const isEnd = columns.length < filters.pageSize;
 
   return (
-    <div className="bg-white">
+    <div className="bg-white py-2">
       <div className="flex">
         <div className="w-[280px]">
           <SectionWrapper
@@ -155,8 +155,8 @@ function ColumnList({
           </SectionWrapper>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="absolute top-25">
+        <div className="">
+          <table className="">
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
@@ -185,7 +185,8 @@ function ColumnList({
                 ))}
               </tbody>
             )}
-            <div className="px-4 my-5 pb-6 flex justify-end">
+          </table>
+          <div className="px-3 my-5 pb-6 flex justify-end">
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -199,7 +200,6 @@ function ColumnList({
                 }
               />
             </div>
-          </table>
         </div>
       </div>
     </div>

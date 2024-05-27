@@ -10,33 +10,29 @@ const renderItem = (label: string, key: string, toRotate?: boolean) => {
     },
     absoluteBottomLeft: {
       position: 'absolute',
-      bottom: 2,
+      bottom: -4,
       left: 30
     }
   };
 
   return (
     <th
-      className="px-4 text-xs"
+      className={clsx(
+        "px-4 text-xs",
+        toRotate ? 'items-start' : 'items-end'
+      )}
       key={key}
-      style={
-        toRotate
-          ? {}
-          : {
-              marginTop: '-30px'
-            }
-      }
     >
       <div
         className={clsx(
-          'flex text-sm relative h-29',
-          toRotate ? 'w-1 items-start' : 'items-end'
+          'flex text-sm relative',
+          toRotate ? 'items-start' : 'items-end'
         )}
       >
         <span
           className={clsx(
             'inline-block text-xs',
-            toRotate ? 'rotate-90 origin-bottom-left' : '',
+            toRotate ? 'rotate-90 origin-bottom-left font-normal' : '',
             label === 'Actions' ? 'ml-6' : ''
           )}
           style={

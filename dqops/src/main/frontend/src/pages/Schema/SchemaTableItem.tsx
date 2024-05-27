@@ -134,7 +134,7 @@ export default function SchemaTableItem({
           </td>
         </>
       )}
-      <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
+      <td className="content-start pt-2 max-w-100 min-w-50 whitespace-normal break-all">
         <Button
           className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
           label={item.target?.table_name}
