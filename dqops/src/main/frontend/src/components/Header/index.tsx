@@ -208,10 +208,11 @@ const Header = () => {
         </div>
       )}
       <div className="flex space-x-2">
-        <div onClick={() => history.push(homeActiveTab ?? '/home')}>
+        <div className="w-30 flex justify-center items-center"
+          onClick={() => history.push(homeActiveTab ?? '/home')}>
           <Logo
             className={clsx(
-              'w-20 cursor-pointer',
+              'w-20 cursor-pointer items-center',
               location.pathname === homeActiveTab && 'w-30'
             )}
           />
