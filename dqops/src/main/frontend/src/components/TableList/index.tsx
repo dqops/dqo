@@ -117,10 +117,11 @@ export default function index({
   return (
     <div className="bg-white">
       <div className="flex">
-        <div className="w-[280px]">
+        <div className="w-[200px]">
           <LabelsSectionWrapper
             labels={labels}
             onChangeLabels={onChangeLabels}
+            className="text-xs w-[180px] mx-4 mb-4 mt-6 "
           />
         </div>
         <div className="overflow-x-auto">
