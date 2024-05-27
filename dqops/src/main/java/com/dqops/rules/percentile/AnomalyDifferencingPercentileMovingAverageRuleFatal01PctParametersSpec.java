@@ -19,6 +19,7 @@ import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -115,6 +116,6 @@ public class AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersS
             return;
         }
 
-        this.anomalyPercent = this.anomalyPercent * 0.7;
+        this.anomalyPercent = DoubleRounding.roundToKeepEffectiveDigits(this.anomalyPercent * 0.7);
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -114,6 +115,11 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
             return;
         }
 
-        this.maxPercent = this.maxPercent * 0.7;
+        if (this.maxPercent < 70.0) {
+            this.maxPercent = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercent * 1.3);
+        }
+        else {
+            this.maxPercent = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercent + (0.3 * (100.0 - this.maxPercent)));
+        }
     }
 }

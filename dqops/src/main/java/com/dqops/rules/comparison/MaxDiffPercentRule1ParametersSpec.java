@@ -19,6 +19,7 @@ import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -104,7 +105,7 @@ public class MaxDiffPercentRule1ParametersSpec extends AbstractRuleParametersSpe
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
         if (this.maxDiffPercent != null) {
-            this.maxDiffPercent = this.maxDiffPercent * 0.7;
+            this.maxDiffPercent = DoubleRounding.roundToKeepEffectiveDigits(this.maxDiffPercent * 1.3);
         }
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -136,11 +137,11 @@ public class ChangePercentileMoving7DaysRuleParametersSpec extends AbstractRuleP
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
         if (this.percentileAbove != null) {
-            this.percentileAbove *= 0.7;
+            this.percentileAbove = DoubleRounding.roundToKeepEffectiveDigits(this.percentileAbove * 0.7);
         }
 
         if (this.percentileBelow != null) {
-            this.percentileBelow *= 0.7;
+            this.percentileBelow = DoubleRounding.roundToKeepEffectiveDigits(this.percentileBelow * 0.7);
         }
     }
 }

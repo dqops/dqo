@@ -96,8 +96,10 @@ public class TableStatusCacheImpl implements TableStatusCache {
      */
     protected CurrentTableStatusCacheEntry loadEntryCore(CurrentTableStatusKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED);
-        this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
-        incrementAwaitingOperationsCount();
+        if (this.loadTableStatusRequestSink != null) {
+            this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+            incrementAwaitingOperationsCount();
+        }
         return currentTableStatusCacheEntry;
     }
 
@@ -159,8 +161,10 @@ public class TableStatusCacheImpl implements TableStatusCache {
         }
 
         currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.REFRESH_QUEUED);
-        this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
-        incrementAwaitingOperationsCount();
+        if (this.loadTableStatusRequestSink != null) {
+            this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+            incrementAwaitingOperationsCount();
+        }
     }
 
     /**
