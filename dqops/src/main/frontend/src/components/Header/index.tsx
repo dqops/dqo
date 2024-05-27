@@ -251,7 +251,7 @@ const Header = () => {
             >
               <SvgIcon
                 name="profiling"
-                className="w-4.5 h-4.5 mr-1.5 mt-[1px]"
+                className="w-4.5 h-4.5 mr-2"
               />
               {!isWindowSmall && <div>Profiling</div>}
             </div>
@@ -269,7 +269,7 @@ const Header = () => {
               )}
               onClick={onClick(CheckTypes.MONITORING)}
             >
-              <SvgIcon name="monitoring_checks" className="w-4 h-4 mr-2" />
+              <SvgIcon name="monitoring_checks" className="w-4.5 h-4.5 mr-2" />
               {!isWindowSmall && <div>Monitoring Checks</div>}
             </div>
           </Tooltip>
