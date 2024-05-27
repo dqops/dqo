@@ -132,10 +132,10 @@ function ColumnList({
   return (
     <div className="bg-white">
       <div className="flex">
-        <div className="w-[280px]">
+        <div className="w-[200px]">
           <SectionWrapper
             title="Filter by labels"
-            className="text-xs w-[250px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[180px] mx-4 mb-4 mt-6 "
           >
             {labels.map((label, index) => (
               <div
