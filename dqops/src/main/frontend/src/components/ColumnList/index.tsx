@@ -72,6 +72,9 @@ function ColumnList({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
+    if(loading){
+      return [];
+    }
     const uniqueDimensions: string[] = [];
     columns.forEach((column) => {
       Object.keys(column.data_quality_status?.dimensions ?? {}).forEach((x) => {
@@ -85,21 +88,12 @@ function ColumnList({
   };
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-
   const getBasicDimensions = () => {
     if(loading){
       return [];
     }
     return basicDimensionTypes;
   };
-
-  const getKpiHeader = () => {
-    return loading && { 
-      label: 'Data Quality KPI', 
-      value: 'data-quality-kpi',
-      toRotate: true
-    }
-  }
 
   const headerItems: (TButtonTabs | undefined)[] = [
     checkTypes && connection

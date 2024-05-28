@@ -62,6 +62,9 @@ export default function index({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
+    if(loading){
+      return [];
+    }
     const uniqueDimensions: string[] = [];
     tables.forEach((table) => {
       Object.keys(table.data_quality_status?.dimensions ?? {}).forEach((x) => {
@@ -169,7 +172,7 @@ export default function index({
               </tbody>
             )}
           </table>
-          <div className="px-3 my-5 pb-6 flex justify-end">
+          <div className="px-3 my-5 flex justify-end">
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
