@@ -109,7 +109,7 @@ export default function SchemaTableItem({
   };
 
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareLabel(x)).join(',');
+    return labels.map((x) => prepareLabel(x)).join(', ');
   };
 
   return (
@@ -134,7 +134,7 @@ export default function SchemaTableItem({
           </td>
         </>
       )}
-      <td className="content-start pt-2 max-w-72 min-w-50 whitespace-normal break-all">
+      <td className="content-start pt-2 max-w-100 min-w-50 whitespace-normal break-all">
         <Button
           className="ml-4 !px-0 underline cursor-pointer text-xs py-0 text-start"
           label={item.target?.table_name}
@@ -142,7 +142,7 @@ export default function SchemaTableItem({
         />
       </td>
       <td className="px-4 text-xs content-start pt-2">{item?.stage}</td>
-      <td className="px-4 text-xs content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2 max-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (
@@ -158,43 +158,49 @@ export default function SchemaTableItem({
                 className="max-w-120 z-50"
                 placement="right-start"
               >
-                <>
+                <div>
                   <SvgIcon
                     name="data_sources"
                     className="w-5 h-5 cursor-pointer"
                     onClick={() => goToTable(item, CheckTypes.SOURCES)}
                   />
-                </>
+                </div>
               </Tooltip>
               <Tooltip
                 content={'Profiling'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="profiling"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.PROFILING)}
-                />
+                <div>
+                  <SvgIcon
+                    name="profiling"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToTable(item, CheckTypes.PROFILING)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
                 content={'Monitoring Checks'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="monitoring_checks"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.MONITORING)}
-                />
+                <div>
+                  <SvgIcon
+                    name="monitoring_checks"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToTable(item, CheckTypes.MONITORING)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
-                content={'Partitioned Checks'}
+                content={'Partition Checks'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="partitioned_checks"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
-                />
+                <div>
+                  <SvgIcon
+                    name="partitioned_checks"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+                  />
+                </div>
               </Tooltip>
             </div>
           </td>

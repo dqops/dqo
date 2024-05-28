@@ -11,13 +11,13 @@ import { Pagination } from '../Pagination';
 type TButtonTabs = {
   label: string;
   value: string;
-  sortable?: boolean;
   toRotate?: boolean | undefined;
+  className?: string;
 };
 
 type TTableWithSchema = TableListModel & { schema?: string };
 
-const headeritems: TButtonTabs[] = [
+const constantHeaderItems: TButtonTabs[] = [
   {
     label: 'Table',
     value: 'target.table_name'
@@ -29,8 +29,7 @@ const headeritems: TButtonTabs[] = [
   {
     label: 'Labels',
     value: 'labels'
-  },
-  { label: 'Data Quality KPI', value: 'data-quality-kpi', sortable: false }
+  }
 ];
 
 type TTableListProps = {
@@ -63,6 +62,9 @@ export default function index({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
+    if(loading || tables.length == 0){
+      return [];
+    }
     const uniqueDimensions: string[] = [];
     tables.forEach((table) => {
       Object.keys(table.data_quality_status?.dimensions ?? {}).forEach((x) => {
@@ -76,7 +78,15 @@ export default function index({
   };
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-  const headerItems = [
+  
+  const getBasicDimensions = () => {
+    if(loading || tables.length == 0){
+      return [];
+    }
+    return basicDimensionTypes;
+  };
+
+  const headerItems: (TButtonTabs | undefined)[] = [
     checkTypes && connection
       ? undefined
       : {
@@ -90,49 +100,57 @@ export default function index({
           value: 'schema'
         },
 
-    ...headeritems,
+    ...constantHeaderItems,
 
-    ...basicDimensionTypes.map((x) => ({
+    loading || tables.length == 0
+    ? undefined
+    : { 
+        label: 'Data Quality KPI', 
+        value: 'data-quality-kpi',
+        toRotate: true,
+        className: 'tracking-wider'
+      },
+
+    ...getBasicDimensions().map((x) => ({
       label: x,
       value: x,
-      sortable: false,
-      toRotate: true
+      toRotate: true,
+      className: 'tracking-wider font-normal'
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
-      sortable: false,
-      toRotate: true
+      toRotate: true,
+      className: 'tracking-wider font-normal'
     })),
     {
       label: 'Actions',
       value: 'actions',
-      sortable: false
     }
   ];
 
   const isEnd = tables.length < filters.pageSize;
 
   return (
-    <div className="bg-white">
+    <div className="bg-white py-2">
       <div className="flex">
         <div className="w-[200px]">
           <LabelsSectionWrapper
             labels={labels}
             onChangeLabels={onChangeLabels}
-            className="text-xs w-[180px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[180px] mx-4 mb-4 mt-2 "
           />
         </div>
-        <div className="overflow-x-auto">
-          <table className="absolute top-25">
+        <div className="">
+          <table className="">
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.toRotate)
+                    renderItem(item.label, item.value, item.toRotate, item.className)
                 )}
               </tr>
             </thead>
@@ -154,7 +172,9 @@ export default function index({
                 ))}
               </tbody>
             )}
-            <div className="px-4 my-5 pb-6 flex justify-end">
+          </table>
+          <div className="px-3 my-5 flex justify-end">
+            { tables.length != 0 && 
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -167,8 +187,8 @@ export default function index({
                   })
                 }
               />
-            </div>
-          </table>
+            }
+          </div>
         </div>
       </div>
     </div>

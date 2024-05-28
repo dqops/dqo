@@ -212,7 +212,7 @@ const Header = () => {
           onClick={() => history.push(homeActiveTab ?? '/home')}>
           <Logo
             className={clsx(
-              'w-20 cursor-pointer items-center',
+              'w-24 cursor-pointer items-center',
               location.pathname === homeActiveTab && 'w-30'
             )}
           />
@@ -304,7 +304,7 @@ const Header = () => {
               )}
               onClick={() => history.push('/dashboards')}
             >
-              <SvgIcon name="dashboards" className="w-5 h-5 mr-1.5" />
+              <SvgIcon name="dashboards" className="w-4 h-4 mr-1.5" />
               {!isWindowSmall && <div>Data Quality Dashboards</div>}
             </div>
           </Tooltip>
