@@ -1,13 +1,13 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import SvgIcon from '../../components/SvgIcon';
-import clsx from 'clsx';
 
 type TSearchFilters = {
   connection?: string | undefined;
