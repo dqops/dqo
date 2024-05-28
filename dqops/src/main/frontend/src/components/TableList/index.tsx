@@ -62,7 +62,7 @@ export default function index({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
-    if(loading){
+    if(loading || tables.length == 0){
       return [];
     }
     const uniqueDimensions: string[] = [];
@@ -80,7 +80,7 @@ export default function index({
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   
   const getBasicDimensions = () => {
-    if(loading){
+    if(loading || tables.length == 0){
       return [];
     }
     return basicDimensionTypes;
@@ -102,26 +102,27 @@ export default function index({
 
     ...constantHeaderItems,
 
-    loading 
+    loading || tables.length == 0
     ? undefined
     : { 
         label: 'Data Quality KPI', 
         value: 'data-quality-kpi',
-        toRotate: true
+        toRotate: true,
+        className: 'tracking-wider'
       },
 
     ...getBasicDimensions().map((x) => ({
       label: x,
       value: x,
       toRotate: true,
-      className: 'font-normal'
+      className: 'tracking-wider font-normal'
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
       toRotate: true,
-      className: 'font-normal'
+      className: 'tracking-wider font-normal'
     })),
     {
       label: 'Actions',
@@ -138,7 +139,7 @@ export default function index({
           <LabelsSectionWrapper
             labels={labels}
             onChangeLabels={onChangeLabels}
-            className="text-xs w-[180px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[180px] mx-4 mb-4 mt-2 "
           />
         </div>
         <div className="">
@@ -173,6 +174,7 @@ export default function index({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
+            { tables.length != 0 && 
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -185,7 +187,8 @@ export default function index({
                   })
                 }
               />
-            </div>
+            }
+          </div>
         </div>
       </div>
     </div>

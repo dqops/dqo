@@ -109,7 +109,7 @@ export default function SchemaTableItem({
   };
 
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareLabel(x)).join(',');
+    return labels.map((x) => prepareLabel(x)).join(', ');
   };
 
   return (
@@ -142,7 +142,7 @@ export default function SchemaTableItem({
         />
       </td>
       <td className="px-4 text-xs content-start pt-2">{item?.stage}</td>
-      <td className="px-4 text-xs content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2 max-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (

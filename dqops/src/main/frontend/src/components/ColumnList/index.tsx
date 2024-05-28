@@ -72,7 +72,7 @@ function ColumnList({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
-    if(loading){
+    if(loading || columns.length == 0){
       return [];
     }
     const uniqueDimensions: string[] = [];
@@ -89,7 +89,7 @@ function ColumnList({
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   const getBasicDimensions = () => {
-    if(loading){
+    if(loading || columns.length == 0){
       return [];
     }
     return basicDimensionTypes;
@@ -111,26 +111,27 @@ function ColumnList({
 
     ...constantHeaderItems,
 
-    loading 
+    loading || columns.length == 0
       ? undefined
       : { 
           label: 'Data Quality KPI', 
           value: 'data-quality-kpi',
-          toRotate: true
+          toRotate: true,
+          className: 'tracking-wider'
         },
 
     ...getBasicDimensions().map((x) => ({
       label: x,
       value: x,
       toRotate: true,
-      className: 'font-normal'
+      className: 'tracking-wider font-normal'
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
       toRotate: true,
-      className: 'font-normal'
+      className: 'tracking-wider font-normal'
     })),
     {
       label: 'Actions',
@@ -154,7 +155,7 @@ function ColumnList({
         <div className="w-[200px]">
           <SectionWrapper
             title="Filter by labels"
-            className="text-xs w-[180px] mx-4 mb-4 mt-6 "
+            className="text-xs w-[180px] mx-4 mb-4 mt-2 "
           >
             {labels.map((label, index) => (
               <div
@@ -205,7 +206,8 @@ function ColumnList({
               </tbody>
             )}
           </table>
-          <div className="px-3 my-5 pb-6 flex justify-end">
+          <div className="px-3 my-5 flex justify-end">
+            { columns.length != 0 && 
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -218,6 +220,7 @@ function ColumnList({
                   })
                 }
               />
+            }
             </div>
         </div>
       </div>

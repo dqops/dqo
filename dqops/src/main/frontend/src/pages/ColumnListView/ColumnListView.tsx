@@ -143,7 +143,7 @@ export default function ColumnListView() {
   return (
     <>
       <div className="flex items-center justify-between bg-white">
-        <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+        <div className="flex items-center gap-x-4 mb-4 mt-5 px-4">
           {!connection && (
             <Input
               label="Connection name"
