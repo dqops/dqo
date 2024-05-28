@@ -52,7 +52,7 @@ public class DuckdbColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.continuous_days_date_and_string_formats;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
-                csvFileName, connectionSpec);
+                csvFileName, connectionSpec, "%d/%m/%Y");
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec();
 		this.checkSpec = new ColumnTextNotMatchingDatePatternFoundCheckSpec();

@@ -244,7 +244,8 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForExplicitCsvFile(String csvFileName,
-                                                                                  ConnectionSpec connectionSpecRaw) {
+                                                                                  ConnectionSpec connectionSpecRaw,
+                                                                                  String dateFormat) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
@@ -257,6 +258,7 @@ public class SampleTableMetadataObjectMother {
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(csvFileName);
         tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(physicalTableName);
+        fileFormatSpec.getCsv().setDateformat(dateFormat);
 
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
         tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
@@ -265,6 +267,11 @@ public class SampleTableMetadataObjectMother {
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+    }
+
+    public static SampleTableMetadata createSampleTableMetadataForExplicitCsvFile(String csvFileName,
+                                                                                  ConnectionSpec connectionSpecRaw) {
+        return createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpecRaw, "%Y-%m-%d");
     }
 
     /**
