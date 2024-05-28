@@ -13,8 +13,8 @@ import renderItem from './renderItem';
 type TButtonTabs = {
   label: string;
   value: string;
-  sortable?: boolean;
   toRotate?: boolean | undefined;
+  className?: string;
 };
 
 type TColumnWithSchema = ColumnListModel & {
@@ -23,7 +23,7 @@ type TColumnWithSchema = ColumnListModel & {
   column_type?: string;
 };
 
-const headeritems: TButtonTabs[] = [
+const constantHeaderItems: TButtonTabs[] = [
   {
     label: 'Table',
     value: 'table_name'
@@ -39,8 +39,7 @@ const headeritems: TButtonTabs[] = [
   {
     label: 'Labels',
     value: 'labels'
-  },
-  { label: 'Data Quality KPI', value: 'data-quality-kpi' }
+  }
 ];
 
 type TColumnListProps = {
@@ -86,7 +85,23 @@ function ColumnList({
   };
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-  const headerItems = [
+
+  const getBasicDimensions = () => {
+    if(loading){
+      return [];
+    }
+    return basicDimensionTypes;
+  };
+
+  const getKpiHeader = () => {
+    return loading && { 
+      label: 'Data Quality KPI', 
+      value: 'data-quality-kpi',
+      toRotate: true
+    }
+  }
+
+  const headerItems: (TButtonTabs | undefined)[] = [
     checkTypes && connection
       ? undefined
       : {
@@ -100,18 +115,28 @@ function ColumnList({
           value: 'schema'
         },
 
-    ...headeritems,
+    ...constantHeaderItems,
 
-    ...basicDimensionTypes.map((x) => ({
+    loading 
+      ? undefined
+      : { 
+          label: 'Data Quality KPI', 
+          value: 'data-quality-kpi',
+          toRotate: true
+        },
+
+    ...getBasicDimensions().map((x) => ({
       label: x,
       value: x,
-      toRotate: true
+      toRotate: true,
+      className: 'font-normal'
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
-      toRotate: true
+      toRotate: true,
+      className: 'font-normal'
     })),
     {
       label: 'Actions',
@@ -163,7 +188,7 @@ function ColumnList({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.toRotate)
+                    renderItem(item.label, item.value, item.toRotate, item.className)
                 )}
               </tr>
             </thead>

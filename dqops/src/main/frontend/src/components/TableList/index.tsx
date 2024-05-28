@@ -11,13 +11,13 @@ import { Pagination } from '../Pagination';
 type TButtonTabs = {
   label: string;
   value: string;
-  sortable?: boolean;
   toRotate?: boolean | undefined;
+  className?: string;
 };
 
 type TTableWithSchema = TableListModel & { schema?: string };
 
-const headeritems: TButtonTabs[] = [
+const constantHeaderItems: TButtonTabs[] = [
   {
     label: 'Table',
     value: 'target.table_name'
@@ -29,8 +29,7 @@ const headeritems: TButtonTabs[] = [
   {
     label: 'Labels',
     value: 'labels'
-  },
-  { label: 'Data Quality KPI', value: 'data-quality-kpi', sortable: false }
+  }
 ];
 
 type TTableListProps = {
@@ -76,7 +75,15 @@ export default function index({
   };
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-  const headerItems = [
+  
+  const getBasicDimensions = () => {
+    if(loading){
+      return [];
+    }
+    return basicDimensionTypes;
+  };
+
+  const headerItems: (TButtonTabs | undefined)[] = [
     checkTypes && connection
       ? undefined
       : {
@@ -90,25 +97,31 @@ export default function index({
           value: 'schema'
         },
 
-    ...headeritems,
+    ...constantHeaderItems,
 
-    ...basicDimensionTypes.map((x) => ({
+    loading 
+    ? undefined
+    : { 
+        label: 'Data Quality KPI', 
+        value: 'data-quality-kpi',
+        toRotate: true
+      },
+
+    ...getBasicDimensions().map((x) => ({
       label: x,
       value: x,
-      sortable: false,
-      toRotate: true
+      toRotate: true,
+      className: 'font-normal'
     })),
 
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
-      sortable: false,
       toRotate: true
     })),
     {
       label: 'Actions',
       value: 'actions',
-      sortable: false
     }
   ];
 
@@ -132,7 +145,7 @@ export default function index({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.toRotate)
+                    renderItem(item.label, item.value, item.toRotate, item.className)
                 )}
               </tr>
             </thead>
