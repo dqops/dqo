@@ -117,7 +117,8 @@ export default function index({
     ...getDimensionKey().map((x) => ({
       label: x,
       value: x,
-      toRotate: true
+      toRotate: true,
+      className: 'font-normal'
     })),
     {
       label: 'Actions',

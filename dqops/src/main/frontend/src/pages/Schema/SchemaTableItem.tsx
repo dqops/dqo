@@ -191,7 +191,7 @@ export default function SchemaTableItem({
                 </div>
               </Tooltip>
               <Tooltip
-                content={'Partitioned Checks'}
+                content={'Partition Checks'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
                 <div>
