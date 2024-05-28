@@ -241,6 +241,7 @@ public class SampleTableMetadataObjectMother {
      * The method allows to test e.g. different database versions.
      * @param csvFileName Sample data CSV file name (a file name in the dqo/sampledata folder).
      * @param connectionSpecRaw Target connection spec.
+     * @param dateFormat Date format of the date column from csv file.
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForExplicitCsvFile(String csvFileName,
@@ -269,6 +270,14 @@ public class SampleTableMetadataObjectMother {
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param csvFileName Sample data CSV file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
     public static SampleTableMetadata createSampleTableMetadataForExplicitCsvFile(String csvFileName,
                                                                                   ConnectionSpec connectionSpecRaw) {
         return createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpecRaw, "%Y-%m-%d");
