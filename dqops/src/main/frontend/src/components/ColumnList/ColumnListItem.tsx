@@ -193,7 +193,7 @@ export default function SchemaTableItem({
                 <SvgIcon
                   name="data_sources"
                   className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.SOURCES)}
+                  onClick={() => goToColumn(item, CheckTypes.SOURCES)}
                 />
               </Tooltip>
               <Tooltip
@@ -203,7 +203,7 @@ export default function SchemaTableItem({
                 <SvgIcon
                   name="profiling"
                   className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.PROFILING)}
+                  onClick={() => goToColumn(item, CheckTypes.PROFILING)}
                 />
               </Tooltip>
               <Tooltip
@@ -213,7 +213,7 @@ export default function SchemaTableItem({
                 <SvgIcon
                   name="monitoring_checks"
                   className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.MONITORING)}
+                  onClick={() => goToColumn(item, CheckTypes.MONITORING)}
                 />
               </Tooltip>
               <Tooltip
@@ -223,7 +223,7 @@ export default function SchemaTableItem({
                 <SvgIcon
                   name="partitioned_checks"
                   className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToTable(item, CheckTypes.PARTITIONED)}
+                  onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
                 />
               </Tooltip>
             </div>
