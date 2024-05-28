@@ -19,6 +19,7 @@ import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -104,6 +105,6 @@ public class WithinPercentMovingAverage60DaysRule5ParametersSpec extends Abstrac
             return;
         }
 
-        this.maxPercentWithin *= 1.3;
+        this.maxPercentWithin = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentWithin * 1.3);
     }
 }

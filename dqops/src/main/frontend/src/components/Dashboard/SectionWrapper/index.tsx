@@ -21,7 +21,7 @@ const SectionWrapper = ({
   return (
     <div
       className={clsx(
-        'border border-gray-300 px-4 py-6 relative rounded text-sm',
+        'border border-gray-300 px-4 pt-5 pb-5 relative rounded text-sm',
         className
       )}
     >

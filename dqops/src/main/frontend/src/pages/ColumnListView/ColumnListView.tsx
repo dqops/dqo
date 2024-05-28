@@ -1,13 +1,13 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import clsx from 'clsx';
-import SvgIcon from '../../components/SvgIcon';
 
 type TSearchFilters = {
   connection?: string | undefined;
@@ -143,7 +143,7 @@ export default function ColumnListView() {
   return (
     <>
       <div className="flex items-center justify-between bg-white">
-        <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+        <div className="flex items-center gap-x-4 mb-4 mt-5 px-4">
           {!connection && (
             <Input
               label="Connection name"

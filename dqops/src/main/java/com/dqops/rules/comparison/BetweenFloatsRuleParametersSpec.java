@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -116,7 +117,7 @@ public class BetweenFloatsRuleParametersSpec extends AbstractRuleParametersSpec 
 
         double difference = this.to - this.from;
 
-        this.from = this.from - difference * 0.15;
-        this.to = this.to + difference * 0.15;
+        this.from = DoubleRounding.roundToKeepEffectiveDigits(this.from - difference * 0.15);
+        this.to = DoubleRounding.roundToKeepEffectiveDigits(this.to + difference * 0.15);
     }
 }

@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -122,6 +123,6 @@ public class ChangeDifference7DaysRuleParametersSpec extends AbstractRuleParamet
             return;
         }
 
-        this.maxDifference = this.maxDifference * 1.3;
+        this.maxDifference = DoubleRounding.roundToKeepEffectiveDigits(this.maxDifference * 1.3);
     }
 }

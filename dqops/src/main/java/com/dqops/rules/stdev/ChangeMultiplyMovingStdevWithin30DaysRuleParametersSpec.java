@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -106,6 +107,6 @@ public class ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpec extends Abs
             return;
         }
 
-        this.multiplyStdev *= 1.3;
+        this.multiplyStdev = DoubleRounding.roundToKeepEffectiveDigits(this.multiplyStdev * 1.3);
     }
 }

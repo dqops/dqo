@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -109,6 +110,10 @@ public class MinRuleParametersSpec extends AbstractRuleParametersSpec {
             return;
         }
 
-        this.minValue = this.minValue * 0.7;
+        if (this.minValue > 0.0) {
+            this.minValue = DoubleRounding.roundToKeepEffectiveDigits(this.minValue * 0.7);
+        } else {
+            this.minValue = DoubleRounding.roundToKeepEffectiveDigits(this.minValue * 1.3);
+        }
     }
 }
