@@ -142,6 +142,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Azure Storage Account Name used by DuckDB Secret Manager. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String accountName;
 
+    @CommandLine.Option(names = {"--duckdb-no-extension"}, description = "Whether the compression extension is present at the end of the file name.")
+    @JsonPropertyDescription("Whether the compression extension is present at the end of the file name.")
+    private Boolean noCompressionExtension = false;
+
     /**
      * Returns a readMode value.
      * @return readMode value.
@@ -469,6 +473,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public Boolean getNoCompressionExtension() {
+        return noCompressionExtension;
+    }
+
+    /**
+     * Sets noCompressionExtension.
+     * @param noCompressionExtension noCompressionExtension.
+     */
+    public void setNoCompressionExtension(Boolean noCompressionExtension) {
+        setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
+        this.noCompressionExtension = noCompressionExtension;
+    }
+
+    /**
      * Returns the AWS AccessKeyID which is placed in user field when configured.
      * @return region.
      */
@@ -503,24 +524,33 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the compression extension set on a file format. When no compression it returns empty string.
-     * @return the compression extension set on a file format.
+     * Returns the file format extension. The compression type is included when "no_extension" is not set.
+     * @return the file format extension. The compression type is included when "no_extension" is not set.
      */
     @JsonIgnore
-    public String getCompressionExtension(){
+    public String getFullExtension(){
         if(filesFormatType == null) {
             return "";
+        }
+        String fileTypeExtension = "." + filesFormatType;
+        if(noCompressionExtension){
+            return fileTypeExtension;
         }
 
         switch(filesFormatType){
             case csv:
                 if(getCsv() != null && getCsv().getCompression() != null){
-                    return getCsv().getCompression().getFileExtension();
+                    return fileTypeExtension + getCsv().getCompression().getCompressionExtension();
                 }
                 break;
             case json:
                 if(getJson() != null && getJson().getCompression() != null){
-                    return getJson().getCompression().getFileExtension();
+                    return fileTypeExtension + getJson().getCompression().getCompressionExtension();
+                }
+                break;
+            case parquet:
+                if(getParquet() != null && getParquet().getCompression() != null){
+                    return fileTypeExtension + getParquet().getCompression().getCompressionExtension();
                 }
                 break;
         }

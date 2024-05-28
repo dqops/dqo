@@ -12,6 +12,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -185,6 +186,32 @@ public class FileFormatSpec extends AbstractSpec {
             case parquet: return this.getParquet() != null;
             default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
+    }
+
+    /**
+     * Returns the file format extension. The compression type is included when "no_extension" is not set.
+     * @return the file format extension. The compression type is included when "no_extension" is not set.
+     */
+    @JsonIgnore
+    public String getFullExtension(DuckdbFilesFormatType duckdbFilesFormatType){
+        if(duckdbFilesFormatType == null) {
+            return "";
+        }
+        String fileTypeExtension = "." + duckdbFilesFormatType;
+        if(noCompressionExtension){
+            return fileTypeExtension;
+        }
+
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null && getCsv().getCompression() != null){
+            return fileTypeExtension + getCsv().getCompression().getCompressionExtension();
+        }
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null && getJson().getCompression() != null){
+            return fileTypeExtension + getJson().getCompression().getCompressionExtension();
+        }
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null && getParquet().getCompression() != null){
+            return fileTypeExtension + getParquet().getCompression().getCompressionExtension();
+        }
+        return "";
     }
 
     @Override

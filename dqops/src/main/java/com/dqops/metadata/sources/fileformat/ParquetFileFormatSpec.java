@@ -48,6 +48,10 @@ public class ParquetFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean unionByName;
 
+    @JsonPropertyDescription("The compression type for the file.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private CompressionType compression;
+
     /**
      * Formats the table options to be used in SQL query. The set (non null) options are added only.
      * @param filePathList The names of files with data.
@@ -141,6 +145,22 @@ public class ParquetFileFormatSpec extends AbstractSpec {
      */
     public void setUnionByName(Boolean unionByName) {
         this.unionByName = unionByName;
+    }
+
+    /**
+     * Returns compression type.
+     * @return Compression type.
+     */
+    public CompressionType getCompression() {
+        return compression;
+    }
+
+    /**
+     * Sets the compression type.
+     * @param compression Compression type.
+     */
+    public void setCompression(CompressionType compression) {
+        this.compression = compression;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbCompressionTypeOption;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -112,7 +113,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
         tableOptionsFormatter.formatColumns("columns", tableSpec);
-        tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
+        tableOptionsFormatter.formatStringWhenSet(Fields.compression, DuckdbCompressionTypeOption.fromCompressionType(compression));
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
         tableOptionsFormatter.formatStringWhenSet(Fields.decimalSeparator, decimalSeparator);
         tableOptionsFormatter.formatStringWhenSet(Fields.delim, delim);

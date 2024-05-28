@@ -2,26 +2,37 @@ package com.dqops.metadata.sources.fileformat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Compresison type option used in csv and json format of DuckDB
- */
 public enum CompressionType {
-    @JsonProperty("auto")
-    auto,
 
     @JsonProperty("none")
     none,
+
+    @JsonProperty("auto")
+    auto,
 
     @JsonProperty("gzip")
     gzip,
 
     @JsonProperty("zstd")
-    zstd;
+    zstd,
 
-    public String getFileExtension(){
+    @JsonProperty("snappy")
+    snappy,
+
+    @JsonProperty("lz4")
+    lz4;
+
+    // todo: add support when brotli is implemented by duckdb
+    //  https://github.com/duckdb/duckdb/pull/12103
+//    @JsonProperty("brotli")
+//    brotli;
+
+    public String getCompressionExtension(){
         switch (this){
             case gzip: return ".gz";
             case zstd: return ".zst";
+            case snappy: return ".snappy";
+            case lz4: return ".lz4";
             default: return null;
         }
     }

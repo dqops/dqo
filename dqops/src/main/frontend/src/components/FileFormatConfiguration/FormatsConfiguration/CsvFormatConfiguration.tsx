@@ -15,20 +15,31 @@ type TCsvConfigurationProps = {
 
 const compressionEnumOptions = [
   {
-    value: CsvFileFormatSpecCompressionEnum.auto,
-    label: CsvFileFormatSpecCompressionEnum.auto
+    value: CsvFileFormatSpecCompressionEnum.none,
+    label: CsvFileFormatSpecCompressionEnum.none + " (*.csv)",
   },
+  // {
+  //   value: CsvFileFormatSpecCompressionEnum.auto,
+  //   label: CsvFileFormatSpecCompressionEnum.auto,
+  //   noCompressionExtension: true
+  // },
   {
     value: CsvFileFormatSpecCompressionEnum.gzip,
-    label: CsvFileFormatSpecCompressionEnum.gzip
-  },
-  {
-    value: CsvFileFormatSpecCompressionEnum.none,
-    label: CsvFileFormatSpecCompressionEnum.none
+    label: CsvFileFormatSpecCompressionEnum.gzip + " (*.csv.gz)",
   },
   {
     value: CsvFileFormatSpecCompressionEnum.zstd,
-    label: CsvFileFormatSpecCompressionEnum.zstd
+    label: CsvFileFormatSpecCompressionEnum.zstd + " (*.csv.zst)",
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.gzip,
+    label: CsvFileFormatSpecCompressionEnum.gzip + "_no_ext (*.csv)",
+    noCompressionExtension: true
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.zstd,
+    label: CsvFileFormatSpecCompressionEnum.zstd + "_no_ext (*.csv)",
+    noCompressionExtension: true
   }
 ];
 

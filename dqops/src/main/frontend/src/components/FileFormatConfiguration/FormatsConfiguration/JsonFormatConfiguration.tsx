@@ -15,21 +15,31 @@ type TJsonConfigurationProps = {
 };
 
 const compressionEnumOptions = [
+  // {
+  //   value: JsonFileFormatSpecCompressionEnum.auto,
+  //   label: JsonFileFormatSpecCompressionEnum.auto
+  // },
   {
-    value: JsonFileFormatSpecCompressionEnum.auto,
-    label: JsonFileFormatSpecCompressionEnum.auto
+    value: JsonFileFormatSpecCompressionEnum.none,
+    label: JsonFileFormatSpecCompressionEnum.none + " (*.json)",
   },
   {
     value: JsonFileFormatSpecCompressionEnum.gzip,
-    label: JsonFileFormatSpecCompressionEnum.gzip
-  },
-  {
-    value: JsonFileFormatSpecCompressionEnum.none,
-    label: JsonFileFormatSpecCompressionEnum.none
+    label: JsonFileFormatSpecCompressionEnum.gzip + " (*.json.gz)",
   },
   {
     value: JsonFileFormatSpecCompressionEnum.zstd,
-    label: JsonFileFormatSpecCompressionEnum.zstd
+    label: JsonFileFormatSpecCompressionEnum.zstd + " (*.json.zst)",
+  },
+  {
+    value: JsonFileFormatSpecCompressionEnum.gzip,
+    label: JsonFileFormatSpecCompressionEnum.gzip + "_no_ext (*.json)",
+    noCompressionExtension: true
+  },
+  {
+    value: JsonFileFormatSpecCompressionEnum.zstd,
+    label: JsonFileFormatSpecCompressionEnum.zstd + "_no_ext (*.json)",
+    noCompressionExtension: true
   }
 ];
 
