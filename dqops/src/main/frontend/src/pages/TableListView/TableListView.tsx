@@ -138,7 +138,7 @@ export default function TableListView() {
 
   return (
     <>
-      <div className="flex items-center justify-between bg-white w-full relative z-[100]">
+      <div className="flex items-center justify-between bg-white w-full relative">
         <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
           {!connection && (
             <Input
