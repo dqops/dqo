@@ -25,7 +25,7 @@ export default function LabelsSectionWrapper({
   return (
     <SectionWrapper
       title="Filter by labels"
-      className={clsx('text-xs w-[250px] mx-4 mb-4 mt-6 ', className)}
+      className={className}
     >
       {labels.map((label, index) => (
         <div

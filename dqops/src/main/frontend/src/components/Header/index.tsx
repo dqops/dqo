@@ -212,7 +212,7 @@ const Header = () => {
           onClick={() => history.push(homeActiveTab ?? '/home')}>
           <Logo
             className={clsx(
-              'w-20 cursor-pointer items-center',
+              'w-24 cursor-pointer items-center',
               location.pathname === homeActiveTab && 'w-30'
             )}
           />
