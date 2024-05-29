@@ -44,6 +44,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-asia/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -53,6 +54,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-australia-southeast1/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -62,6 +64,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-eu/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -71,6 +74,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-europe-central2/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -80,6 +84,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-in/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -89,6 +94,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-me-central1/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -98,6 +104,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-me-west1/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -107,6 +114,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-southamerica-east1/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -117,6 +125,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-africa-south1/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
@@ -126,6 +135,7 @@ jobs:
           path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
           destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-us/releases'
           gzip: false
+          process_gcloudignore: false
           headers: |-
             content-type: application/zip
 
