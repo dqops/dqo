@@ -59,13 +59,18 @@ export default function TableListView() {
   };
 
   const getTables = async (labels: string[] = []) => {
-    const addPrefix = (str: string) => {
+    const addPrefix = (str?: string) => {
+      if (!str) return '';
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     setLoading(true);
+    console.log(
+      connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
+      schema ? addPrefix(schema) : addPrefix(searchFilters.schema)
+    );
     const res = await SearchApiClient.findTables(
-      connection ?? addPrefix(searchFilters.connection ?? ''),
-      schema ?? addPrefix(searchFilters.schema ?? ''),
+      connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
+      schema ? addPrefix(schema) : addPrefix(searchFilters.schema),
       addPrefix(searchFilters.table ?? ''),
       labels,
       filters.page,
@@ -133,8 +138,8 @@ export default function TableListView() {
 
   return (
     <>
-      <div className="flex items-center justify-between bg-white w-full">
-        <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+      <div className="flex items-center justify-between bg-white w-full relative">
+        <div className="flex items-center gap-x-4 mb-4 mt-4 px-4">
           {!connection && (
             <Input
               label="Connection name"
@@ -142,6 +147,7 @@ export default function TableListView() {
               onChange={(e) =>
                 onChangeSearchFilters({ connection: e.target.value })
               }
+              className="z-[100]"
             />
           )}
           {!schema && (
@@ -151,12 +157,14 @@ export default function TableListView() {
               onChange={(e) =>
                 onChangeSearchFilters({ schema: e.target.value })
               }
+              className="z-[100]"
             />
           )}
           <Input
             label="Table name"
             value={searchFilters.table}
             onChange={(e) => onChangeSearchFilters({ table: e.target.value })}
+            className="z-[100]"
           />
           <Button
             label="Search"
@@ -169,7 +177,7 @@ export default function TableListView() {
               );
             }}
             color="primary"
-            className="mt-5"
+            className="mt-5 z-[100]"
           />
         </div>
         <Button

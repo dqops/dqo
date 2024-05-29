@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -122,11 +123,11 @@ public class MultiplyMovingStdev30DaysRuleParametersSpec extends AbstractRulePar
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
         if (this.multiplyStdevAbove != null) {
-            this.multiplyStdevAbove = this.multiplyStdevAbove * 1.3;
+            this.multiplyStdevAbove = DoubleRounding.roundToKeepEffectiveDigits(this.multiplyStdevAbove * 1.3);
         }
 
         if (this.multiplyStdevBelow != null) {
-            this.multiplyStdevBelow = this.multiplyStdevBelow * 1.3;
+            this.multiplyStdevBelow = DoubleRounding.roundToKeepEffectiveDigits(this.multiplyStdevBelow * 1.3);
         }
     }
 }

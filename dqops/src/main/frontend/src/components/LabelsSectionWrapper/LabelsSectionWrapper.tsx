@@ -17,15 +17,15 @@ export default function LabelsSectionWrapper({
 }: TLabelSectionWrapper) {
   const prepareLabel = (label: string | undefined) => {
     if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
+    if (label.length > 17) {
+      return label.slice(0, 17) + '...';
     }
     return label;
   };
   return (
     <SectionWrapper
       title="Filter by labels"
-      className={clsx('text-xs w-[250px] mx-4 mb-4 mt-6 ', className)}
+      className={className}
     >
       {labels.map((label, index) => (
         <div

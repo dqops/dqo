@@ -208,10 +208,11 @@ const Header = () => {
         </div>
       )}
       <div className="flex space-x-2">
-        <div onClick={() => history.push(homeActiveTab ?? '/home')}>
+        <div className="w-30 flex justify-center items-center"
+          onClick={() => history.push(homeActiveTab ?? '/home')}>
           <Logo
             className={clsx(
-              'w-20 cursor-pointer',
+              'w-24 cursor-pointer items-center',
               location.pathname === homeActiveTab && 'w-30'
             )}
           />
@@ -251,7 +252,7 @@ const Header = () => {
             >
               <SvgIcon
                 name="profiling"
-                className="w-4.5 h-4.5 mr-1.5 mt-[1px]"
+                className="w-4.5 h-4.5 mr-2"
               />
               {!isWindowSmall && <div>Profiling</div>}
             </div>
@@ -269,7 +270,7 @@ const Header = () => {
               )}
               onClick={onClick(CheckTypes.MONITORING)}
             >
-              <SvgIcon name="monitoring_checks" className="w-4 h-4 mr-2" />
+              <SvgIcon name="monitoring_checks" className="w-4.5 h-4.5 mr-2" />
               {!isWindowSmall && <div>Monitoring Checks</div>}
             </div>
           </Tooltip>
@@ -303,7 +304,7 @@ const Header = () => {
               )}
               onClick={() => history.push('/dashboards')}
             >
-              <SvgIcon name="dashboards" className="w-5 h-5 mr-1.5" />
+              <SvgIcon name="dashboards" className="w-4 h-4 mr-1.5" />
               {!isWindowSmall && <div>Data Quality Dashboards</div>}
             </div>
           </Tooltip>

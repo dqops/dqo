@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -111,6 +112,6 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
 
         double to100Pct = 100.0 - this.minPercent;
 
-        this.minPercent = this.minPercent + 0.3 * to100Pct;
+        this.minPercent = DoubleRounding.roundToKeepEffectiveDigits(this.minPercent + 0.3 * to100Pct);
     }
 }

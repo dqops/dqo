@@ -47,6 +47,11 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
       history.push(`/incidents`);
       return;
     }
+    if (tabIndex === 0 && pageTabs.length > 1) {
+      history.push(pageTabs[1]?.url);
+      dispatch(setActiveFirstLevelTab(pageTabs[1]?.url));
+      return;
+    }
     history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
     dispatch(
       setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)

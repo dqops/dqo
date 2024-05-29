@@ -19,6 +19,7 @@ import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -116,11 +117,11 @@ public class BetweenPercentMovingAverage60DaysRule10ParametersSpec extends Abstr
     @Override
     public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
         if (this.maxPercentAbove != null) {
-            this.maxPercentAbove *= 1.3;
+            this.maxPercentAbove = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentAbove * 1.3);
         }
 
         if (this.maxPercentBelow != null) {
-            this.maxPercentBelow *= 1.3;
+            this.maxPercentBelow = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentBelow * 1.3);
         }
     }
 }

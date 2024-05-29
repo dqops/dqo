@@ -1,8 +1,10 @@
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { LabelModel, TableListModel } from '../../api';
 import Button from '../../components/Button';
 import ColumnList from '../../components/ColumnList';
 import Input from '../../components/Input';
+import SvgIcon from '../../components/SvgIcon';
 import { LabelsApiClient, SearchApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
@@ -141,7 +143,7 @@ export default function ColumnListView() {
   return (
     <>
       <div className="flex items-center justify-between bg-white">
-        <div className="flex items-center gap-x-4 mb-4 mt-2 px-4">
+        <div className="flex items-center gap-x-4 mb-4 mt-5 px-4">
           {!connection && (
             <Input
               label="Connection name"
@@ -192,9 +194,14 @@ export default function ColumnListView() {
           />
         </div>
         <Button
-          label="Refresh"
           color="primary"
-          className="mb-2 mt-5 mr-4 z-[1]"
+          leftIcon={
+            <SvgIcon
+              name="sync"
+              className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
+            />
+          }
+          className="mb-4 mt-7 !mr-8 pr-0 pl-3 z-[1]"
           onClick={() =>
             getColumns(
               labels
