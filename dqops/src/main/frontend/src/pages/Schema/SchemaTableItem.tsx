@@ -7,7 +7,7 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getFirstLevelTableTab, useDecodedParams } from '../../utils';
+import { getFirstLevelTableTab, limitTextLength, useDecodedParams } from '../../utils';
 import SchemaTableItemDimensions from './SchemaTableItemDimensions';
 
 type TTableWithSchema = TableListModel & { schema?: string };
@@ -100,16 +100,8 @@ export default function SchemaTableItem({
     return;
   };
 
-  const hideOverflowTextLetters = (text: string | undefined, maxSize: number) => {
-    if (!text) return;
-    if (text.length > maxSize) {
-      return text.slice(0, maxSize) + '...';
-    }
-    return text;
-  };
-
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => hideOverflowTextLetters(x, 20)).join(', ');
+    return labels.map((x) => limitTextLength(x, 20)).join(', ');
   };
 
   return (

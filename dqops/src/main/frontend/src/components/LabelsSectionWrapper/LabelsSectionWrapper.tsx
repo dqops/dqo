@@ -3,6 +3,7 @@ import React from 'react';
 
 import { LabelModel } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
+import { limitTextLength } from '../../utils';
 type TLabel = LabelModel & { clicked: boolean };
 type TLabelSectionWrapper = {
   labels: TLabel[];
