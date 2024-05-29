@@ -263,6 +263,7 @@ public class TableListModel {
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
             setYamlParsingError(tableSpec.getYamlParsingError());
+            setStage(tableSpec.getStage());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnection(connectionName);
