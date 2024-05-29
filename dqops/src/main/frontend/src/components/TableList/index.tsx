@@ -62,7 +62,7 @@ export default function index({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
-    if(loading || tables.length == 0){
+    if (loading || tables.length == 0) {
       return [];
     }
     const uniqueDimensions: string[] = [];
@@ -78,9 +78,9 @@ export default function index({
   };
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
-  
+
   const getBasicDimensions = () => {
-    if(loading || tables.length == 0){
+    if (loading || tables.length == 0) {
       return [];
     }
     return basicDimensionTypes;
@@ -103,13 +103,13 @@ export default function index({
     ...constantHeaderItems,
 
     loading || tables.length == 0
-    ? undefined
-    : { 
-        label: 'Data Quality KPI', 
-        value: 'data-quality-kpi',
-        toRotate: true,
-        className: 'tracking-wider'
-      },
+      ? undefined
+      : {
+          label: 'Data Quality KPI',
+          value: 'data-quality-kpi',
+          toRotate: true,
+          className: 'tracking-wider'
+        },
 
     ...getBasicDimensions().map((x) => ({
       label: x,
@@ -126,7 +126,7 @@ export default function index({
     })),
     {
       label: 'Actions',
-      value: 'actions',
+      value: 'actions'
     }
   ];
 
@@ -150,7 +150,12 @@ export default function index({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.toRotate, item.className)
+                    renderItem(
+                      item.label,
+                      item.value,
+                      item.toRotate,
+                      item.className
+                    )
                 )}
               </tr>
             </thead>
@@ -174,7 +179,7 @@ export default function index({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
-            { tables.length > 10 && 
+            {tables.length > 10 && (
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -187,7 +192,7 @@ export default function index({
                   })
                 }
               />
-            }
+            )}
           </div>
         </div>
       </div>
