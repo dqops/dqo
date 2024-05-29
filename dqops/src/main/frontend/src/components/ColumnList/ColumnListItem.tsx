@@ -11,7 +11,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getFirstLevelColumnTab,
   getFirstLevelTableTab,
-  prepareString,
+  limitTextLength,
   useDecodedParams
 } from '../../utils';
 
@@ -133,7 +133,7 @@ export default function SchemaTableItem({
   };
 
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareString(x, 20)).join(',');
+    return labels.map((x) => limitTextLength(x, 20)).join(',');
   };
 
   return (
@@ -173,7 +173,7 @@ export default function SchemaTableItem({
         />
       </td>{' '}
       <td className="px-4 text-xs content-start pt-2">
-        {prepareString(item.type_snapshot?.column_type, 15)}
+        {limitTextLength(item.type_snapshot?.column_type, 15)}
       </td>
       <td className="px-4 text-xs content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}

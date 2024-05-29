@@ -15,13 +15,6 @@ export default function LabelsSectionWrapper({
   onChangeLabels,
   className
 }: TLabelSectionWrapper) {
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 17) {
-      return label.slice(0, 17) + '...';
-    }
-    return label;
-  };
   return (
     <SectionWrapper
       title="Filter by labels"
@@ -39,7 +32,7 @@ export default function LabelsSectionWrapper({
           key={index}
           onClick={() => onChangeLabels(index)}
         >
-          <span>{prepareLabel(label.label)}</span>({label.labels_count})
+          <span>{limitTextLength(label.label, 17)}</span>({label.labels_count})
         </div>
       ))}
     </SectionWrapper>
