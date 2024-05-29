@@ -1,11 +1,8 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import {
-  useHistory,
-  useLocation,
-  useRouteMatch
-} from 'react-router-dom';
-import {
+  addFirstLevelTab,
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/source.actions';
@@ -70,8 +67,8 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   const closeTab = (value: string) => {
     if (pageTabs.length === 1) {
-      setActiveTab(undefined)
-      history.push(`/${checkTypes}`)
+      setActiveTab(undefined);
+      history.push(`/${checkTypes}`);
     }
     dispatch(closeFirstLevelTab(checkTypes, value));
     // console.log(value)
@@ -87,6 +84,10 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   useEffect(() => {
     if (activeTab) {
+      console.log(
+        activeTab &&
+          Object.values(ROUTES.PATTERNS).find((value) => activeTab.match(value))
+      );
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
       // const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
@@ -95,18 +96,31 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
         // history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
         // }
       }
+      if (pageTabs.length === 0) {
+        console.log(
+          Object.values(ROUTES.PATTERNS).find((value) => activeTab.match(value))
+        );
+        dispatch(addFirstLevelTab(checkTypes, activeTab));
+      }
     }
   }, [activeTab]);
+  console.log(
+    Object.values(ROUTES.PATTERNS).filter((value) =>
+      location.pathname.match(value)
+    )
+  );
+  console.log(activeTab, pageTabs, location.pathname);
+
   // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url.
 
   const getComponent = () => {
     switch (route) {
-      case ROUTES.PATTERNS.QUALITY_CHECKS: 
-        return <ChecksPage/>
+      case ROUTES.PATTERNS.QUALITY_CHECKS:
+        return <ChecksPage />;
       case ROUTES.PATTERNS.CREATE:
-        return <CreateConnection/>;
+        return <CreateConnection />;
       case ROUTES.PATTERNS.CONNECTION:
-        return <ConnectionPage/>;
+        return <ConnectionPage />;
       case ROUTES.PATTERNS.SCHEMA:
         return <SchemaPage />;
       case ROUTES.PATTERNS.TABLE:
@@ -155,7 +169,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
- 
+
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
