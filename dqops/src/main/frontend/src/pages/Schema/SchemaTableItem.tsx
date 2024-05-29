@@ -100,16 +100,16 @@ export default function SchemaTableItem({
     return;
   };
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
+  const hideOverflowTextLetters = (text: string | undefined, maxSize: number) => {
+    if (!text) return;
+    if (text.length > maxSize) {
+      return text.slice(0, maxSize) + '...';
     }
-    return label;
+    return text;
   };
 
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareLabel(x)).join(', ');
+    return labels.map((x) => hideOverflowTextLetters(x, 20)).join(', ');
   };
 
   return (
@@ -141,7 +141,7 @@ export default function SchemaTableItem({
           onClick={() => goToTable(item, checkTypes)}
         />
       </td>
-      <td className="px-4 text-xs content-start pt-2">{item?.stage}</td>
+      <td className="px-4 text-xs content-start pt-2 max-w-50 break-all">{item?.stage}</td>
       <td className="px-4 text-xs content-start pt-2 max-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
