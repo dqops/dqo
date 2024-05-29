@@ -174,7 +174,7 @@ export default function index({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
-            { tables.length > 0 && 
+            { tables.length > 10 && 
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
