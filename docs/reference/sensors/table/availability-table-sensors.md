@@ -44,8 +44,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Databricks"
 
@@ -63,8 +65,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "DuckDB"
 
@@ -82,8 +86,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "MySQL"
 
@@ -101,8 +107,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Oracle"
 
@@ -123,8 +131,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "PostgreSQL"
 
@@ -142,8 +152,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Presto"
 
@@ -161,8 +173,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Redshift"
 
@@ -180,8 +194,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Snowflake"
 
@@ -199,8 +215,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "Spark"
 
@@ -218,8 +236,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 === "SQL Server"
 
@@ -251,8 +271,10 @@ The templates used to generate the SQL query for each data source supported by D
             {{ lib.render_where_clause() }}
             LIMIT 1
         ) AS tab_scan
+    {% if lib.time_series is not none -%}
     GROUP BY time_period
     ORDER BY time_period
+    {%- endif -%}
     ```
 ___
 

@@ -26,7 +26,8 @@ class DuckdbTestConnectionImplTest extends BaseTest {
     @BeforeEach
     void setUp() {
         this.duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
-        this.sut = new DuckdbTestConnectionImpl();
+        TablesListerProvider tablesListerProvider = TablesListerProviderObjectMother.getProvider();
+        this.sut = new DuckdbTestConnectionImpl(tablesListerProvider);
     }
 
     @Test

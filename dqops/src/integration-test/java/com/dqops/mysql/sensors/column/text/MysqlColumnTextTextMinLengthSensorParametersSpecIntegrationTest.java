@@ -118,4 +118,18 @@ public class MysqlColumnTextTextMinLengthSensorParametersSpecIntegrationTest ext
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(3L, resultTable.column(0).get(0));
     }
+
+    @Test
+    void runSensor_whenRunOnIntegerColumn_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "length_int", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+    }
+
 }

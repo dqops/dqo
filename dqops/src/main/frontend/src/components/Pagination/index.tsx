@@ -5,10 +5,6 @@ import SvgIcon from '../SvgIcon';
 
 const pageSizeOptions = [
   {
-    label: 5,
-    value: 5
-  },
-  {
     label: 10,
     value: 10
   },
@@ -64,6 +60,7 @@ export const Pagination = ({
           options={pageSizeOptions}
           value={pageSize}
           onChange={onChangePageSize}
+          menuClassName="top-[-150px]"
         />
       </div>
       <div className="flex items-center gap-2">
@@ -74,7 +71,7 @@ export const Pagination = ({
           onClick={onPrev}
           disabled={page === 1}
         >
-          <SvgIcon name="chevron-left" className="w-3 text-white" />
+          <SvgIcon name="chevron-left" className="w-4 text-white" />
         </IconButton>
         <IconButton
           size="sm"
@@ -91,7 +88,7 @@ export const Pagination = ({
           onClick={onNext}
           disabled={page === totalPages || isEnd}
         >
-          <SvgIcon name="chevron-right" className="w-7 text-white" />
+          <SvgIcon name="chevron-right" className="w-4 text-white" />
         </IconButton>
       </div>
     </div>

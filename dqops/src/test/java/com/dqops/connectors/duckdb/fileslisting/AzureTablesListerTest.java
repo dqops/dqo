@@ -25,7 +25,7 @@ class AzureTablesListerTest extends BaseTest {
     @BeforeEach
     void setUp() {
         this.duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
-        this.sut = (AzureTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.azure);
+        this.sut = (AzureTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.azure);
     }
 
     @Test

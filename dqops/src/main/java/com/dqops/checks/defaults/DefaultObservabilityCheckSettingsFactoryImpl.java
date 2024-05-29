@@ -16,16 +16,22 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.checks.column.checkspecs.anomaly.ColumnSumAnomalyDifferencingCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanAnomalyStationaryCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.*;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountAnomalyDifferencingCheckSpec;
+import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountAnomalyStationaryPartitionCheckSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
+import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
@@ -81,14 +87,15 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public TableDefaultChecksPatternSpec createDefaultTableChecks() {
         TableDefaultChecksPatternSpec defaultPattern = new TableDefaultChecksPatternSpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
+        defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(profilingChecks);
         TableVolumeProfilingChecksSpec tableVolumeProfiling = new TableVolumeProfilingChecksSpec();
+        profilingChecks.setVolume(tableVolumeProfiling);
         tableVolumeProfiling.setProfileRowCount(new TableRowCountCheckSpec() {{
             setWarning(new MinCountRule1ParametersSpec());
         }});
-        profilingChecks.setVolume(tableVolumeProfiling);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
         tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
@@ -105,12 +112,13 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         monitoringChecks.setDaily(dailyMonitoring);
 
         TableAvailabilityDailyMonitoringChecksSpec tableAvailability = new TableAvailabilityDailyMonitoringChecksSpec();
+        dailyMonitoring.setAvailability(tableAvailability);
         tableAvailability.setDailyTableAvailability(new TableAvailabilityCheckSpec() {{
             setWarning(new MaxFailuresRule0ParametersSpec());
         }});
-        dailyMonitoring.setAvailability(tableAvailability);
 
         TableVolumeDailyMonitoringChecksSpec tableVolumeDailyMonitoring = new TableVolumeDailyMonitoringChecksSpec();
+        dailyMonitoring.setVolume(tableVolumeDailyMonitoring);
         tableVolumeDailyMonitoring.setDailyRowCount(new TableRowCountCheckSpec() {{
             setWarning(new MinCountRule1ParametersSpec());
         }});
@@ -120,9 +128,9 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableVolumeDailyMonitoring.setDailyRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
-        dailyMonitoring.setVolume(tableVolumeDailyMonitoring);
 
         TableSchemaDailyMonitoringChecksSpec tableSchemaDailyMonitoring = new TableSchemaDailyMonitoringChecksSpec();
+        dailyMonitoring.setSchema(tableSchemaDailyMonitoring);
         tableSchemaDailyMonitoring.setDailyColumnCount(new TableSchemaColumnCountCheckSpec());
         tableSchemaDailyMonitoring.setDailyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
@@ -136,16 +144,15 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableSchemaDailyMonitoring.setDailyColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
-        dailyMonitoring.setSchema(tableSchemaDailyMonitoring);
 
         TableTimelinessDailyMonitoringChecksSpec timelinessDailyMonitoring = new TableTimelinessDailyMonitoringChecksSpec();
+        dailyMonitoring.setTimeliness(timelinessDailyMonitoring);
         timelinessDailyMonitoring.setDailyDataFreshness(new TableDataFreshnessCheckSpec() {{
             setWarning(new MaxDaysRule1ParametersSpec(2.0));
         }});
         timelinessDailyMonitoring.setDailyDataStaleness(new TableDataStalenessCheckSpec() {{
             setWarning(new MaxDaysRule1ParametersSpec(2.0));
         }});
-        dailyMonitoring.setTimeliness(timelinessDailyMonitoring);
 
 
         TablePartitionedCheckCategoriesSpec partitionedChecks = new TablePartitionedCheckCategoriesSpec();
@@ -154,6 +161,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         partitionedChecks.setDaily(dailyPartitioned);
 
         TableVolumeDailyPartitionedChecksSpec volumeDailyPartitioned = new TableVolumeDailyPartitionedChecksSpec();
+        dailyPartitioned.setVolume(volumeDailyPartitioned);
         volumeDailyPartitioned.setDailyPartitionRowCount(new TableRowCountCheckSpec());
         volumeDailyPartitioned.setDailyPartitionRowCountAnomaly(new TableRowCountAnomalyStationaryPartitionCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
@@ -161,8 +169,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         volumeDailyPartitioned.setDailyPartitionRowCountChange(new TableRowCountChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
-
-        dailyPartitioned.setVolume(volumeDailyPartitioned);
 
         return defaultPattern;
     }
@@ -176,11 +182,13 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public ColumnDefaultChecksPatternSpec createDefaultColumnChecks() {
         ColumnDefaultChecksPatternSpec defaultPattern = new ColumnDefaultChecksPatternSpec();
         defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
+        defaultPattern.setDescription("The default configuration of data quality checks that are always activated. This configuration enables the volume monitoring, anomaly monitoring, timeliness and schema change checks.");
 
         ColumnProfilingCheckCategoriesSpec defaultProfilingChecks = new ColumnProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(defaultProfilingChecks);
 
         ColumnNullsProfilingChecksSpec columnNullsProfiling = new ColumnNullsProfilingChecksSpec();
+        defaultProfilingChecks.setNulls(columnNullsProfiling);
         columnNullsProfiling.setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
             setWarning(new MaxCountRule0WarningParametersSpec());
         }});
@@ -188,8 +196,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
             setWarning(new MinCountRule1ParametersSpec());
         }});
         columnNullsProfiling.setProfileNullsPercent(new ColumnNullsPercentCheckSpec());
-        defaultProfilingChecks.setNulls(columnNullsProfiling);
-
 
 
         ColumnMonitoringCheckCategoriesSpec defaultMonitoringChecks = new ColumnMonitoringCheckCategoriesSpec();
@@ -198,30 +204,31 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultMonitoringChecks.setDaily(defaultDailyChecks);
 
         ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
+        defaultDailyChecks.setDatatype(columnDatatype);
         columnDatatype.setDailyDetectedDatatypeInTextChanged(new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
-        defaultDailyChecks.setDatatype(columnDatatype);
 
         ColumnAnomalyDailyMonitoringChecksSpec columnAnomalyDailyMonitoring = new ColumnAnomalyDailyMonitoringChecksSpec();
+        defaultDailyChecks.setAnomaly(columnAnomalyDailyMonitoring);
         columnAnomalyDailyMonitoring.setDailySumAnomaly(new ColumnSumAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         columnAnomalyDailyMonitoring.setDailyMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
-        defaultDailyChecks.setAnomaly(columnAnomalyDailyMonitoring);
 
         ColumnSchemaDailyMonitoringChecksSpec columnSchemaDailyMonitoring = new ColumnSchemaDailyMonitoringChecksSpec();
+        defaultDailyChecks.setSchema(columnSchemaDailyMonitoring);
         columnSchemaDailyMonitoring.setDailyColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
             setWarning(new Equals1RuleParametersSpec());
         }});
         columnSchemaDailyMonitoring.setDailyColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
-        defaultDailyChecks.setSchema(columnSchemaDailyMonitoring);
 
         ColumnNullsDailyMonitoringChecksSpec columnNullsDailyMonitoring = new ColumnNullsDailyMonitoringChecksSpec();
+        defaultDailyChecks.setNulls(columnNullsDailyMonitoring);
         columnNullsDailyMonitoring.setDailyNullsCount(new ColumnNullsCountCheckSpec());
         columnNullsDailyMonitoring.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNullsDailyMonitoring.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
@@ -231,13 +238,55 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNullsDailyMonitoring.setDailyNullsPercentChange(new ColumnNullPercentChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
-        defaultDailyChecks.setNulls(columnNullsDailyMonitoring);
 
         ColumnUniquenessDailyMonitoringChecksSpec columnUniquenessDailyMonitoring = new ColumnUniquenessDailyMonitoringChecksSpec();
+        defaultDailyChecks.setUniqueness(columnUniquenessDailyMonitoring);
         columnUniquenessDailyMonitoring.setDailyDistinctCountAnomaly(new ColumnDistinctCountAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
-        defaultDailyChecks.setUniqueness(columnUniquenessDailyMonitoring);
+
+        ColumnPartitionedCheckCategoriesSpec partitionedChecks = new ColumnPartitionedCheckCategoriesSpec();
+        defaultPattern.setPartitionedChecks(partitionedChecks);
+
+        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = new ColumnDailyPartitionedCheckCategoriesSpec();
+        partitionedChecks.setDaily(dailyPartitionedChecks);
+
+        ColumnNullsDailyPartitionedChecksSpec dailyPartitionedNulls = new ColumnNullsDailyPartitionedChecksSpec();
+        dailyPartitionedChecks.setNulls(dailyPartitionedNulls);
+
+        dailyPartitionedNulls.setDailyPartitionNullsCount(new ColumnNullsCountCheckSpec());
+        dailyPartitionedNulls.setDailyPartitionNullsPercent(new ColumnNullsPercentCheckSpec());
+        dailyPartitionedNulls.setDailyPartitionNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
+        dailyPartitionedNulls.setDailyPartitionNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+
+        ColumnAnomalyDailyPartitionedChecksSpec anomalyDailyPartitioned = new ColumnAnomalyDailyPartitionedChecksSpec();
+        dailyPartitionedChecks.setAnomaly(anomalyDailyPartitioned);
+        anomalyDailyPartitioned.setDailyPartitionSumAnomaly(new ColumnSumAnomalyStationaryPartitionCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+        anomalyDailyPartitioned.setDailyPartitionMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+        anomalyDailyPartitioned.setDailyPartitionMinAnomaly(new ColumnMinAnomalyStationaryCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+        anomalyDailyPartitioned.setDailyPartitionMaxAnomaly(new ColumnMaxAnomalyStationaryCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+
+        ColumnUniquenessDailyPartitionedChecksSpec uniquenessDailyPartitioned = new ColumnUniquenessDailyPartitionedChecksSpec();
+        dailyPartitionedChecks.setUniqueness(uniquenessDailyPartitioned);
+        uniquenessDailyPartitioned.setDailyPartitionDistinctCountAnomaly(new ColumnDistinctCountAnomalyStationaryPartitionCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+
+        ColumnDatatypeDailyPartitionedChecksSpec dataTypeDailyPartitioned = new ColumnDatatypeDailyPartitionedChecksSpec();
+        dailyPartitionedChecks.setDatatype(dataTypeDailyPartitioned);
+        dataTypeDailyPartitioned.setDailyPartitionDetectedDatatypeInTextChanged(new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec() {{
+            setWarning(new ValueChangedRuleParametersSpec());
+        }});
 
         return defaultPattern;
     }

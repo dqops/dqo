@@ -1,7 +1,7 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 
@@ -30,7 +30,7 @@ public abstract class RemoteTablesLister implements TablesLister {
      */
     public List<SourceTableModel> filterAndTransform(DuckdbParametersSpec duckdb, List<String> files, String schemaName){
         List<SourceTableModel> sourceTableModels = files.stream()
-                .filter(file -> isFolderOrFileOfValidExtension(file, duckdb.getFilesFormatType()))
+                .filter(file -> isFolderOrFileOfValidExtension(file, duckdb.getFullExtension()))
                 .map(file -> {
                     String cleanedFilePath = file.endsWith("/") ? file.substring(0, file.length() - 1) : file;
                     String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
@@ -44,14 +44,11 @@ public abstract class RemoteTablesLister implements TablesLister {
     /**
      * Verifies whether the given file name is a valid file name that DuckDB can work with.
      * @param storageObjectName The file name in storage
-     * @param filesType File type used for extension matching.
+     * @param extension File extension.
      * @return Whether the file is valid
      */
-    private boolean isFolderOrFileOfValidExtension(String storageObjectName, DuckdbFilesFormatType filesType){
-        String sourceFilesTypeString = filesType.toString();
-        return storageObjectName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || storageObjectName.toLowerCase().endsWith(".gz")
-                || storageObjectName.endsWith("/");
+    private boolean isFolderOrFileOfValidExtension(String storageObjectName, String extension){
+        return storageObjectName.toLowerCase().endsWith(extension) || storageObjectName.endsWith("/");
     }
 
 }

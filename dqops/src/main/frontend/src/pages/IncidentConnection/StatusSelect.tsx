@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
+import React, { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import Checkbox from "../../components/Checkbox";
 import SvgIcon from "../../components/SvgIcon";
-import { useSelector } from "react-redux";
-import { getFirstLevelIncidentsState } from "../../redux/selectors";
 import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
+import { getFirstLevelIncidentsState } from "../../redux/selectors";
 
 type StatusSelectProps = {
   onChangeFilter: (obj: Partial<IncidentFilter>) => void;
@@ -39,7 +39,7 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
-        <div className="flex items-center relative text-primary whitespace-nowrap cursor-pointer">
+        <div className="flex items-center relative text-primary whitespace-nowrap cursor-pointer text-sm">
           {valueString ? valueString : 'Select Status'}
           <SvgIcon name="chevron-down" className="w-4 ml-2" />
         </div>

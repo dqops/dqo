@@ -37,12 +37,13 @@ public enum AzureAuthenticationMode {
      * Uses the service principal
      */
     @JsonProperty("service_principal")
-    service_principal
+    service_principal,
 
-//    /**
-//     * Uses the default credentials set in DQOps.
-//     */
-//    @JsonProperty("default_credentials")
-//    default_credentials,
+    /**
+     * Uses the DQOps default credential from USER_HOME/.credentials/Azure_default_credentials
+     * The authentication is acquired from the file.
+     */
+    @JsonProperty("default_credentials")
+    default_credentials
 
 }

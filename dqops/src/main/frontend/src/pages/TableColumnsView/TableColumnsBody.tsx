@@ -18,7 +18,11 @@ import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import { dateToString, formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDetectedDatatype, useDecodedParams } from '../../utils';
+import {
+  getDetectedDatatype,
+  limitTextLength,
+  useDecodedParams
+} from '../../utils';
 import { MyData } from './TableColumnsConstans';
 import {
   calculate_color,
@@ -368,7 +372,7 @@ export default function TableColumnsBody({
             </div>
           </td>
           <td className="border-b border-gray-100 text-left px-4 py-2">
-            {column.importedDatatype}
+            {limitTextLength(column.importedDatatype, 15)}
           </td>
           {getMidSectionItemsBasedOnWidth(column).map((item, jIndex) => (
             <td

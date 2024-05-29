@@ -16,6 +16,7 @@
 package com.dqops.rules;
 
 import com.dqops.checks.custom.CustomParametersSpecObject;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.utils.schema.JsonAdditionalProperties;
@@ -120,5 +121,16 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec impleme
     @Override
     public String getRuleDefinitionName() {
         throw new UnsupportedOperationException("A custom rule parameters does not known its sensor name, it is defined on the custom check definition.");
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        // do nothing, we have no option right now to rescale custom rules, maybe in the future, we could support adding a special function inside the rule Python file for recalibration
     }
 }

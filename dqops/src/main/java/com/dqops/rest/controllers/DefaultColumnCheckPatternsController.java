@@ -247,10 +247,12 @@ public class DefaultColumnCheckPatternsController {
                     }
 
                     ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                    defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec() {{
-                        setTarget(patternModel.getTargetColumn());
-                        setPriority(patternModel.getPriority());
-                    }});
+                    ColumnDefaultChecksPatternSpec patternSpec = new ColumnDefaultChecksPatternSpec();
+                    patternSpec.setTarget(patternModel.getTargetColumn());
+                    patternSpec.setPriority(patternModel.getPriority());
+                    patternSpec.setDescription(patternModel.getDescription());
+                    patternSpec.setDisabled(patternModel.isDisabled());
+                    defaultChecksPatternWrapper.setSpec(patternSpec);
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -340,18 +342,22 @@ public class DefaultColumnCheckPatternsController {
 
                     ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
                     ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                    ColumnDefaultChecksPatternSpec targetPatternSpec;
 
                     if (existingDefaultChecksPatternWrapper == null) {
                         ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec() {{
+                        targetPatternSpec = new ColumnDefaultChecksPatternSpec() {{
                             setTarget(patternModel.getTargetColumn());
                             setPriority(patternModel.getPriority());
-                        }});
+                        }};
+                        defaultChecksPatternWrapper.setSpec(targetPatternSpec);
                     } else {
-                        ColumnDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-                        currentPatternSpec.setTarget(patternModel.getTargetColumn());
-                        currentPatternSpec.setPriority(patternModel.getPriority());
+                        targetPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                        targetPatternSpec.setTarget(patternModel.getTargetColumn());
+                        targetPatternSpec.setPriority(patternModel.getPriority());
                     }
+                    targetPatternSpec.setDisabled(patternModel.isDisabled());
+                    targetPatternSpec.setDescription(patternModel.getDescription());
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);

@@ -15,9 +15,11 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -92,5 +94,22 @@ public class MinPercentRule95ParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/min_percent";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.minPercent == null) {
+            return;
+        }
+
+        double to100Pct = 100.0 - this.minPercent;
+
+        this.minPercent = DoubleRounding.roundToKeepEffectiveDigits(this.minPercent + 0.3 * to100Pct);
     }
 }

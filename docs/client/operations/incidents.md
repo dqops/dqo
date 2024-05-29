@@ -6,6 +6,152 @@ Data quality incidents controller that supports reading and updating data qualit
 
 
 ___
+## disable_checks_for_incident
+Disables all data quality checks that caused a given data quality incident.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/disable_checks_for_incident.py) to see the source code on GitHub.
+
+
+**POST**
+```
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/disable
+```
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/checks/disable^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import disable_checks_for_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = disable_checks_for_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import disable_checks_for_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = await disable_checks_for_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import disable_checks_for_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = disable_checks_for_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import disable_checks_for_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = await disable_checks_for_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+
+___
 ## find_connection_incident_stats
 Returns a list of connection names with incident statistics - the count of recent open incidents.
 
@@ -1633,6 +1779,152 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
         ```
     
     
+    
+
+
+
+___
+## recalibrate_checks_for_incident
+Recalibrates all data quality checks that caused a given data quality incident to generate less issues by changing the data quality rule parameters.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/recalibrate_checks_for_incident.py) to see the source code on GitHub.
+
+
+**POST**
+```
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/recalibrate
+```
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/checks/recalibrate^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import recalibrate_checks_for_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = recalibrate_checks_for_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import recalibrate_checks_for_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = await recalibrate_checks_for_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import recalibrate_checks_for_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = recalibrate_checks_for_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import recalibrate_checks_for_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = await recalibrate_checks_for_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
     
 
 

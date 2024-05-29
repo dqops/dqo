@@ -12,6 +12,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -158,7 +159,7 @@ public class FileFormatSpec extends AbstractSpec {
     public String buildTableOptionsString(DuckdbParametersSpec duckdb, TableSpec tableSpec){
         List<String> filePathList = new ArrayList<>(filePaths);
 
-        if(duckdb.getStorageType().equals(DuckdbStorageType.azure)){
+        if (Objects.equals(duckdb.getStorageType(), DuckdbStorageType.azure)) {
             filePathList = filePathList.stream()
                     .map(s -> AzureStoragePath.from(s, duckdb.resolveAccountName()).getAzFullPathPrefix())
                     .collect(Collectors.toList());
@@ -185,6 +186,38 @@ public class FileFormatSpec extends AbstractSpec {
             case parquet: return this.getParquet() != null;
             default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
+    }
+
+    /**
+     * Returns the file format extension. The compression type is included when "no_extension" is not set.
+     * @return the file format extension. The compression type is included when "no_extension" is not set.
+     */
+    @JsonIgnore
+    public String getFullExtension(DuckdbFilesFormatType duckdbFilesFormatType){
+        if(duckdbFilesFormatType == null) {
+            return "";
+        }
+        String fileTypeExtension = "." + duckdbFilesFormatType;
+
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null){
+            CsvFileFormatSpec formatSpec = getCsv();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null){
+            JsonFileFormatSpec formatSpec = getJson();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null){
+            ParquetFileFormatSpec formatSpec = getParquet();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        return fileTypeExtension;
     }
 
     @Override

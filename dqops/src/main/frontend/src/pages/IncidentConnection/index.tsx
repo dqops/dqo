@@ -154,6 +154,14 @@ export const IncidentConnection = () => {
         label: row.incidentId
       })
     );
+    history.push(
+      ROUTES.INCIDENT_DETAIL_VALUE(
+        row.connection || '',
+        row.year || 0,
+        row.month || 0,
+        row.incidentId || ''
+      )
+    );
   };
 
   const handleSortChange = (
@@ -193,7 +201,7 @@ export const IncidentConnection = () => {
       header: () => (
         <SortableColumn
           className="justify-end text-sm"
-          label="Total data quality issues"
+          label="Total issues"
           order="failedChecksCount"
           direction={
             filters.sortBy === 'failedChecksCount'
@@ -203,7 +211,7 @@ export const IncidentConnection = () => {
           onChange={handleSortChange}
         />
       ),
-      label: 'Total data quality issues',
+      label: 'Total issues',
       className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },
@@ -225,8 +233,12 @@ export const IncidentConnection = () => {
         />
       ),
       label: 'Table',
-      className: 'text-left text-sm py-2 px-4',
-      value: 'table'
+      className:
+        'text-left text-sm py-2 px-4 max-w-40 min-w-35 whitespace-normal break-all',
+      value: 'table',
+      render: (value: string) => {
+        return <div className="cursor-pointer text-sm text-start">{value}</div>;
+      }
     },
     {
       header: () => (
@@ -258,7 +270,7 @@ export const IncidentConnection = () => {
             className="text-blue-700 cursor-pointer text-sm"
             onClick={() => openIncidentDetail(row)}
           >
-            {values.join(', ')}(more)
+            {values.join(', ')} (more)
           </a>
         );
       }

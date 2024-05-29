@@ -17,15 +17,16 @@ package com.dqops.duckdb.sensors.column.integrity;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
-import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -47,11 +48,15 @@ public class DuckdbColumnIntegrityForeignKeyMatchPercentSensorParametersSpecInte
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.duckdb);
-        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.duckdb);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.value_match_right_table;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        String csvFileNameForeign = SampleCsvFileNames.value_match_left_table;
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileNameForeign, connectionSpec);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
         this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);

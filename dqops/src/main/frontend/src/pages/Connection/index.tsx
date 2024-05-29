@@ -6,7 +6,6 @@ import ConnectionCommentView from '../../components/Connection/ConnectionView/Co
 import ConnectionDefaultGroupingConfiguration from '../../components/Connection/ConnectionView/ConnectionDataStream';
 import ConnectionDetail from '../../components/Connection/ConnectionView/ConnectionDetail';
 import ConnectionLabelsView from '../../components/Connection/ConnectionView/ConnectionLabelsView';
-import ConnectionTables from '../../components/Connection/ConnectionView/ConnectionTables';
 import { IncidentsNotificationsView } from '../../components/Connection/ConnectionView/IncidentsNotificationsView';
 import ScheduleDetail from '../../components/Connection/ConnectionView/ScheduleDetail';
 import SchemasView from '../../components/Connection/ConnectionView/SchemasView';
@@ -21,6 +20,8 @@ import {
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import ColumnListView from '../ColumnListView/ColumnListView';
+import TableListView from '../TableListView/TableListView';
 
 const initSourceTabs = [
   {
@@ -46,6 +47,10 @@ const initSourceTabs = [
   {
     label: 'Tables',
     value: 'tables'
+  },
+  {
+    label: 'Columns',
+    value: 'columns'
   },
   {
     label: 'Default grouping template',
@@ -172,6 +177,10 @@ const ConnectionPage = () => {
       {
         label: 'Tables',
         value: 'tables'
+      },
+      {
+        label: 'Columns',
+        value: 'columns'
       }
     ]);
     // } else {
@@ -206,7 +215,8 @@ const ConnectionPage = () => {
           <ConnectionDefaultGroupingConfiguration />
         )}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
-        {activeTab === 'tables' && <ConnectionTables />}
+        {activeTab === 'tables' && <TableListView />}
+        {activeTab === 'columns' && <ColumnListView />}
       </div>
     </>
   );

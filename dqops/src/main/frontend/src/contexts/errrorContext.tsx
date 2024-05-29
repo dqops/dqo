@@ -90,7 +90,7 @@ function ErrorProvider({ children }: any) {
       }}
     >
       {children}
-      <ErrorModal open={isErrorModalOpen} onClose={() => dispatch(setIsErrorModalOpen(false))} message = {errorMessage}/>
+      <ErrorModal open={isErrorModalOpen} onClose={() => dispatch(() => {setIsErrorModalOpen(false); setErrorMessage(undefined); })} message = {errorMessage}/>
     </ErrorContext.Provider>
   );
 }

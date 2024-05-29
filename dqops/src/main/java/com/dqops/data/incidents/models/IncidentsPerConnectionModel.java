@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
+import java.time.Instant;
+
 /**
  * Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.
  */
@@ -40,4 +42,10 @@ public class IncidentsPerConnectionModel {
      */
     @JsonPropertyDescription("Count of open (new) data quality incidents.")
     private int openIncidents;
+
+    /**
+     * The UTC timestamp when the most recent data quality incident was first seen.
+     */
+    @JsonPropertyDescription("The UTC timestamp when the most recent data quality incident was first seen.")
+    private Instant mostRecentFirstSeen;
 }

@@ -34,6 +34,8 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
 
+import java.util.Objects;
+
 /**
  * Visitor for {@link ColumnSearchFilters} that finds the correct nodes.
  */
@@ -146,9 +148,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         }
 
         PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
-        if (physicalTableName.isSearchPattern()) {
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
-        }
 
         if (tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -231,13 +230,14 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         }
 
         if (this.filters.getColumnDataType() != null
-                && !this.filters.getColumnDataType().equals(columnSpec.getTypeSnapshot().getColumnType())) {
+                && (columnSpec.getTypeSnapshot() == null
+                || !StringPatternComparer.matchSearchPattern(columnSpec.getTypeSnapshot().getColumnType(), this.filters.getColumnDataType()))) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         Boolean columnIsNullable = columnSpec.getTypeSnapshot() == null ? null : columnSpec.getTypeSnapshot().getNullable();
         if (this.filters.getNullable() != null
-                && (columnIsNullable == null || this.filters.getNullable() ^ columnIsNullable)) {
+                && !Objects.equals(this.filters.getNullable(), columnIsNullable)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -258,6 +258,10 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
         }
 
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overriddenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getColumnLabels() != null && !LabelsSearchMatcher.hasAllLabels(this.filters.getColumnLabels(), columnSpec.getLabels())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

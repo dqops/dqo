@@ -82,6 +82,16 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
     }
 
     /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        // do nothing, no child nodes
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param o

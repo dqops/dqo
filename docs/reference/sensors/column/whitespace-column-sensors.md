@@ -1546,7 +1546,6 @@ The templates used to generate the SQL query for each data source supported by D
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                 AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                     THEN 1
                 ELSE 0
@@ -1590,54 +1589,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-        {%- if (lib.target_column_data_type == 'STRING') -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- else -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
-                AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
                     THEN 1
                 ELSE 0
             END
@@ -1729,7 +1686,7 @@ The templates used to generate the SQL query for each data source supported by D
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                     THEN 1
                 ELSE 0
             END
@@ -1746,54 +1703,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-        {%- if (lib.target_column_data_type == 'STRING') -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- else -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
-                AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
                     THEN 1
                 ELSE 0
             END
@@ -1989,7 +1904,6 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE 100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                     AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                         THEN 1
                     ELSE 0
@@ -2037,56 +1951,14 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-        {%- if (lib.target_column_data_type == 'STRING') -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- else -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
-                    AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
                         THEN 1
                     ELSE 0
                 END
@@ -2192,7 +2064,7 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                     AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                    AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                    AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                         THEN 1
                     ELSE 0
                 END
@@ -2210,56 +2082,14 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-        {%- if (lib.target_column_data_type == 'STRING') -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-        {%- else -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
-                    AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
                         THEN 1
                     ELSE 0
                 END

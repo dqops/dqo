@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Parquet file format specification for querying data in the parquet format files.
@@ -47,6 +48,14 @@ public class ParquetFileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("Whether the columns of multiple schemas should be unified by name, rather than by position.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean unionByName;
+
+    @JsonPropertyDescription("The compression type for the file.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private CompressionType compression;
+
+    @JsonPropertyDescription("Whether the compression extension is present at the end of the file name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean noCompressionExtension;
 
     /**
      * Formats the table options to be used in SQL query. The set (non null) options are added only.
@@ -141,6 +150,39 @@ public class ParquetFileFormatSpec extends AbstractSpec {
      */
     public void setUnionByName(Boolean unionByName) {
         this.unionByName = unionByName;
+    }
+
+    /**
+     * Returns compression type.
+     * @return Compression type.
+     */
+    public CompressionType getCompression() {
+        return compression;
+    }
+
+    /**
+     * Sets the compression type.
+     * @param compression Compression type.
+     */
+    public void setCompression(CompressionType compression) {
+        this.compression = compression;
+    }
+
+    /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public Boolean getNoCompressionExtension() {
+        return noCompressionExtension;
+    }
+
+    /**
+     * Sets noCompressionExtension.
+     * @param noCompressionExtension noCompressionExtension.
+     */
+    public void setNoCompressionExtension(Boolean noCompressionExtension) {
+        setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
+        this.noCompressionExtension = noCompressionExtension;
     }
 
     @Override

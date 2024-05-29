@@ -23,7 +23,6 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.dqops.metadata.sources.fileformat.CompressionType;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
@@ -31,6 +30,8 @@ import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSet
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredential;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -63,7 +64,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode.")
     @JsonPropertyDescription("DuckDB read mode.")
-    private DuckdbReadMode readMode = DuckdbReadMode.files;
+    private DuckdbReadMode readMode = DuckdbReadMode.in_memory;
 
     @CommandLine.Option(names = {"--duckdb-files-format-type"}, description = "Type of source files format for DuckDB.")
     @JsonPropertyDescription("Type of source files format for DuckDB.")
@@ -502,18 +503,35 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Whether the compression option is set to gzip.
-     * @return Whether the compression option is set to gzip.
+     * Returns the file format extension. The compression type is included when "no_extension" is not set.
+     * @return the file format extension. The compression type is included when "no_extension" is not set.
      */
     @JsonIgnore
-    public boolean isSetGzipCompression(){
-        if(filesFormatType != null){
-            switch(filesFormatType){
-                case csv: return getCsv() != null && getCsv().getCompression() != null && getCsv().getCompression().equals(CompressionType.gzip);
-                case json: return getJson() != null && getJson().getCompression() != null && getJson().getCompression().equals(CompressionType.gzip);
+    public String getFullExtension(){
+        if(filesFormatType == null) {
+            return "";
+        }
+        String fileTypeExtension = "." + filesFormatType;
+
+        if(filesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null){
+            CsvFileFormatSpec formatSpec = getCsv();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
             }
         }
-        return false;
+        if(filesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null){
+            JsonFileFormatSpec formatSpec = getJson();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        if(filesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null){
+            ParquetFileFormatSpec formatSpec = getParquet();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        return fileTypeExtension;
     }
 
     /**
@@ -621,31 +639,41 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      *
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
-    public void fillSpecWithDefaultCredentials(SecretValueLookupContext secretValueLookupContext){
-        DuckdbStorageType storageType = this.getStorageType();
+    public void fillSpecWithDefaultAwsCredentials(SecretValueLookupContext secretValueLookupContext){
+        Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+        if(credentialProfile.isPresent()){
+            Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+            if(accessKeyId.isPresent()){
+                String awsAccessKeyId = accessKeyId.get();
+                this.setUser(awsAccessKeyId);
+            }
+            Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+            if(secretAccessKey.isPresent()){
+                String awsSecretAccessKey = secretAccessKey.get();
+                this.setPassword(awsSecretAccessKey);
+            }
+        }
+        fillSpecWithDefaultAwsConfig(secretValueLookupContext);
+    }
 
-        switch (storageType){
-            case s3:
-                Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                if(credentialProfile.isPresent()){
-                    Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                    if(accessKeyId.isPresent()){
-                        String awsAccessKeyId = accessKeyId.get();
-                        this.setUser(awsAccessKeyId);
-                    }
-                    Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                    if(secretAccessKey.isPresent()){
-                        String awsSecretAccessKey = secretAccessKey.get();
-                        this.setPassword(awsSecretAccessKey);
-                    }
-                }
-                fillSpecWithDefaultAwsConfig(secretValueLookupContext);
-                break;
-
-             // todo: azure credentials
-
-            default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
+    /**
+     * Fills the spec with the default credentials from the .credentials/Azure_default_credentials file for a cloud storage.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    public void fillSpecWithDefaultAzureCredentials(SecretValueLookupContext secretValueLookupContext,
+                                                  AzureCredentialsProvider azureCredentialsProvider){
+        Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
+        if(azureCredential.isPresent()
+            && !azureCredential.get().getTenantId().isEmpty()
+            && !azureCredential.get().getClientId().isEmpty()
+            && !azureCredential.get().getClientSecret().isEmpty()
+            && !azureCredential.get().getAccountName().isEmpty()
+        ) {
+            this.setTenantId(azureCredential.get().getTenantId());
+            this.setClientId(azureCredential.get().getClientId());
+            this.setClientSecret(azureCredential.get().getClientSecret());
+            this.setAccountName(azureCredential.get().getAccountName());
         }
     }
 

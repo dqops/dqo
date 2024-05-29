@@ -17,6 +17,7 @@
 package com.dqops.metadata.search.pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -82,6 +83,12 @@ public class SearchPattern {
         }
     }
 
+    /**
+     * Creates a search pattern for a given configuration.
+     * @param ignoreCase Ignore case.
+     * @param patternString Pattern text.
+     * @return Search pattern.
+     */
     public static SearchPattern create(boolean ignoreCase, String patternString) {
         if (patternString == null) {
             throw new IllegalArgumentException("Search pattern is null.");
@@ -91,6 +98,37 @@ public class SearchPattern {
         return new SearchPattern(patternString, searchPatternStrategy);
     }
 
+    /**
+     * Creates an array of search patterns for values that are comma separated.
+     * @param ignoreCase Ignore case.
+     * @param patternString Pattern text with comma separated values.
+     * @return Search pattern.
+     */
+    public static SearchPattern[] createForCommaSeparatedPatterns(boolean ignoreCase, String patternString) {
+        if (patternString == null) {
+            throw new IllegalArgumentException("Search pattern is null.");
+        }
+
+        String[] textPatterns = StringUtils.split(patternString, ',');
+        if (textPatterns.length == 0) {
+            return null;
+        }
+
+        SearchPattern[] searchPatterns = new SearchPattern[textPatterns.length];
+        for (int i = 0; i < searchPatterns.length; i++) {
+            String pattern = textPatterns[i];
+            AbstractSearchPatternStrategy searchPatternStrategy = determineSearchPatternStrategy(ignoreCase, pattern);
+            searchPatterns[i] = new SearchPattern(pattern, searchPatternStrategy);
+        }
+
+        return searchPatterns;
+    }
+
+    /**
+     * Tests a text if it matches the pattern.
+     * @param otherString Text to verify.
+     * @return True when the value matches a pattern.
+     */
     public boolean match(String otherString) {
         if (this.searchPatternStrategy == null) {
             return false;
@@ -98,6 +136,25 @@ public class SearchPattern {
         return this.searchPatternStrategy.match(otherString);
     }
 
+    /**
+     * Tests the text if it matches any pattern from the array of check patterns.
+     * @param patterns Array of check patterns.
+     * @param text Text to verify.
+     * @return True when it matches any pattern.
+     */
+    public static boolean matchAny(SearchPattern[] patterns, String text) {
+        for (SearchPattern pattern : patterns) {
+            if (pattern.match(text)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the pattern contains a wildcard character '*'.
+     */
     @JsonIgnore
     public boolean isWildcardSearchPattern() {
         if (this.searchPatternStrategy == null) {

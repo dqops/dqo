@@ -44,6 +44,18 @@ public class DefaultTableChecksPatternListModel {
     private int priority;
 
     /**
+     * Disables this data quality check configuration. The checks will not be activated.
+     */
+    @JsonPropertyDescription("Disables this data quality check configuration. The checks will not be activated.")
+    private boolean disabled;
+
+    /**
+     * The description (documentation) of this data quality check configuration.
+     */
+    @JsonPropertyDescription("The description (documentation) of this data quality check configuration.")
+    private String description;
+
+    /**
      * Target table filters.
      */
     @JsonPropertyDescription("The filters for the target table.")
@@ -78,6 +90,8 @@ public class DefaultTableChecksPatternListModel {
         return new DefaultTableChecksPatternListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
             setPriority(checksPatternSpec.getPriority());
+            setDisabled(checksPatternSpec.isDisabled());
+            setDescription(checksPatternSpec.getDescription());
             setTargetTable(checksPatternSpec.getTarget());
             setCanEdit(isEditor);
             setYamlParsingError(checksPatternSpec.getYamlParsingError());

@@ -44,15 +44,15 @@ export default function SchemaTableItemDimensions({
   return (
     <>
       {' '}
-      <td className="pl-4 content-start pt-2">
+      <td className="pl-4 text-[10px]">
         <div
           className={clsx(
-            'w-13 h-6 text-center flex items-center justify-center',
+            'w-[35px] h-4.5 text-center flex items-center justify-center',
             getColor(item.data_quality_status?.current_severity)
           )}
         >
           {item.data_quality_status?.data_quality_kpi !== undefined
-            ? item.data_quality_status?.data_quality_kpi.toPrecision(3) + '%'
+            ? Math.round(item.data_quality_status?.data_quality_kpi) + '%'
             : ''}
         </div>
       </td>
@@ -70,49 +70,57 @@ export default function SchemaTableItemDimensions({
         const hasNoSeverity = severityColor.length === 0;
 
         const dimensionsClassNames = clsx(
-          'w-13 h-6 text-center flex items-center justify-center',
+          'w-[35px] h-4.5 text-center flex items-center justify-center text-[10px]',
           {
             'bg-gray-150': hasNoSeverity && lastCheckExecutedAt,
             [severityColor]: !hasNoSeverity
             // 'border border-gray-150': hasNoSeverity
           }
         );
-        return (
-          <td
-            key={`Dimensionindex${dimType}`}
-            className="pl-4 content-start pt-2"
-          >
-            <Tooltip
-              content={renderSecondLevelTooltip(
-                (item.data_quality_status?.dimensions ?? {})?.[
-                  dimensionKey as any
-                ] ?? {
-                  dimension: dimType
-                }
-              )}
-            >
-              <div className={dimensionsClassNames}>
-                {(item.data_quality_status?.dimensions ?? {})?.[
-                  dimensionKey as any
-                ]?.data_quality_kpi !== undefined
-                  ? (item.data_quality_status?.dimensions ?? {})?.[
-                      dimensionKey as any
-                    ].data_quality_kpi?.toPrecision(2 | 3) + '%'
-                  : ''}
-              </div>
-            </Tooltip>
-          </td>
-        );
+        if (
+          (item.data_quality_status?.dimensions ?? {})?.[dimensionKey as any]
+        ) {
+          return (
+            <td key={`Dimensionindex${dimType}`} className="pl-4">
+              <Tooltip
+                content={renderSecondLevelTooltip(
+                  (item.data_quality_status?.dimensions ?? {})?.[
+                    dimensionKey as any
+                  ] ?? {
+                    dimension: dimType
+                  }
+                )}
+              >
+                <div className={dimensionsClassNames}>
+                  {(item.data_quality_status?.dimensions ?? {})?.[
+                    dimensionKey as any
+                  ]?.data_quality_kpi !== undefined
+                    ? Math.round(
+                        Number(
+                          (item.data_quality_status?.dimensions ?? {})?.[
+                            dimensionKey as any
+                          ].data_quality_kpi
+                        )
+                      ) + '%'
+                    : ''}
+                </div>
+              </Tooltip>
+            </td>
+          );
+        } else {
+          return (
+            <td key={`Dimensionindex${dimType}`} className="pl-4">
+              <div className="w-[35px]"></div>
+            </td>
+          );
+        }
       })}
       {getAdditionalDimentionsKeys(
         item.data_quality_status?.dimensions ?? {}
       ).map((dimensionKey: string | undefined, dimIndex) => {
         if (dimensionKey) {
           return (
-            <td
-              key={`DimensionTooltipindex${dimIndex}`}
-              className="pl-4 content-start pt-2"
-            >
+            <td key={`DimensionTooltipindex${dimIndex}`} className="pl-4">
               <Tooltip
                 content={renderSecondLevelTooltip(
                   (item.data_quality_status?.dimensions ?? {})?.[
@@ -122,7 +130,7 @@ export default function SchemaTableItemDimensions({
               >
                 <div
                   className={clsx(
-                    'w-13 h-6 text-center flex items-center justify-center',
+                    'w-[35px] h-4.5 text-[10px] text-center flex items-center justify-center',
                     getColor(
                       (item.data_quality_status?.dimensions ?? {})?.[
                         dimensionKey as any
@@ -143,9 +151,13 @@ export default function SchemaTableItemDimensions({
                   {(item.data_quality_status?.dimensions ?? {})?.[
                     dimensionKey as any
                   ]?.data_quality_kpi !== undefined
-                    ? (item.data_quality_status?.dimensions ?? {})?.[
-                        dimensionKey as any
-                      ].data_quality_kpi?.toPrecision(2 | 3) + '%'
+                    ? Math.round(
+                        Number(
+                          (item.data_quality_status?.dimensions ?? {})?.[
+                            dimensionKey as any
+                          ].data_quality_kpi
+                        )
+                      ) + '%'
                     : ''}
                 </div>
               </Tooltip>
@@ -180,8 +192,14 @@ const renderSecondLevelTooltip = (
           <div>{data?.highest_historical_severity}</div>
         </div>
         <div className="flex gap-x-2">
-          <div className="w-49">Quality Dimension:</div>
+          <div className="w-49">Quality dimension:</div>
           <div>{data?.dimension}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Data quality KPI:</div>
+          <div>
+            {data?.data_quality_kpi ? data?.data_quality_kpi + '%' : ''}
+          </div>
         </div>
       </div>
     );

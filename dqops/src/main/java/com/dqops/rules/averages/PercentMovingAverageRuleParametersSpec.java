@@ -15,10 +15,12 @@
  */
 package com.dqops.rules.averages;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -107,5 +109,22 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
     @Override
     public String getRuleDefinitionName() {
         return "averages/percent_moving_average";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxPercentAbove != null) {
+            this.maxPercentAbove = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentAbove * 1.3);
+        }
+
+        if (this.maxPercentBelow != null) {
+            this.maxPercentBelow = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentBelow * 1.3);
+        }
     }
 }

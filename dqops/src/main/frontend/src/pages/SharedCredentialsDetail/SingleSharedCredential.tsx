@@ -59,9 +59,7 @@ export default function SingleSharedCredential() {
         binary_value: textAreaValue
       }).catch((err) => console.error(err));
     }
-    console.log(location.pathname);
-    console.log(activeTab);
-    console.log('/definitions/shared-credential/' + credential_name);
+
     dispatch(
       closeFirstLevelTab(
         '/definitions/shared-credential/' + urlencodeDecoder(credential_name)
@@ -106,7 +104,7 @@ export default function SingleSharedCredential() {
       setIncorrectBinaryText(false);
     }
   };
-  console.log(credentialName, credential_name);
+
   return (
     <>
       {userProfile.can_manage_and_view_shared_credentials === true ? (

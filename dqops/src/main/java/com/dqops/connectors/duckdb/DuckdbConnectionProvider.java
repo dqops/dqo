@@ -20,10 +20,11 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
-import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -104,30 +105,113 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec = new DuckdbParametersSpec();
             connectionSpec.setDuckdb(duckdbSpec);
         }
+        duckdbSpec.setReadMode(DuckdbReadMode.in_memory);
 
-        if (duckdbSpec.getReadMode() == null) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--duckdb-read-mode");
-            }
-            duckdbSpec.setReadMode(terminalReader.promptEnum("DuckDB read mode.", DuckdbReadMode.class, DuckdbReadMode.files,false));
-        }
+//        if (duckdbSpec.getReadMode() == null) {
+//            if (isHeadless) {
+//                throw new CliRequiredParameterMissingException("--duckdb-read-mode");
+//            }
+//            duckdbSpec.setReadMode(terminalReader.promptEnum("DuckDB read mode.", DuckdbReadMode.class, DuckdbReadMode.files,false));
+//        }
 
-        if (duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory) && Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--duckdb-database");
-            }
-            duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
-        }
+//        if (duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory) && Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
+//            if (isHeadless) {
+//                throw new CliRequiredParameterMissingException("--duckdb-database");
+//            }
+//            duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
+//        }
 
-        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return;
-        }
+//        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
+//            return;
+//        }
 
         if(duckdbSpec.getStorageType() == null){
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-storage-type");
             }
             duckdbSpec.setStorageType(terminalReader.promptEnum("Type of storage", DuckdbStorageType.class, DuckdbStorageType.local,true));
+        }
+
+        if(duckdbSpec.getStorageType() != null && duckdbSpec.getStorageType().equals(DuckdbStorageType.s3)) {
+            if(duckdbSpec.getAwsAuthenticationMode() == null){
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-aws-authentication-mode");
+                }
+                duckdbSpec.setAwsAuthenticationMode(terminalReader.promptEnum("AWS authentication mode", AwsAuthenticationMode.class, AwsAuthenticationMode.iam,false));
+            }
+
+            if(duckdbSpec.getAwsAuthenticationMode().equals(AwsAuthenticationMode.iam)){
+                if(duckdbSpec.getAwsAccessKeyId() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-user");
+                    }
+                    duckdbSpec.setUser(terminalReader.prompt("Access Key ID", null,false));
+                }
+                if(duckdbSpec.getAwsSecretAccessKey() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-password");
+                    }
+                    duckdbSpec.setPassword(terminalReader.prompt("Secret Access Key", null,false));
+                }
+            }
+            if(duckdbSpec.getRegion() == null){
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-region");
+                }
+                duckdbSpec.setRegion(terminalReader.prompt("Region", null,true));
+            }
+        }
+
+        if(duckdbSpec.getStorageType() != null && duckdbSpec.getStorageType().equals(DuckdbStorageType.azure)) {
+            if(duckdbSpec.getAzureAuthenticationMode() == null){
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-azure-authentication-mode");
+                }
+                duckdbSpec.setAzureAuthenticationMode(terminalReader.promptEnum("Azure authentication mode", AzureAuthenticationMode.class, null,false));
+            }
+
+            if(duckdbSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.connection_string)){
+                if(duckdbSpec.getAwsSecretAccessKey() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-password");
+                    }
+                    duckdbSpec.setPassword(terminalReader.prompt("Connection String", null,false));
+                }
+            }
+            if(duckdbSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.credential_chain)){
+                if(duckdbSpec.getAccountName() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-azure-account-name");
+                    }
+                    duckdbSpec.setAccountName(terminalReader.prompt("Azure Storage Account Name", null,false));
+                }
+            }
+            if(duckdbSpec.getAzureAuthenticationMode().equals(AzureAuthenticationMode.service_principal)){
+                if(duckdbSpec.getTenantId() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-azure-tenant-id");
+                    }
+                    duckdbSpec.setTenantId(terminalReader.prompt("Tenant ID", null,false));
+                }
+                if(duckdbSpec.getClientId() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-azure-client-id");
+                    }
+                    duckdbSpec.setClientId(terminalReader.prompt("Client ID", null,false));
+                }
+                if(duckdbSpec.getClientSecret() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-azure-client-id");
+                    }
+                    duckdbSpec.setClientSecret(terminalReader.prompt("Client Secret", null,false));
+                }
+                if(duckdbSpec.getAccountName() == null){
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--duckdb-azure-account-name");
+                    }
+                    duckdbSpec.setAccountName(terminalReader.prompt("Azure Storage Account Name", null,false));
+                }
+            }
         }
 
         if(duckdbSpec.getFilesFormatType() == null){
@@ -137,11 +221,11 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec.setFilesFormatType(terminalReader.promptEnum("Type of source files for DuckDB", DuckdbFilesFormatType.class, null, false));
         }
 
-        if (duckdbSpec.getDirectoriesString().isEmpty()) {
+        if (duckdbSpec.getDirectoriesString() == null) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-directories");
             }
-            duckdbSpec.setDirectoriesString(terminalReader.prompt("Virtual schema name and path in a pattern: schema=path. For multiple use pattern: schema=path1,schema=path2", null, false));
+            duckdbSpec.setDirectoriesString(terminalReader.prompt("Virtual schema name and path in the pattern: schema=path. For multiple paths use another schemas as in pattern: schema1=path1,schema2=path2", null, false));
         }
 
         Map<String, String> directories = parseDirectoriesString(duckdbSpec.getDirectoriesString());
@@ -164,7 +248,13 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
                 throw new RuntimeException("Unbalanced values for " + mapping + "." +
                         "Ensure you provide directories in a schema=path pattern.");
             }
-            directories.put(schemaDirectory.get(0), schemaDirectory.get(1));
+
+            String schema = schemaDirectory.get(0);
+            String path = schemaDirectory.get(1);
+            if(directories.containsKey(schema)){
+                throw new RuntimeException("Schema to path is one-to-one mapping. You cannot add a second path: " + path + " to the schema: " + schema);
+            }
+            directories.put(schema, path);
         }
 
         return directories;

@@ -48,6 +48,8 @@ The default data quality checks are automatically activated on all tables and co
 but they can be disabled or reconfigured in the DQOps table configuration files [*.dqotable.yaml*](../reference/yaml/TableYaml.md) 
 as described in the guide for [configuring data quality checks](configuring-data-quality-checks-and-rules.md).
 
+These default configurations are also called **data quality policies**. 
+
 ### Automatic activation of checks
 The [data quality check editor](dqops-user-interface-overview.md#check-editor) in DQOps
 shows automatically activated data quality checks as enabled but using a gray color.
@@ -236,6 +238,65 @@ The target column parameters are listed in the following table.
 | `data_type`          | The physical data type of the target column, if it is stored in the [type_snapshot.column_type](configuring-table-metadata.md#column-schema) field. |
 | `data_type_category` | The category of the data type detected by DQOps. DQOps detects a database independent category of the data type.                                    |
 
+
+### Targeting multiple data assets 
+All filters support targeting multiple objects, except the *data_type_category* parameter, which uses well-known values from an enumeration.
+Targeting multiple data assets, such as multiple connections, schemas, tables, columns, labels, or data types, 
+is supported by providing all the target data names separated by a comma.
+
+The following example shows how to target multiple tables.
+
+``` { .yaml linenums="1" .annotate hl_lines="7" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  target:
+    table: "fact_sales,dim_pro*"
+```
+
+The following example shows how to target multiple columns.
+
+``` { .yaml linenums="1" .annotate hl_lines="7" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  target:
+    column: "customer_id,product_id"
+```
+
+## Deactivating the policy
+The default configurations of data quality checks (policies) can be deactivated. DQOps does not apply the disabled policies.
+Each default checks configuration file has a *disabled* boolean flag. The following examples show how to turn off a policy.
+
+The following example shows how to disable a table-level policy.
+
+``` { .yaml linenums="1" .annotate hl_lines="6" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  priority: 1000
+  disabled: true
+  target:
+    table: "fact_sales,dim_pro*"
+```
+
+The following example shows how to disable a column-level policy.
+
+``` { .yaml linenums="1" .annotate hl_lines="6" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  priority: 1000
+  disabled: true
+  target:
+    column: "customer_id,product_id"
+```
 
 ## Configuring check patterns in UI
 The configuration of the default data quality check patterns in DQOps is found in the *Default checks configuration* node of the *Configuration* section.
@@ -523,6 +584,64 @@ spec:
           warning: {} 
 ```
 
+
+### Default daily partitioned checks
+The default configuration of column-level [partition checks](definition-of-data-quality-checks/partition-checks.md)
+focuses on detecting anomalies related to null values, numeric values and distinct values across daily partitions.
+
+The default column-level daily partition checks are described in the table below.
+
+| Category                                                                                                  | Data quality check                                                                                                                                                                                         | Description                                                                                                                                                                                                                                                 | Data quality rule                                                                                                                                                                                                                                                                                                           |
+|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_partition_nulls_count`](../checks/column/nulls/nulls-count.md#daily-partition-nulls-count)</span>                                                                      | Counts null values in a monitored column. Detects partially incomplete columns that contain any null values.                                                                                                                                                | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_partition_nulls_percent`](../checks/column/nulls/nulls-percent.md#daily-nulls-percent)</span>                                                                          | Measures the percentage of null values in a column.                                                                                                                                                                                                         | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_partition_nulls_percent_anomaly`](../checks/column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly)</span>                                                  | Detects anomalies in the percentage of null values. Identifies the most significant increases or decreases in the rate of null values since the previous day or the last known value.                                                                       | Raises a *warning* severity issue when the increase or decrease in the percentage of nulls is in the top 1% of the biggest day-to-day changes.                                                                                                                                                                              |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)     | <span class="no-wrap-code ">[`daily_partition_not_nulls_percent`](../checks/column/nulls/not-nulls-percent.md#daily-not-nulls-percent)</span>                                                              | Detects empty columns by counting not null values.                                                                                                                                                                                                          | _no rules (use the dashboards to review the results)_                                                                                                                                                                                                                                                                       |
+| [uniqueness](../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md) | <span class="no-wrap-code ">[`daily_partition_distinct_count_anomaly`](../checks/column/uniqueness/distinct-count-anomaly.md#daily-partition-distinct-count-anomaly)</span>                                | Detects anomalies in the count of distinct (unique) values. Identifies the most significant increases or decreases in the count of distinct values since the previous day or the last known value.                                                          | Raises a *warning* severity issue when the increase or decrease in the count of distinct values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_partition_sum_anomaly`](../checks/column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)</span>                                                                    | Detects anomalies in the sum of numeric values. Identifies the most significant increases or decreases in the sum of values since the previous day or the last known value. **_DQOps activates this check only on numeric columns._**                       | Raises a *warning* severity issue when the increase or decrease in the sum of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                   |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_partition_mean_anomaly`](../checks/column/anomaly/mean-anomaly.md#daily-partition-mean-anomaly)</span>                                                                 | Detects anomalies in the mean (average) of numeric values. Identifies the most significant increases or decreases in the mean of values since the previous day or the last known value. **_DQOps activates this check only on numeric columns._**           | Raises a *warning* severity issue when the increase or decrease in the mean of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                                  |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_partition_min_anomaly`](../checks/column/anomaly/min-anomaly.md#daily-partition-min-anomaly)</span>                                                                    | Detects anomalies as a new minimal numeric value (outlier detection). Identifies the most significant increases or decreases in the minimal value since the previous day or the last known value. **_DQOps activates this check only on numeric columns._** | Raises a *warning* severity issue when the increase or decrease in the minimum of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                               |
+| [anomaly](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)              | <span class="no-wrap-code ">[`daily_partition_max_anomaly`](../checks/column/anomaly/max-anomaly.md#daily-partition-max-anomaly)</span>                                                                    | Detects anomalies as a new maximal numeric value (outlier detection). Identifies the most significant increases or decreases in the maximal value since the previous day or the last known value. **_DQOps activates this check only on numeric columns._** | Raises a *warning* severity issue when the increase or decrease in the maximum of numeric values is in the top 1% of the most significant day-to-day changes.                                                                                                                                                               |
+| [datatype](../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)                       | <span class="no-wrap-code ">[`daily_partition_detected_datatype_in_text_changed`](../checks/column/datatype/detected-datatype-in-text-changed.md#daily-partition-detected-datatype-in-text-changed)</span> | Analyzes values in text columns to detect if all values are convertible to the same data type (boolean, numeric, date, etc). **_DQOps activates this check only on text columns._**                                                                         | Raises a *warning* severity issue when the values found in a text column are in a different format or a new value that is not convertible to the previously detected data type is found. For example, the column *customer_id* in the landing zone table always contained integer values, and a non-numeric value appeared. |
+
+The following extract of the *patterns/default.dqocolumnpattern.yaml* file shows the configuration
+of the default column-level [partition checks](definition-of-data-quality-checks/partition-checks.md).
+
+``` { .yaml linenums="1" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  partitioned_checks:
+    daily:
+      nulls:
+        daily_partition_nulls_count: {}
+        daily_partition_nulls_percent: {}
+        daily_partition_nulls_percent_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_partition_not_nulls_percent: {}
+      uniqueness:
+        daily_partition_distinct_count_anomaly:
+          warning:
+            anomaly_percent: 1.0
+      anomaly:
+        daily_partition_sum_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_partition_mean_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_partition_min_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_partition_max_anomaly:
+          warning:
+            anomaly_percent: 1.0
+      datatype:
+        daily_partition_detected_datatype_in_text_changed:
+          warning: {}
+```
 
 
 ## Next steps

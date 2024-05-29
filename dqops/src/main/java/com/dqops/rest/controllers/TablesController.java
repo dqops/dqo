@@ -42,6 +42,7 @@ import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
@@ -237,7 +238,7 @@ public class TablesController {
             CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                     listModel.getConnectionName(), listModel.getTarget());
             TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-            listModel.setDataQualityStatus(currentTableStatus);
+            listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
         });
 
         if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
@@ -251,7 +252,7 @@ public class TablesController {
                                     CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
                                             tableListModel.getConnectionName(), tableListModel.getTarget());
                                     TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    tableListModel.setDataQualityStatus(currentTableStatus);
+                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
                                 }
                                 return tableListModel;
                             }));
@@ -546,13 +547,14 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
+
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableIncidentGroupingSpec incidentGrouping = tableSpec.getIncidentGrouping();
-        if (incidentGrouping == null) {
-            incidentGrouping = new TableIncidentGroupingSpec();
+        TableIncidentGroupingSpec tableIncidentGrouping = tableSpec.getIncidentGrouping();
+        if (tableIncidentGrouping == null) {
+            tableIncidentGrouping = new TableIncidentGroupingSpec();
         }
 
-        return new ResponseEntity<>(Mono.just(incidentGrouping), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(tableIncidentGrouping), HttpStatus.OK); // 200
     }
 
     /**
@@ -2380,7 +2382,8 @@ public class TablesController {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
                     }
 
-                    tableWrapper.getSpec().setIncidentGrouping(null);
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    tableSpec.setIncidentGrouping(incidentGrouping);
                     userHomeContext.flush();
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -2439,7 +2442,6 @@ public class TablesController {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
                     }
 
-                    // TODO: validate the tableSpec
                     tableWrapper.getSpec().setLabels(labelSetSpec);
                     userHomeContext.flush();
 
@@ -2499,7 +2501,6 @@ public class TablesController {
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
                     }
 
-                    // TODO: validate the tableSpec
                     tableWrapper.getSpec().setComments(commentsListSpec);
                     userHomeContext.flush();
 
@@ -2530,7 +2531,6 @@ public class TablesController {
                         return false;
                     }
 
-                    // TODO: validate the tableSpec
                     TableSpec tableSpec = tableWrapper.getSpec();
                     tableSpecUpdater.accept(tableSpec);
                     userHomeContext.flush();

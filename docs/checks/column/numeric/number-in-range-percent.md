@@ -165,12 +165,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -207,12 +203,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -249,12 +241,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -291,12 +279,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                END AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -339,18 +323,12 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -387,12 +365,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -436,18 +410,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -484,12 +452,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -526,12 +490,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                END AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -568,12 +528,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -610,9 +566,7 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
-                END AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                END AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -657,18 +611,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -753,12 +701,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -795,12 +741,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -837,12 +781,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -879,12 +821,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -930,20 +870,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -980,12 +916,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -1032,20 +966,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -1082,12 +1012,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -1124,12 +1052,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -1166,12 +1092,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -1208,9 +1132,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -1264,20 +1186,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -1437,12 +1355,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -1479,12 +1393,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -1521,12 +1431,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -1563,12 +1469,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                END AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -1611,18 +1513,12 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -1659,12 +1555,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -1708,18 +1600,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -1756,12 +1642,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -1798,12 +1680,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                END AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -1840,12 +1718,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -1882,9 +1756,7 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
-                END AS actual_value,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                END AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1929,18 +1801,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -2026,12 +1892,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -2068,12 +1932,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -2110,12 +1972,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -2152,12 +2012,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -2203,20 +2061,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -2253,12 +2107,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -2305,20 +2157,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -2355,12 +2203,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(LOCALTIMESTAMP AS date) AS time_period,
-                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -2397,12 +2243,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -2439,12 +2283,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -2481,9 +2323,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -2537,20 +2377,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___
@@ -2710,12 +2546,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                END AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Databricks"
 
@@ -2752,12 +2584,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "DuckDB"
 
@@ -2794,12 +2622,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM  AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "MySQL"
 
@@ -2836,12 +2660,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                END AS actual_value
             FROM `<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Oracle"
 
@@ -2884,18 +2704,12 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    original_table.*
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "PostgreSQL"
 
@@ -2932,12 +2746,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Presto"
 
@@ -2981,18 +2791,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Redshift"
 
@@ -3029,12 +2833,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Snowflake"
 
@@ -3071,12 +2871,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                END AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "Spark"
 
@@ -3113,12 +2909,8 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
-                END AS actual_value,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                END AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     ??? example "SQL Server"
 
@@ -3155,9 +2947,7 @@ spec:
                             ELSE 0
                         END
                     ) / COUNT_BIG(analyzed_table.[target_column])
-                END AS actual_value,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                END AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -3202,18 +2992,12 @@ spec:
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
-                END as actual_value,
-                time_period,
-                time_period_utc
+                END as actual_value
             FROM (
                 SELECT
-                    original_table.*,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    original_table.*
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc
             ```
     
 
@@ -3299,12 +3083,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Databricks"
 
@@ -3341,12 +3123,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "DuckDB"
 
@@ -3383,12 +3163,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM  AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "MySQL"
 
@@ -3425,12 +3203,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Oracle"
 
@@ -3476,20 +3252,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "PostgreSQL"
 
@@ -3526,12 +3298,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Presto"
 
@@ -3578,20 +3348,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Redshift"
 
@@ -3628,12 +3394,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Snowflake"
 
@@ -3670,12 +3434,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
-                analyzed_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                analyzed_table."state" AS grouping_level_2
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "Spark"
 
@@ -3712,12 +3474,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
-                analyzed_table.`state` AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                analyzed_table.`state` AS grouping_level_2
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     ??? example "SQL Server"
 
@@ -3754,9 +3514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
-                analyzed_table.[state] AS grouping_level_2,
-                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                analyzed_table.[state] AS grouping_level_2
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -3810,20 +3568,16 @@ Expand the *Configure with data grouping* section to see additional examples for
                             analyzed_table.grouping_level_1,
             
                             analyzed_table.grouping_level_2
-            ,
-                time_period,
-                time_period_utc
+            
             FROM (
                 SELECT
                     original_table.*,
                 original_table."country" AS grouping_level_1,
-                original_table."state" AS grouping_level_2,
-                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                original_table."state" AS grouping_level_2
                 FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
-            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            GROUP BY grouping_level_1, grouping_level_2
+            ORDER BY grouping_level_1, grouping_level_2
             ```
     
 ___

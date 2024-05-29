@@ -1,20 +1,31 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Header from '../../components/Header';
 import Tabs from '../../components/Tabs';
-import GlobalTables from './GlobalTables';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
+import ColumnListView from '../ColumnListView/ColumnListView';
+import TableListView from '../TableListView/TableListView';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
-  { label: 'Home', value: 'home' },
-  { label: 'Tables', value: 'tables' }
+  { label: 'Home', value: '/home' },
+  { label: 'Tables', value: '/tables' },
+  { label: 'Columns', value: '/columns' }
 ];
 const HomePage = () => {
+  const { activeTab } = useSelector(
+    (state: IRootState) => state.source['home']
+  );
   const history = useHistory();
-  const activeTab = location.pathname.replace('/', '');
+  const dispatch = useActionDispatch();
   const onChange = (activeTab: string) => {
-    history.push('/' + activeTab);
+    dispatch(setHomeFirstLevelTab(activeTab));
+    history.push(activeTab);
   };
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -22,8 +33,9 @@ const HomePage = () => {
       <div className="w-full mt-12 border-b border-gray-300 px-0">
         <Tabs tabs={tabs} onChange={onChange} activeTab={activeTab} />
       </div>
-      {activeTab === 'home' && <StaticHomePage />}
-      {activeTab === 'tables' && <GlobalTables />}
+      {activeTab === '/home' && <StaticHomePage />}
+      {activeTab === '/tables' && <TableListView />}
+      {activeTab === '/columns' && <ColumnListView />}
     </div>
   );
 };

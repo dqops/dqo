@@ -34,9 +34,12 @@ import { ReactComponent as CogSvg } from './svg/cog.svg';
 import { ReactComponent as ColumnCheckSvg } from './svg/column-check.svg';
 import { ReactComponent as ColumnSvg } from './svg/column.svg';
 import { ReactComponent as CommentSvg } from './svg/comment.svg';
+import { ReactComponent as ConfigurationSvg } from './svg/configuration.svg';
 import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
 import { ReactComponent as CsvSvg } from './svg/csv-icon.svg';
+import { ReactComponent as DashboardsSvg } from './svg/dashboards.svg';
 import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg';
+import { ReactComponent as DataSourcesSvg } from './svg/data_sources.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
@@ -55,23 +58,28 @@ import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
+import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
 import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
 import { ReactComponent as JsonSvg } from './svg/json-icon.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
+import { ReactComponent as MinusSvg } from './svg/minus.svg';
+import { ReactComponent as MonitoringChecksSvg } from './svg/monitoring-checks.svg';
 import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
 import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
 import { ReactComponent as NotEqualSvg } from './svg/not-equal.svg';
 import { ReactComponent as OptionsSvg } from './svg/options.svg';
 import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 import { ReactComponent as ParquetSvg } from './svg/parquet-icon.svg';
+import { ReactComponent as PartitionedChecksSvg } from './svg/partition-checks.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
 import { ReactComponent as PlaySvg } from './svg/play.svg';
 import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
+import { ReactComponent as ProfilingSvg } from './svg/profiling.svg';
 import { ReactComponent as QueueSvg } from './svg/queue.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
 import { ReactComponent as RedshiftSvg } from './svg/redshift.svg';
@@ -219,7 +227,15 @@ const iconsMap: any = {
   csv: CsvSvg,
   json: JsonSvg,
   parquet: ParquetSvg,
-  comment: CommentSvg
+  comment: CommentSvg,
+  configuration: ConfigurationSvg,
+  profiling: ProfilingSvg,
+  dashboards: DashboardsSvg,
+  data_sources: DataSourcesSvg,
+  incidents: IncidentsSvg,
+  monitoring_checks: MonitoringChecksSvg,
+  partitioned_checks: PartitionedChecksSvg,
+  minus: MinusSvg
 };
 
 interface SvgIconProps {

@@ -1,8 +1,8 @@
-import { INestTab, ISourceState } from './reducers/source.reducer';
 import { CheckTypes } from '../shared/routes';
+import { IRootState } from './reducers';
 import { IDefinitionState } from './reducers/definition.reducer';
 import { IIncidentsState } from './reducers/incidents.reducer';
-import { IRootState } from './reducers';
+import { INestTab, ISourceState } from './reducers/source.reducer';
 
 const transformSourceState = (state: ISourceState): ISourceState => {
   const newState = { ...state };
@@ -10,39 +10,46 @@ const transformSourceState = (state: ISourceState): ISourceState => {
   return {
     [CheckTypes.SOURCES]: {
       activeTab: newState[CheckTypes.SOURCES]?.activeTab,
-      tabs: newState[CheckTypes.SOURCES]?.tabs?.map((item: INestTab) => ({
-        url: item.url,
-        value: item.value,
-        label: item.label,
-        state: {}
-      })) ?? []
+      tabs:
+        newState[CheckTypes.SOURCES]?.tabs?.map((item: INestTab) => ({
+          url: item.url,
+          value: item.value,
+          label: item.label,
+          state: {}
+        })) ?? []
     },
     [CheckTypes.PROFILING]: {
       activeTab: newState[CheckTypes.PROFILING]?.activeTab,
-      tabs: newState[CheckTypes.PROFILING]?.tabs?.map((item: INestTab) => ({
-        url: item.url,
-        value: item.value,
-        label: item.label,
-        state: {}
-      })) ?? []
+      tabs:
+        newState[CheckTypes.PROFILING]?.tabs?.map((item: INestTab) => ({
+          url: item.url,
+          value: item.value,
+          label: item.label,
+          state: {}
+        })) ?? []
     },
     [CheckTypes.MONITORING]: {
       activeTab: newState[CheckTypes.MONITORING]?.activeTab,
-      tabs: newState[CheckTypes.MONITORING]?.tabs?.map((item: INestTab) => ({
-        url: item.url,
-        value: item.value,
-        label: item.label,
-        state: {}
-      })) ?? []
+      tabs:
+        newState[CheckTypes.MONITORING]?.tabs?.map((item: INestTab) => ({
+          url: item.url,
+          value: item.value,
+          label: item.label,
+          state: {}
+        })) ?? []
     },
     [CheckTypes.PARTITIONED]: {
       activeTab: newState[CheckTypes.PARTITIONED]?.activeTab,
-      tabs: newState[CheckTypes.PARTITIONED]?.tabs?.map((item: INestTab) => ({
-        url: item.url,
-        value: item.value,
-        label: item.label,
-        state: {}
-      })) ?? []
+      tabs:
+        newState[CheckTypes.PARTITIONED]?.tabs?.map((item: INestTab) => ({
+          url: item.url,
+          value: item.value,
+          label: item.label,
+          state: {}
+        })) ?? []
+    },
+    ['home']: {
+      activeTab: newState['home']?.activeTab
     }
   };
 };
@@ -52,12 +59,13 @@ const transformSensorState = (state: IDefinitionState): IDefinitionState => {
     sensorState: {},
     ruleState: {},
     dataQualityChecksState: {},
-    tabs: state?.tabs?.map((item: INestTab, index: number) => ({
-      url: item.url,
-      value: item.value,
-      label: item.label,
-      state: state?.tabs[index]?.state
-    })) ?? [],
+    tabs:
+      state?.tabs?.map((item: INestTab, index: number) => ({
+        url: item.url,
+        value: item.value,
+        label: item.label,
+        state: state?.tabs[index]?.state
+      })) ?? [],
     activeTab: state?.activeTab
   };
 };
@@ -65,13 +73,15 @@ const transformSensorState = (state: IDefinitionState): IDefinitionState => {
 const transformIncidentsState = (state: IIncidentsState): IIncidentsState => {
   return {
     connections: [],
-    tabs: state?.tabs?.map((item: INestTab) => ({
-      url: item.url,
-      value: item.value,
-      label: item.label,
-      state: {}
-    })) ?? [],
-    activeTab: state?.activeTab
+    tabs:
+      state?.tabs?.map((item: INestTab) => ({
+        url: item.url,
+        value: item.value,
+        label: item.label,
+        state: {}
+      })) ?? [],
+    activeTab: state?.activeTab,
+    selectedConnections: state?.selectedConnections
   };
 };
 

@@ -139,6 +139,17 @@ public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
     }
 
     /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        Integer index = (Integer) childName;
+        remove(index);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param index

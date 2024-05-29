@@ -77,6 +77,10 @@ const azureAuthenticationOptions = [
   {
     label: 'Service Principal',
     value: DuckdbParametersSpecAzureAuthenticationModeEnum.service_principal
+  },
+  {
+    label: 'Default Credentials',
+    value: DuckdbParametersSpecAzureAuthenticationModeEnum.default_credentials
   }
 ];
 

@@ -44,6 +44,8 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1xcvYNjAiG97MKDOTXbI0e1UeDwiyTRxvLY-6GRZ8qow
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xcvYNjAiG97MKDOTXbI0e1UeDwiyTRxvLY-6GRZ8qow/export?exportFormat=csv" > string_test_data.csv
+REM Export api provides the triple double-quotes on quoting occurrence. The script replaces triple to single double-quoting.
+python -c "with open('string_test_data.csv','r') as file: data=file.read().replace('\"\"\"', '\"'); open('string_test_data.csv','w').write(data)"
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/179H56-ooJJAv4_CM81ejVZu3U5LibuiuzeI5nkDOXwc
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/179H56-ooJJAv4_CM81ejVZu3U5LibuiuzeI5nkDOXwc/export?exportFormat=csv" > nulls_and_uniqueness.csv

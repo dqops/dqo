@@ -15,9 +15,11 @@
  */
 package com.dqops.rules.averages;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -85,5 +87,25 @@ public class WithinPercentMovingAverage30DaysRule10ParametersSpec extends Abstra
     @Override
     public String getRuleDefinitionName() {
         return "averages/within_percent_moving_average_30_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxPercentWithin == null) {
+            return;
+        }
+
+        if (this.maxPercentWithin <= 0.0) {
+            this.maxPercentWithin = checkResultsSingleCheck.getActualValueColumn().max();
+            return;
+        }
+
+        this.maxPercentWithin = DoubleRounding.roundToKeepEffectiveDigits(this.maxPercentWithin * 1.3);
     }
 }

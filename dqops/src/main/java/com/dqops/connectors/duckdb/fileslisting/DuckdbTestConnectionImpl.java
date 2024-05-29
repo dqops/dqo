@@ -4,6 +4,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,14 @@ import java.util.Optional;
  */
 @Component
 public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
+
+    private final TablesListerProvider tablesListerProvider;
+
+    @Autowired
+    public DuckdbTestConnectionImpl(TablesListerProvider tablesListerProvider) {
+        this.tablesListerProvider = tablesListerProvider;
+    }
+
 
     /**
      * Tests the connection by listing files. Throws exception on misconfiguration such as no schema name, lack or invalid paths, no files in a path, etc.
@@ -28,13 +37,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             throw new RuntimeException("Virtual schema name is not configured in the Import configuration.");
         }
 
-        Optional<Map.Entry<String, String>> schemaToEmptyPath = directories.entrySet().stream()
-                .filter(x -> x.getValue() == null || x.getValue().isEmpty())
-                .findAny();
-
-        if(schemaToEmptyPath.isPresent()){
-            throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
-        }
+        verifyEmptyPaths(directories);
 
         directories.keySet().forEach(schema -> {
             List<SourceTableModel> tables;
@@ -55,7 +58,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
                 Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
                         .filter(x -> !x.getValue().toLowerCase().startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
-                            && !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)
+                            //&& !x.getValue().toLowerCase().startsWith(AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX)  // not yet supported
                         )
                         .findAny();
 
@@ -66,7 +69,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                 }
             }
 
-            TablesLister tablesLister = TablesListerProvider.createTablesLister(storageType);
+            TablesLister tablesLister = tablesListerProvider.createTablesLister(storageType);
             tables = tablesLister.listTables(duckdbParametersSpec, schema);
 
             if(tables == null || tables.isEmpty()){
@@ -74,6 +77,16 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             }
         });
 
+    }
+
+    private void verifyEmptyPaths(Map<String, String> directories){
+        Optional<Map.Entry<String, String>> schemaToEmptyPath = directories.entrySet().stream()
+                .filter(x -> x.getValue() == null || x.getValue().isEmpty())
+                .findAny();
+
+        if(schemaToEmptyPath.isPresent()){
+            throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
+        }
     }
 
 }

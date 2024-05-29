@@ -361,6 +361,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         }
 
         int openIncidentsCount = 0;
+        Instant mostRecentFirstSeen = null;
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -372,6 +373,12 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
 
             TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
             InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
+            Instant partitionMaxFirstSeen = firstSeenColumn.max();
+            if (partitionMaxFirstSeen != null) {
+                if (mostRecentFirstSeen == null || partitionMaxFirstSeen.isAfter(mostRecentFirstSeen)) {
+                    mostRecentFirstSeen = partitionMaxFirstSeen;
+                }
+            }
 
             int openIncidentsInPartition = statusColumn.isEqualTo(IncidentStatus.open.name())
                     .and(firstSeenColumn.isAfter(since))
@@ -380,6 +387,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         }
 
         model.setOpenIncidents(openIncidentsCount);
+        model.setMostRecentFirstSeen(mostRecentFirstSeen);
         return model;
     }
 }

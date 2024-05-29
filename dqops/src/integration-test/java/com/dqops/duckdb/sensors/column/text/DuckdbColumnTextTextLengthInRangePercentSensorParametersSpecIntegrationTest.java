@@ -17,19 +17,21 @@ package com.dqops.duckdb.sensors.column.text;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.text.ColumnTextLengthInRangePercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.duckdb.BaseDuckdbIntegrationTest;
-import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,8 +48,10 @@ public class DuckdbColumnTextTextLengthInRangePercentSensorParametersSpecIntegra
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.duckdb);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.string_min_length_test;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextTextLengthInRangePercentSensorParametersSpec();
         this.checkSpec = new ColumnTextLengthInRangePercentCheckSpec();
@@ -133,4 +137,21 @@ public class DuckdbColumnTextTextLengthInRangePercentSensorParametersSpecIntegra
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
+
+    @Test
+    void runSensor_whenRunOnIntegerColumn_thenReturnsValues() {
+        this.sut.setMinLength(1);
+        this.sut.setMaxLength(1);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "result", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+    }
+
 }

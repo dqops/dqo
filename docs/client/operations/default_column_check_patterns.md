@@ -81,6 +81,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -139,6 +140,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -200,6 +202,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -261,6 +264,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -337,7 +341,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"pattern_name\":\"default\",\"priority\":100,\"target_column\":{\"connection\":\"dwh\",\"column\":\"id\"},\"can_edit\":true}"
+		"{\"pattern_name\":\"default\",\"priority\":100,\"disabled\":false,\"target_column\":{\"connection\":\"dwh\",\"column\":\"id\"},\"can_edit\":true}"
 	
     ```
 
@@ -360,6 +364,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -394,6 +399,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -431,6 +437,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -468,6 +475,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -663,6 +671,7 @@ http://localhost:8888/api/default/checks/column
         [ {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_column" : {
 		    "connection" : "dwh",
 		    "column" : "id"
@@ -671,6 +680,7 @@ http://localhost:8888/api/default/checks/column
 		}, {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_column" : {
 		    "connection" : "dwh",
 		    "column" : "id"
@@ -679,6 +689,7 @@ http://localhost:8888/api/default/checks/column
 		}, {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_column" : {
 		    "connection" : "dwh",
 		    "column" : "id"
@@ -716,6 +727,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -725,6 +737,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -734,6 +747,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -773,6 +787,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -782,6 +797,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -791,6 +807,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -833,6 +850,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -842,6 +860,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -851,6 +870,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -893,6 +913,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -902,6 +923,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -911,6 +933,7 @@ http://localhost:8888/api/default/checks/column
 			DefaultColumnChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_column=TargetColumnPatternSpec(
 					column='id',
 					connection='dwh'
@@ -1027,6 +1050,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 			pattern_name='id columns not null',
 			pattern_spec=ColumnDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetColumnPatternSpec(column='id'),
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 				monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -1080,6 +1104,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 			pattern_name='id columns not null',
 			pattern_spec=ColumnDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetColumnPatternSpec(column='id'),
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 				monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -1136,6 +1161,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 			pattern_name='id columns not null',
 			pattern_spec=ColumnDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetColumnPatternSpec(column='id'),
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 				monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -1192,6 +1218,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 			pattern_name='id columns not null',
 			pattern_spec=ColumnDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetColumnPatternSpec(column='id'),
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 				monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -1271,6 +1298,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
         {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_column" : {
 		    "connection" : "dwh",
 		    "column" : "id"
@@ -1308,6 +1336,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
         DefaultColumnChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_column=TargetColumnPatternSpec(
 				column='id',
 				connection='dwh'
@@ -1346,6 +1375,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
         DefaultColumnChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_column=TargetColumnPatternSpec(
 				column='id',
 				connection='dwh'
@@ -1387,6 +1417,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
         DefaultColumnChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_column=TargetColumnPatternSpec(
 				column='id',
 				connection='dwh'
@@ -1428,6 +1459,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
         DefaultColumnChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_column=TargetColumnPatternSpec(
 				column='id',
 				connection='dwh'
@@ -3162,6 +3194,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -3220,6 +3253,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -3281,6 +3315,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -3342,6 +3377,7 @@ http://localhost:8888/api/default/checks/column/{patternName}
 		pattern_name='id columns not null',
 		pattern_spec=ColumnDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetColumnPatternSpec(column='id'),
 			profiling_checks=ColumnProfilingCheckCategoriesSpec(comparisons=ColumnComparisonProfilingChecksSpecMap()),
 			monitoring_checks=ColumnMonitoringCheckCategoriesSpec(
@@ -3418,7 +3454,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"pattern_name\":\"default\",\"priority\":100,\"target_column\":{\"connection\":\"dwh\",\"column\":\"id\"},\"can_edit\":true}"
+		"{\"pattern_name\":\"default\",\"priority\":100,\"disabled\":false,\"target_column\":{\"connection\":\"dwh\",\"column\":\"id\"},\"can_edit\":true}"
 	
     ```
 
@@ -3441,6 +3477,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -3475,6 +3512,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -3512,6 +3550,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'
@@ -3549,6 +3588,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/target
 	request_body = DefaultColumnChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_column=TargetColumnPatternSpec(
 			column='id',
 			connection='dwh'

@@ -131,6 +131,17 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     }
 
     /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        V object = this.index.get(childName);
+        remove(object);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

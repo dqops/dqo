@@ -7,7 +7,8 @@ import { TConfigurationItemRow } from './FormatsConfiguration/RowItem/TConfigura
 import { TConfigurationItemRowBoolean } from './FormatsConfiguration/RowItem/TConfigurationItemRowBoolean';
 
 type TConfigurationProps = {
-  configuraitonStrings?: TConfigurationItemRow[];
+  children?: any;
+  configurationStrings?: TConfigurationItemRow[];
   configurationBooleans?: TConfigurationItemRowBoolean[];
   type: string;
 };
@@ -19,7 +20,8 @@ const divStyle = {
 };
 
 export default function FormatConfigurationRenderer({
-  configuraitonStrings,
+  children,
+  configurationStrings,
   configurationBooleans,
   type
 }: TConfigurationProps) {
@@ -44,21 +46,22 @@ export default function FormatConfigurationRenderer({
           svgIcon={true}
           className="mt-2"
         >
-          <div />
-          {configuraitonStrings && (
-            <div style={divStyle} className="pt-2">
-              {configuraitonStrings.map((x, index) => (
-                <ConfigurationItemRow
-                  key={index}
-                  label={x.label}
-                  value={x.value}
-                  onChange={x.onChange}
-                  defaultValue={x.defaultValue}
-                  isEnum={x.isEnum}
-                  options={x.options}
-                />
-              ))}
-            </div>
+          {configurationStrings && (
+              <div style={divStyle} className="pt-2">
+                {children}
+
+                {configurationStrings.map((x, index) => (
+                  <ConfigurationItemRow
+                    key={index}
+                    label={x.label}
+                    value={x.value}
+                    onChange={x.onChange}
+                    defaultValue={x.defaultValue}
+                    isEnum={x.isEnum}
+                    options={x.options}
+                  />
+                ))}
+              </div>
           )}
 
           {configurationBooleans && (

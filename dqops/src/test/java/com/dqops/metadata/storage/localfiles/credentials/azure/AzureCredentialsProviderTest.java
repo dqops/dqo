@@ -64,16 +64,20 @@ class AzureCredentialsProviderTest extends BaseTest {
         Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
         String credentialFileContent = DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT
-                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_OR_CLIENT_ID", "my_username")
-                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_PASSWORD_OR_CLIENT_SECRET", "my_password");
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_TENANT_ID", "my_tenant_id")
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_CLIENT_ID", "my_client_id")
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_CLIENT_SECRET", "my_client_secret")
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_STORAGE_ACCOUNT_NAME", "my_account_name");
 
         Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
 
         Optional<AzureCredential> azureCredential = this.sut.provideCredentials(secretValueLookupContext);
 
         Assertions.assertTrue(azureCredential.isPresent());
-        Assertions.assertEquals("my_username", azureCredential.get().getUser());
-        Assertions.assertEquals("my_password", azureCredential.get().getPassword());
+        Assertions.assertEquals("my_tenant_id", azureCredential.get().getTenantId());
+        Assertions.assertEquals("my_client_id", azureCredential.get().getClientId());
+        Assertions.assertEquals("my_client_secret", azureCredential.get().getClientSecret());
+        Assertions.assertEquals("my_account_name", azureCredential.get().getAccountName());
     }
 
     @Test

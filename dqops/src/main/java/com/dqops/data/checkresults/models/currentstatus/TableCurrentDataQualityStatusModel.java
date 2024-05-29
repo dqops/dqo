@@ -165,7 +165,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
      */
     public void calculateHighestCurrentAndHistoricSeverity() {
-        for (ColumnCurrentDataQualityStatusModel columnModel : columns.values()) {
+        for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateHighestCurrentAndHistoricSeverity();
 
             if (this.currentSeverity == null) {
@@ -185,7 +185,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             }
         }
 
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             if (this.currentSeverity == null) {
                 this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             } else if (checkStatusModel.getCurrentSeverity() != null &&
@@ -217,7 +217,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         this.executionErrors = 0;
         this.lastCheckExecutedAt = null;
 
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             if (checkStatusModel.getLastExecutedAt() != null &&
                     (this.lastCheckExecutedAt == null || checkStatusModel.getLastExecutedAt().isAfter(this.lastCheckExecutedAt))) {
                 this.lastCheckExecutedAt = checkStatusModel.getLastExecutedAt();
@@ -251,13 +251,19 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
         Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
                 (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
         setDataQualityKpi(dataQualityKpi);
+
+        if (this.columns != null) {
+            for (ColumnCurrentDataQualityStatusModel columnStatusModel : this.columns.values()) {
+                columnStatusModel.calculateDataQualityKpiScore();
+            }
+        }
     }
 
     /**
      * Calculates the status for each data quality dimension, aggregates statuses of data quality checks for each data quality dimension.
      */
     public void calculateStatusesForDataQualityDimensions() {
-        for (ColumnCurrentDataQualityStatusModel columnModel : columns.values()) {
+        for (ColumnCurrentDataQualityStatusModel columnModel : this.columns.values()) {
             columnModel.calculateStatusesForDimensions();
 
             for (DimensionCurrentDataQualityStatusModel columnDimensionModel : columnModel.getDimensions().values()) {
@@ -273,7 +279,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             }
         }
 
-        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : this.checks.values()) {
             String qualityDimension = checkStatusModel.getQualityDimension();
             if (qualityDimension == null) {
                 continue; // should not happen, but if somebody intentionally configures an empty dimension....
@@ -347,6 +353,17 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             tableStatusClone.columns = null; // detaching columns
         }
 
+        return tableStatusClone;
+    }
+
+    /**
+     * Creates a shallow clone of the object, without the checks and columns.
+     * @return Shallow clone of the object, without checks and columns.
+     */
+    public TableCurrentDataQualityStatusModel shallowCloneWithoutCheckResultsAndColumns() {
+        TableCurrentDataQualityStatusModel tableStatusClone = this.clone();
+        tableStatusClone.checks = null; // detaching checks
+        tableStatusClone.columns = null; // detaching columns
         return tableStatusClone;
     }
 

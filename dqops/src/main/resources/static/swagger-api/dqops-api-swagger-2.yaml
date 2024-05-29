@@ -2288,6 +2288,24 @@ paths:
         description: "Table name"
         required: true
         type: "string"
+      - name: "dataQualityStatus"
+        in: "query"
+        description: "Optional parameter to opt out from retrieving the most recent\
+          \ data quality status for the column. By default, DQOps calculates the data\
+          \ quality status from the data quality results."
+        required: false
+        type: "boolean"
+      - name: "checkType"
+        in: "query"
+        description: "Optional parameter for the check type, when provided, returns\
+          \ the results for data quality dimensions for the data quality checks of\
+          \ that type"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
       responses:
         200:
           description: "OK"
@@ -11782,6 +11800,107 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/disable:
+    post:
+      tags:
+      - "Incidents"
+      summary: "disableChecksForIncident"
+      description: "Disables all data quality checks that caused a given data quality\
+        \ incident."
+      operationId: "disableChecksForIncident"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "year"
+        in: "path"
+        description: "Year when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "month"
+        in: "path"
+        description: "Month when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "incidentId"
+        in: "path"
+        description: "Incident id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Data quality checks related to the incident successfully disabled"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Connection was not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/incidents/{connectionName}/{year}/{month}/{incidentId}/checks/recalibrate:
+    post:
+      tags:
+      - "Incidents"
+      summary: "recalibrateChecksForIncident"
+      description: "Recalibrates all data quality checks that caused a given data\
+        \ quality incident to generate less issues by changing the data quality rule\
+        \ parameters."
+      operationId: "recalibrateChecksForIncident"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "year"
+        in: "path"
+        description: "Year when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "month"
+        in: "path"
+        description: "Month when the incident was first seen"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "incidentId"
+        in: "path"
+        description: "Incident id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Data quality checks related to the incident successfully recalibrated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Connection was not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram:
     get:
       tags:
@@ -13230,6 +13349,88 @@ paths:
           description: "Custom rule definition successfully deleted"
         404:
           description: "Custom rule not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/search/columns:
+    get:
+      tags:
+      - "Search"
+      summary: "findColumns"
+      description: "Finds columns in any data source and schema"
+      operationId: "findColumns"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connection"
+        in: "query"
+        description: "Optional connection name filter, accepts filters in the form:\
+          \ fullname, *suffix, prefix*, *contains*."
+        required: false
+        type: "string"
+      - name: "schema"
+        in: "query"
+        description: "Optional schema name filter, accepts filters in the form: fullname,\
+          \ *suffix, prefix*, *contains*."
+        required: false
+        type: "string"
+      - name: "table"
+        in: "query"
+        description: "Optional table name filter"
+        required: false
+        type: "string"
+      - name: "column"
+        in: "query"
+        description: "Optional column name filter"
+        required: false
+        type: "string"
+      - name: "columnType"
+        in: "query"
+        description: "Optional physical column's data type filter"
+        required: false
+        type: "string"
+      - name: "label"
+        in: "query"
+        description: "Optional labels to filter the columns"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "page"
+        in: "query"
+        description: "Page number, the first page is 1"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "Page size, the default is 100 rows, but paging is disabled is\
+          \ neither page and limit parameters are provided"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "checkType"
+        in: "query"
+        description: "Optional parameter for the check type, when provided, returns\
+          \ the results for data quality dimensions for the data quality checks of\
+          \ that type"
+        required: false
+        type: "string"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ColumnListModel"
         500:
           description: "Internal Server Error"
           schema:
@@ -17338,6 +17539,13 @@ definitions:
           \ invalid queries in data quality sensors or invalid python rules. When\
           \ an execution error is reported, the configuration of a data quality check\
           \ on a column must be updated."
+      data_quality_kpi:
+        type: "number"
+        format: "double"
+        description: "Data quality KPI score for the column, measured as a percentage\
+          \ of passed data quality checks. DQOps counts data quality issues at a warning\
+          \ severity level as passed checks. The data quality KPI score is a value\
+          \ in the range 0..100."
       checks:
         type: "object"
         description: "The dictionary of statuses for data quality checks. The keys\
@@ -18180,6 +18388,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target:
         description: "The target column filter that are filtering the column, table\
           \ and connection on which the default checks are applied."
@@ -20238,6 +20453,13 @@ definitions:
         description: "Column data type that was retrieved when the table metadata\
           \ was imported."
         $ref: "#/definitions/ColumnTypeSnapshotSpec"
+      data_quality_status:
+        description: "The current data quality status for the column, grouped by data\
+          \ quality dimensions. DQOps may return a null value when the results were\
+          \ not yet loaded into the cache. In that case, the client should wait a\
+          \ few seconds and retry a call to get the most recent data quality status\
+          \ of the column."
+        $ref: "#/definitions/ColumnCurrentDataQualityStatusModel"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this column."
@@ -30537,10 +30759,16 @@ definitions:
           \ automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv\
           \ will use none). Options are none, gzip, zstd."
         enum:
-        - "auto"
         - "none"
+        - "auto"
         - "gzip"
         - "zstd"
+        - "snappy"
+        - "lz4"
+      no_compression_extension:
+        type: "boolean"
+        description: "Whether the compression extension is present at the end of the\
+          \ file name."
       dateformat:
         type: "string"
         description: "Specifies the date format to use when parsing dates."
@@ -30960,6 +31188,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target_column:
         description: "The filters for the target column."
         $ref: "#/definitions/TargetColumnPatternSpec"
@@ -31023,6 +31258,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target_table:
         description: "The filters for the target table."
         $ref: "#/definitions/TargetTablePatternSpec"
@@ -31200,6 +31442,7 @@ definitions:
         - "floats"
         - "dates"
         - "datetimes"
+        - "timestamps"
         - "booleans"
         - "texts"
         - "mixed"
@@ -31623,6 +31866,7 @@ definitions:
         - "connection_string"
         - "credential_chain"
         - "service_principal"
+        - "default_credentials"
       user:
         type: "string"
         description: "DuckDB user name for a remote storage type. The value can be\
@@ -32182,6 +32426,11 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
+      mostRecentFirstSeen:
+        type: "integer"
+        format: "int64"
+        description: "The UTC timestamp when the most recent data quality incident\
+          \ was first seen."
   JsonFileFormatSpec:
     type: "object"
     properties:
@@ -32195,10 +32444,16 @@ definitions:
           \ automatically from the file extension (e.g., t.json.gz will use gzip,\
           \ t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
         enum:
-        - "auto"
         - "none"
+        - "auto"
         - "gzip"
         - "zstd"
+        - "snappy"
+        - "lz4"
+      no_compression_extension:
+        type: "boolean"
+        description: "Whether the compression extension is present at the end of the\
+          \ file name."
       convert_strings_to_integers:
         type: "boolean"
         description: "Whether strings representing integer values should be converted\
@@ -32642,6 +32897,20 @@ definitions:
         type: "boolean"
         description: "Whether the columns of multiple schemas should be unified by\
           \ name, rather than by position."
+      compression:
+        type: "string"
+        description: "The compression type for the file."
+        enum:
+        - "none"
+        - "auto"
+        - "gzip"
+        - "zstd"
+        - "snappy"
+        - "lz4"
+      no_compression_extension:
+        type: "boolean"
+        description: "Whether the compression extension is present at the end of the\
+          \ file name."
   PartitionIncrementalTimeWindowSpec:
     type: "object"
     properties:
@@ -33824,7 +34093,7 @@ definitions:
         - "sql_password"
         - "active_directory_password"
         - "active_directory_service_principal"
-        - "default_credential"
+        - "active_directory_default"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -35390,6 +35659,13 @@ definitions:
         format: "int32"
         description: "The priority of the pattern. Patterns with lower values are\
           \ applied before patterns with higher priority values."
+      disabled:
+        type: "boolean"
+        description: "Disables this data quality check configuration. The checks will\
+          \ not be activated."
+      description:
+        type: "string"
+        description: "The description (documentation) of this data quality check configuration."
       target:
         description: "The target table filter that are filtering the table and connection\
           \ on which the default checks are applied."

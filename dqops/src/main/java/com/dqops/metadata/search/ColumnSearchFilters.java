@@ -55,6 +55,10 @@ public class ColumnSearchFilters {
             "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
     private String[] labels;
 
+    @JsonPropertyDescription("An array of labels assigned only to a column. All labels must be present on a column to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
+    private String[] columnLabels;
+
     @JsonPropertyDescription("Optional limit for the maximum number of results to return.")
     private Integer maxResults;
 
@@ -68,6 +72,9 @@ public class ColumnSearchFilters {
     private SearchPattern[] tagsSearchPatterns;
     @JsonIgnore
     private SearchPattern[] labelsSearchPatterns;
+    @JsonIgnore
+    private SearchPattern[] columnLabelSearchPatterns;
+
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -208,6 +215,22 @@ public class ColumnSearchFilters {
     }
 
     /**
+     * Returns a list of labels that must be present only on a column.
+     * @return Column level labels.
+     */
+    public String[] getColumnLabels() {
+        return columnLabels;
+    }
+
+    /**
+     * Sets a filter with a list of labels that must be present on a column (not a table).
+     * @param columnLabels Column level label filters.
+     */
+    public void setColumnLabels(String[] columnLabels) {
+        this.columnLabels = columnLabels;
+    }
+
+    /**
      * Sets the limit for the maximum number of results to return.
      * @return Limit or null.
      */
@@ -297,5 +320,22 @@ public class ColumnSearchFilters {
         }
 
         return labelsSearchPatterns[i];
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to a specific column label in <code>labels</code>.
+     * Lazy getter, parses each <code>label</code> as a search pattern when requested and returns parsed object.
+     * @param i Index of requested label search pattern. Corresponds to <code>labels[i]</code>.
+     * @return {@link SearchPattern} related to <code>i</code>'th <code>label</code>.
+     */
+    public SearchPattern getColumnLabelSearchPatternAt(int i) {
+        if (columnLabelSearchPatterns == null) {
+            columnLabelSearchPatterns = new SearchPattern[columnLabels.length];
+        }
+        if (columnLabelSearchPatterns[i] == null && columnLabels[i] != null) {
+            columnLabelSearchPatterns[i] = SearchPattern.create(false, columnLabels[i]);
+        }
+
+        return columnLabelSearchPatterns[i];
     }
 }

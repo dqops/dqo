@@ -87,6 +87,7 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
         List<TableDefaultChecksPatternWrapper> tableDefaultChecksPatternWrappers = new ArrayList<>(userHome.getTableDefaultChecksPatterns().toList());
+        tableDefaultChecksPatternWrappers.removeIf(wrapper -> wrapper.getSpec().isDisabled());
         tableDefaultChecksPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
         
         for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : tableDefaultChecksPatternWrappers) {
@@ -116,7 +117,9 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        List<ColumnDefaultChecksPatternWrapper> columnPatternWrappers = new ArrayList<>(userHome.getColumnDefaultChecksPatterns().toList());
+        List<ColumnDefaultChecksPatternWrapper> columnPatternWrappers = new ArrayList<>(
+                userHome.getColumnDefaultChecksPatterns().toList());
+        columnPatternWrappers.removeIf(wrapper -> wrapper.getSpec().isDisabled());
         columnPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
 
         for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : columnPatternWrappers) {

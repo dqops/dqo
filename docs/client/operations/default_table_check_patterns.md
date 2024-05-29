@@ -80,6 +80,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -137,6 +138,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -197,6 +199,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -257,6 +260,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -333,7 +337,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"pattern_name\":\"default\",\"priority\":100,\"target_table\":{\"connection\":\"dwh\",\"schema\":\"public\",\"table\":\"fact_*\"},\"can_edit\":true}"
+		"{\"pattern_name\":\"default\",\"priority\":100,\"disabled\":false,\"target_table\":{\"connection\":\"dwh\",\"schema\":\"public\",\"table\":\"fact_*\"},\"can_edit\":true}"
 	
     ```
 
@@ -356,6 +360,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -391,6 +396,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -429,6 +435,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -467,6 +474,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -663,6 +671,7 @@ http://localhost:8888/api/default/checks/table
         [ {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_table" : {
 		    "connection" : "dwh",
 		    "schema" : "public",
@@ -672,6 +681,7 @@ http://localhost:8888/api/default/checks/table
 		}, {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_table" : {
 		    "connection" : "dwh",
 		    "schema" : "public",
@@ -681,6 +691,7 @@ http://localhost:8888/api/default/checks/table
 		}, {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_table" : {
 		    "connection" : "dwh",
 		    "schema" : "public",
@@ -719,6 +730,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -729,6 +741,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -739,6 +752,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -779,6 +793,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -789,6 +804,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -799,6 +815,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -842,6 +859,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -852,6 +870,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -862,6 +881,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -905,6 +925,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -915,6 +936,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -925,6 +947,7 @@ http://localhost:8888/api/default/checks/table
 			DefaultTableChecksPatternListModel(
 				pattern_name='default',
 				priority=100,
+				disabled=False,
 				target_table=TargetTablePatternSpec(
 					connection='dwh',
 					schema='public',
@@ -2684,6 +2707,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetTablePatternSpec(),
 				profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 				monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -2737,6 +2761,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetTablePatternSpec(),
 				profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 				monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -2793,6 +2818,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetTablePatternSpec(),
 				profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 				monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -2849,6 +2875,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 			pattern_name='default',
 			pattern_spec=TableDefaultChecksPatternSpec(
 				priority=0,
+				disabled=False,
 				target=TargetTablePatternSpec(),
 				profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 				monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -2928,6 +2955,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
         {
 		  "pattern_name" : "default",
 		  "priority" : 100,
+		  "disabled" : false,
 		  "target_table" : {
 		    "connection" : "dwh",
 		    "schema" : "public",
@@ -2966,6 +2994,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_table=TargetTablePatternSpec(
 				connection='dwh',
 				schema='public',
@@ -3005,6 +3034,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_table=TargetTablePatternSpec(
 				connection='dwh',
 				schema='public',
@@ -3047,6 +3077,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_table=TargetTablePatternSpec(
 				connection='dwh',
 				schema='public',
@@ -3089,6 +3120,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
         DefaultTableChecksPatternListModel(
 			pattern_name='default',
 			priority=100,
+			disabled=False,
 			target_table=TargetTablePatternSpec(
 				connection='dwh',
 				schema='public',
@@ -4643,6 +4675,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -4700,6 +4733,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -4760,6 +4794,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -4820,6 +4855,7 @@ http://localhost:8888/api/default/checks/table/{patternName}
 		pattern_name='default',
 		pattern_spec=TableDefaultChecksPatternSpec(
 			priority=0,
+			disabled=False,
 			target=TargetTablePatternSpec(),
 			profiling_checks=TableProfilingCheckCategoriesSpec(comparisons=TableComparisonProfilingChecksSpecMap()),
 			monitoring_checks=TableMonitoringCheckCategoriesSpec(
@@ -4896,7 +4932,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"pattern_name\":\"default\",\"priority\":100,\"target_table\":{\"connection\":\"dwh\",\"schema\":\"public\",\"table\":\"fact_*\"},\"can_edit\":true}"
+		"{\"pattern_name\":\"default\",\"priority\":100,\"disabled\":false,\"target_table\":{\"connection\":\"dwh\",\"schema\":\"public\",\"table\":\"fact_*\"},\"can_edit\":true}"
 	
     ```
 
@@ -4919,6 +4955,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -4954,6 +4991,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -4992,6 +5030,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',
@@ -5030,6 +5069,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/target
 	request_body = DefaultTableChecksPatternListModel(
 		pattern_name='default',
 		priority=100,
+		disabled=False,
 		target_table=TargetTablePatternSpec(
 			connection='dwh',
 			schema='public',

@@ -4,6 +4,7 @@ import {
   DialogFooter,
   DialogHeader
 } from '@material-tailwind/react';
+import clsx from 'clsx';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -44,7 +45,7 @@ export default function RunChecksDialog({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [filters, setFilters] = useState<CheckSearchFilters>({
-    fullTableName: 'schema*.table*',
+    fullTableName: '*.*',
     ...runChecksJobTemplate
   });
   const [timeWindowFilter, setTimeWindowFilter] = useState<
@@ -81,6 +82,18 @@ export default function RunChecksDialog({
     return copiedFilters;
   };
 
+  const isDateValid = (date?: string) => {
+    if (!date) return false;
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+    return regex.test(date);
+  };
+
+  const isSaveEnabled =
+    checkType === CheckTypes.PARTITIONED
+      ? isDateValid(timeWindowFilter?.to_date) &&
+        isDateValid(timeWindowFilter?.from_date)
+      : true;
+
   return (
     <Dialog open={open} handler={onClose} className="min-w-300 p-4">
       <DialogHeader className="font-bold text-center justify-center">
@@ -96,7 +109,12 @@ export default function RunChecksDialog({
                 onChange={(e) =>
                   onChangeTimeFilterWindow({ from_date: e.target.value })
                 }
-                className="mt-2"
+                className={clsx(
+                  'mt-2',
+                  !isDateValid(timeWindowFilter?.from_date)
+                    ? 'border border-red-500'
+                    : ''
+                )}
                 placeholder="*"
               />
             </div>
@@ -107,7 +125,12 @@ export default function RunChecksDialog({
                 onChange={(e) =>
                   onChangeTimeFilterWindow({ to_date: e.target.value })
                 }
-                className="mt-2"
+                className={clsx(
+                  'mt-2',
+                  !isDateValid(timeWindowFilter?.to_date)
+                    ? 'border border-red-500'
+                    : ''
+                )}
                 placeholder="*"
               />
             </div>
@@ -295,8 +318,10 @@ export default function RunChecksDialog({
           color="primary"
           className="px-8"
           onClick={() => {
-            onClick(prepareFilters(filters), timeWindowFilter),
-              setFilters(runChecksJobTemplate);
+            isSaveEnabled
+              ? (onClick(prepareFilters(filters), timeWindowFilter),
+                setFilters(runChecksJobTemplate))
+              : undefined;
           }}
           label="Run checks"
           disabled={userProfile.can_delete_data !== true}

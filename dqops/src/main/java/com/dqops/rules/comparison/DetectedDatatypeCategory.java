@@ -40,7 +40,10 @@ public enum DetectedDatatypeCategory {
      */
     datetimes(4),
 
-    // TODO: add a timestamps(5) type for timestamps containing a time zone component
+    /**
+     * Timestamp types (with a time zone).
+     */
+    timestamps(5),
 
     /**
      * Booleans
@@ -69,5 +72,24 @@ public enum DetectedDatatypeCategory {
      */
     public int getCode() {
         return code;
+    }
+
+    /**
+     * Creates an enum value from a value code.
+     * @param code Code.
+     * @return Category enum value.
+     */
+    public static DetectedDatatypeCategory fromCode(int code) {
+        switch (code) {
+            case 1: return integers;
+            case 2: return floats;
+            case 3: return dates;
+            case 4: return datetimes;
+            case 6: return timestamps;
+            case 7: return texts;
+            case 8: return mixed;
+            default:
+                return null;
+        }
     }
 }

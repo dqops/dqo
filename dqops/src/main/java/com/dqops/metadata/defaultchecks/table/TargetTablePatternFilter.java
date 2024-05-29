@@ -26,12 +26,12 @@ import com.google.common.base.Strings;
  * Target table filter for default checks that uses parsed patterns.
  */
 public class TargetTablePatternFilter {
-    private SearchPattern connectionPattern;
-    private SearchPattern schemaPattern;
-    private SearchPattern tablePattern;
-    private SearchPattern stagePattern;
+    private SearchPattern[] connectionPattern;
+    private SearchPattern[] schemaPattern;
+    private SearchPattern[] tablePattern;
+    private SearchPattern[] stagePattern;
     private Integer tablePriority;
-    protected SearchPattern labelPattern;
+    protected SearchPattern[] labelPattern;
 
     /**
      * Creates a table pattern search object given a target table pattern specification. Creates search patterns for filled fields.
@@ -39,23 +39,23 @@ public class TargetTablePatternFilter {
      */
     public TargetTablePatternFilter(TargetTablePatternSpec tablePatternSpec) {
         if (!Strings.isNullOrEmpty(tablePatternSpec.getConnection())) {
-            this.connectionPattern = SearchPattern.create(false, tablePatternSpec.getConnection());
+            this.connectionPattern = SearchPattern.createForCommaSeparatedPatterns(false, tablePatternSpec.getConnection());
         }
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getSchema())) {
-            this.schemaPattern = SearchPattern.create(false, tablePatternSpec.getSchema());
+            this.schemaPattern = SearchPattern.createForCommaSeparatedPatterns(false, tablePatternSpec.getSchema());
         }
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getTable())) {
-            this.tablePattern = SearchPattern.create(false, tablePatternSpec.getTable());
+            this.tablePattern = SearchPattern.createForCommaSeparatedPatterns(false, tablePatternSpec.getTable());
         }
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getStage())) {
-            this.stagePattern = SearchPattern.create(false, tablePatternSpec.getStage());
+            this.stagePattern = SearchPattern.createForCommaSeparatedPatterns(false, tablePatternSpec.getStage());
         }
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getLabel())) {
-            this.labelPattern = SearchPattern.create(false, tablePatternSpec.getLabel());
+            this.labelPattern = SearchPattern.createForCommaSeparatedPatterns(false, tablePatternSpec.getLabel());
         }
 
         this.tablePriority = tablePatternSpec.getTablePriority();
@@ -70,25 +70,25 @@ public class TargetTablePatternFilter {
      */
     public boolean match(ConnectionSpec connectionSpec, TableSpec tableSpec, boolean matchLabels) {
         if (this.connectionPattern != null) {
-            if (!this.connectionPattern.match(connectionSpec.getConnectionName())) {
+            if (!SearchPattern.matchAny(this.connectionPattern, connectionSpec.getConnectionName())) {
                 return false;
             }
         }
 
         if (this.schemaPattern != null) {
-            if (!this.schemaPattern.match(tableSpec.getPhysicalTableName().getSchemaName())) {
+            if (!SearchPattern.matchAny(this.schemaPattern, tableSpec.getPhysicalTableName().getSchemaName())) {
                 return false;
             }
         }
 
         if (this.tablePattern != null) {
-            if (!this.tablePattern.match(tableSpec.getPhysicalTableName().getTableName())) {
+            if (!SearchPattern.matchAny(this.tablePattern, tableSpec.getPhysicalTableName().getTableName())) {
                 return false;
             }
         }
 
         if (this.stagePattern != null) {
-            if (!this.stagePattern.match(tableSpec.getStage())) {
+            if (!SearchPattern.matchAny(this.stagePattern, tableSpec.getStage())) {
                 return false;
             }
         }
@@ -103,7 +103,7 @@ public class TargetTablePatternFilter {
             LabelSetSpec connectionLabels = connectionSpec.getLabels();
             if (connectionLabels != null && !connectionLabels.isEmpty()) {
                 for (String label : connectionLabels) {
-                    if (this.labelPattern.match(label)) {
+                    if (SearchPattern.matchAny(this.labelPattern, label)) {
                         return true;
                     }
                 }
@@ -112,7 +112,7 @@ public class TargetTablePatternFilter {
             LabelSetSpec tableLabels = tableSpec.getLabels();
             if (tableLabels != null && !tableLabels.isEmpty()) {
                 for (String label : tableLabels) {
-                    if (this.labelPattern.match(label)) {
+                    if (SearchPattern.matchAny(this.labelPattern, label)) {
                         return true;
                     }
                 }

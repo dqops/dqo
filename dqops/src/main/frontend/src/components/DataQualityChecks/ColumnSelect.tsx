@@ -65,7 +65,9 @@ const ColumnSelect = ({
           const response = await ColumnApiClient.getColumns(
             connection,
             schema,
-            table
+            table,
+            false,
+            undefined
           );
           setOptions(
             response.data.map((item) => ({

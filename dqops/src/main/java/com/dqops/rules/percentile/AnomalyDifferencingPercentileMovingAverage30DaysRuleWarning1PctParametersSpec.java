@@ -15,9 +15,11 @@
  */
 package com.dqops.rules.percentile;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -95,5 +97,25 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleWarning1PctPara
     @Override
     public String getRuleDefinitionName() {
         return "percentile/anomaly_differencing_percentile_moving_average_30_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.anomalyPercent == null) {
+            return;
+        }
+
+        if (this.anomalyPercent == 0.0) {
+            this.anomalyPercent = 1.0;
+            return;
+        }
+
+        this.anomalyPercent = DoubleRounding.roundToKeepEffectiveDigits(this.anomalyPercent * 0.7);
     }
 }

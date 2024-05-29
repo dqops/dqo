@@ -15,9 +15,11 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -78,5 +80,25 @@ public class MaxDaysRule2ParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/max_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.maxDays == null) {
+            return;
+        }
+
+        if (this.maxDays <= 0) {
+            this.maxDays = checkResultsSingleCheck.getActualValueColumn().max();
+            return;
+        }
+
+        this.maxDays = DoubleRounding.roundToKeepEffectiveDigits(this.maxDays * 1.3);
     }
 }

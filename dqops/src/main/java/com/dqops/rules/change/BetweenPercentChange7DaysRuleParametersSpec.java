@@ -15,10 +15,12 @@
  */
 package com.dqops.rules.change;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -127,5 +129,22 @@ public class BetweenPercentChange7DaysRuleParametersSpec extends AbstractRulePar
     @Override
     public String getRuleDefinitionName() {
         return "change/between_percent_change_7_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.fromPercent != null) {
+            this.fromPercent = DoubleRounding.roundToKeepEffectiveDigits(this.fromPercent * 0.7);
+        }
+
+        if (this.toPercent != null) {
+            this.toPercent = DoubleRounding.roundToKeepEffectiveDigits(this.toPercent * 1.3);
+        }
     }
 }

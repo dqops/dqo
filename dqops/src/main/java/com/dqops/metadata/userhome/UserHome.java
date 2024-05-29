@@ -126,6 +126,15 @@ public interface UserHome extends Flushable, HierarchyNode {
     HierarchyNode findNode(HierarchyId hierarchyId);
 
     /**
+     * Finds the first node on the path from the user home to the <code>leafNode</code> that is of <code>parentType</code> class.
+     * @param leafNode Leaf node to follow on the path.
+     * @param parentType Expected class type.
+     * @return Instance of a class of the target type.
+     * @param <T> Target type.
+     */
+    <T extends HierarchyNode> T findNodeOnPathOfType(HierarchyNode leafNode, Class<T> parentType);
+
+    /**
      * Returns a list of dashboards definitions.
      * @return Collection of dashboards definitions.
      */

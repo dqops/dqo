@@ -280,7 +280,7 @@ function DefinitionProvider(props: any) {
     {
       onClick: openDataDictionaryFirstLevelTab,
       icon: 'datadictionary',
-      text: 'Data Dictionary'
+      text: 'Data dictionaries'
     }
   ];
 

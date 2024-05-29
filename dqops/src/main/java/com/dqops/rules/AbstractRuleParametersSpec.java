@@ -16,6 +16,7 @@
 package com.dqops.rules;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
@@ -77,4 +78,11 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec implements
     public boolean isDefault() {
         return false; // always render
     }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    public abstract void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck);
 }

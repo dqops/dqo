@@ -20,6 +20,8 @@ class DefaultTableChecksPatternListModel:
         pattern_name (Union[Unset, str]): Pattern name.
         priority (Union[Unset, int]): The priority of the pattern. Patterns with lower values are applied before
             patterns with higher priority values.
+        disabled (Union[Unset, bool]): Disables this data quality check configuration. The checks will not be activated.
+        description (Union[Unset, str]): The description (documentation) of this data quality check configuration.
         target_table (Union[Unset, TargetTablePatternSpec]):
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
         yaml_parsing_error (Union[Unset, str]): Optional parsing error that was captured when parsing the YAML file.
@@ -29,6 +31,8 @@ class DefaultTableChecksPatternListModel:
 
     pattern_name: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
+    disabled: Union[Unset, bool] = UNSET
+    description: Union[Unset, str] = UNSET
     target_table: Union[Unset, "TargetTablePatternSpec"] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     yaml_parsing_error: Union[Unset, str] = UNSET
@@ -37,6 +41,8 @@ class DefaultTableChecksPatternListModel:
     def to_dict(self) -> Dict[str, Any]:
         pattern_name = self.pattern_name
         priority = self.priority
+        disabled = self.disabled
+        description = self.description
         target_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.target_table, Unset):
             target_table = self.target_table.to_dict()
@@ -51,6 +57,10 @@ class DefaultTableChecksPatternListModel:
             field_dict["pattern_name"] = pattern_name
         if priority is not UNSET:
             field_dict["priority"] = priority
+        if disabled is not UNSET:
+            field_dict["disabled"] = disabled
+        if description is not UNSET:
+            field_dict["description"] = description
         if target_table is not UNSET:
             field_dict["target_table"] = target_table
         if can_edit is not UNSET:
@@ -69,6 +79,10 @@ class DefaultTableChecksPatternListModel:
 
         priority = d.pop("priority", UNSET)
 
+        disabled = d.pop("disabled", UNSET)
+
+        description = d.pop("description", UNSET)
+
         _target_table = d.pop("target_table", UNSET)
         target_table: Union[Unset, TargetTablePatternSpec]
         if isinstance(_target_table, Unset):
@@ -83,6 +97,8 @@ class DefaultTableChecksPatternListModel:
         default_table_checks_pattern_list_model = cls(
             pattern_name=pattern_name,
             priority=priority,
+            disabled=disabled,
+            description=description,
             target_table=target_table,
             can_edit=can_edit,
             yaml_parsing_error=yaml_parsing_error,

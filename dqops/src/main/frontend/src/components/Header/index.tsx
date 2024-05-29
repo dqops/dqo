@@ -1,12 +1,8 @@
-import { Tooltip, tab } from '@material-tailwind/react';
+import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  useHistory,
-  useLocation,
-  useRouteMatch
-} from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { DqoJobChangeModelStatusEnum } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -27,6 +23,7 @@ import { useDecodedParams } from '../../utils';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
+import SvgIcon from '../SvgIcon';
 import UserProfile from '../UserProfile';
 import { HeaderBanner } from './HeaderBanner';
 import { SynchronizeButton } from './SynchronizeButton';
@@ -57,10 +54,15 @@ const Header = () => {
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
+  const { activeTab: homeActiveTab } = useSelector(
+    (state: IRootState) => state.source['home']
+  );
+  const [isWindowSmall, setIsWindowSmall] = useState(window.innerWidth < 1600);
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen, job_dictionary_state, advisorJobId } =
-    useSelector((state: IRootState) => state.job);
+  const { isAdvisorOpen, job_dictionary_state, advisorJobId } = useSelector(
+    (state: IRootState) => state.job
+  );
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
@@ -168,17 +170,35 @@ const Header = () => {
     dispatch(toggleAdvisor(false));
     dispatch(setAdvisorJobId(0));
     dispatch(setAdvisorObject({}));
-  }
+  };
 
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
-      job_dictionary_state[advisorJobId]?.status === DqoJobChangeModelStatusEnum.finished
+      job_dictionary_state[advisorJobId]?.status ===
+        DqoJobChangeModelStatusEnum.finished
     ) {
-      dispatch(setAdvisorObject(job_dictionary_state[advisorJobId]?.parameters?.importTableParameters ?? {}));
+      dispatch(
+        setAdvisorObject(
+          job_dictionary_state[advisorJobId]?.parameters
+            ?.importTableParameters ?? {}
+        )
+      );
       dispatch(toggleAdvisor(true));
     }
   }, [job_dictionary_state[advisorJobId]]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWindowSmall(window.innerWidth < 1600);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
@@ -188,100 +208,140 @@ const Header = () => {
         </div>
       )}
       <div className="flex space-x-2">
-        <div onClick={() => history.push('/')}>
-          <Logo className="w-30 cursor-pointer" />
+        <div className="w-30 flex justify-center items-center"
+          onClick={() => history.push(homeActiveTab ?? '/home')}>
+          <Logo
+            className={clsx(
+              'w-24 cursor-pointer items-center',
+              location.pathname === homeActiveTab && 'w-30'
+            )}
+          />
         </div>
         <div className="flex items-center">
-          <Tooltip content={"Add a new connection and manage its settings"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700" >
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
-              ? 'font-bold'
-              : ''
+          <Tooltip
+            content={'Add a new connection and manage its settings'}
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
+                  ? 'font-bold'
+                  : ''
               )}
               onClick={onClick(CheckTypes.SOURCES)}
-              >
-            Data Sources
-          </div>
+            >
+              <SvgIcon name="data_sources" className="w-4.5 h-4.5 mr-2" />
+              {!isWindowSmall && <div>Data Sources</div>}
+            </div>
           </Tooltip>
-          <Tooltip content={"Measure basic data statistics and experiment with various types of data quality checks"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
-              ? 'font-bold'
-              : ''
+          <Tooltip
+            content={
+              'Measure basic data statistics and experiment with various types of data quality checks'
+            }
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
+                  ? 'font-bold'
+                  : ''
               )}
               onClick={onClick(CheckTypes.PROFILING)}
-              >
-            Profiling
-          </div>
+            >
+              <SvgIcon
+                name="profiling"
+                className="w-4.5 h-4.5 mr-2"
+              />
+              {!isWindowSmall && <div>Profiling</div>}
+            </div>
           </Tooltip>
-          <Tooltip content={"Run standard checks that monitor the data quality"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
-              ? 'font-bold'
-              : ''
+          <Tooltip
+            content={'Run standard checks that monitor the data quality'}
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
+                  ? 'font-bold'
+                  : ''
               )}
               onClick={onClick(CheckTypes.MONITORING)}
-              >
-            Monitoring Checks
-          </div>
-            </Tooltip>
-            <Tooltip content={"Run checks designed to monitor the data quality of partitioned data"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
-              ? 'font-bold'
-              : ''
+            >
+              <SvgIcon name="monitoring_checks" className="w-4.5 h-4.5 mr-2" />
+              {!isWindowSmall && <div>Monitoring Checks</div>}
+            </div>
+          </Tooltip>
+          <Tooltip
+            content={
+              'Run checks designed to monitor the data quality of partitioned data'
+            }
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
+                  ? 'font-bold'
+                  : ''
               )}
               onClick={onClick(CheckTypes.PARTITIONED)}
-              >
-            Partition Checks
-          </div>
-            </Tooltip>
-            <Tooltip content={"Review the summaries of data quality monitoring"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname === '/dashboards' ? 'font-bold' : ''
+            >
+              <SvgIcon name="partitioned_checks" className="w-4.5 h-4.5 mr-2" />
+              {!isWindowSmall && <div>Partition Checks</div>}
+            </div>
+          </Tooltip>
+          <Tooltip
+            content={'Review the summaries of data quality monitoring'}
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname === '/dashboards' ? 'font-bold' : ''
               )}
               onClick={() => history.push('/dashboards')}
-              >
-            Data Quality Dashboards
-          </div>
-            </Tooltip>
-            <Tooltip content={"Review and manage the issues that arise during data quality monitoring"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
-          <div
-            className={clsx(
-              'px-4 cursor-pointer',
-              location.pathname.startsWith('/incidents') ? 'font-bold' : ''
+            >
+              <SvgIcon name="dashboards" className="w-4 h-4 mr-1.5" />
+              {!isWindowSmall && <div>Data Quality Dashboards</div>}
+            </div>
+          </Tooltip>
+          <Tooltip
+            content={
+              'Review and manage the issues that arise during data quality monitoring'
+            }
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
+            <div
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith('/incidents') ? 'font-bold' : ''
               )}
               onClick={() => history.push('/incidents')}
-              >
-            Incidents
-          </div>
-            </Tooltip>
-          <Tooltip content={"Customize built-in data quality sensors and rules"}
-              className="max-w-80 py-4 px-4 bg-gray-800 delay-700">
+            >
+              <SvgIcon name="incidents" className="w-5 h-5 mr-1" />
+              {!isWindowSmall && <div>Incidents</div>}
+            </div>
+          </Tooltip>
+          <Tooltip
+            content={'Customize built-in data quality sensors and rules'}
+            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+          >
             <div
-            className={clsx(  
-              'px-4 cursor-pointer',
-              location.pathname.startsWith('/definitions') ? 'font-bold' : ''
+              className={clsx(
+                'px-4 cursor-pointer flex items-center',
+                location.pathname.startsWith('/definitions') ? 'font-bold' : ''
               )}
-              onClick={() => location.pathname.startsWith('/definitions') ? undefined : history.push('/definitions')}
-              >
-            Configuration
+              onClick={() =>
+                location.pathname.startsWith('/definitions')
+                  ? undefined
+                  : history.push('/definitions')
+              }
+            >
+              <SvgIcon name="configuration" className="w-6 h-6 mr-1" />
+              {!isWindowSmall && <div>Configuration</div>}
             </div>
           </Tooltip>
         </div>

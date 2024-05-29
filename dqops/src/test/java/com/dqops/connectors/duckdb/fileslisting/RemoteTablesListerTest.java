@@ -23,7 +23,7 @@ class RemoteTablesListerTest extends BaseTest {
     @BeforeEach
     void setUp() {
         this.duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
-        this.sut = (RemoteTablesLister)TablesListerProvider.createTablesLister(DuckdbStorageType.s3);
+        this.sut = (RemoteTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.s3);
     }
 
     @Test

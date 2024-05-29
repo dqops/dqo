@@ -15,10 +15,12 @@
  */
 package com.dqops.rules.percentile;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -122,5 +124,22 @@ public class PercentileMoving30DaysRuleParametersSpec extends AbstractRuleParame
     @Override
     public String getRuleDefinitionName() {
         return "percentile/percentile_moving_30_days";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.percentileAbove != null) {
+            this.percentileAbove = DoubleRounding.roundToKeepEffectiveDigits(this.percentileAbove * 0.7);
+        }
+
+        if (this.percentileBelow != null) {
+            this.percentileBelow = DoubleRounding.roundToKeepEffectiveDigits(this.percentileBelow * 0.7);
+        }
     }
 }

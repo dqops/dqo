@@ -2,10 +2,10 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * Used to retrieve the list of files from AWS s3 that are used as tables by duckdb's listTables.
  */
 @Slf4j
+@Component
 public class LocalSystemTablesLister implements TablesLister {
 
     /**
@@ -34,11 +35,10 @@ public class LocalSystemTablesLister implements TablesLister {
         }
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathPrefixString, "/"), "\\");
 
-        DuckdbFilesFormatType sourceFilesTypeString = duckdb.getFilesFormatType();
-
         List<SourceTableModel> sourceTableModels = Arrays.stream(files).map(file -> {
             String fileName = file.toString().substring(folderPrefix.length() + 1);
-            if(!isFolderOrFileOfValidExtension(file, pathPrefixString, sourceFilesTypeString)) {
+            String extension = duckdb.getFullExtension();
+            if(!isFolderOrFileOfValidExtension(file, pathPrefixString, extension)) {
                 return null;
             }
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
@@ -53,17 +53,15 @@ public class LocalSystemTablesLister implements TablesLister {
      * 
      * @param file Local system file.
      * @param absolutePathPrefix Prefix for the file.
-     * @param filesType File type used for extension matching.
+     * @param extension File extension.
      * @return Whether the file is valid
      */
-    private boolean isFolderOrFileOfValidExtension(File file, String absolutePathPrefix, DuckdbFilesFormatType filesType){
+    private boolean isFolderOrFileOfValidExtension(File file,
+                                                   String absolutePathPrefix,
+                                                   String extension){
         String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(absolutePathPrefix, "/"), "\\");
         String fileName = file.toString().substring(folderPrefix.length() + 1);
-
-        String sourceFilesTypeString = filesType.toString();
-        return fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || fileName.toLowerCase().endsWith(".gz")
-                || file.isDirectory();
+        return fileName.toLowerCase().endsWith(extension) || file.isDirectory();
     }
 
 }

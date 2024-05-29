@@ -475,7 +475,8 @@ function TreeProvider(props: any) {
       await ColumnApiClient.getColumns(
         connection ?? '',
         schema ?? '',
-        table ?? ''
+        table ?? '',
+        false
       );
     const items = res.data.map((column) => ({
       id: `${node.id}.${urlencodeDecoder(column.column_name ?? '')}`,

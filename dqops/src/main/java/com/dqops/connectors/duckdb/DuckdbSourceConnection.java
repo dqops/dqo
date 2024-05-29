@@ -24,6 +24,7 @@ import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
+import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.configuration.DqoDuckdbConfiguration;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
@@ -34,6 +35,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
@@ -49,6 +51,7 @@ import tech.tablesaw.columns.Column;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,22 +67,23 @@ import java.util.stream.Collectors;
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
-    private static final Object registerExtensionsLock = new Object();
-    private static Set<String> extensionsRegisteredPerThread = new HashSet<>();
     private final DqoDuckdbConfiguration dqoDuckdbConfiguration;
     private final DuckDBDataTypeParser dataTypeParser;
-    private static final Object settingsExecutionLock = new Object();
-    private static final boolean settingsConfigured = false;
     private static final String temporaryDirectoryPrefix = "dqops_duckdb_temp_";
+    private final TablesListerProvider tablesListerProvider;
+    private final DuckdbInMemoryInstance duckdbInMemoryInstance;
+    private final AzureCredentialsProvider azureCredentialsProvider;
 
     /**
      * Injection constructor for the duckdb connection.
      *
-     * @param jdbcConnectionPool      Jdbc connection pool.
-     * @param secretValueProvider     Secret value provider for the environment variable expansion.
-     * @param homeLocationFindService Home location find service.
-     * @param dqoDuckdbConfiguration  Configuration settings for duckdb.
-     * @param dataTypeParser          Data type parser that parses the schema of structures.
+     * @param jdbcConnectionPool       Jdbc connection pool.
+     * @param secretValueProvider      Secret value provider for the environment variable expansion.
+     * @param homeLocationFindService  Home location find service.
+     * @param dqoDuckdbConfiguration   Configuration settings for duckdb.
+     * @param dataTypeParser           Data type parser that parses the schema of structures.
+     * @param duckdbInMemoryInstance   Holder of a shared in-memory DuckDB connection that is duplicated.
+     * @param azureCredentialsProvider Azure credentials provider
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
@@ -87,11 +91,27 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                                   DuckdbConnectionProvider duckdbConnectionProvider,
                                   HomeLocationFindService homeLocationFindService,
                                   DqoDuckdbConfiguration dqoDuckdbConfiguration,
-                                  DuckDBDataTypeParser dataTypeParser) {
+                                  DuckDBDataTypeParser dataTypeParser,
+                                  TablesListerProvider tablesListerProvider,
+                                  DuckdbInMemoryInstance duckdbInMemoryInstance,
+                                  AzureCredentialsProvider azureCredentialsProvider) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
         this.dqoDuckdbConfiguration = dqoDuckdbConfiguration;
         this.dataTypeParser = dataTypeParser;
+        this.tablesListerProvider = tablesListerProvider;
+        this.duckdbInMemoryInstance = duckdbInMemoryInstance;
+        this.azureCredentialsProvider = azureCredentialsProvider;
+    }
+
+    @Override
+    public void createTable(TableSpec tableSpec) {
+        // nothing to do
+    }
+
+    @Override
+    public void loadData(TableSpec tableSpec, Table data) {
+        // nothing to do
     }
 
     /**
@@ -107,10 +127,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
-
-        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            jdbcConnectionBuilder.append(":memory:");
-        }
 
         String database = this.getSecretValueProvider().expandValue(duckdbSpec.getDatabase(), secretValueLookupContext);
         if(database != null){
@@ -151,6 +167,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Stores a reference to an opened JDBC connection. This method should be called only when we create the connection in a different way, for example - by duplicating a DuckDB in-memory connection.
+     *
+     * @param jdbcConnection JDBC connection to store.
+     */
+    @Override
+    protected void setJdbcConnection(Connection jdbcConnection) {
+        super.setJdbcConnection(jdbcConnection);
+    }
+
+    /**
      * Executes a provider specific SQL that runs a command DML/DDL command.
      *
      * @param sqlStatement SQL DDL or DML statement.
@@ -185,71 +211,88 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
-        try {
-            Class.forName("org.duckdb.DuckDBDriver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        if (this.getConnectionSpec().getDuckdb() == null || this.getConnectionSpec().getDuckdb().getReadMode() == DuckdbReadMode.in_memory) {
+            // use an in-memory shared instance
+            Connection duckDbDuplicatedInstance = this.duckdbInMemoryInstance.duplicateInMemoryJdbcConnection();
+            this.setJdbcConnection(duckDbDuplicatedInstance);
+        } else {
+            try {
+                Class.forName("org.duckdb.DuckDBDriver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            super.open(secretValueLookupContext);
         }
-        super.open(secretValueLookupContext);
-        configureSettings();
-        registerExtensions();
+
         loadSecrets(secretValueLookupContext);
     }
 
-    private void configureSettings(){
-        if(settingsConfigured){
-            return;
-        }
-        try{
-            synchronized (settingsExecutionLock){
-                String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
-                if(memoryLimit != null){
-                    String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
-                    this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
-                }
+    /**
+     * Configures an in-memory instance. This operation is called by {@link DuckdbInMemoryInstanceImpl} singleton to configure the shared instance.
+     */
+    public void initializeInMemoryConfiguration() {
+        configureSettings();
+        registerExtensions();
+    }
 
-                String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
-                this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-                String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
-                Path.of(temporaryDirectory).toFile().deleteOnExit();
-                String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
-                this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
+    /**
+     * Configures settings for a connection, such as the memory limit.
+     */
+    private void configureSettings() {
+        try {
+            String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
+            if (memoryLimit != null){
+                String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
+                this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
+
+            String threadsQuery = "SET GLOBAL threads = " + dqoDuckdbConfiguration.getThreads();
+            this.executeCommand(threadsQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+            String temporaryDirectory = Files.createTempDirectory(temporaryDirectoryPrefix).toFile().getAbsolutePath();
+            Path.of(temporaryDirectory).toFile().deleteOnExit();
+            String tempDirectoryQuery = "SET GLOBAL temp_directory = '" + temporaryDirectory + "'";
+            this.executeCommand(tempDirectoryQuery, JobCancellationToken.createDummyJobCancellationToken());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         }
+    }
+
+    /**
+     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
+     * @return The list of extension names for DuckDB.
+     */
+    private List<String> getAvailableExtensions() {
+        return Arrays.asList(
+                "httpfs",
+                "aws",
+                "azure"
+        );
     }
 
     /**
      * Registers extensions for duckdb from the local extension repository.
      */
-    private void registerExtensions(){
-        String currentThreadName = Thread.currentThread().getName();
-        if(extensionsRegisteredPerThread.contains(currentThreadName)){
-            return;
-        }
+    private void registerExtensions() {
         try {
-            synchronized (registerExtensionsLock) {
-                String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
-                this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
+            String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
+            this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 
-                List<String> availableExtensionList = getAvailableExtensions();
-                availableExtensionList.stream().forEach(extensionName -> {
-                    try {
-                        String installExtensionQuery = "INSTALL " + extensionName;
-                        this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-                        String loadExtensionQuery = "LOAD " + extensionName;
-                        this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-                    } catch (Exception exception) {
-                        log.error("Extension " + extensionName + " cannot be loaded.");
-                        log.error(exception.getMessage());
-                    }
-                });
-                extensionsRegisteredPerThread.add(currentThreadName);
-            }
+            List<String> availableExtensionList = getAvailableExtensions();
+            availableExtensionList.stream().forEach(extensionName -> {
+                try {
+                    String installExtensionQuery = "INSTALL " + extensionName;
+                    this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                    String loadExtensionQuery = "LOAD " + extensionName;
+                    this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                } catch (Exception exception) {
+                    log.error("Extension " + extensionName + " cannot be loaded.");
+                    log.error(exception.getMessage());
+                }
+            });
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DqoRuntimeException(e);
         }
     }
 
@@ -260,7 +303,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     private void loadSecrets(SecretValueLookupContext secretValueLookupContext){
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)){
+        if (duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)) {
             return;
         }
 
@@ -275,12 +318,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                             AwsAuthenticationMode.default_credentials : duckdb.getAwsAuthenticationMode();
 
                     if(awsAuthenticationMode.equals(AwsAuthenticationMode.default_credentials)){
-                        duckdbSpecCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
+                        duckdbSpecCloned.fillSpecWithDefaultAwsCredentials(secretValueLookupContext);
                     } else if (Strings.isNullOrEmpty(duckdbSpecCloned.getRegion())){
                         duckdbSpecCloned.fillSpecWithDefaultAwsConfig(secretValueLookupContext);
                     }
                     break;
-                    // todo: add default azure credentials
+                case azure:
+                    AzureAuthenticationMode azureAuthenticationMode = duckdb.getAzureAuthenticationMode() == null ?
+                            AzureAuthenticationMode.default_credentials : duckdb.getAzureAuthenticationMode();
+
+                    if(azureAuthenticationMode.equals(AzureAuthenticationMode.default_credentials)){
+                        duckdbSpecCloned.fillSpecWithDefaultAzureCredentials(secretValueLookupContext, azureCredentialsProvider);
+                    }
+                    break;
             }
         }
 
@@ -294,18 +344,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
-     * @return The list of extension names for DuckDB.
-     */
-    private List<String> getAvailableExtensions(){
-        return Arrays.asList(
-                "httpfs",
-                "aws",
-                "azure"
-        );
-    }
-
-    /**
      * Returns a list of schemas from the source.
      *
      * @return List of schemas.
@@ -313,9 +351,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public List<SourceSchemaModel> listSchemas() {
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.listSchemas();
-        }
         Map<String, String> directories = duckdb.getDirectories();
         List<SourceSchemaModel> results = new ArrayList<>();
         directories.keySet().forEach(s -> {
@@ -334,18 +369,18 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
-        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
-        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
-            return sourceTableModels;
+        DuckdbParametersSpec duckDbParameters = getConnectionSpec().getDuckdb();
+        if (duckDbParameters == null) {
+            duckDbParameters = new DuckdbParametersSpec();
         }
-        if(duckdb == null || duckdb.getFilesFormatType() == null){
+
+        if (duckDbParameters == null || duckDbParameters.getFilesFormatType() == null) {
             return new ArrayList<>();
         }
 
-        DuckdbStorageType storageType = duckdb.getStorageType();
-        TablesLister remoteTablesLister = TablesListerProvider.createTablesLister(storageType);
-        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckdb, schemaName);
+        DuckdbStorageType storageType = duckDbParameters.getStorageType();
+        TablesLister remoteTablesLister = tablesListerProvider.createTablesLister(storageType);
+        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckDbParameters, schemaName);
         return sourceTableModels;
     }
 
@@ -366,10 +401,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         assert !Strings.isNullOrEmpty(schemaName);
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
-
-        if (duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
-        }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 
@@ -509,5 +540,4 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }
-
 }

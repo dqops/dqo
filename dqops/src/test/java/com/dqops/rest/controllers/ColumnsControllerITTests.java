@@ -51,7 +51,7 @@ public class ColumnsControllerITTests extends BaseTest {
     void getColumns_whenRequestedForSampleTable_thenReturnsColumns() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         this.userHomeContext.flush();
-        String uri = String.format("/api/connections/%s/schemas/%s/tables/%s/columns", this.sampleTable.getConnectionName(),
+        String uri = String.format("/api/connections/%s/schemas/%s/tables/%s/columns?dataQualityStatus=false", this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 

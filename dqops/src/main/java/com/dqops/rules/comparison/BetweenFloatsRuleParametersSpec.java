@@ -15,10 +15,12 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -99,5 +101,23 @@ public class BetweenFloatsRuleParametersSpec extends AbstractRuleParametersSpec 
     @Override
     public String getRuleDefinitionName() {
         return "comparison/between_floats";
+    }
+
+    /**
+     * Decreases the rule severity by changing the parameters.
+     * NOTE: this method is allowed to do nothing if changing the rule severity is not possible
+     *
+     * @param checkResultsSingleCheck Historical results for the check to decide how much to change.
+     */
+    @Override
+    public void decreaseRuleSensitivity(CheckResultsNormalizedResult checkResultsSingleCheck) {
+        if (this.from == null || this.to == null) {
+            return;
+        }
+
+        double difference = this.to - this.from;
+
+        this.from = DoubleRounding.roundToKeepEffectiveDigits(this.from - difference * 0.15);
+        this.to = DoubleRounding.roundToKeepEffectiveDigits(this.to + difference * 0.15);
     }
 }

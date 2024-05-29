@@ -9,6 +9,6 @@ public enum DuckdbReadMode {
     @JsonProperty("in_memory")
     in_memory,
 
-    @JsonProperty("files")
+    @JsonProperty("files")  //duckdb_file
     files
 }

@@ -5,6 +5,7 @@ import com.dqops.metadata.sources.ColumnSpecMap;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.google.common.base.CaseFormat;
+import org.apache.parquet.Strings;
 
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,16 @@ public class TableOptionsFormatter {
             sourceTable.append("\n    '").append(firstEntry.getKey()).append("': '").append(firstColumnType).append("'");
 
             columnSpecMap.entrySet().stream().skip(1).forEachOrdered(columnSpecEntry -> {
-                ColumnTypeSnapshotSpec typeSnapshot = columnSpecEntry.getValue().getTypeSnapshot();
+                ColumnSpec columnSpec = columnSpecEntry.getValue();
+                if (!Strings.isNullOrEmpty(columnSpec.getSqlExpression())) {
+                    return;
+                }
+
+                ColumnTypeSnapshotSpec typeSnapshot = columnSpec.getTypeSnapshot();
+                if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
+                    return;
+                }
+
                 String columnType = typeSnapshot.getColumnType();
                 String columnName = columnSpecEntry.getKey();
 

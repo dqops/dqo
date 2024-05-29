@@ -33,10 +33,16 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckContainerModel*](./common.md#checkcontainermodel)|Model that returns the form definition and the form data to edit all data quality checks divided by categories.|
 |[*CheckContainerTypeModel*](./common.md#checkcontainertypemodel)|Model identifying the check type and timescale of checks belonging to a container.|
 |[*CheckTemplate*](./common.md#checktemplate)|Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.|
+|[*PhysicalTableName*](./common.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
+|[*RuleSeverityLevel*](./common.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
+|[*CheckResultStatus*](./common.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
+|[*CheckCurrentDataQualityStatusModel*](./common.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
+|[*DimensionCurrentDataQualityStatusModel*](./common.md#dimensioncurrentdataqualitystatusmodel)|A model that describes the current data quality status for a single data quality dimension.|
+|[*ColumnCurrentDataQualityStatusModel*](./common.md#columncurrentdataqualitystatusmodel)|The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.|
+|[*ColumnListModel*](./common.md#columnlistmodel)|Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.|
 |[*ProviderType*](./common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
 |[*ConnectionModel*](./common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 |[*DqoQueueJobId*](./common.md#dqoqueuejobid)|Identifies a single job.|
-|[*PhysicalTableName*](./common.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
 |[*ProfilingTimePeriodTruncation*](./common.md#profilingtimeperiodtruncation)|The time period for profiling checks (millisecond, daily, monthly, weekly, hourly). The default profiling check stores one value per month. When profiling checks is re-executed during the month, the previous profiling checks value is overwritten and only the most recent value is stored.|
 |[*TableListModel*](./common.md#tablelistmodel)|Table list model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
 
@@ -46,11 +52,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
 |[*CheckResultsListModel*](./check_results.md#checkresultslistmodel)|Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.|
-|[*RuleSeverityLevel*](./check_results.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
-|[*CheckResultStatus*](./check_results.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
-|[*CheckCurrentDataQualityStatusModel*](./check_results.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
-|[*DimensionCurrentDataQualityStatusModel*](./check_results.md#dimensioncurrentdataqualitystatusmodel)|A model that describes the current data quality status for a single data quality dimension.|
-|[*ColumnCurrentDataQualityStatusModel*](./check_results.md#columncurrentdataqualitystatusmodel)|The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.|
 |[*TableCurrentDataQualityStatusModel*](./check_results.md#tablecurrentdataqualitystatusmodel)|The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.|
 
 
@@ -80,7 +81,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ColumnDailyMonitoringCheckCategoriesSpec*](./columns.md#columndailymonitoringcheckcategoriesspec)|Container of column level daily monitoring checks. Contains categories of daily monitoring checks.|
 |[*ColumnComparisonDailyPartitionedChecksSpecMap*](./columns.md#columncomparisondailypartitionedchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.|
 |[*ColumnDailyPartitionedCheckCategoriesSpec*](./columns.md#columndailypartitionedcheckcategoriesspec)|Container of data quality partitioned checks on a column level that are checking numeric values at a daily level.|
-|[*ColumnListModel*](./columns.md#columnlistmodel)|Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.|
 |[*ColumnModel*](./columns.md#columnmodel)|Table model that returns the specification of a single column in the REST Api.|
 |[*ColumnComparisonMonthlyMonitoringChecksSpecMap*](./columns.md#columncomparisonmonthlymonitoringchecksspecmap)|Container of comparison checks for each defined data comparison. The name of the key in this dictionary must match a name of a table comparison that is defined on the parent table. Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.|
 |[*ColumnMonthlyMonitoringCheckCategoriesSpec*](./columns.md#columnmonthlymonitoringcheckcategoriesspec)|Container of column level monthly monitoring checks. Contains categories of monthly monitoring checks.|
@@ -140,7 +140,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DefaultColumnChecksPatternListModel*](./default_column_check_patterns.md#defaultcolumncheckspatternlistmodel)|The listing model of column-level default check patterns that is returned by the REST API.|
 |[*ColumnMonitoringCheckCategoriesSpec*](./default_column_check_patterns.md#columnmonitoringcheckcategoriesspec)|Container of column level monitoring, divided by the time window (daily, monthly, etc.)|
 |[*ColumnPartitionedCheckCategoriesSpec*](./default_column_check_patterns.md#columnpartitionedcheckcategoriesspec)|Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns.|
+|[*ColumnDefaultChecksPatternSpec*](./default_column_check_patterns.md#columndefaultcheckspatternspec)|The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.|
 |[*DefaultColumnChecksPatternModel*](./default_column_check_patterns.md#defaultcolumncheckspatternmodel)|Default column-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on columns that match the filter.|
 
 
@@ -152,7 +152,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DefaultTableChecksPatternListModel*](./default_table_check_patterns.md#defaulttablecheckspatternlistmodel)|The listing model of table-level default check patterns that is returned by the REST API.|
 |[*TableMonitoringCheckCategoriesSpec*](./default_table_check_patterns.md#tablemonitoringcheckcategoriesspec)|Container of table level monitoring, divided by the time window (daily, monthly, etc.)|
 |[*TablePartitionedCheckCategoriesSpec*](./default_table_check_patterns.md#tablepartitionedcheckcategoriesspec)|Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)|
-|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables.|
+|[*TableDefaultChecksPatternSpec*](./default_table_check_patterns.md#tabledefaultcheckspatternspec)|The default configuration of table-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on tables. This configuration serves as a data quality policy that defines the data quality checks that are verified on matching tables.|
 |[*DefaultTableChecksPatternModel*](./default_table_check_patterns.md#defaulttablecheckspatternmodel)|Default table-level checks pattern model that is returned by the REST API. Describes a configuration of data quality checks for a named pattern. DQOps applies these checks on tables that match the filter.|
 
 

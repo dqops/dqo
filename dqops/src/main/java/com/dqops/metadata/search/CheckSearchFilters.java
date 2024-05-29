@@ -15,13 +15,16 @@
  */
 package com.dqops.metadata.search;
 
-import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
+import com.dqops.checks.*;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
+import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,12 +34,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.parquet.Strings;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -423,6 +424,42 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
         }
     }
 
+    /**
+     * Creates a check search filter given an instance of a check inside a given connection.
+     * @param tableSpec Table where the check is applied.
+     * @param checkSpec Check specification instance, must be inside a user home and the connection that was given.
+     * @return Check search filters with all filters that identify the check.
+     */
+    public static CheckSearchFilters fromCheckSpecInstance(TableSpec tableSpec, AbstractCheckSpec<?,?,?,?> checkSpec) {
+        HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
+        HierarchyNode[] allNodesToCheck = checkHierarchyId.getNodesOnPath(tableSpec);
+        AbstractRootChecksContainerSpec rootChecksContainerSpec = HierarchyNode.findNodeOfType(allNodesToCheck, AbstractRootChecksContainerSpec.class);
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setConnection(checkHierarchyId.getConnectionName());
+        PhysicalTableName physicalTableName = checkHierarchyId.getPhysicalTableName();
+        checkSearchFilters.setPhysicalTableName(physicalTableName);
+        checkSearchFilters.setFullTableName(physicalTableName.toTableSearchFilter());
+        checkSearchFilters.setColumn(checkHierarchyId.getColumnName());
+        checkSearchFilters.setCheckCategory(checkSearchFilters.getCheckCategory());
+        checkSearchFilters.setCheckName(checkSpec.getCheckName());
+        checkSearchFilters.setCheckTarget(rootChecksContainerSpec.getCheckTarget());
+        checkSearchFilters.setCheckType(rootChecksContainerSpec.getCheckType());
+        checkSearchFilters.setTimeScale(rootChecksContainerSpec.getCheckTimeScale());
+
+        if (checkSpec.isTableComparisonCheck()) {
+            AbstractComparisonCheckCategorySpec comparisonCheckCategorySpec = HierarchyNode.findNodeOfType(allNodesToCheck, AbstractComparisonCheckCategorySpec.class);
+            checkSearchFilters.setTableComparisonName(comparisonCheckCategorySpec.getComparisonName());
+        }
+
+        return checkSearchFilters;
+    }
+
+    /**
+     * Create a check search filter from a table search filter object, copying shared attributes.
+     * @param tableSearchFilters Source table search filter.
+     * @return Check search filter.
+     */
     public static CheckSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
         return new CheckSearchFilters() {{
             setConnection(tableSearchFilters.getConnection());

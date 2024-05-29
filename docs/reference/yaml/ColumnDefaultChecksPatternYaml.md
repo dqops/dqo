@@ -37,6 +37,7 @@ ___
 
 ## ColumnDefaultChecksPatternSpec
 The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns.
+ This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.
 
 
 
@@ -51,6 +52,8 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`priority`</span>|The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.|*integer*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Disables this data quality check configuration. The checks will not be activated.|*boolean*| | | |
+|<span class="no-wrap-code ">`description`</span>|The description (documentation) of this data quality check configuration.|*string*| | | |
 |<span class="no-wrap-code ">[`target`](./ColumnDefaultChecksPatternYaml.md#targetcolumnpatternspec)</span>|The target column filter that are filtering the column, table and connection on which the default checks are applied.|*[TargetColumnPatternSpec](./ColumnDefaultChecksPatternYaml.md#targetcolumnpatternspec)*| | | |
 |<span class="no-wrap-code ">[`profiling_checks`](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[ColumnProfilingCheckCategoriesSpec](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#columnmonitoringcheckcategoriesspec)</span>|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|*[ColumnMonitoringCheckCategoriesSpec](./TableYaml.md#columnmonitoringcheckcategoriesspec)*| | | |

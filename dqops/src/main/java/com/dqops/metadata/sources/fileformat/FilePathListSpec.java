@@ -143,6 +143,16 @@ public class FilePathListSpec extends AbstractList<String> implements HierarchyN
     }
 
     /**
+     * Clears the child node, setting a null value.
+     *
+     * @param childName Child name.
+     */
+    @Override
+    public void detachChildNode(Object childName) {
+        // do nothing
+    }
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.

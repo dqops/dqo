@@ -16,13 +16,8 @@
 package com.dqops.execution.sqltemplates.rendering;
 
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbReadMode;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
-import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
-import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -30,8 +25,6 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.sources.fileformat.FileFormatSpec;
-import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -119,50 +112,6 @@ public class JinjaTemplateRenderParameters {
         this.expectedValueAlias = expectedValueAlias;
         this.additionalFilters = additionalFilters;
         this.tableFromFiles = tableFromFiles;
-    }
-
-    /**
-     * Creates a template render parameters using trimmed spec objects copied from the parameters.
-     * Specification object trimming means that we make a clone of a table specification, but we are removing configuration of other checks to make the result json smaller.
-     * @param sensorRunParameters Sensor run parameters with connection, table, column, sensor parameters to copy (with trimming).
-     * @param sensorDefinitions Sensor definition specifications for the sensor itself and its provider sensor definition.
-     * @return Jinja template render parameters that will be forwarded to Jinja2.
-     */
-    public static JinjaTemplateRenderParameters createFromTrimmedObjects(SensorExecutionRunParameters sensorRunParameters,
-																		 SensorDefinitionFindResult sensorDefinitions) {
-        TableSpec tableSpec = sensorRunParameters.getTable();
-
-        JinjaTemplateRenderParameters result = new JinjaTemplateRenderParameters()
-        {{
-			setConnection(sensorRunParameters.getConnection().trim());
-			setTable(tableSpec.trim());
-            setTargetTable(tableSpec.getPhysicalTableName());
-			setColumn(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().trim() : null);
-			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
-			setParameters(sensorRunParameters.getSensorParameters());
-            setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
-            setEffectiveDataGroupings(sensorRunParameters.getDataGroupings() != null ? sensorRunParameters.getDataGroupings().truncateToColumns() : null);
-			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
-			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
-			setDialectSettings(sensorRunParameters.getDialectSettings());
-            setEffectiveTimeWindowFilter(sensorRunParameters.getTimeWindowFilter());
-            setActualValueAlias(sensorRunParameters.getActualValueAlias());
-            setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
-            setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
-        }};
-
-        DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
-        if(duckdbParametersSpec != null && duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.files)
-            && duckdbParametersSpec.getFilesFormatType() != null
-        ){
-            DuckdbFilesFormatType duckdbFilesFormatType = duckdbParametersSpec.getFilesFormatType();
-            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
-            if(duckdbFilesFormatType != null && fileFormatSpec != null && !fileFormatSpec.getFilePaths().isEmpty()){
-                result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbParametersSpec, tableSpec));
-            }
-        }
-
-        return result;
     }
 
     /**
