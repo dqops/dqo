@@ -48,16 +48,16 @@ const rewriteDimensions = (columnStatus: {
   return obj;
 };
 
-const prepareLabel = (label: string | undefined) => {
+const prepareLabel = (label: string | undefined, size: number) => {
   if (!label) return;
-  if (label.length > 20) {
-    return label.slice(0, 20) + '...';
+  if (label.length > size) {
+    return label.slice(0, size) + '...';
   }
   return label;
 };
 
 const getLabelsOverview = (labels: string[]) => {
-  return labels.map((x) => prepareLabel(x)).join(',');
+  return prepareLabel(labels.join(', '), 30);
 };
 
 const TableColumns = ({
