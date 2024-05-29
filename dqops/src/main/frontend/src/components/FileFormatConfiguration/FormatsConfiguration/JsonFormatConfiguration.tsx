@@ -8,6 +8,7 @@ import {
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow';
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean';
 import FormatConfigurationRenderer from '../FormatConfigurationRenderer';
+import ConfigurationItemRowCompression from './RowItem/ConfigurationItemRowCompression';
 
 type TJsonConfigurationProps = {
   configuration: JsonFileFormatSpec;
@@ -16,20 +17,26 @@ type TJsonConfigurationProps = {
 
 const compressionEnumOptions = [
   {
-    value: JsonFileFormatSpecCompressionEnum.auto,
-    label: JsonFileFormatSpecCompressionEnum.auto
+    value: JsonFileFormatSpecCompressionEnum.none,
+    label: JsonFileFormatSpecCompressionEnum.none + " (*.json)",
   },
   {
     value: JsonFileFormatSpecCompressionEnum.gzip,
-    label: JsonFileFormatSpecCompressionEnum.gzip
-  },
-  {
-    value: JsonFileFormatSpecCompressionEnum.none,
-    label: JsonFileFormatSpecCompressionEnum.none
+    label: JsonFileFormatSpecCompressionEnum.gzip + " (*.json.gz)",
   },
   {
     value: JsonFileFormatSpecCompressionEnum.zstd,
-    label: JsonFileFormatSpecCompressionEnum.zstd
+    label: JsonFileFormatSpecCompressionEnum.zstd + " (*.json.zst)",
+  },
+  {
+    value: JsonFileFormatSpecCompressionEnum.gzip + "_no_ext",
+    label: JsonFileFormatSpecCompressionEnum.gzip + "_no_ext (*.json)",
+    noCompressionExtension: true
+  },
+  {
+    value: JsonFileFormatSpecCompressionEnum.zstd + "_no_ext",
+    label: JsonFileFormatSpecCompressionEnum.zstd + "_no_ext (*.json)",
+    noCompressionExtension: true
   }
 ];
 
@@ -73,21 +80,6 @@ export default function JsonFormatConfiguration({
 }: TJsonConfigurationProps) {
   const jsonConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      {
-        label: 'Compression',
-        value: configuration?.compression,
-        onChange: (str) => {
-          onChangeConfiguration({
-            compression:
-              String(str).length > 0
-                ? (str as JsonFileFormatSpecCompressionEnum)
-                : undefined
-          });
-        },
-        isEnum: true,
-        options: [{ label: '', value: '' }, ...compressionEnumOptions],
-        defaultValue: ''
-      },
       {
         label: 'Date format',
         value: configuration?.dateformat,
@@ -187,9 +179,24 @@ export default function JsonFormatConfiguration({
   //wrapper file format options
   return (
     <FormatConfigurationRenderer
-      configuraitonStrings={jsonConfiguration}
+      configurationStrings={jsonConfiguration}
       configurationBooleans={jsonConfigurationBoolean}
       type="JSON"
-    />
+    >
+      <ConfigurationItemRowCompression
+          label='Compression'
+          value={configuration?.compression + (configuration?.no_compression_extension===true ? "_no_ext" : "")}
+          onChange={(str, no_compression_extension) => {
+            onChangeConfiguration({
+              compression:
+                String(str).length > 0
+                  ? (str as JsonFileFormatSpecCompressionEnum)
+                  : undefined, 
+              no_compression_extension: no_compression_extension
+            });
+          }}
+          options={[{ label: '', value: '' }, ...compressionEnumOptions]}
+        />
+    </FormatConfigurationRenderer>
   );
 }

@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbCompressionTypeOption;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -47,6 +48,10 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private CompressionType compression;
+
+    @JsonPropertyDescription("Whether the compression extension is present at the end of the file name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean noCompressionExtension;
 
     @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -112,7 +117,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
         tableOptionsFormatter.formatColumns("columns", tableSpec);
-        tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
+        tableOptionsFormatter.formatStringWhenSet(Fields.compression, DuckdbCompressionTypeOption.fromCompressionType(compression));
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
         tableOptionsFormatter.formatStringWhenSet(Fields.decimalSeparator, decimalSeparator);
         tableOptionsFormatter.formatStringWhenSet(Fields.delim, delim);
@@ -203,6 +208,23 @@ public class CsvFileFormatSpec extends AbstractSpec {
     public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
+    }
+
+    /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public Boolean getNoCompressionExtension() {
+        return noCompressionExtension;
+    }
+
+    /**
+     * Sets noCompressionExtension.
+     * @param noCompressionExtension noCompressionExtension.
+     */
+    public void setNoCompressionExtension(Boolean noCompressionExtension) {
+        setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
+        this.noCompressionExtension = noCompressionExtension;
     }
 
     /**

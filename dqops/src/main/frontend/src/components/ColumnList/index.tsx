@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { ColumnListModel, LabelModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { limitTextLength, useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 
@@ -72,7 +72,7 @@ function ColumnList({
   } = useDecodedParams();
 
   const getDimensionKey = () => {
-    if(loading || columns.length == 0){
+    if (loading || columns.length == 0) {
       return [];
     }
     const uniqueDimensions: string[] = [];
@@ -89,7 +89,7 @@ function ColumnList({
 
   const basicDimensionTypes = ['Completeness', 'Validity', 'Consistency'];
   const getBasicDimensions = () => {
-    if(loading || columns.length == 0){
+    if (loading || columns.length == 0) {
       return [];
     }
     return basicDimensionTypes;
@@ -113,8 +113,8 @@ function ColumnList({
 
     loading || columns.length == 0
       ? undefined
-      : { 
-          label: 'Data Quality KPI', 
+      : {
+          label: 'Data Quality KPI',
           value: 'data-quality-kpi',
           toRotate: true,
           className: 'tracking-wider'
@@ -139,23 +139,15 @@ function ColumnList({
     }
   ];
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
-    }
-    return label;
-  };
-
   const isEnd = columns.length < filters.pageSize;
 
   return (
     <div className="bg-white py-2">
       <div className="flex">
-        <div className="w-[200px]">
+        <div className="w-[200px] mr-3">
           <SectionWrapper
             title="Filter by labels"
-            className="text-xs w-[180px] mx-4 mb-4 mt-2 "
+            className="text-xs w-[200px] mx-4 mb-4 mt-2 "
           >
             {labels.map((label, index) => (
               <div
@@ -169,7 +161,8 @@ function ColumnList({
                 key={index}
                 onClick={() => onChangeLabels(index)}
               >
-                <span>{prepareLabel(label.label)}</span>({label.labels_count})
+                <span>{limitTextLength(label.label, 18)}</span>(
+                {label.labels_count})
               </div>
             ))}
           </SectionWrapper>
@@ -183,7 +176,12 @@ function ColumnList({
                   (item) =>
                     item?.label &&
                     item.value &&
-                    renderItem(item.label, item.value, item.toRotate, item.className)
+                    renderItem(
+                      item.label,
+                      item.value,
+                      item.toRotate,
+                      item.className
+                    )
                 )}
               </tr>
             </thead>
@@ -207,7 +205,7 @@ function ColumnList({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
-            { columns.length != 0 && 
+            {columns.length > 10 && (
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
@@ -220,8 +218,8 @@ function ColumnList({
                   })
                 }
               />
-            }
-            </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

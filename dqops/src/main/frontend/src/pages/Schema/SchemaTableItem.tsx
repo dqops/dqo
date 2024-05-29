@@ -7,7 +7,11 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getFirstLevelTableTab, useDecodedParams } from '../../utils';
+import {
+  getFirstLevelTableTab,
+  limitTextLength,
+  useDecodedParams
+} from '../../utils';
 import SchemaTableItemDimensions from './SchemaTableItemDimensions';
 
 type TTableWithSchema = TableListModel & { schema?: string };
@@ -100,16 +104,8 @@ export default function SchemaTableItem({
     return;
   };
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
-    }
-    return label;
-  };
-
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareLabel(x)).join(', ');
+    return labels.map((x) => limitTextLength(x, 20)).join(', ');
   };
 
   return (
@@ -141,8 +137,10 @@ export default function SchemaTableItem({
           onClick={() => goToTable(item, checkTypes)}
         />
       </td>
-      <td className="px-4 text-xs content-start pt-2">{item?.stage}</td>
-      <td className="px-4 text-xs content-start pt-2 max-w-50 break-all">
+      <td className="px-4 text-xs content-start pt-2 max-w-70 min-w-30 break-all">
+        {item?.stage}
+      </td>
+      <td className="px-4 text-xs content-start pt-2 max-w-100 min-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (

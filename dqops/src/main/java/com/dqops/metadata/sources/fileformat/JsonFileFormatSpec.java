@@ -41,6 +41,10 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private CompressionType compression;
 
+    @JsonPropertyDescription("Whether the compression extension is present at the end of the file name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Boolean noCompressionExtension;
+
     @JsonPropertyDescription("Whether strings representing integer values should be converted to a numerical type.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean convertStringsToIntegers;
@@ -141,6 +145,23 @@ public class JsonFileFormatSpec extends AbstractSpec {
     public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
+    }
+
+    /**
+     * Returns the accountName
+     * @return accountName.
+     */
+    public Boolean getNoCompressionExtension() {
+        return noCompressionExtension;
+    }
+
+    /**
+     * Sets noCompressionExtension.
+     * @param noCompressionExtension noCompressionExtension.
+     */
+    public void setNoCompressionExtension(Boolean noCompressionExtension) {
+        setDirtyIf(!Objects.equals(this.noCompressionExtension, noCompressionExtension));
+        this.noCompressionExtension = noCompressionExtension;
     }
 
     /**
