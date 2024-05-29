@@ -20,7 +20,7 @@ import { dateToString, formatNumber } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getDetectedDatatype,
-  prepareString,
+  limitTextLength,
   useDecodedParams
 } from '../../utils';
 import { MyData } from './TableColumnsConstans';
@@ -372,7 +372,7 @@ export default function TableColumnsBody({
             </div>
           </td>
           <td className="border-b border-gray-100 text-left px-4 py-2">
-            {prepareString(column.importedDatatype, 15)}
+            {limitTextLength(column.importedDatatype, 15)}
           </td>
           {getMidSectionItemsBasedOnWidth(column).map((item, jIndex) => (
             <td

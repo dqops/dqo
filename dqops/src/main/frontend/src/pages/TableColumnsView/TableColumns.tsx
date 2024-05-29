@@ -13,7 +13,7 @@ import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { getFirstLevelState } from '../../redux/selectors';
 import { CheckResultApi, ColumnApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { limitTextLength, useDecodedParams } from '../../utils';
 import ConfirmDialog from './ConfirmDialog';
 import TableColumnsBody from './TableColumnsBody';
 import { ITableColumnsProps, MyData, spec } from './TableColumnsConstans';
@@ -48,16 +48,8 @@ const rewriteDimensions = (columnStatus: {
   return obj;
 };
 
-const prepareLabel = (label: string | undefined) => {
-  if (!label) return;
-  if (label.length > 20) {
-    return label.slice(0, 20) + '...';
-  }
-  return label;
-};
-
 const getLabelsOverview = (labels: string[]) => {
-  return labels.map((x) => prepareLabel(x)).join(',');
+  return limitTextLength(labels.join(', '), 30);
 };
 
 const TableColumns = ({

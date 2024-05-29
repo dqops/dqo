@@ -5,10 +5,6 @@ import SvgIcon from '../SvgIcon';
 
 const pageSizeOptions = [
   {
-    label: 5,
-    value: 5
-  },
-  {
     label: 10,
     value: 10
   },

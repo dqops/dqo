@@ -3,6 +3,7 @@ import React from 'react';
 
 import { LabelModel } from '../../api';
 import SectionWrapper from '../Dashboard/SectionWrapper';
+import { limitTextLength } from '../../utils';
 type TLabel = LabelModel & { clicked: boolean };
 type TLabelSectionWrapper = {
   labels: TLabel[];
@@ -15,13 +16,6 @@ export default function LabelsSectionWrapper({
   onChangeLabels,
   className
 }: TLabelSectionWrapper) {
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 17) {
-      return label.slice(0, 17) + '...';
-    }
-    return label;
-  };
   return (
     <SectionWrapper
       title="Filter by labels"
@@ -39,7 +33,7 @@ export default function LabelsSectionWrapper({
           key={index}
           onClick={() => onChangeLabels(index)}
         >
-          <span>{prepareLabel(label.label)}</span>({label.labels_count})
+          <span>{limitTextLength(label.label, 17)}</span>({label.labels_count})
         </div>
       ))}
     </SectionWrapper>

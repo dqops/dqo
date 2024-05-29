@@ -11,7 +11,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   getFirstLevelColumnTab,
   getFirstLevelTableTab,
-  prepareString,
+  limitTextLength,
   useDecodedParams
 } from '../../utils';
 
@@ -133,7 +133,7 @@ export default function SchemaTableItem({
   };
 
   const getLabelsOverview = (labels: string[]) => {
-    return labels.map((x) => prepareString(x, 20)).join(',');
+    return labels.map((x) => limitTextLength(x, 20)).join(',');
   };
 
   return (
@@ -173,7 +173,7 @@ export default function SchemaTableItem({
         />
       </td>{' '}
       <td className="px-4 text-xs content-start pt-2">
-        {prepareString(item.type_snapshot?.column_type, 15)}
+        {limitTextLength(item.type_snapshot?.column_type, 15)}
       </td>
       <td className="px-4 text-xs content-start pt-2">
         {getLabelsOverview(item?.labels ?? [])}
@@ -190,41 +190,49 @@ export default function SchemaTableItem({
                 content={'Add a new connection and manage its settings'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="data_sources"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToColumn(item, CheckTypes.SOURCES)}
-                />
+                <div>
+                  <SvgIcon
+                    name="data_sources"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToColumn(item, CheckTypes.SOURCES)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
                 content={'Profiling'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="profiling"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToColumn(item, CheckTypes.PROFILING)}
-                />
+                <div>
+                  <SvgIcon
+                    name="profiling"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToColumn(item, CheckTypes.PROFILING)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
                 content={'Monitoring Checks'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="monitoring_checks"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToColumn(item, CheckTypes.MONITORING)}
-                />
+                <div>
+                  <SvgIcon
+                    name="monitoring_checks"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToColumn(item, CheckTypes.MONITORING)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
-                content={'Partitioned Checks'}
+                content={'Partition Checks'}
                 className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
               >
-                <SvgIcon
-                  name="partitioned_checks"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
-                />
+                <div>
+                  <SvgIcon
+                    name="partitioned_checks"
+                    className="w-5 h-5 cursor-pointer"
+                    onClick={() => goToColumn(item, CheckTypes.PARTITIONED)}
+                  />
+                </div>
               </Tooltip>
             </div>
           </td>

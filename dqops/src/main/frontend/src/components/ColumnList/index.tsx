@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { ColumnListModel, LabelModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { limitTextLength, useDecodedParams } from '../../utils';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import { Pagination } from '../Pagination';
 
@@ -139,14 +139,6 @@ function ColumnList({
     }
   ];
 
-  const prepareLabel = (label: string | undefined) => {
-    if (!label) return;
-    if (label.length > 20) {
-      return label.slice(0, 20) + '...';
-    }
-    return label;
-  };
-
   const isEnd = columns.length < filters.pageSize;
 
   return (
@@ -169,7 +161,7 @@ function ColumnList({
                 key={index}
                 onClick={() => onChangeLabels(index)}
               >
-                <span>{prepareLabel(label.label)}</span>({label.labels_count})
+                <span>{limitTextLength(label.label, 20)}</span>({label.labels_count})
               </div>
             ))}
           </SectionWrapper>
@@ -207,7 +199,7 @@ function ColumnList({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
-            { columns.length != 0 && 
+            { columns.length > 10 && 
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}
