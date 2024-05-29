@@ -175,7 +175,7 @@ export default function SchemaTableItem({
       <td className="px-4 text-xs content-start pt-2">
         {limitTextLength(item.type_snapshot?.column_type, 15)}
       </td>
-      <td className="px-4 text-xs content-start pt-2">
+      <td className="px-4 text-xs content-start pt-2 max-w-100 min-w-50 break-all">
         {getLabelsOverview(item?.labels ?? [])}
       </td>
       {item?.data_quality_status?.dimensions ? (
