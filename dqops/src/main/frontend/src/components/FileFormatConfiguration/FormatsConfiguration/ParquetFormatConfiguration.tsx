@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ParquetFileFormatSpec, ParquetFileFormatSpecCompressionEnum } from '../../../api';
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean';
 import FormatConfigurationRenderer from '../FormatConfigurationRenderer';
-import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow';
+import ConfigurationItemRowCompression from './RowItem/ConfigurationItemRowCompression';
 
 type TParquetConfigurationProps = {
   configuration: ParquetFileFormatSpec;
@@ -10,10 +10,6 @@ type TParquetConfigurationProps = {
 };
 
 const compressionEnumOptions = [
-  // {
-  //   value: JsonFileFormatSpecCompressionEnum.auto,
-  //   label: JsonFileFormatSpecCompressionEnum.auto
-  // },
   {
     value: ParquetFileFormatSpecCompressionEnum.none,
     label: ParquetFileFormatSpecCompressionEnum.none + " (*.parquet)",
@@ -61,26 +57,6 @@ export default function ParquetFormatConfiguration({
   onChangeConfiguration
 }: TParquetConfigurationProps) {
 
-  const parquetConfiguration: TConfigurationItemRow[] = useMemo(() => {
-    return [
-      {
-        label: 'Compression',
-        value: configuration?.compression,
-        onChange: (str) => {
-          onChangeConfiguration({
-            compression:
-              String(str).length > 0
-                ? (str as ParquetFileFormatSpecCompressionEnum)
-                : undefined
-          });
-        },
-        isEnum: true,
-        options: [{ label: '', value: '' }, ...compressionEnumOptions],
-        defaultValue: ''
-      }
-    ];
-  }, [configuration]);
-
   const parquetConfigurationBooleans: TConfigurationItemRowBoolean[] =
     useMemo(() => {
       return [
@@ -116,9 +92,24 @@ export default function ParquetFormatConfiguration({
 
   return (
     <FormatConfigurationRenderer
-      configuraitonStrings={parquetConfiguration}
+      configurationStrings={[]}
       configurationBooleans={parquetConfigurationBooleans}
       type="Parquet"
-    />
+    >
+      <ConfigurationItemRowCompression
+          label='Compression'
+          value={configuration?.compression + (configuration?.no_compression_extension===true ? "_no_ext" : "")}
+          onChange={(str, no_compression_extension) => {
+            onChangeConfiguration({
+              compression:
+                String(str).length > 0
+                  ? (str as ParquetFileFormatSpecCompressionEnum)
+                  : undefined, 
+              no_compression_extension: no_compression_extension
+            });
+          }}
+          options={[{ label: '', value: '' }, ...compressionEnumOptions]}
+        />
+    </FormatConfigurationRenderer>
   );
 }

@@ -198,20 +198,26 @@ public class FileFormatSpec extends AbstractSpec {
             return "";
         }
         String fileTypeExtension = "." + duckdbFilesFormatType;
-        if(noCompressionExtension){
-            return fileTypeExtension;
-        }
 
-        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null && getCsv().getCompression() != null){
-            return fileTypeExtension + getCsv().getCompression().getCompressionExtension();
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null){
+            CsvFileFormatSpec formatSpec = getCsv();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
         }
-        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null && getJson().getCompression() != null){
-            return fileTypeExtension + getJson().getCompression().getCompressionExtension();
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null){
+            JsonFileFormatSpec formatSpec = getJson();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
         }
-        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null && getParquet().getCompression() != null){
-            return fileTypeExtension + getParquet().getCompression().getCompressionExtension();
+        if(duckdbFilesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null){
+            ParquetFileFormatSpec formatSpec = getParquet();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
         }
-        return "";
+        return fileTypeExtension;
     }
 
     @Override
