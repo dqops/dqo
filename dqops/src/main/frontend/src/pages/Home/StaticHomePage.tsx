@@ -162,7 +162,7 @@ export default function StaticHomePage() {
 
             <p>Contact us for more information</p>
             <a
-              className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2"
+              className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2 text-center"
               href="https://dqops.com/contact-us/"
             >
               Contact us
