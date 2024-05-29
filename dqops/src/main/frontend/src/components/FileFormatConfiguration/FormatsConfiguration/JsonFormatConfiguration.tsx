@@ -29,12 +29,12 @@ const compressionEnumOptions = [
     label: JsonFileFormatSpecCompressionEnum.zstd + " (*.json.zst)",
   },
   {
-    value: JsonFileFormatSpecCompressionEnum.gzip,
+    value: JsonFileFormatSpecCompressionEnum.gzip + "_no_ext",
     label: JsonFileFormatSpecCompressionEnum.gzip + "_no_ext (*.json)",
     noCompressionExtension: true
   },
   {
-    value: JsonFileFormatSpecCompressionEnum.zstd,
+    value: JsonFileFormatSpecCompressionEnum.zstd + "_no_ext",
     label: JsonFileFormatSpecCompressionEnum.zstd + "_no_ext (*.json)",
     noCompressionExtension: true
   }

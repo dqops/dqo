@@ -31,22 +31,22 @@ const compressionEnumOptions = [
     label: ParquetFileFormatSpecCompressionEnum.lz4 + " (*.parquet.lz4)",
   },
   {
-    value: ParquetFileFormatSpecCompressionEnum.gzip,
+    value: ParquetFileFormatSpecCompressionEnum.gzip + "_no_ext",
     label: ParquetFileFormatSpecCompressionEnum.gzip + "_no_ext (*.parquet)",
     noCompressionExtension: true
   },
   {
-    value: ParquetFileFormatSpecCompressionEnum.zstd,
+    value: ParquetFileFormatSpecCompressionEnum.zstd + "_no_ext",
     label: ParquetFileFormatSpecCompressionEnum.zstd + "_no_ext (*.parquet)",
     noCompressionExtension: true
   },
   {
-    value: ParquetFileFormatSpecCompressionEnum.snappy,
+    value: ParquetFileFormatSpecCompressionEnum.snappy + "_no_ext",
     label: ParquetFileFormatSpecCompressionEnum.snappy + "_no_ext (*.parquet)",
     noCompressionExtension: true
   },
   {
-    value: ParquetFileFormatSpecCompressionEnum.lz4,
+    value: ParquetFileFormatSpecCompressionEnum.lz4 + "_no_ext",
     label: ParquetFileFormatSpecCompressionEnum.lz4 + "_no_ext  (*.parquet)",
     noCompressionExtension: true
   },
