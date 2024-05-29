@@ -339,7 +339,6 @@ spec:
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -364,7 +363,6 @@ spec:
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -589,7 +587,7 @@ spec:
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -609,7 +607,7 @@ spec:
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -928,7 +926,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -952,7 +949,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -1200,7 +1196,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -1219,7 +1215,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -1621,7 +1617,6 @@ spec:
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -1646,7 +1641,6 @@ spec:
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -1871,7 +1865,7 @@ spec:
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -1891,7 +1885,7 @@ spec:
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -2211,7 +2205,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -2235,7 +2228,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -2483,7 +2475,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -2502,7 +2494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -2904,7 +2896,6 @@ spec:
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -2929,7 +2920,6 @@ spec:
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -3154,7 +3144,7 @@ spec:
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -3174,7 +3164,7 @@ spec:
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -3494,7 +3484,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -3518,7 +3507,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -3766,7 +3754,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -3785,7 +3773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -4213,7 +4201,6 @@ spec:
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -4238,7 +4225,6 @@ spec:
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -4491,7 +4477,7 @@ spec:
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -4511,7 +4497,7 @@ spec:
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -4861,7 +4847,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -4885,7 +4870,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -5149,7 +5133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -5168,7 +5152,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -5600,7 +5584,6 @@ spec:
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -5625,7 +5608,6 @@ spec:
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -5878,7 +5860,7 @@ spec:
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -5898,7 +5880,7 @@ spec:
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END
@@ -6248,7 +6230,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                        AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                         AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                             THEN 1
                         ELSE 0
@@ -6272,7 +6253,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SUM(
                     CASE
                         WHEN (analyzed_table."target_column") IS NOT NULL
-                        AND TRIM(analyzed_table."target_column") <> ''
                         AND (analyzed_table."target_column") <> TRIM(analyzed_table."target_column")
                             THEN 1
                         ELSE 0
@@ -6536,7 +6516,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                        AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                        AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                             THEN 1
                         ELSE 0
                     END
@@ -6555,7 +6535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     CASE
                         WHEN (analyzed_table.[target_column]) IS NOT NULL
                         AND TRIM(analyzed_table.[target_column]) <> ''
-                        AND (analyzed_table.[target_column]) <> TRIM(analyzed_table.[target_column])
+                        AND DATALENGTH(analyzed_table.[target_column]) <> DATALENGTH(TRIM(analyzed_table.[target_column]))
                             THEN 1
                         ELSE 0
                     END

@@ -649,6 +649,7 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
         - floats
         - dates
         - datetimes
+        - timestamps
         - booleans
         - texts
         - mixed
