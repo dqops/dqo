@@ -534,15 +534,6 @@ public class SensorReadoutsNormalizedResult {
         Table table = this.getTable();
         Selection selection = Selection.withRange(0, table.rowCount());
 
-        if (!Strings.isNullOrEmpty(searchFilters.getConnection())) {
-            selection = selection.and(this.getConnectionNameColumn().isEqualTo(searchFilters.getConnection()));
-        }
-
-        if (searchFilters.getPhysicalTableName() != null) {
-            selection = selection.and(this.getSchemaNameColumn().isEqualTo(searchFilters.getPhysicalTableName().getSchemaName()));
-            selection = selection.and(this.getTableNameColumn().isEqualTo(searchFilters.getPhysicalTableName().getTableName()));
-        }
-
         if (!Strings.isNullOrEmpty(searchFilters.getColumn())) {
             selection = selection.and(this.getColumnNameColumn().isEqualTo(searchFilters.getColumn()));
         }

@@ -83,7 +83,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
             checkResultsSnapshot.ensureNRecentMonthsAreLoaded(null, null, 3);
             Table allResults = checkResultsSnapshot.getAllData();
             if (allResults == null) {
-                allResults = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(); // just an empty table
+                continue;
             }
 
             CheckResultsNormalizedResult checkResultsAllChecks = new CheckResultsNormalizedResult(allResults, false);
@@ -104,7 +104,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
 
                 // disable checks that had issues
                 try {
-                    CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(connectionSpec, checkSpec);
+                    CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(targetTableSpec, checkSpec);
                     Selection checkResultsSelection = checkResultsAllChecks.findResults(checkSearchFiltersForSingleCheck);
 
                     Table checkResultsForOneCheck = allResults.where(checkResultsSelection);
@@ -120,7 +120,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
                         continue; // only execution errors
                     }
 
-                    Selection resultsWithFailure = checkResultsSingleCheck.getSeverityColumn().isGreaterThan(0.0).andNot(notExecutionErrorResults);
+                    Selection resultsWithFailure = checkResultsSingleCheck.getSeverityColumn().isGreaterThan(0.0).and(notExecutionErrorResults);
                     if (resultsWithFailure.isEmpty()) {
                         continue; // no errors
                     }
@@ -181,7 +181,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
             checkResultsSnapshot.ensureNRecentMonthsAreLoaded(null, null, 3);
             Table allResults = checkResultsSnapshot.getAllData();
             if (allResults == null) {
-                allResults = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(); // just an empty table
+                continue;
             }
 
             CheckResultsNormalizedResult checkResultsAllChecks = new CheckResultsNormalizedResult(allResults, false);
@@ -201,7 +201,7 @@ public class CheckCalibrationServiceImpl implements CheckCalibrationService {
 
                 // apply changes
                 try {
-                    CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(connectionSpec, checkSpec);
+                    CheckSearchFilters checkSearchFiltersForSingleCheck = CheckSearchFilters.fromCheckSpecInstance(targetTableSpec, checkSpec);
                     Selection checkResultsSelection = checkResultsAllChecks.findResults(checkSearchFiltersForSingleCheck);
 
                     Table checkResultsForOneCheck = allResults.where(checkResultsSelection);

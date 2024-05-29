@@ -24,6 +24,7 @@ import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -425,17 +426,17 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
 
     /**
      * Creates a check search filter given an instance of a check inside a given connection.
-     * @param connectionSpec Connection specification where the check is applied.
+     * @param tableSpec Table where the check is applied.
      * @param checkSpec Check specification instance, must be inside a user home and the connection that was given.
      * @return Check search filters with all filters that identify the check.
      */
-    public static CheckSearchFilters fromCheckSpecInstance(ConnectionSpec connectionSpec, AbstractCheckSpec<?,?,?,?> checkSpec) {
+    public static CheckSearchFilters fromCheckSpecInstance(TableSpec tableSpec, AbstractCheckSpec<?,?,?,?> checkSpec) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
-        HierarchyNode[] allNodesToCheck = checkHierarchyId.getNodesOnPath(connectionSpec);
+        HierarchyNode[] allNodesToCheck = checkHierarchyId.getNodesOnPath(tableSpec);
         AbstractRootChecksContainerSpec rootChecksContainerSpec = HierarchyNode.findNodeOfType(allNodesToCheck, AbstractRootChecksContainerSpec.class);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnection(connectionSpec.getConnectionName());
+        checkSearchFilters.setConnection(checkHierarchyId.getConnectionName());
         PhysicalTableName physicalTableName = checkHierarchyId.getPhysicalTableName();
         checkSearchFilters.setPhysicalTableName(physicalTableName);
         checkSearchFilters.setFullTableName(physicalTableName.toTableSearchFilter());

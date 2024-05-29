@@ -75,7 +75,7 @@ const IncidentsTree = () => {
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
     } else if (path[3]) {
-      console.log(selectedConnection, path);
+//      console.log(selectedConnection, path);
       const connection = path[2] || '';
       const year = Number(path[3]);
       const month = Number(path[4]);

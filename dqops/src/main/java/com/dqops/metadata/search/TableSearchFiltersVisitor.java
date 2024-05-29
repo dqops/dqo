@@ -105,12 +105,11 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
-        if (Strings.isNullOrEmpty(schemaTableName)) {
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName == null) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
-        PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
         if (physicalTableName.isSearchPattern()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
         }
@@ -132,8 +131,6 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
-
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         if (labelsSearcherObject != null) {
@@ -154,9 +151,8 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        if (!Strings.isNullOrEmpty(schemaTableName)) {
-            PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
-
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName != null) {
             if (!tableWrapper.getPhysicalTableName().matchPattern(physicalTableName)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }

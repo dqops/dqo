@@ -102,7 +102,7 @@ export default function TableQualityStatusColumnCategory({
     categoryDimension: string
   ) => {
     const array = [...extendedChecks];
-    console.log(extendedChecks, checkType, categoryDimension)
+    // console.log(extendedChecks, checkType, categoryDimension)
     if (
       array.find(
         (item) =>
