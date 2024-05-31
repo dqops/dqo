@@ -32122,7 +32122,11 @@
         "compression" : {
           "type" : "string",
           "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.",
-          "enum" : [ "auto", "none", "gzip", "zstd" ]
+          "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+        },
+        "no_compression_extension" : {
+          "type" : "boolean",
+          "description" : "Whether the compression extension is present at the end of the file name."
         },
         "dateformat" : {
           "type" : "string",
@@ -33886,7 +33890,11 @@
         "compression" : {
           "type" : "string",
           "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.",
-          "enum" : [ "auto", "none", "gzip", "zstd" ]
+          "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+        },
+        "no_compression_extension" : {
+          "type" : "boolean",
+          "description" : "Whether the compression extension is present at the end of the file name."
         },
         "convert_strings_to_integers" : {
           "type" : "boolean",
@@ -34384,6 +34392,15 @@
         "union_by_name" : {
           "type" : "boolean",
           "description" : "Whether the columns of multiple schemas should be unified by name, rather than by position."
+        },
+        "compression" : {
+          "type" : "string",
+          "description" : "The compression type for the file.",
+          "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+        },
+        "no_compression_extension" : {
+          "type" : "boolean",
+          "description" : "Whether the compression extension is present at the end of the file name."
         }
       }
     },

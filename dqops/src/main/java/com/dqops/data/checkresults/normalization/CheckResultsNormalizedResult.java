@@ -54,7 +54,7 @@ public class CheckResultsNormalizedResult extends SensorReadoutsNormalizedResult
      * @param addColumWhenMissing Adds columns if they are missing.
      */
     public CheckResultsNormalizedResult(Table table, boolean addColumWhenMissing) {
-        super(table);
+        super(table, addColumWhenMissing);
         this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, addColumWhenMissing);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(table, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME, addColumWhenMissing);
         this.referenceConnectionColumn = TableColumnUtility.getOrAddTextColumn(table, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME, addColumWhenMissing);

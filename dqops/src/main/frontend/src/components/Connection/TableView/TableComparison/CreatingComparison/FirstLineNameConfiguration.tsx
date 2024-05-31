@@ -201,7 +201,7 @@ export default function FirstLineNameConfiguration({
           })
           .catch((error) => {
             if (error.response.status === 409) {
-              console.log(error);
+              // console.log(error);
               setComparisonAlreadyExist(true);
             }
           });
