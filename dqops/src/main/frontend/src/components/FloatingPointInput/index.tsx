@@ -1,9 +1,9 @@
-import React, { FocusEvent, ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FocusEvent, useState } from 'react';
 
 import clsx from 'clsx';
 
-import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
 
 interface INumberInputProps {
   className?: string;
@@ -71,7 +71,7 @@ const FloatingPointInput = ({
             {!!tooltipText && (
               <Tooltip
                 content={tooltipText}
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800"
               >
                 <div>
                   <SvgIcon

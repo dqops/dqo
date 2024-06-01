@@ -1,6 +1,9 @@
 import { Tooltip } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
-import { DuckdbParametersSpecStorageTypeEnum, SharedCredentialListModel } from '../../../api';
+import {
+  DuckdbParametersSpecStorageTypeEnum,
+  SharedCredentialListModel
+} from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 
@@ -63,7 +66,7 @@ const KeyValueProperties = ({
             <div className="flex gap-2 items-center">
               Virtual schema name
               <Tooltip
-                className="max-w-80 py-4 px-4 bg-gray-800 m-4"
+                className="max-w-80 py-2 px-2 bg-gray-800 m-4"
                 content="A name that will point to the prefix"
                 placement="top-start"
               >
@@ -80,7 +83,7 @@ const KeyValueProperties = ({
             <div className="flex gap-2 items-center">
               Path
               <Tooltip
-                className="max-w-80 py-4 px-4 bg-gray-800 m-4"
+                className="max-w-80 py-2 px-2 bg-gray-800 m-4"
                 content="The absolute path to a folder containing either files or another folder with files. E.g.: /usr/share/data/, s3://bucket_name/data/ or az://container_name/data/"
                 placement="top-start"
               >
@@ -103,9 +106,13 @@ const KeyValueProperties = ({
             index={index}
             properties={arr}
             valuePlaceholder={
-              storageType === DuckdbParametersSpecStorageTypeEnum.s3 ? "s3://bucket_name" : 
-              storageType === DuckdbParametersSpecStorageTypeEnum.azure ? "az://container_name" : 
-              storageType === DuckdbParametersSpecStorageTypeEnum.local ? "/path/to/folder" : undefined 
+              storageType === DuckdbParametersSpecStorageTypeEnum.s3
+                ? 's3://bucket_name'
+                : storageType === DuckdbParametersSpecStorageTypeEnum.azure
+                ? 'az://container_name'
+                : storageType === DuckdbParametersSpecStorageTypeEnum.local
+                ? '/path/to/folder'
+                : undefined
             }
             onChange={onChangeArr}
             sharedCredentials={sharedCredentials}

@@ -2,13 +2,13 @@ import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { ColumnComparisonModel, TableComparisonModel } from '../../../../api';
+import { CheckTypes } from '../../../../shared/routes';
+import Checkbox from '../../../Checkbox';
+import Select, { Option } from '../../../Select';
 import SvgIcon from '../../../SvgIcon';
 import ResultPanel from '../ResultPanel';
 import { itemsToRender } from './TableComparisonConstans';
 import { calculateColor, getComparisonResults } from './TableComparisonUtils';
-import Select, { Option } from '../../../Select';
-import { CheckTypes } from '../../../../shared/routes';
-import Checkbox from '../../../Checkbox';
 
 interface ITableComparisonBody {
   item: ColumnComparisonModel;
@@ -127,11 +127,13 @@ export default function TableComparisonOverwiewBody({
                   (x) => x.label === item.reference_column_name
                 )
               }
-              disabled={item.reference_column_name === undefined ||
+              disabled={
+                item.reference_column_name === undefined ||
                 item.reference_column_name.length === 0 ||
                 !columnOptions.find(
                   (x) => x.label === item.reference_column_name
-                )}
+                )
+              }
             />
             {calculateColor(
               item.compared_column_name ?? '',
@@ -152,7 +154,7 @@ export default function TableComparisonOverwiewBody({
               ) && (
                 <Tooltip
                   content="Previous comparison results are present, delete the results before comparing the tables again"
-                  className="pr-6 max-w-80 py-4 px-4 bg-gray-800"
+                  className="pr-6 max-w-80 py-2 px-2 bg-gray-800"
                 >
                   <div>
                     <SvgIcon

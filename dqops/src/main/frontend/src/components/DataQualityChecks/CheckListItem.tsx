@@ -49,11 +49,11 @@ interface ICheckListItemProps {
   comparisonName?: string;
   isDefaultEditing?: boolean;
   canUserRunChecks?: boolean;
-  isAlreadyDeleted ?: boolean
+  isAlreadyDeleted?: boolean;
 }
 
 interface IRefetchResultsProps {
-  fetchCheckResults : () => void
+  fetchCheckResults: () => void;
 }
 const CheckListItem = ({
   mode,
@@ -99,11 +99,13 @@ const CheckListItem = ({
     'error' | 'warning' | 'fatal' | ''
   >('');
 
-  const [refreshCheckObject, setRefreshCheckObject] = useState<IRefetchResultsProps | undefined>()
+  const [refreshCheckObject, setRefreshCheckObject] = useState<
+    IRefetchResultsProps | undefined
+  >();
 
   const onChangeRefrshCheckObject = (obj: IRefetchResultsProps) => {
-    setRefreshCheckObject(obj)
-  }
+    setRefreshCheckObject(obj);
+  };
   useEffect(() => {
     const localState = localStorage.getItem(
       `${checkTypes}_${check.check_name}`
@@ -164,7 +166,7 @@ const CheckListItem = ({
       ];
       setTabs(initTabs);
       if (typeof activeTab === 'string') {
-        setActiveTab(activeTab)
+        setActiveTab(activeTab);
       } else {
         setActiveTab(initTabs[0].value);
       }
@@ -183,13 +185,17 @@ const CheckListItem = ({
       closeExpand();
     }
 
-    let newRuleConfiguration : RuleThresholdsModel | undefined = configured ? {
-        ...check.rule
-    } : {};
-    
-    if (!check?.rule?.warning?.configured &&
-        !check?.rule?.error?.configured && 
-        !check?.rule?.fatal?.configured) {
+    let newRuleConfiguration: RuleThresholdsModel | undefined = configured
+      ? {
+          ...check.rule
+        }
+      : {};
+
+    if (
+      !check?.rule?.warning?.configured &&
+      !check?.rule?.error?.configured &&
+      !check?.rule?.fatal?.configured
+    ) {
       newRuleConfiguration = {
         ...newRuleConfiguration,
         error: {
@@ -286,8 +292,8 @@ const CheckListItem = ({
       `${checkTypes}_${check.check_name}_details`,
       newValue.toString()
     );
-    if(refreshCheckObject) {
-      refreshCheckObject.fetchCheckResults()
+    if (refreshCheckObject) {
+      refreshCheckObject.fetchCheckResults();
     }
     setShowDetails(newValue);
   };
@@ -340,101 +346,118 @@ const CheckListItem = ({
   return (
     <>
       <tr
-        className={clsx(expanded || showDetails ? '' :
-          ' border-b border-gray-100',
+        className={clsx(
+          expanded || showDetails ? '' : ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
           check?.disabled ? 'line-through' : ''
         )}
       >
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
-
-            {isAlreadyDeleted !== true && (mode ? (
-              <div className="w-5 h-5 block items-center">
-                {check?.configured && (
-                  <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
-                )}
-              </div>
-            ) : (
-              <div>
-                <Switch
-                  checked={!!check?.configured}
-                  checkedByDefault={!!check?.default_check}
-                  onChange={onChangeConfigured}
-                />
-              </div>
-            ))}
             {isAlreadyDeleted !== true &&
-            <Tooltip
-              content={!check?.disabled ? 'Enabled' : 'Disabled'}
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div className={clsx(userProfile.can_manage_data_sources===false ? "cursor-not-allowed pointer-events-none" : ""  )}>
-                <SvgIcon
-                  name={!check?.disabled ? 'stop' : 'disable'}
-                  className={clsx(
-                    'w-5 h-5 cursor-pointer',
-                    !check?.disabled ? 'text-gray-700' : 'text-red-700'
+              (mode ? (
+                <div className="w-5 h-5 block items-center">
+                  {check?.configured && (
+                    <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
                   )}
-                  onClick={() =>
-                    check?.configured &&
-                    handleChange({ disabled: !check?.disabled })
-                  }
-                />
-              </div>
-            </Tooltip>
-            }
-            {isAlreadyDeleted !== true &&
-            <Tooltip
-              content="Settings"
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div>
-                <SvgIcon
-                  name="cog"
-                  className="w-5 h-5 text-gray-700 cursor-pointer"
-                  onClick={openCheckSettings}
-                />
-              </div>
-            </Tooltip>
-            }
-            {isAlreadyDeleted !== true &&
-            <Tooltip
-              content={
-                check?.schedule_override?.disabled
-                  ? 'Schedule disabled'
-                  : 'Schedule enabled'
-              }
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div>
-                <SvgIcon
-                  name={
-                    check?.schedule_override?.disabled ? 'clock-off' : 'clock'
-                  }
+                </div>
+              ) : (
+                <div>
+                  <Switch
+                    checked={!!check?.configured}
+                    checkedByDefault={!!check?.default_check}
+                    onChange={onChangeConfigured}
+                  />
+                </div>
+              ))}
+            {isAlreadyDeleted !== true && (
+              <Tooltip
+                content={!check?.disabled ? 'Enabled' : 'Disabled'}
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div
                   className={clsx(
-                    'w-[18px] h-[18px] cursor-pointer',
-                    check?.schedule_override ? 'text-gray-700' : 'font-bold',
-                    check?.schedule_override?.disabled ? 'line-through' : ''
+                    userProfile.can_manage_data_sources === false
+                      ? 'cursor-not-allowed pointer-events-none'
+                      : ''
                   )}
-                  strokeWidth={check?.schedule_override ? 4 : 2}
-                />
-              </div>
-            </Tooltip>
-            }
+                >
+                  <SvgIcon
+                    name={!check?.disabled ? 'stop' : 'disable'}
+                    className={clsx(
+                      'w-5 h-5 cursor-pointer',
+                      !check?.disabled ? 'text-gray-700' : 'text-red-700'
+                    )}
+                    onClick={() =>
+                      check?.configured &&
+                      handleChange({ disabled: !check?.disabled })
+                    }
+                  />
+                </div>
+              </Tooltip>
+            )}
+            {isAlreadyDeleted !== true && (
+              <Tooltip
+                content="Settings"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div>
+                  <SvgIcon
+                    name="cog"
+                    className="w-5 h-5 text-gray-700 cursor-pointer"
+                    onClick={openCheckSettings}
+                  />
+                </div>
+              </Tooltip>
+            )}
+            {isAlreadyDeleted !== true && (
+              <Tooltip
+                content={
+                  check?.schedule_override?.disabled
+                    ? 'Schedule disabled'
+                    : 'Schedule enabled'
+                }
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div>
+                  <SvgIcon
+                    name={
+                      check?.schedule_override?.disabled ? 'clock-off' : 'clock'
+                    }
+                    className={clsx(
+                      'w-[18px] h-[18px] cursor-pointer',
+                      check?.schedule_override ? 'text-gray-700' : 'font-bold',
+                      check?.schedule_override?.disabled ? 'line-through' : ''
+                    )}
+                    strokeWidth={check?.schedule_override ? 4 : 2}
+                  />
+                </div>
+              </Tooltip>
+            )}
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
-              isDefaultEditing !== true && isAlreadyDeleted !== true && (
+              isDefaultEditing !== true &&
+              isAlreadyDeleted !== true && (
                 <Tooltip
                   content="Run check"
-                  className="max-w-80 py-4 px-4 bg-gray-800"
+                  className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
                 >
                   <div>
                     <SvgIcon
                       name="play"
-                      className={clsx("h-[18px]", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
-                      onClick={canUserRunChecks!==false && (check?.configured || check?.default_check) ? onRunCheck : undefined}
+                      className={clsx(
+                        'h-[18px]',
+                        canUserRunChecks === false
+                          ? 'text-gray-500 cursor-not-allowed'
+                          : 'text-primary cursor-pointer'
+                      )}
+                      onClick={
+                        canUserRunChecks !== false &&
+                        (check?.configured || check?.default_check)
+                          ? onRunCheck
+                          : undefined
+                      }
                     />
                   </div>
                 </Tooltip>
@@ -442,7 +465,7 @@ const CheckListItem = ({
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
               <Tooltip
                 content="Waiting"
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon
@@ -456,7 +479,7 @@ const CheckListItem = ({
               job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
               <Tooltip
                 content="Running"
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon
@@ -469,9 +492,14 @@ const CheckListItem = ({
             {isDefaultEditing !== true && (
               <Tooltip
                 content="Results"
-                className="max-w-80 py-4 px-4 bg-gray-800"
-              > 
-                <div className={clsx("w-5 h-5", isAlreadyDeleted === true ? "pl-[129px] pr-11" : "")}>
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div
+                  className={clsx(
+                    'w-5 h-5',
+                    isAlreadyDeleted === true ? 'pl-[129px] pr-11' : ''
+                  )}
+                >
                   <SvgIcon
                     name="rectangle-list"
                     className="text-gray-700 h-5 cursor-pointer"
@@ -480,26 +508,26 @@ const CheckListItem = ({
                 </div>
               </Tooltip>
             )}
-            {isAlreadyDeleted !== true &&
-            <Tooltip
-              content={check.help_text}
-              className="max-w-80 py-4 px-4 bg-gray-800"
-            >
-              <div className="w-5 h-5">
-                <SvgIcon
-                  name="info"
-                  className="w-5 h-5 text-gray-700 cursor-pointer"
-                />
-              </div>
-            </Tooltip>
-            }
+            {isAlreadyDeleted !== true && (
+              <Tooltip
+                content={check.help_text}
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div className="w-5 h-5">
+                  <SvgIcon
+                    name="info"
+                    className="w-5 h-5 text-gray-700 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
+            )}
             {checkResult && (
               <div className="flex space-x-1">
                 {checkResult?.statuses?.map((status, index) => (
                   <Tooltip
                     key={index}
                     content={
-                      <div className="text-gray-900">
+                      <div className="text-white">
                         <div>Sensor value: {checkResult?.results?.[index]}</div>
                         <div>
                           Most severe status:{' '}
@@ -533,7 +561,7 @@ const CheckListItem = ({
                         </div>
                       </div>
                     }
-                    className="max-w-80 py-4 px-4 bg-white shadow-2xl"
+                    className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
                   >
                     <div className={clsx('w-3 h-3', getColor(status))} />
                   </Tooltip>
@@ -541,30 +569,39 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>{check.display_name !== '' ? (check.display_name ?? check.check_name) : check.check_name} {
-                check.friendly_name &&
-                <span className="text-xxs">
-                  ({check.friendly_name })
-                </span>
-              }</p>
+              <p>
+                {check.display_name !== ''
+                  ? check.display_name ?? check.check_name
+                  : check.check_name}{' '}
+                {check.friendly_name && (
+                  <span className="text-xxs">({check.friendly_name})</span>
+                )}
+              </p>
               <p className="absolute left-0 top-full text-xxs">
                 {check.quality_dimension}
               </p>
             </div>
           </div>
         </td>
-        <div className='flex justify-center items-center mt-6 gap-x-6'>
-        {check.comments ? <SvgIcon name='comment' className='w-4 h-4 ' onClick={() => openCheckSettings('comments')}/> : null}
-        {check.configuration_requirements_errors && check.configuration_requirements_errors?.length !== 0 ? 
-          <Tooltip
-                content={check.configuration_requirements_errors?.map((x) => x)}
-                className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
-                <div>
-                  <SvgIcon name='warning' className='w-5 h-5'/>
-                </div>
-          </Tooltip>
-        : null }
-          
+        <div className="flex justify-center items-center mt-6 gap-x-6">
+          {check.comments ? (
+            <SvgIcon
+              name="comment"
+              className="w-4 h-4 "
+              onClick={() => openCheckSettings('comments')}
+            />
+          ) : null}
+          {check.configuration_requirements_errors &&
+          check.configuration_requirements_errors?.length !== 0 ? (
+            <Tooltip
+              content={check.configuration_requirements_errors?.map((x) => x)}
+              className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
+            >
+              <div>
+                <SvgIcon name="warning" className="w-5 h-5" />
+              </div>
+            </Tooltip>
+          ) : null}
         </div>
         <td className="py-2 px-4 flex items-end justify-end">
           <div className=" space-x-2">
@@ -581,71 +618,69 @@ const CheckListItem = ({
           </div>
         </td>
         <td className="py-2 px-4 bg-yellow-100 relative">
-        {isAlreadyDeleted !== true &&
-          <CheckRuleItem
-            disabled={isDisabled}
-            parameters={check?.rule?.warning}
-            onChange={(warning) =>
-              handleChange({
-                rule: {
-                  ...check.rule,
-                  warning
-                }
-              })
-            }
-            type="warning"
-            onUpdate={onUpdate}
-            changeEnabled={changeEnabled}
-            configuredType={enabledType}
-          />
-        }
+          {isAlreadyDeleted !== true && (
+            <CheckRuleItem
+              disabled={isDisabled}
+              parameters={check?.rule?.warning}
+              onChange={(warning) =>
+                handleChange({
+                  rule: {
+                    ...check.rule,
+                    warning
+                  }
+                })
+              }
+              type="warning"
+              onUpdate={onUpdate}
+              changeEnabled={changeEnabled}
+              configuredType={enabledType}
+            />
+          )}
           <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
-          {isAlreadyDeleted !== true &&
-          <CheckRuleItem
-            disabled={isDisabled}
-            parameters={check?.rule?.error}
-            onChange={(error) =>
-              handleChange({
-                rule: {
-                  ...check?.rule,
-                  error
-                }
-              })
-            }
-            type="error"
-            onUpdate={onUpdate}
-            changeEnabled={changeEnabled}
-            configuredType={enabledType}
-          />
-        }
+          {isAlreadyDeleted !== true && (
+            <CheckRuleItem
+              disabled={isDisabled}
+              parameters={check?.rule?.error}
+              onChange={(error) =>
+                handleChange({
+                  rule: {
+                    ...check?.rule,
+                    error
+                  }
+                })
+              }
+              type="error"
+              onUpdate={onUpdate}
+              changeEnabled={changeEnabled}
+              configuredType={enabledType}
+            />
+          )}
         </td>
         <td className="py-2 px-4 bg-red-100 h-18">
-        {isAlreadyDeleted !== true &&
-          <CheckRuleItem
-            disabled={isDisabled}
-            parameters={check?.rule?.fatal}
-            onChange={(fatal) =>
-              handleChange({
-                rule: {
-                  ...check?.rule,
-                  fatal
-                }
-              })
-            }
-            type="fatal"
-            onUpdate={onUpdate}
-            changeEnabled={changeEnabled}
-            configuredType={enabledType}
-          />
-        }
+          {isAlreadyDeleted !== true && (
+            <CheckRuleItem
+              disabled={isDisabled}
+              parameters={check?.rule?.fatal}
+              onChange={(fatal) =>
+                handleChange({
+                  rule: {
+                    ...check?.rule,
+                    fatal
+                  }
+                })
+              }
+              type="fatal"
+              onUpdate={onUpdate}
+              changeEnabled={changeEnabled}
+              configuredType={enabledType}
+            />
+          )}
         </td>
       </tr>
       {expanded && (
-        <tr className={clsx(
-        ' border-b border-gray-100'
-        )}>
+        <tr className={clsx(' border-b border-gray-100')}>
           <td colSpan={6}>
             <CheckSettings
               activeTab={activeTab}
@@ -660,9 +695,7 @@ const CheckListItem = ({
         </tr>
       )}
       {showDetails && (
-        <tr className={clsx(
-          ' border-b border-gray-100'
-          )}>
+        <tr className={clsx(' border-b border-gray-100')}>
           <td colSpan={6}>
             <CheckDetails
               checkTypes={checkTypes}
