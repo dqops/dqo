@@ -84,32 +84,42 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   useEffect(() => {
     if (activeTab) {
-      console.log(
-        activeTab &&
-          Object.values(ROUTES.PATTERNS).find((value) => activeTab.match(value))
-      );
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
-      // const { import_schema } = qs.parse(location.search);
+      console.log(activeUrl, location.pathname, activeTab);
       if (activeUrl && activeUrl !== location.pathname) {
-        // if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
         history.push(activeUrl);
-        // history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
-        // }
-      }
-      if (pageTabs.length === 0) {
-        console.log(
-          Object.values(ROUTES.PATTERNS).find((value) => activeTab.match(value))
-        );
-        dispatch(addFirstLevelTab(checkTypes, activeTab));
       }
     }
-  }, [activeTab]);
-  console.log(
-    Object.values(ROUTES.PATTERNS).filter((value) =>
-      location.pathname.match(value)
-    )
-  );
-  console.log(activeTab, pageTabs, location.pathname);
+
+    const foundRoute = Object.values(ROUTES.PATTERNS).find(
+      (value) => value === match.path
+    );
+    if (pageTabs.length === 0 && foundRoute) {
+      const params = match.params as any;
+      console.log(params, foundRoute);
+      if (params?.tab) {
+        let newRoute = foundRoute;
+        let routeWithoutTab = foundRoute;
+        const segments = foundRoute.split('/');
+        if (segments[segments.length - 1] === ':tab') {
+          routeWithoutTab = segments.slice(0, -1).join('/');
+        }
+        Object.entries(params).forEach(([key, value]) => {
+          newRoute = newRoute.replace(`:${key}`, String(value));
+          routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
+        });
+        dispatch(
+          addFirstLevelTab(checkTypes, {
+            url: newRoute,
+            value: routeWithoutTab,
+            label:
+              routeWithoutTab.split('/')[routeWithoutTab.split('/').length - 1]
+          })
+        );
+        setActiveTab(newRoute);
+      }
+    }
+  }, [pageTabs, activeTab, location.pathname]);
 
   // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url.
 
