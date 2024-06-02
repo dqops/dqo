@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import SvgIcon from '../SvgIcon';
 import { Dialog, Tooltip } from '@material-tailwind/react';
-import LabelsView from '../Connection/LabelsView';
 import Button from '../Button';
+import LabelsView from '../Connection/LabelsView';
+import SvgIcon from '../SvgIcon';
 
 interface IStringListFieldProps {
   className?: string;
@@ -38,7 +38,7 @@ const StringListField = ({
 
   const handleChange = useCallback((values: string[]) => {
     setLabels(values);
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -49,7 +49,7 @@ const StringListField = ({
             {!!tooltipText && (
               <Tooltip
                 content={tooltipText}
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800"
               >
                 <div>
                   <SvgIcon

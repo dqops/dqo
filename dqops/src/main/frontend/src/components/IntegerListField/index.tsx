@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import SvgIcon from '../SvgIcon';
 import { Dialog, Tooltip } from '@material-tailwind/react';
 import Button from '../Button';
 import NumbersView from '../Connection/NumbersView';
+import SvgIcon from '../SvgIcon';
 
 interface IIntegerListFieldProps {
   className?: string;
@@ -32,7 +32,7 @@ const IntegerListField = ({
             {!!tooltipText && (
               <Tooltip
                 content={tooltipText}
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800"
               >
                 <div>
                   <SvgIcon

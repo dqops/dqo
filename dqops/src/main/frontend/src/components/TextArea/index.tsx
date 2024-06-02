@@ -46,11 +46,11 @@ const TextArea = ({
         htmlFor={name}
         className="block text-sm font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
       >
-        <span className='text-sm'>{label}</span>
+        <span className="text-sm">{label}</span>
         {!!tooltipText && (
           <Tooltip
             content={tooltipText}
-            className="max-w-80 py-4 px-4 bg-gray-800"
+            className="max-w-80 py-2 px-2 bg-gray-800"
           >
             <div>
               <SvgIcon
