@@ -71,7 +71,6 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
       history.push(`/${checkTypes}`);
     }
     dispatch(closeFirstLevelTab(checkTypes, value));
-    // console.log(value)
   };
 
   const tabOptions = useMemo(() => {
@@ -85,7 +84,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
-      console.log(activeUrl, location.pathname, activeTab);
+
       if (activeUrl && activeUrl !== location.pathname) {
         history.push(activeUrl);
       }
@@ -96,7 +95,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
     );
     if (pageTabs.length === 0 && foundRoute) {
       const params = match.params as any;
-      console.log(params, foundRoute);
+
       if (params?.tab) {
         let newRoute = foundRoute;
         let routeWithoutTab = foundRoute;
