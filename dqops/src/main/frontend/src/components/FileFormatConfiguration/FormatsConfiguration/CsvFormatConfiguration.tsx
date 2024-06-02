@@ -7,6 +7,7 @@ import {
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow';
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean';
 import FormatConfigurationRenderer from '../FormatConfigurationRenderer';
+import ConfigurationItemRowCompression from './RowItem/ConfigurationItemRowCompression';
 
 type TCsvConfigurationProps = {
   configuration: CsvFileFormatSpec;
@@ -15,20 +16,26 @@ type TCsvConfigurationProps = {
 
 const compressionEnumOptions = [
   {
-    value: CsvFileFormatSpecCompressionEnum.auto,
-    label: CsvFileFormatSpecCompressionEnum.auto
+    value: CsvFileFormatSpecCompressionEnum.none,
+    label: CsvFileFormatSpecCompressionEnum.none + " (*.csv)",
   },
   {
     value: CsvFileFormatSpecCompressionEnum.gzip,
-    label: CsvFileFormatSpecCompressionEnum.gzip
-  },
-  {
-    value: CsvFileFormatSpecCompressionEnum.none,
-    label: CsvFileFormatSpecCompressionEnum.none
+    label: CsvFileFormatSpecCompressionEnum.gzip + " (*.csv.gz)",
   },
   {
     value: CsvFileFormatSpecCompressionEnum.zstd,
-    label: CsvFileFormatSpecCompressionEnum.zstd
+    label: CsvFileFormatSpecCompressionEnum.zstd + " (*.csv.zst)",
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.gzip + "_no_ext",
+    label: CsvFileFormatSpecCompressionEnum.gzip + "_no_ext (*.csv)",
+    noCompressionExtension: true
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.zstd + "_no_ext",
+    label: CsvFileFormatSpecCompressionEnum.zstd + "_no_ext (*.csv)",
+    noCompressionExtension: true
   }
 ];
 
@@ -53,21 +60,6 @@ export default function CsvFormatConfiguration({
 }: TCsvConfigurationProps) {
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      {
-        label: 'Compression',
-        value: configuration?.compression,
-        onChange: (str) => {
-          onChangeConfiguration({
-            compression:
-              String(str).length > 0
-                ? (str as CsvFileFormatSpecCompressionEnum)
-                : undefined
-          });
-        },
-        isEnum: true,
-        options: [{ label: '', value: '' }, ...compressionEnumOptions],
-        defaultValue: ''
-      },
       {
         label: 'Date format',
         value: configuration?.dateformat,
@@ -173,10 +165,28 @@ export default function CsvFormatConfiguration({
     }, [configuration]);
 
   return (
-    <FormatConfigurationRenderer
-      configuraitonStrings={csvConfiguration}
-      configurationBooleans={csvConfigurationBoolean}
-      type="CSV"
-    />
+    <>
+      <FormatConfigurationRenderer
+        configurationStrings={csvConfiguration}
+        configurationBooleans={csvConfigurationBoolean}
+        type="CSV"
+      >
+        <ConfigurationItemRowCompression
+          label='Compression'
+          value={configuration?.compression + (configuration?.no_compression_extension===true ? "_no_ext" : "")}
+          onChange={(str, no_compression_extension) => {
+            onChangeConfiguration({
+              compression:
+                String(str).length > 0
+                  ? (str as CsvFileFormatSpecCompressionEnum)
+                  : undefined, 
+              no_compression_extension: no_compression_extension
+            });
+          }}
+          options={[{ label: '', value: '' }, ...compressionEnumOptions]}
+        />
+      </FormatConfigurationRenderer>
+    </>
+    
   );
 }

@@ -18,6 +18,8 @@ class JsonFileFormatSpec:
         auto_detect (Union[Unset, bool]): Whether to auto-detect detect the names of the keys and data types of the
             values automatically.
         compression (Union[Unset, CompressionType]):
+        no_compression_extension (Union[Unset, bool]): Whether the compression extension is present at the end of the
+            file name.
         convert_strings_to_integers (Union[Unset, bool]): Whether strings representing integer values should be
             converted to a numerical type.
         dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
@@ -36,6 +38,7 @@ class JsonFileFormatSpec:
 
     auto_detect: Union[Unset, bool] = UNSET
     compression: Union[Unset, CompressionType] = UNSET
+    no_compression_extension: Union[Unset, bool] = UNSET
     convert_strings_to_integers: Union[Unset, bool] = UNSET
     dateformat: Union[Unset, str] = UNSET
     filename: Union[Unset, bool] = UNSET
@@ -55,6 +58,7 @@ class JsonFileFormatSpec:
         if not isinstance(self.compression, Unset):
             compression = self.compression.value
 
+        no_compression_extension = self.no_compression_extension
         convert_strings_to_integers = self.convert_strings_to_integers
         dateformat = self.dateformat
         filename = self.filename
@@ -80,6 +84,8 @@ class JsonFileFormatSpec:
             field_dict["auto_detect"] = auto_detect
         if compression is not UNSET:
             field_dict["compression"] = compression
+        if no_compression_extension is not UNSET:
+            field_dict["no_compression_extension"] = no_compression_extension
         if convert_strings_to_integers is not UNSET:
             field_dict["convert_strings_to_integers"] = convert_strings_to_integers
         if dateformat is not UNSET:
@@ -117,6 +123,8 @@ class JsonFileFormatSpec:
         else:
             compression = CompressionType(_compression)
 
+        no_compression_extension = d.pop("no_compression_extension", UNSET)
+
         convert_strings_to_integers = d.pop("convert_strings_to_integers", UNSET)
 
         dateformat = d.pop("dateformat", UNSET)
@@ -152,6 +160,7 @@ class JsonFileFormatSpec:
         json_file_format_spec = cls(
             auto_detect=auto_detect,
             compression=compression,
+            no_compression_extension=no_compression_extension,
             convert_strings_to_integers=convert_strings_to_integers,
             dateformat=dateformat,
             filename=filename,

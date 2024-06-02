@@ -118,12 +118,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
-        if (Strings.isNullOrEmpty(schemaTableName)) {
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName == null) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
-        PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
         if (physicalTableName.isSearchPattern()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
         }
@@ -145,13 +144,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getFullTableName();
-
-        if (Strings.isNullOrEmpty(schemaTableName)) {
+        PhysicalTableName physicalTableName = this.filters.getPhysicalTableName();
+        if (physicalTableName == null) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
-        PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
         if (physicalTableName.isSearchPattern()) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // we need to iterate anyway
         }
@@ -313,7 +310,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         String qualityDimensionFilter = this.filters.getQualityDimension();
         if (!Strings.isNullOrEmpty(qualityDimensionFilter)) {
-            String qualityDimension = abstractCheckSpec.getQualityDimension();
+            String qualityDimension = abstractCheckSpec.getEffectiveDataQualityDimension();
             if (!StringPatternComparer.matchSearchPattern(qualityDimension, qualityDimensionFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }

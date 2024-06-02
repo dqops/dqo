@@ -1,6 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
-const renderItem = (label: string, key: string, toRotate?: boolean, className?: string) => {
+const renderItem = (
+  label: string,
+  key: string,
+  toRotate?: boolean,
+  className?: string
+) => {
   const styles = {
     rotate270: {
       transform: 'rotate(270deg)'
@@ -11,16 +16,13 @@ const renderItem = (label: string, key: string, toRotate?: boolean, className?: 
     absoluteBottomLeft: {
       position: 'absolute',
       bottom: -4,
-      left: 30
+      left: 25
     }
   };
 
   return (
     <th
-      className={clsx(
-        "px-4 text-xs",
-        toRotate ? 'items-start' : 'items-end'
-      )}
+      className={clsx('px-4 text-xs', toRotate ? 'items-start' : 'items-end')}
       key={key}
     >
       <div
@@ -32,7 +34,7 @@ const renderItem = (label: string, key: string, toRotate?: boolean, className?: 
         <span
           className={clsx(
             'inline-block text-xs',
-            toRotate ? 'rotate-90 origin-bottom-left' : '',
+            toRotate ? 'rotate-90 origin-bottom-left' : 'font-bold',
             label === 'Actions' ? 'ml-6' : '',
             className ? className : ''
           )}

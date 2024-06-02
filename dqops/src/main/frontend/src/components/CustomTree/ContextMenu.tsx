@@ -69,7 +69,7 @@ const ContextMenu = ({
     filter?: CheckSearchFilters,
     value?: TimeWindowFilterParameters
   ) => {
-    console.log(filter, value);
+    // console.log(filter, value);
     runPartitionedChecks({
       check_search_filters: filter,
       time_window_filter: value

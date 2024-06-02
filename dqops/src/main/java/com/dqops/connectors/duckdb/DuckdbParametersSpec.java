@@ -23,7 +23,6 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.dqops.metadata.sources.fileformat.CompressionType;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
@@ -504,18 +503,35 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Whether the compression option is set to gzip.
-     * @return Whether the compression option is set to gzip.
+     * Returns the file format extension. The compression type is included when "no_extension" is not set.
+     * @return the file format extension. The compression type is included when "no_extension" is not set.
      */
     @JsonIgnore
-    public boolean isSetGzipCompression(){
-        if(filesFormatType != null){
-            switch(filesFormatType){
-                case csv: return getCsv() != null && getCsv().getCompression() != null && getCsv().getCompression().equals(CompressionType.gzip);
-                case json: return getJson() != null && getJson().getCompression() != null && getJson().getCompression().equals(CompressionType.gzip);
+    public String getFullExtension(){
+        if(filesFormatType == null) {
+            return "";
+        }
+        String fileTypeExtension = "." + filesFormatType;
+
+        if(filesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null){
+            CsvFileFormatSpec formatSpec = getCsv();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
             }
         }
-        return false;
+        if(filesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null){
+            JsonFileFormatSpec formatSpec = getJson();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        if(filesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null){
+            ParquetFileFormatSpec formatSpec = getParquet();
+            if(formatSpec.getCompression() != null && formatSpec.getNoCompressionExtension() != null && !formatSpec.getNoCompressionExtension()){
+                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+            }
+        }
+        return fileTypeExtension;
     }
 
     /**

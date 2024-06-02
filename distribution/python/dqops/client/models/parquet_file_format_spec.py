@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.compression_type import CompressionType
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ParquetFileFormatSpec")
@@ -20,6 +21,9 @@ class ParquetFileFormatSpec:
         hive_partitioning (Union[Unset, bool]): Whether or not to interpret the path as a hive partitioned path.
         union_by_name (Union[Unset, bool]): Whether the columns of multiple schemas should be unified by name, rather
             than by position.
+        compression (Union[Unset, CompressionType]):
+        no_compression_extension (Union[Unset, bool]): Whether the compression extension is present at the end of the
+            file name.
     """
 
     binary_as_string: Union[Unset, bool] = UNSET
@@ -27,6 +31,8 @@ class ParquetFileFormatSpec:
     file_row_number: Union[Unset, bool] = UNSET
     hive_partitioning: Union[Unset, bool] = UNSET
     union_by_name: Union[Unset, bool] = UNSET
+    compression: Union[Unset, CompressionType] = UNSET
+    no_compression_extension: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -35,6 +41,11 @@ class ParquetFileFormatSpec:
         file_row_number = self.file_row_number
         hive_partitioning = self.hive_partitioning
         union_by_name = self.union_by_name
+        compression: Union[Unset, str] = UNSET
+        if not isinstance(self.compression, Unset):
+            compression = self.compression.value
+
+        no_compression_extension = self.no_compression_extension
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,6 +60,10 @@ class ParquetFileFormatSpec:
             field_dict["hive_partitioning"] = hive_partitioning
         if union_by_name is not UNSET:
             field_dict["union_by_name"] = union_by_name
+        if compression is not UNSET:
+            field_dict["compression"] = compression
+        if no_compression_extension is not UNSET:
+            field_dict["no_compression_extension"] = no_compression_extension
 
         return field_dict
 
@@ -65,12 +80,23 @@ class ParquetFileFormatSpec:
 
         union_by_name = d.pop("union_by_name", UNSET)
 
+        _compression = d.pop("compression", UNSET)
+        compression: Union[Unset, CompressionType]
+        if isinstance(_compression, Unset):
+            compression = UNSET
+        else:
+            compression = CompressionType(_compression)
+
+        no_compression_extension = d.pop("no_compression_extension", UNSET)
+
         parquet_file_format_spec = cls(
             binary_as_string=binary_as_string,
             filename=filename,
             file_row_number=file_row_number,
             hive_partitioning=hive_partitioning,
             union_by_name=union_by_name,
+            compression=compression,
+            no_compression_extension=no_compression_extension,
         )
 
         parquet_file_format_spec.additional_properties = d

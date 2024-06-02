@@ -1546,7 +1546,6 @@ The templates used to generate the SQL query for each data source supported by D
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                 AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                     THEN 1
                 ELSE 0
@@ -1687,7 +1686,7 @@ The templates used to generate the SQL query for each data source supported by D
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                     THEN 1
                 ELSE 0
             END
@@ -1905,7 +1904,6 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE 100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                     AND ({{ lib.render_target_column('analyzed_table') }}) <> TRIM({{ lib.render_target_column('analyzed_table') }})
                         THEN 1
                     ELSE 0
@@ -2066,7 +2064,7 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                     AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
-                    AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
+                    AND DATALENGTH({{ lib.render_target_column('analyzed_table')}}) <> DATALENGTH(TRIM({{ lib.render_target_column('analyzed_table')}}))
                         THEN 1
                     ELSE 0
                 END

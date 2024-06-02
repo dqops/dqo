@@ -8,7 +8,7 @@ export default function StaticHomePage() {
       </div>
       <div className="px-8 py-4 w-full">
         <p className="font-bold text-lg mb-5">
-          To start monitoring your data, just follow these steps
+          To start monitoring your data, follow these steps
         </p>
 
         <div className="w-full grid grid-cols-3 gap-20">
@@ -27,7 +27,7 @@ export default function StaticHomePage() {
                       className="w-30"
                       alt=""
                     />
-                    <span>in the upper left corner.</span>
+                    <span>on the upper left corner.</span>
                   </div>
                 </li>
                 <li className="mb-2">Fill in the connection parameters.</li>
@@ -93,7 +93,7 @@ export default function StaticHomePage() {
                       alt=""
                       className="inline w-30"
                     />{' '}
-                    in the upper right corner.
+                    on the upper right corner.
                   </div>
                 </li>
                 <li className="mb-2">
@@ -116,7 +116,7 @@ export default function StaticHomePage() {
               <ul className="pl-8 list-disc list-outside">
                 <li className="mb-2 leading-[2]">
                   The square next to the check name will indicate the results of
-                  the check run: Valid, Warning, Error or Fatal{' '}
+                  the check run: Correct result, Warning, Error, or Fatal error{' '}
                   <img
                     src="/images/home/status-bar.png"
                     alt=""
@@ -162,7 +162,7 @@ export default function StaticHomePage() {
 
             <p>Contact us for more information</p>
             <a
-              className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2"
+              className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2 text-center"
               href="https://dqops.com/contact-us/"
             >
               Contact us

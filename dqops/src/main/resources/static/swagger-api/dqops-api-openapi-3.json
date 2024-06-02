@@ -61779,6 +61779,13 @@
             "$ref" : "#/components/schemas/CompressionType",
             "exampleSetFlag" : false
           },
+          "no_compression_extension" : {
+            "type" : "boolean",
+            "description" : "Whether the compression extension is present at the end of the file name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "dateformat" : {
             "type" : "string",
             "description" : "Specifies the date format to use when parsing dates.",
@@ -61890,7 +61897,11 @@
             "compression" : {
               "type" : "string",
               "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.",
-              "enum" : [ "auto", "none", "gzip", "zstd" ]
+              "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+            },
+            "no_compression_extension" : {
+              "type" : "boolean",
+              "description" : "Whether the compression extension is present at the end of the file name."
             },
             "dateformat" : {
               "type" : "string",
@@ -66428,6 +66439,13 @@
             "$ref" : "#/components/schemas/CompressionType",
             "exampleSetFlag" : false
           },
+          "no_compression_extension" : {
+            "type" : "boolean",
+            "description" : "Whether the compression extension is present at the end of the file name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "convert_strings_to_integers" : {
             "type" : "boolean",
             "description" : "Whether strings representing integer values should be converted to a numerical type.",
@@ -66515,7 +66533,11 @@
             "compression" : {
               "type" : "string",
               "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.",
-              "enum" : [ "auto", "none", "gzip", "zstd" ]
+              "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+            },
+            "no_compression_extension" : {
+              "type" : "boolean",
+              "description" : "Whether the compression extension is present at the end of the file name."
             },
             "convert_strings_to_integers" : {
               "type" : "boolean",
@@ -67691,6 +67713,17 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "compression" : {
+            "$ref" : "#/components/schemas/CompressionType",
+            "exampleSetFlag" : false
+          },
+          "no_compression_extension" : {
+            "type" : "boolean",
+            "description" : "Whether the compression extension is present at the end of the file name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
           }
         },
         "exampleSetFlag" : false,
@@ -67717,6 +67750,15 @@
             "union_by_name" : {
               "type" : "boolean",
               "description" : "Whether the columns of multiple schemas should be unified by name, rather than by position."
+            },
+            "compression" : {
+              "type" : "string",
+              "description" : "The compression type for the file.",
+              "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
+            },
+            "no_compression_extension" : {
+              "type" : "boolean",
+              "description" : "Whether the compression extension is present at the end of the file name."
             }
           }
         }
@@ -80671,7 +80713,7 @@
       "CompressionType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "auto", "none", "gzip", "zstd" ]
+        "enum" : [ "none", "auto", "gzip", "zstd", "snappy", "lz4" ]
       },
       "NewLineCharacterType" : {
         "type" : "string",

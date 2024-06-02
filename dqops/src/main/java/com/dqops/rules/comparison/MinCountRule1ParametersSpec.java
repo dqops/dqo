@@ -116,7 +116,7 @@ public class MinCountRule1ParametersSpec extends AbstractRuleParametersSpec {
             return;
         }
 
-        long newMinCount = (long) (this.minCount * 1.3);
+        long newMinCount = (long) (this.minCount * 0.7);
         if (newMinCount == this.minCount) {
             newMinCount++;
         }

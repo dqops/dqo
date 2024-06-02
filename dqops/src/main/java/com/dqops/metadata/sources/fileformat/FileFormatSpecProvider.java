@@ -79,10 +79,13 @@ public class FileFormatSpecProvider {
                 : createAbsoluteFilePathFrom(pathPrefix, tableName, storageType);
 
         DuckdbFilesFormatType filesType = duckdb.getFilesFormatType();
-        boolean isSetHivePartitioning = duckdb.isSetHivePartitioning() || (tableSpec.getFileFormat() != null && tableSpec.getFileFormat().isSetHivePartitioning(filesType));
+        boolean isSetHivePartitioning = duckdb.isSetHivePartitioning()
+                || (tableSpec.getFileFormat() != null && tableSpec.getFileFormat().isSetHivePartitioning(filesType));
 
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
-        String fileExtension = "." + filesType.toString() + (duckdb.isSetGzipCompression() ? ".gz" : "");
+        String fileExtension = tableSpec.getFileFormat() != null
+                ? tableSpec.getFileFormat().getFullExtension(filesType)
+                : duckdb.getFullExtension();
         String separator = (storageType == null || storageType.equals(DuckdbStorageType.local)) ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
             filePath = filePath + separator + (isSetHivePartitioning ? "**" + separator : "") + "*" + fileExtension;

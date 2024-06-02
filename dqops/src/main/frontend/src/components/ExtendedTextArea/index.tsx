@@ -43,7 +43,7 @@ export default function ExtendedTextAre({
   const onChangeEditedValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedValue(e.target.value);
   };
-  console.log(editedValue);
+  // console.log(editedValue);
   return (
     <div className="flex items-center justify-center space-x-2">
       <TextArea

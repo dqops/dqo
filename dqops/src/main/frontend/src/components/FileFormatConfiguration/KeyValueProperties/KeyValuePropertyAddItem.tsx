@@ -48,7 +48,7 @@ export default function KeyValuePropertyAddItem({
     updatedProperties[index] = { key: newValue };
     onChange(updatedProperties);
   };
-  console.log(properties);
+  // console.log(properties);
   return (
     <tr>
       <td className="pr-4 min-w-40 py-2 w-1/4">

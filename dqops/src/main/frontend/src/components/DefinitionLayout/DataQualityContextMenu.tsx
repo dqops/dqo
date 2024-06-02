@@ -80,7 +80,7 @@ const DataQualityContextMenu = ({
     setOpen(false);
   };
   const onCopy = (): void => {
-    console.log(check);
+    // console.log(check);
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(check?.check_name + '_copy' ?? ''),
