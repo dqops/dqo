@@ -186,7 +186,7 @@ const ConnectionPage = () => {
     // } else {
     //   setTabs(initCheckTabs);
     // }
-    onChangeTab('schemas');
+    // onChangeTab('schemas');
   }, [import_schema, checkTypes]);
 
   return (

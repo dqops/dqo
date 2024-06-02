@@ -1,11 +1,8 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import {
-  useHistory,
-  useLocation,
-  useRouteMatch
-} from 'react-router-dom';
-import {
+  addFirstLevelTab,
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/source.actions';
@@ -70,11 +67,10 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
 
   const closeTab = (value: string) => {
     if (pageTabs.length === 1) {
-      setActiveTab(undefined)
-      history.push(`/${checkTypes}`)
+      setActiveTab(undefined);
+      history.push(`/${checkTypes}`);
     }
     dispatch(closeFirstLevelTab(checkTypes, value));
-    // console.log(value)
   };
 
   const tabOptions = useMemo(() => {
@@ -88,25 +84,52 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   useEffect(() => {
     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
-      // const { import_schema } = qs.parse(location.search);
+
       if (activeUrl && activeUrl !== location.pathname) {
-        // if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
         history.push(activeUrl);
-        // history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
-        // }
       }
     }
-  }, [activeTab]);
+
+    const foundRoute = Object.values(ROUTES.PATTERNS).find(
+      (value) => value === match.path
+    );
+    if (pageTabs.length === 0 && foundRoute) {
+      const params = match.params as any;
+
+      if (params?.tab) {
+        let newRoute = foundRoute;
+        let routeWithoutTab = foundRoute;
+        const segments = foundRoute.split('/');
+        if (segments[segments.length - 1] === ':tab') {
+          routeWithoutTab = segments.slice(0, -1).join('/');
+        }
+        Object.entries(params).forEach(([key, value]) => {
+          newRoute = newRoute.replace(`:${key}`, String(value));
+          routeWithoutTab = routeWithoutTab.replace(`:${key}`, String(value));
+        });
+        dispatch(
+          addFirstLevelTab(checkTypes, {
+            url: newRoute,
+            value: routeWithoutTab,
+            label:
+              routeWithoutTab.split('/')[routeWithoutTab.split('/').length - 1]
+          })
+        );
+        setActiveTab(newRoute);
+      }
+    }
+  }, [pageTabs, activeTab, location.pathname]);
+
   // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url.
 
   const getComponent = () => {
     switch (route) {
-      case ROUTES.PATTERNS.QUALITY_CHECKS: 
-        return <ChecksPage/>
+      case ROUTES.PATTERNS.QUALITY_CHECKS:
+        return <ChecksPage />;
       case ROUTES.PATTERNS.CREATE:
-        return <CreateConnection/>;
+        return <CreateConnection />;
       case ROUTES.PATTERNS.CONNECTION:
-        return <ConnectionPage/>;
+        return <ConnectionPage />;
       case ROUTES.PATTERNS.SCHEMA:
         return <SchemaPage />;
       case ROUTES.PATTERNS.TABLE:
@@ -155,7 +178,7 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
- 
+
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
