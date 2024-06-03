@@ -29,8 +29,12 @@ public interface SourceTablesService {
      * Returns a list of tables on a schema on the source database.
      * @param connectionName     Connection name. Required import.
      * @param schemaName         Schema name.
+     * @param tableNameContains  Optional filter to return tables that contain this text in the name.
      * @param principal          Calling user principal.
      * @return Schema list acquired remotely.
      */
-    List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName, String schemaName, DqoUserPrincipal principal);
+    List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName,
+                                                        String schemaName,
+                                                        String tableNameContains,
+                                                        DqoUserPrincipal principal);
 }

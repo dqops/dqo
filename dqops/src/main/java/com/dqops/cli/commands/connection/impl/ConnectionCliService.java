@@ -43,13 +43,13 @@ public interface ConnectionCliService {
      * Returns cli operation status.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
-     * @param tableName Table name.
+     * @param tableNameContains Table name.
      * @param tabularOutputFormat Tabular output format.
      * @param dimensions Dimensions filter.
      * @param labels Labels filter.
      * @return Cli operation status.
      */
-    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
+    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableNameContains, TabularOutputFormat tabularOutputFormat,
                                      String[] dimensions, String[] labels);
 
     /**

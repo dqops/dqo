@@ -32,13 +32,14 @@ public class AzureTablesLister extends RemoteTablesLister {
      * @param schemaName The name of a virtual schema.
      * @return The list of SourceTableModel.
      */
-    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName){
+    @Override
+    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName, String tableNameContains, int limit) {
         String pathString = duckdb.getDirectories().get(schemaName);
 
         AzureStoragePath pathComponents = AzureStoragePath.from(pathString, duckdb.getAccountName());
         BlobContainerClient blobContainerClient = provideBlobContainerClient(duckdb, pathComponents);
         List<String> files = listBucketObjects(blobContainerClient, pathComponents);
-        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName);
+        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName, tableNameContains, limit);
         return sourceTableModels;
     }
 

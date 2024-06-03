@@ -38,6 +38,7 @@ import java.util.Locale;
 public class SqlServerProviderDialectSettings extends ProviderDialectSettings {
     public SqlServerProviderDialectSettings() {
         super("[", "]", "\"\"", false);
+        setSupportsLimitClause(false);
     }
 
     /**

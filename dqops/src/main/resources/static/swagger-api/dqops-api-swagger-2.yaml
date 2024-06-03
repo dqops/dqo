@@ -9856,6 +9856,12 @@ paths:
         description: "Schema name"
         required: true
         type: "string"
+      - name: "tableNameContains"
+        in: "query"
+        description: "Optional filter to return tables that contain this text inside\
+          \ the table name (case sensitive)"
+        required: false
+        type: "string"
       responses:
         200:
           description: "The list of tables on a remote data source was introspected\
@@ -32163,10 +32169,15 @@ definitions:
     properties:
       connectionName:
         type: "string"
+        description: "Connection name where the tables are imported."
       schemaName:
         type: "string"
-      tableNamePattern:
+        description: "Source schema name from which the tables are imported."
+      tableNameContains:
         type: "string"
+        description: "Optional filter for the names of tables to import, it is a text\
+          \ (substring) that must be present inside table names. This filter is case\
+          \ sensitive."
   ImportSeverityRuleParametersSpec:
     type: "object"
   ImportTablesQueueJobParameters:
@@ -32178,6 +32189,11 @@ definitions:
       schemaName:
         type: "string"
         description: "Schema name"
+      tableNameContains:
+        type: "string"
+        description: "Optional filter for the table names to import. The table names\
+          \ that are imported must contain a substring matching this parameter. This\
+          \ filter is case sensitive."
       tableNames:
         type: "array"
         description: "Optional list of table names inside the schema. When the list\

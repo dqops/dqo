@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.jobqueue.DqoJobExecutionContext;
 import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.DqoQueueJob;
@@ -56,15 +57,18 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
+    private final DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties;
     private ImportTablesQueueJobParameters importParameters;
 
     @Autowired
     public ImportTablesQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider) {
+                                SecretValueProvider secretValueProvider,
+                                DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.metadataImportConfigurationProperties = metadataImportConfigurationProperties;
     }
 
     /**
@@ -133,6 +137,8 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                     this.importParameters.getSchemaName(),
+                    this.importParameters.getTableNameContains(),
+                    this.metadataImportConfigurationProperties.getTablesImportLimit(),
                     this.importParameters.getTableNames(),
                     connectionWrapper,
                     secretValueLookupContext);

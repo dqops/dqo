@@ -107,10 +107,13 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter for table names (a required substring).
+     * @param limit The maximum number of tables to return.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT OWNER AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
@@ -118,6 +121,15 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         sqlBuilder.append("WHERE OWNER='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
+
+        if (!Strings.isNullOrEmpty(tableNameContains)) {
+            sqlBuilder.append(" AND TABLE_NAME LIKE '%");
+            sqlBuilder.append(tableNameContains.replace("'", "''"));
+            sqlBuilder.append("%'");
+        }
+
+        sqlBuilder.append(" LIMIT ");
+        sqlBuilder.append(limit);
 
         String listTablesSql = sqlBuilder.toString();
         Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
@@ -137,11 +149,17 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter for a component in the table name.
+     * @param limit The maximum number of tables to return.
      * @param tableNames Table names.
+     * @param connectionWrapper Parent connection wrapper with a list of already imported tables.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of table specifications with the column list.
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -160,12 +178,23 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!physicalTableName.contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
                 String columnName = colRow.getString("column_name");
                 boolean isNullable = !Objects.equals(colRow.getString("nullable"),"N");
                 String dataType = colRow.getString("data_type");
 
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
+                    // next table
+                    if (tableSpecs.size() >= limit) {
+                        break;
+                    }
+
                     tableSpec = new TableSpec();
                     tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);

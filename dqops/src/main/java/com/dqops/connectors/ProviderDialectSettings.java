@@ -36,6 +36,7 @@ public class ProviderDialectSettings {
     private String quoteEnd = "\"";
     private String quoteEscape = "\"\"";
     private boolean tableNameIncludesDatabaseName = false;
+    private boolean supportsLimitClause = true;
 
     public ProviderDialectSettings() {
     }
@@ -117,6 +118,22 @@ public class ProviderDialectSettings {
      */
     public void setTableNameIncludesDatabaseName(boolean tableNameIncludesDatabaseName) {
         this.tableNameIncludesDatabaseName = tableNameIncludesDatabaseName;
+    }
+
+    /**
+     * The driver supports a LIMIT keyword.
+     * @return True when the connection supports a LIMIT keyword.
+     */
+    public boolean isSupportsLimitClause() {
+        return supportsLimitClause;
+    }
+
+    /**
+     * Sets a flag that the query supports a LIMIT keyword.
+     * @param supportsLimitClause True when the LIMIT keyword is supported.
+     */
+    public void setSupportsLimitClause(boolean supportsLimitClause) {
+        this.supportsLimitClause = supportsLimitClause;
     }
 
     /**

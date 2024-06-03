@@ -110,7 +110,7 @@ public class ProviderTestDataProxy {
         if (tablesInSchema == null) {
             SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
             try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
-                tablesInSchema = sourceConnection.listTables(schemaName, secretValueLookupContext);
+                tablesInSchema = sourceConnection.listTables(schemaName, null, 300, secretValueLookupContext);
                 tablesInSchemas.put(schemaListKey, tablesInSchema);
             }
         }

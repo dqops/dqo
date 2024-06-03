@@ -89,7 +89,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                     setSchemaName(sourceSchemaModel.getSchemaName());
                     setConnectionName(connectionName);
                     setAlreadyImported(importedSchemaNames.contains(this.getSchemaName()));
-                    setImportTableJobParameters(new ImportTablesQueueJobParameters(connectionName, sourceSchemaModel.getSchemaName(), null));
+                    setImportTableJobParameters(new ImportTablesQueueJobParameters(connectionName, sourceSchemaModel.getSchemaName(), null, null));
                 }}).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Failed to list schemas from a connection, error: " + e.getMessage(), e);

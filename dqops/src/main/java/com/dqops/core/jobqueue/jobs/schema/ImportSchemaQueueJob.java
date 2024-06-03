@@ -16,6 +16,7 @@
 package com.dqops.core.jobqueue.jobs.schema;
 
 import com.dqops.connectors.*;
+import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.jobqueue.DqoJobExecutionContext;
 import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.DqoQueueJob;
@@ -54,15 +55,18 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
+    private final DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties;
     private ImportSchemaQueueJobParameters importParameters;
 
     @Autowired
     public ImportSchemaQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider) {
+                                SecretValueProvider secretValueProvider,
+                                DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.metadataImportConfigurationProperties = metadataImportConfigurationProperties;
     }
 
     /**
@@ -146,11 +150,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     public ImportSchemaQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
-        String tableNamePattern = this.importParameters.getTableNamePattern();
-
-        if (tableNamePattern == null) {
-            tableNamePattern = "*";
-        }
+        String tableNameContains = this.importParameters.getTableNameContains();
 
         UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity, false);
@@ -169,7 +169,8 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName(), secretValueLookupContext);
+            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName(), tableNameContains,
+                    this.metadataImportConfigurationProperties.getTablesImportLimit(), secretValueLookupContext);
             if (tableModels.size() == 0) {
                 throw new ImportSchemaQueueJobException("No tables found in the data source when importing tables on the " +
                         this.importParameters.getConnectionName() + ", from the " + this.importParameters.getSchemaName() + " schema");
@@ -179,8 +180,10 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
                     .map(tm -> tm.getTableName().getTableName())
                     .collect(Collectors.toList());
 
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper, secretValueLookupContext);
-            List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(),
+                    tableNameContains, this.metadataImportConfigurationProperties.getTablesImportLimit(),
+                    tableNames, connectionWrapper, secretValueLookupContext);
+            List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNameContains);
 //
             TableList currentTablesColl = connectionWrapper.getTables();
             currentTablesColl.importTables(filteredSourceTableSpecs, connectionSpec.getDefaultGroupingConfiguration());

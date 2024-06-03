@@ -184,6 +184,8 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
 
                     List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
                             schemaName,
+                            null,
+                            1,
                             new ArrayList<>() {{
                                 add(tableName);
                             }},

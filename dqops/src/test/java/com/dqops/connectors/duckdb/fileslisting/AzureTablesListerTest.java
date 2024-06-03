@@ -33,7 +33,7 @@ class AzureTablesListerTest extends BaseTest {
         List<String> filesList = List.of("file_1.csv", "file_2.csv", "file_3.csv");
         DuckdbParametersSpec duckdb = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv).getDuckdb();
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(3)
@@ -49,7 +49,7 @@ class AzureTablesListerTest extends BaseTest {
     void filterAndTransform_whenFileHasNoExtension_doesNotUseIt() {
         List<String> filesList = List.of("file_1");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(0);
@@ -59,7 +59,7 @@ class AzureTablesListerTest extends BaseTest {
     void filterAndTransform_whenFileHasTrailingSlash_usesItWithoutSlash() {
         List<String> filesList = List.of("file_1/");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(1)
@@ -73,7 +73,7 @@ class AzureTablesListerTest extends BaseTest {
     void filterAndTransform_fileIsGz_usesIt() {
         List<String> filesList = List.of("file_1.csv.gz");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(1)

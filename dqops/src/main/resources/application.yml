@@ -141,6 +141,9 @@ dqo:
     authentication-token-expiration-minutes: 10080
     return-base-url: http://localhost:8888
     validate-return-base-url: false
+  metadata:
+    import:
+      tables-import-limit: 300
   sensor:
     limits:
       sensor-readout-limit: 1000

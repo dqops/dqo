@@ -15,10 +15,7 @@
  */
 package com.dqops.connectors.mysql;
 
-import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.SourceSchemaModel;
-import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.*;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
@@ -29,6 +26,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -62,15 +60,15 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Lists tables inside a schema. Views are also returned.
+     * Generates an SQL statement that lists tables.
      *
-     * @param schemaName Schema name.
-     * @return List of tables in the given schema.
+     * @param schemaName        Schema name.
+     * @param tableNameContains Optional filter with a text that must be present in the tables returned.
+     * @param limit             The limit of the number of tables to return.
+     * @return SQL string for a query that lists tables.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-
+    public @NotNull String buildListTablesSql(String schemaName, String tableNameContains, int limit) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
@@ -79,18 +77,17 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
 
-        String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-
-        List<SourceTableModel> results = new ArrayList<>();
-        for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
-            String tableName = tablesRows.getString(rowIndex, "table_name");
-            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-            results.add(schemaModel);
+        if (!Strings.isNullOrEmpty(tableNameContains)) {
+            sqlBuilder.append(" AND table_name LIKE '%");
+            sqlBuilder.append(tableNameContains.replace("'", "''"));
+            sqlBuilder.append("%'");
         }
 
-        return results;
+        sqlBuilder.append(" LIMIT ");
+        sqlBuilder.append(limit);
+
+        String listTablesSql = sqlBuilder.toString();
+        return listTablesSql;
     }
 
     /**
