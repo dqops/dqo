@@ -225,8 +225,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoDefaultTimeZone;
 
     @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
-            description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
+            description = "The time window between now and X days ago to scan for open incidents that are shown on the list of connections in the incidents section.", defaultValue = "60")
     private Integer dqoIncidentsCountOpenIncidentsDays;
+
+    @CommandLine.Option(names = {"--dqo.incidents.top-incidents-days"},
+            description = "The time window between now and X days ago to scan for incidents that are shown on the main screen, grouped by a requested grouping.", defaultValue = "30")
+    private Integer dqoIncidentsTopIncidentsDays;
 
     @CommandLine.Option(names = {"--dqo.incidents.column-histogram-size"},
             description = "The size of the column histogram that is generated for a preview of a data quality incident.", defaultValue = "10")

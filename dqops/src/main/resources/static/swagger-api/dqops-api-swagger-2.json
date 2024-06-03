@@ -16291,6 +16291,61 @@
         } ]
       }
     },
+    "/api/topincidents" : {
+      "get" : {
+        "tags" : [ "Incidents" ],
+        "summary" : "findTopIncidentsGrouped",
+        "description" : "Finds the most recent incidents grouped by one of the incident's attribute, such as a data quality dimension, a data quality check category or the connection name.",
+        "operationId" : "findTopIncidentsGrouped",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Incident status to group. When this parameter is missing, the 'open' (new) incidents are grouped by default.",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "open", "acknowledged", "resolved", "muted" ]
+        }, {
+          "name" : "groupBy",
+          "in" : "query",
+          "description" : "Incident grouping key. When this parameter is missing, returns incidents grouped by the data quality check category.",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "dimension", "category", "connection" ]
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The result limit for each group. When this parameter is missing, returns the default limit of 10",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/TopIncidentsModel"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/users" : {
       "get" : {
         "tags" : [ "Users" ],
@@ -39186,6 +39241,31 @@
         "partition_by_column" : {
           "type" : "string",
           "description" : "Column name that contains the date, datetime or timestamp column for date/time partitioned data. Partition checks (daily partition checks and monthly partition checks) use this column in a GROUP BY clause in order to detect data quality issues in each partition separately. It should be a DATE type, DATETIME type (using a local server time zone) or a TIMESTAMP type (a UTC absolute time)."
+        }
+      }
+    },
+    "TopIncidentsModel" : {
+      "type" : "object",
+      "properties" : {
+        "grouping" : {
+          "type" : "string",
+          "description" : "Incident grouping used to group the top incidents in the dictionary of top incidents.",
+          "enum" : [ "dimension", "category", "connection" ]
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Incident status of the incidents that are returned.",
+          "enum" : [ "open", "acknowledged", "resolved", "muted" ]
+        },
+        "topIncidents" : {
+          "type" : "object",
+          "description" : "Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).",
+          "additionalProperties" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/IncidentModel"
+            }
+          }
         }
       }
     },

@@ -16,16 +16,14 @@
 
 package com.dqops.rest.controllers;
 
+import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.IncidentIssueUrlChangeParameters;
 import com.dqops.core.incidents.IncidentStatusChangeParameters;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.models.*;
 import com.dqops.data.incidents.factory.IncidentStatus;
-import com.dqops.data.incidents.models.IncidentListFilterParameters;
-import com.dqops.data.incidents.models.IncidentModel;
-import com.dqops.data.incidents.models.IncidentSortOrder;
-import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
+import com.dqops.data.incidents.models.*;
 import com.dqops.data.incidents.services.IncidentsDataService;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionList;
@@ -59,10 +57,16 @@ import java.util.Optional;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Incidents", description = "Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.")
 public class IncidentsController {
+    /**
+     * The limit of incidents that are returned for each group by default.
+     */
+    public static final int TOP_INCIDENTS_LIMIT_PER_GROUP = 10;
+
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;
     private UserHomeContextFactory userHomeContextFactory;
     private CheckCalibrationService checkCalibrationService;
+    private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
 
     /**
      * Creates an incident management service, given all used dependencies.
@@ -70,16 +74,19 @@ public class IncidentsController {
      * @param incidentImportQueueService Incident queued update service that updates the statuses of incidents.
      * @param userHomeContextFactory User home factory.
      * @param checkCalibrationService Data quality check calibration service that adapts the configuration of checks to reduce the number of incidents.
+     * @param dqoIncidentsConfigurationProperties Incident configuration parameters.
      */
     @Autowired
     public IncidentsController(IncidentsDataService incidentsDataService,
                                IncidentImportQueueService incidentImportQueueService,
                                UserHomeContextFactory userHomeContextFactory,
-                               CheckCalibrationService checkCalibrationService) {
+                               CheckCalibrationService checkCalibrationService,
+                               DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
         this.incidentsDataService = incidentsDataService;
         this.incidentImportQueueService = incidentImportQueueService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.checkCalibrationService = checkCalibrationService;
+        this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
     }
 
     /**
@@ -383,6 +390,41 @@ public class IncidentsController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats(principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
+    }
+
+    /**
+     * Finds the most recent incidents grouped by one of the incident's attribute, such as a data quality dimension, a data quality check category or the connection name.
+     * @return Dictionary of most recent incidents, grouped by a requested column.
+     */
+    @GetMapping(value = "/topincidents", produces = "application/json")
+    @ApiOperation(value = "findTopIncidentsGrouped", notes = "Finds the most recent incidents grouped by one of the incident's attribute, such as a data quality dimension, a data quality check category or the connection name.",
+            response = TopIncidentsModel.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = TopIncidentsModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<TopIncidentsModel>> findTopIncidentsGrouped(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam(name = "status", value = "Incident status to group. When this parameter is missing, the 'open' (new) incidents are grouped by default.", required = false)
+            @RequestParam(required = false) Optional<IncidentStatus> status,
+            @ApiParam(name = "groupBy", value = "Incident grouping key. When this parameter is missing, returns incidents grouped by the data quality check category.", required = false)
+            @RequestParam(required = false) Optional<TopIncidentGrouping> groupBy,
+            @ApiParam(name = "limit", value = "The result limit for each group. When this parameter is missing, returns the default limit of " + TOP_INCIDENTS_LIMIT_PER_GROUP, required = false)
+            @RequestParam(required = false) Optional<Integer> limit,
+            @ApiParam(name = "limit", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
+            @RequestParam(required = false) Optional<Integer> days) {
+        TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
+                groupBy.orElse(TopIncidentGrouping.category),
+                status.orElse(IncidentStatus.open),
+                limit.orElse(TOP_INCIDENTS_LIMIT_PER_GROUP),
+                days.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsDays()),
+                principal.getDataDomainIdentity());
+        return new ResponseEntity<>(Mono.just(topIncidentsModel), HttpStatus.OK);
     }
 
     /**

@@ -21,9 +21,8 @@ import com.dqops.data.checkresults.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
 import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
-import com.dqops.data.incidents.models.IncidentListFilterParameters;
-import com.dqops.data.incidents.models.IncidentModel;
-import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
+import com.dqops.data.incidents.factory.IncidentStatus;
+import com.dqops.data.incidents.models.*;
 
 import java.util.Collection;
 
@@ -59,6 +58,20 @@ public interface IncidentsDataService {
      * @return Collection of connection names, with a count of open incidents.
      */
     Collection<IncidentsPerConnectionModel> findConnectionIncidentStats(UserDomainIdentity userDomainIdentity);
+
+    /**
+     * Finds the top <code>limitPerGroup</code> incidents grouped by <code>incidentGrouping</code> that are at the given incident status.
+     * @param incidentGrouping Incident grouping.
+     * @param limitPerGroup The maximum number of incidents per group to return.
+     * @param daysToScan The number of days to scan.
+     * @param userDomainIdentity Calling user identity with the data domain.
+     * @return Summary of the most recent incidents.
+     */
+    TopIncidentsModel findTopIncidents(TopIncidentGrouping incidentGrouping,
+                                       IncidentStatus incidentStatus,
+                                       int limitPerGroup,
+                                       int daysToScan,
+                                       UserDomainIdentity userDomainIdentity);
 
     /**
      * Loads all failed check results covered by a given incident.
