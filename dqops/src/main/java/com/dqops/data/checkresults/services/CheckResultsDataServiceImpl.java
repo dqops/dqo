@@ -849,27 +849,20 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
                 }
 
-                if (checkCurrentStatusModel.getLastExecutedAt() != null) {
-                    if (executedAt != null && executedAt.isAfter(checkCurrentStatusModel.getLastExecutedAt())) {
-                        checkCurrentStatusModel.setLastExecutedAt(executedAt);
+                if (checkCurrentStatusModel.getLastExecutedAt() != null && executedAt != null) {
+                    if (checkCurrentStatusModel.getLastExecutedAt().equals(executedAt)) {
+                        // groupings or partitioned checks, the whole batch of check results will have the same executed at timestamp
 
-                        String checkTypeString = checkTypeColumn.get(i);
-                        boolean isPartitionedCheck = Objects.equals(checkTypeString, CheckType.partitioned.getDisplayName());
-
-                        if (isPartitionedCheck) {
-                            // for partitioned checks, the current status is the highest severity status from other partitions
-                            if (checkCurrentStatusModel.getCurrentSeverity() == null || severity > checkCurrentStatusModel.getCurrentSeverity().getSeverity()) {
-                                checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
-                            }
-                        } else {
+                        if (severity > checkCurrentStatusModel.getCurrentSeverity().getSeverity()) {
                             checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                         }
+                    } else if (executedAt.isAfter(checkCurrentStatusModel.getLastExecutedAt())) {
+                        checkCurrentStatusModel.setLastExecutedAt(executedAt);
+                        checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                     }
-                } else {
-                    checkCurrentStatusModel.setLastExecutedAt(executedAt);
-                    checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                 }
             }
+
             checkCurrentStatusModel.incrementTotalIssueCount(severity);
         }
 
