@@ -14,12 +14,72 @@ The DQOps web interface is divided into three main areas.
 2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
 3. The [main workspace](#main-workspace) changes according to your selection in the navigation bar and the tree view.
 
+## **Home screen**
+
+The DQOps home screen provides a quick guide on how to start data quality monitoring. Here, you can also access summaries
+that provide a centralized view of the data quality or all your monitored tables and columns. 
+These summaries are created based on the results of previously executed data quality checks.
+
+### **Tables summary**
+The Tables summary screen provides a centralized view of the data quality of all your tables within DQOps.
+
+To access **Tables summary** click on the DQOps logo in the top left corner and select the **Tables** tab.
+
+![Table summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tables-summary.png){ loading=lazy; width="1200px" }
+
+Searching and filtering the tables:
+
+- **Search**: Use the search bar at the top of the screen to find specific tables based on connection name, schema name, or table name. You can also use wildcards (*) to easily locate tables that meet specific criteria without needing to enter exact names.
+- **Filter by Label**: Refine your view by applying filters to the table labels on the left-hand side. This helps you locate tables based on your user-defined table labels.
+
+The Tables summary screen displays the following information for each table:
+
+- **Connection** - The database connection the table belongs to.
+- **Schema** - The schema within the connection where the table is located.
+- **Table** - The name of the specific table.
+- **Stage** - The current stage of the table (e.g., development, production).
+- **Labels** - User-defined labels associated with the table for easier organization.
+- **Data Quality KPIs** - A summary of [data quality KPIs](definition-of-data-quality-kpis.md) calculated from partial data values, providing a quick overview of data quality of the table.
+- **Data Quality KPIs by dimensions** - This column displays a breakdown of [data quality KPIs](definition-of-data-quality-kpis.md) calculated from executed checks categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display a tooltip containing more details.
+  
+    ![Table summary - deta quality dimension results details](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-summary-tooltip.png){ loading=lazy; width="500px" }
+
+- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data Source, Profiling, Monitoring Checks, or Partition Checks section screens.
+
+
+### **Columns summary**
+The Column summary screen provides a granular view of the data quality for each column within your tables.
+
+To access Columns summary click on the DQOps logo in the top left corner and select the **Columns** tab.
+
+![Table summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/columns-summary.png){ loading=lazy; width="1200px" }
+
+Searching and filtering the columns:
+
+- **Search**: Use the search bar at the top of the screen to find specific columns based on connection name, schema name, table name, column name, or column type (e.g., INTEGER, STRING, DATE). You can also use wildcards (*) to easily locate columns that meet specific criteria without needing to enter exact names.
+- **Filter by Label**: Refine your view by applying filters to the table labels on the left-hand side. This helps you locate tables based on your user-defined table labels.
+
+The table summary screen displays the following information for each table:
+
+- **Connection** - The database connection the table belongs to.
+- **Schema** - The schema within the connection where the table is located.
+- **Table** - The table where the column is located.
+- **Column** - The name of the specific column.
+- **Column type** - The data type of the column (e.g., INTEGER, STRING, DATE).
+- **Data Quality KPIs** - A summary of [data quality KPIs](definition-of-data-quality-kpis.md) from partial data values, providing a quick overview of data quality of your columns.
+- **Results from data quality dimensions** - This column displays a breakdown of [data quality KPIs](definition-of-data-quality-kpis.md) calculated from executed checks categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display a tooltip containing more details.
+  
+    ![Table summary - deta quality dimension results details](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-summary-tooltip.png){ loading=lazy; width="500px" }
+
+- **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data Source, Profiling, Monitoring Checks, or Partition Checks section screens.
+
 ## Navigation bar
 
 The navigation bar allows you to select the specific sections that you want to focus on.
 
-![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
+![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar2.png)
 
+- The **Home screen** section, which you can access by clicking on the DQOps logo. It allows you to view the Welcome page, as well as summaries of Tables and Columns.
 - The **Data Sources** section allows you to [add new connections](../data-sources/index.md), import schemas and 
     tables, [set up schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md), add comments and labels, [configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md),
     [set the date and time columns for partition checks](../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
@@ -108,10 +168,10 @@ quality checks that can be customized. The tree view in this section also provid
 ## Main workspace
 
 Once you select a section from the navigation bar and tree view, the main workspace will show you various data quality 
-components. These include data source options, information about schemas, tables, and columns, a list of data quality checks,
+components. These include home screen summaries, data source options, information about schemas, tables, and columns, a list of data quality checks,
 and data quality dashboards.
 
-Clicking on an object in the tree view always opens a new tab in the main workspace that helps in navigating between open elements. 
+Clicking on an object in the tree view always opens a new tab in the main workspace that helps in navigating between open elements.
 
 ### **Tabbed interface**
 
