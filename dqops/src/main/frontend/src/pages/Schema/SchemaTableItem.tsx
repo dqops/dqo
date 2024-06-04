@@ -152,8 +152,8 @@ export default function SchemaTableItem({
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
               <Tooltip
-                content={'Add a new connection and manage its settings'}
-                className="max-w-120 z-50"
+                content={'Data Sources'}
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
                 placement="right-start"
               >
                 <div>
