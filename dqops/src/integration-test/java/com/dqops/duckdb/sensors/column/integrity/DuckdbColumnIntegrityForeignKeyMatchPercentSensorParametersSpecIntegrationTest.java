@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.integrity.ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,31 @@ public class DuckdbColumnIntegrityForeignKeyMatchPercentSensorParametersSpecInte
         this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+
+
+    @Test
+    void runSensor_onNullDataInForeignTable_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
+
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("int_nulls");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "foreign_key", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
