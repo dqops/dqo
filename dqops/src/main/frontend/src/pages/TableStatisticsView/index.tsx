@@ -50,22 +50,6 @@ export default function TableStatisticsView({
     table: string;
     tab: string;
   } = useDecodedParams();
-  // const fetchRows = async () => {
-  //   try {
-  //     const res: AxiosResponse<TableStatisticsModel> =
-  //       await TableApiClient.getTableStatistics(
-  //         connectionName,
-  //         schemaName,
-  //         tableName
-  //       );
-  //     setRowCount(res.data);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchRows();
-  // }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
     setNumberOfSelected(0);
@@ -157,11 +141,9 @@ export default function TableStatisticsView({
         connectionName={connectionName}
         schemaName={schemaName}
         tableName={tableName}
-        updateData={updateData}
-        setLevelsData={setLevelsData}
-        setNumberOfSelected={setNumberOfSelected}
+        levels={{}}
+        setLevels={setLevelsData}
         statistics={statistics}
-        onChangeSelectedColumns={onChangeSelectedColumns}
         refreshListFunc={refreshListFunc}
       />
     </div>

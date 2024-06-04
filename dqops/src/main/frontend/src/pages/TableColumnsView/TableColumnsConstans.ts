@@ -47,9 +47,12 @@ export interface MyData {
   importedDatatype?: string | undefined;
   columnHash: number;
   isColumnSelected: boolean;
-  dimentions?: ({
-    [key: string]: DimensionCurrentDataQualityStatusModel;
-} | undefined)[];
+  dimentions?: (
+    | {
+        [key: string]: DimensionCurrentDataQualityStatusModel;
+      }
+    | undefined
+  )[];
   labels?: string;
 }
 
@@ -57,12 +60,10 @@ export interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
-  updateData: (arg: string) => void;
-  setLevelsData: (arg: DataGroupingConfigurationSpec) => void;
-  setNumberOfSelected: (arg: number) => void;
+  levels?: DataGroupingConfigurationSpec;
+  setLevels?: (levels: DataGroupingConfigurationSpec) => void;
   statistics?: TableColumnsStatisticsModel;
-  onChangeSelectedColumns?: (columns: Array<string>) => void;
-  refreshListFunc: ()  => void;
+  refreshListFunc: () => void;
 }
 
 export const labels = [

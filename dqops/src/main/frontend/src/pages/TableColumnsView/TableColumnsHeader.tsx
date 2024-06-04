@@ -6,40 +6,41 @@ import { handleSorting } from './TableColumnsUtils';
 interface ITableColumnsHeaderProps {
   dataArray: MyData[];
   setSortedArray: any;
-  updateData: any;
 }
 
 export default function TableColumnsHeader({
   dataArray,
-  setSortedArray,
-  updateData
+  setSortedArray
 }: ITableColumnsHeaderProps) {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [headerItems, setHeaderItems] = useState<Array<string>>([]);
   const getHeaderitemsBasedOnWidth = () => {
     const width = window.innerWidth;
-    const excludedItems : string[]= []
+    const excludedItems: string[] = [];
     if (width < 1700) {
-      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale', 'Length')
+      excludedItems.push(
+        'Nulls count',
+        'Max value',
+        'Min value',
+        'Scale',
+        'Length'
+      );
     } else if (width < 1800) {
-      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale')
-    } 
-    else if (width < 1900) {
-      excludedItems.push('Nulls count', 'Max value', 'Min value')
-    } 
-    else if (width < 2000) {
-      excludedItems.push('Nulls count', 'Max value')
-    } 
-    else if (width < 2200) {
-      excludedItems.push('Nulls count')
-    } 
+      excludedItems.push('Nulls count', 'Max value', 'Min value', 'Scale');
+    } else if (width < 1900) {
+      excludedItems.push('Nulls count', 'Max value', 'Min value');
+    } else if (width < 2000) {
+      excludedItems.push('Nulls count', 'Max value');
+    } else if (width < 2200) {
+      excludedItems.push('Nulls count');
+    }
     const arr = labels.filter((item) => !excludedItems.includes(item));
     setHeaderItems(arr);
     return arr;
-  }
+  };
   useEffect(() => {
-    getHeaderitemsBasedOnWidth()
-  }, [window.innerWidth])
+    getHeaderitemsBasedOnWidth();
+  }, [window.innerWidth]);
   return (
     <thead className="text-sm">
       <tr>
@@ -89,7 +90,7 @@ export default function TableColumnsHeader({
               );
             }}
           >
-            <div onClick={() => updateData('updated data')}>Nulls percent</div>
+            <div>Nulls percent</div>
             <div>
               <SvgIcon name="chevron-up" className="w-2 h-2" />
               <SvgIcon name="chevron-down" className="w-2 h-2" />
