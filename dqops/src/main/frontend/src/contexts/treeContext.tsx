@@ -719,7 +719,6 @@ function TreeProvider(props: any) {
     if (!node) return;
     const nodeId = node.id.toString();
     const existTab = tabs.find((item) => item.value === nodeId);
-    console.log('existTab', existTab, tabs, nodeId, node);
     if (!existTab) {
       const newTab = {
         label: node.label ?? '',

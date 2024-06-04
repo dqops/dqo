@@ -182,7 +182,6 @@ const Tree = () => {
           newTreeData,
           `${tableNode?.id || ''}.columns`
         );
-        console.log(newTreeData, columnsNode, `${tableNode?.id || ''}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
@@ -409,7 +408,6 @@ const Tree = () => {
       </Tooltip>
     );
   };
-  console.log(activeTab);
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>

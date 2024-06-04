@@ -156,7 +156,7 @@ const TableColumnsView = () => {
   useEffect(() => {
     fetchColumns();
   }, [connectionName, schemaName, tableName]);
-
+  console.log(levels);
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
