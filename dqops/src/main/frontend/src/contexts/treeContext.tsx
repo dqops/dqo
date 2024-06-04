@@ -464,7 +464,7 @@ function TreeProvider(props: any) {
     const schema = urlencodeEncoder(terms[1]);
     const connection = urlencodeEncoder(terms[0]);
     const column = urlencodeEncoder(terms[4]);
-    
+
     return { connection, schema, table, column };
   };
 
@@ -639,7 +639,9 @@ function TreeProvider(props: any) {
     const items: CustomTreeNode[] = [];
     checks?.forEach((check) => {
       items.push({
-        id: `${node.id}.${urlencodeDecoder(check?.check_category ?? '')}_${urlencodeDecoder(check?.check_name ?? '')}`,
+        id: `${node.id}.${urlencodeDecoder(
+          check?.check_category ?? ''
+        )}_${urlencodeDecoder(check?.check_name ?? '')}`,
         label: check?.check_name || '',
         level: TREE_LEVEL.CHECK,
         parentId: node.id,
@@ -717,6 +719,7 @@ function TreeProvider(props: any) {
     if (!node) return;
     const nodeId = node.id.toString();
     const existTab = tabs.find((item) => item.value === nodeId);
+    console.log('existTab', existTab, tabs, nodeId, node);
     if (!existTab) {
       const newTab = {
         label: node.label ?? '',
@@ -760,8 +763,12 @@ function TreeProvider(props: any) {
     ].reduce(
       (acc, cur) => ({
         ...acc,
-        [cur]: treeDataMaps[cur]?.filter(  
-          (item) => !(item.id.toString().startsWith(node.id.toString() + '.') || item.id.toString() === node.id.toString())
+        [cur]: treeDataMaps[cur]?.filter(
+          (item) =>
+            !(
+              item.id.toString().startsWith(node.id.toString() + '.') ||
+              item.id.toString() === node.id.toString()
+            )
         )
       }),
       {}
@@ -785,7 +792,11 @@ function TreeProvider(props: any) {
         (acc, cur) => ({
           ...acc,
           [cur]: (tabMaps[cur] || [])?.filter(
-            (item) => !(item.value.toString().startsWith(node.id.toString() + '.') || item.value.toString() === node.id.toString())
+            (item) =>
+              !(
+                item.value.toString().startsWith(node.id.toString() + '.') ||
+                item.value.toString() === node.id.toString()
+              )
           )
         }),
         {}
@@ -1203,7 +1214,6 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
-  
 
       if (firstLevelActiveTab === url) {
         return;
@@ -1796,7 +1806,10 @@ function TreeProvider(props: any) {
     setTabMaps(newTabMaps);
   };
 
-  const reimportTableMetadata = async (node: CustomTreeNode, closeMenuCallBack?: () => void) => {
+  const reimportTableMetadata = async (
+    node: CustomTreeNode,
+    closeMenuCallBack?: () => void
+  ) => {
     const { connection, schema, table } = parseNodeId(node.id);
     await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
@@ -1805,7 +1818,7 @@ function TreeProvider(props: any) {
     });
     dispatch(toggleMenu(true));
     if (closeMenuCallBack) {
-      closeMenuCallBack()
+      closeMenuCallBack();
     }
   };
 
@@ -1877,4 +1890,3 @@ function useTree() {
 }
 
 export { TreeProvider, useTree };
-

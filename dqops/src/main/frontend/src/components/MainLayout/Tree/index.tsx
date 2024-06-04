@@ -16,7 +16,7 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 import { TREE_LEVEL } from '../../../shared/enums';
 import { CustomTreeNode } from '../../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { useDecodedParams } from '../../../utils';
+import { urlencodeDecoder, useDecodedParams } from '../../../utils';
 import { findTreeNode } from '../../../utils/tree';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
@@ -86,7 +86,8 @@ const Tree = () => {
 
   useEffect(() => {
     (async () => {
-      const terms = firstLevelActiveTab.split('/');
+      const undecodedTerms = firstLevelActiveTab.split('/');
+      const terms = undecodedTerms.map((x) => urlencodeDecoder(x));
       const connection = terms[3] || '';
       let newTreeData = [...(treeData || [])];
 
@@ -181,11 +182,11 @@ const Tree = () => {
           newTreeData,
           `${tableNode?.id || ''}.columns`
         );
+        console.log(newTreeData, columnsNode, `${tableNode?.id || ''}.columns`);
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
         }
-
         setActiveTab(`${columnsNode?.id || ''}.${terms[9] || ''}`);
       }
       if (match.path === ROUTES.PATTERNS.COLUMN_PROFILING) {
@@ -325,7 +326,7 @@ const Tree = () => {
     setAddSchemaDialogOpen(false);
     setSelectedNode(undefined);
   };
-   
+
   const renderIcon = (node: CustomTreeNode) => {
     if (
       node.level === TREE_LEVEL.TABLE_INCIDENTS ||
@@ -408,7 +409,7 @@ const Tree = () => {
       </Tooltip>
     );
   };
-
+  console.log(activeTab);
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
