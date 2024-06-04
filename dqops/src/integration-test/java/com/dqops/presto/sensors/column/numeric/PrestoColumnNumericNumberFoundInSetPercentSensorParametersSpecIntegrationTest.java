@@ -15,6 +15,9 @@
  */
 package com.dqops.presto.sensors.column.numeric;
 
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberFoundInSetPercentCheckSpec;
@@ -30,6 +33,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericNumberFoundInSetPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +58,48 @@ public class PrestoColumnNumericNumberFoundInSetPercentSensorParametersSpecInteg
 		this.sut = new ColumnNumericNumberFoundInSetPercentSensorParametersSpec();
 		this.checkSpec = new ColumnNumberFoundInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataAndNoParameters_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        this.sut.setExpectedValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test

@@ -15,6 +15,9 @@
  */
 package com.dqops.presto.sensors.column.acceptedvalues;
 
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedTextsInTopValuesCountCheckSpec;
@@ -33,6 +36,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PrestoColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTests extends BasePrestoIntegrationTest {
+public class PrestoColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
     private ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnExpectedTextsInTopValuesCountCheckSpec checkSpec;
@@ -57,6 +61,50 @@ public class PrestoColumnStringsExpectedTextsInTopValuesCountSensorParametersSpe
         this.sut = new ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec();
         this.checkSpec = new ColumnExpectedTextsInTopValuesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataWithInvalidParameters_thenReturnsNull() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(null, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class DuckdbColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTests extends BaseDuckdbIntegrationTest {
+public class DuckdbColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnExpectedTextsInTopValuesCountCheckSpec checkSpec;

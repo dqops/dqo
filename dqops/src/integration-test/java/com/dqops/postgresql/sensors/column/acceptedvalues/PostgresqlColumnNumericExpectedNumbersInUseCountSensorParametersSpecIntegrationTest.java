@@ -18,10 +18,13 @@ package com.dqops.postgresql.sensors.column.acceptedvalues;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.postgresql.BasePostgresqlIntegrationTest;
@@ -30,6 +33,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +58,49 @@ public class PostgresqlColumnNumericExpectedNumbersInUseCountSensorParametersSpe
 		this.sut = new ColumnNumericExpectedNumbersInUseCountSensorParametersSpec();
 		this.checkSpec = new ColumnExpectedNumbersInUseCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataAndNoParams_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        this.sut.setExpectedValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test

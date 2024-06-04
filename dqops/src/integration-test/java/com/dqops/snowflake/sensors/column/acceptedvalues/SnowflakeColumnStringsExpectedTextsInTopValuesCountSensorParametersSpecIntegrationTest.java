@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.databricks.sensors.column.acceptedvalues;
+package com.dqops.snowflake.sensors.column.acceptedvalues;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedTextsInTopValuesCountCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -25,6 +27,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -32,7 +35,8 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec;
-import com.dqops.databricks.BaseDatabricksIntegrationTest;
+import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class DatabricksColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTests extends BaseDatabricksIntegrationTest {
+public class SnowflakeColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnExpectedTextsInTopValuesCountCheckSpec checkSpec;
@@ -51,12 +55,56 @@ public class DatabricksColumnStringsExpectedTextsInTopValuesCountSensorParameter
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.databricks);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec();
         this.checkSpec = new ColumnExpectedTextsInTopValuesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataWithInvalidParameters_thenReturnsNull() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(null, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+                csvFileName, connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -66,7 +114,7 @@ public class DatabricksColumnStringsExpectedTextsInTopValuesCountSensorParameter
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -86,7 +134,7 @@ public class DatabricksColumnStringsExpectedTextsInTopValuesCountSensorParameter
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getDefaultDataGroupingConfiguration();
         dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
@@ -113,7 +161,7 @@ public class DatabricksColumnStringsExpectedTextsInTopValuesCountSensorParameter
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
