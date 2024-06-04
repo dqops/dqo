@@ -18,7 +18,8 @@ The DQOps web interface is divided into three main areas.
 
 The DQOps home screen provides a quick guide on how to start data quality monitoring. Here, you can also access summaries
 that provide a centralized view of the data quality or all your monitored tables and columns. 
-These summaries are created based on the results of previously executed data quality checks.
+These summaries are created based on the results of previously executed monitoring and partition data quality checks. 
+The results form profiling data quality are not included in the calculation.
 
 ### **Tables summary**
 The Tables summary screen provides a centralized view of the data quality of all your tables within DQOps.
