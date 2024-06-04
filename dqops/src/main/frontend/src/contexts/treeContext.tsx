@@ -719,7 +719,6 @@ function TreeProvider(props: any) {
     if (!node) return;
     const nodeId = node.id.toString();
     const existTab = tabs.find((item) => item.value === nodeId);
-    console.log('existTab', existTab, tabs, nodeId, node);
     if (!existTab) {
       const newTab = {
         label: node.label ?? '',
@@ -1642,7 +1641,7 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      if (firstLevelActiveTab === url) {
+      if (firstLevelActiveTab === location.pathname) {
         return;
       }
       dispatch(
