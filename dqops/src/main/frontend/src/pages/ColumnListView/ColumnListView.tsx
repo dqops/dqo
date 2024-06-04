@@ -109,7 +109,7 @@ export default function ColumnListView() {
 
     fetchData();
     getLabels();
-  }, [filters]);
+  }, [filters, checkTypes, connection, schema]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
