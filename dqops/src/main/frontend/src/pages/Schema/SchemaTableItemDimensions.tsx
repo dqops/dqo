@@ -198,7 +198,11 @@ const renderSecondLevelTooltip = (
         <div className="flex gap-x-2">
           <div className="w-49">Data quality KPI:</div>
           <div>
-            {data?.data_quality_kpi ? data?.data_quality_kpi + '%' : ''}
+            {data?.data_quality_kpi
+              ? Number(data?.data_quality_kpi) === 100
+                ? '100%'
+                : Number(data?.data_quality_kpi).toFixed(2) + '%'
+              : ''}
           </div>
         </div>
       </div>
