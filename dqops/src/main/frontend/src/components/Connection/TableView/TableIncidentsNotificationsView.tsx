@@ -62,7 +62,7 @@ export const TableIncidentsNotificationsView = () => {
       value: item
     })),
     {
-      label: "Apply incident grouping at a connection level",
+      label: "Apply incident grouping configured at the connection level",
       value: undefined
     }
   ];  
@@ -84,7 +84,6 @@ export const TableIncidentsNotificationsView = () => {
             label="Data quality incident grouping level:"
             options={groupLevelOptions}
             value={incidentGrouping?.grouping_level}
-            prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
             disabled={userProfile.can_manage_data_sources !== true}
             className="min-w-110 text-sm"
