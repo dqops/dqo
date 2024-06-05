@@ -16,6 +16,7 @@
 
 package com.dqops.data.incidents.models;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,6 +24,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.
@@ -48,4 +51,18 @@ public class IncidentsPerConnectionModel {
      */
     @JsonPropertyDescription("The UTC timestamp when the most recent data quality incident was first seen.")
     private Instant mostRecentFirstSeen;
+
+    /**
+     * Sample factory for an incident model.
+     */
+    public static class IncidentsPerConnectionModelSampleFactory implements SampleValueFactory<IncidentsPerConnectionModel> {
+        @Override
+        public IncidentsPerConnectionModel createSample() {
+            return new IncidentsPerConnectionModel() {{
+                setConnection("datalake");
+                setOpenIncidents(40);
+                setMostRecentFirstSeen(LocalDateTime.of(2024, 06, 01, 11, 45, 22, 0).toInstant(ZoneOffset.UTC));
+            }};
+        }
+    }
 }

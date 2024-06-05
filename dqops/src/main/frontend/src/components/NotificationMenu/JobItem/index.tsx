@@ -193,9 +193,9 @@ const JobItem = ({
                   <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td className="px-2 capitalize align-top">Tables pattern</td>
+                  <td className="px-2 capitalize align-top">Table name contains</td>
                   <td className="px-2 max-w-76">
-                    {job?.parameters?.importSchemaParameters?.tableNamePattern}
+                    {job?.parameters?.importSchemaParameters?.tableNameContains}
                   </td>
                 </tr>
               </>

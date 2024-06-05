@@ -365,10 +365,13 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a text that must be present inside a table name.
+     * @param limit The maximum number of tables to return.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
         DuckdbParametersSpec duckDbParameters = getConnectionSpec().getDuckdb();
         if (duckDbParameters == null) {
             duckDbParameters = new DuckdbParametersSpec();
@@ -380,7 +383,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         DuckdbStorageType storageType = duckDbParameters.getStorageType();
         TablesLister remoteTablesLister = tablesListerProvider.createTablesLister(storageType);
-        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckDbParameters, schemaName);
+        List<SourceTableModel> sourceTableModels = remoteTablesLister.listTables(duckDbParameters, schemaName, tableNameContains, limit);
         return sourceTableModels;
     }
 
@@ -388,6 +391,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains An optional filter for a substring that must be present in a table name.
+     * @param limit The maximum number of tables to return.
      * @param tableNames Table names.
      * @param connectionWrapper The connection wrapper on table spec which points the file path and the file format.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
@@ -395,6 +400,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -416,6 +423,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         for (String tableName : tableNames) {
+            if (!Strings.isNullOrEmpty(tableNameContains)) {
+                if (!tableName.contains(tableNameContains)) {
+                    continue;
+                }
+            }
+
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
             TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(physicalTableName.toString());
             if (tableSpecTemp == null){
@@ -461,6 +474,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 }
             }
 
+            if (tableSpecs.size() >= limit) {
+                break;
+            }
         }
         return tableSpecs;
     }

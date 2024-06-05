@@ -15,11 +15,15 @@
  */
 package com.dqops.data.incidents.models;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * A model that stores a daily number of incidents.
@@ -67,6 +71,21 @@ public class IncidentDailyIssuesCount {
         }
         else if (severityLevel == 3) {
             this.fatals++;
+        }
+    }
+
+    /**
+     * Sample factory for an incident model.
+     */
+    public static class IncidentDailyIssuesCountSampleFactory implements SampleValueFactory<IncidentDailyIssuesCount> {
+        @Override
+        public IncidentDailyIssuesCount createSample() {
+            return new IncidentDailyIssuesCount() {{
+                setTotalCount(10);
+                setWarnings(2);
+                setErrors(7);
+                setFatals(1);
+            }};
         }
     }
 }

@@ -16,6 +16,7 @@
 package com.dqops.core.jobqueue.jobs.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -24,9 +25,14 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
 public class ImportSchemaQueueJobParameters {
+    @JsonPropertyDescription("Connection name where the tables are imported.")
     private String connectionName;
+
+    @JsonPropertyDescription("Source schema name from which the tables are imported.")
     private String schemaName;
-    private String tableNamePattern;
+
+    @JsonPropertyDescription("Optional filter for the names of tables to import, it is a text (substring) that must be present inside table names. This filter is case sensitive.")
+    private String tableNameContains;
 
     public ImportSchemaQueueJobParameters() {
     }
@@ -35,12 +41,12 @@ public class ImportSchemaQueueJobParameters {
      * Creates a schema import job parameters.
      * @param connectionName Connection name to import.
      * @param schemaName Schema name in the source database to import.
-     * @param tableNamePattern Optional table name search filter.
+     * @param tableNameContains Optional table name search filter.
      */
-    public ImportSchemaQueueJobParameters(String connectionName, String schemaName, String tableNamePattern) {
+    public ImportSchemaQueueJobParameters(String connectionName, String schemaName, String tableNameContains) {
         this.connectionName = connectionName;
         this.schemaName = schemaName;
-        this.tableNamePattern = tableNamePattern;
+        this.tableNameContains = tableNameContains;
     }
 
     /**
@@ -76,18 +82,18 @@ public class ImportSchemaQueueJobParameters {
     }
 
     /**
-     * Sets an optional table filter. It could be a table name "customers", or a name with a prefix/suffix/infix: "*customer", "customer*", "cus*r".
-     * @return Table name search pattern.
+     * Sets an optional table filter that should be a text inside the table name, without any wildcard characters.
+     * @return Table name substring.
      */
-    public String getTableNamePattern() {
-        return tableNamePattern;
+    public String getTableNameContains() {
+        return tableNameContains;
     }
 
     /**
      * Sets the table name search filter.
-     * @param tableNamePattern Table name search filter.
+     * @param tableNameContains Table name search filter.
      */
-    public void setTableNamePattern(String tableNamePattern) {
-        this.tableNamePattern = tableNamePattern;
+    public void setTableNameContains(String tableNameContains) {
+        this.tableNameContains = tableNameContains;
     }
 }

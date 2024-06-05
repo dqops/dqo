@@ -15735,6 +15735,17 @@
             "types" : [ "string" ]
           },
           "extensions" : { }
+        }, {
+          "name" : "tableNameContains",
+          "in" : "query",
+          "description" : "Optional filter to return tables that contain this text inside the table name (case sensitive)",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -20725,6 +20736,77 @@
                     "types" : [ "string" ]
                   },
                   "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/topincidents" : {
+      "get" : {
+        "tags" : [ "Incidents" ],
+        "summary" : "findTopIncidentsGrouped",
+        "description" : "Finds the most recent incidents grouped by one of the incident's attribute, such as a data quality dimension, a data quality check category or the connection name.",
+        "operationId" : "findTopIncidentsGrouped",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Incident status to group. When this parameter is missing, the 'open' (new) incidents are grouped by default.",
+          "schema" : {
+            "$ref" : "#/components/schemas/IncidentStatus",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "groupBy",
+          "in" : "query",
+          "description" : "Incident grouping key. When this parameter is missing, returns incidents grouped by the data quality check category.",
+          "schema" : {
+            "$ref" : "#/components/schemas/TopIncidentGrouping",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The result limit for each group. When this parameter is missing, returns the default limit of 10",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TopIncidentsModel",
+                  "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
@@ -65679,18 +65761,21 @@
         "properties" : {
           "connectionName" : {
             "type" : "string",
+            "description" : "Connection name where the tables are imported.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "schemaName" : {
             "type" : "string",
+            "description" : "Source schema name from which the tables are imported.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "tableNamePattern" : {
+          "tableNameContains" : {
             "type" : "string",
+            "description" : "Optional filter for the names of tables to import, it is a text (substring) that must be present inside table names. This filter is case sensitive.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -65702,13 +65787,16 @@
           "type" : "object",
           "properties" : {
             "connectionName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Connection name where the tables are imported."
             },
             "schemaName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "Source schema name from which the tables are imported."
             },
-            "tableNamePattern" : {
-              "type" : "string"
+            "tableNameContains" : {
+              "type" : "string",
+              "description" : "Optional filter for the names of tables to import, it is a text (substring) that must be present inside table names. This filter is case sensitive."
             }
           }
         }
@@ -65734,6 +65822,13 @@
           "schemaName" : {
             "type" : "string",
             "description" : "Schema name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "tableNameContains" : {
+            "type" : "string",
+            "description" : "Optional filter for the table names to import. The table names that are imported must contain a substring matching this parameter. This filter is case sensitive.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -65764,6 +65859,10 @@
             "schemaName" : {
               "type" : "string",
               "description" : "Schema name"
+            },
+            "tableNameContains" : {
+              "type" : "string",
+              "description" : "Optional filter for the table names to import. The table names that are imported must contain a substring matching this parameter. This filter is case sensitive."
             },
             "tableNames" : {
               "type" : "array",
@@ -80431,6 +80530,69 @@
           }
         }
       },
+      "TopIncidentsModel" : {
+        "type" : "object",
+        "properties" : {
+          "grouping" : {
+            "$ref" : "#/components/schemas/TopIncidentGrouping",
+            "exampleSetFlag" : false
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/IncidentStatus",
+            "exampleSetFlag" : false
+          },
+          "topIncidents" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "items" : {
+                "$ref" : "#/components/schemas/IncidentModel",
+                "extensions" : { },
+                "exampleSetFlag" : false
+              },
+              "types" : [ "array" ]
+            },
+            "description" : "Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "description" : "Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first)."
+            }
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "grouping" : {
+              "type" : "string",
+              "description" : "Incident grouping used to group the top incidents in the dictionary of top incidents.",
+              "enum" : [ "dimension", "category", "connection" ]
+            },
+            "status" : {
+              "type" : "string",
+              "description" : "Incident status of the incidents that are returned.",
+              "enum" : [ "open", "acknowledged", "resolved", "muted" ]
+            },
+            "topIncidents" : {
+              "type" : "object",
+              "description" : "Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).",
+              "additionalProperties" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/definitions/IncidentModel",
+                  "originalRef" : "#/definitions/IncidentModel"
+                }
+              }
+            }
+          }
+        }
+      },
       "TrinoParametersSpec" : {
         "type" : "object",
         "properties" : {
@@ -80629,6 +80791,11 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "open", "acknowledged", "resolved", "muted" ]
+      },
+      "TopIncidentGrouping" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "dimension", "category", "connection" ]
       },
       "BigQueryJobsCreateProject" : {
         "type" : "string",

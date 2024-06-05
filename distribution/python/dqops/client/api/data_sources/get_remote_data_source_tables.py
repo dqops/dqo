@@ -6,14 +6,21 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.remote_table_list_model import RemoteTableListModel
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     connection_name: str,
     schema_name: str,
+    *,
+    table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     pass
+
+    params: Dict[str, Any] = {}
+    params["tableNameContains"] = table_name_contains
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "get",
@@ -21,6 +28,7 @@ def _get_kwargs(
             connectionName=connection_name,
             schemaName=schema_name,
         ),
+        "params": params,
     }
 
 
@@ -58,6 +66,7 @@ def sync_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Response[List["RemoteTableListModel"]]:
     """getRemoteDataSourceTables
 
@@ -67,6 +76,7 @@ def sync_detailed(
     Args:
         connection_name (str):
         schema_name (str):
+        table_name_contains (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -79,6 +89,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
+        table_name_contains=table_name_contains,
     )
 
     response = client.get_httpx_client().request(
@@ -93,6 +104,7 @@ def sync(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["RemoteTableListModel"]]:
     """getRemoteDataSourceTables
 
@@ -102,6 +114,7 @@ def sync(
     Args:
         connection_name (str):
         schema_name (str):
+        table_name_contains (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -115,6 +128,7 @@ def sync(
         connection_name=connection_name,
         schema_name=schema_name,
         client=client,
+        table_name_contains=table_name_contains,
     ).parsed
 
 
@@ -123,6 +137,7 @@ async def asyncio_detailed(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Response[List["RemoteTableListModel"]]:
     """getRemoteDataSourceTables
 
@@ -132,6 +147,7 @@ async def asyncio_detailed(
     Args:
         connection_name (str):
         schema_name (str):
+        table_name_contains (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,6 +160,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         connection_name=connection_name,
         schema_name=schema_name,
+        table_name_contains=table_name_contains,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -156,6 +173,7 @@ async def asyncio(
     schema_name: str,
     *,
     client: AuthenticatedClient,
+    table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["RemoteTableListModel"]]:
     """getRemoteDataSourceTables
 
@@ -165,6 +183,7 @@ async def asyncio(
     Args:
         connection_name (str):
         schema_name (str):
+        table_name_contains (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -179,5 +198,6 @@ async def asyncio(
             connection_name=connection_name,
             schema_name=schema_name,
             client=client,
+            table_name_contains=table_name_contains,
         )
     ).parsed

@@ -33,6 +33,7 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Big query connection.
@@ -156,10 +157,13 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter to return tables that contain a given text in the name.
+     * @param limit Limit of rows to retur.
+     * @param secretValueLookupContext Secret lookup context to find secrets.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
         try {
             List<SourceTableModel> tables = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
@@ -179,10 +183,20 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 SourceTableModel sourceTableModel = new SourceTableModel();
                 String datasetName = table.getTableId().getDataset();
                 PhysicalTableName physicalTableName = new PhysicalTableName(datasetName, table.getTableId().getTable());
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!physicalTableName.getTableName().contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
                 sourceTableModel.setSchemaName(datasetName);
                 sourceTableModel.setTableName(physicalTableName);
                 sourceTableModel.getProperties().put("projectId", projectId);
                 tables.add(sourceTableModel);
+
+                if (tables.size() >= limit) {
+                    break;
+                }
             }
 
             return tables;
@@ -196,11 +210,17 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter to return only tables that match a condition.
+     * @param limit The limit of the number of tables to return.
+     * @param connectionWrapper Connection wrapper of the parent connection.
      * @param tableNames Table names.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of table specifications with the column list.
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -232,6 +252,16 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 columnType.setNullable(isNullable);
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
+            }
+
+            if (!org.apache.parquet.Strings.isNullOrEmpty(tableNameContains)) {
+                tableSpecs.removeIf(tableSpec -> !tableSpec.getPhysicalTableName().getTableName().contains(tableNameContains));
+            }
+
+            if (tableSpecs.size() > limit) {
+                tableSpecs = tableSpecs.stream()
+                        .limit(limit)
+                        .collect(Collectors.toList());
             }
 
             return tableSpecs;

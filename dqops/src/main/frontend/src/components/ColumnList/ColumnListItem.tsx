@@ -187,8 +187,8 @@ export default function SchemaTableItem({
           <td>
             <div className="flex gap-x-2 items-center justify-center mx-3">
               <Tooltip
-                content={'Add a new connection and manage its settings'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                content={'Data Sources'}
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon
@@ -200,7 +200,7 @@ export default function SchemaTableItem({
               </Tooltip>
               <Tooltip
                 content={'Profiling'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon
@@ -212,7 +212,7 @@ export default function SchemaTableItem({
               </Tooltip>
               <Tooltip
                 content={'Monitoring Checks'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon
@@ -224,7 +224,7 @@ export default function SchemaTableItem({
               </Tooltip>
               <Tooltip
                 content={'Partition Checks'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <div>
                   <SvgIcon

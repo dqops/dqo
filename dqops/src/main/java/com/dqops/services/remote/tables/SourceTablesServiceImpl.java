@@ -16,6 +16,7 @@
 package com.dqops.services.remote.tables;
 
 import com.dqops.connectors.*;
+import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -40,15 +41,18 @@ import java.util.stream.Collectors;
 public class SourceTablesServiceImpl implements SourceTablesService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
-    private SecretValueProvider secretValueProvider;
+    private final SecretValueProvider secretValueProvider;
+    private final DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties;
 
     @Autowired
     public SourceTablesServiceImpl(UserHomeContextFactory userHomeContextFactory,
                                    ConnectionProviderRegistry connectionProviderRegistry,
-                                   SecretValueProvider secretValueProvider) {
+                                   SecretValueProvider secretValueProvider,
+                                   DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.metadataImportConfigurationProperties = metadataImportConfigurationProperties;
     }
 
     /**
@@ -56,10 +60,15 @@ public class SourceTablesServiceImpl implements SourceTablesService {
      *
      * @param connectionName Connection name. Required import.
      * @param schemaName     Schema name.
+     * @param tableNameContains Optional filter to return tables that contain this text.
      * @param principal      Calling user principal.
      * @return Table list acquired remotely.
      */
-    public List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName, String schemaName, DqoUserPrincipal principal) {
+    @Override
+    public List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName,
+                                                               String schemaName,
+                                                               String tableNameContains,
+                                                               DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -84,7 +93,9 @@ public class SourceTablesServiceImpl implements SourceTablesService {
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
+            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName, tableNameContains,
+                    this.metadataImportConfigurationProperties.getTablesImportLimit(), secretValueLookupContext);
+
             remoteTableListModels = sourceTableModels.stream()
                     .map(sourceTableModel -> new RemoteTableListModel(){{
                         setConnectionName(connectionName);

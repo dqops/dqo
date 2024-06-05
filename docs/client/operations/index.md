@@ -264,6 +264,7 @@ Data quality incidents controller that supports reading and updating data qualit
 |<span class="no-wrap-code">[`disable_checks_for_incident`</span>](./incidents.md#disable_checks_for_incident)|POST|Disables all data quality checks that caused a given data quality incident.|
 |<span class="no-wrap-code">[`find_connection_incident_stats`</span>](./incidents.md#find_connection_incident_stats)|GET|Returns a list of connection names with incident statistics - the count of recent open incidents.|
 |<span class="no-wrap-code">[`find_recent_incidents_on_connection`</span>](./incidents.md#find_recent_incidents_on_connection)|GET|Returns a list of recent data quality incidents.|
+|<span class="no-wrap-code">[`find_top_incidents_grouped`</span>](./incidents.md#find_top_incidents_grouped)|GET|Finds the most recent incidents grouped by one of the incident&#x27;s attribute, such as a data quality dimension, a data quality check category or the connection name.|
 |<span class="no-wrap-code">[`get_incident`</span>](./incidents.md#get_incident)|GET|Return a single data quality incident&#x27;s details.|
 |<span class="no-wrap-code">[`get_incident_histogram`</span>](./incidents.md#get_incident_histogram)|GET|Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.|
 |<span class="no-wrap-code">[`get_incident_issues`</span>](./incidents.md#get_incident_issues)|GET|Return a paged list of failed data quality check results that are related to an incident.|

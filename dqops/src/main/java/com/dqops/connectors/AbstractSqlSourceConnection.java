@@ -21,11 +21,13 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.utils.conversion.NumericTypeConverter;
 import org.apache.parquet.Strings;
+import org.jetbrains.annotations.NotNull;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Base class for source connections that are using SQL. The derived providers can reuse the logic for querying the metadata using the INFORMATION_SCHEMA management views.
@@ -143,10 +145,35 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @return List of tables in the given schema.
+     * @param tableNameContains Optional filter with a substring that must be present in the table names.
+     * @param limit The limit of tables to return.
+     * @param secretValueLookupContext Secret value lookup context.     * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
+        String listTablesSql = buildListTablesSql(schemaName, tableNameContains, limit);
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceTableModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
+            String tableName = tablesRows.getString(rowIndex, "table_name");
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+            results.add(schemaModel);
+        }
+
+        return results;
+    }
+
+    /**
+     * Generates an SQL statement that lists tables.
+     * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a text that must be present in the tables returned.
+     * @param limit The limit of the number of tables to return.
+     * @return SQL string for a query that lists tables.
+     */
+    @NotNull
+    public String buildListTablesSql(String schemaName, String tableNameContains, int limit) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -163,29 +190,38 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             sqlBuilder.append("'");
         }
 
-        String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-
-        List<SourceTableModel> results = new ArrayList<>();
-        for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
-            String tableName = tablesRows.getString(rowIndex, "table_name");
-            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-            results.add(schemaModel);
+        if (!Strings.isNullOrEmpty(tableNameContains)) {
+            sqlBuilder.append(" AND table_name LIKE '%");
+            sqlBuilder.append(tableNameContains.replace("'", "''"));
+            sqlBuilder.append("%'");
         }
 
-        return results;
+        ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
+        if (dialectSettings.isSupportsLimitClause()) {
+            sqlBuilder.append(" LIMIT ");
+            sqlBuilder.append(limit);
+        }
+
+        String listTablesSql = sqlBuilder.toString();
+        return listTablesSql;
     }
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a substring that must be present in the table names.
+     * @param limit The limit of tables to return.
+     * @param secretValueLookupContext Secret value lookup context.
      * @param tableNames Table names.
+     * @param connectionWrapper Parent connection wrapper.
+     * @param secretValueLookupContext Secret value lookup context.
      * @return List of table specifications with the column list.
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -204,12 +240,23 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
+
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!physicalTableName.contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
                 String columnName = colRow.getString("column_name");
                 boolean isNullable = Objects.equals(colRow.getString("is_nullable"),"YES");
                 String dataType = colRow.getString("data_type");
 
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
+                    if (tableSpecs.size() >= limit) {
+                        break;
+                    }
+
                     tableSpec = new TableSpec();
                     tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);
@@ -445,7 +492,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 
-    private String makeFullyQualifiedTableName(TableSpec tableSpec){
+    protected String makeFullyQualifiedTableName(TableSpec tableSpec){
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
 

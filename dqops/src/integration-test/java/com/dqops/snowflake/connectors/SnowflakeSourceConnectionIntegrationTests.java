@@ -71,7 +71,7 @@ public class SnowflakeSourceConnectionIntegrationTests extends BaseSnowflakeInte
     @Test
     void listTables_whenPUBLICSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", null, 300, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() > 0);
     }
@@ -79,11 +79,11 @@ public class SnowflakeSourceConnectionIntegrationTests extends BaseSnowflakeInte
     @Test
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", null, 300, secretValueLookupContext);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames, null, null);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", null, 300, tableNames, null, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -93,11 +93,11 @@ public class SnowflakeSourceConnectionIntegrationTests extends BaseSnowflakeInte
     @Test
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables("PUBLIC", null, 300, secretValueLookupContext);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-                List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", tableNames, null, null);
+                List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("PUBLIC", null, 300, tableNames, null, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }

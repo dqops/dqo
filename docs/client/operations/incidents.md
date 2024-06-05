@@ -194,11 +194,17 @@ http://localhost:8888/api/incidentstat
     
         ```
         [ {
-		  "openIncidents" : 0
+		  "connection" : "datalake",
+		  "openIncidents" : 40,
+		  "mostRecentFirstSeen" : "2024-06-01T11:45:22Z"
 		}, {
-		  "openIncidents" : 0
+		  "connection" : "datalake",
+		  "openIncidents" : 40,
+		  "mostRecentFirstSeen" : "2024-06-01T11:45:22Z"
 		}, {
-		  "openIncidents" : 0
+		  "connection" : "datalake",
+		  "openIncidents" : 40,
+		  "mostRecentFirstSeen" : "2024-06-01T11:45:22Z"
 		} ]
         ```
     
@@ -228,9 +234,21 @@ http://localhost:8888/api/incidentstat
     
         ```
         [
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0)
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			)
 		]
         ```
     
@@ -261,9 +279,21 @@ http://localhost:8888/api/incidentstat
     
         ```
         [
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0)
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			)
 		]
         ```
     
@@ -297,9 +327,21 @@ http://localhost:8888/api/incidentstat
     
         ```
         [
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0)
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			)
 		]
         ```
     
@@ -333,9 +375,21 @@ http://localhost:8888/api/incidentstat
     
         ```
         [
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0),
-			IncidentsPerConnectionModel(open_incidents=0)
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			),
+			IncidentsPerConnectionModel(
+				connection='datalake',
+				open_incidents=40,
+				most_recent_first_seen='2024-06-01T11:45:22Z'
+			)
 		]
         ```
     
@@ -404,23 +458,44 @@ http://localhost:8888/api/incidents/{connectionName}
     
         ```
         [ {
-		  "year" : 0,
-		  "month" : 0,
-		  "highestSeverity" : 0,
+		  "incidentId" : "c05e6544-46e5-47ed-b8c2-b72927199976",
+		  "connection" : "datalake",
+		  "year" : 2024,
+		  "month" : 6,
+		  "schema" : "public",
+		  "table" : "fact_sales",
+		  "firstSeen" : "2024-06-01T11:45:22Z",
+		  "qualityDimension" : "Completeness",
+		  "highestSeverity" : 2,
 		  "minimumSeverity" : 0,
-		  "failedChecksCount" : 0
+		  "failedChecksCount" : 5,
+		  "status" : "open"
 		}, {
-		  "year" : 0,
-		  "month" : 0,
-		  "highestSeverity" : 0,
+		  "incidentId" : "c05e6544-46e5-47ed-b8c2-b72927199976",
+		  "connection" : "datalake",
+		  "year" : 2024,
+		  "month" : 6,
+		  "schema" : "public",
+		  "table" : "fact_sales",
+		  "firstSeen" : "2024-06-01T11:45:22Z",
+		  "qualityDimension" : "Completeness",
+		  "highestSeverity" : 2,
 		  "minimumSeverity" : 0,
-		  "failedChecksCount" : 0
+		  "failedChecksCount" : 5,
+		  "status" : "open"
 		}, {
-		  "year" : 0,
-		  "month" : 0,
-		  "highestSeverity" : 0,
+		  "incidentId" : "c05e6544-46e5-47ed-b8c2-b72927199976",
+		  "connection" : "datalake",
+		  "year" : 2024,
+		  "month" : 6,
+		  "schema" : "public",
+		  "table" : "fact_sales",
+		  "firstSeen" : "2024-06-01T11:45:22Z",
+		  "qualityDimension" : "Completeness",
+		  "highestSeverity" : 2,
 		  "minimumSeverity" : 0,
-		  "failedChecksCount" : 0
+		  "failedChecksCount" : 5,
+		  "status" : "open"
 		} ]
         ```
     
@@ -454,25 +529,46 @@ http://localhost:8888/api/incidents/{connectionName}
         ```
         [
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			)
 		]
         ```
@@ -508,25 +604,46 @@ http://localhost:8888/api/incidents/{connectionName}
         ```
         [
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			)
 		]
         ```
@@ -565,25 +682,46 @@ http://localhost:8888/api/incidents/{connectionName}
         ```
         [
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			)
 		]
         ```
@@ -622,27 +760,340 @@ http://localhost:8888/api/incidents/{connectionName}
         ```
         [
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			),
 			IncidentModel(
-				year=0,
-				month=0,
-				highest_severity=0,
+				incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+				connection='datalake',
+				year=2024,
+				month=6,
+				schema='public',
+				table='fact_sales',
+				first_seen='2024-06-01T11:45:22Z',
+				quality_dimension='Completeness',
+				highest_severity=2,
 				minimum_severity=0,
-				failed_checks_count=0
+				failed_checks_count=5,
+				status=IncidentStatus.OPEN
 			)
 		]
+        ```
+    
+    
+    
+
+
+
+___
+## find_top_incidents_grouped
+Finds the most recent incidents grouped by one of the incident&#x27;s attribute, such as a data quality dimension, a data quality check category or the connection name.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_top_incidents_grouped.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/topincidents
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`top_incidents_model`](../models/incidents.md#topincidentsmodel)</span>||*[TopIncidentsModel](../models/incidents.md#topincidentsmodel)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">[`status`](../models/incidents.md#incidentstatus)</span>|Incident status to group. When this parameter is missing, the &#x27;open&#x27; (new) incidents are grouped by default.|*[IncidentStatus](../models/incidents.md#incidentstatus)*| |
+|<span class="no-wrap-code">[`group_by`](../models/incidents.md#topincidentgrouping)</span>|Incident grouping key. When this parameter is missing, returns incidents grouped by the data quality check category.|*[TopIncidentGrouping](../models/incidents.md#topincidentgrouping)*| |
+|<span class="no-wrap-code">`limit`</span>|The result limit for each group. When this parameter is missing, returns the default limit of 10|*long*| |
+|<span class="no-wrap-code">`limit`</span>|Optional filter to configure a time window before now to scan for incidents based on the incident&#x27;s first seen attribute.|*long*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/topincidents^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "grouping" : "dimension",
+		  "status" : "open",
+		  "topIncidents" : {
+		    "Completeness" : [ {
+		      "incidentId" : "c05e6544-46e5-47ed-b8c2-b72927199976",
+		      "connection" : "datalake",
+		      "year" : 2024,
+		      "month" : 6,
+		      "schema" : "public",
+		      "table" : "fact_sales",
+		      "firstSeen" : "2024-06-01T11:45:22Z",
+		      "qualityDimension" : "Completeness",
+		      "highestSeverity" : 2,
+		      "minimumSeverity" : 0,
+		      "failedChecksCount" : 5,
+		      "status" : "open"
+		    } ]
+		  }
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_top_incidents_grouped
+	from dqops.client.models import IncidentStatus, \
+	                                TopIncidentGrouping
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_top_incidents_grouped.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TopIncidentsModel(
+			grouping=TopIncidentGrouping.DIMENSION,
+			status=IncidentStatus.OPEN,
+			top_incidents={
+				'Completeness': [
+					IncidentModel(
+						incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+						connection='datalake',
+						year=2024,
+						month=6,
+						schema='public',
+						table='fact_sales',
+						first_seen='2024-06-01T11:45:22Z',
+						quality_dimension='Completeness',
+						highest_severity=2,
+						minimum_severity=0,
+						failed_checks_count=5,
+						status=IncidentStatus.OPEN
+					)
+				]
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_top_incidents_grouped
+	from dqops.client.models import IncidentStatus, \
+	                                TopIncidentGrouping
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_top_incidents_grouped.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TopIncidentsModel(
+			grouping=TopIncidentGrouping.DIMENSION,
+			status=IncidentStatus.OPEN,
+			top_incidents={
+				'Completeness': [
+					IncidentModel(
+						incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+						connection='datalake',
+						year=2024,
+						month=6,
+						schema='public',
+						table='fact_sales',
+						first_seen='2024-06-01T11:45:22Z',
+						quality_dimension='Completeness',
+						highest_severity=2,
+						minimum_severity=0,
+						failed_checks_count=5,
+						status=IncidentStatus.OPEN
+					)
+				]
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_top_incidents_grouped
+	from dqops.client.models import IncidentStatus, \
+	                                TopIncidentGrouping
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_top_incidents_grouped.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TopIncidentsModel(
+			grouping=TopIncidentGrouping.DIMENSION,
+			status=IncidentStatus.OPEN,
+			top_incidents={
+				'Completeness': [
+					IncidentModel(
+						incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+						connection='datalake',
+						year=2024,
+						month=6,
+						schema='public',
+						table='fact_sales',
+						first_seen='2024-06-01T11:45:22Z',
+						quality_dimension='Completeness',
+						highest_severity=2,
+						minimum_severity=0,
+						failed_checks_count=5,
+						status=IncidentStatus.OPEN
+					)
+				]
+			}
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_top_incidents_grouped
+	from dqops.client.models import IncidentStatus, \
+	                                TopIncidentGrouping
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_top_incidents_grouped.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        TopIncidentsModel(
+			grouping=TopIncidentGrouping.DIMENSION,
+			status=IncidentStatus.OPEN,
+			top_incidents={
+				'Completeness': [
+					IncidentModel(
+						incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+						connection='datalake',
+						year=2024,
+						month=6,
+						schema='public',
+						table='fact_sales',
+						first_seen='2024-06-01T11:45:22Z',
+						quality_dimension='Completeness',
+						highest_severity=2,
+						minimum_severity=0,
+						failed_checks_count=5,
+						status=IncidentStatus.OPEN
+					)
+				]
+			}
+		)
         ```
     
     
@@ -703,11 +1154,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
         ```
         {
-		  "year" : 0,
-		  "month" : 0,
-		  "highestSeverity" : 0,
+		  "incidentId" : "c05e6544-46e5-47ed-b8c2-b72927199976",
+		  "connection" : "datalake",
+		  "year" : 2024,
+		  "month" : 6,
+		  "schema" : "public",
+		  "table" : "fact_sales",
+		  "firstSeen" : "2024-06-01T11:45:22Z",
+		  "qualityDimension" : "Completeness",
+		  "highestSeverity" : 2,
 		  "minimumSeverity" : 0,
-		  "failedChecksCount" : 0
+		  "failedChecksCount" : 5,
+		  "status" : "open"
 		}
         ```
     
@@ -741,11 +1199,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
         ```
         IncidentModel(
-			year=0,
-			month=0,
-			highest_severity=0,
+			incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+			connection='datalake',
+			year=2024,
+			month=6,
+			schema='public',
+			table='fact_sales',
+			first_seen='2024-06-01T11:45:22Z',
+			quality_dimension='Completeness',
+			highest_severity=2,
 			minimum_severity=0,
-			failed_checks_count=0
+			failed_checks_count=5,
+			status=IncidentStatus.OPEN
 		)
         ```
     
@@ -780,11 +1245,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
         ```
         IncidentModel(
-			year=0,
-			month=0,
-			highest_severity=0,
+			incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+			connection='datalake',
+			year=2024,
+			month=6,
+			schema='public',
+			table='fact_sales',
+			first_seen='2024-06-01T11:45:22Z',
+			quality_dimension='Completeness',
+			highest_severity=2,
 			minimum_severity=0,
-			failed_checks_count=0
+			failed_checks_count=5,
+			status=IncidentStatus.OPEN
 		)
         ```
     
@@ -822,11 +1294,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
         ```
         IncidentModel(
-			year=0,
-			month=0,
-			highest_severity=0,
+			incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+			connection='datalake',
+			year=2024,
+			month=6,
+			schema='public',
+			table='fact_sales',
+			first_seen='2024-06-01T11:45:22Z',
+			quality_dimension='Completeness',
+			highest_severity=2,
 			minimum_severity=0,
-			failed_checks_count=0
+			failed_checks_count=5,
+			status=IncidentStatus.OPEN
 		)
         ```
     
@@ -864,11 +1343,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     
         ```
         IncidentModel(
-			year=0,
-			month=0,
-			highest_severity=0,
+			incident_id='c05e6544-46e5-47ed-b8c2-b72927199976',
+			connection='datalake',
+			year=2024,
+			month=6,
+			schema='public',
+			table='fact_sales',
+			first_seen='2024-06-01T11:45:22Z',
+			quality_dimension='Completeness',
+			highest_severity=2,
 			minimum_severity=0,
-			failed_checks_count=0
+			failed_checks_count=5,
+			status=IncidentStatus.OPEN
 		)
         ```
     

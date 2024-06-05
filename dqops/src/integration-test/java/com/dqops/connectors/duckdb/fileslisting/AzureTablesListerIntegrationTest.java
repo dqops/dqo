@@ -49,7 +49,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/");
         duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSizeGreaterThanOrEqualTo(2)
@@ -67,7 +67,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container");
         duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSizeGreaterThanOrEqualTo(2)
@@ -85,7 +85,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://duckdb-container/test-folder-1/data-set-1/");
         duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())
@@ -104,7 +104,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.setClientSecret(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET, secretValueLookupContext));
         duckdbParametersSpec.setAccountName(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_ACCOUNT_NAME, secretValueLookupContext));
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())
@@ -120,7 +120,7 @@ class AzureTablesListerIntegrationTest extends BaseTest {
         duckdbParametersSpec.getDirectories().put(schemaName, "az://" + accountName + ".blob.core.windows.net/duckdb-container/");
         duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AZURE_STORAGE_CONNECTION_STRING, secretValueLookupContext));
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSizeGreaterThanOrEqualTo(2)

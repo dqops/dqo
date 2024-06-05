@@ -181,3 +181,32 @@ REST api model sort direction.
 
 ___
 
+## TopIncidentGrouping
+Enumeration of groupings for incidents.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|dimension<br/>category<br/>connection<br/>|
+
+___
+
+## TopIncidentsModel
+Summary model with the most recent incidents grouped by one attribute (data quality dimension, data quality check category, etc).
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`grouping`](./incidents.md#topincidentgrouping)</span>|Incident grouping used to group the top incidents in the dictionary of top incidents.|*[TopIncidentGrouping](./incidents.md#topincidentgrouping)*|
+|<span class="no-wrap-code">[`status`](./incidents.md#incidentstatus)</span>|Incident status of the incidents that are returned.|*[IncidentStatus](./incidents.md#incidentstatus)*|
+|<span class="no-wrap-code">`top_incidents`</span>|Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).|*Dict[string, List[[IncidentModel](./incidents.md#incidentmodel)]]*|
+
+
+___
+

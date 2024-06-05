@@ -359,24 +359,28 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             DateTimeColumn timePeriodColumn = newCheckResults.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
             TextColumn checkTypeColumn = newCheckResults.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
-            Selection selectionOfNotProfilingCheckResults = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
+            Selection selectionOfMonitoringCheckResults = checkTypeColumn.isEqualTo(CheckType.monitoring.getDisplayName());
             Selection selectionOfPartitionedCheckResults = checkTypeColumn.isEqualTo(CheckType.partitioned.getDisplayName());
+            Selection selectionOfIssuesAboveMinSeverity = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
+
+            Selection selectionOfMonitoringAlerts = selectionOfMonitoringCheckResults // only monitoring (full table scan) check results
+                    .and(selectionOfIssuesAboveMinSeverity); // incidents generated only for severity above a threshold
 
             ZoneId defaultTimeZoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
             int partitionedChecksTimeWindowDays = incidentsConfigurationProperties.getPartitionedChecksTimeWindowDays();
             LocalDateTime oldestIncludedPartitionedCheck = Instant.now().atZone(defaultTimeZoneId).truncatedTo(ChronoUnit.DAYS)
                     .minus(partitionedChecksTimeWindowDays, ChronoUnit.DAYS)
                     .toLocalDateTime();
-            Selection selectionOfPartitionChecksInTimeWindowCheckResults = timePeriodColumn.isOnOrAfter(oldestIncludedPartitionedCheck)
-                    .and(selectionOfPartitionedCheckResults);
+            Selection selectionOfPartitionChecksInTimeWindowCheckResults = selectionOfPartitionedCheckResults
+                    .and(selectionOfIssuesAboveMinSeverity)
+                    .and(timePeriodColumn.isOnOrAfter(oldestIncludedPartitionedCheck));
 
-            Selection selectionOfIssuesAboveMinSeverity = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
-            Selection selectionOfNewAlerts = selectionOfNotProfilingCheckResults // issues detected in profiling checks are not generating data quality incidents
-                    .and(selectionOfIssuesAboveMinSeverity) // incidents generated only for severity above a threshold
-                    .and(selectionOfPartitionChecksInTimeWindowCheckResults); // incidents for issues related to old partitioned checks cover results only for a specified time window
+            Selection selectionOfAllNewAlerts = selectionOfMonitoringAlerts // only monitoring issues, independent of the time period
+                    .or(selectionOfPartitionChecksInTimeWindowCheckResults); // incidents for issues related to old partitioned checks cover results only for a specified time window
+                    // profiling check results are not used to generate incidents, that is why there is no third OR
             List<Integer> newIncidentsRowIndexes = new ArrayList<>();
 
-            if (selectionOfNewAlerts.isEmpty()) {
+            if (selectionOfAllNewAlerts.isEmpty()) {
                 return null; // no alerts with a severity at the threshold when we create incidents
             }
 
@@ -395,7 +399,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             InstantColumn incidentUntilNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
             TextColumn statusNewIncidentsColumn = this.allNewIncidentRows.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
-            int[] issuesRowIndexes = selectionOfNewAlerts.toArray();
+            int[] issuesRowIndexes = selectionOfAllNewAlerts.toArray();
             for (int i = 0; i < issuesRowIndexes.length; i++) {
                 int checkResultRowIndex = issuesRowIndexes[i];
                 Integer severity = severityColumn.get(checkResultRowIndex);

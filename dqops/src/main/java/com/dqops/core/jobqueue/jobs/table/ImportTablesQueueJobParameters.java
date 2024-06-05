@@ -35,6 +35,9 @@ public class ImportTablesQueueJobParameters {
     @JsonPropertyDescription("Schema name")
     private String schemaName;
 
+    @JsonPropertyDescription("Optional filter for the table names to import. The table names that are imported must contain a substring matching this parameter. This filter is case sensitive.")
+    private String tableNameContains;
+
     @JsonPropertyDescription("Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.")
     private List<String> tableNames;
 
@@ -45,11 +48,13 @@ public class ImportTablesQueueJobParameters {
      * Creates a schema import job parameters.
      * @param connectionName Connection name to import.
      * @param schemaName Schema name in the source database to import.
+     * @param tableNameContains Optional filter for the table names to import.
      * @param tableNames Names of tables to import.
      */
-    public ImportTablesQueueJobParameters(String connectionName, String schemaName, List<String> tableNames) {
+    public ImportTablesQueueJobParameters(String connectionName, String schemaName, String tableNameContains, List<String> tableNames) {
         this.connectionName = connectionName;
         this.schemaName = schemaName;
+        this.tableNameContains = tableNameContains;
         this.tableNames = tableNames;
     }
 
@@ -83,6 +88,22 @@ public class ImportTablesQueueJobParameters {
      */
     public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
+    }
+
+    /**
+     * Returns an optional filter for the table names to return.
+     * @return Optional filter for the table names.
+     */
+    public String getTableNameContains() {
+        return tableNameContains;
+    }
+
+    /**
+     * Sets an optional filter for the table names.
+     * @param tableNameContains Table name filter.
+     */
+    public void setTableNameContains(String tableNameContains) {
+        this.tableNameContains = tableNameContains;
     }
 
     /**

@@ -340,7 +340,7 @@ export const IncidentDetail = () => {
             <div className="flex items-center gap-x-2">
               <Tooltip
                 content={'Disable'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <Button
                   leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
@@ -362,7 +362,7 @@ export const IncidentDetail = () => {
               </Tooltip>
               <Tooltip
                 content={'Settings'}
-                className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+                className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
                 <Button
                   leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
@@ -510,7 +510,7 @@ export const IncidentDetail = () => {
                       >
                         <Tooltip
                           content={incidentDetail?.issueUrl}
-                          className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+                          className="max-w-80 py-2 px-2 bg-gray-800 delay-300"
                           placement="top-start"
                         >
                           {incidentDetail?.issueUrl.length > 15

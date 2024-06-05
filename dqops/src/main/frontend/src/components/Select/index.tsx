@@ -91,7 +91,7 @@ const Select = ({
           {!!tooltipText && (
             <Tooltip
               content={tooltipText}
-              className="max-w-80 py-4 px-4 bg-gray-800"
+              className="max-w-80 py-2 px-2 bg-gray-800"
             >
               <div>
                 <SvgIcon

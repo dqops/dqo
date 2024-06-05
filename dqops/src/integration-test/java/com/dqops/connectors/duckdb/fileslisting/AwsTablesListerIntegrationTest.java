@@ -44,7 +44,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
     void listTables_straightlyFromBucket_returnFileAndFolder() {
         duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/");
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSizeGreaterThanOrEqualTo(2)
@@ -59,7 +59,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
     void listTables_straightlyFromBucketWithNoTrailingSlash_returnFileAndFolder() {
         duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test");
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSizeGreaterThanOrEqualTo(2)
@@ -74,7 +74,7 @@ class AwsTablesListerIntegrationTest extends BaseTest {
     void listTables_fromBucketPrefixWithSingleFile_returnOnlyOneFile() {
         duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/test-folder-1/data-set-1/");
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName);
+        List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
         assertThat(sourceTableModels)
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().getTableName())

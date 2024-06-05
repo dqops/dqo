@@ -176,6 +176,8 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
 
                     List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
                             schemaName,
+                            null,
+                            1,
                             new ArrayList<>() {{
                                 add(tableName);
                             }},

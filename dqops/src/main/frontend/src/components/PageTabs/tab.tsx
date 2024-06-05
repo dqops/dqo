@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 
 import clsx from 'clsx';
 
-import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
 
 export interface TabOption {
   label: string;
@@ -51,7 +51,7 @@ const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
     return (
       <Tooltip
         content={tab?.tooltip}
-        className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+        className="max-w-80 py-2 px-2 bg-gray-800 delay-300"
         placement="top-start"
       >
         {content}
