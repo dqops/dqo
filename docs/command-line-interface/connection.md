@@ -738,8 +738,8 @@ List all the tables available in the database for the specified connection and s
 
 ```
 $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
-                       [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
-                       [-l=<labels>]...
+                       [-s=<schema>] [-t=<tableNameContains>]
+                       [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
@@ -747,8 +747,8 @@ $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] 
 
 ```
 dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
-                       [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
-                       [-l=<labels>]...
+                       [-s=<schema>] [-t=<tableNameContains>]
+                       [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
@@ -768,7 +768,7 @@ All parameters supported by the command are listed below.
 |<div id="connection table list-l" class="no-wrap-code">`-l`</div><div id="connection table list--label" class="no-wrap-code">`--label`</div>|Label filter| ||
 |<div id="connection table list-of" class="no-wrap-code">`-of`</div><div id="connection table list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="connection table list-s" class="no-wrap-code">`-s`</div><div id="connection table list--schema" class="no-wrap-code">`--schema`</div>|Schema name| ||
-|<div id="connection table list-t" class="no-wrap-code">`-t`</div><div id="connection table list--table" class="no-wrap-code">`--table`</div>|Table name, without the schema name.| ||
+|<div id="connection table list-t" class="no-wrap-code">`-t`</div><div id="connection table list--table" class="no-wrap-code">`--table`</div>|Table name or a fragment of the table name| ||
 
 
 

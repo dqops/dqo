@@ -60,7 +60,7 @@ export const Pagination = ({
           options={pageSizeOptions}
           value={pageSize}
           onChange={onChangePageSize}
-          menuClassName="top-[-150px]"
+          menuClassName="top-[-120px]"
         />
       </div>
       <div className="flex items-center gap-2">

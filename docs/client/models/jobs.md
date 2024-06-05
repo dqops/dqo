@@ -422,9 +422,9 @@ Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that im
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`connection_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`schema_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`table_name_pattern`</span>|:mm|*string*|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name where the tables are imported.|*string*|
+|<span class="no-wrap-code">`schema_name`</span>|Source schema name from which the tables are imported.|*string*|
+|<span class="no-wrap-code">`table_name_contains`</span>|Optional filter for the names of tables to import, it is a text (substring) that must be present inside table names. This filter is case sensitive.|*string*|
 
 
 ___
@@ -440,6 +440,7 @@ Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that im
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|
+|<span class="no-wrap-code">`table_name_contains`</span>|Optional filter for the table names to import. The table names that are imported must contain a substring matching this parameter. This filter is case sensitive.|*string*|
 |<span class="no-wrap-code">`table_names`</span>|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|*List[string]*|
 
 

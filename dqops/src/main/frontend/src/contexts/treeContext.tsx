@@ -1641,7 +1641,7 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      if (firstLevelActiveTab === url) {
+      if (firstLevelActiveTab === location.pathname) {
         return;
       }
       dispatch(

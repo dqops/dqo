@@ -195,6 +195,8 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*IncidentSortOrder*](./incidents.md#incidentsortorder)|Incident sort order columns.|
 |[*IncidentsPerConnectionModel*](./incidents.md#incidentsperconnectionmodel)|Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.|
 |[*SortDirection*](./incidents.md#sortdirection)|REST api model sort direction.|
+|[*TopIncidentGrouping*](./incidents.md#topincidentgrouping)|Enumeration of groupings for incidents.|
+|[*TopIncidentsModel*](./incidents.md#topincidentsmodel)|Summary model with the most recent incidents grouped by one attribute (data quality dimension, data quality check category, etc).|
 
 
 ## jobs
