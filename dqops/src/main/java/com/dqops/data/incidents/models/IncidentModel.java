@@ -22,6 +22,7 @@ import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
@@ -302,5 +304,27 @@ public class IncidentModel {
         }
 
         return checkSearchFilters;
+    }
+
+    /**
+     * Sample factory for an incident model.
+     */
+    public static class IncidentModelSampleFactory implements SampleValueFactory<IncidentModel> {
+        @Override
+        public IncidentModel createSample() {
+            return new IncidentModel() {{
+               setConnection("datalake");
+               setYear(2024);
+               setMonth(06);
+               setStatus(IncidentStatus.open);
+               setIncidentId("c05e6544-46e5-47ed-b8c2-b72927199976");
+               setQualityDimension("Completeness");
+               setHighestSeverity(2);
+               setFailedChecksCount(5);
+               setFirstSeen(LocalDateTime.of(2024, 06, 01, 11, 45, 22, 0).toInstant(ZoneOffset.UTC));
+               setSchema("public");
+               setTable("fact_sales");
+            }};
+        }
     }
 }

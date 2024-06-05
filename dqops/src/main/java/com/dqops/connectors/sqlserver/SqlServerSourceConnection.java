@@ -16,6 +16,7 @@
 package com.dqops.connectors.sqlserver;
 
 import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -23,6 +24,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,6 +33,7 @@ import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -189,4 +192,18 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Generates an SQL statement that lists tables.
+     *
+     * @param schemaName        Schema name.
+     * @param tableNameContains Optional filter with a text that must be present in the tables returned.
+     * @param limit             The limit of the number of tables to return.
+     * @return SQL string for a query that lists tables.
+     */
+    @Override
+    public @NotNull String buildListTablesSql(String schemaName, String tableNameContains, int limit) {
+        String sql = super.buildListTablesSql(schemaName, tableNameContains, limit);
+        String sqlWithTop = sql.replace("SELECT", "SELECT TOP " + limit);
+        return sqlWithTop;
+    }
 }

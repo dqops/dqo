@@ -33,7 +33,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
 
         Map<String, String> directories = duckdbParametersSpec.getDirectories();
 
-        if(directories == null || directories.isEmpty()){
+        if (directories == null || directories.isEmpty()) {
             throw new RuntimeException("Virtual schema name is not configured in the Import configuration.");
         }
 
@@ -43,18 +43,18 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             List<SourceTableModel> tables;
 
             DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
-            if(storageType != null && storageType.equals(DuckdbStorageType.s3)) {
+            if (storageType != null && storageType.equals(DuckdbStorageType.s3)) {
 
                 Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
                         .filter(x -> !x.getValue().toLowerCase().startsWith(AwsConstants.S3_URI_PREFIX))
                         .findAny();
 
-                if(pathWithInvalidPrefix.isPresent()){
+                if (pathWithInvalidPrefix.isPresent()) {
                     throw new RuntimeException("S3 path for the schema " + pathWithInvalidPrefix.get().getKey() + " must start with " + AwsConstants.S3_URI_PREFIX);
                 }
             }
 
-            if(storageType != null && storageType.equals(DuckdbStorageType.azure)) {
+            if (storageType != null && storageType.equals(DuckdbStorageType.azure)) {
 
                 Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
                         .filter(x -> !x.getValue().toLowerCase().startsWith(AzureConstants.BLOB_STORAGE_URI_PREFIX)
@@ -62,7 +62,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                         )
                         .findAny();
 
-                if(pathWithInvalidPrefix.isPresent()){
+                if (pathWithInvalidPrefix.isPresent()) {
                     throw new RuntimeException("Azure path for the schema " + pathWithInvalidPrefix.get().getKey()
                             + " must start with " + AzureConstants.BLOB_STORAGE_URI_PREFIX
                             + " or " + AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX);
@@ -70,9 +70,9 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
             }
 
             TablesLister tablesLister = tablesListerProvider.createTablesLister(storageType);
-            tables = tablesLister.listTables(duckdbParametersSpec, schema);
+            tables = tablesLister.listTables(duckdbParametersSpec, schema, null, 10);
 
-            if(tables == null || tables.isEmpty()){
+            if (tables == null || tables.isEmpty()) {
                 throw new RuntimeException("No files found in the path " + directories.get(schema));
             }
         });
@@ -84,7 +84,7 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                 .filter(x -> x.getValue() == null || x.getValue().isEmpty())
                 .findAny();
 
-        if(schemaToEmptyPath.isPresent()){
+        if (schemaToEmptyPath.isPresent()) {
             throw new RuntimeException("A path is not filled in the schema: " + schemaToEmptyPath.get().getKey());
         }
     }

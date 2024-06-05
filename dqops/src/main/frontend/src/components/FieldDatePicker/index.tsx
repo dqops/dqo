@@ -1,12 +1,11 @@
 import React, { FocusEvent, useRef } from 'react';
 
-import clsx from 'clsx';
-import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
-import moment from 'moment';
-import usePopup from '../../hooks/usePopup';
+import clsx from 'clsx';
 import BaseDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import usePopup from '../../hooks/usePopup';
+import SvgIcon from '../SvgIcon';
 
 interface IFieldDatePickerProps {
   type?: string;
@@ -62,7 +61,7 @@ const FieldDatePicker = ({
             {!!tooltipText && (
               <Tooltip
                 content={tooltipText}
-                className="max-w-80 py-4 px-4 bg-gray-800"
+                className="max-w-80 py-2 px-2 bg-gray-800"
               >
                 <div>
                   <SvgIcon

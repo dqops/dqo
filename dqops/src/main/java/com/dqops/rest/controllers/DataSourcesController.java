@@ -146,6 +146,8 @@ public class DataSourcesController {
      * Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.
      * @param connectionName Connection name. Required import.
      * @param schemaName     Schema name.
+     * @param tableNameContains Optional filter for a text inside table names.
+     * @param principal      User principal.
      * @return List of tables inside a schema.
      */
     @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
@@ -166,10 +168,12 @@ public class DataSourcesController {
     public ResponseEntity<Flux<RemoteTableListModel>> getRemoteDataSourceTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName) {
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam(name = "tableNameContains", value = "Optional filter to return tables that contain this text inside the table name (case sensitive)", required = false)
+            @RequestParam(required = false) Optional<String> tableNameContains) {
         List<RemoteTableListModel> result;
         try {
-            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, principal);
+            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, tableNameContains.orElse(null), principal);
         }
         catch (SourceTablesServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

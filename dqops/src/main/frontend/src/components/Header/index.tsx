@@ -208,8 +208,10 @@ const Header = () => {
         </div>
       )}
       <div className="flex space-x-2">
-        <div className="w-30 flex justify-center items-center"
-          onClick={() => history.push(homeActiveTab ?? '/home')}>
+        <div
+          className="w-30 flex justify-center items-center"
+          onClick={() => history.push(homeActiveTab ?? '/home')}
+        >
           <Logo
             className={clsx(
               'w-24 cursor-pointer items-center',
@@ -220,7 +222,7 @@ const Header = () => {
         <div className="flex items-center">
           <Tooltip
             content={'Add a new connection and manage its settings'}
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -239,7 +241,7 @@ const Header = () => {
             content={
               'Measure basic data statistics and experiment with various types of data quality checks'
             }
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -250,16 +252,13 @@ const Header = () => {
               )}
               onClick={onClick(CheckTypes.PROFILING)}
             >
-              <SvgIcon
-                name="profiling"
-                className="w-4.5 h-4.5 mr-2"
-              />
+              <SvgIcon name="profiling" className="w-4.5 h-4.5 mr-2" />
               {!isWindowSmall && <div>Profiling</div>}
             </div>
           </Tooltip>
           <Tooltip
             content={'Run standard checks that monitor the data quality'}
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -278,7 +277,7 @@ const Header = () => {
             content={
               'Run checks designed to monitor the data quality of partitioned data'
             }
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -295,7 +294,7 @@ const Header = () => {
           </Tooltip>
           <Tooltip
             content={'Review the summaries of data quality monitoring'}
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -312,7 +311,7 @@ const Header = () => {
             content={
               'Review and manage the issues that arise during data quality monitoring'
             }
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(
@@ -327,7 +326,7 @@ const Header = () => {
           </Tooltip>
           <Tooltip
             content={'Customize built-in data quality sensors and rules'}
-            className="max-w-80 py-4 px-4 bg-gray-800 delay-700"
+            className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
           >
             <div
               className={clsx(

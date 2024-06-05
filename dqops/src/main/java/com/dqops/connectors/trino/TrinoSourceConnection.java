@@ -260,7 +260,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
      * @param tableSpec Table specification with the physical table name, column names and physical column data types.
      * @return Ready to execute sql statement.
      */
-    String generateCreateTableSqlStatementForAthena(TableSpec tableSpec){
+    protected String generateCreateTableSqlStatementForAthena(TableSpec tableSpec){
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE EXTERNAL TABLE IF NOT EXISTS ");
         sqlBuilder.append(tableSpec.getPhysicalTableName().getSchemaName());

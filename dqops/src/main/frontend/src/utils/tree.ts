@@ -14,9 +14,9 @@
 /// limitations under the License.
 ///
 
+import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITreeNode } from '../shared/interfaces';
-import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 
 export const findNode = (
   treeData: ITreeNode,
@@ -65,4 +65,5 @@ export const findTreeNode = (
   return undefined;
 };
 
-export const sleep = (duration: number) => new Promise((resolve) => setTimeout(resolve, duration));
+export const sleep = (duration: number) =>
+  new Promise((resolve) => setTimeout(resolve, duration));

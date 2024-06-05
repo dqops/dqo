@@ -5,6 +5,7 @@ import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -25,9 +26,11 @@ public class LocalSystemTablesLister implements TablesLister {
      * Returns list of SourceTableModel from local system.
      * @param duckdb DuckdbParametersSpec
      * @param schemaName The name of a virtual schema.
+     * @param tableNameContains Optional filter for table names that must contain this name.
+     * @param limit The maximum number of tables to return.
      * @return The list of SourceTableModel.
      */
-    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName){
+    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName, String tableNameContains, int limit){
         String pathPrefixString = duckdb.getDirectories().get(schemaName);
         File[] files = Path.of(pathPrefixString).toFile().listFiles();
         if(files == null){
@@ -37,6 +40,11 @@ public class LocalSystemTablesLister implements TablesLister {
 
         List<SourceTableModel> sourceTableModels = Arrays.stream(files).map(file -> {
             String fileName = file.toString().substring(folderPrefix.length() + 1);
+            if (!Strings.isNullOrEmpty(tableNameContains)) {
+                if (!fileName.contains(tableNameContains)) {
+                    return null;
+                }
+            }
             String extension = duckdb.getFullExtension();
             if(!isFolderOrFileOfValidExtension(file, pathPrefixString, extension)) {
                 return null;
@@ -44,7 +52,9 @@ public class LocalSystemTablesLister implements TablesLister {
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
             SourceTableModel sourceTableModel = new SourceTableModel(schemaName, physicalTableName);
             return sourceTableModel;
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+        }).filter(Objects::nonNull)
+                .limit(limit)
+                .collect(Collectors.toList());
 
         return sourceTableModels;
     }

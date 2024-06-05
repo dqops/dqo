@@ -236,6 +236,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 |---------------|---------------------------------|-----------|-----------------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name_contains`</span>|Optional filter to return tables that contain this text inside the table name (case sensitive)|*string*| |
 
 
 

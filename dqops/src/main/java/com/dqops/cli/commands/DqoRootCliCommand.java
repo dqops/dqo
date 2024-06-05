@@ -225,8 +225,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoDefaultTimeZone;
 
     @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
-            description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
+            description = "The time window between now and X days ago to scan for open incidents that are shown on the list of connections in the incidents section.", defaultValue = "60")
     private Integer dqoIncidentsCountOpenIncidentsDays;
+
+    @CommandLine.Option(names = {"--dqo.incidents.top-incidents-days"},
+            description = "The time window between now and X days ago to scan for incidents that are shown on the main screen, grouped by a requested grouping.", defaultValue = "30")
+    private Integer dqoIncidentsTopIncidentsDays;
 
     @CommandLine.Option(names = {"--dqo.incidents.column-histogram-size"},
             description = "The size of the column histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
@@ -248,6 +252,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.jdbc.expire-after-access-seconds"},
             description = "Sets the number of seconds when a connection in a JDBC pool is expired after the last access.", defaultValue = "1800")
     private Integer dqoJdbcExpireAfterAccessSeconds;
+
+    @CommandLine.Option(names = {"--dqo.metadata.import.tables-import-limit"},
+            description = "Sets the maximum number of tables that are imported from a data source. DQOps supports importing more tables by importing additional tables specified by a different table filter.", defaultValue = "300")
+    private Integer metadataImportTablesImportLimit;
 
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")

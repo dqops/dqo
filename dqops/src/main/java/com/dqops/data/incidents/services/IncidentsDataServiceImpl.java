@@ -24,10 +24,9 @@ import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
-import com.dqops.data.incidents.models.IncidentListFilterParameters;
-import com.dqops.data.incidents.models.IncidentModel;
+import com.dqops.data.incidents.models.*;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.rest.models.common.SortDirection;
-import com.dqops.data.incidents.models.IncidentsPerConnectionModel;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.data.storage.LoadedMonthlyPartition;
@@ -69,7 +68,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param checkResultsDataService Data quality check results data service, used to load results (matching issues).
      * @param userHomeContextFactory User home context factory, used to load a list of connections.
      * @param dqoIncidentsConfigurationProperties DQOps incidents configuration parameters.
-     * @param defaultTimeZoneProvider Defautl time zone provider.
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
@@ -86,115 +85,133 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
 
     /**
      * Loads recent incidents on a connection.
-     * @param connectionName Connection name.
+     * @param connectionNameFilter Connection name filter.
      * @param filterParameters Incident filter parameters.
      * @param userDomainIdentity Calling user identity with the data domain.
      * @return Collection of recent incidents.
      */
     @Override
     public Collection<IncidentModel> loadRecentIncidentsOnConnection(
-            String connectionName, IncidentListFilterParameters filterParameters, UserDomainIdentity userDomainIdentity) {
-        IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
-        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
-        LocalDate endDate = Instant.now().atZone(defaultTimeZoneId).toLocalDate();
-        LocalDate startDate = filterParameters.getRecentMonths() > 1 ?
-                endDate.minusMonths(filterParameters.getRecentMonths() - 1) : endDate;
-        if (!incidentsSnapshot.ensureMonthsAreLoaded(startDate, endDate)) {
-            return new ArrayList<>(); // no results
+            String connectionNameFilter, IncidentListFilterParameters filterParameters, UserDomainIdentity userDomainIdentity) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
+        ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
+        List<ConnectionWrapper> connectionWrappers = connectionList.toList();
+
+        if (Strings.isNullOrEmpty(connectionNameFilter)) {
+            connectionNameFilter = "*";
         }
+
+        SearchPattern connectionNameSearchPattern = SearchPattern.create(false, connectionNameFilter);
+        ArrayList<IncidentModel> incidentModels = new ArrayList<>();
 
         String filter = filterParameters.getFilter();
         if (!Strings.isNullOrEmpty(filter) && filter.indexOf('*') < 0) {
             filter = "*" + filter + "*";
         }
 
-        ArrayList<IncidentModel> incidentModels = new ArrayList<>();
-        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
-        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
-            Table partitionTable = partitionEntry.getValue().getData();
-            if (partitionTable == null) {
-                // empty partition
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        LocalDate endDate = Instant.now().atZone(defaultTimeZoneId).toLocalDate();
+        LocalDate startDate = filterParameters.getRecentMonths() > 1 ?
+                endDate.minusMonths(filterParameters.getRecentMonths() - 1) : endDate;
+
+        for (ConnectionWrapper connectionWrapper : connectionWrappers) {
+            String connectionName = connectionWrapper.getName();
+            if (!connectionNameSearchPattern.match(connectionName)) {
                 continue;
             }
 
-            TextColumn incidentIdColumn = partitionTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
-            TextColumn schemaColumn = partitionTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-            TextColumn tableColumn = partitionTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
-            IntColumn tablePriorityColumn = partitionTable.intColumn(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
-            LongColumn incidentHashColumn = partitionTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
-            InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
-            InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
-            InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
-            TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-            TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
-            TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
-            IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
-            IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
-                    partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
-            IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
-            TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
-            TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+            IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
+            if (!incidentsSnapshot.ensureMonthsAreLoaded(startDate, endDate)) {
+                return new ArrayList<>(); // no results
+            }
 
-            int partitionYear = partitionEntry.getKey().getMonth().getYear();
-            int partitionMonth = partitionEntry.getKey().getMonth().getMonthValue();
-
-            int rowCount = partitionTable.rowCount();
-            for (int rowIndex = rowCount - 1; rowIndex >= 0; rowIndex--) {
-                String status = statusColumn.get(rowIndex);
-                IncidentStatus incidentStatus = IncidentStatus.valueOf(status);
-
-                if (!filterParameters.isIncidentStatusEnabled(incidentStatus)) {
-                    continue; // skipping
-                }
-
-                IncidentModel incidentModel = new IncidentModel();
-                incidentModel.setIncidentId(incidentIdColumn.get(rowIndex));
-                incidentModel.setYear(partitionYear);
-                incidentModel.setMonth(partitionMonth);
-                incidentModel.setConnection(connectionName);
-                incidentModel.setSchema(schemaColumn.get(rowIndex));
-                incidentModel.setTable(tableColumn.get(rowIndex));
-                if (!tablePriorityColumn.isMissing(rowIndex)) {
-                    incidentModel.setTablePriority(tablePriorityColumn.get(rowIndex));
-                }
-                incidentModel.setIncidentHash(incidentHashColumn.get(rowIndex));
-                Instant firstSeen = firstSeenColumn.get(rowIndex);
-                incidentModel.setFirstSeen(firstSeen);
-                incidentModel.setLastSeen(lastSeenColumn.get(rowIndex));
-                incidentModel.setIncidentUntil(incidentUntilColumn.get(rowIndex));
-                if (!dataStreamNameColumn.isMissing(rowIndex)) {
-                    incidentModel.setDataGroup(dataStreamNameColumn.get(rowIndex));
-                }
-                if (!qualityDimensionColumn.isMissing(rowIndex)) {
-                    incidentModel.setQualityDimension(qualityDimensionColumn.get(rowIndex));
-                }
-                if (!checkCategoryColumn.isMissing(rowIndex)) {
-                    incidentModel.setCheckCategory(checkCategoryColumn.get(rowIndex));
-                }
-                if (!checkTypeColumn.isMissing(rowIndex)) {
-                    incidentModel.setCheckType(checkTypeColumn.get(rowIndex));
-                }
-                if (!checkNameColumn.isMissing(rowIndex)) {
-                    incidentModel.setCheckName(checkNameColumn.get(rowIndex));
-                }
-                if (!issueUrlColumn.isMissing(rowIndex)) {
-                    incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
-                }
-                incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
-                if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
-                    incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
-                }
-                incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
-                incidentModel.setStatus(incidentStatus);
-
-                if (!Strings.isNullOrEmpty(filter) &&
-                     !incidentModel.matchesFilter(filter)) {
+            Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
+                Table partitionTable = partitionEntry.getValue().getData();
+                if (partitionTable == null) {
+                    // empty partition
                     continue;
                 }
 
-                incidentModels.add(incidentModel);
+                TextColumn incidentIdColumn = partitionTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
+                TextColumn schemaColumn = partitionTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+                TextColumn tableColumn = partitionTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
+                IntColumn tablePriorityColumn = partitionTable.intColumn(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
+                LongColumn incidentHashColumn = partitionTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
+                InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
+                InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
+                InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
+                TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+                TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
+                IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
+                IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
+                        partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
+                IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
+                TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+
+                int partitionYear = partitionEntry.getKey().getMonth().getYear();
+                int partitionMonth = partitionEntry.getKey().getMonth().getMonthValue();
+
+                int rowCount = partitionTable.rowCount();
+                for (int rowIndex = rowCount - 1; rowIndex >= 0; rowIndex--) {
+                    String status = statusColumn.get(rowIndex);
+                    IncidentStatus incidentStatus = IncidentStatus.valueOf(status);
+
+                    if (!filterParameters.isIncidentStatusEnabled(incidentStatus)) {
+                        continue; // skipping
+                    }
+
+                    IncidentModel incidentModel = new IncidentModel();
+                    incidentModel.setIncidentId(incidentIdColumn.get(rowIndex));
+                    incidentModel.setYear(partitionYear);
+                    incidentModel.setMonth(partitionMonth);
+                    incidentModel.setConnection(connectionName);
+                    incidentModel.setSchema(schemaColumn.get(rowIndex));
+                    incidentModel.setTable(tableColumn.get(rowIndex));
+                    if (!tablePriorityColumn.isMissing(rowIndex)) {
+                        incidentModel.setTablePriority(tablePriorityColumn.get(rowIndex));
+                    }
+                    incidentModel.setIncidentHash(incidentHashColumn.get(rowIndex));
+                    Instant firstSeen = firstSeenColumn.get(rowIndex);
+                    incidentModel.setFirstSeen(firstSeen);
+                    incidentModel.setLastSeen(lastSeenColumn.get(rowIndex));
+                    incidentModel.setIncidentUntil(incidentUntilColumn.get(rowIndex));
+                    if (!dataStreamNameColumn.isMissing(rowIndex)) {
+                        incidentModel.setDataGroup(dataStreamNameColumn.get(rowIndex));
+                    }
+                    if (!qualityDimensionColumn.isMissing(rowIndex)) {
+                        incidentModel.setQualityDimension(qualityDimensionColumn.get(rowIndex));
+                    }
+                    if (!checkCategoryColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckCategory(checkCategoryColumn.get(rowIndex));
+                    }
+                    if (!checkTypeColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckType(checkTypeColumn.get(rowIndex));
+                    }
+                    if (!checkNameColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckName(checkNameColumn.get(rowIndex));
+                    }
+                    if (!issueUrlColumn.isMissing(rowIndex)) {
+                        incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
+                    }
+                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
+                        incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
+                    }
+                    incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
+                    incidentModel.setStatus(incidentStatus);
+
+                    if (!Strings.isNullOrEmpty(filter) &&
+                            !incidentModel.matchesFilter(filter)) {
+                        continue;
+                    }
+
+                    incidentModels.add(incidentModel);
+                }
             }
         }
 
@@ -389,5 +406,181 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         model.setOpenIncidents(openIncidentsCount);
         model.setMostRecentFirstSeen(mostRecentFirstSeen);
         return model;
+    }
+
+    /**
+     * Finds the top <code>limitPerGroup</code> incidents grouped by <code>incidentGrouping</code> that are at the given incident status.
+     *
+     * @param incidentGrouping   Incident grouping.
+     * @param incidentStatus     Incident status to filter by.
+     * @param limitPerGroup      The maximum number of incidents per group to return.
+     * @param daysToScan         The number of days back to scan.
+     * @param userDomainIdentity Calling user identity with the data domain.
+     * @return Summary of the most recent incidents.
+     */
+    @Override
+    public TopIncidentsModel findTopIncidents(TopIncidentGrouping incidentGrouping,
+                                              IncidentStatus incidentStatus,
+                                              int limitPerGroup,
+                                              int daysToScan,
+                                              UserDomainIdentity userDomainIdentity) {
+        TopIncidentsModel result = new TopIncidentsModel();
+        result.setGrouping(incidentGrouping);
+        result.setStatus(incidentStatus);
+
+        if (daysToScan > 180) {
+            daysToScan = 180; // sanity limit
+        }
+
+        Instant now = Instant.now();
+        Instant since = now.minus(daysToScan, ChronoUnit.DAYS);
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        LocalDate dateUntil = now.atZone(defaultTimeZoneId).toLocalDate();
+        LocalDate dateSince = since.atZone(defaultTimeZoneId).toLocalDate();
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
+        ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
+        List<ConnectionWrapper> connectionWrappers = connectionList.toList();
+
+        for (ConnectionWrapper connectionWrapper : connectionWrappers) {
+            String connectionName = connectionWrapper.getName();
+            IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName, userDomainIdentity);
+            if (!incidentsSnapshot.ensureMonthsAreLoaded(dateSince, dateUntil)) {
+                continue;
+            }
+
+            Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
+                Table partitionTable = partitionEntry.getValue().getData();
+                if (partitionTable == null) {
+                    // empty partition
+                    continue;
+                }
+
+                TextColumn incidentIdColumn = partitionTable.textColumn(IncidentsColumnNames.ID_COLUMN_NAME);
+                TextColumn schemaColumn = partitionTable.textColumn(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+                TextColumn tableColumn = partitionTable.textColumn(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME);
+                IntColumn tablePriorityColumn = partitionTable.intColumn(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
+                LongColumn incidentHashColumn = partitionTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
+                InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
+                InstantColumn lastSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
+                InstantColumn incidentUntilColumn = partitionTable.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
+                TextColumn dataStreamNameColumn = partitionTable.textColumn(IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                TextColumn qualityDimensionColumn = partitionTable.textColumn(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+                TextColumn checkCategoryColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
+                IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
+                IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
+                        partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
+                IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
+                TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+
+                int partitionYear = partitionEntry.getKey().getMonth().getYear();
+                int partitionMonth = partitionEntry.getKey().getMonth().getMonthValue();
+
+                int rowCount = partitionTable.rowCount();
+                for (int rowIndex = rowCount - 1; rowIndex >= 0; rowIndex--) {
+                    String statusText = statusColumn.get(rowIndex);
+                    IncidentStatus status = IncidentStatus.valueOf(statusText);
+                    if (status != incidentStatus) {
+                        continue;
+                    }
+
+                    String groupingKey = null;
+                    switch (incidentGrouping) {
+                        case dimension:
+                            groupingKey = qualityDimensionColumn.isMissing(rowIndex) ? null : qualityDimensionColumn.getString(rowIndex);
+                            break;
+
+                        case category:
+                            groupingKey = checkCategoryColumn.isMissing(rowIndex) ? null : checkCategoryColumn.getString(rowIndex);
+                            break;
+
+                        case connection:
+                            groupingKey = connectionName;
+                            break;
+                    }
+
+                    if (groupingKey == null) {
+                        groupingKey = ""; // alternative name, when an incident was not grouped by a dimension, we will get null, but we want to return that incident in an unnamed group
+                    }
+
+                    List<IncidentModel> incidentModelsByGroup = result.getTopIncidents().get(groupingKey);
+                    if (incidentModelsByGroup == null) {
+                        incidentModelsByGroup = new ArrayList<>();
+                        result.getTopIncidents().put(groupingKey, incidentModelsByGroup);
+                    }
+
+                    Instant firstSeen = firstSeenColumn.get(rowIndex);
+
+                    if (since.isAfter(firstSeen)) {
+                        continue; // too old
+                    }
+
+                    if (incidentModelsByGroup.size() >= limitPerGroup) {
+                        IncidentModel lastIncidentInGroup = incidentModelsByGroup.get(incidentModelsByGroup.size() - 1);
+                        if (!firstSeen.isAfter(lastIncidentInGroup.getFirstSeen())) {
+                            continue; // skipping
+                        }
+                    }
+
+                    IncidentModel incidentModel = new IncidentModel();
+                    incidentModel.setIncidentId(incidentIdColumn.get(rowIndex));
+                    incidentModel.setYear(partitionYear);
+                    incidentModel.setMonth(partitionMonth);
+                    incidentModel.setConnection(connectionName);
+                    incidentModel.setSchema(schemaColumn.get(rowIndex));
+                    incidentModel.setTable(tableColumn.get(rowIndex));
+                    if (!tablePriorityColumn.isMissing(rowIndex)) {
+                        incidentModel.setTablePriority(tablePriorityColumn.get(rowIndex));
+                    }
+                    incidentModel.setIncidentHash(incidentHashColumn.get(rowIndex));
+                    incidentModel.setFirstSeen(firstSeen);
+                    incidentModel.setLastSeen(lastSeenColumn.get(rowIndex));
+                    incidentModel.setIncidentUntil(incidentUntilColumn.get(rowIndex));
+                    if (!dataStreamNameColumn.isMissing(rowIndex)) {
+                        incidentModel.setDataGroup(dataStreamNameColumn.get(rowIndex));
+                    }
+                    if (!qualityDimensionColumn.isMissing(rowIndex)) {
+                        incidentModel.setQualityDimension(qualityDimensionColumn.get(rowIndex));
+                    }
+                    if (!checkCategoryColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckCategory(checkCategoryColumn.get(rowIndex));
+                    }
+                    if (!checkTypeColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckType(checkTypeColumn.get(rowIndex));
+                    }
+                    if (!checkNameColumn.isMissing(rowIndex)) {
+                        incidentModel.setCheckName(checkNameColumn.get(rowIndex));
+                    }
+                    if (!issueUrlColumn.isMissing(rowIndex)) {
+                        incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
+                    }
+                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
+                        incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
+                    }
+                    incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
+                    incidentModel.setStatus(incidentStatus);
+
+                    int indexOfInsertionPoint = Collections.binarySearch(incidentModelsByGroup, incidentModel,
+                            Comparator.comparing((IncidentModel model) -> model.getFirstSeen()).reversed());
+
+                    if (indexOfInsertionPoint >= 0) {
+                        incidentModelsByGroup.add(indexOfInsertionPoint, incidentModel);
+                    } else {
+                        incidentModelsByGroup.add(-indexOfInsertionPoint - 1, incidentModel);
+                    }
+
+                    if (incidentModelsByGroup.size() > limitPerGroup) {
+                        incidentModelsByGroup.remove(incidentModelsByGroup.size() - 1);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

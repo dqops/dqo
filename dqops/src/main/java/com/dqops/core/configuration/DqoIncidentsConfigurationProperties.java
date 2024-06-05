@@ -26,7 +26,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dqo.incidents")
 @EqualsAndHashCode(callSuper = false)
 public class DqoIncidentsConfigurationProperties implements Cloneable {
-    private int countOpenIncidentsDays = 15;
+    private int countOpenIncidentsDays = 60;
+    private int topIncidentsDays = 30;
     private int columnHistogramSize = 10;
     private int checkHistogramSize = 10;
     private int partitionedChecksTimeWindowDays = 45;
@@ -45,6 +46,22 @@ public class DqoIncidentsConfigurationProperties implements Cloneable {
      */
     public void setCountOpenIncidentsDays(int countOpenIncidentsDays) {
         this.countOpenIncidentsDays = countOpenIncidentsDays;
+    }
+
+    /**
+     * Returns the number of days shown on the summary of the top incidents.
+     * @return The number of days for the summary of the top incidents.
+     */
+    public int getTopIncidentsDays() {
+        return topIncidentsDays;
+    }
+
+    /**
+     * Sets the filter for the number of days for the summary of the top incidents per grouping.
+     * @param topIncidentsDays Days to scan for top incidents.
+     */
+    public void setTopIncidentsDays(int topIncidentsDays) {
+        this.topIncidentsDays = topIncidentsDays;
     }
 
     /**

@@ -1922,6 +1922,9 @@ from .text_built_in_date_formats import TextBuiltInDateFormats
 from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
+from .top_incident_grouping import TopIncidentGrouping
+from .top_incidents_model import TopIncidentsModel
+from .top_incidents_model_top_incidents import TopIncidentsModelTopIncidents
 from .trino_engine_type import TrinoEngineType
 from .trino_parameters_spec import TrinoParametersSpec
 from .trino_parameters_spec_properties import TrinoParametersSpecProperties
@@ -2812,6 +2815,9 @@ __all__ = (
     "TimePeriodGradient",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
+    "TopIncidentGrouping",
+    "TopIncidentsModel",
+    "TopIncidentsModelTopIncidents",
     "TrinoEngineType",
     "TrinoParametersSpec",
     "TrinoParametersSpecProperties",

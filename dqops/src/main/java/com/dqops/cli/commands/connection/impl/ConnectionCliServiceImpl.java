@@ -23,6 +23,7 @@ import com.dqops.cli.exceptions.CliRequiredParameterMissingException;
 import com.dqops.cli.output.OutputFormatService;
 import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
+import com.dqops.core.configuration.DqoMetadataImportConfigurationProperties;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
@@ -68,6 +69,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     private final EditorLaunchService editorLaunchService;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
     private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private final DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties;
 
     @Autowired
     public ConnectionCliServiceImpl(ConnectionService connectionService,
@@ -79,7 +81,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                     OutputFormatService outputFormatService,
                                     EditorLaunchService editorLaunchService,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
-                                    DqoUserPrincipalProvider dqoUserPrincipalProvider) {
+                                    DqoUserPrincipalProvider dqoUserPrincipalProvider,
+                                    DqoMetadataImportConfigurationProperties metadataImportConfigurationProperties) {
         this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -90,6 +93,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         this.editorLaunchService = editorLaunchService;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
+        this.metadataImportConfigurationProperties = metadataImportConfigurationProperties;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -132,7 +136,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             ArrayList<String> tableNames = new ArrayList<>();
             tableNames.add(physicalTableName.getTableName());
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames, connectionWrapper, secretValueLookupContext);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(),
+                    null, 1, tableNames, connectionWrapper, secretValueLookupContext);
 
             if (sourceTableSpecs.size() == 0) {
                 cliOperationStatus.setFailedMessage("No tables found in the data source");
@@ -187,14 +192,17 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      * Returns cli operation status.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
-     * @param tableName Table name.
+     * @param tableNameContains Table name.
      * @param tabularOutputFormat Tabular output format.
      * @param dimensions Dimensions filter.
      * @param labels Labels filter.
      * @return CLI operation status.
      */
     @Override
-    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
+    public CliOperationStatus loadTableList(String connectionName,
+                                            String schemaName,
+                                            String tableNameContains,
+                                            TabularOutputFormat tabularOutputFormat,
                                             String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
@@ -218,7 +226,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
+            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName, tableNameContains,
+                    this.metadataImportConfigurationProperties.getTablesImportLimit(), secretValueLookupContext);
             if (schemaModels.size() == 0) {
                 cliOperationStatus.setFailedMessage("No schemas found in the data source");
                 return cliOperationStatus;
@@ -239,7 +248,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                     IntColumn.create("Imported columns count"),
                     IntColumn.create("Table hash"));
 
-            for( SourceTableModel sourceTableModel : schemaModels) {
+            for (SourceTableModel sourceTableModel : schemaModels) {
                 Row row = resultTable.appendRow();
                 TableWrapper tableWrapper = findTableFromNameAndSchema(sourceTableModel.getTableName().getTableName(), tableWrappers);
                 row.setString(0, sourceTableModel.getTableName().toString());
@@ -270,7 +279,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     }
 
     private int countImportedTablesFromSchema(String schemaName, Collection<TableWrapper> tableWrappers) {
-        return tableWrappers.stream().filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
+        return tableWrappers.stream()
+                .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
                 .collect(Collectors.toList()).size();
     }
 

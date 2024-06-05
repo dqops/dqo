@@ -55,17 +55,25 @@ public interface SourceConnection extends Closeable {
     /**
      * Lists tables inside a schema. Views are also returned.
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a substring that must be present in the table names.
+     * @param limit The limit of tables to return.
+     * @param secretValueLookupContext Secret value lookup context.
      * @return List of tables in the given schema.
      */
-    List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext);
+    List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a substring that must be present in the table names.
+     * @param limit The limit of tables to return.
      * @param tableNames Table names.
+     * @param connectionWrapper Parent connection wrapper with a list of existing tables.
+     * @param secretValueLookupContext Secret value lookup context.
      * @return List of table specifications with the column list which pass the filters.
      */
-    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper, SecretValueLookupContext secretValueLookupContext);
+    List<TableSpec> retrieveTableMetadata(String schemaName, String tableNameContains, int limit,
+                                          List<String> tableNames, ConnectionWrapper connectionWrapper, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.

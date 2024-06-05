@@ -29,7 +29,8 @@ public class AwsTablesLister extends RemoteTablesLister {
      * @param schemaName The name of a virtual schema.
      * @return The list of SourceTableModel.
      */
-    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName){
+    @Override
+    public List<SourceTableModel> listTables(DuckdbParametersSpec duckdb, String schemaName, String tableNameContains, int limit) {
         AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials
                 .create(duckdb.getAwsAccessKeyId(), duckdb.getAwsSecretAccessKey());
         StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
@@ -46,7 +47,7 @@ public class AwsTablesLister extends RemoteTablesLister {
         List<String> files = listBucketObjects(s3Client, s3Uri);
         s3Client.close();
 
-        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName);
+        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName, tableNameContains, limit);
         return sourceTableModels;
     }
 

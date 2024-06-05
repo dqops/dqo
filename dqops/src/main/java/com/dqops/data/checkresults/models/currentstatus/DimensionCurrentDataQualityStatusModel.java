@@ -120,7 +120,7 @@ public class DimensionCurrentDataQualityStatusModel {
         int totalExecutedChecksWithNoExecutionErrors = this.getValidResults() + this.getWarnings() + this.getErrors() + this.getFatals();
         Double dataQualityKpi = totalExecutedChecksWithNoExecutionErrors > 0 ?
                 (this.getValidResults() + this.getWarnings()) * 100.0 / totalExecutedChecksWithNoExecutionErrors : null;
-        setDataQualityKpi(dataQualityKpi);
+        this.setDataQualityKpi(dataQualityKpi);
     }
 
     /**
@@ -146,8 +146,8 @@ public class DimensionCurrentDataQualityStatusModel {
         }
 
         this.executedChecks++; // we count only the current status (the last executed check), maybe we should count executed checks also for partitioned checks
-        if (this.currentSeverity != null) {
-            switch (this.currentSeverity) {
+        if (checkStatusModel.getCurrentSeverity() != null) {
+            switch (checkStatusModel.getCurrentSeverity()) {
                 case valid:
                     this.validResults++;
                     break;
@@ -163,10 +163,10 @@ public class DimensionCurrentDataQualityStatusModel {
                 case fatal:
                     this.fatals++;
                     break;
-            }
-        } else {
-            if (checkStatusModel.getCurrentSeverity() != null && checkStatusModel.getCurrentSeverity().getSeverity() == 4) {
-                this.executionErrors++;
+
+                case execution_error:
+                    this.executionErrors++;
+                    break;
             }
         }
     }
@@ -179,13 +179,15 @@ public class DimensionCurrentDataQualityStatusModel {
         assert Objects.equals(this.dimension, columnDimensionModel.dimension);
 
         if (this.currentSeverity == null ||
-                (columnDimensionModel.getCurrentSeverity() != null && this.currentSeverity.getSeverity() < columnDimensionModel.getCurrentSeverity().getSeverity())) {
+                (columnDimensionModel.getCurrentSeverity() != null && this.currentSeverity.getSeverity() < columnDimensionModel.getCurrentSeverity().getSeverity() &&
+                        columnDimensionModel.getCurrentSeverity().getSeverity() != 4)) {
             this.currentSeverity = columnDimensionModel.getCurrentSeverity();
         }
 
         if (this.highestHistoricalSeverity == null ||
                 (columnDimensionModel.getHighestHistoricalSeverity() != null &&
-                        this.highestHistoricalSeverity.getSeverity() < columnDimensionModel.getHighestHistoricalSeverity().getSeverity())) {
+                        this.highestHistoricalSeverity.getSeverity() < columnDimensionModel.getHighestHistoricalSeverity().getSeverity() &&
+                        columnDimensionModel.getHighestHistoricalSeverity().getSeverity() != 4)) {
             this.highestHistoricalSeverity = columnDimensionModel.getHighestHistoricalSeverity();
         }
 

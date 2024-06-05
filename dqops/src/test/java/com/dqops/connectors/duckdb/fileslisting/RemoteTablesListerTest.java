@@ -6,6 +6,8 @@ import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.metadata.sources.fileformat.CompressionType;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +32,7 @@ class RemoteTablesListerTest extends BaseTest {
     void filterAndTransform_fromFiles_createCollection() {
         List<String> filesList = List.of("file_1.csv", "file_2.csv", "file_3.csv");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 10);
 
         assertThat(sourceTableModels)
                 .hasSize(3)
@@ -43,10 +45,39 @@ class RemoteTablesListerTest extends BaseTest {
     }
 
     @Test
+    void filterAndTransform_fromFilesWhereTableContainsFilterApplied_createCollection() {
+        List<String> filesList = List.of("file_1.csv", "file_2.csv", "file_3.csv");
+
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, "2", 10);
+
+        assertThat(sourceTableModels)
+                .hasSize(1)
+                .extracting(sourceTableModel -> sourceTableModel.getTableName().toString())
+                .containsExactlyInAnyOrder(
+                        "schema_name.file_2.csv"
+                );
+    }
+
+    @Test
+    void filterAndTransform_fromFilesWhereLimitApplied_createCollection() {
+        List<String> filesList = List.of("file_1.csv", "file_2.csv", "file_3.csv");
+
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 2);
+
+        assertThat(sourceTableModels)
+                .hasSize(2)
+                .extracting(sourceTableModel -> sourceTableModel.getTableName().toString())
+                .containsExactlyInAnyOrder(
+                        "schema_name.file_1.csv",
+                        "schema_name.file_2.csv"
+                );
+    }
+
+    @Test
     void filterAndTransform_whenFileHasNoExtension_doesNotUseIt() {
         List<String> filesList = List.of("file_1");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(0);
@@ -56,7 +87,7 @@ class RemoteTablesListerTest extends BaseTest {
     void filterAndTransform_whenFileHasTrailingSlash_usesItWithoutSlash() {
         List<String> filesList = List.of("file_1/");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(1)
@@ -70,7 +101,9 @@ class RemoteTablesListerTest extends BaseTest {
     void filterAndTransform_fileIsGz_usesIt() {
         List<String> filesList = List.of("file_1.csv.gz");
 
-        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema);
+        duckdb.setCsv(new CsvFileFormatSpec());
+        duckdb.getCsv().setCompression(CompressionType.gzip);
+        List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
                 .hasSize(1)

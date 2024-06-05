@@ -85,7 +85,7 @@ const SelectInput = ({
           {!!tooltipText && (
             <Tooltip
               content={tooltipText}
-              className="max-w-80 py-4 px-4 bg-gray-800"
+              className="max-w-80 py-2 px-2 bg-gray-800"
             >
               <div>
                 <SvgIcon
@@ -118,8 +118,8 @@ const SelectInput = ({
             disabled={disabled}
           />
           <SvgIcon
-            name={isOpen ? "chevron-up" :"chevron-down"}
-            className='absolute right-2 w-4'
+            name={isOpen ? 'chevron-up' : 'chevron-down'}
+            className="absolute right-2 w-4"
           />
         </div>
         <div

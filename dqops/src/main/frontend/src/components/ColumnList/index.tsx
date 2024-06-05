@@ -204,8 +204,8 @@ function ColumnList({
               </tbody>
             )}
           </table>
-          <div className="px-3 my-5 flex justify-end">
-            {columns.length > 10 && (
+          <div className="px-3 my-5 flex justify-end z-[100]">
+            {columns.length >= 10 && (
               <Pagination
                 page={filters.page || 1}
                 pageSize={filters.pageSize || 50}

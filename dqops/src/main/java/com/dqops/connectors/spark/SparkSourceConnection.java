@@ -134,10 +134,13 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter for a table name substring.
+     * @param limit The limit of tables to return.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");
@@ -149,9 +152,19 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
             String tableName = tablesRows.getString(rowIndex, "tablename");
+            if (!Strings.isNullOrEmpty(tableNameContains)) {
+                if (!tableName.contains(tableNameContains)) {
+                    continue;
+                }
+            }
+
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
             SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
             results.add(schemaModel);
+
+            if (results.size() >= limit) {
+                break;
+            }
         }
 
         return results;
@@ -190,11 +203,17 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter to limit the number of returned tables.
+     * @param limit Limit of returned tables.
      * @param tableNames Table names.
+     * @param connectionWrapper Parent connection.
+     * @param secretValueLookupContext Secret lookup.
      * @return List of table specifications with the column list.
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -204,6 +223,12 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
             List<TableSpec> tableSpecs = new ArrayList<>();
 
             for (String tableName : tableNames) {
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!tableName.contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
                 String sql = "DESCRIBE " + schemaName + "." + tableName;
                 tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
                 Column<?>[] columns = tableResult.columnArray();
@@ -263,6 +288,9 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
 
+                if (tableSpecs.size() >= limit) {
+                    break;
+                }
             }
 
             return tableSpecs;

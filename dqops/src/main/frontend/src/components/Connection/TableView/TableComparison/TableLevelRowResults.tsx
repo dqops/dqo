@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react';
-import clsx from 'clsx';
-import SvgIcon from '../../../SvgIcon';
-import { calculateColor } from './TableComparisonUtils';
-import Checkbox from '../../../Checkbox';
 import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
+import React, { ReactNode } from 'react';
+import Checkbox from '../../../Checkbox';
+import SvgIcon from '../../../SvgIcon';
 import { TSeverityValues } from './TableComparisonConstans';
+import { calculateColor } from './TableComparisonUtils';
 
 interface TableRowProps {
   table: string;
@@ -44,7 +44,7 @@ const TableRow: React.FC<TableRowProps> = ({
     return (
       <Tooltip
         content="Previous comparison results are present, delete the results before comparing the tables again"
-        className="pr-6 max-w-80 py-4 px-4 bg-gray-800"
+        className="pr-6 max-w-80 py-2 px-2 bg-gray-800"
       >
         <div>
           <SvgIcon
@@ -71,7 +71,7 @@ const TableRow: React.FC<TableRowProps> = ({
         )}{' '}
         {table}
       </th>
-      <th ></th>
+      <th></th>
       <th
         className={clsx(
           'text-center px-0 py-4 pr-[11px] relative !w-30 !max-w-30 flex justify-center items-center',
@@ -81,16 +81,16 @@ const TableRow: React.FC<TableRowProps> = ({
             'row_count',
             checkTypes,
             tableComparisonResults
-            )
-            )}
-            >
+          )
+        )}
+      >
         <Checkbox
           checked={showRowCount}
           onChange={(checked) => {
             onUpdateChecksUI(checksUI, 'row', checked);
             setIsUpdated(true);
           }}
-          />{' '}
+        />{' '}
         {calculateColor('', '', 'row_count', checkTypes, tableComparisonResults)
           .length !== 0 &&
           !showRowCount && <>{renderWarningTooltip()}</>}
@@ -99,32 +99,32 @@ const TableRow: React.FC<TableRowProps> = ({
         className={clsx(
           'text-center px-0 py-4 pr-[11px] relative !w-30 !max-w-30',
           reference.supports_compare_column_count === true
-          ? calculateColor(
+            ? calculateColor(
                 '',
                 '',
                 'column_count',
                 checkTypes,
                 tableComparisonResults
-                )
-                : ''
-                )}
-                >
+              )
+            : ''
+        )}
+      >
         {reference.supports_compare_column_count === true ? (
           <Checkbox
-          checked={showColumnCount}
-          onChange={(checked) => {
-            onUpdateChecksUI(checksUI, 'column', checked);
-            setIsUpdated(true);
-          }}
+            checked={showColumnCount}
+            onChange={(checked) => {
+              onUpdateChecksUI(checksUI, 'column', checked);
+              setIsUpdated(true);
+            }}
           />
-          ) : null}
+        ) : null}
         {calculateColor(
           '',
           '',
           'column_count',
           checkTypes,
           tableComparisonResults
-          ).length !== 0 &&
+        ).length !== 0 &&
           !showColumnCount && <>{renderWarningTooltip()}</>}
       </th>
     </tr>

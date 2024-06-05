@@ -152,10 +152,13 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Optional filter with a required text inside a table name.
+     * @param limit The maximum number of tables to return.
+     * @param secretValueLookupContext Secret value lookup.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
+    public List<SourceTableModel> listTables(String schemaName, String tableNameContains, int limit, SecretValueLookupContext secretValueLookupContext) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");
@@ -167,9 +170,20 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
             String tableName = tablesRows.getString(rowIndex, "tableName");
+
+            if (!Strings.isNullOrEmpty(tableNameContains)) {
+                if (!tableName.contains(tableNameContains)) {
+                    continue;
+                }
+            }
+
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
             SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
             results.add(schemaModel);
+
+            if (results.size() >= limit) {
+                break;
+            }
         }
 
         return results;
@@ -208,11 +222,17 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
      *
      * @param schemaName Schema name.
+     * @param tableNameContains Filter for a name that should be present in a table name.
+     * @param limit The maximum number of tables to return.
      * @param tableNames Table names.
+     * @param connectionWrapper Parent connection wrapper with a list of existing tables.
+     * @param secretValueLookupContext Secret lookup context.
      * @return List of table specifications with the column list.
      */
     @Override
     public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 String tableNameContains,
+                                                 int limit,
                                                  List<String> tableNames,
                                                  ConnectionWrapper connectionWrapper,
                                                  SecretValueLookupContext secretValueLookupContext) {
@@ -222,6 +242,12 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
             List<TableSpec> tableSpecs = new ArrayList<>();
 
             for (String tableName : tableNames) {
+                if (!Strings.isNullOrEmpty(tableNameContains)) {
+                    if (!tableName.contains(tableNameContains)) {
+                        continue;
+                    }
+                }
+
                 String sql = String.format("DESCRIBE %s.%s", schemaName, tableName);
                 Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
                 Column<?>[] columns = tableResult.columnArray();
@@ -281,6 +307,9 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
 
+                if (tableSpecs.size() >= limit) {
+                    break;
+                }
             }
 
             return tableSpecs;

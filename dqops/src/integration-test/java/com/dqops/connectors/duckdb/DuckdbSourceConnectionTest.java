@@ -64,7 +64,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
                 .collect(Collectors.toList());
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, connectionWrapper, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -88,7 +88,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         List<String> tableNames = List.of(SampleCsvFileNames.continuous_days_one_row_per_day);
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -113,7 +113,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         List<String> tableNames = List.of(SampleCsvFileNames.continuous_days_one_row_per_day);
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -138,7 +138,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         List<String> tableNames = List.of(SampleDataFilesProvider.getFile(SampleCsvFileNames.continuous_days_one_row_per_day).toString());
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -163,7 +163,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
                 SampleJsonFileNames.continuous_days_one_row_per_day.substring(SampleJsonFileNames.folder_path.length()));
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -188,7 +188,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
                 SampleParquetFileNames.continuous_days_one_row_per_day.substring(SampleParquetFileNames.folder_path.length()));
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -221,7 +221,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided).toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, secretValueLookupContext);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null, 300, secretValueLookupContext);
 
         Assertions.assertEquals(4, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().equals("continuous_days_one_row_per_day_1.csv"));
@@ -237,7 +237,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile("files/").toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, secretValueLookupContext);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null, 300, secretValueLookupContext);
 
         Assertions.assertEquals(3, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("csv"));
@@ -252,7 +252,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided) + "/";
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, secretValueLookupContext);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null, 300, secretValueLookupContext);
 
         Assertions.assertEquals(4, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().equals("continuous_days_one_row_per_day_1.csv"));
@@ -268,7 +268,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided) + "\\";
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, secretValueLookupContext);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null, 300, secretValueLookupContext);
 
         Assertions.assertEquals(4, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().equals("continuous_days_one_row_per_day_1.csv"));

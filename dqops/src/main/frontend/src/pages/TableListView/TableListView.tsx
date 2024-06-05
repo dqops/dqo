@@ -64,10 +64,10 @@ export default function TableListView() {
       return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
     };
     setLoading(true);
-//    console.log(
-//      connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
-//      schema ? addPrefix(schema) : addPrefix(searchFilters.schema)
-//    );
+    //    console.log(
+    //      connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
+    //      schema ? addPrefix(schema) : addPrefix(searchFilters.schema)
+    //    );
     const res = await SearchApiClient.findTables(
       connection ? addPrefix(connection) : addPrefix(searchFilters.connection),
       schema ? addPrefix(schema) : addPrefix(searchFilters.schema),
@@ -105,7 +105,7 @@ export default function TableListView() {
 
     fetchData();
     getLabels();
-  }, [filters]);
+  }, [filters, checkTypes, connection, schema]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {

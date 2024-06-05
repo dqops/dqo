@@ -26,11 +26,11 @@ To review the results:
 
     For detailed description of each column go to the [Basics statistics section](../working-with-dqo/collecting-basic-data-statistics.md).
 
-    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics3.png){ loading=lazy; width="1200px" }
+    ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics4.png){ loading=lazy; width="1200px" }
 
 2. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
  
-    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics4.png){ loading=lazy; width="1200px" }
+    ![Basic statistics results for austin crimes - details](https://dqops.com/docs/images/getting-started/austin-crimes-address-column-statistics5.png){ loading=lazy; width="1200px" }
 
 
 ## Review profiling checks results
@@ -44,7 +44,7 @@ In the previous step we have run profiling checks for imported tables and column
 ### Review Profiling Table quality status
 
 **Table quality status** allows you to quickly evaluate the data quality status of your table. To navigate to the Table quality status,
-click on **Profiling** section, the "crime" table on the tree view, and **Table quality status** tab.
+click on **Profiling** section, the "austin_crime.csv" table on the tree view, and **Table quality status** tab.
 
 ![Profiling Table quality status](https://dqops.com/docs/images/getting-started/profiling-table-quality-status2.png){ loading=lazy; width="1200px" }
 
@@ -141,7 +141,7 @@ Now let's run monitoring checks.
 
     You can run checks for your entire connection, schema, table, or column from the tree view on the left-hand side of
     the screen. To do so, click on the three-dot icon and select the Run check option. Check more information how to 
-    [Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#Run-checks-from-a-tree-view)
+    [Run checks from a tree view](../working-with-dqo/run-data-quality-checks.md#Run-checks-from-a-tree-view).
 
     You can activate and run other monitoring checks and adjust their thresholds.
 
@@ -175,6 +175,23 @@ on every table and column to apply [data observability](../dqo-concepts/data-obs
 | column | [daily column type changed](../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                                                                                                                   |
 
 For more [general information about checks, see the DQOps concepts](../dqo-concepts/definition-of-data-quality-checks/index.md) section.
+
+## View Tables summary
+
+To review the overall health summary of your data, navigate to the Home screen and use the Tables and Columns summaries.
+These summaries are based on previously executed monitoring and partition data quality checks, excluding the results from profiling checks.
+
+To access **Tables summary**, click on the DQOps logo in the top left corner and select the **Tables** tab.
+
+![Navigating to Tables summary](https://dqops.com/docs/images/getting-started/austin-crime-table-summary.png){ loading=lazy; width="1200px" }
+
+You can view a list of tables with measured total data quality KPI and a breakdown of KPIs calculated from executed checks
+categorized by specific dimensions (e.g., completeness, validity, consistency). Hovering over the KPIs value will display 
+a tooltip containing more details.
+
+The calculated KPIs in our example are at 100% because we ran one monitoring check that gave a valid result.
+
+For a deeper dive into [Tables and Columns summaries, see the DQOps concepts section](../dqo-concepts/dqops-user-interface-overview.md#home-screen)
 
 ## Next step
 
