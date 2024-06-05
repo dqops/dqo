@@ -60,8 +60,8 @@ export interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
-  levels?: DataGroupingConfigurationSpec;
-  setLevels?: (levels: DataGroupingConfigurationSpec) => void;
+  checkedColumns?: Array<string>;
+  setCheckedColumns?: (columns: Array<string>) => void;
   statistics?: TableColumnsStatisticsModel;
   refreshListFunc: () => void;
 }

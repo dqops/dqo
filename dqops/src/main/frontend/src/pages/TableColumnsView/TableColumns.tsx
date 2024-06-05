@@ -34,8 +34,8 @@ const TableColumns = ({
   connectionName,
   schemaName,
   tableName,
-  levels,
-  setLevels,
+  checkedColumns,
+  setCheckedColumns,
   statistics,
   refreshListFunc
 }: ITableColumnsProps) => {
@@ -43,20 +43,11 @@ const TableColumns = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [sortedArray, setSortedArray] = useState<MyData[]>();
-  const [objectStates, setObjectStates] = useState<{ [key: string]: boolean }>(
-    {}
-  );
+
   const [status, setStatus] = useState<{
     [key: string]: ColumnCurrentDataQualityStatusModel;
   }>({});
   const [columns, setColumns] = useState<ColumnListModel[]>([]);
-
-  const handleButtonClick = (name: string) => {
-    setObjectStates((prevStates) => ({
-      ...prevStates,
-      [name]: !prevStates[name]
-    }));
-  };
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -172,6 +163,14 @@ const TableColumns = ({
     ).then((res) => setColumns(res.data));
   }, [checkTypes, connectionName, schemaName, tableName]);
 
+  const handleChangeCheckedColumns = (columnName: string) => {
+    if (checkedColumns?.includes(columnName)) {
+      setCheckedColumns?.(checkedColumns.filter((col) => col !== columnName));
+    } else {
+      setCheckedColumns?.([...(checkedColumns ?? []), columnName]);
+    }
+  };
+
   return (
     <div className="p-4 relative">
       <table className=" mt-4 w-full">
@@ -181,11 +180,10 @@ const TableColumns = ({
         />
         <TableColumnsBody
           columns={sortedArray || dataArray}
-          objectStates={objectStates}
           statistics={statistics}
           rewriteData={rewriteData}
-          showDataStreamButtonFunc={{}}
-          handleButtonClick={handleButtonClick}
+          checkedColumns={checkedColumns ?? []}
+          handleChangeCheckedColumns={handleChangeCheckedColumns}
           refreshListFunc={refreshListFunc}
         />
       </table>

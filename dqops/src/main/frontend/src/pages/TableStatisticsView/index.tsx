@@ -1,13 +1,8 @@
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  DataGroupingConfigurationSpec,
-  TableColumnsStatisticsModel,
-  TableStatisticsModel
-} from '../../api';
+import { TableColumnsStatisticsModel, TableStatisticsModel } from '../../api';
 import Loader from '../../components/Loader';
-import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { getFirstLevelState } from '../../redux/selectors';
 import { formatNumber } from '../../shared/constants';
 import { CheckTypes } from '../../shared/routes';
@@ -18,45 +13,23 @@ export default function TableStatisticsView({
   connectionName,
   schemaName,
   tableName,
-  updateData2,
-  setLevelsData2,
-  setNumberOfSelected2,
+  checkedColumns,
+  setCheckedColumns,
   statistics,
-  onChangeSelectedColumns,
   refreshListFunc,
   rowCount
 }: {
   connectionName: string;
   schemaName: string;
   tableName: string;
-  updateData2: (arg: string) => void;
-  setLevelsData2: (arg: DataGroupingConfigurationSpec) => void;
-  setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
-  onChangeSelectedColumns?: (columns: string[]) => void;
+  checkedColumns: Array<string>;
+  setCheckedColumns: (columns: Array<string>) => void;
   refreshListFunc: () => void;
   rowCount: TableStatisticsModel;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
-
-  const {
-    connection,
-    schema,
-    table
-  }: {
-    connection: string;
-    schema: string;
-    table: string;
-    tab: string;
-  } = useDecodedParams();
-
-  useEffect(() => {
-    setNumberOfSelected(0);
-    updateData('');
-    setLevelsData({});
-    setCreatedDataStream(false, '', {});
-  }, [connection, schema, table]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -66,17 +39,6 @@ export default function TableStatisticsView({
       return value.toString();
     }
     return value;
-  };
-  const updateData = (nameOfDS: string): void => {
-    updateData2(nameOfDS);
-  };
-
-  const setLevelsData = (levelsToSet: DataGroupingConfigurationSpec): void => {
-    setLevelsData2(levelsToSet);
-  };
-
-  const setNumberOfSelected = (param: number): void => {
-    setNumberOfSelected2(param);
   };
 
   if (loading) {
@@ -141,9 +103,9 @@ export default function TableStatisticsView({
         connectionName={connectionName}
         schemaName={schemaName}
         tableName={tableName}
-        levels={{}}
-        setLevels={setLevelsData}
+        checkedColumns={checkedColumns}
         statistics={statistics}
+        setCheckedColumns={setCheckedColumns}
         refreshListFunc={refreshListFunc}
       />
     </div>

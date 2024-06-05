@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DataGroupingConfigurationListModel } from '../../../api';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
 import { IRootState } from '../../../redux/reducers';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import { useDecodedParams } from '../../../utils';
 import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
 import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
-import { useDecodedParams } from '../../../utils';
 
 const TableDataGroupingConfiguration = () => {
   const {
@@ -24,10 +22,6 @@ const TableDataGroupingConfiguration = () => {
   );
   const history = useHistory();
 
-  const actionDispatch = useActionDispatch();
-  const setBackData = () => {
-    actionDispatch(setCreatedDataStream(false, '', {}));
-  };
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationListModel[]
   >([]);
@@ -77,7 +71,6 @@ const TableDataGroupingConfiguration = () => {
 
   const onBack = () => {
     history.replace(`${location.pathname}?isEditing=false`);
-    setBackData();
   };
 
   const sortObjects = (
