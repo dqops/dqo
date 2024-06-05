@@ -167,6 +167,77 @@ To sort the issue table, simply click on the sorting icon next to any column hea
 
 ![Sorting issues](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/sort-issues2.png){ loading=lazy; width="1200px" }
 
+## Disable check for the incident 
+
+To manage incidents, you have the option to disable the check responsible for the incident. Disabling a check can be 
+useful when you are actively working to resolve the underlying issue.
+
+To disable a check, click on the "Disable check" button in the top right corner of the Incident details screen. 
+Once confirmed, the check will be temporarily stopped from executing.
+
+![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button.png){ loading=lazy; width="1200px" }
+
+You can verify that the check has been disabled by navigating to the check editor screen.
+
+![Disabling check verification on Check editor](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-verification.png){ loading=lazy; width="1200px" }
+
+
+## Recalibrate check for the incident 
+
+DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check. 
+This can be helpful in situations where the check might be overly sensitive.
+
+Clicking the Recalibrate button will decrease the check's thresholds by 30%. For more significant adjustments, you can click
+the Recalibrate button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
+
+![Recalibrate-check-button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
+
+The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after recalibration. Notice that the `min_count` rule has been reduced from 1000, to 700.
+
+
+=== "Check configuration before recalibration"
+
+    ``` { .yaml .annotate linenums="1" hl_lines="17" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: created_date
+        ingestion_timestamp_column: close_date
+        partition_by_column: created_date
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      partitioned_checks:
+        daily:
+          volume:
+            daily_partition_row_count:
+              error:
+                min_count: 1000
+    ```
+
+=== "Check configuration after recalibration"
+
+    ``` { .yaml .annotate linenums="1" hl_lines="17" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: created_date
+        ingestion_timestamp_column: close_date
+        partition_by_column: created_date
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      partitioned_checks:
+        daily:
+          volume:
+            daily_partition_row_count:
+              error:
+                min_count: 700
+    ```
 
 ## What's next
 
