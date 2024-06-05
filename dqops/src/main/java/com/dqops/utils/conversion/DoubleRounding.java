@@ -16,6 +16,8 @@
 
 package com.dqops.utils.conversion;
 
+import java.util.Locale;
+
 /**
  * Helper class that performs rounding of double (floating point) values to preserve a given number of important digits.
  */
@@ -41,7 +43,7 @@ public final class DoubleRounding {
             return value;
         }
 
-        String text = String.format("%.13f", value);
+        String text = String.format(Locale.ENGLISH, "%.13f", value);
 
         int indexOfDot = text.indexOf('.');
         if (indexOfDot < 0) {
