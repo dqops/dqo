@@ -94,7 +94,6 @@ export const IncidentsNotificationsView = () => {
             label="Data quality incident grouping level:"
             options={groupLevelOptions}
             value={incidentGrouping?.grouping_level}
-            prefix="By"
             onChange={(value) => onChange({ grouping_level: value })}
             className="text-sm"
           />
