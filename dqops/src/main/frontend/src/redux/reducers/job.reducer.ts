@@ -14,10 +14,9 @@
 /// limitations under the License.
 ///
 
-import { JOB_ACTION } from '../types';
+import moment from 'moment';
 import {
   CloudSynchronizationFoldersStatusModel,
-  DataGroupingConfigurationSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelJobTypeEnum,
@@ -25,8 +24,8 @@ import {
   DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
-import moment from 'moment';
 import { TJobDictionary, TJobList } from '../../shared/constants';
+import { JOB_ACTION } from '../types';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -42,9 +41,6 @@ export interface IJobsState {
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, TJobDictionary>;
-  bool?: boolean;
-  dataGrouping: string;
-  spec: DataGroupingConfigurationSpec;
   isAdvisorOpen: boolean;
   advisorObject: ImportTablesQueueJobParameters;
   advisorListener: boolean;
@@ -66,9 +62,6 @@ const initialState: IJobsState = {
   isProfileOpen: false,
   areSettingsOpen: false,
   job_dictionary_state: {},
-  bool: false,
-  dataGrouping: '',
-  spec: {},
   isAdvisorOpen: false,
   advisorObject: {},
   advisorListener: false,
