@@ -21,6 +21,7 @@ import Tabs from '../../Tabs';
 
 import {
   DataGroupingConfigurationSpec,
+  DataGroupingDimensionSpec,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel,
   TableStatisticsModel
@@ -28,8 +29,10 @@ import {
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 
 import { AxiosResponse } from 'axios';
-import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
-import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setActiveFirstLevelUrl
+} from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
 import {
   ColumnApiClient,
@@ -38,15 +41,11 @@ import {
   TableApiClient
 } from '../../../services/apiClient';
 import { TABLE_LEVEL_TABS } from '../../../shared/constants';
+import { useDecodedParams } from '../../../utils';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
-import { useDecodedParams } from '../../../utils';
-interface LocationState {
-  bool: boolean;
-  data_stream_name: string;
-  spec: DataGroupingConfigurationSpec;
-}
+
 const ProfilingView = () => {
   const {
     checkTypes,
@@ -72,12 +71,9 @@ const ProfilingView = () => {
     (state: IRootState) => state.job || {}
   );
 
-  const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
-  const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
-  const [selected, setSelected] = useState<number>(0);
+  const [checkedColumns, setCheckedColumns] = useState<string[]>([]);
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-  const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
   const [jobId, setJobId] = useState<number>();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
 
@@ -93,10 +89,6 @@ const ProfilingView = () => {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const onChangeSelectedColumns = (columns: string[]): void => {
-    setSelectedColumns(columns);
   };
 
   const fetchRows = async () => {
@@ -165,66 +157,52 @@ const ProfilingView = () => {
     );
   };
 
-  const updateData2 = (nameOfDS: string): void => {
-    setNameOfDataStream(nameOfDS);
-  };
-
-  const setLevelsData2 = (levelsToSet: DataGroupingConfigurationSpec): void => {
-    setLevels(levelsToSet);
-  };
-
-  const setNumberOfSelected2 = (param: number): void => {
-    setSelected(param);
-  };
-
-  const doNothing = (): void => {};
-
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
-      'sources',
+      CheckTypes.SOURCES,
       connectionName,
       schemaName,
       tableName,
       'data-groupings'
     );
     const value = ROUTES.TABLE_LEVEL_VALUE(
-      'sources',
+      CheckTypes.SOURCES,
       connectionName,
       schemaName,
       tableName
     );
-    const data: LocationState = {
-      bool: true,
-      data_stream_name: nameOfDataStream,
-      spec: levels
-    };
-
+    const data_grouping_configuration_name = checkedColumns.join(',');
+    const levels: DataGroupingConfigurationSpec = {};
+    checkedColumns.forEach((column, index) => {
+      const key: keyof DataGroupingConfigurationSpec = `level_${
+        index + 1
+      }` as keyof DataGroupingConfigurationSpec;
+      const value: DataGroupingDimensionSpec = {
+        source: 'column_value',
+        column: column
+      };
+      levels[key] = value;
+      return;
+    });
     try {
-      const response =
-        await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
-          connectionName,
-          schemaName,
-          tableName,
-          { data_grouping_configuration_name: nameOfDataStream, spec: levels }
-        );
-      if (response.status === 409) {
-        doNothing();
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status) {
-        doNothing();
-      }
+      await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
+        connectionName,
+        schemaName,
+        tableName,
+        { data_grouping_configuration_name, spec: levels }
+      );
+    } catch (err) {
+      console.error(err);
     }
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
-        state: data,
+        state: { levels },
         label: tableName
       })
     );
     history.push(url);
-    setCreatedDataStream(false, '', {});
   };
 
   const onChangeTab = (tab: string) => {
@@ -232,7 +210,13 @@ const ProfilingView = () => {
       setActiveFirstLevelUrl(
         checkTypes,
         firstLevelActiveTab,
-        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab)
+        ROUTES.TABLE_LEVEL_PAGE(
+          checkTypes,
+          connectionName,
+          schemaName,
+          tableName,
+          tab
+        )
       )
     );
     history.push(
@@ -247,20 +231,21 @@ const ProfilingView = () => {
   };
 
   const collectStatistics = async () => {
-      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
-        ...statistics?.collect_column_statistics_job_template,
-        columnNames: selectedColumns
-      }).then((res) => setJobId(res.data.jobId?.jobId));
+    await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+      ...statistics?.collect_column_statistics_job_template,
+      columnNames: checkedColumns
+    }).then((res) => setJobId(res.data.jobId?.jobId));
   };
- 
-  const filteredCollectStatisticsJobs = useMemo(() => {
-    return (job && (
-      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
-    }, [job])
 
-    
+  const filteredCollectStatisticsJobs = useMemo(() => {
+    return (
+      job &&
+      (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    );
+  }, [job]);
+
   useEffect(() => {
     if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       fetchRows();
@@ -271,7 +256,11 @@ const ProfilingView = () => {
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <div className="border-b border-gray-300">
-        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={activeTab} onChange={onChangeTab} />
+        <Tabs
+          tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]}
+          activeTab={activeTab}
+          onChange={onChangeTab}
+        />
       </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
@@ -280,11 +269,13 @@ const ProfilingView = () => {
           isUpdated={isUpdatedChecksUi}
           isUpdating={isUpdating}
           addSaveButton={false}
-          createDataStream={selected > 0 && selected <= 9 && true}
+          createDataStream={
+            checkedColumns.length > 0 && checkedColumns.length <= 9 && true
+          }
           createDataStreamFunc={postDataStream}
-          maxToCreateDataStream={selected > 9 && true}
-          collectStatistics = {collectStatistics}
-          selectedColumns={selectedColumns && selectedColumns?.length > 0}
+          maxToCreateDataStream={checkedColumns.length > 9 && true}
+          collectStatistics={collectStatistics}
+          selectedColumns={checkedColumns && checkedColumns?.length > 0}
           collectStatisticsSpinner={filteredCollectStatisticsJobs}
         />
       )}
@@ -299,13 +290,11 @@ const ProfilingView = () => {
       {activeTab === 'statistics' && (
         <TableStatisticsView
           connectionName={connectionName}
+          checkedColumns={checkedColumns}
+          setCheckedColumns={setCheckedColumns}
           schemaName={schemaName}
           tableName={tableName}
-          updateData2={updateData2}
-          setLevelsData2={setLevelsData2}
-          setNumberOfSelected2={setNumberOfSelected2}
           statistics={statistics}
-          onChangeSelectedColumns={onChangeSelectedColumns}
           refreshListFunc={fetchColumns}
           rowCount={rowCount ?? {}}
         />
