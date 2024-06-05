@@ -24,7 +24,6 @@ import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.utils.string.StringCheckUtility;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,7 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
@@ -289,15 +289,15 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             return asBoolean ? "true" : "false";
         }
 
-        if (StringCheckUtility.equalsAny(columnType.getColumnType(), "DATE", "TIME")) {
-            formattedConstant.append( columnType.getColumnType().toLowerCase());
-            formattedConstant.append(" ");
-        }
-
         // due to bug in presto/trino the datetime yyyy-MM-dd HH:mm:ss format is not supported
         if (constant instanceof LocalDateTime) {
             LocalDateTime asLocalTimeTime = (LocalDateTime)constant;
             return "cast('" + asLocalTimeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + "' as timestamp)";
+        }
+
+        if (constant instanceof LocalDate) {
+            LocalDate asLocalDate = (LocalDate)constant;
+            return "cast('" + asLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "' as date)";
         }
 
         formattedConstant.append(super.formatConstant(constant, columnType));
