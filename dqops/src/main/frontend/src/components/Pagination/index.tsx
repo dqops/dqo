@@ -24,6 +24,7 @@ type PaginationProps = {
   onChange: (page: number, pageSize: number) => void;
   totalPages: number;
   isEnd?: boolean;
+  selectMenuClassName?: string;
 };
 
 export const Pagination = ({
@@ -31,7 +32,8 @@ export const Pagination = ({
   pageSize,
   totalPages,
   onChange,
-  isEnd
+  isEnd,
+  selectMenuClassName
 }: PaginationProps) => {
   const onChangePageSize = (value: number) => {
     onChange(1, value);
@@ -60,7 +62,7 @@ export const Pagination = ({
           options={pageSizeOptions}
           value={pageSize}
           onChange={onChangePageSize}
-          menuClassName="top-[-120px]"
+          menuClassName={'top-[-120px]'}
         />
       </div>
       <div className="flex items-center gap-2">
