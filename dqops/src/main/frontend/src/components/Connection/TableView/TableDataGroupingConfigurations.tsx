@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DataGroupingConfigurationListModel } from '../../../api';
-import { IRootState } from '../../../redux/reducers';
+import { getFirstLevelState } from '../../../redux/selectors';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
+import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import DataGroupingConfigurationEditView from './DataGroupingConfigurationEditView';
 import DataGroupingConfigurationListView from './DataGroupingConfigurationListView';
@@ -15,13 +16,11 @@ const TableDataGroupingConfiguration = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useDecodedParams();
+  const { levels } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
   const location = useLocation();
   const [isEditing, setIsEditing] = useState(false);
-  const { dataGrouping, bool } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
-  const history = useHistory();
 
+  const history = useHistory();
   const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
     DataGroupingConfigurationListModel[]
   >([]);
@@ -62,13 +61,6 @@ const TableDataGroupingConfiguration = () => {
     history.replace(`${location.pathname}?isEditing=true`);
   };
 
-  const myObj: DataGroupingConfigurationListModel = {
-    connection_name: connectionName,
-    schema_name: schemaName,
-    table_name: tableName,
-    data_grouping_configuration_name: dataGrouping
-  };
-
   const onBack = () => {
     history.replace(`${location.pathname}?isEditing=false`);
   };
@@ -84,16 +76,27 @@ const TableDataGroupingConfiguration = () => {
     return sortedArray;
   };
 
+  useEffect(() => {
+    if (levels) {
+      setSelectedDataGroupingConfiguration({
+        connection_name: connectionName,
+        schema_name: schemaName,
+        table_name: tableName,
+        data_grouping_configuration_name: Object.values(levels)
+          .map((x) => (x as any)?.column)
+          .join(','),
+        default_data_grouping_configuration: true
+      });
+      history.replace(`${location.pathname}?isEditing=true`);
+    }
+  }, [levels, connectionName, schemaName, tableName]);
+
   return (
     <div className="my-1">
-      {isEditing || bool ? (
+      {isEditing ? (
         <DataGroupingConfigurationEditView
           onBack={onBack}
-          selectedGroupingConfiguration={
-            dataGrouping.length !== 0
-              ? myObj
-              : selectedDataGroupingConfiguration
-          }
+          selectedGroupingConfiguration={selectedDataGroupingConfiguration}
           connection={connectionName}
           schema={schemaName}
           table={tableName}

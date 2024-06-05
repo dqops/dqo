@@ -101,7 +101,6 @@ const TableColumnsView = () => {
       levels[key] = value;
       return;
     });
-    console.log(levels);
     try {
       await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
         connectionName,
@@ -117,8 +116,7 @@ const TableColumnsView = () => {
         url,
         value,
         state: {
-          data_grouping_configuration_name,
-          spec: levels
+          levels
         },
         label: tableName
       })
@@ -135,7 +133,6 @@ const TableColumnsView = () => {
   useEffect(() => {
     fetchColumns();
   }, [connectionName, schemaName, tableName]);
-  console.log(checkedColumns);
   return (
     <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">

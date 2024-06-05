@@ -184,7 +184,6 @@ const ProfilingView = () => {
       levels[key] = value;
       return;
     });
-    console.log(levels);
     try {
       await DataGroupingConfigurationsApi.createTableGroupingConfiguration(
         connectionName,
@@ -199,10 +198,7 @@ const ProfilingView = () => {
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
-        state: {
-          data_grouping_configuration_name,
-          spec: levels
-        },
+        state: { levels },
         label: tableName
       })
     );
