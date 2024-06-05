@@ -328,37 +328,43 @@ export const IncidentDetail = () => {
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
-                content={'Disable'}
+                content={'Disable checks for this incident'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setDisableDialog(true)}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setDisableDialog(true)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
-                content={'Recalibrate'}
-                className="w-30 h-30 py-4 px-4 bg-gray-800"
-              >
-                <Button
-                  leftIcon={<SvgIcon name="minus" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setRecalibrateDialog(true)}
-                />
-              </Tooltip>
-              <Tooltip
-                content={'Settings'}
+                content={'Recalibrate checks for this incident'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={goToConfigure}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="minus" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setRecalibrateDialog(true)}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={'Change incident configuration'}
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={goToConfigure}
+                  />
+                </div>
               </Tooltip>
             </div>
           </div>
