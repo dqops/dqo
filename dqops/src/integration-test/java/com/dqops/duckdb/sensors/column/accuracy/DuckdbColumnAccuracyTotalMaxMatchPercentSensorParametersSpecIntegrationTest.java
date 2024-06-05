@@ -62,7 +62,6 @@ public class DuckdbColumnAccuracyTotalMaxMatchPercentSensorParametersSpecIntegra
         this.checkSpec.setParameters(this.sut);
     }
 
-
     @Test
     void runSensor_onNullDataInPrimaryTable_thenReturnsValues() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
