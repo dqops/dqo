@@ -34,7 +34,6 @@ import { getDaysString, useDecodedParams } from '../../utils';
 import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
 import { HistogramChart } from './HistogramChart';
 import { IncidentIssueList } from './IncidentIssueList';
-import IncidentNavigation from './IncidentNavigation';
 
 const statusOptions = [
   {
@@ -178,13 +177,6 @@ export const IncidentDetail = () => {
     );
   };
 
-  // useEffect(() => {
-  //   onChangeFilter({
-  //     filter: debouncedSearchTerm,
-  //     page: 1
-  //   });
-  // }, [debouncedSearchTerm]);
-
   const getWarnings = (minimumSeverity?: number) => {
     if (!minimumSeverity) return 'No warnings';
     if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
@@ -204,13 +196,14 @@ export const IncidentDetail = () => {
     const table = incidentDetail?.table || '';
     dispatch(
       addSourceFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        url: ROUTES.TABLE_LEVEL_PAGE(
           CheckTypes.SOURCES,
           connection,
           schema,
-          table
+          table,
+          'incident_configuration'
         ),
-        value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+        value: ROUTES.TABLE_LEVEL_VALUE(
           CheckTypes.SOURCES,
           connection,
           schema,
@@ -321,11 +314,11 @@ export const IncidentDetail = () => {
       </div>
     );
   };
-
+  // console.log(incidentDetail, filters, issues, histograms);
   return (
     <>
       <div className="relative">
-        <IncidentNavigation incident={incidentDetail} />
+        {/* <IncidentNavigation incident={incidentDetail} /> */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />

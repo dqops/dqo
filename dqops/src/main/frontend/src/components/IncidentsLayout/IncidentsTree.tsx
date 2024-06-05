@@ -41,6 +41,7 @@ const IncidentsTree = () => {
     if (activeTab === url) {
       return;
     }
+
     dispatch(
       addFirstLevelTab({
         url,
@@ -60,13 +61,6 @@ const IncidentsTree = () => {
   };
 
   const openCorrectTabFromUrl = () => {
-    // if (
-    //   window.location.pathname === '/incidents' ||
-    //   window.location.pathname === '/incidents/'
-    // ) {
-    //   return;
-    // }
-
     const path = window.location.pathname.split('/');
     const connection = path[2];
     const selectedConnection = connections.find(
@@ -75,12 +69,14 @@ const IncidentsTree = () => {
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
     } else if (path[3]) {
-//      console.log(selectedConnection, path);
       const connection = path[2] || '';
       const year = Number(path[3]);
       const month = Number(path[4]);
       const incidentId = path[5] || '';
-
+      const state = tabs.find(
+        (x) =>
+          x.url === ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
+      )?.state;
       dispatch(
         addFirstLevelTab({
           url: ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId),
@@ -90,7 +86,7 @@ const IncidentsTree = () => {
             month,
             incidentId
           ),
-          state: {},
+          state: state || {},
           label: incidentId
         })
       );
