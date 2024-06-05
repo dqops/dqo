@@ -51,7 +51,7 @@ const IncidentsTree = () => {
             openIncidents: true,
             acknowledgedIncidents: true,
             page: 1,
-            pageSize: 50
+            pageSize: 10
           }
         },
         label: connection?.connection ?? ''

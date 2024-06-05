@@ -100,7 +100,7 @@ export const getIncidentsByConnection =
     resolvedIncidents = false,
     mutedIncidents = false,
     page = 1,
-    pageSize = 50,
+    pageSize = 10,
     optionalFilter = '',
     sortBy = 'firstSeen',
     sortDirection = 'desc'
@@ -181,7 +181,7 @@ export const getIncidentsIssues =
     month,
     incidentId,
     page = 1,
-    pageSize = 50,
+    pageSize = 10,
     filter,
     days = 999999,
     date,

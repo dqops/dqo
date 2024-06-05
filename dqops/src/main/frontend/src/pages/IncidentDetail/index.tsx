@@ -280,9 +280,7 @@ export const IncidentDetail = () => {
             connection,
             schema,
             table,
-            `table-quality-status${
-              timeScale !== undefined ? '-' + timeScale : ''
-            }`
+            timeScale ?? 'advanced'
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
           state: {},
@@ -295,9 +293,7 @@ export const IncidentDetail = () => {
           connection,
           schema,
           table,
-          `table-quality-status${
-            timeScale !== undefined ? '-' + timeScale : ''
-          }`
+          timeScale ?? 'advanced'
         )
       );
     };
@@ -587,7 +583,7 @@ export const IncidentDetail = () => {
 
           <Pagination
             page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
+            pageSize={filters.pageSize || 10}
             totalPages={10}
             isEnd={isEnd}
             onChange={(page, pageSize) =>
