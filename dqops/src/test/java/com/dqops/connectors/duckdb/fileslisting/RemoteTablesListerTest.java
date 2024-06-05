@@ -6,6 +6,8 @@ import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.metadata.sources.fileformat.CompressionType;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,7 +51,7 @@ class RemoteTablesListerTest extends BaseTest {
         List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, "2", 10);
 
         assertThat(sourceTableModels)
-                .hasSize(3)
+                .hasSize(1)
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().toString())
                 .containsExactlyInAnyOrder(
                         "schema_name.file_2.csv"
@@ -63,7 +65,7 @@ class RemoteTablesListerTest extends BaseTest {
         List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 2);
 
         assertThat(sourceTableModels)
-                .hasSize(3)
+                .hasSize(2)
                 .extracting(sourceTableModel -> sourceTableModel.getTableName().toString())
                 .containsExactlyInAnyOrder(
                         "schema_name.file_1.csv",
@@ -99,6 +101,8 @@ class RemoteTablesListerTest extends BaseTest {
     void filterAndTransform_fileIsGz_usesIt() {
         List<String> filesList = List.of("file_1.csv.gz");
 
+        duckdb.setCsv(new CsvFileFormatSpec());
+        duckdb.getCsv().setCompression(CompressionType.gzip);
         List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)

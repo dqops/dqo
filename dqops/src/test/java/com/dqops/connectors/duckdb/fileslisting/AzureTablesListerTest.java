@@ -7,6 +7,8 @@ import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
+import com.dqops.metadata.sources.fileformat.CompressionType;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,6 +75,8 @@ class AzureTablesListerTest extends BaseTest {
     void filterAndTransform_fileIsGz_usesIt() {
         List<String> filesList = List.of("file_1.csv.gz");
 
+        duckdb.setCsv(new CsvFileFormatSpec());
+        duckdb.getCsv().setCompression(CompressionType.gzip);
         List<SourceTableModel> sourceTableModels = sut.filterAndTransform(duckdb, filesList, schema, null, 300);
 
         assertThat(sourceTableModels)
