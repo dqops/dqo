@@ -46,10 +46,11 @@ public class SingleStoreDbColumnNumericMaxSensorParametersSpecIntegrationTest ex
     private UserHomeContext userHomeContext;
     private ColumnMaxInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
+        this.connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

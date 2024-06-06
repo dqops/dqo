@@ -46,10 +46,11 @@ public class AthenaColumnNumericMinSensorParametersSpecIntegrationTest extends B
     private UserHomeContext userHomeContext;
     private ColumnMinInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = AthenaConnectionSpecObjectMother.create();
+        this.connectionSpec = AthenaConnectionSpecObjectMother.create();
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
