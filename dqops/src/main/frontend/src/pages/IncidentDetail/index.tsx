@@ -310,7 +310,7 @@ export const IncidentDetail = () => {
       </div>
     );
   };
-  // console.log(incidentDetail, filters, issues, histograms);
+
   return (
     <>
       <div className="relative">
@@ -434,12 +434,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.firstSeen).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.firstSeen || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.firstSeen || 0) + ')'}
+                {incidentDetail?.firstSeen &&
+                  Number(
+                    getDaysString(incidentDetail?.firstSeen).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.firstSeen) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
@@ -448,12 +449,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.lastSeen).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.lastSeen || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.lastSeen || 0) + ')'}
+                {incidentDetail?.lastSeen &&
+                  Number(
+                    getDaysString(incidentDetail?.lastSeen || 0).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.lastSeen) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
@@ -462,12 +464,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.incidentUntil).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.incidentUntil || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.incidentUntil || 0) + ')'}
+                {incidentDetail?.incidentUntil &&
+                  Number(
+                    getDaysString(incidentDetail?.incidentUntil).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.incidentUntil) + ')'}
               </div>
             </div>
           </SectionWrapper>
