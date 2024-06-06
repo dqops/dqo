@@ -22,7 +22,6 @@ export const getFirstLevelState =
   (checkType: CheckTypes) => (state: IRootState) => {
     const { tabs, activeTab = '' } =
       state.source[checkType || CheckTypes.SOURCES] || {};
-    console.log(tabs);
     return tabs.find((item) => item.value === activeTab)?.state || ({} as any);
   };
 
