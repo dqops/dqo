@@ -39,7 +39,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     'current'
   );
   const [month, setMonth] = useState<number | undefined>();
-  const [since, setSince] = useState<Date | undefined>(new Date(moment().subtract(30, 'days').format('YYYY-MM-DD')));
+  const [since, setSince] = useState<Date | undefined>(
+    new Date(moment().subtract(30, 'days').format('YYYY-MM-DD'))
+  );
 
   const getTableDataQualityStatus = (month?: number, since?: Date) => {
     CheckResultApi.getTableDataQualityStatus(
@@ -61,99 +63,53 @@ export default function TableQualityStatus({ timeScale }: IProps) {
 
   const onChangeFirstLevelChecks = () => {
     const data: Record<string, TFirstLevelCheck[]> = {};
-    Object.keys(tableDataQualityStatus.checks ?? {}).flatMap((key) => {
+
+    const processCheck = (key: string, check: any, checkType: string) => {
       const categoryDimensionKey =
         categoryDimension === 'category'
-          ? (tableDataQualityStatus.checks ?? {})[key]?.category
-          : (tableDataQualityStatus.checks ?? {})[key]?.quality_dimension;
+          ? check?.category
+          : check?.quality_dimension;
+
       if (categoryDimensionKey !== undefined) {
-        if (Object.keys(data).find((x) => x === categoryDimensionKey)) {
-          data[categoryDimensionKey].push({
-            checkName: key,
-            currentSeverity: (tableDataQualityStatus.checks ?? {})[key]
-              ?.current_severity,
-            highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
-              ?.highest_historical_severity,
-            lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]
-              ?.last_executed_at,
-            checkType: 'table',
-            category: (tableDataQualityStatus.checks ?? {})[key]?.category,
-            qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
-              ?.quality_dimension
-          });
+        const checkData: TFirstLevelCheck = {
+          checkName: key,
+          currentSeverity: check?.current_severity,
+          highestSeverity: check?.highest_historical_severity,
+          lastExecutedAt: check?.last_executed_at,
+          checkType,
+          category: check?.category,
+          qualityDimension: check?.quality_dimension,
+          execution_errors: check?.execution_errors
+        };
+
+        if (data[categoryDimensionKey]) {
+          data[categoryDimensionKey].push(checkData);
         } else {
-          data[categoryDimensionKey] = [
-            {
-              checkName: key,
-              currentSeverity: (tableDataQualityStatus.checks ?? {})[key]
-                ?.current_severity,
-              highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
-                ?.highest_historical_severity,
-              lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]
-                ?.last_executed_at,
-              checkType: 'table',
-              category: (tableDataQualityStatus.checks ?? {})[key]?.category,
-              qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
-                ?.quality_dimension
-            }
-          ];
+          data[categoryDimensionKey] = [checkData];
         }
       }
+    };
+
+    const tableChecks = tableDataQualityStatus.checks ?? {};
+    Object.keys(tableChecks).forEach((key) => {
+      processCheck(key, tableChecks[key], 'table');
     });
-    Object.keys(tableDataQualityStatus.columns ?? {}).forEach((column) =>
-      Object.keys(
-        (tableDataQualityStatus.columns ?? {})[column].checks ?? {}
-      ).forEach((key) => {
-        const categoryDimensionColumnKey =
-          categoryDimension === 'category'
-            ? ((tableDataQualityStatus.columns ?? {})[column].checks ?? {})[key]
-                ?.category
-            : ((tableDataQualityStatus.columns ?? {})[column].checks ?? {})[key]
-                ?.quality_dimension;
-        if (categoryDimensionColumnKey !== undefined) {
-          if (Object.keys(data).find((x) => x === categoryDimensionColumnKey)) {
-            data[categoryDimensionColumnKey].push({
-              checkName: key,
-              currentSeverity: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.current_severity,
-              highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.highest_historical_severity,
-              lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.last_executed_at,
-              checkType: column,
-              category: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.category,
-              qualityDimension: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.quality_dimension
-            });
-          } else {
-            data[categoryDimensionColumnKey] = [
-              {
-                checkName: key,
-                currentSeverity: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.current_severity,
-                highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.highest_historical_severity,
-                lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.last_executed_at,
-                checkType: column,
-                category: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.category,
-                qualityDimension: ((tableDataQualityStatus.columns ?? {})[
-                  column
-                ].checks ?? {})[key]?.quality_dimension
-              }
-            ];
-          }
-        }
-      })
-    );
+
+    const columnChecks = tableDataQualityStatus.columns ?? {};
+    Object.keys(columnChecks).forEach((column) => {
+      const columnData = columnChecks[column].checks ?? {};
+      Object.keys(columnData).forEach((key) => {
+        processCheck(key, columnData[key], column);
+      });
+    });
+
     const sortedData: Record<string, TFirstLevelCheck[]> = {};
     const keys = Object.keys(data).sort();
 
     keys.forEach((key) => {
       sortedData[key] = data[key];
     });
+
     setFirstLevelChecks(sortedData);
   };
 
@@ -165,17 +121,17 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     <div className="p-4 text-sm">
       <div className="flex justify-between items-center">
         <div className="flex pb-6 gap-x-5 items-center">
-          <div className='text-xs'>Group checks by: </div>
+          <div className="text-xs">Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
             label="category"
-            fontClassName='text-xs'
+            fontClassName="text-xs"
             onClick={() => setCategoryDimension('category')}
           />
           <RadioButton
             checked={categoryDimension === 'dimension'}
             label="quality dimension"
-            fontClassName='text-xs'
+            fontClassName="text-xs"
             onClick={() => setCategoryDimension('dimension')}
           />
         </div>
@@ -187,7 +143,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(1);
               }}
-              fontClassName='text-xs'
+              fontClassName="text-xs"
             />
             <RadioButton
               checked={month === 3}
@@ -195,7 +151,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(3);
               }}
-              fontClassName='text-xs'
+              fontClassName="text-xs"
             />
             <RadioButton
               checked={month === undefined}
@@ -203,7 +159,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setMonth(undefined);
               }}
-              fontClassName='text-xs'
+              fontClassName="text-xs"
             />
             <DatePicker
               showIcon
@@ -218,13 +174,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               label="Current severity status"
               checked={severityType === 'current'}
               onClick={() => setSeverityType('current')}
-              fontClassName='text-xs'
+              fontClassName="text-xs"
             />
             <RadioButton
               label="Highest severity status"
               checked={severityType === 'highest'}
               onClick={() => setSeverityType('highest')}
-              fontClassName='text-xs'
+              fontClassName="text-xs"
             />
           </div>
         </div>

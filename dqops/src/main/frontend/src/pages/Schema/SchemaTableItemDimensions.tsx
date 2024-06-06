@@ -185,11 +185,21 @@ const renderSecondLevelTooltip = (
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Current severity level:</div>
-          <div>{data?.current_severity}</div>
+          <div>
+            {data?.current_severity ??
+              (data.execution_errors && data?.execution_errors > 0
+                ? 'execution error'
+                : '-')}
+          </div>
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Highest historical severity level:</div>
-          <div>{data?.highest_historical_severity}</div>
+          <div>
+            {data?.highest_historical_severity ??
+              (data.execution_errors && data?.execution_errors > 0
+                ? 'execution error'
+                : '-')}
+          </div>
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Quality dimension:</div>
@@ -202,7 +212,7 @@ const renderSecondLevelTooltip = (
               ? Number(data?.data_quality_kpi) === 100
                 ? '100%'
                 : Number(data?.data_quality_kpi).toFixed(2) + '%'
-              : ''}
+              : '-'}
           </div>
         </div>
       </div>
