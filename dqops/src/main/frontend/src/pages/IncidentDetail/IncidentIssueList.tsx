@@ -222,12 +222,6 @@ export const IncidentIssueRow = ({
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.includeInKpi}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.includeInSla}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {issue.durationMs}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
@@ -441,12 +435,6 @@ export const IncidentIssueList = ({
                 <br />
                 Upper Threshold
               </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              Include In KPI
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-              Include In SLA (Data Contract)
             </th>
             <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
               Duration Ms

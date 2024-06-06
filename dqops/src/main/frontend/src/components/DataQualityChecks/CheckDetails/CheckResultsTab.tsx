@@ -3,10 +3,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  CheckResultEntryModel,
-  CheckResultsListModel
-} from '../../../api';
+import { CheckResultEntryModel, CheckResultsListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { getCheckResults } from '../../../redux/actions/source.actions';
@@ -228,16 +225,6 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Include In KPI',
-      value: 'includeInKpi',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
-      label: 'Include In SLA (Data Contract)',
-      value: 'includeInSla',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
-    },
-    {
       label: 'Duration Ms',
       value: 'durationMs',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
@@ -296,12 +283,15 @@ const CheckResultsTab = ({
 
   const allResults = results
     .map((result) =>
-      (result.checkResultEntries || [])
-      .map((item) => ({
+      (result.checkResultEntries || []).map((item) => ({
         ...item,
         checkName: results[0].checkName,
-        executedAt: Number(moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')),
-        timePeriod: item.timePeriod?.replace(/T/g, " ")
+        executedAt: Number(
+          moment(
+            getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+          ).format('YYYY-MM-DD HH:mm:ss')
+        ),
+        timePeriod: item.timePeriod?.replace(/T/g, ' ')
       }))
     )
     .reduce((arr, el) => [...arr, ...el], []);
@@ -315,7 +305,7 @@ const CheckResultsTab = ({
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
           <Select
-            value={ dataGroup || results[0]?.dataGroup }
+            value={dataGroup || results[0]?.dataGroup}
             options={
               (results[0]?.dataGroups || []).map((item) => ({
                 label: item,
@@ -342,7 +332,7 @@ const CheckResultsTab = ({
                 : 'bg-teal-500'
             }
             onClick={() => {
-               setMode('table');
+              setMode('table');
             }}
           >
             <SvgIcon
@@ -361,7 +351,7 @@ const CheckResultsTab = ({
                 : 'bg-teal-500'
             }
             onClick={() => {
-             setMode('chart');
+              setMode('chart');
             }}
           >
             <SvgIcon
@@ -387,8 +377,10 @@ const CheckResultsTab = ({
               data={(results[0].checkResultEntries || []).map((item) => ({
                 ...item,
                 checkName: results[0].checkName,
-                executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss'),
-                timePeriod: item.timePeriod?.replace(/T/g, " ")
+                executedAt: moment(
+                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+                ).format('YYYY-MM-DD HH:mm:ss'),
+                timePeriod: item.timePeriod?.replace(/T/g, ' ')
               }))}
               emptyMessage="No Data"
               getRowClass={getSeverityClass}
