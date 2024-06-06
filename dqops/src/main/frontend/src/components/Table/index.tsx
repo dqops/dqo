@@ -1,7 +1,5 @@
-import React from 'react';
-
 import clsx from 'clsx';
-
+import React from 'react';
 import SvgIcon from '../SvgIcon';
 
 interface Column {
@@ -36,20 +34,15 @@ export const Table: React.FC<TableProps> = ({
     return key !== undefined ? item[key] : undefined;
   };
 
-  const getSecondValue = (item: any, column: Column) => {
-    const isValue = item[column.value] !== undefined;
-    return !!isValue;
-  };
-
   return (
     <div className="w-full">
       <table className={className}>
         <thead>
           <tr>
             {columns.map((column) => {
-              const itemExist = data.find((item) => {
-                return getValue(item, column) !== undefined;
-              });
+              const itemExist = data.find(
+                (item) => getValue(item, column) !== undefined
+              );
 
               if (itemExist === undefined) {
                 return null;
@@ -105,7 +98,14 @@ export const Table: React.FC<TableProps> = ({
                       className="border-b border-gray-150 last:border-b-0"
                     >
                       {columns.map((column) => {
-                        if (!getSecondValue(item, column)) return null;
+                        const headerItemExist = data.find(
+                          (dataItem) => getValue(dataItem, column) !== undefined
+                        );
+
+                        if (!headerItemExist) {
+                          return null;
+                        }
+
                         return (
                           <td
                             key={column.value}
