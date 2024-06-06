@@ -11724,6 +11724,17 @@ paths:
           \ and nest*ed filter expressions"
         required: false
         type: "string"
+      - name: "dimension"
+        in: "query"
+        description: "Optional filter for the data quality dimension name, case sensitive"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Optional filter for the data quality check category name, case\
+          \ sensitive"
+        required: false
+        type: "string"
       - name: "order"
         in: "query"
         description: "Optional sort order, the default sort order is by the number\

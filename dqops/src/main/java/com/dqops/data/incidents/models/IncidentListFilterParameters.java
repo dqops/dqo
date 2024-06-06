@@ -46,6 +46,18 @@ public class IncidentListFilterParameters {
     private String filter;
 
     /**
+     * Optional filter for the data quality dimension name, case sensitive.
+     */
+    @JsonPropertyDescription("Optional filter for the data quality dimension name, case sensitive.")
+    private String dimension;
+
+    /**
+     * Optional filter for the data quality check category name, case sensitive.
+     */
+    @JsonPropertyDescription("Optional filter for the data quality check category name, case sensitive.")
+    private String category;
+
+    /**
      * Page number. The first page is 1.
      */
     @JsonPropertyDescription("Page number. The first page is 1 which is the default value.")

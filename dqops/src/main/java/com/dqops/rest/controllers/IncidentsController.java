@@ -334,6 +334,10 @@ public class IncidentsController {
                 @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
                 @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "dimension", value = "Optional filter for the data quality dimension name, case sensitive", required = false)
+                @RequestParam(required = false) Optional<String> dimension,
+            @ApiParam(name = "category", value = "Optional filter for the data quality check category name, case sensitive", required = false)
+                @RequestParam(required = false) Optional<String> category,
             @ApiParam(name = "order", value = "Optional sort order, the default sort order is by the number of failed data quality checks", required = false)
                 @RequestParam(required = false) Optional<IncidentSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
@@ -344,6 +348,8 @@ public class IncidentsController {
         filterParameters.setAcknowledged(acknowledged.orElse(Boolean.TRUE));
         filterParameters.setResolved(resolved.orElse(Boolean.FALSE));
         filterParameters.setMuted(muted.orElse(Boolean.FALSE));
+        filterParameters.setDimension(dimension.orElse(null));
+        filterParameters.setCategory(category.orElse(null));
 
         if (page.isPresent()) {
             filterParameters.setPage(page.get());
