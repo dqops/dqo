@@ -89,12 +89,12 @@ public class DuckdbColumnIntegrityForeignKeyMatchPercentSensorParametersSpecInte
     void runSensor_onNullDataInForeignTable_thenReturnsValues() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.only_nulls;
-        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+        SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
 
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignTable(nullTableMetadata.getTableData().getHashedTableName());
         this.sut.setForeignColumn("int_nulls");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
