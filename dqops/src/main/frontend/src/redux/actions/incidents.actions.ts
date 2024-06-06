@@ -102,6 +102,8 @@ export const getIncidentsByConnection =
     page = 1,
     pageSize = 10,
     optionalFilter = '',
+    dimension = undefined,
+    category = undefined,
     sortBy = 'firstSeen',
     sortDirection = 'desc'
   }: IncidentFilter) =>
@@ -119,6 +121,8 @@ export const getIncidentsByConnection =
           page,
           pageSize,
           optionalFilter,
+          dimension,
+          category,
           sortBy,
           sortDirection
         );

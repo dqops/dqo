@@ -28,6 +28,8 @@ export interface IncidentFilter {
   page?: number;
   pageSize?: number;
   optionalFilter?: string;
+  dimension?: string;
+  category?: string;
   sortBy?:
     | 'table'
     | 'tablePriority'
