@@ -139,94 +139,130 @@ export const IncidentIssueRow = ({
             />
           )}
         </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.columnName}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <a
-            className="text-blue-700 underline cursor-pointer"
-            onClick={navigate}
-          >
-            {issue.checkName}
-          </a>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {formatDateTime(
-            moment(issue.executedAt).format('YYYY-MM-DD HH:mm:ss.SSS')
-          )}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.timeGradient}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {formatDateTime(
-            moment(issue.timePeriod).format('YYYY-MM-DD HH:mm:ss.SSS')
-          )}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.actualValue === 'number' ? issue.actualValue : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.expectedValue === 'number' ? issue.expectedValue : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-          {issue.dataGroup}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-          {getIssueSeverityLevel(issue.severity)}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.warningLowerBound === 'number'
-              ? issue.warningLowerBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.warningUpperBound === 'number'
-              ? issue.warningUpperBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.errorLowerBound === 'number'
-              ? issue.errorLowerBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.errorUpperBound === 'number'
-              ? issue.errorUpperBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.fatalLowerBound === 'number'
-              ? issue.fatalLowerBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>
-            {typeof issue.fatalUpperBound === 'number'
-              ? issue.fatalUpperBound
-              : ''}
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.durationMs}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-          <span>{issue.id}</span>
-        </td>
+        {issue.columnName !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {issue.columnName}
+          </td>
+        ) : null}
+        {issue.checkName !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            <a
+              className="text-blue-700 underline cursor-pointer"
+              onClick={navigate}
+            >
+              {issue.checkName}
+            </a>
+          </td>
+        ) : null}
+        {issue.executedAt !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {formatDateTime(
+              moment(issue.executedAt).format('YYYY-MM-DD HH:mm:ss.SSS')
+            )}
+          </td>
+        ) : null}
+        {issue.timeGradient !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {issue.timeGradient}
+          </td>
+        ) : null}
+        {issue.timePeriod !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {formatDateTime(
+              moment(issue.timePeriod).format('YYYY-MM-DD HH:mm:ss.SSS')
+            )}
+          </td>
+        ) : null}
+        {issue.actualValue !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.actualValue === 'number' ? issue.actualValue : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.expectedValue !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.expectedValue === 'number'
+                ? issue.expectedValue
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.dataGroup !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            {issue.dataGroup}
+          </td>
+        ) : null}
+        {issue.severity !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            {getIssueSeverityLevel(issue.severity)}
+          </td>
+        ) : null}
+        {issue.warningLowerBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.warningLowerBound === 'number'
+                ? issue.warningLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.warningUpperBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.warningUpperBound === 'number'
+                ? issue.warningUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.errorLowerBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.errorLowerBound === 'number'
+                ? issue.errorLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.errorUpperBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.errorUpperBound === 'number'
+                ? issue.errorUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.fatalLowerBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.fatalLowerBound === 'number'
+                ? issue.fatalLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.fatalUpperBound !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.fatalUpperBound === 'number'
+                ? issue.fatalUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {issue.durationMs !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            {issue.durationMs}
+          </td>
+        ) : null}
+        {issue.id !== undefined ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            <span>{issue.id}</span>
+          </td>
+        ) : null}
       </tr>
       {open && (
         <tr>
@@ -277,171 +313,221 @@ export const IncidentIssueList = ({
     });
   };
 
+  // Helper function to check if any issues have a value for a given column
+  const doesColumnHaveValues = (columnKey: keyof CheckResultEntryModel) => {
+    return issues.some(
+      (issue) =>
+        issue[columnKey] !== undefined &&
+        issue[columnKey] !== null &&
+        issue[columnKey] !== ''
+    );
+  };
+
   return (
     <div>
       <table className="mt-4 w-full">
         <thead>
           <tr>
             <th></th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              <SortableColumn
-                className="justify-start"
-                label="Column Name"
-                order="columnName"
-                direction={
-                  filters?.order === 'columnName'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              <SortableColumn
-                className="justify-start"
-                label="Check Name"
-                order="checkName"
-                direction={
-                  filters?.order === 'checkName' ? filters.direction : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              <SortableColumn
-                className="justify-start"
-                label="Executed At"
-                order="executedAt"
-                direction={
-                  filters?.order === 'executedAt'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              <SortableColumn
-                className="justify-start"
-                label="Time Scale"
-                order="timeGradient"
-                direction={
-                  filters?.order === 'timeGradient'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              <SortableColumn
-                className="justify-start"
-                label="Time Period"
-                order="timePeriod"
-                direction={
-                  filters?.order === 'timePeriod'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <SortableColumn
-                className="justify-end"
-                label="Actual Value"
-                order="actualValue"
-                direction={
-                  filters?.order === 'actualValue'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <SortableColumn
-                className="justify-end"
-                label="Expected Value"
-                order="expectedValue"
-                direction={
-                  filters?.order === 'expectedValue'
-                    ? filters.direction
-                    : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-              <SortableColumn
-                className="justify-start"
-                label="Data Group"
-                order="dataGroup"
-                direction={
-                  filters?.order === 'dataGroup' ? filters.direction : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <SortableColumn
-                className="justify-start"
-                label="Issue Severity Level"
-                order="severity"
-                direction={
-                  filters?.order === 'severity' ? filters.direction : undefined
-                }
-                onChange={handleSortChange}
-              />
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Warning
-                <br />
-                Lower Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Warning
-                <br />
-                Upper Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Error
-                <br />
-                Lower Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Error
-                <br />
-                Upper Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Fatal
-                <br />
-                Lower Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-              <span>
-                Fatal
-                <br />
-                Upper Threshold
-              </span>
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-              Duration Ms
-            </th>
-            <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-              Id
-            </th>
+            {doesColumnHaveValues('columnName') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Column Name"
+                  order="columnName"
+                  direction={
+                    filters?.order === 'columnName'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('checkName') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Check Name"
+                  order="checkName"
+                  direction={
+                    filters?.order === 'checkName'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('executedAt') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Executed At"
+                  order="executedAt"
+                  direction={
+                    filters?.order === 'executedAt'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('timeGradient') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Time Scale"
+                  order="timeGradient"
+                  direction={
+                    filters?.order === 'timeGradient'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('timePeriod') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Time Period"
+                  order="timePeriod"
+                  direction={
+                    filters?.order === 'timePeriod'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('actualValue') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-end"
+                  label="Actual Value"
+                  order="actualValue"
+                  direction={
+                    filters?.order === 'actualValue'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('expectedValue') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-end"
+                  label="Expected Value"
+                  order="expectedValue"
+                  direction={
+                    filters?.order === 'expectedValue'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('dataGroup') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+                <SortableColumn
+                  className="justify-start"
+                  label="Data Group"
+                  order="dataGroup"
+                  direction={
+                    filters?.order === 'dataGroup'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('severity') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-start"
+                  label="Issue Severity Level"
+                  order="severity"
+                  direction={
+                    filters?.order === 'severity'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('warningLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Warning
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('warningUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Warning
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('errorLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Error
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('errorUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Error
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('fatalLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Fatal
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('fatalUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Fatal
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('durationMs') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+                Duration Ms
+              </th>
+            )}
+            {doesColumnHaveValues('id') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                Id
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
