@@ -18,9 +18,8 @@ import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections, activeTab, selectedConnections, tabs } = useSelector(
-    (state: IRootState) => state.incidents
-  );
+  const { connections, activeTab, selectedConnections, tabs, loading } =
+    useSelector((state: IRootState) => state.incidents);
   const selectedConnection =
     activeTab && activeTab.length > 0 && activeTab !== '/incidents/new-tab'
       ? activeTab?.split('/')[2]
@@ -136,11 +135,15 @@ const IncidentsTree = () => {
       new Date(localStorageDate ?? '').getTime()
     );
   };
-
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 bg-white">
       <Button
         className="w-full mb-4"
+        leftIcon={
+          loading && (
+            <SvgIcon name="sync" className="w-4 h-4 mr-3 animate-spin" />
+          )
+        }
         label="Refresh"
         variant="outlined"
         color="primary"
