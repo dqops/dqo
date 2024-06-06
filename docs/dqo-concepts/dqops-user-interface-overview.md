@@ -191,14 +191,6 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 Below we explain the main tabs of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
 
-The top section of workspace at the table and column level, contains quick links that allow you to switch between different sections 
-while keeping the same level in the tree. The quick links section is hidden by default and can be expanded by clicking on the **<** arrow.
-For instance, if you are in the monitoring section on a table and click the 
-**Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
-same when you are on the column level.
-
-Below the quick links are tabs that vary in different sections.
-
 In the **Profiling** section you can access:
 
 ![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling.png){ loading=lazy; width="1200px" }
