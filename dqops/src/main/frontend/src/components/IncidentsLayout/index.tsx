@@ -63,7 +63,8 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
       pageTabs?.map((item) => ({
         value: item.url,
         url: item.url,
-        label: item.label
+        label: item.label,
+        state: { ...item.state }
       })) || []
     );
   }, [pageTabs]);

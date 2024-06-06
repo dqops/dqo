@@ -34,7 +34,6 @@ import { getDaysString, useDecodedParams } from '../../utils';
 import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
 import { HistogramChart } from './HistogramChart';
 import { IncidentIssueList } from './IncidentIssueList';
-import IncidentNavigation from './IncidentNavigation';
 
 const statusOptions = [
   {
@@ -178,13 +177,6 @@ export const IncidentDetail = () => {
     );
   };
 
-  // useEffect(() => {
-  //   onChangeFilter({
-  //     filter: debouncedSearchTerm,
-  //     page: 1
-  //   });
-  // }, [debouncedSearchTerm]);
-
   const getWarnings = (minimumSeverity?: number) => {
     if (!minimumSeverity) return 'No warnings';
     if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
@@ -204,13 +196,14 @@ export const IncidentDetail = () => {
     const table = incidentDetail?.table || '';
     dispatch(
       addSourceFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        url: ROUTES.TABLE_LEVEL_PAGE(
           CheckTypes.SOURCES,
           connection,
           schema,
-          table
+          table,
+          'incident_configuration'
         ),
-        value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+        value: ROUTES.TABLE_LEVEL_VALUE(
           CheckTypes.SOURCES,
           connection,
           schema,
@@ -287,9 +280,7 @@ export const IncidentDetail = () => {
             connection,
             schema,
             table,
-            `table-quality-status${
-              timeScale !== undefined ? '-' + timeScale : ''
-            }`
+            timeScale ?? 'advanced'
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
           state: {},
@@ -302,9 +293,7 @@ export const IncidentDetail = () => {
           connection,
           schema,
           table,
-          `table-quality-status${
-            timeScale !== undefined ? '-' + timeScale : ''
-          }`
+          timeScale ?? 'advanced'
         )
       );
     };
@@ -321,11 +310,11 @@ export const IncidentDetail = () => {
       </div>
     );
   };
-
+  // console.log(incidentDetail, filters, issues, histograms);
   return (
     <>
       <div className="relative">
-        <IncidentNavigation incident={incidentDetail} />
+        {/* <IncidentNavigation incident={incidentDetail} /> */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
@@ -339,37 +328,43 @@ export const IncidentDetail = () => {
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
-                content={'Disable'}
+                content={'Disable checks for this incident'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setDisableDialog(true)}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setDisableDialog(true)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
-                content={'Recalibrate'}
-                className="w-30 h-30 py-4 px-4 bg-gray-800"
-              >
-                <Button
-                  leftIcon={<SvgIcon name="minus" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setRecalibrateDialog(true)}
-                />
-              </Tooltip>
-              <Tooltip
-                content={'Settings'}
+                content={'Recalibrate checks for this incident'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={goToConfigure}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="minus" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setRecalibrateDialog(true)}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={'Change incident configuration'}
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={goToConfigure}
+                  />
+                </div>
               </Tooltip>
             </div>
           </div>
@@ -594,7 +589,7 @@ export const IncidentDetail = () => {
 
           <Pagination
             page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
+            pageSize={filters.pageSize || 10}
             totalPages={10}
             isEnd={isEnd}
             onChange={(page, pageSize) =>
