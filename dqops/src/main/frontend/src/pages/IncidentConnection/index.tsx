@@ -477,7 +477,7 @@ export const IncidentConnection = () => {
 
           <Pagination
             page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
+            pageSize={filters.pageSize || 10}
             isEnd={isEnd}
             totalPages={10}
             onChange={(page, pageSize) =>

@@ -33,21 +33,19 @@ import {
 
 interface ITableColumnsBodyProps {
   columns: MyData[];
-  objectStates: any;
   statistics: any;
   rewriteData: any;
-  handleButtonClick: any;
-  showDataStreamButtonFunc: any;
+  checkedColumns: string[];
+  handleChangeCheckedColumns: (column: string) => void;
   refreshListFunc: () => void;
 }
 
 export default function TableColumnsBody({
   columns,
-  objectStates,
+  checkedColumns,
   statistics,
   rewriteData,
-  handleButtonClick,
-  showDataStreamButtonFunc,
+  handleChangeCheckedColumns,
   refreshListFunc
 }: ITableColumnsBodyProps) {
   const history = useHistory();
@@ -137,70 +135,6 @@ export default function TableColumnsBody({
       : ([] as string[]);
   }, [job]);
 
-  const renderSecondLevelTooltip = (
-    data: DimensionCurrentDataQualityStatusModel | undefined
-  ) => {
-    if (data && data.last_check_executed_at) {
-      return (
-        <div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Last executed at:</div>
-            <div>
-              {moment(data?.last_check_executed_at).format(
-                'YYYY-MM-DD HH:mm:ss'
-              )}
-            </div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Current severity level:</div>
-            <div>{data?.current_severity}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Highest historical severity level:</div>
-            <div>{data?.highest_historical_severity}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Quality Dimension:</div>
-            <div>{data?.dimension}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Executed checks:</div>
-            <div>{data?.executed_checks}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Valid results:</div>
-            <div>{data?.valid_results}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Warnings:</div>
-            <div>{data?.warnings}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Errors:</div>
-            <div>{data?.errors}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Fatals:</div>
-            <div>{data?.fatals}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-49">Data quality KPI:</div>
-            <div>{data?.data_quality_kpi}</div>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div>
-        <div className="flex gap-x-2">
-          <div className="w-42">Quality Dimension:</div>
-          <div>{data?.dimension}</div>
-        </div>
-        <div className="w-full">No data quality checks configured</div>
-      </div>
-    );
-  };
-
   const getBasicDimmensionsKeys = (column: MyData, type: string) => {
     const basicDimensions = Object.keys(column.dimentions ?? {})?.find(
       (x) => x === type
@@ -275,14 +209,9 @@ export default function TableColumnsBody({
           <td className="border-b border-gray-100 text-right px-4 py-2 text-sm">
             <div>
               <Checkbox
-                checked={
-                  objectStates[column.nameOfCol ? column.nameOfCol : '']
-                    ? true
-                    : false
-                }
+                checked={!!checkedColumns?.find((x) => x === column.nameOfCol)}
                 onChange={() => {
-                  showDataStreamButtonFunc();
-                  handleButtonClick(column.nameOfCol ? column.nameOfCol : '');
+                  handleChangeCheckedColumns(column.nameOfCol ?? '');
                 }}
                 className="py-4"
               />
@@ -477,3 +406,65 @@ export default function TableColumnsBody({
     </tbody>
   );
 }
+
+const renderSecondLevelTooltip = (
+  data: DimensionCurrentDataQualityStatusModel | undefined
+) => {
+  if (data && data.last_check_executed_at) {
+    return (
+      <div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Last executed at:</div>
+          <div>
+            {moment(data?.last_check_executed_at).format('YYYY-MM-DD HH:mm:ss')}
+          </div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Current severity level:</div>
+          <div>{data?.current_severity}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Highest historical severity level:</div>
+          <div>{data?.highest_historical_severity}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Quality Dimension:</div>
+          <div>{data?.dimension}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Executed checks:</div>
+          <div>{data?.executed_checks}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Valid results:</div>
+          <div>{data?.valid_results}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Warnings:</div>
+          <div>{data?.warnings}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Errors:</div>
+          <div>{data?.errors}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Fatals:</div>
+          <div>{data?.fatals}</div>
+        </div>
+        <div className="flex gap-x-2">
+          <div className="w-49">Data quality KPI:</div>
+          <div>{data?.data_quality_kpi}</div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <div className="flex gap-x-2">
+        <div className="w-42">Quality Dimension:</div>
+        <div>{data?.dimension}</div>
+      </div>
+      <div className="w-full">No data quality checks configured</div>
+    </div>
+  );
+};
