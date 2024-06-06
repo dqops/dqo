@@ -314,7 +314,6 @@ export const IncidentDetail = () => {
   return (
     <>
       <div className="relative">
-        {/* <IncidentNavigation incident={incidentDetail} /> */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />

@@ -5,19 +5,31 @@ import { CheckContainerModel, CheckResultsOverviewDataModel } from '../../api';
 import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
-import TableNavigation from "../../components/TableNavigation";
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableProfilingChecksModel,
   updateTableProfilingChecksModel
 } from '../../redux/actions/table.actions';
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
-import { CheckResultOverviewApi } from "../../services/apiClient";
-import { CheckTypes } from "../../shared/routes";
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 
 const TableProfilingsView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useDecodedParams();
+  const {
+    checkTypes,
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useDecodedParams();
 
   const { checksUI, isUpdating, loading } = useSelector(
     getFirstLevelState(checkTypes)
@@ -108,7 +120,6 @@ const TableProfilingsView = () => {
           />
         </div>
       </div>
-      <TableNavigation />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}
