@@ -62,7 +62,7 @@ public class SqlServerColumnSqlConditionPassedPercentSensorParametersSpecIntegra
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
-        this.sut.setSqlCondition("length({column}) < 30");
+        this.sut.setSqlCondition("LEN({column}) < 30");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);

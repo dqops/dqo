@@ -63,7 +63,7 @@ public class SqlServerColumnSqlConditionFailedCountSensorParametersSpecIntegrati
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
-        this.sut.setSqlCondition("length({column}) < 8");
+        this.sut.setSqlCondition("LEN({column}) < 8");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);
