@@ -32,6 +32,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,6 +54,25 @@ public class OracleColumnUniquenessDistinctPercentSensorParametersSpecIntegratio
         this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
         this.checkSpec = new ColumnDistinctPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.oracle);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test

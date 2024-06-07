@@ -45,7 +45,14 @@ public class RedshiftColumnTextTextLengthInRangePercentSensorParametersSpecInteg
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
-    void setUp()
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_regex_sensor, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnTextTextLengthInRangePercentSensorParametersSpec();
+        this.checkSpec = new ColumnTextLengthInRangePercentCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
 
     @Test
     void runSensor_onNullDataAndNoParams_thenReturnsValues() {
