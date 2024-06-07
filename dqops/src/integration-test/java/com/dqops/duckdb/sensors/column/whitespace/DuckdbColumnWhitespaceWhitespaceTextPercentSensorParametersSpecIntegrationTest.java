@@ -58,7 +58,6 @@ public class DuckdbColumnWhitespaceWhitespaceTextPercentSensorParametersSpecInte
         this.checkSpec.setParameters(this.sut);
     }
 
-
     @Test
     void runSensor_onNullData_thenReturnsValues() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
