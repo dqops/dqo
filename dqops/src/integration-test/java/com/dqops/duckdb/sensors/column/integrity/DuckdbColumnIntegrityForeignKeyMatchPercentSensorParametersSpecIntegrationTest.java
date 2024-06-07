@@ -92,7 +92,7 @@ public class DuckdbColumnIntegrityForeignKeyMatchPercentSensorParametersSpecInte
         SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, nullTableMetadata);
 
         this.sut.setForeignTable(nullTableMetadata.getTableData().getHashedTableName());
         this.sut.setForeignColumn("int_nulls");
