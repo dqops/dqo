@@ -1,7 +1,8 @@
 import moment from 'moment';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { IncidentModel } from '../../../api';
-import Button from '../../../components/Button';
+import { ROUTES } from '../../../shared/routes';
 
 type GlobalIncidentsDashboardTableProps = {
   group: string;
@@ -11,7 +12,16 @@ export default function GlobalIncidentsDashboardTable({
   group,
   incidents
 }: GlobalIncidentsDashboardTableProps) {
-  const goToIncidents = (group: string) => {};
+  const history = useHistory();
+  const goToIncidents = (incident: IncidentModel) => {
+    const url = ROUTES.INCIDENT_DETAIL(
+      incident.connection ?? '',
+      incident.year ?? 0,
+      incident.month ?? 0,
+      incident.incidentId ?? ''
+    );
+    history.push(url);
+  };
 
   if (incidents.length === 0) {
     return null;
@@ -22,12 +32,7 @@ export default function GlobalIncidentsDashboardTable({
       <div className="flex items-center justify-between pl-2 py-2 border-b border-gray-300 mb-2 text-lg font-semibold">
         <div>{group}</div>
         <div>
-          <Button
-            label="Show more"
-            color="primary"
-            className="text-sm"
-            onClick={() => goToIncidents(group)}
-          />
+          {/* <Button label="Show more" color="primary" className="text-sm" /> */}
         </div>
       </div>
       <table>
@@ -48,9 +53,9 @@ export default function GlobalIncidentsDashboardTable({
               First seen
             </th>
             <th className="py-2 px-4 text-left whitespace-nowrap">Last seen</th>
-            <th className="py-2 px-4 text-left whitespace-nowrap">
+            {/* <th className="py-2 px-4 text-left whitespace-nowrap">
               Incident id
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody>
@@ -59,9 +64,24 @@ export default function GlobalIncidentsDashboardTable({
               key={incident.incidentId}
               className="py-2 border-b border-gray-300 pl-2"
             >
-              <td className="py-2 px-4">{incident.connection}</td>
-              <td className="py-2 px-4">{incident.schema}</td>
-              <td className="py-2 px-4">{incident.table}</td>
+              <td
+                className="py-2 px-4 underline cursor-pointer"
+                onClick={() => goToIncidents(incident)}
+              >
+                {incident.connection}
+              </td>
+              <td
+                className="py-2 px-4 underline cursor-pointer"
+                onClick={() => goToIncidents(incident)}
+              >
+                {incident.schema}
+              </td>
+              <td
+                className="py-2 px-4 underline cursor-pointer"
+                onClick={() => goToIncidents(incident)}
+              >
+                {incident.table}
+              </td>
               <td className="py-2 px-4">{incident.qualityDimension}</td>
               <td className="py-2 px-4">{incident.checkCategory}</td>
               <td className="py-2 px-4">
@@ -70,7 +90,7 @@ export default function GlobalIncidentsDashboardTable({
               <td className="py-2 px-4">
                 {moment(incident.lastSeen).format('YYYY-MM-DD')}
               </td>
-              <td className="py-2 px-4">{incident.incidentId}</td>
+              {/* <td className="py-2 px-4">{incident.incidentId}</td> */}
             </tr>
           ))}
         </tbody>
