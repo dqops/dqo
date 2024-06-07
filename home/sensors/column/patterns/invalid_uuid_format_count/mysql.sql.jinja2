@@ -2,9 +2,9 @@
 SELECT
     SUM(
         CASE
-            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                THEN 0
-            ELSE 1
+            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                THEN 1
+            ELSE 0
         END
     ) AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}

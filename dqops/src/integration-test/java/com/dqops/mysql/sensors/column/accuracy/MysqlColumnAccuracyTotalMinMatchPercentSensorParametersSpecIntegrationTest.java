@@ -87,7 +87,7 @@ public class MysqlColumnAccuracyTotalMinMatchPercentSensorParametersSpecIntegrat
     void runSensor_onNullDataInForeignTable_thenReturnsValues() {
         String csvFileName = SampleCsvFileNames.only_nulls;
         SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                csvFileName, ProviderType.bigquery);
+                csvFileName, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
 
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, nullTableMetadata);
