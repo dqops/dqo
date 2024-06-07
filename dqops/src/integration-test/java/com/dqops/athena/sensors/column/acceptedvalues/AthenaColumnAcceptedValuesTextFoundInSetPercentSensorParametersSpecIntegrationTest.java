@@ -18,8 +18,6 @@ package com.dqops.athena.sensors.column.acceptedvalues;
 import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextFoundInSetPercentCheckSpec;
-import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -84,10 +82,10 @@ public class AthenaColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec
 
     @Test
     void runSensor_onNullData_thenReturnsValues() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         String csvFileName = SampleCsvFileNames.only_nulls;
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 csvFileName, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         List<String> values = new ArrayList<>();

@@ -60,7 +60,7 @@ public class PostgresqlColumnDatetimeDateMatchFormatPercentSensorParametersSpecI
     void runSensor_onNullData_thenReturnsValues() {
         String csvFileName = SampleCsvFileNames.only_nulls;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                csvFileName, ProviderType.presto);
+                csvFileName, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
