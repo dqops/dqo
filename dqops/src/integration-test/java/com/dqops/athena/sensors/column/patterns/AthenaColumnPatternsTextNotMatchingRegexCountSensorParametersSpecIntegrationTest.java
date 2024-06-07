@@ -18,7 +18,6 @@ package com.dqops.athena.sensors.column.patterns;
 import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnTextNotMatchingRegexFoundCheckSpec;
-import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -66,6 +65,8 @@ public class AthenaColumnPatternsTextNotMatchingRegexCountSensorParametersSpecIn
                 csvFileName, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        this.sut.setRegex(".*");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);

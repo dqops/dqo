@@ -66,7 +66,7 @@ public class DuckdbColumnPatternsTextsMatchingRegexPercentSensorParametersSpecIn
                 csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex(".*");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);

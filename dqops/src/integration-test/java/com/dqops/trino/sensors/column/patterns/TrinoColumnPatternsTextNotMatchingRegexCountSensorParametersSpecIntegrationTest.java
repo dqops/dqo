@@ -57,11 +57,14 @@ public class TrinoColumnPatternsTextNotMatchingRegexCountSensorParametersSpecInt
 
     @Test
     void runSensor_onNullData_thenReturnsValues() {
+        this.sut.setRegex(".*");
         String csvFileName = SampleCsvFileNames.only_nulls;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 csvFileName, ProviderType.trino);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        this.sut.setRegex(".*");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);

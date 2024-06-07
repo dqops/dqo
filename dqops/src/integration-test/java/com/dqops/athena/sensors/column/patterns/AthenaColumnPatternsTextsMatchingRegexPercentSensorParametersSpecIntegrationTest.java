@@ -66,6 +66,8 @@ public class AthenaColumnPatternsTextsMatchingRegexPercentSensorParametersSpecIn
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
+        this.sut.setRegex(".*");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);
 
