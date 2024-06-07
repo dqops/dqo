@@ -257,6 +257,7 @@ export const IncidentConnection = () => {
       label: 'Data quality issue grouping',
       className: 'text-left py-2 px-4',
       value: 'checkName',
+      alwaysVisible: true,
       render: (value: string, row: IncidentModel) => {
         const values = [
           row.qualityDimension,

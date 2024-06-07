@@ -8,6 +8,7 @@ interface Column {
   className?: string;
   render?: any;
   header?: any;
+  alwaysVisible?: boolean;
 }
 
 export interface TableProps {
@@ -44,7 +45,7 @@ export const Table: React.FC<TableProps> = ({
                 (item) => getValue(item, column) !== undefined
               );
 
-              if (itemExist === undefined) {
+              if (itemExist === undefined && column.alwaysVisible !== true) {
                 return null;
               }
               return (
@@ -102,7 +103,7 @@ export const Table: React.FC<TableProps> = ({
                           (dataItem) => getValue(dataItem, column) !== undefined
                         );
 
-                        if (!headerItemExist) {
+                        if (!headerItemExist && column.alwaysVisible !== true) {
                           return null;
                         }
 

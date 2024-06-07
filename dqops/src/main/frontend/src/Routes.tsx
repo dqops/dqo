@@ -15,6 +15,11 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
       <Route exact path={ROUTES.PATTERNS.TABLES} component={HomePage} />
       <Route exact path={ROUTES.PATTERNS.COLUMNS} component={HomePage} />
+      <Route
+        exact
+        path={ROUTES.PATTERNS.GLOBAL_INCIDENTS}
+        component={HomePage}
+      />
 
       {/* Dashboard Layout pages */}
       <Route
