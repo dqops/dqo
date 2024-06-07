@@ -9,7 +9,7 @@ export default function GlobalIncidentsDashboard({
 }) {
   const groups = incidents.topIncidents || {};
   return (
-    <div>
+    <div className="flex flex-wrap gap-4 p-4">
       {Object.entries(groups).map(([key, value]) => {
         return (
           <GlobalIncidentsDashboardTable
