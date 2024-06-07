@@ -68,7 +68,7 @@ public class SingleStoreDbColumnIntegrityForeignKeyMatchPercentSensorParametersS
                 csvFileName, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(nullTableMetadata);
-        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, nullTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataForeign);
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
