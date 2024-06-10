@@ -42,6 +42,10 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
     private final FolderTreeNode sensorDefinitionFolderNode;
     @JsonIgnore
     private final YamlSerializer yamlSerializer;
+    @JsonIgnore
+    private boolean sqlTemplateLoaded;
+    @JsonIgnore
+    private boolean errorSamplingTemplateLoaded;
 
     /**
      * Creates a file based provider specific sensor definition wrapper.
@@ -116,17 +120,21 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
     @Override
     public String getSqlTemplate() {
         String sqlTemplate = super.getSqlTemplate();
-        if (sqlTemplate == null) {
+        if (sqlTemplate == null && !this.sqlTemplateLoaded) {
             String providerNameLowerCase = this.getProvider().name().toLowerCase(Locale.ROOT);
             String fileNameWithExt = providerNameLowerCase + SpecFileNames.PROVIDER_SENSOR_SQL_TEMPLATE_EXT;
             FileTreeNode fileNode = this.sensorDefinitionFolderNode.getChildFileByFileName(fileNameWithExt);
+            this.sqlTemplateLoaded = true;
 
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
+                boolean wasDirty = this.isDirty();
 				this.setSqlTemplate(textContent);
                 this.setSqlTemplateLastModified(fileContent.getLastModified());
-				clearDirty(false);
+				if (wasDirty) {
+                    clearDirty(false);
+                }
 
                return textContent;
             }
@@ -143,13 +151,62 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
     @Override
     public Instant getSqlTemplateLastModified() {
         Instant sqlTemplateLastModified = super.getSqlTemplateLastModified();
-        if (sqlTemplateLastModified == null) {
+        if (sqlTemplateLastModified == null && !this.sqlTemplateLoaded) {
             this.getSqlTemplate(); // trigger loading
         } else {
             return sqlTemplateLastModified;
         }
 
         return super.getSqlTemplateLastModified();
+    }
+
+    /**
+     * Returns the error sampling SQL template for the template. A sensor may not have an SQL template and could be implemented
+     * as a python module instead.
+     *
+     * @return Error sampling SQL Template.
+     */
+    @Override
+    public String getErrorSamplingTemplate() {
+        String errorSamplingTemplate = super.getErrorSamplingTemplate();
+        if (errorSamplingTemplate == null && !this.errorSamplingTemplateLoaded) {
+            String providerNameLowerCase = this.getProvider().name().toLowerCase(Locale.ROOT);
+            String fileNameWithExt = providerNameLowerCase + SpecFileNames.PROVIDER_SENSOR_ERROR_SAMPLING_TEMPLATE_EXT;
+            FileTreeNode fileNode = this.sensorDefinitionFolderNode.getChildFileByFileName(fileNameWithExt);
+            this.errorSamplingTemplateLoaded = true;
+
+            if (fileNode != null) {
+                FileContent fileContent = fileNode.getContent();
+                String textContent = fileContent.getTextContent();
+                boolean wasDirty = this.isDirty();
+                this.setErrorSamplingTemplate(textContent);
+                this.setErrorSamplingTemplateLastModified(fileContent.getLastModified());
+                if (wasDirty) {
+                    clearDirty(false);
+                }
+
+                return textContent;
+            }
+        }
+
+        return errorSamplingTemplate;
+    }
+
+    /**
+     * Returns the file modification timestamp when the SQL template was modified for the last time.
+     *
+     * @return Last file modification timestamp.
+     */
+    @Override
+    public Instant getErrorSamplingTemplateLastModified() {
+        Instant errorSamplingTemplateLastModified = super.getErrorSamplingTemplateLastModified();
+        if (errorSamplingTemplateLastModified == null && !this.errorSamplingTemplateLoaded) {
+            this.getErrorSamplingTemplate(); // trigger loading
+        } else {
+            return errorSamplingTemplateLastModified;
+        }
+
+        return super.getErrorSamplingTemplateLastModified();
     }
 
     /**
@@ -176,6 +233,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
         FileContent newSpecFileContent = new FileContent(specAsYaml);
         String specFileNameWithExt = this.getProvider().name().toLowerCase(Locale.ROOT) + SpecFileNames.PROVIDER_SENSOR_SPEC_FILE_EXT_YAML;
         String templateFileNameWithExt = this.getProvider().name().toLowerCase(Locale.ROOT) + SpecFileNames.PROVIDER_SENSOR_SQL_TEMPLATE_EXT;
+        String errorSamplingTemplateFileNameWithExt = this.getProvider().name().toLowerCase(Locale.ROOT) + SpecFileNames.PROVIDER_SENSOR_ERROR_SAMPLING_TEMPLATE_EXT;
 
         switch (this.getStatus()) {
             case ADDED:
@@ -184,12 +242,16 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 if (this.getSqlTemplate() != null) {
 					this.sensorDefinitionFolderNode.addChildFile(templateFileNameWithExt, new FileContent(this.getSqlTemplate()));
                 }
+                if (this.getErrorSamplingTemplate() != null) {
+                    this.sensorDefinitionFolderNode.addChildFile(errorSamplingTemplateFileNameWithExt, new FileContent(this.getErrorSamplingTemplate()));
+                }
                 break;
 
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.sensorDefinitionFolderNode.getChildFileByFileName(specFileNameWithExt);
                 modifiedFileNode.changeContent(newSpecFileContent);
 				this.getSpec().clearDirty(true);
+
                 if (this.getSqlTemplate() != null) {
                     FileTreeNode currentSqlTemplateFile = this.sensorDefinitionFolderNode.getChildFileByFileName(templateFileNameWithExt);
                     if (currentSqlTemplateFile != null) {
@@ -205,6 +267,23 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                         currentSqlTemplateFileToDelete.markForDeletion();
                     }
                 }
+
+                if (this.getErrorSamplingTemplate() != null) {
+                    FileTreeNode currentErrorSamplingTemplateFile = this.sensorDefinitionFolderNode.getChildFileByFileName(errorSamplingTemplateFileNameWithExt);
+                    if (currentErrorSamplingTemplateFile != null) {
+                        currentErrorSamplingTemplateFile.changeContent(new FileContent(this.getErrorSamplingTemplate()));
+                    }
+                    else {
+                        this.sensorDefinitionFolderNode.addChildFile(errorSamplingTemplateFileNameWithExt, new FileContent(this.getErrorSamplingTemplate()));
+                    }
+                }
+                else {
+                    FileTreeNode currentErrorSamplingTemplateFileToDelete = this.sensorDefinitionFolderNode.getChildFileByFileName(errorSamplingTemplateFileNameWithExt);
+                    if (currentErrorSamplingTemplateFileToDelete != null) {
+                        currentErrorSamplingTemplateFileToDelete.markForDeletion();
+                    }
+                }
+
                 break;
 
             case TO_BE_DELETED:
@@ -212,6 +291,11 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 FileTreeNode sqlTemplateToDelete = this.sensorDefinitionFolderNode.getChildFileByFileName(templateFileNameWithExt);
                 if (sqlTemplateToDelete != null) {
                     sqlTemplateToDelete.markForDeletion();
+                }
+
+                FileTreeNode errorSamplingTemplateToDelete = this.sensorDefinitionFolderNode.getChildFileByFileName(errorSamplingTemplateFileNameWithExt);
+                if (errorSamplingTemplateToDelete != null) {
+                    errorSamplingTemplateToDelete.markForDeletion();
                 }
                 break;
         }

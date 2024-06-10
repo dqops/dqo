@@ -45,9 +45,14 @@ public final class SpecFileNames {
     public static final String PROVIDER_SENSOR_SPEC_FILE_EXT_YAML = ".dqoprovidersensor.yaml";
 
     /**
-     * Provider specific sensor definition file extension.
+     * Provider specific SQL template file extension.
      */
     public static final String PROVIDER_SENSOR_SQL_TEMPLATE_EXT = ".sql.jinja2";
+
+    /**
+     * Provider specific error sampling SQL template file extension.
+     */
+    public static final String PROVIDER_SENSOR_ERROR_SAMPLING_TEMPLATE_EXT = ".sample.sql.jinja2";
 
     /**
      * Custom rule definition file extension.

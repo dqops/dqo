@@ -44,10 +44,15 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
             ExecutionContext executionContext, String sensorName, ProviderType providerType) {
         UserHome userHome = executionContext.getUserHomeContext() != null ? executionContext.getUserHomeContext().getUserHome() : null;
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
-        String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
         String dataDomain = executionContext.getUserHomeContext() != null ?
                 executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder() : UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+
+        String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
         HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome);
+
+        String errorSamplingJinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sample.sql.jinja2";
+        HomeFilePath errorSamplingJinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, errorSamplingJinjaFileNameRelativeToHome);
+
 
         if (userHome != null) {
 
@@ -63,9 +68,13 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                             userProviderSensorDefinitionWrapper.getSpec(),
                             userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getSqlTemplate(),  // return a sql template as a string only when the file is not stored in a file system
                             userProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
+                            userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getErrorSamplingTemplate(),  // return a sql template as a string only when the file is not stored in a file system
+                            userProviderSensorDefinitionWrapper.getErrorSamplingTemplateLastModified(),
                             providerType,
                             HomeType.USER_HOME,
-                            userHomeIsLocalFileSystem ? jinjaFileHomePath : null);
+                            userHomeIsLocalFileSystem ? jinjaFileHomePath : null,
+                            userHomeIsLocalFileSystem ? errorSamplingJinjaFileHomePath : null
+                        );
                 }
             }
         }
@@ -89,8 +98,12 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
                 builtinProviderSensorDefinitionWrapper.getSpec(),
                 dqoHomeIsLocalFileSystem ? null : builtinProviderSensorDefinitionWrapper.getSqlTemplate(),
                 builtinProviderSensorDefinitionWrapper.getSqlTemplateLastModified(),
+                dqoHomeIsLocalFileSystem ? null : builtinProviderSensorDefinitionWrapper.getErrorSamplingTemplate(),
+                builtinProviderSensorDefinitionWrapper.getErrorSamplingTemplateLastModified(),
                 providerType,
                 HomeType.DQO_HOME,
-                dqoHomeIsLocalFileSystem ? jinjaFileHomePath : null);
+                dqoHomeIsLocalFileSystem ? jinjaFileHomePath : null,
+                dqoHomeIsLocalFileSystem ? errorSamplingJinjaFileHomePath : null
+            );
     }
 }

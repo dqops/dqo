@@ -57,6 +57,7 @@ public class JinjaTemplateRenderParameters {
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
     private List<String> additionalFilters;
     private String tableFromFiles;
+    private ErrorSamplingRenderParameters errorSampling;
 
     /**
      * Creates a default, empty jinja template render parameters object.
@@ -370,4 +371,19 @@ public class JinjaTemplateRenderParameters {
         this.tableFromFiles = tableFromFiles;
     }
 
+    /**
+     * Returns additional parameters that are passed to the error sampling templates.
+     * @return Error sampling parameters.
+     */
+    public ErrorSamplingRenderParameters getErrorSampling() {
+        return errorSampling;
+    }
+
+    /**
+     * Sets the configuration of error sampling parameters.
+     * @param errorSampling Error sampling parameters.
+     */
+    public void setErrorSampling(ErrorSamplingRenderParameters errorSampling) {
+        this.errorSampling = errorSampling;
+    }
 }

@@ -27941,6 +27941,10 @@
           "description" : "Column data type that was retrieved when the table metadata was imported.",
           "$ref" : "#/definitions/ColumnTypeSnapshotSpec"
         },
+        "id" : {
+          "type" : "boolean",
+          "description" : "True when this column is a part of the primary key or a business key that identifies a row. Error sampling captures values of id columns to identify the row where the error sample was found."
+        },
         "profiling_checks" : {
           "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
           "$ref" : "#/definitions/ColumnProfilingCheckCategoriesSpec"

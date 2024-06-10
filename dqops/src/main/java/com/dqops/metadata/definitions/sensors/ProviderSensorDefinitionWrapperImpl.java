@@ -40,6 +40,10 @@ public class ProviderSensorDefinitionWrapperImpl extends AbstractElementWrapper<
     private String sqlTemplate;
     @JsonIgnore
     private Instant sqlTemplateLastModified;
+    @JsonIgnore
+    private String errorSamplingTemplate;
+    @JsonIgnore
+    private Instant errorSamplingTemplateLastModified;
 
     /**
      * Creates a new provider specific sensor definition wrapper.
@@ -116,6 +120,49 @@ public class ProviderSensorDefinitionWrapperImpl extends AbstractElementWrapper<
     public void setSqlTemplateLastModified(Instant sqlTemplateLastModified) {
         this.setModifiedIf(!Objects.equals(this.sqlTemplateLastModified, sqlTemplateLastModified));
         this.sqlTemplateLastModified = sqlTemplateLastModified;
+    }
+
+    /**
+     * Returns the error sampling SQL template for the template. A sensor may not have an SQL template and could be implemented
+     * as a python module instead.
+     *
+     * @return Error sampling sql Template.
+     */
+    @Override
+    public String getErrorSamplingTemplate() {
+        return this.errorSamplingTemplate;
+    }
+
+    /**
+     * Sets an error sampling sql template used by this provider.
+     *
+     * @param errorSamplingTemplate Error sampling SQL template string.
+     */
+    @Override
+    public void setErrorSamplingTemplate(String errorSamplingTemplate) {
+        this.setModifiedIf(!Objects.equals(this.errorSamplingTemplate, errorSamplingTemplate));
+        this.errorSamplingTemplate = errorSamplingTemplate;
+    }
+
+    /**
+     * Returns the file modification timestamp when the error sampling SQL template was modified for the last time.
+     *
+     * @return Last file modification timestamp of the error sampling template.
+     */
+    @Override
+    public Instant getErrorSamplingTemplateLastModified() {
+        return this.errorSamplingTemplateLastModified;
+    }
+
+    /**
+     * Sets the timestamp when the error sampling SQL template was modified for the last time.
+     *
+     * @param errorSamplingTemplateLastModified Error sampling SQL Template last modified timestamp.
+     */
+    @Override
+    public void setErrorSamplingTemplateLastModified(Instant errorSamplingTemplateLastModified) {
+        this.setModifiedIf(!Objects.equals(this.errorSamplingTemplateLastModified, errorSamplingTemplateLastModified));
+        this.errorSamplingTemplateLastModified = errorSamplingTemplateLastModified;
     }
 
     /**

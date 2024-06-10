@@ -102,10 +102,6 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         if (userHomePhysicalPath != null) {
             inputDto.setUserHomePath(userHomePhysicalPath.toString().replace('\\', '/'));
         }
-//        Path dqoHomePhysicalPath = checkExecutionContext.getDqoHomeContext().getHomeRoot().getPhysicalAbsolutePath();
-//        if (dqoHomePhysicalPath != null) {
-//            inputDto.setDqoHomePath(dqoHomePhysicalPath.toString().replace('\\', '/'));
-//        }
 
         inputDto.setParameters(templateRenderParameters);
         String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
@@ -120,7 +116,54 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
 
         if (output.getError() != null) {
             progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
-            throw new PythonExecutionException("Quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
+            throw new PythonExecutionException("Data quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
+        }
+
+        progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
+        return output.getResult();
+    }
+
+    /**
+     * Render an error sampling template for a sensor definition that was found in the user home or dqo home. This method prefers to use disk based template loading.
+     *
+     * @param executionContext    Check execution context with paths to the user home and dqo home.
+     * @param sensorFindResult         Sensor definition (template) find result.
+     * @param templateRenderParameters Template rendering parameters that are passed to the jinja2 template file and are usable in the template code.
+     * @param progressListener         Progress listener that receives information about rendered templates.
+     * @return Rendered SQL template for error sampling.
+     */
+    @Override
+    public String renderErrorSamplingTemplate(ExecutionContext executionContext,
+                                              SensorDefinitionFindResult sensorFindResult,
+                                              JinjaTemplateRenderParameters templateRenderParameters,
+                                              SensorExecutionProgressListener progressListener) {
+        JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
+        inputDto.setTemplateText(sensorFindResult.getErrorSamplingTemplateText());
+        inputDto.setTemplateLastModified(sensorFindResult.getErrorSamplingTemplateLastModified());
+        inputDto.setHomeType(sensorFindResult.getHome());
+        String relativePathToTemplate = sensorFindResult.getErrorSamplingTemplateFilePath() != null ?
+                sensorFindResult.getErrorSamplingTemplateFilePath().toRelativePath().toString().replace('\\', '/')
+                : null;
+        inputDto.setTemplateHomePath(relativePathToTemplate);
+        Path userHomePhysicalPath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
+        if (userHomePhysicalPath != null) {
+            inputDto.setUserHomePath(userHomePhysicalPath.toString().replace('\\', '/'));
+        }
+
+        inputDto.setParameters(templateRenderParameters);
+        String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
+
+        progressListener.onBeforeSqlTemplateRender(new BeforeSqlTemplateRenderEvent(inputDto));
+        JinjaTemplateRenderOutput output =
+                this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
+
+        if (output == null) {
+            return null;
+        }
+
+        if (output.getError() != null) {
+            progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
+            throw new PythonExecutionException("Data quality check error sampling template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
         }
 
         progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));

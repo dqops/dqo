@@ -483,4 +483,31 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            SELECT
+                %1$s as actual_value
+            FROM
+                `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+                  AND NOT (%1$s >= 29 AND %1$s <= 30)
+            LIMIT 10""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
 }

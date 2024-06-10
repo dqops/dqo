@@ -640,8 +640,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
 
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
-                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate, providerSensorDefinitionWrapper.getSqlTemplateLastModified(),
-                        providerType, HomeType.DQO_HOME, null);
+                        providerSensorDefinitionWrapper.getSpec(),
+                        sqlTemplate, providerSensorDefinitionWrapper.getSqlTemplateLastModified(),
+                        providerSensorDefinitionWrapper.getErrorSamplingTemplate(), providerSensorDefinitionWrapper.getErrorSamplingTemplateLastModified(),
+                        providerType, HomeType.DQO_HOME, null, null);
 
                 ConnectionSpec connectionSpec = new ConnectionSpec();
                 connectionSpec.setBigquery(new BigQueryParametersSpec() {{
