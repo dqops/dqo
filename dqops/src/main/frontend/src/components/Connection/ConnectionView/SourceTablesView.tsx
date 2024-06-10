@@ -14,6 +14,7 @@ import { CheckTypes } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import Button from '../../Button';
 import Checkbox from '../../Checkbox';
+import Input from '../../Input';
 import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 
@@ -30,6 +31,7 @@ const SourceTablesView = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<RemoteTableListModel[]>([]);
+  const [tableNameContains, setTableNameContains] = useState('');
 
   const dispatch = useActionDispatch();
   const { job_dictionary_state } = useSelector(
@@ -42,7 +44,11 @@ const SourceTablesView = () => {
   const fetchSourceTables = async () => {
     setLoading(true);
     setSelectedTables([]);
-    DataSourcesApi.getRemoteDataSourceTables(connection, schema)
+    DataSourcesApi.getRemoteDataSourceTables(
+      connection,
+      schema,
+      tableNameContains
+    )
       .then((res) => {
         setTables(res.data);
       })
@@ -67,7 +73,8 @@ const SourceTablesView = () => {
     const res = await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
       schemaName: schema,
-      tableNames: selectedTables
+      tableNames: selectedTables,
+      tableNameContains
     });
 
     dispatch(
@@ -86,7 +93,8 @@ const SourceTablesView = () => {
     const res = await JobApiClient.importTables(undefined, false, undefined, {
       connectionName: connection,
       schemaName: schema,
-      tableNames: tables.map((item) => item.tableName ?? '')
+      tableNames: tables.map((item) => item.tableName ?? ''),
+      tableNameContains
     });
 
     dispatch(
@@ -118,34 +126,49 @@ const SourceTablesView = () => {
   return (
     <div className="py-4 px-8">
       {/* <ConnectionActionGroup onImport={onBack} /> */}
-      <div className="flex justify-end space-x-4 mb-4">
-        <Button
-          color="primary"
-          className="text-sm"
-          label="Select all"
-          onClick={selectAll}
-          disabled={selectedTables.length === tables.length}
-        />
-        <Button
-          color="primary"
-          className="text-sm"
-          label="Unselect all"
-          onClick={unselectAll}
-          disabled={selectedTables.length === 0}
-        />
-        <Button
-          color="primary"
-          className="text-sm"
-          label="Import selected tables"
-          onClick={importSelectedTables}
-          disabled={selectedTables.length === 0}
-        />
-        <Button
-          color="primary"
-          className="text-sm"
-          label="Import all tables"
-          onClick={importAllTables}
-        />
+      <div className="flex justify-between space-x-4 mb-4">
+        <div className="flex items-center space-x-2">
+          <div className="text-sm">Table name contains</div>
+          <Input
+            value={tableNameContains}
+            onChange={(e) => setTableNameContains(e.target.value)}
+          />
+          <Button
+            color="primary"
+            className="text-sm"
+            label="Search"
+            onClick={fetchSourceTables}
+          />
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            color="primary"
+            className="text-sm"
+            label="Select all"
+            onClick={selectAll}
+            disabled={selectedTables.length === tables.length}
+          />
+          <Button
+            color="primary"
+            className="text-sm"
+            label="Unselect all"
+            onClick={unselectAll}
+            disabled={selectedTables.length === 0}
+          />
+          <Button
+            color="primary"
+            className="text-sm"
+            label="Import selected tables"
+            onClick={importSelectedTables}
+            disabled={selectedTables.length === 0}
+          />
+          <Button
+            color="primary"
+            className="text-sm"
+            label="Import all tables"
+            onClick={importAllTables}
+          />
+        </div>
       </div>
       {loading ? (
         <div className="flex justify-center h-100">
