@@ -117,7 +117,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       const existing = state[action.checkType]?.tabs.find(
         (item) => item.value === action.data.value
       );
-      const { state: actionState, ...data } = action.data;
+      const { ...data } = action.data;
 
       if (existing) {
         return {

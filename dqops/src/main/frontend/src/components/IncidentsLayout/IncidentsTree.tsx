@@ -18,9 +18,8 @@ import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections, activeTab, selectedConnections, tabs } = useSelector(
-    (state: IRootState) => state.incidents
-  );
+  const { connections, activeTab, selectedConnections, tabs, loading } =
+    useSelector((state: IRootState) => state.incidents);
   const selectedConnection =
     activeTab && activeTab.length > 0 && activeTab !== '/incidents/new-tab'
       ? activeTab?.split('/')[2]
@@ -41,6 +40,7 @@ const IncidentsTree = () => {
     if (activeTab === url) {
       return;
     }
+
     dispatch(
       addFirstLevelTab({
         url,
@@ -50,7 +50,7 @@ const IncidentsTree = () => {
             openIncidents: true,
             acknowledgedIncidents: true,
             page: 1,
-            pageSize: 50
+            pageSize: 10
           }
         },
         label: connection?.connection ?? ''
@@ -60,13 +60,6 @@ const IncidentsTree = () => {
   };
 
   const openCorrectTabFromUrl = () => {
-    // if (
-    //   window.location.pathname === '/incidents' ||
-    //   window.location.pathname === '/incidents/'
-    // ) {
-    //   return;
-    // }
-
     const path = window.location.pathname.split('/');
     const connection = path[2];
     const selectedConnection = connections.find(
@@ -75,12 +68,14 @@ const IncidentsTree = () => {
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
     } else if (path[3]) {
-//      console.log(selectedConnection, path);
       const connection = path[2] || '';
       const year = Number(path[3]);
       const month = Number(path[4]);
       const incidentId = path[5] || '';
-
+      const state = tabs.find(
+        (x) =>
+          x.url === ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
+      )?.state;
       dispatch(
         addFirstLevelTab({
           url: ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId),
@@ -90,7 +85,7 @@ const IncidentsTree = () => {
             month,
             incidentId
           ),
-          state: {},
+          state: state || {},
           label: incidentId
         })
       );
@@ -140,11 +135,15 @@ const IncidentsTree = () => {
       new Date(localStorageDate ?? '').getTime()
     );
   };
-
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 bg-white">
       <Button
         className="w-full mb-4"
+        leftIcon={
+          loading && (
+            <SvgIcon name="sync" className="w-4 h-4 mr-3 animate-spin" />
+          )
+        }
         label="Refresh"
         variant="outlined"
         color="primary"

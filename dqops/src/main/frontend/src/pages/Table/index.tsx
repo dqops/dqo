@@ -12,7 +12,6 @@ import TableIncidentsNotificationsView from '../../components/Connection/TableVi
 import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
 import SvgIcon from '../../components/SvgIcon';
-import TableNavigation from '../../components/TableNavigation';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
@@ -243,7 +242,6 @@ const TablePage = () => {
             <div className="text-lg font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
           </div>
         </div>
-        <TableNavigation />
         {isProfilingChecksOnly && <ProfilingView />}
         {isMonitoringOnly && <MonitoringView />}
         {isPartitionChecksOnly && <PartitionedChecks />}

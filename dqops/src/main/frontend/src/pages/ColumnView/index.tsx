@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import ColumnNavigation from '../../components/ColumnNavigation';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -210,7 +209,6 @@ const ColumnView = () => {
             <div className="text-lg font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
-        <ColumnNavigation />
         {isMonitoringOnly && <ColumnMonitoringChecksView />}
         {isPartitionCheckOnly && <ColumnPartitionedChecksView />}
         {isProfilingCheckOnly && (

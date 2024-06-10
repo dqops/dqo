@@ -257,6 +257,7 @@ export const IncidentConnection = () => {
       label: 'Data quality issue grouping',
       className: 'text-left py-2 px-4',
       value: 'checkName',
+      alwaysVisible: true,
       render: (value: string, row: IncidentModel) => {
         const values = [
           row.qualityDimension,
@@ -477,7 +478,7 @@ export const IncidentConnection = () => {
 
           <Pagination
             page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
+            pageSize={filters.pageSize || 10}
             isEnd={isEnd}
             totalPages={10}
             onChange={(page, pageSize) =>

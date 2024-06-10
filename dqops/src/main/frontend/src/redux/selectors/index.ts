@@ -14,15 +14,14 @@
 /// limitations under the License.
 ///
 
-import { IRootState } from '../reducers';
-import { CheckTypes } from '../../shared/routes';
 import { TABLE_LEVEL_TABS } from '../../shared/constants';
+import { CheckTypes } from '../../shared/routes';
+import { IRootState } from '../reducers';
 
 export const getFirstLevelState =
   (checkType: CheckTypes) => (state: IRootState) => {
     const { tabs, activeTab = '' } =
       state.source[checkType || CheckTypes.SOURCES] || {};
-
     return tabs.find((item) => item.value === activeTab)?.state || ({} as any);
   };
 
@@ -41,12 +40,16 @@ export const getFirstLevelSensorState = (state: IRootState) => {
 
 export const getFirstLevelIncidentsState = (state: IRootState) => {
   const { tabs, activeTab = '' } = state.incidents;
-
   return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };
 
-export const getSecondLevelTab = (checkType: CheckTypes, tab: string) : string => {
-  const secondTab = TABLE_LEVEL_TABS[checkType].find((x) => x.value === tab)?.value
-  
-  return secondTab ? secondTab : TABLE_LEVEL_TABS[checkType][0].value
-}
+export const getSecondLevelTab = (
+  checkType: CheckTypes,
+  tab: string
+): string => {
+  const secondTab = TABLE_LEVEL_TABS[checkType].find(
+    (x) => x.value === tab
+  )?.value;
+
+  return secondTab ? secondTab : TABLE_LEVEL_TABS[checkType][0].value;
+};

@@ -33,6 +33,7 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
   const history = useHistory();
 
   const handleChange = (tab: TabOption) => {
+    console.log('tab', tab);
     if (tab.url === window.location.pathname) {
       return;
     }
@@ -41,21 +42,22 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
-    const tabIndex = pageTabs.findIndex((item) => item.url === value);
+    // console.log('tab', value);
+    // const tabIndex = pageTabs.findIndex((item) => item.url === value);
     dispatch(closeFirstLevelTab(value));
     if (pageTabs.length === 1) {
       history.push(`/incidents`);
       return;
     }
-    if (tabIndex === 0 && pageTabs.length > 1) {
-      history.push(pageTabs[1]?.url);
-      dispatch(setActiveFirstLevelTab(pageTabs[1]?.url));
-      return;
-    }
-    history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
-    dispatch(
-      setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)
-    );
+    // if (tabIndex === 0 && pageTabs.length > 1) {
+    //   history.push(pageTabs[1]?.url);
+    //   dispatch(setActiveFirstLevelTab(pageTabs[1]?.url));
+    //   return;
+    // }
+    // history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
+    // dispatch(
+    //   setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)
+    // );
   };
 
   const tabOptions = useMemo(() => {
@@ -63,7 +65,8 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
       pageTabs?.map((item) => ({
         value: item.url,
         url: item.url,
-        label: item.label
+        label: item.label,
+        state: { ...item.state }
       })) || []
     );
   }, [pageTabs]);

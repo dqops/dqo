@@ -7,13 +7,22 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import ColumnListView from '../ColumnListView/ColumnListView';
+import GlobalIncidents from '../GlobalIncidents';
 import TableListView from '../TableListView/TableListView';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
   { label: 'Home', value: '/home' },
   { label: 'Tables', value: '/tables' },
-  { label: 'Columns', value: '/columns' }
+  { label: 'Columns', value: '/columns' },
+  {
+    label: 'Incidents grouped by dimesion',
+    value: '/global-incidents?groupBy=dimension'
+  },
+  {
+    label: 'Incidents grouped by category',
+    value: '/global-incidents?groupBy=category'
+  }
 ];
 const HomePage = () => {
   const { activeTab } = useSelector(
@@ -36,6 +45,12 @@ const HomePage = () => {
       {activeTab === '/home' && <StaticHomePage />}
       {activeTab === '/tables' && <TableListView />}
       {activeTab === '/columns' && <ColumnListView />}
+      {activeTab === '/global-incidents?groupBy=dimension' && (
+        <GlobalIncidents groupBy="dimension" />
+      )}
+      {activeTab === '/global-incidents?groupBy=category' && (
+        <GlobalIncidents groupBy="category" />
+      )}
     </div>
   );
 };

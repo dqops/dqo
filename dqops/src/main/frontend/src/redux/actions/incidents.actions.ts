@@ -100,8 +100,10 @@ export const getIncidentsByConnection =
     resolvedIncidents = false,
     mutedIncidents = false,
     page = 1,
-    pageSize = 50,
+    pageSize = 10,
     optionalFilter = '',
+    dimension = undefined,
+    category = undefined,
     sortBy = 'firstSeen',
     sortDirection = 'desc'
   }: IncidentFilter) =>
@@ -119,6 +121,8 @@ export const getIncidentsByConnection =
           page,
           pageSize,
           optionalFilter,
+          dimension,
+          category,
           sortBy,
           sortDirection
         );
@@ -163,12 +167,10 @@ export const getIncidentsIssuesRequest = () => ({
 });
 
 export const getIncidentsIssuesSuccess = (
-  data: Array<CheckResultEntryModel>,
-  isEnd: boolean
+  data: Array<CheckResultEntryModel>
 ) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS,
-  data,
-  isEnd
+  data
 });
 
 export const getIncidentsIssuesFailed = (error: unknown) => ({
@@ -183,7 +185,7 @@ export const getIncidentsIssues =
     month,
     incidentId,
     page = 1,
-    pageSize = 50,
+    pageSize = 10,
     filter,
     days = 999999,
     date,
@@ -212,24 +214,7 @@ export const getIncidentsIssues =
           direction
         );
 
-      const nextRes: AxiosResponse<Array<CheckResultEntryModel>> =
-        await IncidentsApi.getIncidentIssues(
-          connection,
-          year,
-          month,
-          incidentId,
-          page + 1,
-          pageSize,
-          filter,
-          days,
-          date,
-          column,
-          check,
-          order,
-          direction
-        );
-
-      dispatch(getIncidentsIssuesSuccess(res.data, !nextRes.data.length));
+      dispatch(getIncidentsIssuesSuccess(res.data));
     } catch (err) {
       dispatch(getIncidentsIssuesFailed(err));
     }

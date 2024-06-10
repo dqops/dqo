@@ -28,6 +28,8 @@ export interface IncidentFilter {
   page?: number;
   pageSize?: number;
   optionalFilter?: string;
+  dimension?: string;
+  category?: string;
   sortBy?:
     | 'table'
     | 'tablePriority'
@@ -220,7 +222,7 @@ const incidentsReducer = (state = initialState, action: any) => {
       return setActiveTabState(state, action, {
         issues: action.data,
         loading: false,
-        isEnd: action.isEnd
+        isEnd: false
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR: {
