@@ -33,7 +33,6 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
   const history = useHistory();
 
   const handleChange = (tab: TabOption) => {
-    console.log('tab', tab);
     if (tab.url === window.location.pathname) {
       return;
     }
