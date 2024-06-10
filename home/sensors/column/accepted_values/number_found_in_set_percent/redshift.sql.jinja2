@@ -4,24 +4,25 @@
 {% endmacro %}
 
 {%- macro render_else() -%}
-    {%- if parameters.expected_values|length == 0 -%}
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         MAX(0.0)
-    {%- else -%}
-          100.0 * SUM(
+        {%- else -%}
+    CASE
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
             CASE
-              WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                THEN 1
-              ELSE 0
+                WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                    THEN 1
+                ELSE 0
             END
-          ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+    END
     {%- endif -%}
 {% endmacro -%}
 
 SELECT
-    CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-        ELSE {{render_else()}}
-    END AS actual_value
+    {{ actual_value() }} AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
