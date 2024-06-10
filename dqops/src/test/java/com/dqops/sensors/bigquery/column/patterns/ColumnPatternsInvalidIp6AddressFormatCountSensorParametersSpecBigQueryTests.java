@@ -102,9 +102,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -135,9 +135,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 0
-                            ELSE 1
+                            WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                                THEN 1
+                            ELSE 0
                         END
                     ) AS actual_value,
                     analyzed_table.`date` AS time_period,
@@ -166,9 +166,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -193,9 +193,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
@@ -231,9 +231,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
@@ -264,9 +264,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
@@ -297,9 +297,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
@@ -342,9 +342,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
@@ -381,9 +381,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
@@ -418,9 +418,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
