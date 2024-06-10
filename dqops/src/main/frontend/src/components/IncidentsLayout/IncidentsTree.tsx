@@ -107,12 +107,15 @@ const IncidentsTree = () => {
     openCorrectTabFromUrl();
   }, [window.location.pathname, connections]);
 
-  // useEffect(() => {
-  //   if (activeTab) {
-  //     dispatch(setActiveFirstLevelTab(activeTab));
-  //     history.push(activeTab);
-  //   }
-  // }, [activeTab]);
+  useEffect(() => {
+    if (activeTab) {
+      const activeUrl = tabs.find((item) => item.value === activeTab)?.url;
+
+      if (activeUrl && activeUrl !== location.pathname) {
+        history.push(activeUrl);
+      }
+    }
+  }, [activeTab]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
