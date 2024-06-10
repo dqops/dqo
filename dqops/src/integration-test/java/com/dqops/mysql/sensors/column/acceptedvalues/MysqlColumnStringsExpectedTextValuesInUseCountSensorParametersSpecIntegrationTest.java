@@ -58,6 +58,45 @@ public class MysqlColumnStringsExpectedTextValuesInUseCountSensorParametersSpecI
     }
 
     @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.mysql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        List<String> values = new ArrayList<>();
+        values.add("e55e");
+        this.sut.setExpectedValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingAndNoParams_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        this.sut.setExpectedValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
+    }
+
+    @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         this.sut.setExpectedValues(values);

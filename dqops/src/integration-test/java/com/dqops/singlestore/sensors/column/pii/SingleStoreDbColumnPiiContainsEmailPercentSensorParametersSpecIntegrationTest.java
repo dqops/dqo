@@ -17,20 +17,20 @@ package com.dqops.singlestore.sensors.column.pii;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.pii.ColumnPiiContainsEmailPercentCheckSpec;
+import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.pii.ColumnPiiContainsEmailPercentSensorParametersSpec;
+import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,16 +45,36 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsEmailPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
+        this.connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnPiiContainsEmailPercentSensorParametersSpec();
 		this.checkSpec = new ColumnPiiContainsEmailPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test

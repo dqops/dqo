@@ -94,7 +94,7 @@ public class PrestoTableAvailabilitySensorParametersSpecIntegrationTest extends 
     @Test
     void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
 
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.spark);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.presto);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(

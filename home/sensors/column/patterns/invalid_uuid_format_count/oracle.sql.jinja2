@@ -2,9 +2,9 @@
 SELECT
     SUM(
         CASE
-            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                THEN 0
-            ELSE 1
+            WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                THEN 1
+            ELSE 0
         END
     ) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

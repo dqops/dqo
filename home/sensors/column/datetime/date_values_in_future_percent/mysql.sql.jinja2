@@ -21,7 +21,7 @@
             END
     {%- else -%}
             CASE
-                WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                     THEN 1
                 ELSE 0
             END
@@ -41,4 +41,3 @@ FROM {{ lib.render_target_table() }} AS analyzed_table
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
-

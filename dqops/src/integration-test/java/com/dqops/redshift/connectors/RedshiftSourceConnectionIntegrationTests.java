@@ -15,7 +15,6 @@
  */
 package com.dqops.redshift.connectors;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.connectors.*;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftSourceConnection;
@@ -23,6 +22,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 
 @SpringBootTest
-public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
+public class RedshiftSourceConnectionIntegrationTests extends BaseRedshiftIntegrationTest {
     private RedshiftSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;

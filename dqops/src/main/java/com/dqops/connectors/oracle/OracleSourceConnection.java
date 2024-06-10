@@ -128,7 +128,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
             sqlBuilder.append("%'");
         }
 
-        sqlBuilder.append(" LIMIT ");
+        sqlBuilder.append(" AND ROWNUM <= ");
         sqlBuilder.append(limit);
 
         String listTablesSql = sqlBuilder.toString();

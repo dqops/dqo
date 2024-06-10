@@ -45,10 +45,11 @@ public class AthenaColumnNumericPercentile10SensorParametersSpecIntegrationTest 
     private UserHomeContext userHomeContext;
     private ColumnPercentile10InRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = AthenaConnectionSpecObjectMother.create();
+        this.connectionSpec = AthenaConnectionSpecObjectMother.create();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

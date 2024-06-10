@@ -15,7 +15,6 @@
  */
 package com.dqops.snowflake.sensors.table.timeliness;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -30,6 +29,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.table.timeliness.TableTimelinessDataStalenessSensorParametersSpec;
+import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class SnowflakeTableTimelinessDataStalenessSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeTableTimelinessDataStalenessSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableTimelinessDataStalenessSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableDataStalenessCheckSpec checkSpec;

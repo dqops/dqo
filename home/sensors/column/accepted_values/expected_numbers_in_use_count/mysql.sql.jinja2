@@ -6,7 +6,7 @@
 
 {%- macro render_else() -%}
     {%- if parameters.expected_values|length == 0 -%}
-        0
+    0
     {%- else -%}
     COUNT(DISTINCT
         CASE

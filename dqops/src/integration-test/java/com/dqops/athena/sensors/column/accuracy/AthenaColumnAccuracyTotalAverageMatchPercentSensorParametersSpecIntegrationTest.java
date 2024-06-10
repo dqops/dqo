@@ -15,6 +15,7 @@
  */
 package com.dqops.athena.sensors.column.accuracy;
 
+import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalAverageMatchPercentCheckSpec;
 import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
@@ -30,7 +31,6 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.accuracy.ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec;
-import com.dqops.athena.BaseAthenaIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,10 +45,11 @@ public class AthenaColumnAccuracyTotalAverageMatchPercentSensorParametersSpecInt
     private ColumnAccuracyTotalAverageMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadata sampleTableMetadataReferenced;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = AthenaConnectionSpecObjectMother.create();
+        this.connectionSpec = AthenaConnectionSpecObjectMother.create();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.ip4_test, connectionSpec);
         this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
@@ -59,6 +60,57 @@ public class AthenaColumnAccuracyTotalAverageMatchPercentSensorParametersSpecInt
         this.sut = new ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnAccuracyTotalAverageMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataInPrimaryTable_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
+
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(nullTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataReferenced);
+        this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
+        this.sut.setReferencedColumn("result");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                nullTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(0.75, resultTable.column(0).get(0));
+        Assertions.assertEquals(null, resultTable.column(1).get(0));
+    }
+
+    @Test
+    void runSensor_onNullDataInForeignTable_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, connectionSpec);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
+
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(nullTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, nullTableMetadata);
+
+        this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
+        this.sut.setReferencedColumn("int_nulls");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "result", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.75, resultTable.column(1).get(0));
     }
 
     @Test
