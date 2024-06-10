@@ -15,7 +15,6 @@
  */
 package com.dqops.presto.sensors.table.timeliness;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import com.dqops.connectors.ProviderType;

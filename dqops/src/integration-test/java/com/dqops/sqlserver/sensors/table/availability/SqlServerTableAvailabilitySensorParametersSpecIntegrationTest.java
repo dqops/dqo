@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.mysql.sensors.column.uniqueness;
+package com.dqops.sqlserver.sensors.table.availability;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountCheckSpec;
+import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -24,12 +24,12 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.mysql.BaseMysqlIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
+import com.dqops.sensors.table.availability.TableAvailabilitySensorParametersSpec;
+import com.dqops.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,84 +37,75 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class MysqlColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnUniquenessDistinctCountSensorParametersSpec sut;
+public class SqlServerTableAvailabilitySensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private TableAvailabilitySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDistinctCountCheckSpec checkSpec;
+    private TableAvailabilityCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnUniquenessDistinctCountSensorParametersSpec();
-		this.checkSpec = new ColumnDistinctCountCheckSpec();
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new TableAvailabilitySensorParametersSpec();
+        this.checkSpec = new TableAvailabilityCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
-    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "correct", this.checkSpec);
+    void runSensor_whenSensorExecuted_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.daily);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.daily,"date");
+    void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
 
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.sqlserver);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2L, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.monthly,"date");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1, resultTable.column(0).get(0));
     }
 }

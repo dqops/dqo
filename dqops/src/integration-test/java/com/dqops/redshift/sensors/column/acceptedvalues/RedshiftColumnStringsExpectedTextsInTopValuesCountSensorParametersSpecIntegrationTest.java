@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.sqlserver.sensors.column.text;
+package com.dqops.redshift.sensors.column.acceptedvalues;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.text.ColumnTextLengthInRangePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedTextsInTopValuesCountCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSource;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.postgresql.BasePostgresqlIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
-import com.dqops.sqlserver.BaseSqlServerIntegrationTest;
+import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,29 +40,31 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
-public class SqlServerColumnTextTextLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
-    private ColumnTextTextLengthInRangePercentSensorParametersSpec sut;
+public class RedshiftColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+    private ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnTextLengthInRangePercentCheckSpec checkSpec;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnTextTextLengthInRangePercentSensorParametersSpec();
-        this.checkSpec = new ColumnTextLengthInRangePercentCheckSpec();
+        this.sut = new ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec();
+        this.checkSpec = new ColumnExpectedTextsInTopValuesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
-    void runSensor_onNullDataAndNoParams_thenReturnsValues() {
+    void runSensor_onNullDataWithInvalidParameters_thenReturnsNull() {
         String csvFileName = SampleCsvFileNames.only_nulls;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                csvFileName, ProviderType.sqlserver);
+                csvFileName, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
@@ -71,19 +76,22 @@ public class SqlServerColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals("", resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_onNullData_thenReturnsValues() {
         String csvFileName = SampleCsvFileNames.only_nulls;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                csvFileName, ProviderType.sqlserver);
+                csvFileName, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "string_nulls", this.checkSpec);
@@ -93,103 +101,130 @@ public class SqlServerColumnTextTextLengthInRangePercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "text", this.checkSpec);
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
+
+        DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getDefaultDataGroupingConfiguration();
+        dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
+            setSource(DataGroupingDimensionSource.column_value);
+            setColumn("mix_string_int");
+        }});
+        this.sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfiguration);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenRunOnIntegerColumn_thenReturnsValues() {
-        this.sut.setMinLength(1);
-        this.sut.setMaxLength(1);
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "result", this.checkSpec);
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
-
 }
