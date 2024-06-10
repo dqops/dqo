@@ -28,8 +28,8 @@ export default function GlobalIncidentsDashboardTable({
   }
 
   return (
-    <div className="border border-gray-150 p-2 rounded-md">
-      <div className="flex items-center justify-between pl-2 py-2 border-b border-gray-300 mb-2 text-lg font-semibold">
+    <div className="border border-gray-150 p-2 rounded-md text-sm">
+      <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
         <div>{group}</div>
         <div>
           {/* <Button label="Show more" color="primary" className="text-sm" /> */}
