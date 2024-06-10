@@ -14,73 +14,128 @@
  * limitations under the License.
  */
 package com.dqops.redshift.sensors.column.numeric;
-//
-//import com.dqops.checks.column.checkspecs.numeric.ColumnNonNegativePercentCheckSpec;
-//import com.dqops.connectors.ProviderType;
-//import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
-//import com.dqops.execution.sensors.SensorExecutionResult;
-//import com.dqops.execution.sensors.SensorExecutionRunParameters;
-//import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
-//import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
-//import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-//import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
-//import com.dqops.sampledata.SampleCsvFileNames;
-//import com.dqops.sampledata.SampleTableMetadata;
-//import com.dqops.sampledata.SampleTableMetadataObjectMother;
-//import com.dqops.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
-//import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import tech.tablesaw.api.Table;
-//
-//@SpringBootTest
-//public class ColumnNumericNonNegativeCountSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
-//    private ColumnNumericNonNegativePercentSensorParametersSpec sut;
-//    private UserHomeContext userHomeContext;
-//    private ColumnNonNegativePercentCheckSpec checkSpec;
-//    private SampleTableMetadata sampleTableMetadata;
-//
-//    /**
-//     * Called before each test.
-//     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-//     *
-//     * @throws Throwable
-//     */
-//    @Override
-//    @BeforeEach
-//    protected void setUp() throws Throwable {
-//        super.setUp();
-//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day_13_non_negative_floats, ProviderType.redshift);
-//        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-//		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-//		this.sut = new ColumnNumericNonNegativePercentSensorParametersSpec();
-//		this.checkSpec = new ColumnNonNegativePercentCheckSpec();
-//		this.checkSpec.setParameters(this.sut);
-//    }
-//
-//    @Test
-//    void runSensor_whenSensorExecutedOnColumnWithPositiveValues_thenReturnsValues() {
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
-//
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
-//    }
-//
-//    @Test
-//    void runSensor_whenSensorExecutedOnColumnWithNegativeValues_thenReturnsValues() {
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "value", this.checkSpec);
-//
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(52.0F, resultTable.column(0).get(0));
-//    }
-//}
+
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.column.checkspecs.numeric.ColumnNonNegativeCountCheckSpec;
+import com.dqops.connectors.ProviderType;
+import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
+import com.dqops.execution.sensors.SensorExecutionResult;
+import com.dqops.execution.sensors.SensorExecutionRunParameters;
+import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
+import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleTableMetadata;
+import com.dqops.sampledata.SampleTableMetadataObjectMother;
+import com.dqops.sensors.column.numeric.ColumnNumericNonNegativeCountSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import tech.tablesaw.api.Table;
+
+
+@SpringBootTest
+public class RedshiftColumnNumericNonNegativeCountSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
+    private ColumnNumericNonNegativeCountSensorParametersSpec sut;
+    private UserHomeContext userHomeContext;
+    private ColumnNonNegativeCountCheckSpec checkSpec;
+    private SampleTableMetadata sampleTableMetadata;
+
+    @BeforeEach
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnNumericNonNegativeCountSensorParametersSpec();
+        this.checkSpec = new ColumnNonNegativeCountCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "negative", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+    }
+}

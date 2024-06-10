@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.singlestore.sensors.column.uniqueness;
+package com.dqops.redshift.sensors.column.uniqueness;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctPercentCheckSpec;
+import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
+public class RedshiftColumnUniquenessDistinctPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDistinctPercentCheckSpec checkSpec;
@@ -46,13 +46,31 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, connectionSpec);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
         this.checkSpec = new ColumnDistinctPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -65,7 +83,7 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -78,7 +96,7 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -91,7 +109,7 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -104,7 +122,7 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -117,6 +135,6 @@ public class SingleStoreDbColumnUniquenessUniquePercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(6.666, (double) resultTable.column(0).get(0), 0.001);
     }
 }
