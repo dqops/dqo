@@ -69,7 +69,7 @@ WHERE top_values_rank <= {{ parameters.top }}
 
 SELECT
 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-    NULL AS actual_value,
+    MAX(1 + NULL) AS actual_value,
     MAX(0) AS expected_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}

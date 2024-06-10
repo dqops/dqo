@@ -3,7 +3,7 @@
 SELECT
     SUM(
         CASE
-            WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
+            WHEN {{ lib.render_target_column('analyzed_table')}} < 0 OR {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 0
             ELSE 1
         END
     ) AS actual_value

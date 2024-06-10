@@ -70,7 +70,7 @@ public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
 		this.sut.open(this.secretValueLookupContext);
         List<SourceTableModel> tables = this.sut.listTables("default", null, 300, secretValueLookupContext);
 
-        Assertions.assertTrue(tables.size() == 0);
+        Assertions.assertTrue(tables.isEmpty());
     }
 
 }

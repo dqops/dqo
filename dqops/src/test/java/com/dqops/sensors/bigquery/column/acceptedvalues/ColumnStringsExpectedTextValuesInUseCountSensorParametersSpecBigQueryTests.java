@@ -147,7 +147,7 @@ public class ColumnStringsExpectedTextValuesInUseCountSensorParametersSpecBigQue
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                NULL AS actual_value,
+                0 AS actual_value,
                 MAX(0) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";

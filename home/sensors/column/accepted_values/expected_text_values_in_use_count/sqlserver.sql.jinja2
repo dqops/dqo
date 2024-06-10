@@ -12,7 +12,7 @@
 
 {%- macro render_else() -%}
     {%- if parameters.expected_values|length == 0 -%}
-        NULL
+    0
     {%- else -%}
     COUNT_BIG(DISTINCT
         CASE

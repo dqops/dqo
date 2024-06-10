@@ -12,7 +12,7 @@
 
 {%- macro render_else() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        MAX(NULL)
+    MAX(0)
     {%- else -%}
     COUNT(DISTINCT
         CASE

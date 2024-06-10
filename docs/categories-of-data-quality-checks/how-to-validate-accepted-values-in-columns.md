@@ -247,7 +247,7 @@ per country uses some invalid country codes.
 
 ![DQOps data quality check that validates two letter country codes in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/country-code-validation-check-in-dqops-min.png){ loading=lazy; width="1200px" }
 
-### Activating country code validation in UI
+### Activating country code validation in YAML
 The [*text_valid_country_code_percent*](../checks/column/accepted_values/text-valid-country-code-percent.md) check is easy to configure.
 It does not require a list of accepted values because the list is already included in the SQL query template.
 

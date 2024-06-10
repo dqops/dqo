@@ -1,0 +1,4 @@
+int_nulls:INTEGER,string_nulls:STRING,bool_nulls:BOOLEAN,date_nulls:LOCAL_DATE,timestamp_nulls:LOCAL_DATE_TIME,date:LOCAL_DATE,timestamp:LOCAL_DATE_TIME
+,,,,,2024-01-15,2024-01-15 20:00:00
+,,,,,2024-01-16,2024-01-16 21:00:00
+,,,,,2024-01-17,2024-01-17 22:00:00
