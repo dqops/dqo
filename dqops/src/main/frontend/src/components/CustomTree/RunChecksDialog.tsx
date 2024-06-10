@@ -137,7 +137,7 @@ export default function RunChecksDialog({
             <div></div>
           </div>
         )}
-        <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
+        <div className="flex justify-between border-b py-4 border-gray-300 text-black  ">
           <div className="w-[45%] ml-2">
             Connection:
             <Input
