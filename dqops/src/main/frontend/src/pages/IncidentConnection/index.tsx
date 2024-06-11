@@ -475,19 +475,20 @@ export const IncidentConnection = () => {
             data={incidents || []}
             className="w-full mb-8"
           />
-
-          <Pagination
-            page={filters.page || 1}
-            pageSize={filters.pageSize || 10}
-            isEnd={(filters.pageSize || 10) > incidents?.length}
-            totalPages={10}
-            onChange={(page, pageSize) =>
-              onChangeFilter({
-                page,
-                pageSize
-              })
-            }
-          />
+          <div className="flex justify-end">
+            <Pagination
+              page={filters.page || 1}
+              pageSize={filters.pageSize || 10}
+              isEnd={(filters.pageSize || 10) > incidents?.length}
+              totalPages={10}
+              onChange={(page, pageSize) =>
+                onChangeFilter({
+                  page,
+                  pageSize
+                })
+              }
+            />
+          </div>
         </div>
       </div>
 
