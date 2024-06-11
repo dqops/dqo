@@ -88,15 +88,13 @@ const IncidentsTree = () => {
           label: incidentId
         })
       );
-
       history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
+      return;
     }
   };
-
   useEffect(() => {
-    console.log('window.location.pathname', window.location.pathname);
     openCorrectTabFromUrl();
-  }, [window.location.pathname, connections]);
+  }, [window.location.pathname]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
