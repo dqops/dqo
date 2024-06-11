@@ -1,4 +1,4 @@
-package com.dqops.connectors.duckdb.fileslisting;
+package com.dqops.connectors.duckdb.fileslisting.aws;
 
 /**
  * AWS specific contestants

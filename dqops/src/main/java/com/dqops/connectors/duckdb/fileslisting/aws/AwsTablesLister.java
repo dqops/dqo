@@ -1,7 +1,8 @@
-package com.dqops.connectors.duckdb.fileslisting;
+package com.dqops.connectors.duckdb.fileslisting.aws;
 
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.duckdb.fileslisting.RemoteTablesLister;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -57,7 +58,7 @@ public class AwsTablesLister extends RemoteTablesLister {
      * @param s3Uri S3Uri
      * @return The list of objects in S3
      */
-    private List<String> listBucketObjects(S3Client s3, S3Uri s3Uri) {
+    public List<String> listBucketObjects(S3Client s3, S3Uri s3Uri) {
         List<String> paths = new ArrayList<>();
 
         if(s3Uri.bucket().isEmpty()){

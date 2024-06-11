@@ -246,4 +246,23 @@ class DuckdbQueriesProviderTest extends BaseTest {
         assertThat(lineSplittedResult.get(5)).matches("\\);");
     }
 
+    @Test
+    void provideCreateSecretQuery_forGcs_createsQuery() {
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFilesOnGoogle(DuckdbFilesFormatType.csv);
+        String scope = "gs://path";
+        String secretName = "s_" + DuckdbQueriesProvider.calculateSecretHex(scope);
+        String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, scope);
+
+        Assertions.assertTrue(createSecretQuery.contains("CREATE SECRET " + secretName));
+
+        assertThat(createSecretQuery).matches(
+                "CREATE SECRET s_[0-9a-f]* \\(\\s*" +
+                        "TYPE GCS,\\s*" +
+                        "KEY_ID 'gcs_example_key_id',\\s*" +
+                        "SECRET 'gcs_example_secret',\\s*" +
+                        "SCOPE 'gs://path'\\s*" +
+                        "\\);"
+        );
+    }
+
 }

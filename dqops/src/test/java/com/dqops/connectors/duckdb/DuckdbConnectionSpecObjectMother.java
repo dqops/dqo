@@ -104,6 +104,27 @@ public class DuckdbConnectionSpecObjectMother {
     }
 
     /**
+     * Creates a default connection spec to DuckDB with Google Cloud Storage setup.
+     * @return Connection spec to a DuckDB.
+     */
+    public static ConnectionSpec createForFilesOnGoogle(DuckdbFilesFormatType duckdbFilesFormatType) {
+        ConnectionSpec connectionSpec = new ConnectionSpec()
+        {{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec()
+            {{
+                setReadMode(DuckdbReadMode.in_memory);
+                setFilesFormatType(duckdbFilesFormatType);
+                setStorageType(DuckdbStorageType.gcs);
+                setUser("gcs_example_key_id");
+                setPassword("gcs_example_secret");
+            }});
+        }};
+
+        return connectionSpec;
+    }
+
+    /**
      * Returns the default schema used for a testable DuckDB database. Tables are created in this schema.
      * @return Schema name.
      */

@@ -214,6 +214,21 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             }
         }
 
+        if(duckdbSpec.getStorageType() != null && duckdbSpec.getStorageType().equals(DuckdbStorageType.gcs)) {
+            if(duckdbSpec.getAwsAccessKeyId() == null){
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-user");
+                }
+                duckdbSpec.setUser(terminalReader.prompt("Access Key", null,false));
+            }
+            if(duckdbSpec.getAwsSecretAccessKey() == null){
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-password");
+                }
+                duckdbSpec.setPassword(terminalReader.prompt("Secret", null,false));
+            }
+        }
+
         if(duckdbSpec.getFilesFormatType() == null){
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-files-format-type");
