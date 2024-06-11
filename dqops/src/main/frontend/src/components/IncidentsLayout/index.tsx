@@ -40,23 +40,30 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
     history.push(tab.value);
   };
 
-  const closeTab = (value: string) => {
-    // console.log('tab', value);
-    // const tabIndex = pageTabs.findIndex((item) => item.url === value);
+  const closeTab = (value: string, _?: boolean, tab?: string) => {
     dispatch(closeFirstLevelTab(value));
+
     if (pageTabs.length === 1) {
       history.push(`/incidents`);
       return;
     }
-    // if (tabIndex === 0 && pageTabs.length > 1) {
-    //   history.push(pageTabs[1]?.url);
-    //   dispatch(setActiveFirstLevelTab(pageTabs[1]?.url));
-    //   return;
-    // }
-    // history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
-    // dispatch(
-    //   setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)
-    // );
+
+    if (value === activeTab) {
+      const tabIndex = pageTabs.findIndex((item) => item.url === value);
+      if (tabIndex === 0 && pageTabs.length > 1) {
+        history.push(pageTabs[1].url);
+        return;
+      } else {
+        history.push(pageTabs[tabIndex - 1].url || pageTabs[0].url);
+      }
+    }
+
+    if (tab) {
+      history.push(tab);
+      return;
+    } else {
+      //
+    }
   };
 
   const tabOptions = useMemo(() => {

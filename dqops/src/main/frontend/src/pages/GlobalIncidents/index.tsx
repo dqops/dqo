@@ -20,8 +20,6 @@ export default function index({ groupBy }: GlobalIncidentsProps) {
     fetchIncidents();
   }, []);
 
-  console.log(incidents);
-
   return (
     <div>
       <GlobalIncidentsDashboard incidents={incidents} />
