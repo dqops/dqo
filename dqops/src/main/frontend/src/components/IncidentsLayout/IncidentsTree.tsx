@@ -8,8 +8,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   addSelectedConnection,
-  getConnections,
-  setActiveFirstLevelTab
+  getConnections
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
@@ -92,30 +91,12 @@ const IncidentsTree = () => {
 
       history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
     }
-    if (
-      activeTab &&
-      activeTab !== window.location.pathname &&
-      (window.location.pathname === '/incidents/' ||
-        window.location.pathname === '/incidents')
-    ) {
-      dispatch(setActiveFirstLevelTab(activeTab));
-      history.push(activeTab);
-    }
   };
 
   useEffect(() => {
+    console.log('window.location.pathname', window.location.pathname);
     openCorrectTabFromUrl();
   }, [window.location.pathname, connections]);
-
-  useEffect(() => {
-    if (activeTab) {
-      const activeUrl = tabs.find((item) => item.value === activeTab)?.url;
-
-      if (activeUrl && activeUrl !== location.pathname) {
-        history.push(activeUrl);
-      }
-    }
-  }, [activeTab]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
