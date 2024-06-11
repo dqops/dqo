@@ -5,6 +5,7 @@ import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.aws.AwsTablesLister;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;

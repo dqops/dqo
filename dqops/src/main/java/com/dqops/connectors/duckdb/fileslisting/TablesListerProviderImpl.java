@@ -1,6 +1,7 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.aws.AwsTablesLister;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
