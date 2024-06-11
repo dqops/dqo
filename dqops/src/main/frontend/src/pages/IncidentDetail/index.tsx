@@ -22,10 +22,7 @@ import {
   getIncidentsIssues,
   setIncidentsFilter
 } from '../../redux/actions/incidents.actions';
-import {
-  addFirstLevelTab,
-  addFirstLevelTab as addSourceFirstLevelTab
-} from '../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
 import { getFirstLevelIncidentsState } from '../../redux/selectors';
 import { IncidentsApi } from '../../services/apiClient';
@@ -190,15 +187,16 @@ export const IncidentDetail = () => {
   const goToConfigure = () => {
     const schema = incidentDetail?.schema || '';
     const table = incidentDetail?.table || '';
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'incident_configuration'
+    );
     dispatch(
-      addSourceFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_LEVEL_PAGE(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table,
-          'incident_configuration'
-        ),
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
         value: ROUTES.TABLE_LEVEL_VALUE(
           CheckTypes.SOURCES,
           connection,
@@ -209,14 +207,7 @@ export const IncidentDetail = () => {
         label: 'Incident configuration'
       })
     );
-    history.push(
-      ROUTES.TABLE_INCIDENTS_NOTIFICATION(
-        CheckTypes.SOURCES,
-        connection,
-        schema,
-        table
-      )
-    );
+    history.push(url);
   };
 
   const tableQualityStatusOptions: Array<{
