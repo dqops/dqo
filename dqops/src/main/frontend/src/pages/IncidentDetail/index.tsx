@@ -572,7 +572,7 @@ export const IncidentDetail = () => {
         </div>
 
         <HistogramChart onChangeFilter={onChangeFilter} days={filters.days} />
-        <div className="px-4 text-sm">
+        <div className="px-4 text-sm mb-4">
           <div
             className="py-3 mb-5 overflow-auto"
             style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
@@ -584,19 +584,20 @@ export const IncidentDetail = () => {
               onChangeFilter={onChangeFilter}
             />
           </div>
-
-          <Pagination
-            page={filters.page || 1}
-            pageSize={filters.pageSize || 10}
-            totalPages={10}
-            isEnd={(filters.pageSize || 10) > issues?.length}
-            onChange={(page, pageSize) =>
-              onChangeFilter({
-                page,
-                pageSize
-              })
-            }
-          />
+          <div className="flex justify-end">
+            <Pagination
+              page={filters.page || 1}
+              pageSize={filters.pageSize || 10}
+              totalPages={10}
+              isEnd={(filters.pageSize || 10) > issues?.length}
+              onChange={(page, pageSize) =>
+                onChangeFilter({
+                  page,
+                  pageSize
+                })
+              }
+            />
+          </div>
         </div>
       </div>
 
