@@ -3,7 +3,9 @@ package com.dqops.connectors.duckdb.fileslisting;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.aws.AwsConstants;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
+import com.dqops.connectors.duckdb.fileslisting.google.GcsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -66,6 +68,17 @@ public class DuckdbTestConnectionImpl implements DuckdbTestConnection {
                     throw new RuntimeException("Azure path for the schema " + pathWithInvalidPrefix.get().getKey()
                             + " must start with " + AzureConstants.BLOB_STORAGE_URI_PREFIX
                             + " or " + AzureConstants.DATA_LAKE_STORAGE_URI_PREFIX);
+                }
+            }
+
+            if (storageType != null && storageType.equals(DuckdbStorageType.gcs)) {
+
+                Optional<Map.Entry<String, String>> pathWithInvalidPrefix = directories.entrySet().stream()
+                        .filter(x -> !x.getValue().toLowerCase().startsWith(GcsConstants.GCS_URI_PREFIX))
+                        .findAny();
+
+                if (pathWithInvalidPrefix.isPresent()) {
+                    throw new RuntimeException("GCS path for the schema " + pathWithInvalidPrefix.get().getKey() + " must start with " + GcsConstants.GCS_URI_PREFIX);
                 }
             }
 

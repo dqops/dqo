@@ -60,6 +60,10 @@ public class DuckdbQueriesProvider {
                     loadSecretsString.append(indent).append("ACCOUNT_NAME '").append(duckdbParametersSpec.getAccountName()).append("',\n");
                 }
                 break;
+            case gcs:
+                loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
+                loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
+                break;
             default:
                 throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }
