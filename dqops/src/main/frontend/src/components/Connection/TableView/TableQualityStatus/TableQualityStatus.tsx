@@ -121,17 +121,17 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     <div className="p-4 text-sm">
       <div className="flex justify-between items-center">
         <div className="flex pb-6 gap-x-5 items-center">
-          <div className="text-xs">Group checks by: </div>
+          <div className="text-sm pl-1">Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
             label="category"
-            fontClassName="text-xs"
+            fontClassName="text-sm"
             onClick={() => setCategoryDimension('category')}
           />
           <RadioButton
             checked={categoryDimension === 'dimension'}
             label="quality dimension"
-            fontClassName="text-xs"
+            fontClassName="text-sm"
             onClick={() => setCategoryDimension('dimension')}
           />
         </div>
@@ -143,7 +143,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(1);
               }}
-              fontClassName="text-xs"
+              fontClassName="text-sm"
             />
             <RadioButton
               checked={month === 3}
@@ -151,7 +151,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setSince(undefined), setMonth(3);
               }}
-              fontClassName="text-xs"
+              fontClassName="text-sm"
             />
             <RadioButton
               checked={month === undefined}
@@ -159,7 +159,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               onClick={() => {
                 setMonth(undefined);
               }}
-              fontClassName="text-xs"
+              fontClassName="text-sm"
             />
             <DatePicker
               showIcon
@@ -174,13 +174,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               label="Current severity status"
               checked={severityType === 'current'}
               onClick={() => setSeverityType('current')}
-              fontClassName="text-xs"
+              fontClassName="text-sm"
             />
             <RadioButton
               label="Highest severity status"
               checked={severityType === 'highest'}
               onClick={() => setSeverityType('highest')}
-              fontClassName="text-xs"
+              fontClassName="text-sm"
             />
           </div>
         </div>
