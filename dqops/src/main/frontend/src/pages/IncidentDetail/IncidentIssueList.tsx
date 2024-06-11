@@ -139,11 +139,9 @@ export const IncidentIssueRow = ({
             />
           )}
         </td>
-        {issue.columnName !== undefined ? (
-          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            {issue.columnName}
-          </td>
-        ) : null}
+        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+          {issue.columnName}
+        </td>
         {issue.checkName !== undefined ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             <a
