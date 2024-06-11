@@ -31931,6 +31931,7 @@ definitions:
         - "local"
         - "s3"
         - "azure"
+        - "gcs"
       aws_authentication_mode:
         type: "string"
         description: "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE}\

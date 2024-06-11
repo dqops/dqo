@@ -33317,7 +33317,7 @@
         "storage_type" : {
           "type" : "string",
           "description" : "The storage type.",
-          "enum" : [ "local", "s3", "azure" ]
+          "enum" : [ "local", "s3", "azure", "gcs" ]
         },
         "aws_authentication_mode" : {
           "type" : "string",
