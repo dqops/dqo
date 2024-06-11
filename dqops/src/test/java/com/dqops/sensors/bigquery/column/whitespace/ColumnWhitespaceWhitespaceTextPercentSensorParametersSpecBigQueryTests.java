@@ -112,7 +112,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s""";
+            WHERE (%7$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -153,7 +153,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -188,7 +188,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s""";
+            WHERE (%7$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -223,7 +223,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -266,7 +266,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -305,7 +305,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -346,7 +346,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -399,7 +399,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -442,7 +442,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_int` AS grouping_level_3
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -487,7 +487,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%4$s`.`%5$s`.`%6$s` AS analyzed_table
-            WHERE %7$s
+            WHERE (%7$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

@@ -104,7 +104,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -135,7 +135,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -160,7 +160,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -185,7 +185,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
@@ -218,7 +218,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -247,7 +247,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -278,7 +278,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -319,7 +319,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
@@ -350,7 +350,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date4` AS grouping_level_2
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2
             ORDER BY grouping_level_1, grouping_level_2""";
 
@@ -383,7 +383,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
