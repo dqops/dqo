@@ -179,20 +179,18 @@ export default function index({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end">
-            {tables.length > 10 && (
-              <Pagination
-                page={filters.page || 1}
-                pageSize={filters.pageSize || 50}
-                isEnd={isEnd}
-                totalPages={10}
-                onChange={(page, pageSize) =>
-                  onChangeFilters({
-                    page,
-                    pageSize
-                  })
-                }
-              />
-            )}
+            <Pagination
+              page={filters.page || 1}
+              pageSize={filters.pageSize || 50}
+              isEnd={isEnd}
+              totalPages={10}
+              onChange={(page, pageSize) =>
+                onChangeFilters({
+                  page,
+                  pageSize
+                })
+              }
+            />
           </div>
         </div>
       </div>
