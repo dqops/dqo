@@ -113,7 +113,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s""";
+            WHERE (%6$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -153,7 +153,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -187,7 +187,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s""";
+            WHERE (%6$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -221,7 +221,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -263,7 +263,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -301,7 +301,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -341,7 +341,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -393,7 +393,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -435,7 +435,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_int` AS grouping_level_3
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -479,7 +479,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
-            WHERE %6$s
+            WHERE (%6$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

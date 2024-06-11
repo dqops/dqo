@@ -113,7 +113,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     )
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -144,7 +144,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     )
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -175,7 +175,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     )
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -206,7 +206,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     )
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -243,7 +243,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -275,7 +275,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     )
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -307,7 +307,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`earlier_datetime` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`earlier_datetime` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
@@ -346,7 +346,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table.`earlier_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -382,7 +382,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
                 analyzed_table.`earlier_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -420,7 +420,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`earlier_datetime` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`earlier_datetime` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY grouping_level_1, time_period, time_period_utc

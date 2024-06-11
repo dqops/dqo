@@ -290,7 +290,7 @@
                 {%- if not loop.first -%}
                     {{ eol() ~ indentation ~ '      AND ' }}
                 {%- endif -%}
-                {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }}
+                {{ "(" -}} {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }} {{- ")" -}}
             {%- endfor -%}
             {{ render_date_range_filters(eol() ~ indentation ~ '      AND ', table_alias_prefix, indentation ~ '      ') }}
         {%- else -%}

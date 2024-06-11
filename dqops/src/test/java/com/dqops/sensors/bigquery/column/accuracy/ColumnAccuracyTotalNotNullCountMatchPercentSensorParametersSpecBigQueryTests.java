@@ -124,7 +124,7 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpecBigQ
                     ) AS expected_value,
                     COUNT(analyzed_table.`result`) AS actual_value
                 FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_3914369825998677835` AS analyzed_table
-                WHERE analyzed_table.`correct` = 1""";
+                WHERE (analyzed_table.`correct` = 1)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -157,7 +157,7 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpecBigQ
                     ) AS expected_value,
                     COUNT(analyzed_table.`result`) AS actual_value
                 FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_3914369825998677835` AS analyzed_table
-                WHERE analyzed_table.`correct` = 1""";
+                WHERE (analyzed_table.`correct` = 1)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

@@ -97,7 +97,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
             SELECT
                 COUNT(*) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
@@ -150,7 +150,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                     analyzed_table.`date` AS time_period,
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
+                WHERE (%s)
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
 
@@ -179,8 +179,8 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                     analyzed_table.`date` AS time_period,
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
-                      AND analyzed_table.col2=5
+                WHERE (%s)
+                      AND (analyzed_table.col2=5)
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
 
@@ -210,9 +210,9 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                     analyzed_table.`date` AS time_period,
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
-                      AND analyzed_table.col2=5
-                      AND analyzed_table.col3='x'
+                WHERE (%s)
+                      AND (analyzed_table.col2=5)
+                      AND (analyzed_table.col3='x')
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
 
@@ -234,7 +234,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
             SELECT
                 COUNT(*) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
@@ -255,7 +255,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -284,7 +284,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 COUNT(*) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -309,7 +309,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 COUNT(*) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -336,7 +336,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -365,7 +365,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH), INTERVAL -120 MONTH)
                   AND analyzed_table.`date` < DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH)
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -403,7 +403,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -432,7 +432,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -463,7 +463,7 @@ public class TableVolumeRowCountSensorParametersSpecBigQueryTests extends BaseTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
