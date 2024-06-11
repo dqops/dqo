@@ -22,7 +22,7 @@ type PaginationProps = {
   page: number;
   pageSize: number;
   onChange: (page: number, pageSize: number) => void;
-  totalPages: number;
+  totalPages?: number;
   isEnd?: boolean;
   selectMenuClassName?: string;
 };
@@ -30,7 +30,6 @@ type PaginationProps = {
 export const Pagination = ({
   page,
   pageSize,
-  totalPages,
   onChange,
   isEnd,
   selectMenuClassName
@@ -49,9 +48,7 @@ export const Pagination = ({
     }
   };
   const onNext = () => {
-    if (page < totalPages) {
-      onChangePage(page + 1);
-    }
+    onChangePage(page + 1);
   };
 
   return (
@@ -88,7 +85,7 @@ export const Pagination = ({
           className="w-10 h-10 !shadow-none"
           color="teal"
           onClick={onNext}
-          disabled={page === totalPages || isEnd}
+          disabled={isEnd}
         >
           <SvgIcon name="chevron-right" className="w-4 text-white" />
         </IconButton>

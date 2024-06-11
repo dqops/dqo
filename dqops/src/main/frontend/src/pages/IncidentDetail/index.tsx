@@ -100,11 +100,7 @@ export const IncidentDetail = () => {
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
-  const {
-    issues,
-    isEnd,
-    filters = {}
-  } = useSelector(getFirstLevelIncidentsState);
+  const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
   const { histograms }: { histograms: IncidentIssueHistogramModel } =
     useSelector(getFirstLevelIncidentsState);
@@ -593,7 +589,7 @@ export const IncidentDetail = () => {
             page={filters.page || 1}
             pageSize={filters.pageSize || 10}
             totalPages={10}
-            isEnd={isEnd}
+            isEnd={(filters.pageSize || 10) > issues?.length}
             onChange={(page, pageSize) =>
               onChangeFilter({
                 page,
