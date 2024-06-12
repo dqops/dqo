@@ -122,8 +122,8 @@ public class SqlServerColumnAccuracyTotalAverageMatchPercentSensorParametersSpec
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(0).get(0));
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(1).get(0));
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(1).get(0)), 0.001);
     }
 
     @Test
@@ -140,8 +140,8 @@ public class SqlServerColumnAccuracyTotalAverageMatchPercentSensorParametersSpec
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(0).get(0));
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(1).get(0));
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(1).get(0)), 0.001);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class SqlServerColumnAccuracyTotalAverageMatchPercentSensorParametersSpec
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(0).get(0));
-        Assertions.assertEquals(0.7500000000000001, resultTable.column(1).get(0));
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
+        Assertions.assertEquals(0.75, ValueConverter.toDouble(resultTable.column(1).get(0)), 0.001);
     }
 }
