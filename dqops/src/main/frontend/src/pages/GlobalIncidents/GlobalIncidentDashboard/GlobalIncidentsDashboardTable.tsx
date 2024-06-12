@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -29,10 +30,19 @@ export default function GlobalIncidentsDashboardTable({
     return null;
   }
 
+  const getWidth = () => {
+    if (window.innerWidth < 2060) {
+      return '100%';
+    } else {
+      const amount = Math.floor(window.innerWidth / 1030);
+      return `${window.innerWidth / amount} px`;
+    }
+  };
+
   return (
     <div
-      className="border border-gray-150 p-2 rounded-md text-xs w-full"
-      style={{ width: window.innerWidth > 2060 ? '1030px' : '100%' }}
+      className="border border-gray-150 p-2 rounded-md text-xs "
+      style={{ width: getWidth() }}
     >
       <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
         <div>{group}</div>
@@ -101,23 +111,35 @@ export default function GlobalIncidentsDashboardTable({
                 key={incident.incidentId}
                 className="py-2 border-b border-gray-300"
               >
-                <td
-                  className="py-2 px-4 underline cursor-pointer truncate"
-                  onClick={() => goToIncidents(incident)}
-                >
-                  {incident.connection}
+                <td className="py-2 px-4 truncate">
+                  <Tooltip
+                    content={incident.connection}
+                    placement="top"
+                    color="light"
+                  >
+                    {incident.connection}
+                  </Tooltip>
+                </td>
+                <td className="py-2 px-4 truncate">
+                  <Tooltip
+                    content={incident.schema}
+                    placement="top"
+                    color="light"
+                  >
+                    {incident.schema}
+                  </Tooltip>
                 </td>
                 <td
                   className="py-2 px-4 underline cursor-pointer truncate"
                   onClick={() => goToIncidents(incident)}
                 >
-                  {incident.schema}
-                </td>
-                <td
-                  className="py-2 px-4 underline cursor-pointer truncate"
-                  onClick={() => goToIncidents(incident)}
-                >
-                  {incident.table}
+                  <Tooltip
+                    content={incident.table}
+                    placement="top"
+                    color="light"
+                  >
+                    {incident.table}
+                  </Tooltip>
                 </td>
                 {groupBy === 'dimension' ? (
                   <td className="py-2 px-4 truncate">

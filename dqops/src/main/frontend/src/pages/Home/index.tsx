@@ -36,11 +36,16 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
-      tabs
-      <div className="w-full mt-12 border-b border-gray-300 px-0">
-        <Tabs tabs={tabs} onChange={onChange} activeTab={activeTab} />
+      <div className="border-b border-gray-300 px-0 mt-18">
+        <Tabs
+          tabs={tabs}
+          onChange={onChange}
+          activeTab={activeTab}
+          className="z-[100]"
+          disableTreeWidth={true}
+        />
       </div>
       {activeTab === '/home' && <StaticHomePage />}
       {activeTab === '/tables' && <TableListView />}
