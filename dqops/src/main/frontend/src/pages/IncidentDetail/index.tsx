@@ -360,7 +360,7 @@ export const IncidentDetail = () => {
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter errors: col*"
+              placeholder="Filter issues: col*"
               className="!h-12"
             />
           </div>
