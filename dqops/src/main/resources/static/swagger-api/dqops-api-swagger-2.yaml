@@ -24054,8 +24054,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       max_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24067,8 +24067,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       max_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24080,8 +24080,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       min_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24093,8 +24093,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       min_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
