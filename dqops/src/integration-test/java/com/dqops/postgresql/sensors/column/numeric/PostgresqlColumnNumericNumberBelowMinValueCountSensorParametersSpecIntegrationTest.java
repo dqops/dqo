@@ -78,7 +78,7 @@ public class PostgresqlColumnNumericNumberBelowMinValueCountSensorParametersSpec
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "value", this.checkSpec);
@@ -93,7 +93,7 @@ public class PostgresqlColumnNumericNumberBelowMinValueCountSensorParametersSpec
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
@@ -108,7 +108,7 @@ public class PostgresqlColumnNumericNumberBelowMinValueCountSensorParametersSpec
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
@@ -123,7 +123,7 @@ public class PostgresqlColumnNumericNumberBelowMinValueCountSensorParametersSpec
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
@@ -138,7 +138,7 @@ public class PostgresqlColumnNumericNumberBelowMinValueCountSensorParametersSpec
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");

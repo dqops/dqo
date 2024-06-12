@@ -41,13 +41,13 @@ public class ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec extends
     };
 
     @JsonPropertyDescription("This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0")
-    private int maxValue = 0;
+    private Double maxValue = 0.0;
 
     /**
      * Returns the max value.
      * @return maxValue.
      */
-    public int getMaxValue() {
+    public Double getMaxValue() {
         return maxValue;
     }
 
@@ -55,7 +55,7 @@ public class ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec extends
      * Sets the max value.
      * @param maxValue maxvalue.
      */
-    public void setMaxValue(int maxValue) {
+    public void setMaxValue(Double maxValue) {
         this.setDirtyIf(!Objects.equals(this.maxValue, maxValue));
         this.maxValue = maxValue;
     }
