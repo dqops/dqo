@@ -9,11 +9,13 @@ type GlobalIncidentsDashboardTableProps = {
   group: string;
   incidents: IncidentModel[];
   groupBy: 'dimension' | 'category' | 'connection' | undefined;
+  maxHeight?: number;
 };
 export default function GlobalIncidentsDashboardTable({
   group,
   incidents,
-  groupBy
+  groupBy,
+  maxHeight
 }: GlobalIncidentsDashboardTableProps) {
   const history = useHistory();
   const goToIncidents = (incident: IncidentModel) => {
@@ -39,13 +41,21 @@ export default function GlobalIncidentsDashboardTable({
     }
   };
 
+  const showMore = () => {
+    // history.push(ROUTES.INCIDENT_CONNECTION);
+  };
+
   return (
     <div
-      className="border border-gray-150 p-2 rounded-md text-xs "
-      style={{ width: getWidth() }}
+      className="border border-gray-150 p-2 rounded-md text-xs"
+      style={{ width: getWidth(), height: `${maxHeight}px` }}
     >
       <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
-        <div>{group}</div>
+        <div>
+          {groupBy === 'dimension'
+            ? incidents[0].qualityDimension
+            : incidents[0].checkCategory}
+        </div>
         <div>
           {/* <Button label="Show more" color="primary" className="text-sm" /> */}
         </div>
