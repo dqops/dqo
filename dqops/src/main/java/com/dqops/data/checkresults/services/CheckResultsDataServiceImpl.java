@@ -24,6 +24,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.models.*;
 import com.dqops.data.checkresults.models.currentstatus.*;
+import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
@@ -264,6 +265,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+        CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(sortedTable, false);
 
         LongColumn checkHashColumn = sortedTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
         LongColumn checkHashColumnUnsorted = filteredTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
@@ -287,7 +289,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                     continue; // we are not mixing groups, results for a different group were already loaded
                 }
             } else {
-                singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
+                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
                 checkResultsListModel = new CheckResultsListModel();
                 checkResultsListModel.setCheckCategory(singleModel.getCheckCategory());
                 checkResultsListModel.setCheckName(singleModel.getCheckName());
@@ -309,7 +311,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             if (singleModel == null) {
-                singleModel = createSingleCheckResultDetailedModel(sortedTable.row(rowIndex));
+                singleModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
             }
 
             checkResultsListModel.getCheckResultEntries().add(singleModel);
@@ -320,43 +322,45 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
     /**
      * Creates a data model that returns the result of a single check.
-     * @param row Row from the data quality result table.
+     * @param checkNormalizedResults A table wrapper for check results.
+     * @param rowIndex Row index.
      * @return Model with all information for a single check result.
      */
     @NotNull
-    protected CheckResultEntryModel createSingleCheckResultDetailedModel(Row row) {
-        String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
-        Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-        Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-        Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
-        Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-        Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-        Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-        Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
-        Integer severity = row.getInt(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+    protected CheckResultEntryModel createSingleCheckResultDetailedModel(CheckResultsNormalizedResult checkNormalizedResults, int rowIndex) {
+        String id = checkNormalizedResults.getIdColumn().getString(rowIndex);
+        Double actualValue = checkNormalizedResults.getActualValueColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getActualValueColumn().getDouble(rowIndex);
+        Double expectedValue = checkNormalizedResults.getExpectedValueColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getExpectedValueColumn().getDouble(rowIndex);
+        Double warningLowerBound = checkNormalizedResults.getWarningLowerBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getWarningLowerBoundColumn().getDouble(rowIndex);
+        Double warningUpperBound = checkNormalizedResults.getWarningUpperBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getWarningUpperBoundColumn().getDouble(rowIndex);
+        Double errorLowerBound = checkNormalizedResults.getErrorLowerBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getErrorLowerBoundColumn().getDouble(rowIndex);
+        Double errorUpperBound = checkNormalizedResults.getErrorUpperBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getErrorUpperBoundColumn().getDouble(rowIndex);
+        Double fatalLowerBound = checkNormalizedResults.getFatalLowerBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getFatalLowerBoundColumn().getDouble(rowIndex);
+        Double fatalUpperBound = checkNormalizedResults.getFatalUpperBoundColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getFatalUpperBoundColumn().getDouble(rowIndex);
+        Integer severity = checkNormalizedResults.getSeverityColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getSeverityColumn().getInt(rowIndex);
 
-        String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-        String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-        Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-        String checkTypeString = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        String checkCategory = checkNormalizedResults.getCheckCategoryColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getCheckCategoryColumn().getString(rowIndex);
+        String checkDisplayName = checkNormalizedResults.getCheckDisplayNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getCheckDisplayNameColumn().getString(rowIndex);
+        Long checkHash = checkNormalizedResults.getCheckHashColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getCheckHashColumn().getLong(rowIndex);
+        String checkName = checkNormalizedResults.getCheckNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getCheckNameColumn().getString(rowIndex);
+        String checkTypeString = checkNormalizedResults.getCheckTypeColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getCheckTypeColumn().getString(rowIndex);
 
-        String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        String dataGroupName = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        String columnName = checkNormalizedResults.getColumnNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getColumnNameColumn().getString(rowIndex);
+        String dataGroupName = checkNormalizedResults.getDataGroupNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getDataGroupNameColumn().getString(rowIndex);
 
-        Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
-        Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradientString = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-        LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        Integer durationMs = checkNormalizedResults.getDurationMsColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getDurationMsColumn().getInt(rowIndex);
+        Instant executedAt = checkNormalizedResults.getExecutedAtColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getExecutedAtColumn().get(rowIndex);
+        String timeGradientString = checkNormalizedResults.getTimeGradientColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getTimeGradientColumn().getString(rowIndex);
+        LocalDateTime timePeriod = checkNormalizedResults.getTimePeriodColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getTimePeriodColumn().get(rowIndex);
 
-        Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
-        Boolean includeInSla = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
-        String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
-        String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-        String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+        Boolean includeInKpi = checkNormalizedResults.getIncludeInKpiColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getIncludeInKpiColumn().get(rowIndex);
+        Boolean includeInSla = checkNormalizedResults.getIncludeInSlaColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getIncludeInSlaColumn().get(rowIndex);
+        String provider = checkNormalizedResults.getProviderColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getProviderColumn().getString(rowIndex);
+        String qualityDimension = checkNormalizedResults.getQualityDimensionColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getQualityDimensionColumn().getString(rowIndex);
+        String sensorName = checkNormalizedResults.getSensorNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getSensorNameColumn().getString(rowIndex);
 
-        String tableComparison = row.getString(CheckResultsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+        String tableComparison = checkNormalizedResults.getTableComparisonNameColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getTableComparisonNameColumn().getString(rowIndex);
+        Instant updatedAt = checkNormalizedResults.getUpdatedAtColumn().isMissing(rowIndex) ? null : checkNormalizedResults.getUpdatedAtColumn().get(rowIndex);
 
         CheckResultEntryModel singleModel = new CheckResultEntryModel() {{
             setId(id);
@@ -390,6 +394,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             setQualityDimension(qualityDimension);
             setSensorName(sensorName);
             setTableComparison(tableComparison);
+
+            setUpdatedAt(updatedAt);
         }};
         return singleModel;
     }
@@ -462,19 +468,21 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 continue;
             }
 
-            Selection minSeveritySelection = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThanOrEqualTo(minSeverity);
-            Selection notProfilingSelection = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isNotEqualTo(CheckType.profiling.getDisplayName());
-            InstantColumn partitionExecutedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(partitionData, false);
+
+            Selection minSeveritySelection = checkResultsNormalizedResult.getSeverityColumn().isGreaterThanOrEqualTo(minSeverity);
+            Selection notProfilingSelection = checkResultsNormalizedResult.getCheckTypeColumn().isNotEqualTo(CheckType.profiling.getDisplayName());
+            InstantColumn partitionExecutedAtColumn = checkResultsNormalizedResult.getExecutedAtColumn();
             Selection issuesInTimeRange = partitionExecutedAtColumn.isBetweenIncluding(
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(endTimestamp));
-            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
+            Selection incidentHashSelection = checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash);
 
             Selection selectionOfMatchingIssues = minSeveritySelection
                     .and(notProfilingSelection)
                     .and(issuesInTimeRange)
                     .and(incidentHashSelection);
             if (!Strings.isNullOrEmpty(filterParameters.getColumn())) {
-                TextColumn partitionColumnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+                TextColumn partitionColumnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
                 if (Objects.equals(CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER, filterParameters.getColumn())) {
                     selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isMissing()); // table level sensors
                 } else {
@@ -483,7 +491,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             if (!Strings.isNullOrEmpty(filterParameters.getCheck())) {
-                TextColumn partitionCheckNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+                TextColumn partitionCheckNameColumn =checkResultsNormalizedResult.getCheckNameColumn();
                 selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionCheckNameColumn.isEqualTo(filterParameters.getCheck()));
             }
 
@@ -492,8 +500,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
-                Row row = partitionData.row(rowIndex);
-                CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
 
                 if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
                         !singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
@@ -587,17 +594,19 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 continue;
             }
 
-            IntColumn severityColumn = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            CheckResultsNormalizedResult checkResultsNormalizedResult = new CheckResultsNormalizedResult(partitionData, false);
+
+            IntColumn severityColumn = checkResultsNormalizedResult.getSeverityColumn();
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
-            TextColumn checkTypeColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+            TextColumn checkTypeColumn = checkResultsNormalizedResult.getCheckTypeColumn();
             Selection notProfilingSelection = checkTypeColumn.isNotEqualTo(CheckType.profiling.getDisplayName());
 
-            InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            InstantColumn executedAtColumn = checkResultsNormalizedResult.getExecutedAtColumn();
 
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
                     PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
-            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
+            Selection incidentHashSelection = checkResultsNormalizedResult.getIncidentHashColumn().isIn(incidentHash);
 
             Selection selectionOfMatchingIssues = minSeveritySelection
                     .and(notProfilingSelection)
@@ -607,15 +616,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 continue;
             }
 
-            TextColumn columnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            TextColumn checkNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
-            TextColumn checkTimeGradientColumn = partitionData.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TextColumn columnNameColumn = checkResultsNormalizedResult.getColumnNameColumn();
+            TextColumn checkNameColumn = checkResultsNormalizedResult.getCheckNameColumn();
+            TextColumn checkTimeGradientColumn = checkResultsNormalizedResult.getTimeGradientColumn();
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
-                Row row = partitionData.row(rowIndex);
-
                 if (!Strings.isNullOrEmpty(filterParameters.getFilter())) {
-                    CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                    CheckResultEntryModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(checkResultsNormalizedResult, rowIndex);
                     if (!singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
                         continue;
                     }

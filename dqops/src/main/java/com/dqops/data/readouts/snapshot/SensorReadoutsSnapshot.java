@@ -84,6 +84,7 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,
                 SensorReadoutsColumnNames.ID_COLUMN_NAME,
+                FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES,
                 TablePartitioningPattern.CTM);
     }
 

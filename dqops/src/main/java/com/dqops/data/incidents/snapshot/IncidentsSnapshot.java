@@ -71,6 +71,7 @@ public class IncidentsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME,
                 IncidentsColumnNames.ID_COLUMN_NAME,
+                FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES,
                 TablePartitioningPattern.CM);
     }
 }

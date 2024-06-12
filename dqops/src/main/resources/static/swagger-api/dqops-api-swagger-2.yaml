@@ -12091,6 +12091,7 @@ paths:
         - "timePeriod"
         - "qualityDimension"
         - "sensorName"
+        - "updatedAt"
       - name: "direction"
         in: "query"
         description: "Optional sort direction, the default sort direction is ascending"
@@ -14952,6 +14953,12 @@ definitions:
       tableComparison:
         type: "string"
         description: "Table comparison name"
+      updatedAt:
+        type: "integer"
+        format: "int64"
+        description: "The timestamp when the check was recently updated with a new\
+          \ value because it as rerun for the same period and the severity could be\
+          \ changed"
   CheckResultsListModel:
     type: "object"
     properties:

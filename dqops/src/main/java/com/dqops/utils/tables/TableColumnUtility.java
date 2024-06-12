@@ -17,9 +17,15 @@ package com.dqops.utils.tables;
 
 import com.dqops.utils.conversion.NumericTypeConverter;
 import com.dqops.utils.string.UniqueStringSet;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Helper class used to retrieve column from a table.
@@ -408,5 +414,62 @@ public final class TableColumnUtility {
         InstantColumn newColumn = InstantColumn.create(columnName);
         table.addColumns(newColumn);
         return newColumn;
+    }
+
+    /**
+     * Indexes text values from a text column in a hashmap that converts string values found in the column to their respective row indexes in the column.
+     * @param textColumn Source text column.
+     * @return Hashmap of row indexes, keyed by the values from the column.
+     */
+    public static Object2IntMap<String> mapStringValuesToRowIndexes(TextColumn textColumn) {
+        Object2IntOpenHashMap<String> resultHashMap = new Object2IntOpenHashMap<>();
+        int size = textColumn.size();
+
+        for (int i = 0; i < size; i++) {
+            if (!textColumn.isMissing(i)) {
+                String value = textColumn.getString(i);
+                resultHashMap.put(value, i);
+            }
+        }
+
+        return resultHashMap;
+    }
+
+    /**
+     * Indexes long values from a long column in a hashmap that converts long values found in the column to their respective row indexes in the column.
+     * @param longColumn Source long column.
+     * @return Hashmap of row indexes, keyed by the values from the column.
+     */
+    public static Long2IntOpenHashMap mapLongValuesToRowIndexes(LongColumn longColumn) {
+        Long2IntOpenHashMap resultHashMap = new Long2IntOpenHashMap();
+        int size = longColumn.size();
+
+        for (int i = 0; i < size; i++) {
+            if (!longColumn.isMissing(i)) {
+                long value = longColumn.getLong(i);
+                resultHashMap.put(value, i);
+            }
+        }
+
+        return resultHashMap;
+    }
+
+    /**
+     * Indexes values from a column in a hashmap that converts values values found in the column to their respective row indexes in the column.
+     * @param column Source  column.
+     * @return Hashmap of row indexes, keyed by the values from the column.
+     */
+    public static Map<Object, Integer> mapValuesToRowIndexes(Column<?> column) {
+        Map<Object, Integer> resultHashMap = new HashMap<>();
+        int size = column.size();
+
+        for (int i = 0; i < size; i++) {
+            if (!column.isMissing(i)) {
+                Object value = column.get(i);
+                resultHashMap.put(value, i);
+            }
+        }
+
+        return resultHashMap;
     }
 }

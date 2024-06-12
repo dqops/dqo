@@ -18,6 +18,8 @@ package com.dqops.data.checkresults.snapshot;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
+import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionStorageService;
@@ -33,6 +35,12 @@ import tech.tablesaw.api.Table;
  */
 public class CheckResultsSnapshot extends TableDataSnapshot {
     public static final String PARQUET_FILE_NAME = "check_results.0.parquet";
+
+    public static final String[] COPIED_COLUMN_NAMES_FOR_UPDATED_ROWS = {
+            CommonColumnNames.CREATED_AT_COLUMN_NAME,
+            CommonColumnNames.CREATED_BY_COLUMN_NAME,
+            CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME
+        };
 
     /**
      * Default constructor that creates a snapshot.
@@ -78,6 +86,7 @@ public class CheckResultsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,
                 SensorReadoutsColumnNames.ID_COLUMN_NAME,
+                COPIED_COLUMN_NAMES_FOR_UPDATED_ROWS,
                 TablePartitioningPattern.CTM);
     }
 }

@@ -14428,7 +14428,7 @@
           "description" : "Optional sort order, the default sort order is by the execution date",
           "required" : false,
           "type" : "string",
-          "enum" : [ "executedAt", "checkHash", "checkCategory", "checkName", "checkDisplayName", "checkType", "actualValue", "expectedValue", "severity", "columnName", "dataGroup", "timeGradient", "timePeriod", "qualityDimension", "sensorName" ]
+          "enum" : [ "executedAt", "checkHash", "checkCategory", "checkName", "checkDisplayName", "checkType", "actualValue", "expectedValue", "severity", "columnName", "dataGroup", "timeGradient", "timePeriod", "qualityDimension", "sensorName", "updatedAt" ]
         }, {
           "name" : "direction",
           "in" : "query",
@@ -17615,6 +17615,11 @@
         "tableComparison" : {
           "type" : "string",
           "description" : "Table comparison name"
+        },
+        "updatedAt" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The timestamp when the check was recently updated with a new value because it as rerun for the same period and the severity could be changed"
         }
       }
     },

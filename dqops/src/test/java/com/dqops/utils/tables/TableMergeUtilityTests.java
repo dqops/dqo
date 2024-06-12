@@ -16,8 +16,10 @@
 package com.dqops.utils.tables;
 
 import com.dqops.BaseTest;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
+import com.dqops.data.storage.FileStorageSettings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +54,8 @@ public class TableMergeUtilityTests extends BaseTest {
     void mergeNewResults_whenCurrentEmptyAndNewHasRow_thenRowAppended() {
 		addRows(newTable, 10L, 20L, 15.0);
 
-        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
+        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames,
+                UserDomainIdentity.SYSTEM_USER_NAME, FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES);
 
         Assertions.assertEquals(1, merged.rowCount());
         Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
@@ -64,7 +67,8 @@ public class TableMergeUtilityTests extends BaseTest {
 		addRows(currentTable, 11L, 21L, 16.0);
 		addRows(newTable, 10L, 20L, 15.0);
 
-        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
+        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames,
+                UserDomainIdentity.SYSTEM_USER_NAME, FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES);
 
         Assertions.assertEquals(2, merged.rowCount());
         Assertions.assertEquals("11", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
@@ -79,7 +83,8 @@ public class TableMergeUtilityTests extends BaseTest {
 		addRows(currentTable, 10L, 21L, 16.0);
 		addRows(newTable, 10L, 20L, 15.0);
 
-        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
+        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames,
+                UserDomainIdentity.SYSTEM_USER_NAME, FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES);
 
         Assertions.assertEquals(2, merged.rowCount());
         Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
@@ -94,7 +99,8 @@ public class TableMergeUtilityTests extends BaseTest {
 		addRows(currentTable, 10L, 20L, 16.0);
 		addRows(newTable, 10L, 20L, 15.0);
 
-        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
+        Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames,
+                UserDomainIdentity.SYSTEM_USER_NAME, FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES);
 
         Assertions.assertEquals(1, merged.rowCount());
         Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));

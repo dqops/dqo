@@ -45,10 +45,7 @@ import org.apache.hadoop.fs.ChecksumException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.DateColumn;
-import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.InstantColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.selection.Selection;
@@ -384,11 +381,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                         dataToSave = newOrChangedDataPartitionMonth;
                         InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
                         createdAtColumn.setMissingTo(Instant.now());
+                        TextColumn createdByColumn = dataToSave.textColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
+                        createdByColumn.setMissingTo(userIdentity.getUserName());
                     } else {
                         String[] joinColumns = {
                                 storageSettings.getIdStringColumnName()
                         };
-                        dataToSave = TableMergeUtility.mergeNewResults(partitionDataOld, newOrChangedDataPartitionMonth, joinColumns);
+                        dataToSave = TableMergeUtility.mergeNewResults(partitionDataOld, newOrChangedDataPartitionMonth, joinColumns,
+                                userIdentity.getUserName(),
+                                storageSettings.getCopiedColumnNames());
                     }
                 }
 

@@ -17,6 +17,8 @@ package com.dqops.utils.tables;
 
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.jetbrains.annotations.NotNull;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -40,7 +42,11 @@ public class TableMergeUtility {
      * @param joinColumns Join column names to detect overwritten rows.
      * @return New table with all rows.
      */
-    public static Table mergeNewResults(Table currentResults, Table newResults, String... joinColumns) {
+    public static Table mergeNewResults(Table currentResults,
+                                        Table newResults,
+                                        String[] joinColumns,
+                                        String userName,
+                                        String[] columnNamesToCopy) {
         assert joinColumns.length > 0;
 
         if (!tableSchemasEqual(currentResults, newResults)) {
@@ -48,7 +54,7 @@ public class TableMergeUtility {
         }
 
         if (joinColumns.length == 1 && tableSchemasEqual(currentResults, newResults)) {
-            return mergeResultsSimple(currentResults, newResults, joinColumns[0]);
+            return mergeResultsSimple(currentResults, newResults, joinColumns[0], userName, columnNamesToCopy);
         }
         else {
             return mergeNewResultsOnMultipleColumns(currentResults, newResults, joinColumns);
@@ -90,18 +96,31 @@ public class TableMergeUtility {
      * @param currentResults Current results (old rows).
      * @param newResults New rows that will be appended or will replace rows.
      * @param idColumName Column name used as an ID.
+     * @param userName User name that will be saved in the created_by field for new rows, or in the updated_by column for updated rows.
      * @return Merged results.
      */
-    protected static Table mergeResultsSimple(Table currentResults, Table newResults, String idColumName) {
+    protected static Table mergeResultsSimple(Table currentResults,
+                                              Table newResults,
+                                              String idColumName,
+                                              String userName,
+                                              String[] copiedColumnNames) {
         Column<?> newResultIdColumn = newResults.column(idColumName);
         Instant now = Instant.now();
+//        InstantColumn currentResultsCreatedAtColumn = currentResults.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
+//        TextColumn currentResultsCreatedByColumn = currentResults.textColumn(CommonColumnNames.CREATED_BY_COLUMN_NAME);
         InstantColumn newResultsCreatedAtColumn = newResults.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
         InstantColumn newResultsUpdatedAtColumn = newResults.instantColumn(CommonColumnNames.UPDATED_AT_COLUMN_NAME);
+        TextColumn newResultsUpdatedByColumn = newResults.textColumn(CommonColumnNames.UPDATED_BY_COLUMN_NAME);
+
         Table resultTable = null;
 
         Column<?> currentIdColumn = currentResults.column(idColumName);
+        Selection newResultsThatAreUpdates = null;
+        Map<Object, Integer> currentKeysToRowIndexesInCurrentData = null;
+
         if (currentIdColumn instanceof TextColumn) {
             TextColumn currentIdColumnString = (TextColumn) currentIdColumn;
+            currentKeysToRowIndexesInCurrentData = TableColumnUtility.mapValuesToRowIndexes(currentIdColumnString);
             Set<String> idsInCurrentResults = currentIdColumnString.asSet();
             TextColumn newResultIdTextColumn = (TextColumn) newResultIdColumn;
             List<String> idsInNewResultsStrings = newResultIdTextColumn.asList();
@@ -109,8 +128,7 @@ public class TableMergeUtility {
 
             if (notInSelection.size() < currentIdColumnString.size()) {
                 resultTable = currentResults.where(notInSelection);
-                Selection newResultsThatAreUpdates = newResultIdTextColumn.isIn(idsInCurrentResults);
-                newResultsUpdatedAtColumn.set(newResultsThatAreUpdates, now);
+                newResultsThatAreUpdates = newResultIdTextColumn.isIn(idsInCurrentResults);
             }
             else {
                 resultTable = currentResults.copy();
@@ -119,14 +137,14 @@ public class TableMergeUtility {
         else if (currentIdColumn instanceof LongColumn) {
             LongColumn currentIdColumnLong = (LongColumn) currentIdColumn;
             LongColumn newResultsIdColumnLong = (LongColumn) newResultIdColumn;
-            Set<Number> idsInCurrentResultsLong = (Set<Number>)(Set<?>)newResultsIdColumnLong.asSet();
+            currentKeysToRowIndexesInCurrentData = TableColumnUtility.mapValuesToRowIndexes(currentIdColumnLong);
+            Set<Number> idsInCurrentResultsLong = (Set<Number>)(Set<?>)currentIdColumnLong.asSet();
             long[] idsInNewResultsLong = newResultsIdColumnLong.asLongArray();
             Selection notInSelection = currentIdColumnLong.isNotIn(idsInNewResultsLong);
 
             if (notInSelection.size() < currentIdColumnLong.size()) {
                 resultTable = currentResults.where(notInSelection);
-                Selection newResultsThatAreUpdates = newResultsIdColumnLong.isIn(idsInCurrentResultsLong);
-                newResultsUpdatedAtColumn.set(newResultsThatAreUpdates, now);
+                newResultsThatAreUpdates = newResultsIdColumnLong.isIn(idsInCurrentResultsLong);
             }
             else {
                 resultTable = currentResults.copy();
@@ -135,8 +153,34 @@ public class TableMergeUtility {
             throw new DqoRuntimeException("Unsupported column type " + newResultIdColumn.type());
         }
 
-        Selection whenNotUpdated = newResultsUpdatedAtColumn.isMissing();
-        newResultsCreatedAtColumn.set(whenNotUpdated, now);
+        if (newResultsThatAreUpdates != null) {
+            newResultsUpdatedAtColumn.set(newResultsThatAreUpdates, now);
+            newResultsUpdatedByColumn.set(newResultsThatAreUpdates, userName);
+
+            for (String copiedColumnName : copiedColumnNames) {
+                Column currentColumnSource = TableColumnUtility.findColumn(currentResults, copiedColumnName);
+                if (currentColumnSource == null) {
+                    continue; // column missing
+                }
+
+                Column newColumnTarget = newResults.column(copiedColumnName);
+
+                for (Integer rowIndexNewData : newResultsThatAreUpdates) {
+                    Object key = newResultIdColumn.get(rowIndexNewData);
+                    Integer rowIndexOldData = currentKeysToRowIndexesInCurrentData.get(key);
+
+                    if (!currentColumnSource.isMissing(rowIndexOldData) && newColumnTarget.isMissing(rowIndexNewData)) {
+                        Object oldValueCopied = currentColumnSource.get(rowIndexOldData);
+                        //noinspection unchecked
+                        newColumnTarget.set(rowIndexNewData, oldValueCopied);
+                    }
+                }
+            }
+        }
+
+        Selection newCreatedRows = newResultsUpdatedAtColumn.isMissing();
+        newResultsCreatedAtColumn.set(newCreatedRows, now);
+        newResultsUpdatedByColumn.set(newCreatedRows, userName);
         resultTable.append(newResults);
 
         return resultTable;
@@ -176,7 +220,9 @@ public class TableMergeUtility {
      * @return Joined result.
      */
     @NotNull
-    protected static Table mergeNewResultsOnMultipleColumns(Table currentResults, Table newResults, String[] joinColumns) {
+    protected static Table mergeNewResultsOnMultipleColumns(Table currentResults,
+                                                            Table newResults,
+                                                            String[] joinColumns) {
         List<Column<?>> newResultJoinColumns = new ArrayList<>();
         for (String joinColumnName : joinColumns) {
             newResultJoinColumns.add(newResults.column(joinColumnName).copy());
@@ -185,6 +231,8 @@ public class TableMergeUtility {
 
         Table currentRowsJoined = currentResults.joinOn(joinColumns).leftOuter(newResultsJoinColumnsTab, true, true, joinColumns);
         Column<?> firstJoinColumnRightTable = currentRowsJoined.column(currentResults.columnCount()); // we take the first join column from the target that was added
+
+        // TODO: before dropping updated rows, we must copy values, we must also fill the created_* and updated_* columns
         Table finalRows = currentRowsJoined.dropWhere(firstJoinColumnRightTable.isNotMissing());// dropping rows that have new versions
         int[] columnIndexesToRetain = IntStream.range(0, currentResults.columnCount()).toArray();
         finalRows = finalRows.retainColumns(columnIndexesToRetain);
