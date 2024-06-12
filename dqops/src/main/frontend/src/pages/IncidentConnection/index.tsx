@@ -200,7 +200,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end text-sm"
+          className="justify-end text-sm w-25"
           label="Total issues"
           order="failedChecksCount"
           direction={
@@ -212,7 +212,7 @@ export const IncidentConnection = () => {
         />
       ),
       label: 'Total issues',
-      className: 'text-right text-sm py-2 px-4',
+      className: 'text-right text-sm py-2 px-4 w-25',
       value: 'failedChecksCount'
     },
     {
@@ -234,7 +234,7 @@ export const IncidentConnection = () => {
       ),
       label: 'Table',
       className:
-        'text-left text-sm py-2 px-4 max-w-40 min-w-35 whitespace-normal break-all',
+        'text-left text-sm py-2 px-4 max-w-65 min-w-60 whitespace-normal break-all',
       value: 'table',
       render: (value: string) => {
         return <div className="cursor-pointer text-sm text-start">{value}</div>;
@@ -324,6 +324,7 @@ export const IncidentConnection = () => {
       label: 'Issue Link',
       className: 'text-center issueUrl py-2 px-4 text-sm',
       value: 'issueUrl',
+      alwaysVisible: true,
       render: (value: string, row: IncidentModel) => {
         return (
           <div className="flex justify-center">
