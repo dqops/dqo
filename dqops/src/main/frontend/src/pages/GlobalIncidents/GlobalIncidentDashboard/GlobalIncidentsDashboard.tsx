@@ -3,9 +3,11 @@ import { TopIncidentsModel } from '../../../api';
 import GlobalIncidentsDashboardTable from './GlobalIncidentsDashboardTable';
 
 export default function GlobalIncidentsDashboard({
-  incidents
+  incidents,
+  groupBy
 }: {
   incidents: TopIncidentsModel;
+  groupBy: 'dimension' | 'category' | 'connection' | undefined;
 }) {
   const groups = incidents.topIncidents || {};
   return (
@@ -16,6 +18,7 @@ export default function GlobalIncidentsDashboard({
             key={key}
             group={key}
             incidents={value}
+            groupBy={groupBy}
           />
         );
       })}

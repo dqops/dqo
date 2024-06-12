@@ -16,13 +16,13 @@ const tabs = [
   { label: 'Tables', value: '/tables' },
   { label: 'Columns', value: '/columns' },
   {
-    label: 'Incidents grouped by dimesion',
-    value: '/global-incidents?groupBy=dimension'
-  },
-  {
-    label: 'Incidents grouped by category',
-    value: '/global-incidents?groupBy=category'
+    label: 'Incidents summary',
+    value: '/global-incidents'
   }
+  // {
+  //   label: 'Incidents grouped by category',
+  //   value: '/global-incidents?groupBy=category'
+  // }
 ];
 const HomePage = () => {
   const { activeTab } = useSelector(
@@ -45,12 +45,10 @@ const HomePage = () => {
       {activeTab === '/home' && <StaticHomePage />}
       {activeTab === '/tables' && <TableListView />}
       {activeTab === '/columns' && <ColumnListView />}
-      {activeTab === '/global-incidents?groupBy=dimension' && (
-        <GlobalIncidents groupBy="dimension" />
-      )}
-      {activeTab === '/global-incidents?groupBy=category' && (
+      {activeTab === '/global-incidents' && <GlobalIncidents />}
+      {/* {activeTab === '/global-incidents?groupBy=category' && (
         <GlobalIncidents groupBy="category" />
-      )}
+      )} */}
     </div>
   );
 };
