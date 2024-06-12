@@ -15,13 +15,15 @@
  */
 package com.dqops.athena.sensors.column.numeric;
 
+import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNumberBelowMinValuePercentCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -29,9 +31,6 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.numeric.ColumnNumericNumberBelowMinValuePercentSensorParametersSpec;
-import com.dqops.athena.BaseAthenaIntegrationTest;
-import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,7 +79,7 @@ public class AthenaColumnNumericNumberBelowMinValuePercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "value", this.checkSpec);
@@ -95,7 +94,7 @@ public class AthenaColumnNumericNumberBelowMinValuePercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
@@ -110,7 +109,7 @@ public class AthenaColumnNumericNumberBelowMinValuePercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
@@ -125,7 +124,7 @@ public class AthenaColumnNumericNumberBelowMinValuePercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
@@ -140,7 +139,7 @@ public class AthenaColumnNumericNumberBelowMinValuePercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");

@@ -93,7 +93,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
@@ -105,7 +105,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -125,7 +125,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
@@ -141,7 +141,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -164,7 +164,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
@@ -175,7 +175,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -194,7 +194,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
 
@@ -205,7 +205,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -231,7 +231,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
@@ -246,7 +246,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -268,7 +268,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
@@ -282,7 +282,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -304,7 +304,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
@@ -318,7 +318,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -345,7 +345,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
@@ -366,7 +366,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -392,7 +392,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
@@ -408,7 +408,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)
@@ -432,7 +432,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMinValue(16);
+        this.sut.setMinValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
@@ -448,7 +448,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 16 THEN 1
+                            WHEN %1$s < 16.0 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(%1$s)

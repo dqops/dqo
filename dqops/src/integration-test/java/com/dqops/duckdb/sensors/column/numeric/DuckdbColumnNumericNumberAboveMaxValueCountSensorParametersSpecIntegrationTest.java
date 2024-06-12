@@ -79,7 +79,7 @@ public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecInte
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "value", this.checkSpec);
@@ -94,7 +94,7 @@ public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecInte
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
@@ -109,7 +109,7 @@ public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecInte
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
@@ -124,7 +124,7 @@ public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecInte
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
@@ -139,7 +139,7 @@ public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecInte
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");
