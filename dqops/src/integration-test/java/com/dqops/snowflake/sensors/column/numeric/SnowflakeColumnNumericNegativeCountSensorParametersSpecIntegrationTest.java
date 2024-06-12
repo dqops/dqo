@@ -88,6 +88,19 @@ public class SnowflakeColumnNumericNegativeCountSensorParametersSpecIntegrationT
     }
 
     @Test
+    void runSensor_onIntsAndNullsMixedData_thenReturnValueFromNonNullData() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "ints_nulls_mix", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+    }
+
+    @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
