@@ -71,9 +71,7 @@ const IncidentsTree = () => {
           category ? `*?category=${category}` : `*?dimension=${dimension}`
         ),
         state: {},
-        label: `Incidents group by ${
-          category ? 'category' : 'quality dimension'
-        }`
+        label: category || dimension
       })
     );
     history.push(
