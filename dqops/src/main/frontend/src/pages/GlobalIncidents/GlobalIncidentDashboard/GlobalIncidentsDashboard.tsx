@@ -26,7 +26,7 @@ export default function GlobalIncidentsDashboard({
   }, [incidents]);
 
   return (
-    <div className="flex flex-wrap pt-4 grid lg:grid-cols-1 screen1600:grid-cols-2">
+    <div className="flex flex-wrap pt-4 grid lg:grid-cols-1 screen2000:grid-cols-2">
       {Object.entries(groups)
         .filter(([, value]) => value.length !== 0)
         .sort(([, valueA], [, valueB]) => {

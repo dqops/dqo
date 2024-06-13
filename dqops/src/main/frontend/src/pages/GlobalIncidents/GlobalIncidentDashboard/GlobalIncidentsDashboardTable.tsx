@@ -12,7 +12,9 @@ type GlobalIncidentsDashboardTableProps = {
   maxHeight?: number;
 };
 
-const tableHeaderClassName = "py-2 px-4 text-left whitespace-nowrap";
+const tableHeaderClassName = "py-2 px-2 text-left whitespace-nowrap screen2000:col-span-2 ";
+const tableRowClassName = "px-2 truncate screen2000:col-span-2 ";
+const tableMinWidth = '800px'
 
 export default function GlobalIncidentsDashboardTable({
   group,
@@ -52,43 +54,38 @@ export default function GlobalIncidentsDashboardTable({
         </div>
       </div>
       <div className="overflow-auto w-full">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className={tableHeaderClassName}>
-                Connection
-              </th>
-              <th className={tableHeaderClassName}>
-                Schema
-              </th>
-              <th className={tableHeaderClassName}>
-                Table
-              </th>
+          <div className='grid grid-cols-12 font-bold min-w-800' style={{ minWidth: tableMinWidth}}>
+            <div className={tableHeaderClassName + ' col-span-2'}>
+              Connection
+            </div>
+            <div className={tableHeaderClassName + ' col-span-2'}>
+              Schema
+            </div>
+            <div className={tableHeaderClassName + ' col-span-2 2xl:col-span-5'}>
+              Table
+            </div>
+            <div className={tableHeaderClassName + ' col-span-2 2xl:col-span-1'}>
               {groupBy === 'dimension' ? (
-                <th className={tableHeaderClassName} style={{width: "0%"}}>
-                  Check category
-                </th>
+                <>Check category</>
               ) : (
-                <th className={tableHeaderClassName} style={{width: "0%"}}>
-                  Quality dimension
-                </th>
+                <>Quality dimension</>
               )}
+              </div>
 
-              <th className={tableHeaderClassName} style={{width: "0%"}}>
-                First seen
-              </th>
-              <th className={tableHeaderClassName} style={{width: "0%"}}>
-                Last seen
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+            <div className={tableHeaderClassName + 'col-span-2 2xl:col-span-1'}>
+              First seen
+            </div>
+            <div className={tableHeaderClassName + 'col-span-2 2xl:col-span-1'}>
+              Last seen
+            </div>
+          </div>
+          <div>
             {incidents.map((incident) => (
-              <tr
+              <div
                 key={incident.incidentId}
-                className="py-2 border-b border-gray-300"
+                className="py-2 border-b border-gray-300 grid grid-cols-12"
               >
-                <td className="py-2 px-4 truncate">
+                <div className={tableRowClassName + "col-span-2"}>
                   <Tooltip
                     content={incident.connection}
                     placement="top"
@@ -96,8 +93,8 @@ export default function GlobalIncidentsDashboardTable({
                   >
                     {incident.connection}
                   </Tooltip>
-                </td>
-                <td className="py-2 px-4 truncate">
+                </div>
+                <div className={tableRowClassName + "col-span-2"}>
                   <Tooltip
                     content={incident.schema}
                     placement="top"
@@ -105,9 +102,9 @@ export default function GlobalIncidentsDashboardTable({
                   >
                     {incident.schema}
                   </Tooltip>
-                </td>
-                <td
-                  className="py-2 px-4 underline cursor-pointer truncate"
+                </div>
+                <div
+                  className={tableRowClassName + "underline cursor-pointer col-span-2 2xl:col-span-5"}
                   onClick={() => goToIncidents(incident)}
                 >
                   <Tooltip
@@ -117,26 +114,23 @@ export default function GlobalIncidentsDashboardTable({
                   >
                     {incident.table}
                   </Tooltip>
-                </td>
-                {groupBy === 'dimension' ? (
-                  <td className="py-2 px-4 truncate">
-                    {incident.checkCategory}
-                  </td>
-                ) : (
-                  <td className="py-2 px-4 truncate">
-                    {incident.qualityDimension}
-                  </td>
-                )}
-                <td className="py-2 px-4 truncate">
+                </div>
+                <div className={tableRowClassName + "col-span-2 2xl:col-span-1"}>
+                  {groupBy === 'dimension' ? (
+                    <>{incident.checkCategory}</>
+                  ) : (
+                    <>{incident.qualityDimension}</>
+                  )}
+                </div>
+                <div className={tableRowClassName + "col-span-2 2xl:col-span-1"}>
                   {moment(incident.firstSeen).format('YYYY-MM-DD')}
-                </td>
-                <td className="py-2 px-4 truncate">
+                </div>
+                <div className={tableRowClassName + "col-span-2 2xl:col-span-1"}>
                   {moment(incident.lastSeen).format('YYYY-MM-DD')}
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+        </div>
       </div>
     </div>
   );

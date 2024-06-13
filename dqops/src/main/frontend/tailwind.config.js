@@ -120,7 +120,7 @@ module.exports = withMT({
         1000: 1000,
       },
       screens: {
-        'screen1600': '1600px',
+        'screen2000': '2000px',
       },
     },
   },
