@@ -19,7 +19,7 @@ export default function index() {
       );
     };
     fetchIncidents();
-  }, [incidents]);
+  }, [groupingField]);
 
   return (
     <div>
