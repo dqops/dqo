@@ -10,14 +10,6 @@ export default function GlobalIncidentsDashboard({
   groupBy: 'dimension' | 'category' | 'connection' | undefined;
 }) {
   const groups = incidents.topIncidents || {};
-  const getWidth = () => {
-    if (window.innerWidth < 1800) {
-      return '100%';
-    } else {
-      const amount = Math.floor(window.innerWidth / 900);
-      return `${window.innerWidth / amount}px`;
-    }
-  };
 
   const getMaxHeight = () => {
     return Object.entries(groups)
@@ -34,12 +26,12 @@ export default function GlobalIncidentsDashboard({
   }, [incidents]);
 
   return (
-    <div className="flex flex-wrap pt-4">
+    <div className="flex flex-wrap pt-4 grid lg:grid-cols-1 screen1600:grid-cols-2 ">
       {Object.entries(groups)
         .filter(([, value]) => value.length !== 0)
         .map(([key, value]) => {
           return (
-            <div key={key} style={{ width: getWidth(), padding: '8px' }}>
+            <div key={key} className='p-2'>
               <GlobalIncidentsDashboardTable
                 group={key}
                 incidents={value}

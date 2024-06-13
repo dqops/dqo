@@ -118,7 +118,10 @@ module.exports = withMT({
       },
       zIndex: {
         1000: 1000,
-      }
+      },
+      screens: {
+        'screen1600': '1600px',
+      },
     },
   },
   plugins: [

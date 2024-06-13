@@ -32,15 +32,6 @@ export default function GlobalIncidentsDashboardTable({
     return null;
   }
 
-  const getWidth = () => {
-    if (window.innerWidth < 2060) {
-      return '100%';
-    } else {
-      const amount = Math.floor(window.innerWidth / 1030);
-      return `${window.innerWidth / amount} px`;
-    }
-  };
-
   const showMore = () => {
     // history.push(ROUTES.INCIDENT_CONNECTION);
   };
@@ -48,7 +39,7 @@ export default function GlobalIncidentsDashboardTable({
   return (
     <div
       className="border border-gray-150 p-2 rounded-md text-xs"
-      style={{ width: getWidth(), maxHeight: `${maxHeight}px` }}
+      style={{ maxHeight: `${maxHeight}px` }}
     >
       <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
         <div>
@@ -64,50 +55,29 @@ export default function GlobalIncidentsDashboardTable({
         <table className="w-full">
           <thead>
             <tr>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
+              <th className="py-2 px-4 text-left whitespace-nowrap">
                 Connection
               </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
+              <th className="py-2 px-4 text-left whitespace-nowrap">
                 Schema
               </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
+              <th className="py-2 px-4 text-left whitespace-nowrap">
                 Table
               </th>
               {groupBy === 'dimension' ? (
-                <th
-                  className="py-2 px-4 text-left whitespace-nowrap"
-                  style={{ width: '12.5%' }}
-                >
+                <th className="py-2 px-4 text-left whitespace-nowrap">
                   Check category
                 </th>
               ) : (
-                <th
-                  className="py-2 px-4 text-left whitespace-nowrap"
-                  style={{ width: '12.5%' }}
-                >
+                <th className="py-2 px-4 text-left whitespace-nowrap">
                   Quality dimension
                 </th>
               )}
 
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
+              <th className="py-2 px-4 text-left whitespace-nowrap">
                 First seen
               </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
+              <th className="py-2 px-4 text-left whitespace-nowrap">
                 Last seen
               </th>
               {/* <th className="py-2 px-4 text-left whitespace-nowrap">
