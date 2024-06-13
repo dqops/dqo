@@ -373,13 +373,15 @@ export const IncidentConnection = () => {
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
+      console.log(window.location.pathname);
+
       dispatch(
         getIncidentsByConnection({
           connection
         })
       );
     }
-  }, [connection, activeTab]);
+  }, [connection, activeTab, window.location.pathname]);
 
   useEffect(() => {
     onChangeFilter({
