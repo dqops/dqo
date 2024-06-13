@@ -48,7 +48,7 @@ export default function GlobalIncidentsDashboardTable({
   return (
     <div
       className="border border-gray-150 p-2 rounded-md text-xs"
-      style={{ width: getWidth(), height: `${maxHeight}px` }}
+      style={{ width: getWidth(), maxHeight: `${maxHeight}px` }}
     >
       <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
         <div>
