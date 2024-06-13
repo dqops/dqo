@@ -385,14 +385,14 @@ export const IncidentConnection = () => {
     }
   }, [activeTab]);
 
-  // useEffect(() => {
-  //   onChangeFilter({
-  //     optionalFilter: debouncedSearchTerm,
-  //     page: 1,
-  //     openIncidents: true,
-  //     acknowledgedIncidents: true
-  //   });
-  // }, [debouncedSearchTerm]);
+  useEffect(() => {
+    onChangeFilter({
+      optionalFilter: debouncedSearchTerm,
+      page: 1,
+      openIncidents: true,
+      acknowledgedIncidents: true
+    });
+  }, [debouncedSearchTerm]);
 
   const onChangeFilter = (obj: Partial<IncidentFilter>) => {
     dispatch(
@@ -401,13 +401,6 @@ export const IncidentConnection = () => {
         ...obj
       })
     );
-    console.log({
-      ...(filters || {}),
-      ...obj,
-      category: category,
-      dimension: dimension,
-      connection
-    });
     dispatch(
       getIncidentsByConnection({
         ...(filters || {}),
@@ -444,7 +437,10 @@ export const IncidentConnection = () => {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              Data quality incidents on {connection || ''}
+              Data quality incidents on{' '}
+              {category || dimension
+                ? `all connections (${category ? category : dimension})`
+                : connection || ''}
             </div>
           </div>
           <div className="flex items-center">
