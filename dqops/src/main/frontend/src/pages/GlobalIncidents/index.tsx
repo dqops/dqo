@@ -6,13 +6,13 @@ import GlobalIncidentsDashboard from './GlobalIncidentDashboard/GlobalIncidentsD
 
 export default function index() {
   const [incidents, setIncidents] = useState<TopIncidentsModel>({});
-  const [categoryDimension, setCategoryDimension] = useState<
+  const [groupingField, setGroupingField] = useState<
     'category' | 'dimension'
   >('category');
 
   useEffect(() => {
     const fetchIncidents = async () => {
-      IncidentsApi.findTopIncidentsGrouped(undefined, categoryDimension).then(
+      IncidentsApi.findTopIncidentsGrouped(undefined, groupingField).then(
         (response) => {
           setIncidents(response.data);
         }
@@ -22,25 +22,25 @@ export default function index() {
   }, []);
 
   return (
-    <div className="">
+    <div>
       <div className="flex pb-2 pt-6 pl-4 gap-x-5 items-center">
         <div className="text-sm pl-1">Group incidents by: </div>
         <RadioButton
-          checked={categoryDimension === 'category'}
+          checked={groupingField === 'category'}
           label="category"
           fontClassName="text-sm"
-          onClick={() => setCategoryDimension('category')}
+          onClick={() => setGroupingField('category')}
         />
         <RadioButton
-          checked={categoryDimension === 'dimension'}
+          checked={groupingField === 'dimension'}
           label="quality dimension"
           fontClassName="text-sm"
-          onClick={() => setCategoryDimension('dimension')}
+          onClick={() => setGroupingField('dimension')}
         />
       </div>
       <GlobalIncidentsDashboard
         incidents={incidents}
-        groupBy={categoryDimension}
+        groupBy={groupingField}
       />
     </div>
   );

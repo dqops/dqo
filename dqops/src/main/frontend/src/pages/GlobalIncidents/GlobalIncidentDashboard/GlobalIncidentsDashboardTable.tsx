@@ -11,6 +11,9 @@ type GlobalIncidentsDashboardTableProps = {
   groupBy: 'dimension' | 'category' | 'connection' | undefined;
   maxHeight?: number;
 };
+
+const tableHeaderClassName = "py-2 px-4 text-left whitespace-nowrap";
+
 export default function GlobalIncidentsDashboardTable({
   group,
   incidents,
@@ -47,42 +50,36 @@ export default function GlobalIncidentsDashboardTable({
             ? incidents[0].qualityDimension
             : incidents[0].checkCategory}
         </div>
-        <div>
-          {/* <Button label="Show more" color="primary" className="text-sm" /> */}
-        </div>
       </div>
       <div className="overflow-auto w-full">
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 px-4 text-left whitespace-nowrap">
+              <th className={tableHeaderClassName}>
                 Connection
               </th>
-              <th className="py-2 px-4 text-left whitespace-nowrap">
+              <th className={tableHeaderClassName}>
                 Schema
               </th>
-              <th className="py-2 px-4 text-left whitespace-nowrap">
+              <th className={tableHeaderClassName}>
                 Table
               </th>
               {groupBy === 'dimension' ? (
-                <th className="py-2 px-4 text-left whitespace-nowrap">
+                <th className={tableHeaderClassName} style={{width: "0%"}}>
                   Check category
                 </th>
               ) : (
-                <th className="py-2 px-4 text-left whitespace-nowrap">
+                <th className={tableHeaderClassName} style={{width: "0%"}}>
                   Quality dimension
                 </th>
               )}
 
-              <th className="py-2 px-4 text-left whitespace-nowrap">
+              <th className={tableHeaderClassName} style={{width: "0%"}}>
                 First seen
               </th>
-              <th className="py-2 px-4 text-left whitespace-nowrap">
+              <th className={tableHeaderClassName} style={{width: "0%"}}>
                 Last seen
               </th>
-              {/* <th className="py-2 px-4 text-left whitespace-nowrap">
-            Incident id
-          </th> */}
             </tr>
           </thead>
           <tbody>
@@ -136,7 +133,6 @@ export default function GlobalIncidentsDashboardTable({
                 <td className="py-2 px-4 truncate">
                   {moment(incident.lastSeen).format('YYYY-MM-DD')}
                 </td>
-                {/* <td className="py-2 px-4">{incident.incidentId}</td> */}
               </tr>
             ))}
           </tbody>
