@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IncidentModel } from '../../../api';
+import Button from '../../../components/Button';
 import { ROUTES } from '../../../shared/routes';
 
 type GlobalIncidentsDashboardTableProps = {
@@ -42,7 +43,15 @@ export default function GlobalIncidentsDashboardTable({
   };
 
   const showMore = () => {
-    // history.push(ROUTES.INCIDENT_CONNECTION);
+    history.push(
+      ROUTES.INCIDENT_CONNECTION(
+        `*?${groupBy}=${
+          groupBy === 'dimension'
+            ? incidents[0].qualityDimension
+            : incidents[0].checkCategory
+        }`
+      )
+    );
   };
 
   return (
@@ -51,13 +60,18 @@ export default function GlobalIncidentsDashboardTable({
       style={{ width: getWidth(), height: `${maxHeight}px` }}
     >
       <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
-        <div>
+        <div className="underline cursor-pointer" onClick={showMore}>
           {groupBy === 'dimension'
             ? incidents[0].qualityDimension
             : incidents[0].checkCategory}
         </div>
         <div>
-          {/* <Button label="Show more" color="primary" className="text-sm" /> */}
+          <Button
+            label="Show more"
+            color="primary"
+            className="text-sm"
+            onClick={showMore}
+          />
         </div>
       </div>
       <div className="overflow-auto w-full">

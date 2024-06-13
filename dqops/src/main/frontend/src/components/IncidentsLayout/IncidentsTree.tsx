@@ -58,14 +58,54 @@ const IncidentsTree = () => {
     history.push(url);
   };
 
+  const openCategoryTab = () => {
+    const category = getLastValueFromURL(window.location.href, 'category');
+    const dimension = getLastValueFromURL(window.location.href, 'dimension');
+
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.INCIDENT_CONNECTION(
+          category ? `*?category=${category}` : `*?dimension=${dimension}`
+        ),
+        value: ROUTES.INCIDENT_CONNECTION_VALUE(
+          category ? `*?category=${category}` : `*?dimension=${dimension}`
+        ),
+        state: {},
+        label: category || dimension
+      })
+    );
+    history.push(
+      ROUTES.INCIDENT_CONNECTION(
+        category ? `*?category=${category}` : `*?dimension=${dimension}`
+      )
+    );
+  };
+
   const openCorrectTabFromUrl = () => {
     const path = window.location.pathname.split('/');
+    if (
+      window.location.pathname === '/incidents' ||
+      window.location.pathname === '/incidents/'
+    ) {
+      if (activeTab && tabs.length > 0) {
+        history.push(activeTab);
+      }
+      return;
+    }
+
+    // if (path.length < 3) {
+    //   return;
+    // }
     const connection = path[2];
     const selectedConnection = connections.find(
       (x) => x.connection === connection
     );
+    console.log(window.location.pathname, path, selectedConnection);
+
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
+    } else if (path[2] === '*') {
+      openCategoryTab();
     } else if (path[3]) {
       const connection = path[2] || '';
       const year = Number(path[3]);
@@ -161,3 +201,15 @@ const IncidentsTree = () => {
 };
 
 export default IncidentsTree;
+
+function getLastValueFromURL(url: string, param: string): string | undefined {
+  const regex = new RegExp(`[?&]${param}=([^&]*)`);
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    const values = match[1].split(',');
+    return values[values.length - 1];
+  }
+
+  return undefined;
+}

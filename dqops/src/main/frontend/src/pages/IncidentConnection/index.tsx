@@ -370,16 +370,20 @@ export const IncidentConnection = () => {
       }
     }
   ];
+  const category = getLastValueFromURL(window.location.href, 'category');
+  const dimension = getLastValueFromURL(window.location.href, 'dimension');
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
       dispatch(
         getIncidentsByConnection({
-          connection
+          connection,
+          dimension,
+          category
         })
       );
     }
-  }, [connection, activeTab]);
+  }, [activeTab]);
 
   useEffect(() => {
     onChangeFilter({
@@ -401,6 +405,8 @@ export const IncidentConnection = () => {
       getIncidentsByConnection({
         ...(filters || {}),
         ...obj,
+        category: category,
+        dimension: dimension,
         connection
       })
     );
@@ -431,7 +437,12 @@ export const IncidentConnection = () => {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              Data quality incidents on {connection || ''}
+              Data quality incidents{' '}
+              {category || dimension
+                ? `for ${
+                    category ? `${category} category` : `${dimension} dimension`
+                  }`
+                : `on ${connection}` || ''}
             </div>
           </div>
           <div className="flex items-center">
@@ -504,3 +515,15 @@ export const IncidentConnection = () => {
 };
 
 export default IncidentConnection;
+
+function getLastValueFromURL(url: string, param: string): string | undefined {
+  const regex = new RegExp(`[?&]${param}=([^&]*)`);
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    const values = match[1].split(',');
+    return values[values.length - 1];
+  }
+
+  return undefined;
+}
