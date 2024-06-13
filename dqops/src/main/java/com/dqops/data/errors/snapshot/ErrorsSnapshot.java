@@ -77,6 +77,7 @@ public class ErrorsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,
                 ErrorsColumnNames.ID_COLUMN_NAME,
+                FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES,
                 TablePartitioningPattern.CTM);
     }
 

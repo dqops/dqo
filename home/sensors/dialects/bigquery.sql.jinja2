@@ -354,7 +354,8 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
-        {{- render_where_clause(extra_filter = wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+        {{- render_where_clause(extra_filter = render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~
+             wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '        ') }}
 )
 SELECT
     sample_table.sample_value AS actual_value,
@@ -383,7 +384,7 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
-    {{- render_where_clause(wrap_condition ~ ' (' ~ caller() ~ ')') }}
+    {{- render_where_clause(render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}

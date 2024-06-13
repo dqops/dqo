@@ -161,7 +161,8 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             SENSOR_NAME_COLUMN_NAME,
             TIME_SERIES_ID_COLUMN_NAME,
 
-            INCIDENT_HASH_COLUMN_NAME
+            INCIDENT_HASH_COLUMN_NAME,
+            UPDATED_AT_COLUMN_NAME
     };
 
     /**

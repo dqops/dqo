@@ -103,7 +103,8 @@ public class CheckResultEntryModel {
     String sensorName;
     @JsonPropertyDescription("Table comparison name")
     String tableComparison;
-
+    @JsonPropertyDescription("The timestamp when the check was recently updated with a new value because it as rerun for the same period and the severity could be changed")
+    Instant updatedAt;
     /**
      * Checks if any filtered field name matches a pattern.
      * @param filter Filter pattern.
@@ -174,6 +175,8 @@ public class CheckResultEntryModel {
                 return Comparator.comparing(o -> o.qualityDimension, Comparator.nullsFirst(Comparator.naturalOrder()));
             case sensorName:
                 return Comparator.comparing(o -> o.sensorName, Comparator.nullsFirst(Comparator.naturalOrder()));
+            case updatedAt:
+                return Comparator.comparing(o -> o.updatedAt, Comparator.nullsFirst(Comparator.naturalOrder()));
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
         }

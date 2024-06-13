@@ -9,6 +9,7 @@ export interface TabsProps {
   activeTab?: string;
   onChange?: any;
   onCloseTab?: (value: string) => void;
+  disableTreeWidth?: boolean;
 }
 
 const Tabs = ({
@@ -16,7 +17,8 @@ const Tabs = ({
   className,
   activeTab,
   onChange,
-  onCloseTab
+  onCloseTab,
+  disableTreeWidth
 }: TabsProps) => {
   const { sidebarWidth } = useTree();
   const onChangeTab = (tab: TabOption) => {
@@ -26,7 +28,9 @@ const Tabs = ({
   return (
     <div
       className={`flex overflow-auto ${className}`}
-      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 40}px` }}
+      style={{
+        maxWidth: `calc(100vw - ${!disableTreeWidth && sidebarWidth + 40}px`
+      }}
     >
       {tabs.map((tab) => (
         <Tab

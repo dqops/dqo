@@ -78,6 +78,7 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,
                 StatisticsColumnNames.ID_COLUMN_NAME,
+                FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES,
                 TablePartitioningPattern.CTM);
     }
 }

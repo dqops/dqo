@@ -306,7 +306,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinimumSeverity(),
+                0, // load all incidents, they will be filtered by the incident hash anyway, so that updated check results for fixed issues are also returned
                 filterParameters,
                 userDomainIdentity);
 
@@ -341,7 +341,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinimumSeverity(),
+                0, // load all incidents, they will be filtered by the incident hash anyway, so that updated check results for fixed issues are also returned
                 filterParameters,
                 userDomainIdentity);
 
