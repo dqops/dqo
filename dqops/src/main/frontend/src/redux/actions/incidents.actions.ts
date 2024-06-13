@@ -127,24 +127,7 @@ export const getIncidentsByConnection =
           sortDirection
         );
 
-      const nextPageRes: AxiosResponse<Array<IncidentModel>> =
-        await IncidentsApi.findRecentIncidentsOnConnection(
-          connection,
-          numberOfMonth,
-          openIncidents,
-          acknowledgedIncidents,
-          resolvedIncidents,
-          mutedIncidents,
-          page + 1,
-          pageSize,
-          optionalFilter,
-          sortBy,
-          sortDirection
-        );
-
-      dispatch(
-        getIncidentsByConnectionSuccess(res.data, !nextPageRes.data.length)
-      );
+      dispatch(getIncidentsByConnectionSuccess(res.data, false));
     } catch (err) {
       dispatch(getIncidentsByConnectionFailed(err));
     }
