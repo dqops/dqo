@@ -370,27 +370,29 @@ export const IncidentConnection = () => {
       }
     }
   ];
+  const category = getLastValueFromURL(window.location.href, 'category');
+  const dimension = getLastValueFromURL(window.location.href, 'dimension');
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
-      console.log(window.location.pathname);
-
       dispatch(
         getIncidentsByConnection({
-          connection
+          connection,
+          dimension,
+          category
         })
       );
     }
-  }, [connection, activeTab, window.location.pathname]);
+  }, [activeTab]);
 
-  useEffect(() => {
-    onChangeFilter({
-      optionalFilter: debouncedSearchTerm,
-      page: 1,
-      openIncidents: true,
-      acknowledgedIncidents: true
-    });
-  }, [debouncedSearchTerm]);
+  // useEffect(() => {
+  //   onChangeFilter({
+  //     optionalFilter: debouncedSearchTerm,
+  //     page: 1,
+  //     openIncidents: true,
+  //     acknowledgedIncidents: true
+  //   });
+  // }, [debouncedSearchTerm]);
 
   const onChangeFilter = (obj: Partial<IncidentFilter>) => {
     dispatch(
@@ -399,10 +401,19 @@ export const IncidentConnection = () => {
         ...obj
       })
     );
+    console.log({
+      ...(filters || {}),
+      ...obj,
+      category: category,
+      dimension: dimension,
+      connection
+    });
     dispatch(
       getIncidentsByConnection({
         ...(filters || {}),
         ...obj,
+        category: category,
+        dimension: dimension,
         connection
       })
     );
@@ -506,3 +517,15 @@ export const IncidentConnection = () => {
 };
 
 export default IncidentConnection;
+
+function getLastValueFromURL(url: string, param: string): string | undefined {
+  const regex = new RegExp(`[?&]${param}=([^&]*)`);
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    const values = match[1].split(',');
+    return values[values.length - 1];
+  }
+
+  return undefined;
+}
