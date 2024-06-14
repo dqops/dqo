@@ -138,7 +138,7 @@ export default function TableListView() {
 
   return (
     <div className="bg-white">
-      <div className="flex items-center justify-between bg-white w-full relative">
+      <div className="flex items-center bg-white w-full relative">
         <div className="flex items-center gap-x-4 mb-4 mt-4 px-4">
           {!connection && (
             <Input
@@ -188,7 +188,7 @@ export default function TableListView() {
               className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
             />
           }
-          className="mb-4 mt-7 !mr-8 pr-0 pl-3 z-[1]"
+          className="!mr-8 pr-0 pl-3 z-[1] mt-5"
           onClick={() =>
             getTables(
               labels
