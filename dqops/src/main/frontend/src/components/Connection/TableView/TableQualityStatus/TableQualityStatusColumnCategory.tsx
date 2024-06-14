@@ -126,7 +126,10 @@ export default function TableQualityStatusColumnCategory({
 
   return (
     <React.Fragment key={`column_${customKey}`}>
-      <tr key={`column_row_${customKey}`}>
+      <tr
+        key={`column_row_${customKey}`}
+        style={{ paddingTop: 0, paddingBottom: 0.5, margin: 0 }}
+      >
         <td
           key={`column_cell_${customKey}`}
           className="p-2 px-4 underline cursor-pointer"
@@ -139,6 +142,7 @@ export default function TableQualityStatusColumnCategory({
               customKey
             )
           }
+          style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
         >
           {customKey}
         </td>
@@ -149,6 +153,7 @@ export default function TableQualityStatusColumnCategory({
             onClick={() => {
               toggleExtendedChecks(customKey, firstLevelChecksKey);
             }}
+            style={{ paddingTop: 0.5, paddingBottom: 0, margin: 0 }}
           >
             {' '}
             {getColor(
@@ -270,13 +275,21 @@ export default function TableQualityStatusColumnCategory({
           </td>
         ))}
       </tr>
-      <tr key={`column_row_blank_${customKey}`}>
+      <tr
+        key={`column_row_blank_${customKey}`}
+        style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
+      >
         <td
           key={`column_cell_blank_${customKey}`}
+          style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
           className="font-bold px-4 "
         ></td>
         {Object.keys(firstLevelChecks).map((check) => (
-          <td key={`cell_column_blank_${customKey}_${check}`} valign="baseline">
+          <td
+            key={`cell_column_blank_${customKey}_${check}`}
+            valign="baseline"
+            style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
+          >
             {extendedChecks.find(
               (x) => x.checkType === customKey && x.categoryDimension === check
             ) ? (
