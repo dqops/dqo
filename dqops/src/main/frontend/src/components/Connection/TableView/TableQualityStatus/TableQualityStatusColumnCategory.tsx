@@ -34,7 +34,7 @@ interface ITableQualityStatusColumnCategoryProps {
     severity: any,
     severityType: 'current' | 'highest'
   ) => React.JSX.Element;
-  timeScale: "daily" | "monthly" | undefined
+  timeScale: 'daily' | 'monthly' | undefined;
 }
 
 export default function TableQualityStatusColumnCategory({
@@ -126,9 +126,7 @@ export default function TableQualityStatusColumnCategory({
 
   return (
     <React.Fragment key={`column_${customKey}`}>
-      <tr
-        key={`column_row_${customKey}`}
-      >
+      <tr key={`column_row_${customKey}`}>
         <td
           key={`column_cell_${customKey}`}
           className="p-2 px-4 underline cursor-pointer"
@@ -162,7 +160,7 @@ export default function TableQualityStatusColumnCategory({
               ).status
             ) !== '' ? (
               <div className="h-full flex w-40 items-center ">
-                <div className='w-5 h-full'></div>
+                <div className="w-5 h-full"></div>
                 <div
                   className={clsx(
                     'h-8 w-43 flex justify-end',
@@ -215,14 +213,17 @@ export default function TableQualityStatusColumnCategory({
                       )}
                     >
                       <div
-                        className={clsx("h-4 w-4 ml-2 mt-2 mr-0.5", getColor(
-                          getColumnCircleStatus(
-                            severityType,
-                            categoryDimension,
-                            (tableDataQualityStatus.columns ?? {})[customKey],
-                            firstLevelChecksKey
-                          ).status
-                        ))}
+                        className={clsx(
+                          'h-4 w-4 ml-2 mt-2 mr-0.5',
+                          getColor(
+                            getColumnCircleStatus(
+                              severityType,
+                              categoryDimension,
+                              (tableDataQualityStatus.columns ?? {})[customKey],
+                              firstLevelChecksKey
+                            ).status
+                          )
+                        )}
                         style={{
                           borderRadius: '6px',
                           ...(getColor(
@@ -239,25 +240,30 @@ export default function TableQualityStatusColumnCategory({
                       ></div>
                     </Tooltip>
                   ) : null}
-                <div className='flex items-center justify-center'>
-                  <SvgIcon
-                    key={`svg_column_${customKey}_${firstLevelChecksKey}`}
-                    name={
-                     extendedChecks.find(
-                        (x) =>
-                          x.checkType === customKey &&
-                          x.categoryDimension === firstLevelChecksKey
-                      ) 
-                        ? 'chevron-up'
-                        : 'chevron-down'
-                    }
-                    className={clsx("h-5 w-5 pr-1",extendedChecks.find(
-                      (x) =>
-                        x.checkType === customKey &&
-                        x.categoryDimension === firstLevelChecksKey
-                    ) ? "mb-1" : "mt-1")}
-                  />
-                </div>
+                  <div className="flex items-center justify-center">
+                    <SvgIcon
+                      key={`svg_column_${customKey}_${firstLevelChecksKey}`}
+                      name={
+                        extendedChecks.find(
+                          (x) =>
+                            x.checkType === customKey &&
+                            x.categoryDimension === firstLevelChecksKey
+                        )
+                          ? 'chevron-up'
+                          : 'chevron-down'
+                      }
+                      className={clsx(
+                        'h-5 w-5 pr-1',
+                        extendedChecks.find(
+                          (x) =>
+                            x.checkType === customKey &&
+                            x.categoryDimension === firstLevelChecksKey
+                        )
+                          ? 'mb-1'
+                          : 'mt-1'
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
             ) : null}
@@ -288,7 +294,7 @@ export default function TableQualityStatusColumnCategory({
                     >
                       <div
                         className={clsx(
-                          'cursor-auto h-12 p-2 ml-4.5',
+                          'cursor-auto h-12 p-2 ml-[16.7px]',
                           getColor(
                             severityType === 'current'
                               ? x.currentSeverity
