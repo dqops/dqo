@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
+import { useDashboard } from '../../contexts/dashboardContext';
+import Dashboards from '../../pages/Dashboards';
+import { ROUTES } from '../../shared/routes';
 import LeftView from '../Dashboards/LeftView';
 import Header from '../Header';
-import { useDashboard } from '../../contexts/dashboardContext';
-import { ROUTES } from '../../shared/routes';
-import Dashboards from '../../pages/Dashboards';
 
 interface LayoutProps {
   route: string;
@@ -31,7 +31,8 @@ const DashboardLayout = ({ route }: LayoutProps) => {
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
             marginLeft: sidebarWidth,
-            maxWidth: `calc(100vw - ${sidebarWidth}px)`
+            maxWidth: `calc(100vw - ${sidebarWidth}px)`,
+            backgroundColor: '#F9FAFC'
           }}
         >
           {renderComponent}

@@ -2,9 +2,9 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import { useTree } from '../../contexts/treeContext';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
-import { useTree } from '../../contexts/treeContext';
 
 interface LayoutProps {
   children?: any;
@@ -23,7 +23,8 @@ const MainLayout = ({ children }: LayoutProps) => {
           style={{
             marginLeft: sidebarWidth,
             maxWidth: `calc(100vw - ${sidebarWidth}px)`,
-            maxHeight: "calc(100vh - 64px)"
+            maxHeight: 'calc(100vh - 64px)',
+            backgroundColor: '#F9FAFC'
           }}
         >
           {children}

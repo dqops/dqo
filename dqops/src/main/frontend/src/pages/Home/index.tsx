@@ -38,7 +38,10 @@ const HomePage = () => {
   return (
     <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
-      <div className="border-b border-gray-300 px-0 mt-18">
+      <div
+        className="border-b border-gray-300 px-0 mt-18"
+        style={{ backgroundColor: '#F9FAFC' }}
+      >
         <Tabs
           tabs={tabs}
           onChange={onChange}

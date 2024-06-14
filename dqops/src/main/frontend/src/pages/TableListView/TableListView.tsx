@@ -137,7 +137,7 @@ export default function TableListView() {
   };
 
   return (
-    <>
+    <div className="bg-white">
       <div className="flex items-center justify-between bg-white w-full relative">
         <div className="flex items-center gap-x-4 mb-4 mt-4 px-4">
           {!connection && (
@@ -207,6 +207,6 @@ export default function TableListView() {
         onChangeLabels={onChangeLabels}
         loading={loading}
       />
-    </>
+    </div>
   );
 }
