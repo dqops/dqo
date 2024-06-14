@@ -17,11 +17,13 @@ import { SortableColumn } from '../IncidentConnection/SortableColumn';
 type IncidentIssueRowProps = {
   issue: CheckResultEntryModel;
   incidentDetail?: IncidentModel;
+  issues: CheckResultEntryModel[];
 };
 
 export const IncidentIssueRow = ({
   issue,
-  incidentDetail
+  incidentDetail,
+  issues
 }: IncidentIssueRowProps) => {
   const [open, setOpen] = useState(false);
   const history = useHistory();
@@ -120,7 +122,14 @@ export const IncidentIssueRow = ({
     dispatch(addFirstLevelTab(checkType as CheckTypes, tabData));
     history.push(url);
   };
-
+  const doesColumnHaveValues = (columnKey: keyof CheckResultEntryModel) => {
+    return issues.some(
+      (issue) =>
+        issue[columnKey] !== undefined &&
+        issue[columnKey] !== null &&
+        issue[columnKey] !== ''
+    );
+  };
   return (
     <>
       <tr className={getSeverityClass(issue)}>
@@ -139,10 +148,12 @@ export const IncidentIssueRow = ({
             />
           )}
         </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.columnName}
-        </td>
-        {issue.checkName !== undefined ? (
+        {doesColumnHaveValues('columnName') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {issue.columnName}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('checkName') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             <a
               className="text-blue-700 underline cursor-pointer"
@@ -152,33 +163,33 @@ export const IncidentIssueRow = ({
             </a>
           </td>
         ) : null}
-        {issue.executedAt !== undefined ? (
+        {doesColumnHaveValues('executedAt') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             {formatDateTime(
               moment(issue.executedAt).format('YYYY-MM-DD HH:mm:ss.SSS')
             )}
           </td>
         ) : null}
-        {issue.timeGradient !== undefined ? (
+        {doesColumnHaveValues('timeGradient') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             {issue.timeGradient}
           </td>
         ) : null}
-        {issue.timePeriod !== undefined ? (
+        {doesColumnHaveValues('timePeriod') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             {formatDateTime(
               moment(issue.timePeriod).format('YYYY-MM-DD HH:mm:ss.SSS')
             )}
           </td>
         ) : null}
-        {issue.actualValue !== undefined ? (
+        {doesColumnHaveValues('actualValue') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.actualValue === 'number' ? issue.actualValue : ''}
             </div>
           </td>
         ) : null}
-        {issue.expectedValue !== undefined ? (
+        {doesColumnHaveValues('expectedValue') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.expectedValue === 'number'
@@ -187,17 +198,17 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.dataGroup !== undefined ? (
+        {doesColumnHaveValues('dataGroup') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             {issue.dataGroup}
           </td>
         ) : null}
-        {issue.severity !== undefined ? (
+        {doesColumnHaveValues('severity') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             {getIssueSeverityLevel(issue.severity)}
           </td>
         ) : null}
-        {issue.warningLowerBound !== undefined ? (
+        {doesColumnHaveValues('warningLowerBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.warningLowerBound === 'number'
@@ -206,7 +217,7 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.warningUpperBound !== undefined ? (
+        {doesColumnHaveValues('warningUpperBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.warningUpperBound === 'number'
@@ -215,7 +226,7 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.errorLowerBound !== undefined ? (
+        {doesColumnHaveValues('errorLowerBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.errorLowerBound === 'number'
@@ -224,7 +235,7 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.errorUpperBound !== undefined ? (
+        {doesColumnHaveValues('errorUpperBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.errorUpperBound === 'number'
@@ -233,7 +244,7 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.fatalLowerBound !== undefined ? (
+        {doesColumnHaveValues('fatalLowerBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.fatalLowerBound === 'number'
@@ -242,7 +253,7 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.fatalUpperBound !== undefined ? (
+        {doesColumnHaveValues('fatalUpperBound') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <div>
               {typeof issue.fatalUpperBound === 'number'
@@ -251,12 +262,12 @@ export const IncidentIssueRow = ({
             </div>
           </td>
         ) : null}
-        {issue.durationMs !== undefined ? (
+        {doesColumnHaveValues('durationMs') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             {issue.durationMs}
           </td>
         ) : null}
-        {issue.id !== undefined ? (
+        {doesColumnHaveValues('id') ? (
           <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             <span>{issue.id}</span>
           </td>
@@ -534,6 +545,7 @@ export const IncidentIssueList = ({
               key={issue.id}
               issue={issue}
               incidentDetail={incidentDetail}
+              issues={issues}
             />
           ))}
         </tbody>
