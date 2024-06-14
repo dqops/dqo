@@ -10,7 +10,6 @@ type GlobalIncidentsDashboardTableProps = {
   group: string;
   incidents: IncidentModel[];
   groupBy: 'dimension' | 'category' | 'connection' | undefined;
-  maxHeight?: number;
 };
 
 const tableHeaderClassName = "py-2 px-2 text-left whitespace-nowrap ";
@@ -21,7 +20,6 @@ export default function GlobalIncidentsDashboardTable({
   group,
   incidents,
   groupBy,
-  maxHeight
 }: GlobalIncidentsDashboardTableProps) {
   const history = useHistory();
   const goToIncidents = (incident: IncidentModel) => {
@@ -51,12 +49,9 @@ export default function GlobalIncidentsDashboardTable({
   };
 
   return (
-    <div
-      className="border border-gray-150 p-2 rounded-md text-xs"
-      style={{ height: `${maxHeight}px` }}
-    >
-      <div className="flex items-center justify-between pl-2 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
-        <div>
+    <div className={"border border-gray-150 p-2 rounded-md text-xs screen2000:h-[386px]"}>
+      <div className="flex items-center justify-between pl-2 pb-2 border-b border-gray-300 mb-2 text-md">
+        <div className="underline cursor-pointer font-semibold pt-1" onClick={showMore}>
           {groupBy === 'dimension'
             ? incidents[0].qualityDimension
             : incidents[0].checkCategory}
@@ -71,7 +66,7 @@ export default function GlobalIncidentsDashboardTable({
         </div>
       </div>
       <div className="">
-        <div className='grid grid-cols-24 font-bold' style={{ minWidth: tableMinWidth}}>
+        <div className='grid grid-cols-24 font-bold border-b border-gray-300' style={{ minWidth: tableMinWidth}}>
           <div className={tableHeaderClassName + ' col-span-3'}>
             Connection
           </div>

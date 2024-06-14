@@ -11,20 +11,6 @@ export default function GlobalIncidentsDashboard({
 }) {
   const groups = incidents.topIncidents || {};
 
-  const getMaxHeight = () => {
-    return Object.entries(groups)
-      .filter(([, value]) => value.length !== 0)
-      .reduce((maxHeight, [, value]) => {
-        return value.length * 29 > maxHeight ? value.length * 29 : maxHeight;
-      }, 0);
-  };
-
-  const [maxHeight, setMaxHeight] = useState(0);
-
-  useEffect(() => {
-    setMaxHeight(getMaxHeight());
-  }, [incidents]);
-
   return (
     <div className="flex flex-wrap pt-4 grid lg:grid-cols-1 screen2000:grid-cols-2">
       {Object.entries(groups)
@@ -45,7 +31,6 @@ export default function GlobalIncidentsDashboard({
                 group={key}
                 incidents={value}
                 groupBy={groupBy}
-                maxHeight={maxHeight + 95}
               />
             </div>
           );
