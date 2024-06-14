@@ -101,15 +101,14 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -133,8 +132,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
@@ -145,7 +144,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -163,15 +161,14 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -189,8 +186,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
@@ -203,7 +200,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -226,8 +222,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
@@ -237,7 +233,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -258,8 +253,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
@@ -269,7 +264,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -290,8 +284,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
@@ -305,7 +299,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -334,8 +327,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
@@ -349,7 +342,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -372,8 +364,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
@@ -385,7 +377,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
@@ -408,8 +399,8 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             SELECT
                 SUM(
                     CASE
-                        WHEN %s < 0 OR %s IS NULL THEN 0
-                        ELSE 1
+                        WHEN %s >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
@@ -425,7 +416,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpecBigQueryTests exte
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),

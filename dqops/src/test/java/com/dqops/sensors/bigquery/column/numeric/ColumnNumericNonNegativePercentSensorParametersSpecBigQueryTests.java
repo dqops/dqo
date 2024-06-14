@@ -103,8 +103,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
@@ -137,8 +137,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -169,8 +169,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
@@ -197,8 +197,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -236,8 +236,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -270,8 +270,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -304,8 +304,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -350,8 +350,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -390,8 +390,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -428,8 +428,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,

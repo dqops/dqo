@@ -3,7 +3,7 @@
     {{values_list|join(', ')}}
 {% endmacro %}
 
-{%- macro render_else() -%}
+{%- macro actual_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         MAX(0.0)

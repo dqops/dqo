@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IncidentModel } from '../../../api';
+import Button from '../../../components/Button';
 import { ROUTES } from '../../../shared/routes';
 
 type GlobalIncidentsDashboardTableProps = {
@@ -38,7 +39,15 @@ export default function GlobalIncidentsDashboardTable({
   }
 
   const showMore = () => {
-    // history.push(ROUTES.INCIDENT_CONNECTION);
+    history.push(
+      ROUTES.INCIDENT_CONNECTION(
+        `*?${groupBy}=${
+          groupBy === 'dimension'
+            ? incidents[0].qualityDimension
+            : incidents[0].checkCategory
+        }`
+      )
+    );
   };
 
   return (
@@ -51,6 +60,14 @@ export default function GlobalIncidentsDashboardTable({
           {groupBy === 'dimension'
             ? incidents[0].qualityDimension
             : incidents[0].checkCategory}
+        </div>
+        <div>
+          <Button
+            label="Show more"
+            color="primary"
+            className="text-sm py-2"
+            onClick={showMore}
+          />
         </div>
       </div>
       <div className="">
@@ -125,7 +142,7 @@ export default function GlobalIncidentsDashboardTable({
               <div className={tableRowClassName + "col-span-2"}>
                 {moment(incident.firstSeen).format('YYYY-MM-DD')}
               </div>
-              <div className={tableRowClassName + "col-span-2"}> 
+              <div className={tableRowClassName + "col-span-2"}>
                 {moment(incident.lastSeen).format('YYYY-MM-DD')}
               </div>
             </div>
