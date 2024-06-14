@@ -15,7 +15,7 @@ export default function GlobalIncidentsDashboard({
     return Object.entries(groups)
       .filter(([, value]) => value.length !== 0)
       .reduce((maxHeight, [, value]) => {
-        return value.length * 33 > maxHeight ? value.length * 33 : maxHeight;
+        return value.length * 29 > maxHeight ? value.length * 29 : maxHeight;
       }, 0);
   };
 

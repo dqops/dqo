@@ -83,7 +83,7 @@ export default function GlobalIncidentsDashboardTable({
           {incidents.map((incident) => (
             <div
               key={incident.incidentId}
-              className="py-2 border-b border-gray-300 grid grid-cols-24"
+              className="py-1.5 border-b border-gray-300 grid grid-cols-24"
             >
               <div className={tableRowClassName + "col-span-3"}>
                 <Tooltip
