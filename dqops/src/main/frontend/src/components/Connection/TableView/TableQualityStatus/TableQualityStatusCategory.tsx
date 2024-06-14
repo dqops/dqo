@@ -68,37 +68,23 @@ export default function TableQualityStatusCategory({
 
   return (
     <React.Fragment>
-      <tr key="row_table_level_checks" className="">
-        <td key="cell_table_level_checks_title" className="font-bold px-4 ">
+      <tr key="row_table_level_checks" style={{ margin: 0 }}>
+        <td key="cell_table_level_checks_title" className="font-bold px-4">
           Table level checks
         </td>
         {Object.keys(firstLevelChecks).map((key) => (
-          <td key={`cell_table_level_checks_${key}`} className=" h-full ">
+          <td
+            key={`cell_table_level_checks_${key}`}
+            className="h-full"
+            style={{ padding: 0.5, paddingBottom: 0, margin: 0.5 }}
+          >
             <div
-              className="h-full flex w-40 items-center "
+              className="h-full flex w-40 items-center"
               onClick={() => {
                 toggleExtendedChecks(key, 'table');
               }}
             >
-              {/* {getColor(
-                getTableStatus(severityType, firstLevelChecks[key]).status
-              ) !== '' ? (
-                <div>
-                  <SvgIcon
-                    key={`svg_table_level_checks_${key}`}
-                    name={
-                      extendedChecks.find(
-                        (x) =>
-                          x.checkType === key && x.categoryDimension === 'table'
-                      )
-                        ? 'chevron-up'
-                        : 'chevron-down'
-                    }
-                    className="h-5 w-5 pr-1"
-                  />
-                </div>
-              ) : null} */}
-              <div className='w-5 h-full'></div>
+              <div className="w-5 h-full"></div>
               {getColor(
                 getTableStatus(severityType, firstLevelChecks[key]).status
               ) !== '' ? (
@@ -137,7 +123,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          ' h-4 w-4 mr-0.5 mt-2 ml-2',
+                          'h-4 w-4 mr-0.5 mt-2 ml-2',
                           getColor(
                             getTableCircleStatus(
                               severityType,
@@ -159,27 +145,34 @@ export default function TableQualityStatusCategory({
                       ></div>
                     </Tooltip>
                   ) : null}
-              {getColor(
-                getTableStatus(severityType, firstLevelChecks[key]).status
-              ) !== '' ? (
-                <div className='flex justify-center items-center'>
-                  <SvgIcon
-                    key={`svg_table_level_checks_${key}`}
-                    name={
-                      extendedChecks.find(
-                        (x) =>
-                          x.checkType === key && x.categoryDimension === 'table'
-                      )
-                        ? 'chevron-up'
-                        : 'chevron-down'
-                    }
-                    className={clsx("h-5 w-5 pr-1",   extendedChecks.find(
-                      (x) =>
-                        x.checkType === key && x.categoryDimension === 'table'
-                    ) ? "mb-1" : "mt-1")}
-                  />
-                </div>
-              ) : null}
+                  {getColor(
+                    getTableStatus(severityType, firstLevelChecks[key]).status
+                  ) !== '' ? (
+                    <div className="flex justify-center items-center">
+                      <SvgIcon
+                        key={`svg_table_level_checks_${key}`}
+                        name={
+                          extendedChecks.find(
+                            (x) =>
+                              x.checkType === key &&
+                              x.categoryDimension === 'table'
+                          )
+                            ? 'chevron-up'
+                            : 'chevron-down'
+                        }
+                        className={clsx(
+                          'h-5 w-5 pr-1',
+                          extendedChecks.find(
+                            (x) =>
+                              x.checkType === key &&
+                              x.categoryDimension === 'table'
+                          )
+                            ? 'mb-1'
+                            : 'mt-1'
+                        )}
+                      />
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
             </div>
@@ -189,17 +182,23 @@ export default function TableQualityStatusCategory({
       <tr
         key="row_table_level_checks_blank"
         className="border-b border-b-gray-150"
+        style={{ margin: 0 }}
       >
         <td
           key="cell_table_level_checks_blank"
-          className="font-bold px-4 "
+          className="font-bold px-4"
+          style={{ padding: 0, margin: 0 }}
         ></td>
         {Object.keys(firstLevelChecks).map((key) => (
-          <td valign="baseline" key={`cell_table_level_checks_blank_${key}`}>
+          <td
+            valign="baseline"
+            key={`cell_table_level_checks_blank_${key}`}
+            style={{ padding: 0, paddingBottom: 0.5, margin: 0 }}
+          >
             {extendedChecks.find(
               (x) => x.checkType === key && x.categoryDimension === 'table'
             ) && (
-              <div className="w-40">
+              <div className="w-[160.5px]">
                 {(firstLevelChecks[key] ?? []).map((x, index) =>
                   x.checkType === 'table' ? (
                     <Tooltip
@@ -208,7 +207,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          'cursor-auto h-12 ml-4.5 p-2',
+                          'cursor-auto h-12 ml-[17.3px] p-2',
                           getColor(
                             severityType === 'current'
                               ? x.currentSeverity ??
