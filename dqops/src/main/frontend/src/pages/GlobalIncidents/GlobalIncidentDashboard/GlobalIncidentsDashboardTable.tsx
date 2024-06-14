@@ -10,13 +10,16 @@ type GlobalIncidentsDashboardTableProps = {
   group: string;
   incidents: IncidentModel[];
   groupBy: 'dimension' | 'category' | 'connection' | undefined;
-  maxHeight?: number;
 };
+
+const tableHeaderClassName = "py-2 px-2 text-left whitespace-nowrap ";
+const tableRowClassName = "px-2 truncate ";
+const tableMinWidth = '960px'
+
 export default function GlobalIncidentsDashboardTable({
   group,
   incidents,
   groupBy,
-  maxHeight
 }: GlobalIncidentsDashboardTableProps) {
   const history = useHistory();
   const goToIncidents = (incident: IncidentModel) => {
@@ -33,15 +36,6 @@ export default function GlobalIncidentsDashboardTable({
     return null;
   }
 
-  const getWidth = () => {
-    if (window.innerWidth < 2060) {
-      return '100%';
-    } else {
-      const amount = Math.floor(window.innerWidth / 1030);
-      return `${window.innerWidth / amount} px`;
-    }
-  };
-
   const showMore = () => {
     history.push(
       ROUTES.INCIDENT_CONNECTION(
@@ -55,12 +49,9 @@ export default function GlobalIncidentsDashboardTable({
   };
 
   return (
-    <div
-      className="border border-gray-150 p-2 rounded-md text-xs"
-      style={{ width: getWidth(), height: `${maxHeight}px` }}
-    >
-      <div className="flex items-center justify-between pl-4 py-2 border-b border-gray-300 mb-2 text-md font-semibold">
-        <div className="underline cursor-pointer" onClick={showMore}>
+    <div className={"border border-gray-150 p-2 rounded-md text-xs screen2000:h-[386px]"}>
+      <div className="flex items-center justify-between pl-2 pb-2 border-b border-gray-300 mb-2 text-md">
+        <div className="underline cursor-pointer font-semibold pt-1" onClick={showMore}>
           {groupBy === 'dimension'
             ? incidents[0].qualityDimension
             : incidents[0].checkCategory}
@@ -69,122 +60,89 @@ export default function GlobalIncidentsDashboardTable({
           <Button
             label="Show more"
             color="primary"
-            className="text-sm"
+            className="text-sm py-2"
             onClick={showMore}
           />
         </div>
       </div>
-      <div className="overflow-auto w-full">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
-                Connection
-              </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
-                Schema
-              </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
-                Table
-              </th>
-              {groupBy === 'dimension' ? (
-                <th
-                  className="py-2 px-4 text-left whitespace-nowrap"
-                  style={{ width: '12.5%' }}
-                >
-                  Check category
-                </th>
-              ) : (
-                <th
-                  className="py-2 px-4 text-left whitespace-nowrap"
-                  style={{ width: '12.5%' }}
-                >
-                  Quality dimension
-                </th>
-              )}
+      <div className="">
+        <div className='grid grid-cols-24 font-bold border-b border-gray-300' style={{ minWidth: tableMinWidth}}>
+          <div className={tableHeaderClassName + ' col-span-3'}>
+            Connection
+          </div>
+          <div className={tableHeaderClassName + ' col-span-4'}>
+            Schema
+          </div>
+          <div className={tableHeaderClassName + ' col-span-10'}>
+            Table
+          </div>
+          <div className={tableHeaderClassName + ' col-span-3'}>
+            {groupBy === 'dimension' ? (
+              <p>Check category</p>
+            ) : (
+              <p>Quality dimension</p>
+            )}
+            </div>
 
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
-                First seen
-              </th>
-              <th
-                className="py-2 px-4 text-left whitespace-nowrap"
-                style={{ width: '12.5%' }}
-              >
-                Last seen
-              </th>
-              {/* <th className="py-2 px-4 text-left whitespace-nowrap">
-            Incident id
-          </th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {incidents.map((incident) => (
-              <tr
-                key={incident.incidentId}
-                className="py-2 border-b border-gray-300"
-              >
-                <td className="py-2 px-4 truncate">
-                  <Tooltip
-                    content={incident.connection}
-                    placement="top"
-                    color="light"
-                  >
-                    {incident.connection}
-                  </Tooltip>
-                </td>
-                <td className="py-2 px-4 truncate">
-                  <Tooltip
-                    content={incident.schema}
-                    placement="top"
-                    color="light"
-                  >
-                    {incident.schema}
-                  </Tooltip>
-                </td>
-                <td
-                  className="py-2 px-4 underline cursor-pointer truncate"
-                  onClick={() => goToIncidents(incident)}
+          <div className={tableHeaderClassName + 'col-span-2'}>
+            First seen
+          </div>
+          <div className={tableHeaderClassName + 'col-span-2'}>
+            Last seen
+          </div>
+        </div>
+        <div style={{ minWidth: tableMinWidth}}>
+          {incidents.map((incident) => (
+            <div
+              key={incident.incidentId}
+              className="py-1.5 border-b border-gray-300 grid grid-cols-24"
+            >
+              <div className={tableRowClassName + "col-span-3"}>
+                <Tooltip
+                  content={incident.connection}
+                  placement="top"
+                  color="light"
                 >
-                  <Tooltip
-                    content={incident.table}
-                    placement="top"
-                    color="light"
-                  >
-                    {incident.table}
-                  </Tooltip>
-                </td>
+                  {incident.connection}
+                </Tooltip>
+              </div>
+              <div className={tableRowClassName + "col-span-4"}>
+                <Tooltip
+                  content={incident.schema}
+                  placement="top"
+                  color="light"
+                >
+                  {incident.schema}
+                </Tooltip>
+              </div>
+              <div
+                className={tableRowClassName + "underline cursor-pointer col-span-10"}
+                onClick={() => goToIncidents(incident)}
+              >
+                <Tooltip
+                  content={incident.table}
+                  placement="top"
+                  color="light"
+                >
+                  {incident.table}
+                </Tooltip>
+              </div>
+              <div className={tableRowClassName + "col-span-3"}>
                 {groupBy === 'dimension' ? (
-                  <td className="py-2 px-4 truncate">
-                    {incident.checkCategory}
-                  </td>
+                  <>{incident.checkCategory}</>
                 ) : (
-                  <td className="py-2 px-4 truncate">
-                    {incident.qualityDimension}
-                  </td>
+                  <>{incident.qualityDimension}</>
                 )}
-                <td className="py-2 px-4 truncate">
-                  {moment(incident.firstSeen).format('YYYY-MM-DD')}
-                </td>
-                <td className="py-2 px-4 truncate">
-                  {moment(incident.lastSeen).format('YYYY-MM-DD')}
-                </td>
-                {/* <td className="py-2 px-4">{incident.incidentId}</td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+              <div className={tableRowClassName + "col-span-2"}>
+                {moment(incident.firstSeen).format('YYYY-MM-DD')}
+              </div>
+              <div className={tableRowClassName + "col-span-2"}>
+                {moment(incident.lastSeen).format('YYYY-MM-DD')}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

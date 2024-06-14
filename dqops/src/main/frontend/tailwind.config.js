@@ -118,6 +118,12 @@ module.exports = withMT({
       },
       zIndex: {
         1000: 1000,
+      },
+      screens: {
+        'screen2000': '2000px',
+      },
+      gridTemplateColumns: {
+        '24': 'repeat(24, minmax(0, 1fr))', // 24 column grid
       }
     },
   },
