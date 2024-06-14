@@ -122,6 +122,9 @@ module.exports = withMT({
       screens: {
         'screen2000': '2000px',
       },
+      gridTemplateColumns: {
+        '24': 'repeat(24, minmax(0, 1fr))', // 24 column grid
+      }
     },
   },
   plugins: [
