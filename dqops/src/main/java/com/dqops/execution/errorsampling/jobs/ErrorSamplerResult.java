@@ -75,7 +75,7 @@ public class ErrorSamplerResult {
      * @param errorSamplerExecutionSummary Error sampler execution summary.
      * @return The job result object.
      */
-    public static ErrorSamplerResult fromStatisticsExecutionSummary(ErrorSamplerExecutionSummary errorSamplerExecutionSummary) {
+    public static ErrorSamplerResult fromErrorSamplerExecutionSummary(ErrorSamplerExecutionSummary errorSamplerExecutionSummary) {
         ErrorSamplerResult runChecksQueueJobResult = new ErrorSamplerResult() {{
             setExecutedErrorSamplers(errorSamplerExecutionSummary.getTotalCollectorsExecuted());
             setColumnsAnalyzed(errorSamplerExecutionSummary.getColumnsAnalyzedCount());

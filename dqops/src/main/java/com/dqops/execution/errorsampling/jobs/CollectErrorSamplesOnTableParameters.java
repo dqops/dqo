@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CollectErrorSamplesOnTableQueueJobParameters implements Cloneable {
+public class CollectErrorSamplesOnTableParameters implements Cloneable {
     /**
      * The name of the target connection.
      */
@@ -92,7 +92,7 @@ public class CollectErrorSamplesOnTableQueueJobParameters implements Cloneable {
     @JsonPropertyDescription("The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.")
     private ErrorSamplerResult errorSamplerResult;
 
-    public CollectErrorSamplesOnTableQueueJobParameters() {
+    public CollectErrorSamplesOnTableParameters() {
     }
 
     /**
@@ -106,14 +106,14 @@ public class CollectErrorSamplesOnTableQueueJobParameters implements Cloneable {
      * @param dataScope Error samples data scope to analyze - the whole table or each data grouping separately.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
-    public CollectErrorSamplesOnTableQueueJobParameters(String connection,
-                                                        Integer maxJobsPerConnection,
-                                                        PhysicalTableName table,
-                                                        CheckSearchFilters checkSearchFilters,
-                                                        TimeWindowFilterParameters timeWindowFilter,
-                                                        ErrorSamplerExecutionProgressListener progressListener,
-                                                        ErrorSamplesDataScope dataScope,
-                                                        boolean dummySensorExecution) {
+    public CollectErrorSamplesOnTableParameters(String connection,
+                                                Integer maxJobsPerConnection,
+                                                PhysicalTableName table,
+                                                CheckSearchFilters checkSearchFilters,
+                                                TimeWindowFilterParameters timeWindowFilter,
+                                                ErrorSamplerExecutionProgressListener progressListener,
+                                                ErrorSamplesDataScope dataScope,
+                                                boolean dummySensorExecution) {
         this.connection = connection;
         this.maxJobsPerConnection = maxJobsPerConnection;
         this.table = table;
@@ -272,9 +272,9 @@ public class CollectErrorSamplesOnTableQueueJobParameters implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public CollectErrorSamplesOnTableQueueJobParameters clone() {
+    public CollectErrorSamplesOnTableParameters clone() {
         try {
-            return (CollectErrorSamplesOnTableQueueJobParameters)super.clone();
+            return (CollectErrorSamplesOnTableParameters)super.clone();
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);

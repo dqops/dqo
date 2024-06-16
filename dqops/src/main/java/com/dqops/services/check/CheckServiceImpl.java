@@ -28,7 +28,7 @@ import com.dqops.execution.checks.jobs.RunChecksParameters;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
 import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJob;
-import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJobParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesParameters;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.id.HierarchyId;
@@ -135,7 +135,7 @@ public class CheckServiceImpl implements CheckService {
                                                             boolean dummyRun,
                                                             DqoUserPrincipal principal) {
         CollectErrorSamplesQueueJob runChecksJob = this.dqoQueueJobFactory.createCollectErrorSamplesJob();
-        CollectErrorSamplesQueueJobParameters parameters = new CollectErrorSamplesQueueJobParameters(
+        CollectErrorSamplesParameters parameters = new CollectErrorSamplesParameters(
                 checkSearchFilters, timeWindowFilterParameters, errorSamplesDataScope, errorSamplerProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 

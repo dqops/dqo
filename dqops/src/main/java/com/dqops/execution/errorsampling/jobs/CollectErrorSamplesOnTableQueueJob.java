@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 public class CollectErrorSamplesOnTableQueueJob extends DqoQueueJob<ErrorSamplerExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
     private ErrorSamplerExecutionService errorSamplerExecutionService;
-    private CollectErrorSamplesOnTableQueueJobParameters parameters;
+    private CollectErrorSamplesOnTableParameters parameters;
 
     @Autowired
     public CollectErrorSamplesOnTableQueueJob(
@@ -55,7 +55,7 @@ public class CollectErrorSamplesOnTableQueueJob extends DqoQueueJob<ErrorSampler
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public CollectErrorSamplesOnTableQueueJobParameters getParameters() {
+    public CollectErrorSamplesOnTableParameters getParameters() {
         return parameters;
     }
 
@@ -63,7 +63,7 @@ public class CollectErrorSamplesOnTableQueueJob extends DqoQueueJob<ErrorSampler
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(CollectErrorSamplesOnTableQueueJobParameters parameters) {
+    public void setParameters(CollectErrorSamplesOnTableParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -101,8 +101,8 @@ public class CollectErrorSamplesOnTableQueueJob extends DqoQueueJob<ErrorSampler
         }
 
         ErrorSamplerResult errorSamplerResult =
-                ErrorSamplerResult.fromStatisticsExecutionSummary(errorSamplerExecutionSummary);
-        CollectErrorSamplesOnTableQueueJobParameters clonedParameters = this.getParameters().clone();
+                ErrorSamplerResult.fromErrorSamplerExecutionSummary(errorSamplerExecutionSummary);
+        CollectErrorSamplesOnTableParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setErrorSamplerResult(errorSamplerResult);
         setParameters(clonedParameters);
 

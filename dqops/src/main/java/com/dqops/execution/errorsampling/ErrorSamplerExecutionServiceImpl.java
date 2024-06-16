@@ -20,7 +20,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableQueueJob;
-import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableQueueJobParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableParameters;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
 import com.dqops.execution.errorsampling.progress.ErrorSamplersExecutionFinishedEvent;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -105,7 +105,7 @@ public class ErrorSamplerExecutionServiceImpl implements ErrorSamplerExecutionSe
             for (TableWrapper targetTable : targetTables) {
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 
-                CollectErrorSamplesOnTableQueueJobParameters runErrorSamplersOnTableQueueJobParameters = new CollectErrorSamplesOnTableQueueJobParameters() {{
+                CollectErrorSamplesOnTableParameters runErrorSamplersOnTableQueueJobParameters = new CollectErrorSamplesOnTableParameters() {{
                     setConnection(connectionWrapper.getName());
                     setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelJobsLimit());
                     setTable(targetTable.getPhysicalTableName());

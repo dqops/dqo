@@ -29,12 +29,12 @@ import lombok.EqualsAndHashCode;
  * and optionally can also contain the result of collecting the error samples if the operation was started with wait=true parameter to wait for the "collect error samples" job to finish.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "CollectErrorSamplesQueueJobResult", description = "Object returned from the operation that queues a \"collect error samples\" job. " +
+@ApiModel(value = "CollectErrorSamplesResult", description = "Object returned from the operation that queues a \"collect error samples\" job. " +
         "The result contains the job id that was started and optionally can also contain the result of collecting the error samples  " +
         "if the operation was started with wait=true parameter to wait for the \"collect error samples\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class CollectErrorSamplesQueueJobResult {
+public class CollectErrorSamplesResult {
     /**
      * Job id that identifies a job that was started on the DQOps job queue.
      */
@@ -58,7 +58,7 @@ public class CollectErrorSamplesQueueJobResult {
     private DqoJobStatus status = DqoJobStatus.queued;
 
 
-    public CollectErrorSamplesQueueJobResult() {
+    public CollectErrorSamplesResult() {
     }
 
     /**
@@ -67,7 +67,7 @@ public class CollectErrorSamplesQueueJobResult {
      * @param result Job result.
      * @param status Job status.
      */
-    public CollectErrorSamplesQueueJobResult(DqoQueueJobId jobId, ErrorSamplerResult result, DqoJobStatus status) {
+    public CollectErrorSamplesResult(DqoQueueJobId jobId, ErrorSamplerResult result, DqoJobStatus status) {
         this.jobId = jobId;
         this.result = result;
         this.status = status;
@@ -77,14 +77,14 @@ public class CollectErrorSamplesQueueJobResult {
      * Creates a new model given all parameters.
      * @param jobId Job id.
      */
-    public CollectErrorSamplesQueueJobResult(DqoQueueJobId jobId) {
+    public CollectErrorSamplesResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
     }
 
-    public static class CollectErrorSamplesQueueJobResultSampleFactory implements SampleValueFactory<CollectErrorSamplesQueueJobResult> {
+    public static class CollectErrorSamplesQueueJobResultSampleFactory implements SampleValueFactory<CollectErrorSamplesResult> {
         @Override
-        public CollectErrorSamplesQueueJobResult createSample() {
-            return new CollectErrorSamplesQueueJobResult() {{
+        public CollectErrorSamplesResult createSample() {
+            return new CollectErrorSamplesResult() {{
                 setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
                 setStatus(DqoJobStatus.finished);
                 setResult(new ErrorSamplerResult() {{

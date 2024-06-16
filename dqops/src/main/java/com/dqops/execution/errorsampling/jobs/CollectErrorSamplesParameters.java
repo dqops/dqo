@@ -26,15 +26,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
 /**
  * Parameters object for the run the error samples collection job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel(value = "CollectErrorSamplesParameters", description = "Collect error samples job parameters, specifies the target checks that should be executed to collect error samples and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CollectErrorSamplesQueueJobParameters implements Cloneable {
+public class CollectErrorSamplesParameters implements Cloneable {
     /**
      * Check search filters that identify the checks for which the error samples should be collected.
      */
@@ -72,7 +74,7 @@ public class CollectErrorSamplesQueueJobParameters implements Cloneable {
     @JsonPropertyDescription("The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.")
     private ErrorSamplerResult errorSamplerResult;
 
-    public CollectErrorSamplesQueueJobParameters() {
+    public CollectErrorSamplesParameters() {
     }
 
     /**
@@ -83,11 +85,11 @@ public class CollectErrorSamplesQueueJobParameters implements Cloneable {
      * @param dataScope Error samples data scope to analyze - the whole table or each data grouping separately.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
-    public CollectErrorSamplesQueueJobParameters(CheckSearchFilters checkSearchFilters,
-                                                 TimeWindowFilterParameters timeWindowFilter,
-                                                 ErrorSamplesDataScope dataScope,
-                                                 ErrorSamplerExecutionProgressListener progressListener,
-                                                 boolean dummySensorExecution) {
+    public CollectErrorSamplesParameters(CheckSearchFilters checkSearchFilters,
+                                         TimeWindowFilterParameters timeWindowFilter,
+                                         ErrorSamplesDataScope dataScope,
+                                         ErrorSamplerExecutionProgressListener progressListener,
+                                         boolean dummySensorExecution) {
         this.checkSearchFilters = checkSearchFilters;
         this.timeWindowFilter = timeWindowFilter;
         this.dataScope = dataScope;
@@ -117,6 +119,14 @@ public class CollectErrorSamplesQueueJobParameters implements Cloneable {
      */
     public ErrorSamplerExecutionProgressListener getProgressListener() {
         return progressListener;
+    }
+
+    /**
+     * Sets an instance of a progress listener.
+     * @param progressListener New progress listener.
+     */
+    public void setProgressListener(ErrorSamplerExecutionProgressListener progressListener) {
+        this.progressListener = progressListener;
     }
 
     /**
@@ -155,9 +165,9 @@ public class CollectErrorSamplesQueueJobParameters implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public CollectErrorSamplesQueueJobParameters clone() {
+    public CollectErrorSamplesParameters clone() {
         try {
-            return (CollectErrorSamplesQueueJobParameters)super.clone();
+            return (CollectErrorSamplesParameters)super.clone();
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);

@@ -14651,6 +14651,70 @@
         }
       }
     },
+    "/api/jobs/collecterrorsamples" : {
+      "post" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "collectErrorSamples",
+        "description" : "Starts a new background job that will run selected data quality checks to collect their error samples",
+        "operationId" : "collectErrorSamples",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Data quality check run configuration (target checks and an optional time range)",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CollectErrorSamplesParameters"
+          }
+        }, {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "wait",
+          "in" : "query",
+          "description" : "Wait until the error sampling finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "waitTimeout",
+          "in" : "query",
+          "description" : "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/CollectErrorSamplesResult"
+            }
+          },
+          "201" : {
+            "description" : "New job that will collect error samples for data quality checks was added to the queue",
+            "schema" : {
+              "$ref" : "#/definitions/CollectErrorSamplesResult"
+            }
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/jobs/collectstatistics/table" : {
       "post" : {
         "tags" : [ "Jobs" ],
@@ -17953,7 +18017,7 @@
         }
       }
     },
-    "CollectErrorSamplesOnTableQueueJobParameters" : {
+    "CollectErrorSamplesOnTableParameters" : {
       "type" : "object",
       "properties" : {
         "connection" : {
@@ -17992,7 +18056,7 @@
         }
       }
     },
-    "CollectErrorSamplesQueueJobParameters" : {
+    "CollectErrorSamplesParameters" : {
       "type" : "object",
       "properties" : {
         "check_search_filters" : {
@@ -18016,7 +18080,27 @@
           "description" : "The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.",
           "$ref" : "#/definitions/ErrorSamplerResult"
         }
-      }
+      },
+      "description" : "Collect error samples job parameters, specifies the target checks that should be executed to collect error samples and an optional time window."
+    },
+    "CollectErrorSamplesResult" : {
+      "type" : "object",
+      "properties" : {
+        "jobId" : {
+          "description" : "Job id that identifies a job that was started on the DQOps job queue.",
+          "$ref" : "#/definitions/DqoQueueJobId"
+        },
+        "result" : {
+          "description" : "Optional result object that is returned only when the wait parameter was true and the \"collect error samples\" job has finished. Contains the summary result of collecting error samples, including the number of error samplers that were executed, and the number of error samples collected. ",
+          "$ref" : "#/definitions/ErrorSamplerResult"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Job status",
+          "enum" : [ "queued", "running", "waiting", "finished", "failed", "cancel_requested", "cancelled" ]
+        }
+      },
+      "description" : "Object returned from the operation that queues a \"collect error samples\" job. The result contains the job id that was started and optionally can also contain the result of collecting the error samples  if the operation was started with wait=true parameter to wait for the \"collect error samples\" job to finish."
     },
     "CollectStatisticsOnTableQueueJobParameters" : {
       "type" : "object",
@@ -33107,11 +33191,11 @@
         },
         "collectErrorSamplesParameters" : {
           "description" : "The job parameters for the \"collect error samples\" queue job.",
-          "$ref" : "#/definitions/CollectErrorSamplesQueueJobParameters"
+          "$ref" : "#/definitions/CollectErrorSamplesParameters"
         },
         "collectErrorSamplesOnTableParameters" : {
           "description" : "The job parameters for the \"collect error samples on table\" queue job.",
-          "$ref" : "#/definitions/CollectErrorSamplesOnTableQueueJobParameters"
+          "$ref" : "#/definitions/CollectErrorSamplesOnTableParameters"
         },
         "importSchemaParameters" : {
           "description" : "The job parameters for the \"collect schema\" queue job.",

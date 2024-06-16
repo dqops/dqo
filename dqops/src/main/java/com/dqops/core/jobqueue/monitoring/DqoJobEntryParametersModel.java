@@ -23,8 +23,8 @@ import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
 import com.dqops.execution.checks.jobs.RunChecksOnTableParameters;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
-import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableQueueJobParameters;
-import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJobParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
@@ -84,13 +84,13 @@ public class DqoJobEntryParametersModel {
      * The job parameters for the "collect error samples" queue job.
      */
     @JsonPropertyDescription("The job parameters for the \"collect error samples\" queue job.")
-    private CollectErrorSamplesQueueJobParameters collectErrorSamplesParameters;
+    private CollectErrorSamplesParameters collectErrorSamplesParameters;
 
     /**
      * The job parameters for the "collect error samples on table" queue job.
      */
     @JsonPropertyDescription("The job parameters for the \"collect error samples on table\" queue job.")
-    private CollectErrorSamplesOnTableQueueJobParameters collectErrorSamplesOnTableParameters;
+    private CollectErrorSamplesOnTableParameters collectErrorSamplesOnTableParameters;
 
     /**
      * The job parameters for the "collect schema" queue job.
