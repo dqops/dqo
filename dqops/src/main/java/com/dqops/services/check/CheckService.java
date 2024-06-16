@@ -16,8 +16,11 @@
 package com.dqops.services.check;
 
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
+import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
@@ -44,6 +47,25 @@ public interface CheckService {
                                     CheckExecutionProgressListener checkExecutionProgressListener,
                                     boolean dummyRun,
                                     DqoUserPrincipal principal);
+
+    /**
+     * Runs error samplers for the data quality checks identified by a check search filter.
+     *
+     * @param checkSearchFilters             Check search filters.
+     * @param timeWindowFilterParameters     Optional user provided time window parameters, limits the time period that is analyzed.
+     * @param errorSamplesDataScope          Error sampling scope (whole table, or per data grouping).
+     * @param errorSamplerProgressListener   Progress listener that will report the progress.
+     * @param errorSamplesDataScope          Error sampling scope (whole table, or per data grouping).
+     * @param dummyRun                       Run the sensors in a dummy mode (sensors are not executed).
+     * @param principal                      Principal that will be used to run the job.
+     * @return Error sampler execution summary.
+     */
+    ErrorSamplerExecutionSummary collectErrorSamples(CheckSearchFilters checkSearchFilters,
+                                                     TimeWindowFilterParameters timeWindowFilterParameters,
+                                                     ErrorSamplesDataScope errorSamplesDataScope,
+                                                     ErrorSamplerExecutionProgressListener errorSamplerProgressListener,
+                                                     boolean dummyRun,
+                                                     DqoUserPrincipal principal);
 
     /**
      * Deletes existing checks matching the provided filters.

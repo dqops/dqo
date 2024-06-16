@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.cli.commands.check;
+package com.dqops.cli.commands.collect;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
+import com.dqops.cli.commands.check.CheckRunCommandFailThreshold;
 import com.dqops.cli.commands.check.impl.CheckCliService;
 import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.*;
@@ -28,11 +29,16 @@ import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalTableWritter;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionErrorSummary;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
+import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListenerProvider;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionReportingMode;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.serialization.JsonSerializer;
@@ -45,21 +51,22 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "check run" 2nd level CLI command that executes data quality checks.
+ * "collect errorsamples" 2nd level CLI command that executes data quality checks in an error sampling mode to collect error samples.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
-public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
+@CommandLine.Command(name = "errorsamples", header = "Run data quality checks that match a given condition and collects error samples",
+        description = "Run data quality checks on your dataset that match a given condition and capture their error samples. The command output is a table with the results that provides insight into the list of invalid values.")
+public class CollectErrorSamplesCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalFactory terminalFactory;
     private TerminalTableWritter terminalTableWritter;
     private CheckCliService checkService;
-    private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
+    private ErrorSamplerExecutionProgressListenerProvider errorSamplerExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
     private FileWriter fileWriter;
 
-    public CheckRunCliCommand() {
+    public CollectErrorSamplesCliCommand() {
     }
 
     /**
@@ -68,17 +75,17 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalFactory terminalFactory,
-                              TerminalTableWritter terminalTableWritter,
-                              CheckCliService checkService,
-                              CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
-                              JsonSerializer jsonSerializer,
-                              OutputFormatService outputFormatService,
-                              FileWriter fileWriter) {
+    public CollectErrorSamplesCliCommand(TerminalFactory terminalFactory,
+                                         TerminalTableWritter terminalTableWritter,
+                                         CheckCliService checkService,
+                                         ErrorSamplerExecutionProgressListenerProvider errorSamplerExecutionProgressListenerProvider,
+                                         JsonSerializer jsonSerializer,
+                                         OutputFormatService outputFormatService,
+                                         FileWriter fileWriter) {
         this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
-        this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
+        this.errorSamplerExecutionProgressListenerProvider = errorSamplerExecutionProgressListenerProvider;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
         this.fileWriter = fileWriter;
@@ -107,6 +114,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")
     private Boolean enabled = true;
 
+    @CommandLine.Option(names = {"-sc", "--scope"}, description = "Error sampling scope that is used for tables with data grouping. Error samples can be collected for the whole table, or for each data grouping. By default, collects error samples for a whole table.", defaultValue = "table")
+    private ErrorSamplesDataScope scope = ErrorSamplesDataScope.table;
+
     @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, monitoring, partitioned)")
     private CheckType checkType;
 
@@ -122,8 +132,8 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
     private boolean failOnExecutionErrors = true;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
-    private CheckRunReportingMode mode = CheckRunReportingMode.summary;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent)", defaultValue = "silent")
+    private ErrorSamplerExecutionReportingMode mode = ErrorSamplerExecutionReportingMode.silent;
 
     @CommandLine.Option(names = {"-tag", "--data-grouping-level-tag"}, description = "Data grouping hierarchy level filter (tag)",
             required = false)
@@ -131,9 +141,6 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
     private String[] labels;
-
-    @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
-    private CheckRunCommandFailThreshold failAt = CheckRunCommandFailThreshold.warning;
 
     @CommandLine.Mixin
     private TimeWindowFilterParameters timeWindowFilterParameters;
@@ -334,7 +341,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * Gets the progress reporting mode.
      * @return Progress reporting mode.
      */
-    public CheckRunReportingMode getMode() {
+    public ErrorSamplerExecutionReportingMode getMode() {
         return mode;
     }
 
@@ -342,7 +349,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * Sets the progress reporting mode.
      * @param mode Progress reporting mode.
      */
-    public void setMode(CheckRunReportingMode mode) {
+    public void setMode(ErrorSamplerExecutionReportingMode mode) {
         this.mode = mode;
     }
 
@@ -383,17 +390,18 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setTags(this.tags);
         filters.setLabels(this.labels);
 
-        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
+        ErrorSamplerExecutionProgressListener progressListener = this.errorSamplerExecutionProgressListenerProvider.getProgressListener(this.mode, false);
+        ErrorSamplerExecutionSummary errorSamplerExecutionSummary = this.checkService.collectErrorSamples(filters, this.timeWindowFilterParameters,
+                this.scope, progressListener, this.dummyRun);
 
-        if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
-            this.terminalFactory.getWriter().writeLine("No checks with these filters were found.");
+        if (errorSamplerExecutionSummary.getTotalCollectorsExecuted() == 0) {
+            this.terminalFactory.getWriter().writeLine("No checks with these filters were found, or target checks did not have an error sampler.");
             return 0;
         }
 
-        if (this.mode != CheckRunReportingMode.silent) {
-            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
-			this.terminalFactory.getWriter().writeLine("Check evaluation summary per table:");
+        if (this.mode != ErrorSamplerExecutionReportingMode.silent) {
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(errorSamplerExecutionSummary.getSummaryTable());
+			this.terminalFactory.getWriter().writeLine("Error sampler summary per table:");
             switch(this.getOutputFormat()) {
                 case CSV: {
                     String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
@@ -432,48 +440,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                     break;
                 }
             }
-
-            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
-            if (checkExecutionErrorSummary != null) {
-                if (this.mode == CheckRunReportingMode.debug) {
-                    this.terminalFactory.getWriter().writeLine(checkExecutionErrorSummary.getDebugMessage());
-                } else {
-                    this.terminalFactory.getWriter().writeLine(checkExecutionErrorSummary.getSummaryMessage());
-                }
-            }
         }
 
-        int executionErrorsCount = checkExecutionSummary.getTotalExecutionErrorsCount();
+        int executionErrorsCount = (int)errorSamplerExecutionSummary.getErrorSamplersFailedColumn().sum();
         if (this.failOnExecutionErrors && executionErrorsCount > 0) {
             return 4;
         }
 
-        int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();
-        int errorIssuesCount = checkExecutionSummary.getErrorSeverityIssuesCount();
-        int warningIssuesCount = checkExecutionSummary.getWarningSeverityIssuesCount();
-
-        CheckRunCommandFailThreshold checkRunCommandFailThreshold = this.failAt != null ? this.failAt : CheckRunCommandFailThreshold.error;
-        switch (checkRunCommandFailThreshold) {
-            case warning:
-                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 1) && warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
-                    return 1;
-                }
-                // move to the next level...
-
-            case error:
-                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 2) && errorIssuesCount > 0 && fatalIssuesCount == 0) {
-                    return 2;
-                }
-                // move to the next level...
-
-            case fatal:
-                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 3) && fatalIssuesCount > 0) {
-                    return 3;
-                }
-                // move to the next level...
-
-            default:
-                return 0;
-        }
+        return 0;
     }
 }

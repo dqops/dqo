@@ -85,13 +85,13 @@ public class CollectErrorSamplesQueueJobParameters implements Cloneable {
      */
     public CollectErrorSamplesQueueJobParameters(CheckSearchFilters checkSearchFilters,
                                                  TimeWindowFilterParameters timeWindowFilter,
-                                                 ErrorSamplerExecutionProgressListener progressListener,
                                                  ErrorSamplesDataScope dataScope,
+                                                 ErrorSamplerExecutionProgressListener progressListener,
                                                  boolean dummySensorExecution) {
         this.checkSearchFilters = checkSearchFilters;
         this.timeWindowFilter = timeWindowFilter;
-        this.progressListener = progressListener;
         this.dataScope = dataScope;
+        this.progressListener = progressListener;
         this.dummySensorExecution = dummySensorExecution;
     }
 

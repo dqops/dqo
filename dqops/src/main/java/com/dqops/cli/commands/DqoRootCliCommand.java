@@ -17,6 +17,7 @@ package com.dqops.cli.commands;
 
 import com.dqops.cli.commands.check.CheckCliCommand;
 import com.dqops.cli.commands.cloud.CloudCliCommand;
+import com.dqops.cli.commands.collect.CollectCliCommand;
 import com.dqops.cli.commands.column.ColumnCliCommand;
 import com.dqops.cli.commands.connection.ConnectionCliCommand;
 import com.dqops.cli.commands.data.DataCliCommand;
@@ -60,6 +61,7 @@ import java.util.List;
             ConnectionCliCommand.class,
             TableCliCommand.class,
             CheckCliCommand.class,
+            CollectCliCommand.class,
             ColumnCliCommand.class,
             SettingsCliCommand.class,
             CloudCliCommand.class,
