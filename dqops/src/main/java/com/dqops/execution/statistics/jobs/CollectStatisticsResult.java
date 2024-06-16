@@ -42,12 +42,6 @@ public class CollectStatisticsResult {
     private int executedStatisticsCollectors;
 
     /**
-     * The count of executed statistics collectors.
-     */
-    @JsonPropertyDescription("The count of executed statistics collectors.")
-    private int totalCollectorsExecuted;
-
-    /**
      * The count of columns for which DQOps executed a collector and tried to read the statistics.
      */
     @JsonPropertyDescription("The count of columns for which DQOps executed a collector and tried to read the statistics.")

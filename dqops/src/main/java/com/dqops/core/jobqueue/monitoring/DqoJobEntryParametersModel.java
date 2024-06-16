@@ -23,10 +23,13 @@ import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
 import com.dqops.execution.checks.jobs.RunChecksOnTableParameters;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableQueueJobParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJobParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
 
 /**
@@ -35,15 +38,81 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class DqoJobEntryParametersModel {
+    /**
+     * The job parameters for the "synchronize folder" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"synchronize folder\" queue job.")
     private SynchronizeRootFolderDqoQueueJobParameters synchronizeRootFolderParameters;
+
+    /**
+     * The job parameters for the "synchronize multiple folders" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"synchronize multiple folders\" queue job.")
     private SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeMultipleFoldersParameters;
+
+    /**
+     * The job parameters for the "run scheduled checks cron" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"run scheduled checks cron\" queue job.")
     private MonitoringScheduleSpec runScheduledChecksParameters;
+
+    /**
+     * The job parameters for the "run checks" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"run checks\" queue job.")
     private RunChecksParameters runChecksParameters;
+
+    /**
+     * The job parameters for the "run checks on table" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"run checks on table\" queue job.")
     private RunChecksOnTableParameters runChecksOnTableParameters;
+
+    /**
+     * The job parameters for the "collect statistics" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect statistics\" queue job.")
     private CollectStatisticsQueueJobParameters collectStatisticsParameters;
+
+    /**
+     * The job parameters for the "collect statistics on table" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect statistics on table\" queue job.")
     private CollectStatisticsOnTableQueueJobParameters collectStatisticsOnTableParameters;
+
+    /**
+     * The job parameters for the "collect error samples" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect error samples\" queue job.")
+    private CollectErrorSamplesQueueJobParameters collectErrorSamplesParameters;
+
+    /**
+     * The job parameters for the "collect error samples on table" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect error samples on table\" queue job.")
+    private CollectErrorSamplesOnTableQueueJobParameters collectErrorSamplesOnTableParameters;
+
+    /**
+     * The job parameters for the "collect schema" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect schema\" queue job.")
     private ImportSchemaQueueJobParameters importSchemaParameters;
+
+    /**
+     * The job parameters for the "collect tables" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"collect tables\" queue job.")
     private ImportTablesQueueJobParameters importTableParameters;
+
+    /**
+     * The job parameters for the "delete stored data" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"delete stored data\" queue job.")
     private DeleteStoredDataQueueJobParameters deleteStoredDataParameters;
+
+    /**
+     * The job parameters for the "repair stored data" queue job.
+     */
+    @JsonPropertyDescription("The job parameters for the \"repair stored data\" queue job.")
     private RepairStoredDataQueueJobParameters repairStoredDataParameters;
 }

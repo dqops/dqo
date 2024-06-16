@@ -17953,6 +17953,71 @@
         }
       }
     },
+    "CollectErrorSamplesOnTableQueueJobParameters" : {
+      "type" : "object",
+      "properties" : {
+        "connection" : {
+          "type" : "string",
+          "description" : "The name of the target connection."
+        },
+        "max_jobs_per_connection" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum number of concurrent 'collect error samples on table' jobs that can be run on this connection. Limits the number of concurrent jobs."
+        },
+        "table" : {
+          "description" : "The full physical name (schema.table) of the target table.",
+          "$ref" : "#/definitions/PhysicalTableName"
+        },
+        "check_search_filters" : {
+          "description" : "Check search filters that identify data quality checks for which the error samples are collected.",
+          "$ref" : "#/definitions/CheckSearchFilters"
+        },
+        "time_window_filter" : {
+          "description" : "Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.",
+          "$ref" : "#/definitions/TimeWindowFilterParameters"
+        },
+        "data_scope" : {
+          "type" : "string",
+          "description" : "The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.",
+          "enum" : [ "table", "data_group" ]
+        },
+        "dummy_sensor_execution" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files)."
+        },
+        "error_sampler_result" : {
+          "description" : "The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.",
+          "$ref" : "#/definitions/ErrorSamplerResult"
+        }
+      }
+    },
+    "CollectErrorSamplesQueueJobParameters" : {
+      "type" : "object",
+      "properties" : {
+        "check_search_filters" : {
+          "description" : "Check search filters that identify the checks for which the error samples should be collected.",
+          "$ref" : "#/definitions/CheckSearchFilters"
+        },
+        "time_window_filter" : {
+          "description" : "Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.",
+          "$ref" : "#/definitions/TimeWindowFilterParameters"
+        },
+        "data_scope" : {
+          "type" : "string",
+          "description" : "The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.",
+          "enum" : [ "table", "data_group" ]
+        },
+        "dummy_sensor_execution" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files)."
+        },
+        "error_sampler_result" : {
+          "description" : "The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.",
+          "$ref" : "#/definitions/ErrorSamplerResult"
+        }
+      }
+    },
     "CollectStatisticsOnTableQueueJobParameters" : {
       "type" : "object",
       "properties" : {
@@ -18036,11 +18101,6 @@
           "type" : "integer",
           "format" : "int32",
           "description" : "The total count of all executed statistics collectors."
-        },
-        "total_collectors_executed" : {
-          "type" : "integer",
-          "format" : "int32",
-          "description" : "The count of executed statistics collectors."
         },
         "columns_analyzed" : {
           "type" : "integer",
@@ -33018,36 +33078,55 @@
       "type" : "object",
       "properties" : {
         "synchronizeRootFolderParameters" : {
+          "description" : "The job parameters for the \"synchronize folder\" queue job.",
           "$ref" : "#/definitions/SynchronizeRootFolderDqoQueueJobParameters"
         },
         "synchronizeMultipleFoldersParameters" : {
+          "description" : "The job parameters for the \"synchronize multiple folders\" queue job.",
           "$ref" : "#/definitions/SynchronizeMultipleFoldersDqoQueueJobParameters"
         },
         "runScheduledChecksParameters" : {
+          "description" : "The job parameters for the \"run scheduled checks cron\" queue job.",
           "$ref" : "#/definitions/MonitoringScheduleSpec"
         },
         "runChecksParameters" : {
+          "description" : "The job parameters for the \"run checks\" queue job.",
           "$ref" : "#/definitions/RunChecksParameters"
         },
         "runChecksOnTableParameters" : {
+          "description" : "The job parameters for the \"run checks on table\" queue job.",
           "$ref" : "#/definitions/RunChecksOnTableParameters"
         },
         "collectStatisticsParameters" : {
+          "description" : "The job parameters for the \"collect statistics\" queue job.",
           "$ref" : "#/definitions/CollectStatisticsQueueJobParameters"
         },
         "collectStatisticsOnTableParameters" : {
+          "description" : "The job parameters for the \"collect statistics on table\" queue job.",
           "$ref" : "#/definitions/CollectStatisticsOnTableQueueJobParameters"
         },
+        "collectErrorSamplesParameters" : {
+          "description" : "The job parameters for the \"collect error samples\" queue job.",
+          "$ref" : "#/definitions/CollectErrorSamplesQueueJobParameters"
+        },
+        "collectErrorSamplesOnTableParameters" : {
+          "description" : "The job parameters for the \"collect error samples on table\" queue job.",
+          "$ref" : "#/definitions/CollectErrorSamplesOnTableQueueJobParameters"
+        },
         "importSchemaParameters" : {
+          "description" : "The job parameters for the \"collect schema\" queue job.",
           "$ref" : "#/definitions/ImportSchemaQueueJobParameters"
         },
         "importTableParameters" : {
+          "description" : "The job parameters for the \"collect tables\" queue job.",
           "$ref" : "#/definitions/ImportTablesQueueJobParameters"
         },
         "deleteStoredDataParameters" : {
+          "description" : "The job parameters for the \"delete stored data\" queue job.",
           "$ref" : "#/definitions/DeleteStoredDataQueueJobParameters"
         },
         "repairStoredDataParameters" : {
+          "description" : "The job parameters for the \"repair stored data\" queue job.",
           "$ref" : "#/definitions/RepairStoredDataQueueJobParameters"
         }
       }
@@ -33060,7 +33139,7 @@
         },
         "jobType" : {
           "type" : "string",
-          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
+          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
         },
         "parameters" : {
           "$ref" : "#/definitions/DqoJobEntryParametersModel"
@@ -33515,6 +33594,37 @@
           "description" : "Table comparison name"
         }
       }
+    },
+    "ErrorSamplerResult" : {
+      "type" : "object",
+      "properties" : {
+        "executed_error_samplers" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. "
+        },
+        "columns_analyzed" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The count of columns for which DQOps executed an error sampler and tried to collect error samples."
+        },
+        "columns_successfully_analyzed" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The count of columns for which DQOps managed to obtain error samples."
+        },
+        "total_error_samplers_failed" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The count of error samplers that failed to execute."
+        },
+        "total_error_samples_collected" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The total number of error samples (values) that were collected."
+        }
+      },
+      "description" : "Returns the result with the summary of the error samples collected."
     },
     "ErrorsListModel" : {
       "type" : "object",

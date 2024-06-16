@@ -195,7 +195,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                         sensorExecutionResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor
                 }
-                executionStatistics.incrementCollectorsResultsCount(sensorExecutionResult.getResultTable() != null ?
+                executionStatistics.incrementCollectedErrorSamplesCount(sensorExecutionResult.getResultTable() != null ?
                         sensorExecutionResult.getResultTable().rowCount() : 0);
 
                 ErrorSamplesNormalizedResult normalizedStatisticsResults = this.errorSamplesNormalizationService.normalizeResults(
@@ -221,8 +221,8 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                 .filter(cnt -> cnt > 0)
                 .count();
 
-        executionStatistics.incrementProfiledColumnsCount(profiledColumns);
-        executionStatistics.incrementProfiledColumnSuccessfullyCount((int)profiledColumnsSuccessfully);
+        executionStatistics.incrementAnalyzedColumnsCount(profiledColumns);
+        executionStatistics.incrementAnalyzedColumnSuccessfullyCount((int)profiledColumnsSuccessfully);
 
         progressListener.onTableErrorSamplesFinished(new ExecuteErrorSamplerOnTableFinishedEvent(
                 connectionWrapper, tableSpec, checks, executionStatistics));
@@ -265,7 +265,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                 if (sensorRunParameters == null) {
                     continue; // the collector does not support that target
                 }
-                executionStatistics.incrementCollectorsExecutedCount(1);
+                executionStatistics.incrementErrorSamplersExecutedCount(1);
 
                 jobCancellationToken.throwIfCancelled();
                 progressListener.onPreparingSensor(new PreparingSensorEvent(sensorRunParameters.getTable(), sensorRunParameters));
@@ -276,7 +276,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                                 ((sensorPrepareResult.getPrepareException() != null) ? sensorPrepareResult.getPrepareException().getMessage() : ""),
                                 sensorPrepareResult.getPrepareException());
 
-                    executionStatistics.incrementCollectorsFailedCount(sensorPrepareResult.getPrepareException());
+                    executionStatistics.incrementErrorSamplersFailedCount(sensorPrepareResult.getPrepareException());
                     SensorExecutionResult sensorExecutionResultFailedPrepare = new SensorExecutionResult(sensorRunParameters, sensorPrepareResult.getPrepareException());
                     progressListener.onSensorFailed(new SensorFailedEvent(sensorRunParameters.getTable(), sensorRunParameters,
                             sensorExecutionResultFailedPrepare, sensorPrepareResult.getPrepareException()));
@@ -346,14 +346,14 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                                                     ((sensorExecuteResult.getException() != null) ? sensorExecuteResult.getException().getMessage() : ""),
                                             sensorExecuteResult.getException());
 
-                            executionStatistics.incrementCollectorsFailedCount(sensorExecuteResult.getException());
+                            executionStatistics.incrementErrorSamplersFailedCount(sensorExecuteResult.getException());
                             progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters,
                                     sensorExecuteResult, sensorExecuteResult.getException()));
                             continue;
                         }
 
                         progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorExecuteResult));
-                        executionStatistics.incrementCollectorsResultsCount(sensorExecuteResult.getResultTable().rowCount());
+                        executionStatistics.incrementCollectedErrorSamplesCount(sensorExecuteResult.getResultTable().rowCount());
                         sensorExecuteResults.add(sensorExecuteResult);
                     }
                 }

@@ -29,18 +29,18 @@ public class ErrorSamplerExecutionSummary {
     private Throwable firstException;
     private final TextColumn connectionColumn;
     private final TextColumn tableColumn;
-    private final IntColumn collectorsExecutedColumn;
-    private final IntColumn collectorsColumnsColumn;
-    private final IntColumn collectorsColumnsSuccessfullyColumn;
-    private final IntColumn collectorsFailedColumn;
-    private final IntColumn collectorsResultsColumn;
+    private final IntColumn errorSamplersExecutedColumn;
+    private final IntColumn errorSampledColumnsColumn;
+    private final IntColumn successfullyErrorSampledColumnsColumn;
+    private final IntColumn errorSamplersFailedColumn;
+    private final IntColumn collectedErrorSamplesCountColumn;
     private final Table summaryTable;
 
     /**
      * Default constructor that creates the output table.
      */
     public ErrorSamplerExecutionSummary() {
-		this.summaryTable = Table.create("Statistics collection execution summary");
+		this.summaryTable = Table.create("Error samples collection execution summary");
 
         this.connectionColumn = TextColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
@@ -48,25 +48,25 @@ public class ErrorSamplerExecutionSummary {
         this.tableColumn = TextColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 
-		this.collectorsExecutedColumn = IntColumn.create("Collectors executed");
-		this.summaryTable.addColumns(collectorsExecutedColumn);
+		this.errorSamplersExecutedColumn = IntColumn.create("Error samplers executed");
+		this.summaryTable.addColumns(errorSamplersExecutedColumn);
 
-        this.collectorsColumnsColumn = IntColumn.create("Columns profiled");
-        this.summaryTable.addColumns(collectorsColumnsColumn);
+        this.errorSampledColumnsColumn = IntColumn.create("Columns analyzed for error samples");
+        this.summaryTable.addColumns(errorSampledColumnsColumn);
 
-        this.collectorsColumnsSuccessfullyColumn = IntColumn.create("Columns profiled successfully");
-        this.summaryTable.addColumns(collectorsColumnsSuccessfullyColumn);
+        this.successfullyErrorSampledColumnsColumn = IntColumn.create("Columns error sampled successfully");
+        this.summaryTable.addColumns(successfullyErrorSampledColumnsColumn);
 
-        this.collectorsFailedColumn = IntColumn.create("Collectors failed count");
-        this.summaryTable.addColumns(collectorsFailedColumn);
+        this.errorSamplersFailedColumn = IntColumn.create("Error samplers failed count");
+        this.summaryTable.addColumns(errorSamplersFailedColumn);
 
-        this.collectorsResultsColumn = IntColumn.create("Collectors results count");
-        this.summaryTable.addColumns(collectorsResultsColumn);
+        this.collectedErrorSamplesCountColumn = IntColumn.create("Collected error samples count");
+        this.summaryTable.addColumns(collectedErrorSamplesCountColumn);
     }
 
     /**
      * Summary table.
-     * @return Check execution summary.
+     * @return Error sampler execution summary as a table.
      */
     public Table getSummaryTable() {
         return summaryTable;
@@ -89,51 +89,51 @@ public class ErrorSamplerExecutionSummary {
     }
 
     /**
-     * Returns the column that contains the total number of table and column level statistics collectors that were evaluated for the given column.
-     * @return Statistics collectors count.
+     * Returns the column that contains the total number of table and column level error samplers that were evaluated for the given column.
+     * @return Error sampler count.
      */
-    public IntColumn getCollectorsExecutedColumn() {
-        return collectorsExecutedColumn;
+    public IntColumn getErrorSamplersExecutedColumn() {
+        return errorSamplersExecutedColumn;
     }
 
     /**
-     * Returns the column that returns the number of columns that were profiled.
-     * @return Column with the number of profiled columns.
+     * Returns the column that returns the number of columns that were analyzed for error samples.
+     * @return Column with the number of error sampled columns.
      */
-    public IntColumn getCollectorsColumnsColumn() {
-        return collectorsColumnsColumn;
+    public IntColumn getErrorSampledColumnsColumn() {
+        return errorSampledColumnsColumn;
     }
 
     /**
-     * Returns a dataset column that contains the number of columns on a table that had at least one collector successfully executed, so the column exists.
-     * @return Number of columns that were analysed with at least one statistics collector.
+     * Returns a dataset column that contains the number of columns on a table that had at least one error sampler successfully executed, so the column exists.
+     * @return Number of columns that were analysed with at least one error sampler.
      */
-    public IntColumn getCollectorsColumnsSuccessfullyColumn() {
-        return collectorsColumnsSuccessfullyColumn;
+    public IntColumn getSuccessfullyErrorSampledColumnsColumn() {
+        return successfullyErrorSampledColumnsColumn;
     }
 
     /**
-     * Returns a column that returns the number of failed statistics collectors that were not able to capture results.
-     * @return Number of failed statistics collectors.
+     * Returns a column that returns the number of failed error samplers that were not able to capture results.
+     * @return Number of failed error samplers.
      */
-    public IntColumn getCollectorsFailedColumn() {
-        return collectorsFailedColumn;
+    public IntColumn getErrorSamplersFailedColumn() {
+        return errorSamplersFailedColumn;
     }
 
     /**
-     * Returns a column that contains the count of results retrieved from statistics collectors. The total count could be higher when statistics collectors are using data streams
-     * and separate statistics are captured for each data stream.
-     * @return Statistics results count column.
+     * Returns a column that contains the count of results retrieved error samples by error samplers. The total count could be higher when error samplers are using data streams
+     * and separate error samples are captured for each data stream.
+     * @return Collected error samples count column.
      */
-    public IntColumn getCollectorsResultsColumn() {
-        return collectorsResultsColumn;
+    public IntColumn getCollectedErrorSamplesCountColumn() {
+        return collectedErrorSamplesCountColumn;
     }
 
     /**
-     * Adds a table statistics collection summary row.
+     * Adds a table error sampling statistics summary row.
      * @param connection Connection wrapper.
      * @param tableSpec Table specification.
-     * @param executionStatistics Collector execution statistics with the counts of collectors executed, statistics results collected count, etc..
+     * @param executionStatistics Error sampler execution statistics with the counts of error samplers executed, error samples results collected count, etc..
      */
     public void reportTableStats(ConnectionWrapper connection,
                                  TableSpec tableSpec,
@@ -141,11 +141,11 @@ public class ErrorSamplerExecutionSummary {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
 		this.tableColumn.set(row.getRowNumber(), tableSpec.getPhysicalTableName().toString());
-		this.collectorsExecutedColumn.set(row.getRowNumber(), executionStatistics.getCollectorsExecutedCount());
-		this.collectorsColumnsColumn.set(row.getRowNumber(), executionStatistics.getProfiledColumnsCount());
-		this.collectorsColumnsSuccessfullyColumn.set(row.getRowNumber(), executionStatistics.getProfiledColumnSuccessfullyCount());
-		this.collectorsFailedColumn.set(row.getRowNumber(), executionStatistics.getCollectorsFailedCount());
-        this.collectorsResultsColumn.set(row.getRowNumber(), executionStatistics.getCollectorsResultsCount());
+		this.errorSamplersExecutedColumn.set(row.getRowNumber(), executionStatistics.getErrorSamplersExecutedCount());
+		this.errorSampledColumnsColumn.set(row.getRowNumber(), executionStatistics.getAnalyzedColumnsCount());
+		this.successfullyErrorSampledColumnsColumn.set(row.getRowNumber(), executionStatistics.getAnalyzedColumnSuccessfullyCount());
+		this.errorSamplersFailedColumn.set(row.getRowNumber(), executionStatistics.getErrorSamplersFailedCount());
+        this.collectedErrorSamplesCountColumn.set(row.getRowNumber(), executionStatistics.getCollectedErrorSamplesCount());
         if (this.firstException == null && executionStatistics.getFirstException() != null) {
             this.firstException = executionStatistics.getFirstException();
         }
@@ -153,7 +153,7 @@ public class ErrorSamplerExecutionSummary {
 
     /**
      * Appends results from another summary. Used to append results from child jobs.
-     * @param otherExecutionSummary Other summary, from a child job (a table level job that collected statistics from a single table).
+     * @param otherExecutionSummary Other summary, from a child job (a table level job that collected error samples from a single table).
      */
     public void append(ErrorSamplerExecutionSummary otherExecutionSummary) {
         this.summaryTable.append(otherExecutionSummary.getSummaryTable());
@@ -163,56 +163,56 @@ public class ErrorSamplerExecutionSummary {
     }
 
     /**
-     * Returns the number of executed collectors.
-     * @return Number of executed collectors.
+     * Returns the number of executed error samplers.
+     * @return Number of executed error samplers.
      */
     public int getTotalCollectorsExecuted() {
-        return (int)this.collectorsExecutedColumn.sum();
+        return (int)this.errorSamplersExecutedColumn.sum();
     }
 
     /**
-     * Returns the count of columns for which DQOps executed a collector and tried to read the statistics.
-     * @return The count of columns for which DQOps executed a collector and tried to read the statistics.
+     * Returns the count of columns for which DQOps executed an error sampler and tried to read the error samples.
+     * @return The count of columns for which DQOps executed an error sampler and tried to read the error samples.
      */
     public int getColumnsAnalyzedCount() {
-        return (int)this.collectorsColumnsColumn.sum();
+        return (int)this.errorSampledColumnsColumn.sum();
     }
 
     /**
-     * Returns the number of columns for which DQOps managed to obtain statistics.
+     * Returns the number of columns for which DQOps managed to obtain error samples.
      * @return Number of columns that were analyzed successfully.
      */
     public int getColumnsSuccessfullyAnalyzed() {
-        return (int)this.collectorsColumnsSuccessfullyColumn.sum();
+        return (int)this.successfullyErrorSampledColumnsColumn.sum();
     }
 
     /**
-     * Returns the count of statistics collectors that failed to execute.
-     * @return The count of statistics collectors that failed to execute.
+     * Returns the count of error samplers that failed to execute.
+     * @return The count of error samplers that failed to execute.
      */
     public int getTotalCollectorsFailed() {
-        return (int)this.collectorsFailedColumn.sum();
+        return (int)this.errorSamplersFailedColumn.sum();
     }
 
     /**
-     * Returns the total number of results that were collected.
-     * @return The total number of results that were collected.
+     * Returns the total number of error samples (values) that were collected.
+     * @return The total number of error samples (values) that were collected.
      */
     public int getTotalCollectedResults() {
-        return (int)this.collectorsResultsColumn.sum();
+        return (int)this.collectedErrorSamplesCountColumn.sum();
     }
 
     /**
-     * Returns the first exception that was thrown when running the statistics collection. It is the exception from the first statistics collector that failed.
-     * @return The exception from the first failed statistics collector or null when no collectors failed.
+     * Returns the first exception that was thrown when running the error samples collection. It is the exception from the first error sampler that failed.
+     * @return The exception from the first failed error sampler collector or null when no collectors failed.
      */
     public Throwable getFirstException() {
         return firstException;
     }
 
     /**
-     * Checks if the whole statistics collection job failed, resulting only in failures.
-     * @return True when the statistics collection failed for all collectors, false when some collectors managed to collect statistics.
+     * Checks if the whole error sampling collection job failed, resulting only in failures.
+     * @return True when the error sampling collection failed for all collectors, false when some error samplers managed to collect error samples.
      */
     public boolean getAllChecksFailed() {
         if (this.getTotalCollectorsExecuted() > 0 &&  // there are some matches to run collects
