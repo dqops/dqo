@@ -108,8 +108,14 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
         try {
             JinjaTemplateRenderParameters templateRenderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
                     executionContext, sensorRunParameters, sensorDefinition);
-            renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
-                    templateRenderParameters, progressListener);
+
+            if (templateRenderParameters.getErrorSampling() != null) {
+                renderedSql = this.jinjaTemplateRenderService.renderErrorSamplingTemplate(executionContext, sensorDefinition,
+                        templateRenderParameters, progressListener);
+            } else {
+                renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
+                        templateRenderParameters, progressListener);
+            }
 
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = sensorDefinition.getProviderSensorDefinitionSpec();
 

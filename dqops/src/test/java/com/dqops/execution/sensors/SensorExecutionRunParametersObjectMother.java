@@ -49,7 +49,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createEmptyBigQuery() {
         return new SensorExecutionRunParameters(BigQueryConnectionSpecObjectMother.create(),
                 null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, 1000, false);
+                null, null, null, null, null, 1000, false, null);
     }
 
     /**

@@ -35896,7 +35896,7 @@
       "properties" : {
         "folder" : {
           "type" : "string",
-          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
+          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_error_samples", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
         },
         "direction" : {
           "type" : "string",

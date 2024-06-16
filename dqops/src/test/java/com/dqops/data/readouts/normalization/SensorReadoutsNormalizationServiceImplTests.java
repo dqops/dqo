@@ -91,7 +91,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,
                 1000,
-                true);
+                true,
+                null);
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
     }
 

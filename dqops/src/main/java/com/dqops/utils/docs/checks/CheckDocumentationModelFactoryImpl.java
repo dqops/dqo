@@ -703,7 +703,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         providerDialectSettings,
                         new CheckSearchFilters(),
                         1000,
-                        true
+                        true,
+                        null
                 );
 
                 JinjaTemplateRenderParametersProvider jinjaTemplateRenderParametersProvider = new JinjaTemplateRenderParametersProviderImpl(null);

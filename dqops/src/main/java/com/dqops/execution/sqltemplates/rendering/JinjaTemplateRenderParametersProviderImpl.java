@@ -61,6 +61,7 @@ public class JinjaTemplateRenderParametersProviderImpl implements JinjaTemplateR
             setActualValueAlias(sensorRunParameters.getActualValueAlias());
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
             setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
+            setErrorSampling(sensorRunParameters.getErrorSamplingRenderParameters());  // when not null, error sampling is used
         }};
 
         DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();

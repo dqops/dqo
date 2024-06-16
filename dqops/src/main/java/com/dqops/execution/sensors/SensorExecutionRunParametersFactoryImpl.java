@@ -19,11 +19,14 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.core.configuration.DqoErrorSamplingConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
+import com.dqops.execution.sqltemplates.rendering.ErrorSamplingRenderParameters;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
@@ -51,18 +54,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionRunParametersFactory {
     private final SecretValueProvider secretValueProvider;
-    private DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties;
+    private final DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties;
+    private final DqoErrorSamplingConfigurationProperties errorSamplingConfigurationProperties;
 
     /**
      * Default injection constructor.
      * @param secretValueProvider Secret value provider to expand environment variables and secrets.
      * @param sensorLimitsConfigurationProperties Sensor limit configuration properties.
+     * @param errorSamplingConfigurationProperties Configuration for error sampling limits.
      */
     @Autowired
     public SensorExecutionRunParametersFactoryImpl(SecretValueProvider secretValueProvider,
-                                                   DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties) {
+                                                   DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties,
+                                                   DqoErrorSamplingConfigurationProperties errorSamplingConfigurationProperties) {
         this.secretValueProvider = secretValueProvider;
         this.sensorLimitsConfigurationProperties = sensorLimitsConfigurationProperties;
+        this.errorSamplingConfigurationProperties = errorSamplingConfigurationProperties;
     }
 
     /**
@@ -142,7 +149,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
                 dataGroupingConfiguration, tableComparisonConfigurationSpec, null, sensorParameters, dialectSettings, exactCheckSearchFilters,
-                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded());
+                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), null);
     }
 
     /**
@@ -197,7 +204,115 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
                 dataGroupingConfigurationSpec, null, null, sensorParameters, dialectSettings, null,
                 this.sensorLimitsConfigurationProperties.getSensorReadoutLimit(),
-                false); // statistics is opportunistic, we do not fail, we just collect something for data groups
+                false,  // statistics is opportunistic, we do not fail, we just collect something for data groups
+                null);
+    }
+
+    /**
+     * Creates a sensor parameters object for an error sample. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     *
+     * @param dqoHome               DQO home.
+     * @param userHome              User home used to look up credentials.
+     * @param connection            Connection specification.
+     * @param table                 Table specification.
+     * @param column                Optional column specification for column sensors.
+     * @param check                 Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     * @param statisticsDataScope   Data scope (whole table or per data stream) for collecting error samples.
+     * @param dialectSettings       Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    @Override
+    public SensorExecutionRunParameters createErrorSamplerSensorParameters(DqoHome dqoHome,
+                                                                           UserHome userHome,
+                                                                           ConnectionSpec connection,
+                                                                           TableSpec table,
+                                                                           ColumnSpec column,
+                                                                           AbstractCheckSpec<?, ?, ?, ?> check,
+                                                                           CheckDefinitionSpec customCheckDefinition,
+                                                                           TimeWindowFilterParameters userTimeWindowFilters,
+                                                                           ErrorSamplesDataScope statisticsDataScope,
+                                                                           ProviderDialectSettings dialectSettings) {
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
+
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider, secretValueLookupContext) : null;
+        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+
+        TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
+        DataGroupingConfigurationSpec dataGroupingConfiguration =
+                statisticsDataScope == ErrorSamplesDataScope.table ? null :
+                        (check.getDataGrouping() != null ? expandedTable.getGroupings().get(check.getDataGrouping()) : expandedTable.getDefaultDataGroupingConfiguration());
+        TimeWindowFilterParameters timeWindowFilterParameters =
+                this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();
+        if (customCheckDefinition != null) {
+            effectiveSensorRuleNames.setSensorName(customCheckDefinition.getSensorName());
+            effectiveSensorRuleNames.setRuleName(customCheckDefinition.getRuleName());
+        } else {
+            effectiveSensorRuleNames.setSensorName(check.getParameters().getSensorDefinitionName());
+            effectiveSensorRuleNames.setRuleName(check.getRuleDefinitionName());
+        }
+
+        if (check instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec) check;
+            if (!Strings.isNullOrEmpty(customCheckSpec.getSensorName())) {
+                effectiveSensorRuleNames.setSensorName(customCheckSpec.getSensorName());
+            }
+            if (!Strings.isNullOrEmpty(customCheckSpec.getRuleName())) {
+                effectiveSensorRuleNames.setRuleName(customCheckSpec.getRuleName());
+            }
+        }
+
+        SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHome.getSensors().getByObjectName(effectiveSensorRuleNames.getSensorName(), true);
+        ProviderSensorDefinitionWrapper userHomeProviderSpecificSensor =
+                userHomeSensorDefinitionWrapper != null ?
+                userHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(connection.getProviderType(), true) : null;
+
+        if (userHomeProviderSpecificSensor == null || Strings.isNullOrEmpty(userHomeProviderSpecificSensor.getErrorSamplingTemplate())) {
+            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHome.getSensors().getByObjectName(effectiveSensorRuleNames.getSensorName(), true);
+            if (dqoHomeSensorDefinitionWrapper == null) {
+                return null;
+            }
+
+            ProviderSensorDefinitionWrapper dqoHomeProviderSpecificSensor = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(connection.getProviderType(), true);
+            if (dqoHomeProviderSpecificSensor == null) {
+                return null; // not supported on this data source (percentile on mysql for example)
+            }
+
+            if (Strings.isNullOrEmpty(dqoHomeProviderSpecificSensor.getErrorSamplingTemplate())) {
+                return null; // no error sampling template
+            }
+        }
+
+        CheckSearchFilters exactCheckSearchFilters = new CheckSearchFilters();
+        exactCheckSearchFilters.setConnection(connection.getConnectionName());
+        exactCheckSearchFilters.setFullTableName(table.getPhysicalTableName().toTableSearchFilter());
+        exactCheckSearchFilters.setColumn(column == null ? null : column.getColumnName());
+        exactCheckSearchFilters.setCheckCategory(check.getCategoryName());
+        exactCheckSearchFilters.setCheckName(check.getCheckName());
+        exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());
+
+        int rowCountLimit = this.sensorLimitsConfigurationProperties.getSensorReadoutLimit();
+        ErrorSamplingRenderParameters errorSamplingRenderParameters = new ErrorSamplingRenderParameters();
+        errorSamplingRenderParameters.setSamplesLimit(this.errorSamplingConfigurationProperties.getSamplesLimit());
+        errorSamplingRenderParameters.setTotalSamplesLimit(this.errorSamplingConfigurationProperties.getTotalSamplesLimit());
+
+        for (ColumnSpec testedColumn : table.getColumns().values()) {
+            if (testedColumn.isId()) {
+                errorSamplingRenderParameters.getIdColumns().add(testedColumn.getColumnName());
+            }
+        }
+
+        CheckType checkType = CheckType.profiling; // no matter what is the real check type, we run them like they were profiling checks
+
+        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
+                check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
+                dataGroupingConfiguration, null, null, sensorParameters, dialectSettings, exactCheckSearchFilters,
+                rowCountLimit, this.sensorLimitsConfigurationProperties.isFailOnSensorReadoutLimitExceeded(), errorSamplingRenderParameters);
     }
 
     /**

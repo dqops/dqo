@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.statistics.factory;
+package com.dqops.data.errorsamples.factory;
 
 /**
- * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_groupings" - groups of rows were profiled.
+ * Enumeration of possible error samples collection scopes. "table" - a whole table is analyzed for error samples, "data_groupings" - error samples are collected for each data grouping.
  */
-public enum StatisticsDataScope {
+public enum ErrorSamplesDataScope {
     /**
-     * The statistics (profile) is analyzed for the whole table.
+     * The error samples are collected for the whole table.
      */
     table,
 
     /**
-     * The statistics (profile) is analyzed for each group of data.
+     * The error samples are collected for each data grouping.
      */
     data_group
 }

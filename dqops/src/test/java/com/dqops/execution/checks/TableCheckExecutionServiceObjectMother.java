@@ -18,9 +18,7 @@ package com.dqops.execution.checks;
 
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
-import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.*;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
@@ -67,8 +65,9 @@ public class TableCheckExecutionServiceObjectMother {
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         SecretValueProvider secretValueProvider = SecretValueProviderObjectMother.getInstance();
         DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties = DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault();
+        DqoErrorSamplingConfigurationProperties errorSamplingConfigurationProperties = DqoErrorSamplingConfigurationPropertiesObjectMother.getDefault();
         SensorExecutionRunParametersFactoryImpl sensorExecutionRunParametersFactory = new SensorExecutionRunParametersFactoryImpl(
-                secretValueProvider, sensorLimitsConfigurationProperties);
+                secretValueProvider, sensorLimitsConfigurationProperties, errorSamplingConfigurationProperties);
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         DataQualitySensorRunnerImpl dataQualitySensorRunner = new DataQualitySensorRunnerImpl(sensorDefinitionFindService,
                 SensorRunnerFactoryObjectMother.create(), new SqlQueryFragmentsParserImpl());

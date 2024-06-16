@@ -34416,6 +34416,7 @@ definitions:
         - "data_check_results"
         - "data_statistics"
         - "data_errors"
+        - "data_error_samples"
         - "data_incidents"
         - "sources"
         - "sensors"

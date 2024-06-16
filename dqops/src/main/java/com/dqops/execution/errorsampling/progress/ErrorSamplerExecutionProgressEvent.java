@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.statistics.factory;
+package com.dqops.execution.errorsampling.progress;
 
 /**
- * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_groupings" - groups of rows were profiled.
+ * Base class for progress events reported during an error samples collector execution.
  */
-public enum StatisticsDataScope {
-    /**
-     * The statistics (profile) is analyzed for the whole table.
-     */
-    table,
-
-    /**
-     * The statistics (profile) is analyzed for each group of data.
-     */
-    data_group
+public abstract class ErrorSamplerExecutionProgressEvent {
 }

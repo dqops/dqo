@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.statistics.factory;
+
+package com.dqops.core.configuration;
+
+import com.dqops.utils.BeanFactoryObjectMother;
 
 /**
- * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_groupings" - groups of rows were profiled.
+ * Object mother for {@link DqoSensorLimitsConfigurationProperties}
  */
-public enum StatisticsDataScope {
+public class DqoErrorSamplingConfigurationPropertiesObjectMother {
     /**
-     * The statistics (profile) is analyzed for the whole table.
+     * Returns the default (but cloned) dqo sensor limit configuration.
+     * @return DQOps sensor limit configuration.
      */
-    table,
-
-    /**
-     * The statistics (profile) is analyzed for each group of data.
-     */
-    data_group
+    public static DqoErrorSamplingConfigurationProperties getDefault() {
+        return BeanFactoryObjectMother.getBeanFactory().getBean(DqoErrorSamplingConfigurationProperties.class).clone();
+    }
 }
