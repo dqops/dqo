@@ -235,8 +235,18 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
             }
 
-            String keyColumnUsageSql = buildKeyColumnUsageSql(schemaName, tableNames);
-            tech.tablesaw.api.Table keyColumnUsageResult = this.executeQuery(keyColumnUsageSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+            HashMap<String, HashSet<String>> tableColumnMap = new HashMap<>();
+            try {
+                String keyColumnUsageSql = buildKeyColumnUsageSql(schemaName, tableNames);
+                tech.tablesaw.api.Table keyColumnUsageResult = this.executeQuery(keyColumnUsageSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+                for (Row row : keyColumnUsageResult) {
+                    String tableName = row.getString("table_name");
+                    String columnName = row.getString("column_name");
+                    tableColumnMap.computeIfAbsent(tableName, k -> new HashSet<>()).add(columnName);
+                }
+            } catch (Exception ex) {
+                // exception is swallowed
+            }
 
             HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
@@ -301,11 +311,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
 
-                Table filteredTable = keyColumnUsageResult
-                        .where(keyColumnUsageResult.stringColumn("table_name").isEqualTo(tableSpec.getPhysicalTableName().getTableName())
-                                .and(keyColumnUsageResult.stringColumn("column_name").isEqualTo(columnSpec.getColumnName())));
-
-                if(filteredTable.rowCount() > 0 ){
+                if(tableColumnMap.containsKey(physicalTableName) && tableColumnMap.get(physicalTableName).contains(columnName)){
                     columnSpec.setId(true);
                 }
             }
