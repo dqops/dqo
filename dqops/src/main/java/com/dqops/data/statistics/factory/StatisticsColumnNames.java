@@ -121,7 +121,7 @@ public final class StatisticsColumnNames {
     /**
      * The data group name, it is a concatenated name of the data group dimensions, created from [grouping_level_1] / [grouping_level_2] / ...
      */
-    public static final String DATA_GROUP_COLUMN_NAME = CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME;
+    public static final String DATA_GROUP_NAME_COLUMN_NAME = CommonColumnNames.DATA_GROUP_NAME_COLUMN_NAME;
 
     /**
      * The data grouping configuration name, it is a name of the named data grouping configuration that was used to run the data quality check.

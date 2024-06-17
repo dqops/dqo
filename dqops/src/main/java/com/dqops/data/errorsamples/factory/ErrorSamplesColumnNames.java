@@ -25,12 +25,29 @@ import com.dqops.data.normalization.CommonColumnNames;
  *
  * The folder partitioning structure for this table is:
  * *c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/*, for example: *c=myconnection/t=public.analyzedtable/m=2023-01-01/*.
+ * The date used for monthly partitioning is calculated from the *executed_at* column value.
  */
 public class ErrorSamplesColumnNames {
     /**
-     * The check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The check result id (primary key), it is a uuid of the check hash, collected at, sample index and the data grouping id. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
+
+    /**
+     * Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time.
+     * The parquet files are time partitioned by this column.
+     */
+    public static final String COLLECTED_AT_COLUMN_NAME = "collected_at";
+
+    /**
+     * String column that says if the result is for a whole table (the "table" value) or for each data group separately (the "data_group" value).
+     */
+    public static final String SCOPE_COLUMN_NAME = "scope";
+
+    /**
+     * Column prefix for the data group dimension level columns: grouping_level_.
+     */
+    public static final String DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX;
 
     /**
      * The data grouping hash, it is a hash of the data grouping level values.
@@ -201,6 +218,12 @@ public class ErrorSamplesColumnNames {
      * The sample filtering formula that was used in the where filter.
      */
     public static final String SAMPLE_FILTER_COLUMN_NAME = "sample_filter";
+
+    /**
+     * Prefix added to the first 5 columns that identify the row. DQOps uses columns that are identifiers, or are part of a unique key to identify collected samples.
+     * The column names from the analyzed table are not stored and must be matched to the list of columns in the monitored table, according to their order in DQOps metadata.
+     */
+    public static final String ID_COLUMN_NAME_PREFIX = "id_";
 
     /**
      * The timestamp when the row was created at.

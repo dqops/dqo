@@ -15,8 +15,8 @@
  */
 package com.dqops.data.errorsamples.normalization;
 
-import com.dqops.data.statistics.factory.StatisticsCollectorResultStatus;
-import com.dqops.data.statistics.factory.StatisticsColumnNames;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
+import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
@@ -27,19 +27,7 @@ import tech.tablesaw.api.*;
 public class ErrorSamplesNormalizedResult {
     private final Table table;
     private final TextColumn idColumn;
-    private final TextColumn statusColumn;
     private final DateTimeColumn collectedAtColumn;
-    private final TextColumn resultTypeColumn;
-    private final TextColumn resultStringColumn;
-    private final LongColumn resultIntegerColumn;
-    private final DoubleColumn resultFloatColumn;
-    private final BooleanColumn resultBooleanColumn;
-    private final DateColumn resultDateColumn;
-    private final DateTimeColumn resultDateTimeColumn;
-    private final InstantColumn resultInstantColumn;
-    private final TimeColumn resultTimeColumn;
-    private final IntColumn sampleIndex;
-    private final LongColumn sampleCount;
     private final TextColumn scopeColumn;
     private final TextColumn dataGroupingLevel1Column;
     private final TextColumn dataGroupingLevel2Column;
@@ -60,17 +48,35 @@ public class ErrorSamplesNormalizedResult {
     private final TextColumn schemaNameColumn;
     private final TextColumn tableNameColumn;
     private final TextColumn tableStageColumn;
+    private final IntColumn tablePriorityColumn;
     private final LongColumn columnHashColumn;
     private final TextColumn columnNameColumn;
-    private final LongColumn collectorHashColumn;
-    private final TextColumn collectorNameColumn;
-    private final TextColumn collectorTargetColumn;
-    private final TextColumn collectorCategoryColumn;
+    private final LongColumn checkHashColumn;
+    private final TextColumn checkNameColumn;
+    private final TextColumn checkDisplayNameColumn;
+    private final TextColumn checkTypeColumn;
+    private final TextColumn checkCategoryColumn;
+    private final TextColumn qualityDimensionColumn;
     private final TextColumn sensorNameColumn;
     private final TextColumn timeSeriesIdColumn;
+    private final TextColumn resultTypeColumn;
+    private final TextColumn resultStringColumn;
+    private final LongColumn resultIntegerColumn;
+    private final DoubleColumn resultFloatColumn;
+    private final BooleanColumn resultBooleanColumn;
+    private final DateColumn resultDateColumn;
+    private final DateTimeColumn resultDateTimeColumn;
+    private final InstantColumn resultInstantColumn;
+    private final TimeColumn resultTimeColumn;
+    private final IntColumn sampleIndex;
+    private final TextColumn sampleFilterColumn;
+    private final TextColumn sampleRowId1Column;
+    private final TextColumn sampleRowId2Column;
+    private final TextColumn sampleRowId3Column;
+    private final TextColumn sampleRowId4Column;
+    private final TextColumn sampleRowId5Column;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
-    private final TextColumn errorMessageColumn;
     private final InstantColumn createdAtColumn;
     private final InstantColumn updatedAtColumn;
     private final TextColumn createdByColumn;
@@ -92,55 +98,61 @@ public class ErrorSamplesNormalizedResult {
      */
     public ErrorSamplesNormalizedResult(Table table, boolean addColumWhenMissing) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
-        this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.statusColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.STATUS_COLUMN_NAME, addColumWhenMissing);
-        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
-        this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME, addColumWhenMissing);
-        this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME, addColumWhenMissing);
-        this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, StatisticsColumnNames.RESULT_BOOLEAN_COLUMN_NAME, addColumWhenMissing);
-        this.resultDateColumn = TableColumnUtility.getOrAddDateColumn(table, StatisticsColumnNames.RESULT_DATE_COLUMN_NAME, addColumWhenMissing);
-        this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME, addColumWhenMissing);
-        this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME, addColumWhenMissing);
-        this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME, addColumWhenMissing);
-        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME, addColumWhenMissing);
-        this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME, addColumWhenMissing);
-        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
-        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
-        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
-        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
-        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
-        this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
-        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
-        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
-        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.collectorHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.collectorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.collectorTargetColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, addColumWhenMissing);
-        this.collectorCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, addColumWhenMissing);
-        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
-        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
-        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME, addColumWhenMissing);
-        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
-        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
-        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME, addColumWhenMissing);
+        this.collectedAtColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorSamplesColumnNames.COLLECTED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.resultTypeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.RESULT_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.resultStringColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, addColumWhenMissing);
+        this.resultIntegerColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.RESULT_INTEGER_COLUMN_NAME, addColumWhenMissing);
+        this.resultFloatColumn = TableColumnUtility.getOrAddDoubleColumn(table, ErrorSamplesColumnNames.RESULT_FLOAT_COLUMN_NAME, addColumWhenMissing);
+        this.resultBooleanColumn = TableColumnUtility.getOrAddBooleanColumn(table, ErrorSamplesColumnNames.RESULT_BOOLEAN_COLUMN_NAME, addColumWhenMissing);
+        this.resultDateColumn = TableColumnUtility.getOrAddDateColumn(table, ErrorSamplesColumnNames.RESULT_DATE_COLUMN_NAME, addColumWhenMissing);
+        this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorSamplesColumnNames.RESULT_DATE_TIME_COLUMN_NAME, addColumWhenMissing);
+        this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.RESULT_INSTANT_COLUMN_NAME, addColumWhenMissing);
+        this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, ErrorSamplesColumnNames.RESULT_TIME_COLUMN_NAME, addColumWhenMissing);
+        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.SAMPLE_INDEX_COLUMN_NAME, addColumWhenMissing);
+        this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SCOPE_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingLevel1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.dataGroupingLevel2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.dataGroupingLevel3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.dataGroupingLevel4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.dataGroupingLevel5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.dataGroupingLevel6Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "6", addColumWhenMissing);
+        this.dataGroupingLevel7Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "7", addColumWhenMissing);
+        this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
+        this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
+        this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
+        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME, addColumWhenMissing);
+        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.TABLE_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
+        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
+        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
+        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.sampleFilterColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, addColumWhenMissing);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
+        this.sampleRowId1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.sampleRowId2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.sampleRowId3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.sampleRowId4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.sampleRowId5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
     }
 
 
@@ -167,14 +179,6 @@ public class ErrorSamplesNormalizedResult {
      */
     public DateTimeColumn getCollectedAtColumn() {
         return collectedAtColumn;
-    }
-
-    /**
-     * Returns the column name that holds the status code. Status codes are defined in {@link StatisticsCollectorResultStatus}.
-     * @return Status column.
-     */
-    public TextColumn getStatusColumn() {
-        return statusColumn;
     }
 
     /**
@@ -255,14 +259,6 @@ public class ErrorSamplesNormalizedResult {
      */
     public IntColumn getSampleIndex() {
         return sampleIndex;
-    }
-
-    /**
-     * Returns the sample count column that stores the number of rows that contain the given sample value, obtained by a column value sampling collector.
-     * @return Sample count column.
-     */
-    public LongColumn getSampleCount() {
-        return sampleCount;
     }
 
     /**
@@ -426,6 +422,14 @@ public class ErrorSamplesNormalizedResult {
     }
 
     /**
+     * Returns a tablesaw column with the table's priority.
+     * @return Table's priority column.
+     */
+    public IntColumn getTablePriorityColumn() {
+        return tablePriorityColumn;
+    }
+
+    /**
      * Column hash column. The column contains a 64-bit hash of the column's hierarchy id.
      * @return Column hash column.
      */
@@ -442,36 +446,51 @@ public class ErrorSamplesNormalizedResult {
     }
 
     /**
-     * Collector hash column. The column contains a 64-bit hash of the collector's hierarchy id.
-     * @return Collector hash column.
+     * Check hash column. The column contains a 64-bit hash of the check's hierarchy id.
+     * @return Check hash column.
      */
-    public LongColumn getCollectorHashColumn() {
-        return collectorHashColumn;
+    public LongColumn getCheckHashColumn() {
+        return checkHashColumn;
     }
 
     /**
-     * Returns a tablesaw column with the collector name.
-     * @return Collector name column.
+     * Returns a tablesaw column with the check name.
+     * @return Check name column.
      */
-    public TextColumn getCollectorNameColumn() {
-        return collectorNameColumn;
+    public TextColumn getCheckNameColumn() {
+        return checkNameColumn;
     }
 
     /**
-     * Returns a column that stores the collector target (table, column).
-     * @return Collector target column.
+     * Returns a tablesaw column with the check display name.
+     * @return Check display name column.
      */
-    public TextColumn getCollectorTargetColumn() {
-        return collectorTargetColumn;
+    public TextColumn getCheckDisplayNameColumn() {
+        return checkDisplayNameColumn;
     }
 
     /**
-     * Returns the column that stores the collector category (the node in YAML that is a parent of the group of collectors).
-     * @return Statistics collector category name column.
-     * @return Statistics collector category name column.
+     * Returns a column that stores the check type (profiling, monitoring, partitioned).
+     * @return Check type column.
      */
-    public TextColumn getCollectorCategoryColumn() {
-        return collectorCategoryColumn;
+    public TextColumn getCheckTypeColumn() {
+        return checkTypeColumn;
+    }
+
+    /**
+     * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
+     * @return Quality check category name column.
+     */
+    public TextColumn getCheckCategoryColumn() {
+        return checkCategoryColumn;
+    }
+
+    /**
+     * Returns a tablesaw column with the parent quality dimension of a check.
+     * @return Quality dimension of a check.
+     */
+    public TextColumn getQualityDimensionColumn() {
+        return qualityDimensionColumn;
     }
 
     /**
@@ -491,6 +510,54 @@ public class ErrorSamplesNormalizedResult {
     }
 
     /**
+     * Returns a tablesaw's column that stores the table filter that was used to capture the sample.
+     * @return Table filter column.
+     */
+    public TextColumn getSampleFilterColumn() {
+        return sampleFilterColumn;
+    }
+
+    /**
+     * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 1st ID column.
+     * @return ID 1 column.
+     */
+    public TextColumn getSampleRowId1Column() {
+        return sampleRowId1Column;
+    }
+
+    /**
+     * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 2nd ID column.
+     * @return ID 2 column.
+     */
+    public TextColumn getSampleRowId2Column() {
+        return sampleRowId2Column;
+    }
+
+    /**
+     * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 3rd ID column.
+     * @return ID 3 column.
+     */
+    public TextColumn getSampleRowId3Column() {
+        return sampleRowId3Column;
+    }
+
+    /**
+     * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 4th ID column.
+     * @return ID 4 column.
+     */
+    public TextColumn getSampleRowId4Column() {
+        return sampleRowId4Column;
+    }
+
+    /**
+     * Returns a tablesaw column that stores an ID retrieved from the analyzed table for the 5th ID column.
+     * @return ID 5 column.
+     */
+    public TextColumn getSampleRowId5Column() {
+        return sampleRowId5Column;
+    }
+
+    /**
      * Absolute timestamp when the sensor execution started.
      * @return Sensor started timestamp.
      */
@@ -504,14 +571,6 @@ public class ErrorSamplesNormalizedResult {
      */
     public IntColumn getDurationMsColumn() {
         return durationMsColumn;
-    }
-
-    /**
-     * Returns the column that stores an error message when the collector failed to execute.
-     * @return Error message column.
-     */
-    public TextColumn getErrorMessageColumn() {
-        return errorMessageColumn;
     }
 
     /**

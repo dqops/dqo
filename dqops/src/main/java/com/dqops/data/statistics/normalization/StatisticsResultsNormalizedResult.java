@@ -117,7 +117,7 @@ public class StatisticsResultsNormalizedResult {
         this.dataGroupingLevel8Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8", addColumWhenMissing);
         this.dataGroupingLevel9Column = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9", addColumWhenMissing);
         this.dataGroupHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_COLUMN_NAME, addColumWhenMissing);
+        this.dataGroupNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, addColumWhenMissing);
         this.dataGroupingConfigurationColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, addColumWhenMissing);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME, addColumWhenMissing);
         this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME, addColumWhenMissing);

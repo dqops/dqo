@@ -76,7 +76,7 @@ public class ErrorSamplesSnapshot extends TableDataSnapshot {
         return new FileStorageSettings(DqoRoot.data_error_samples,
                 BuiltInFolderNames.ERROR_SAMPLES,
                 PARQUET_FILE_NAME,
-                ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME,
+                ErrorSamplesColumnNames.COLLECTED_AT_COLUMN_NAME,
                 ErrorSamplesColumnNames.ID_COLUMN_NAME,
                 FileStorageSettings.DEFAULT_COPIED_COLUMN_NAMES,
                 TablePartitioningPattern.CTM);
