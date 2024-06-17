@@ -223,7 +223,7 @@ public class ErrorSamplesColumnNames {
      * Prefix added to the first 5 columns that identify the row. DQOps uses columns that are identifiers, or are part of a unique key to identify collected samples.
      * The column names from the analyzed table are not stored and must be matched to the list of columns in the monitored table, according to their order in DQOps metadata.
      */
-    public static final String ID_COLUMN_NAME_PREFIX = "id_";
+    public static final String ROW_ID_COLUMN_NAME_PREFIX = "row_id_";
 
     /**
      * The timestamp when the row was created at.

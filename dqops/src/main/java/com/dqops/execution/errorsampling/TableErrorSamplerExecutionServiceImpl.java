@@ -25,11 +25,13 @@ import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.data.errorsamples.normalization.ErrorSamplesNormalizationService;
 import com.dqops.data.errorsamples.normalization.ErrorSamplesNormalizedResult;
 import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshot;
 import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshotFactory;
+import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionFailedException;
 import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
@@ -59,8 +61,12 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.selection.Selection;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -160,10 +166,11 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
         ErrorSamplesSnapshot errorSamplesSnapshot = this.errorSamplesSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedStatisticsTable = errorSamplesSnapshot.getTableDataChanges().getNewOrChangedRows();
+        Table allOldRows = null;
 
         Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
-        List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, executionContext, userHome, userTimeWindowFilters, progressListener,
+        List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, tableSpec, executionContext, userHome, userTimeWindowFilters, progressListener,
                 executionStatistics, errorSamplesDataScope, jobCancellationToken);
 
         GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(1); // no merging, just find the same sensors
@@ -171,6 +178,12 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
 
         List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener,
                 executionStatistics, dummySensorExecution, jobCancellationToken);
+
+        if (!sensorExecutionResults.isEmpty()) {
+            LocalDate currentMonth = errorSamplingSessionStartAt.toLocalDate();
+            errorSamplesSnapshot.ensureMonthsAreLoaded(currentMonth, currentMonth);
+            allOldRows = errorSamplesSnapshot.getAllData();
+        }
 
         for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
             jobCancellationToken.throwIfCancelled();
@@ -201,6 +214,22 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                 ErrorSamplesNormalizedResult normalizedStatisticsResults = this.errorSamplesNormalizationService.normalizeResults(
                         sensorExecutionResult, errorSamplingSessionStartAt, sensorRunParameters);
                 allNormalizedStatisticsTable.append(normalizedStatisticsResults.getTable());
+
+                if (allOldRows != null) {
+                    LongColumn oldResultsCheckHashColumn = allOldRows.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
+                    TextColumn oldResultsScopeColumn = allOldRows.textColumn(ErrorSamplesColumnNames.SCOPE_COLUMN_NAME);
+                    TextColumn oldResultsIdColumn = allOldRows.textColumn(ErrorSamplesColumnNames.ID_COLUMN_NAME);
+                    long checkHash = checkSpec.getHierarchyId().hashCode64();
+                    TextColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
+                    List<String> newIds = newRowsIdColumn.asList();
+                    Selection oldRows = oldResultsCheckHashColumn.isIn(checkHash)
+                            .and(oldResultsIdColumn.isNotIn(newIds))
+                            .and(oldResultsScopeColumn.isEqualTo(errorSamplesDataScope.name()));
+                    if (oldRows.size() > 0) {
+                        List<String> oldIdsToRemove = oldResultsIdColumn.where(oldRows).asList();
+                        errorSamplesSnapshot.getTableDataChanges().getDeletedIds().addAll(oldIdsToRemove);
+                    }
+                }
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore
@@ -235,6 +264,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
     /**
      * Prepares all sensors for execution.
      * @param checks Collection of check specifications for which error samplers that will be prepared.
+     * @param tableSpec Table specification with expanded default (patterned) checks.
      * @param executionContext Execution context - to access sensor definitions.
      * @param userHome User home.
      * @param userTimeWindowFilters Optional, user provided time window to apply for filtering.
@@ -245,6 +275,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
      * @return List of prepared sensors.
      */
     public List<SensorPrepareResult> prepareSensors(Collection<AbstractCheckSpec<?,?,?,?>> checks,
+                                                    TableSpec tableSpec,
                                                     ExecutionContext executionContext,
                                                     UserHome userHome,
                                                     TimeWindowFilterParameters userTimeWindowFilters,
@@ -261,7 +292,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
             }
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(dqoHome, userHome, check, errorSamplesDataScope, userTimeWindowFilters);
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(dqoHome, userHome, tableSpec, check, errorSamplesDataScope, userTimeWindowFilters);
                 if (sensorRunParameters == null) {
                     continue; // the collector does not support that target
                 }
@@ -375,6 +406,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
      * Creates a sensor run parameters from the statistics collector specification. Retrieves the connection, table, column and sensor parameters.
      * @param dqoHome DQO home.
      * @param userHome User home with the metadata.
+     * @param tableSpec Table spec with expanded checks.
      * @param checkSpec Check specification for the target check.
      * @param errorSamplingDataScope Error sampler collector data scope to analyze - the whole table or each data stream separately.
      * @param userTimeWindowFilters User defined time window.
@@ -382,17 +414,16 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
      */
     public SensorExecutionRunParameters createSensorRunParameters(DqoHome dqoHome,
                                                                   UserHome userHome,
+                                                                  TableSpec tableSpec,
                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
                                                                   ErrorSamplesDataScope errorSamplingDataScope,
                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
-        TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
         ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
-        TableSpec tableSpec = tableWrapper.getSpec();
 
         List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(tableSpec));
         Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)

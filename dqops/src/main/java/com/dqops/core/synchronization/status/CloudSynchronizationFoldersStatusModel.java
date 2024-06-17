@@ -155,6 +155,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return dataStatistics;
             case data_incidents:
                 return dataIncidents;
+            case data_error_samples:
             case _indexes:
             case _local_settings:
                 return null;

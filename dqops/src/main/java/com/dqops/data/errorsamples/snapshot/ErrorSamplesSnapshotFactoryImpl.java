@@ -54,7 +54,7 @@ public class ErrorSamplesSnapshotFactoryImpl implements ErrorSamplesSnapshotFact
      */
     @Override
     public ErrorSamplesSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity) {
-        Table newStatisticsTable = this.errorSamplesTableFactory.createEmptyErrorSamplesTable("new_error_Samples");
+        Table newStatisticsTable = this.errorSamplesTableFactory.createEmptyErrorSamplesTable("new_error_samples");
         return new ErrorSamplesSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, newStatisticsTable);
     }
 

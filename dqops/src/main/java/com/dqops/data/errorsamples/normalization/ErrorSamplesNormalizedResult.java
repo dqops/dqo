@@ -142,11 +142,11 @@ public class ErrorSamplesNormalizedResult {
         this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
         this.sampleFilterColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, addColumWhenMissing);
         this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
-        this.sampleRowId1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
-        this.sampleRowId2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
-        this.sampleRowId3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
-        this.sampleRowId4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
-        this.sampleRowId5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
+        this.sampleRowId1Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1", addColumWhenMissing);
+        this.sampleRowId2Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2", addColumWhenMissing);
+        this.sampleRowId3Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3", addColumWhenMissing);
+        this.sampleRowId4Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4", addColumWhenMissing);
+        this.sampleRowId5Column = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5", addColumWhenMissing);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME, addColumWhenMissing);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.DURATION_MS_COLUMN_NAME, addColumWhenMissing);
         this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, ErrorSamplesColumnNames.CREATED_AT_COLUMN_NAME, addColumWhenMissing);

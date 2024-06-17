@@ -345,15 +345,15 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         }
         normalizedResults.addColumns(sampleFilterColumn);
 
-        TextColumn id1Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "1");
+        TextColumn id1Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "1");
         normalizedResults.addColumns(id1Column);
-        TextColumn id2Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "2");
+        TextColumn id2Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "2");
         normalizedResults.addColumns(id2Column);
-        TextColumn id3Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "3");
+        TextColumn id3Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "3");
         normalizedResults.addColumns(id3Column);
-        TextColumn id4Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "4");
+        TextColumn id4Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "4");
         normalizedResults.addColumns(id4Column);
-        TextColumn id5Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ID_COLUMN_NAME_PREFIX + "5");
+        TextColumn id5Column = normalizeSourceIdColumn(resultsTable, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + "5");
         normalizedResults.addColumns(id5Column);
 
         InstantColumn createdAtColumn = InstantColumn.create(ErrorSamplesColumnNames.CREATED_AT_COLUMN_NAME, resultRowCount);
@@ -475,7 +475,11 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
 
         Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
         if (currentColumn == null) {
-            return null;
+            IntColumn indexesColumn = IntColumn.create(columnName, resultsTable.rowCount());
+            for (int i = 0; i < resultsTable.rowCount(); i++) {
+                indexesColumn.set(i, i + 1); // sample indexes are 1-based
+            }
+            return indexesColumn;
         }
 
         IntColumn resultColumn = TableColumnUtility.convertToIntColumn(currentColumn);

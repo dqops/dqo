@@ -319,7 +319,7 @@ WITH error_samples AS (
         {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
             {%- for id_column in error_sampling.id_columns -%}
                 {{ ',' }}
-        {{ render_column(id_column, 'analyzed_table') }} AS id_{{ loop.counter }}
+        {{ render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
         {%- endfor -%}
     {%- endif -%},
         ROW_NUMBER() OVER (
@@ -339,7 +339,7 @@ WITH error_samples AS (
                 {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
                     {%- for id_column in error_sampling.id_columns -%}
                         {{ ',' }}
-                        {{- render_column(id_column, 'analyzed_table') }} AS id_{{ loop.counter }}
+                        {{- render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
                     {%- endfor %}
                 {%- endif %}
             ORDER BY
@@ -367,7 +367,7 @@ SELECT
     {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
         {%- for id_column in error_sampling.id_columns -%}
             {{ ',' }}
-    sample_table.id_{{ loop.counter }} AS id_{{ loop.counter }}
+    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
         {%- endfor -%}
     {%- endif %}
 FROM error_samples AS sample_table
@@ -379,7 +379,7 @@ SELECT
     {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
         {%- for id_column in error_sampling.id_columns -%}
             {{ ',' }}
-    {{ render_column(id_column) }} AS id_{{ loop.counter }}
+    {{ render_column(id_column) }} AS row_id_{{ loop.index }}
         {%- endfor -%}
     {%- endif %}
 FROM
