@@ -87,6 +87,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.userDomainIdentityFactory = userDomainIdentityFactory;
         this.emitFailureHandlerPublisher = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                 this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+        this.queueEmptyFuture = new CompletableFuture<>();
+        this.queueEmptyFuture.complete(0);
     }
 
     /**
