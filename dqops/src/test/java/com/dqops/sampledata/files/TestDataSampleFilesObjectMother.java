@@ -24,6 +24,8 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvReadOptions;
+import tech.tablesaw.io.json.JsonReadOptions;
+import tech.tablesaw.io.json.JsonReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +37,8 @@ import java.util.stream.Collectors;
 /**
  * Provides access to cached instances of sample data.
  */
-public class CsvSampleFilesObjectMother {
-    private static final Map<String, SampleTableFromCsv> tables = new HashMap<>();
+public class TestDataSampleFilesObjectMother {
+    private static final Map<String, SampleTableFromTestDataFile> tables = new HashMap<>();
 
     /**
      * The supported column types that are the same as the types in ColumnType class
@@ -59,10 +61,9 @@ public class CsvSampleFilesObjectMother {
      * @param fileName CSV file name in the sampledata folder.
      * @return Loaded file.
      */
-    public static CsvSampleFileContent loadTableCsv(String fileName) {
+    public static TestDataSampleFileContent loadTableCsv(String fileName) {
         try {
             File sampleFile = SampleDataFilesProvider.getFile(fileName);
-            HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
             CsvReadOptions csvReadOptions = CsvReadOptions.builder(sampleFile)
                     .header(true)
@@ -75,12 +76,54 @@ public class CsvSampleFilesObjectMother {
             Table loadedTable = Table.read().csv(csvReadOptions);
             String tableName = fileName.substring(0, fileName.indexOf(".csv"));
 
+            return loadTable(fileName, loadedTable, tableName);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Failed to read sample file " + fileName, ex);
+        }
+    }
+
+    /**
+     * Loads a JSON file with sample data from the dqo/sampledata folder. Applies requested column types according to the
+     * column names. The header row should have column names in the format: {column_name}:{requested_type}. Supported types
+     * are the same as types in ColumnType class (case insensitive), for example: INTEGER, DOUBLE, LOCAL_DATE, LOCAL_DATE_TIME.
+     * @param fileName CSV file name in the sampledata folder.
+     * @return Loaded file.
+     */
+    public static TestDataSampleFileContent loadTableJson(String fileName) {
+        try {
+            File sampleFile = SampleDataFilesProvider.getFile(fileName);
+
+            JsonReadOptions jsonReadOptions = JsonReadOptions.builder(sampleFile)
+                    .dateFormat(DateTimeFormatter.ISO_DATE)
+                    .dateTimeFormat(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    .build();
+
+            Table loadedTable = new JsonReader().read(jsonReadOptions);
+            String tableName = fileName.substring(0, fileName.indexOf(".json"));
+
+            return loadTable(fileName, loadedTable, tableName, true);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Failed to read sample file " + fileName, ex);
+        }
+    }
+
+
+
+    public static TestDataSampleFileContent loadTable(String fileName, Table loadedTable, String tableName) {
+        return loadTable(fileName, loadedTable, tableName, false);
+    }
+
+    public static TestDataSampleFileContent loadTable(String fileName, Table loadedTable, String tableName, boolean preserveColumnNameWithType) {
+        try {
+            HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
             Table convertedTable = Table.create(tableName);
             for (Column<?> loadedColumn : loadedTable.columnArray()) {
                 String annotatedColumName = loadedColumn.name();
                 String[] nameTypeParts = annotatedColumName.split(":");
                 Assertions.assertTrue(nameTypeParts.length == 2 || nameTypeParts.length == 3);
-                String columnName = nameTypeParts[0];
+                String columnName = preserveColumnNameWithType ? annotatedColumName : nameTypeParts[0];
                 String typeName = nameTypeParts[1];
                 String physicalDataType = nameTypeParts.length > 2 ? nameTypeParts[2] : null;
                 ColumnType columnType = ColumnType.valueOf(typeName);
@@ -114,7 +157,7 @@ public class CsvSampleFilesObjectMother {
                 convertedTable.addColumns(convertedColumn);
             }
 
-            return new CsvSampleFileContent(convertedTable, columnPhysicalDataTypes);
+            return new TestDataSampleFileContent(convertedTable, columnPhysicalDataTypes);
         }
         catch (Exception ex) {
             throw new RuntimeException("Failed to read sample file " + fileName, ex);
@@ -128,7 +171,7 @@ public class CsvSampleFilesObjectMother {
      * @param folderName CSV file name in the sampledata folder.
      * @return Loaded multiple csv.
      */
-    public static CsvSampleFileContent loadTableFromFolderWithCsvFiles(String folderName) {
+    public static TestDataSampleFileContent loadTableFromFolderWithCsvFiles(String folderName) {
         try {
             List<File> sampleFiles = SampleDataFilesProvider.getCsvFiles(folderName);
             HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
@@ -180,7 +223,7 @@ public class CsvSampleFilesObjectMother {
                         }
                     });
 
-            return new CsvSampleFileContent(convertedTable, columnPhysicalDataTypes);
+            return new TestDataSampleFileContent(convertedTable, columnPhysicalDataTypes);
         }
         catch (Exception ex) {
             throw new RuntimeException("Failed to read sample files from the path: " + folderName, ex);
@@ -251,12 +294,25 @@ public class CsvSampleFilesObjectMother {
      * @param fileName CSV file name inside the dqo/sampledata folder.
      * @return Sample data with a proposed physical table name based on the table hash.
      */
-    public static SampleTableFromCsv getSampleTable(String fileName) {
+    public static SampleTableFromTestDataFile getSampleTableFromCsv(String fileName) {
         if (tables.containsKey(fileName)) {
             return tables.get(fileName);
         }
-        CsvSampleFileContent csvSampleFileContent = loadTableCsv(fileName);
+        TestDataSampleFileContent csvSampleFileContent = loadTableCsv(fileName);
         return getSampleTable(csvSampleFileContent, fileName);
+    }
+
+    /**
+     * Loads or returns a cached sample table loaded from a csv file in the dqo/sampledata folder.
+     * @param fileName CSV file name inside the dqo/sampledata folder.
+     * @return Sample data with a proposed physical table name based on the table hash.
+     */
+    public static SampleTableFromTestDataFile getSampleTableFromJson(String fileName) {
+        if (tables.containsKey(fileName)) {
+            return tables.get(fileName);
+        }
+        TestDataSampleFileContent jsonSampleFileContent = loadTableJson(fileName);
+        return getSampleTable(jsonSampleFileContent, fileName);
     }
 
     /**
@@ -264,11 +320,11 @@ public class CsvSampleFilesObjectMother {
      * @param filesFolder folder of CSV file names inside the dqo/sampledata folder.
      * @return Sample data with a proposed physical table name based on the table hash.
      */
-    public static SampleTableFromCsv getSampleTableForFiles(String filesFolder) {
+    public static SampleTableFromTestDataFile getSampleTableForFiles(String filesFolder) {
         if (tables.containsKey(filesFolder)) {
             return tables.get(filesFolder);
         }
-        CsvSampleFileContent csvSampleFileContent = loadTableFromFolderWithCsvFiles(filesFolder);
+        TestDataSampleFileContent csvSampleFileContent = loadTableFromFolderWithCsvFiles(filesFolder);
         return getSampleTable(csvSampleFileContent, filesFolder);
     }
 
@@ -278,11 +334,11 @@ public class CsvSampleFilesObjectMother {
      * @param csvDataName Csv data name that will be used as a key in a table cache.
      * @return Sample table.
      */
-    private static SampleTableFromCsv getSampleTable(CsvSampleFileContent csvSampleFileContent, String csvDataName){
+    private static SampleTableFromTestDataFile getSampleTable(TestDataSampleFileContent csvSampleFileContent, String csvDataName){
         Table loadedTable = csvSampleFileContent.getTable();
         long tableHash = TableHashingHelper.hashTable(loadedTable);
         String hashedTableName = loadedTable.name() + "_" + tableHash;
-        SampleTableFromCsv sampleTable = new SampleTableFromCsv(loadedTable, hashedTableName, tableHash, csvSampleFileContent.getColumnPhysicalDataTypes());
+        SampleTableFromTestDataFile sampleTable = new SampleTableFromTestDataFile(loadedTable, hashedTableName, tableHash, csvSampleFileContent.getColumnPhysicalDataTypes());
         tables.put(csvDataName, sampleTable);
         return sampleTable;
     }
