@@ -27,7 +27,6 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Base class for source connections that are using SQL. The derived providers can reuse the logic for querying the metadata using the INFORMATION_SCHEMA management views.
@@ -236,6 +235,9 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
             }
 
+            String keyColumnUsageSql = buildKeyColumnUsageSql(schemaName, tableNames);
+            tech.tablesaw.api.Table keyColumnUsageResult = this.executeQuery(keyColumnUsageSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
             HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
             for (Row colRow : tableResult) {
@@ -298,6 +300,14 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 columnType.setNullable(isNullable);
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
+
+                Table filteredTable = keyColumnUsageResult
+                        .where(keyColumnUsageResult.stringColumn("table_name").isEqualTo(tableSpec.getPhysicalTableName().getTableName())
+                                .and(keyColumnUsageResult.stringColumn("column_name").isEqualTo(columnSpec.getColumnName())));
+
+                if(filteredTable.rowCount() > 0 ){
+                    columnSpec.setId(true);
+                }
             }
 
             return tableSpecs;
@@ -348,6 +358,34 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
         String sql = sqlBuilder.toString();
         return sql;
+    }
+
+    /**
+     * Creates an SQL for listing columns from information_schema.key_column_usage for the given tables.
+     * @param schemaName Schema name.
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildKeyColumnUsageSql(String schemaName, List<String> tableNames) {
+        StringBuilder KeyColumnUsageQueryBuilder = new StringBuilder();
+        KeyColumnUsageQueryBuilder.append("SELECT TABLE_NAME, COLUMN_NAME\n");
+        KeyColumnUsageQueryBuilder.append("FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE\n");
+        KeyColumnUsageQueryBuilder.append("WHERE TABLE_SCHEMA = '").append(schemaName).append("'");
+        if (tableNames != null && tableNames.size() > 0) {
+            KeyColumnUsageQueryBuilder.append(" AND TABLE_NAME IN (");
+            for (int i = 0; i < tableNames.size(); i++) {
+                String tableName = tableNames.get(i);
+                if (i > 0) {
+                    KeyColumnUsageQueryBuilder.append(",");
+                }
+                KeyColumnUsageQueryBuilder.append('\'');
+                KeyColumnUsageQueryBuilder.append(tableName.replace("'", "''"));
+                KeyColumnUsageQueryBuilder.append('\'');
+            }
+            KeyColumnUsageQueryBuilder.append(") ");
+        }
+        String KeyColumnUsageQuery = KeyColumnUsageQueryBuilder.toString();
+        return KeyColumnUsageQuery;
     }
 
     /**
