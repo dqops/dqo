@@ -24,13 +24,13 @@ import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 
 /**
- * Unit tests for the {@link CsvSampleFilesObjectMother}
+ * Unit tests for the {@link TestDataSampleFilesObjectMother}
  */
 @SpringBootTest
 public class CsvSampleFilesTests extends BaseTest {
     @Test
     void loadTableCsv_whenLoaded_continuous_days_one_row_per_day_thenFileParsed() {
-        CsvSampleFileContent csvSampleFileContent = CsvSampleFilesObjectMother.loadTableCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
+        TestDataSampleFileContent csvSampleFileContent = TestDataSampleFilesObjectMother.loadTableCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
         Table table = csvSampleFileContent.getTable();
         Assertions.assertEquals("continuous_days_one_row_per_day", table.name());
         Assertions.assertEquals(24, table.rowCount());
@@ -44,7 +44,7 @@ public class CsvSampleFilesTests extends BaseTest {
 
     @Test
     void getSampleTable_whenCalled_thenReturnsTableHashed() {
-        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(SampleCsvFileNames.continuous_days_one_row_per_day);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
         Assertions.assertNotNull(sampleTable);
         Assertions.assertEquals(24, sampleTable.getTable().rowCount());
         Assertions.assertEquals("continuous_days_one_row_per_day_" + sampleTable.getHash(), sampleTable.getHashedTableName());
@@ -52,8 +52,8 @@ public class CsvSampleFilesTests extends BaseTest {
 
     @Test
     void getSampleTable_whenCalledTwice_thenReturnsTheSameCachedTable() {
-        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(SampleCsvFileNames.continuous_days_one_row_per_day);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
         Assertions.assertNotNull(sampleTable);
-        Assertions.assertSame(sampleTable, CsvSampleFilesObjectMother.getSampleTable(SampleCsvFileNames.continuous_days_one_row_per_day));
+        Assertions.assertSame(sampleTable, TestDataSampleFilesObjectMother.getSampleTableFromCsv(SampleCsvFileNames.continuous_days_one_row_per_day));
     }
 }
