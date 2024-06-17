@@ -46,7 +46,7 @@ public class DuckdbTableSchemaTableColumnCountSensorParametersSpecIntegrationTes
     @BeforeEach
     void setUp(){
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableColumnCountSensorParametersSpec();
@@ -59,8 +59,7 @@ public class DuckdbTableSchemaTableColumnCountSensorParametersSpecIntegrationTes
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
                 .createForTableForProfilingCheck(sampleTableMetadata, this.checkSpec);
 
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother
-                .executeSensor(this.userHomeContext, runParameters);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
