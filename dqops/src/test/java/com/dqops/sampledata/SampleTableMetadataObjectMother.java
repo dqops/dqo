@@ -376,7 +376,37 @@ public class SampleTableMetadataObjectMother {
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param parquetFileName Sample data JSON file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForExplicitParquetFile(String parquetFileName,
+                                                                                      ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
+        String connectionName = getConnectionNameForProvider(providerType);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromParquet(parquetFileName);
 
+        String targetSchema = getSchemaForProvider(connectionSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
+        TableSpec tableSpec = new TableSpec();
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForParquetFile(parquetFileName);
+        tableSpec.setFileFormat(fileFormatSpec);
+        tableSpec.setPhysicalTableName(physicalTableName);
+
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+    }
 
     /**
      * Fills column specifications basing on the sample data from csv file.

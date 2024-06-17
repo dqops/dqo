@@ -17,6 +17,8 @@ package com.dqops.sampledata.files;
 
 import com.dqops.sampledata.files.csv.HeaderEntry;
 import com.google.common.base.Strings;
+import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
+import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.StringColumn;
@@ -109,7 +111,29 @@ public class TestDataSampleFilesObjectMother {
         }
     }
 
+    /**
+     * Loads a Parquet file with sample data from the dqo/sampledata folder. Applies requested column types according to the
+     * column names. The header row should have column names in the format: {column_name}:{requested_type}. Supported types
+     * are the same as types in ColumnType class (case insensitive), for example: INTEGER, DOUBLE, LOCAL_DATE, LOCAL_DATE_TIME.
+     * @param fileName Parquet file name in the sampledata folder.
+     * @return Loaded file.
+     */
+    public static TestDataSampleFileContent loadTableParquet(String fileName) {
+        try {
+            File sampleFile = SampleDataFilesProvider.getFile(fileName);
 
+            TablesawParquetReadOptions parquetReadOptions = TablesawParquetReadOptions.builder(sampleFile)
+                    .build();
+
+            Table loadedTable = new TablesawParquetReader().read(parquetReadOptions);
+            String tableName = fileName.substring(0, fileName.indexOf(".parquet"));
+
+            return loadTable(fileName, loadedTable, tableName, true);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Failed to read sample file " + fileName, ex);
+        }
+    }
 
     public static TestDataSampleFileContent loadTable(String fileName, Table loadedTable, String tableName) {
         return loadTable(fileName, loadedTable, tableName, false);
@@ -313,6 +337,19 @@ public class TestDataSampleFilesObjectMother {
         }
         TestDataSampleFileContent jsonSampleFileContent = loadTableJson(fileName);
         return getSampleTable(jsonSampleFileContent, fileName);
+    }
+
+    /**
+     * Loads or returns a cached sample table loaded from a csv file in the dqo/sampledata folder.
+     * @param fileName CSV file name inside the dqo/sampledata folder.
+     * @return Sample data with a proposed physical table name based on the table hash.
+     */
+    public static SampleTableFromTestDataFile getSampleTableFromParquet(String fileName) {
+        if (tables.containsKey(fileName)) {
+            return tables.get(fileName);
+        }
+        TestDataSampleFileContent parquetSampleFileContent = loadTableParquet(fileName);
+        return getSampleTable(parquetSampleFileContent, fileName);
     }
 
     /**
