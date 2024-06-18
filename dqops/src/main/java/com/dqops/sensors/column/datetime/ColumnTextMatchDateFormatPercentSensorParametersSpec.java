@@ -38,7 +38,7 @@ public class ColumnTextMatchDateFormatPercentSensorParametersSpec extends Abstra
         }
     };
 
-    @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
+    @JsonPropertyDescription("Expected date format. The sensor will try to parse the column records and cast the data using this format.")
     @RequiredField
     private DatetimeBuiltInDateFormats dateFormat = DatetimeBuiltInDateFormats.DaySlashMonthSlashYear;
 
