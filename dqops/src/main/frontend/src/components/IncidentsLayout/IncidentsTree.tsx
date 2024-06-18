@@ -100,7 +100,6 @@ const IncidentsTree = () => {
     const selectedConnection = connections.find(
       (x) => x.connection === connection
     );
-    console.log(window.location.pathname, path, selectedConnection);
 
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
