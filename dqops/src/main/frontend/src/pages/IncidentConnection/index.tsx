@@ -18,6 +18,7 @@ import StatusSelect from './StatusSelect';
 import { IconButton, Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
 import { IncidentModel, IncidentModelStatusEnum } from '../../api';
+import Loader from '../../components/Loader';
 import { Pagination } from '../../components/Pagination';
 import Select from '../../components/Select';
 import { Table } from '../../components/Table';
@@ -75,7 +76,9 @@ export const IncidentConnection = () => {
     isEnd,
     filters = {}
   } = useSelector(getFirstLevelIncidentsState);
-  const { activeTab } = useSelector((state: IRootState) => state.incidents);
+  const { activeTab, loading } = useSelector(
+    (state: IRootState) => state.incidents
+  );
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
@@ -482,11 +485,17 @@ export const IncidentConnection = () => {
           </div>
         </div>
         <div className="p-4">
-          <Table
-            columns={columns}
-            data={incidents || []}
-            className="w-full mb-8"
-          />
+          {loading ? (
+            <div className="ml-4 flex items-start justify-start">
+              <Loader className="w-8 h-8" isFull={false} />
+            </div>
+          ) : (
+            <Table
+              columns={columns}
+              data={incidents || []}
+              className="w-full mb-8"
+            />
+          )}
           <div className="flex justify-end">
             <Pagination
               page={filters.page || 1}
