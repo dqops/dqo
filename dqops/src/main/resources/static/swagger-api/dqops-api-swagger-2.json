@@ -36545,6 +36545,14 @@
           "description" : "The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.",
           "enum" : [ "daily", "monthly" ]
         },
+        "compared_table_filter" : {
+          "type" : "string",
+          "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table."
+        },
+        "reference_table_filter" : {
+          "type" : "string",
+          "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table."
+        },
         "grouping_columns" : {
           "type" : "array",
           "description" : "List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.",
@@ -36694,6 +36702,14 @@
         "reference_table" : {
           "description" : "The schema and table name of the reference table that has the expected data.",
           "$ref" : "#/definitions/PhysicalTableName"
+        },
+        "compared_table_filter" : {
+          "type" : "string",
+          "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table."
+        },
+        "reference_table_filter" : {
+          "type" : "string",
+          "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table."
         },
         "grouping_columns" : {
           "type" : "array",
