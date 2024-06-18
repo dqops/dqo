@@ -80,6 +80,22 @@ public class TableComparisonModel {
     private PhysicalTableName referenceTable;
 
     /**
+     * Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table.
+     * This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.
+     */
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.")
+    private String comparedTableFilter;
+
+    /**
+     * Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth).
+     * This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.
+     */
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
+    private String referenceTableFilter;
+
+    /**
      * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
      */
     @JsonPropertyDescription("List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  " +
@@ -175,10 +191,12 @@ public class TableComparisonModel {
         }
 
         tableComparisonModel.setTableComparisonConfigurationName(comparisonSpec.getComparisonName());
-        tableComparisonModel.comparedConnection = comparedTableHierarchyId.getConnectionName();
-        tableComparisonModel.comparedTable = comparedTableHierarchyId.getPhysicalTableName();
-        tableComparisonModel.referenceConnection = comparisonSpec.getReferenceTableConnectionName();
-        tableComparisonModel.referenceTable = new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName());
+        tableComparisonModel.setComparedConnection(comparedTableHierarchyId.getConnectionName());
+        tableComparisonModel.setComparedTable(comparedTableHierarchyId.getPhysicalTableName());
+        tableComparisonModel.setReferenceConnection(comparisonSpec.getReferenceTableConnectionName());
+        tableComparisonModel.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
+        tableComparisonModel.setComparedTableFilter(comparisonSpec.getComparedTableFilter());
+        tableComparisonModel.setReferenceTableFilter(comparisonSpec.getReferenceTableFilter());
         tableComparisonModel.setCanEdit(canCompareTables);
         tableComparisonModel.setCanRunCompareChecks(canCompareTables);
         tableComparisonModel.setCanDeleteData(canCompareTables);
@@ -259,6 +277,8 @@ public class TableComparisonModel {
 
         comparisonSpec.setCheckType(checkType);
         comparisonSpec.setTimeScale(checkTimeScale);
+        comparisonSpec.setComparedTableFilter(this.getComparedTableFilter());
+        comparisonSpec.setReferenceTableFilter(this.getReferenceTableFilter());
         comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
         if (this.getReferenceTable() != null) {
             comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());
