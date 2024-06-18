@@ -187,7 +187,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New custom check successfully created"
         400:
@@ -229,7 +229,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom check successfully updated"
         400:
@@ -262,7 +262,7 @@ paths:
         200:
           description: "Custom check definition successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Custom check not found"
         500:
@@ -348,7 +348,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New connection successfully created"
         400:
@@ -389,7 +389,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection successfully updated"
         400:
@@ -484,7 +484,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New connection successfully created"
         400:
@@ -525,7 +525,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's basic parameters successfully updated"
         400:
@@ -571,7 +571,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Checks enabled in bulk"
         400:
@@ -617,7 +617,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Checks disabled"
         400:
@@ -688,7 +688,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's comments successfully updated"
         400:
@@ -786,7 +786,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's default data grouping configuration successfully\
             \ updated"
@@ -856,7 +856,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's incident configuration successfully updated"
         400:
@@ -927,7 +927,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's labels successfully updated"
         400:
@@ -1017,7 +1017,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's schedule successfully updated"
         400:
@@ -1654,7 +1654,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table successfully created"
         400:
@@ -1705,7 +1705,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table successfully updated"
         400:
@@ -1832,7 +1832,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table successfully updated"
         400:
@@ -2444,7 +2444,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New column successfully created"
         400:
@@ -2501,7 +2501,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column successfully updated"
         400:
@@ -2643,7 +2643,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column basic information successfully updated"
         400:
@@ -2747,7 +2747,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column's list of comments successfully updated"
         400:
@@ -2851,7 +2851,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column's list of labels successfully updated"
         400:
@@ -2955,7 +2955,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily column level data quality monitoring successfully updated"
         400:
@@ -3059,7 +3059,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly column level data quality monitoring checks successfully\
             \ updated"
@@ -3272,7 +3272,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality monitoring successfully updated"
         400:
@@ -3743,7 +3743,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily column level data quality partitioned checks successfully\
             \ updated"
@@ -3848,7 +3848,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly column level data quality partitioned checks successfully\
             \ updated"
@@ -4061,7 +4061,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality partitioned checks successfully\
             \ updated"
@@ -4533,7 +4533,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality profiling checks successfully updated"
         400:
@@ -4721,7 +4721,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality profiling checks successfully updated"
         400:
@@ -5186,7 +5186,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's comments successfully updated"
         400:
@@ -5276,7 +5276,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's default data grouping configuration successfully updated"
         400:
@@ -5367,7 +5367,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New data grouping configuration successfully created"
         400:
@@ -5417,7 +5417,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration successfully set as the default\
             \ for the table"
@@ -5472,7 +5472,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration successfully updated"
         404:
@@ -5520,7 +5520,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration removed"
         404:
@@ -5650,7 +5650,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's incident grouping configuration successfully updated"
         400:
@@ -5744,7 +5744,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's labels successfully updated"
         400:
@@ -5838,7 +5838,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily table level data quality monitoring successfully updated"
         400:
@@ -5932,7 +5932,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly table level data quality monitoring successfully updated"
         400:
@@ -6182,7 +6182,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality monitoring successfully updated"
         400:
@@ -6619,7 +6619,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily table level data quality monitoring successfully updated"
         400:
@@ -6713,7 +6713,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly table level data quality partitioned checks successfully\
             \ updated"
@@ -6964,7 +6964,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoObject"
+            $ref: "#/definitions/MonoResponseEntityMonoObject"
         204:
           description: "Table level data quality partitioned checks successfully updated"
         400:
@@ -7396,7 +7396,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table partitioning successfully updated"
         400:
@@ -7490,7 +7490,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
         400:
@@ -7708,7 +7708,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
         400:
@@ -8124,7 +8124,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's overridden schedule configuration successfully updated"
         400:
@@ -8392,7 +8392,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration successfully created"
         400:
@@ -8493,7 +8493,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison configuration successfully updated"
         404:
@@ -8542,7 +8542,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison configuration removed"
         404:
@@ -8594,7 +8594,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for daily monitoring checks\
             \ successfully created"
@@ -8651,7 +8651,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily monitoring checks successfully updated"
         404:
@@ -8703,7 +8703,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for monthly monitoring\
             \ checks successfully created"
@@ -8760,7 +8760,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily monitoring checks successfully updated"
         404:
@@ -8812,7 +8812,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for daily partitioned checks\
             \ successfully created"
@@ -8870,7 +8870,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily partitioned checks successfully updated"
         404:
@@ -8922,7 +8922,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for monthly partitioned\
             \ checks successfully created"
@@ -8980,7 +8980,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison monthly partitioned checks successfully updated"
         404:
@@ -9031,7 +9031,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for profiling checks successfully\
             \ created"
@@ -9088,7 +9088,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison profiling checks successfully updated"
         404:
@@ -9349,7 +9349,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Shared credential successfully updated"
         400:
@@ -9409,7 +9409,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New shared credential successfully created"
         400:
@@ -9471,7 +9471,7 @@ paths:
         200:
           description: "Shared credential file successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Shared credential file not found"
         500:
@@ -9999,7 +9999,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10041,7 +10041,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully updated"
         400:
@@ -10072,7 +10072,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully deleted"
         404:
@@ -10141,7 +10141,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily monitoring checks successfully\
             \ updated."
@@ -10215,7 +10215,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly monitoring checks successfully\
             \ updated."
@@ -10289,7 +10289,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily partitioned checks successfully\
             \ updated."
@@ -10363,7 +10363,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly partitioned checks successfully\
             \ updated."
@@ -10437,7 +10437,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of profiling checks successfully\
             \ updated."
@@ -10507,7 +10507,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10549,7 +10549,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully updated"
         400:
@@ -10642,7 +10642,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10684,7 +10684,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully updated"
         400:
@@ -10715,7 +10715,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully deleted"
         404:
@@ -10784,7 +10784,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily monitoring checks successfully\
             \ updated."
@@ -10858,7 +10858,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly monitoring checks successfully\
             \ updated."
@@ -10932,7 +10932,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily partitioned checks successfully\
             \ updated."
@@ -11006,7 +11006,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly partitioned checks successfully\
             \ updated."
@@ -11080,7 +11080,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of profiling checks successfully\
             \ updated."
@@ -11150,7 +11150,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -11192,7 +11192,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully updated"
         400:
@@ -11270,7 +11270,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of schedules successfully updated."
         400:
@@ -11326,7 +11326,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of notification webhooks successfully\
             \ updated."
@@ -11453,7 +11453,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New data dictionary successfully created"
         400:
@@ -11523,7 +11523,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data dictionary successfully updated"
         400:
@@ -11555,7 +11555,7 @@ paths:
         200:
           description: "Data dictionary CSV file successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Data dictionary file not found"
         500:
@@ -11854,7 +11854,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality checks related to the incident successfully disabled"
         400:
@@ -11905,7 +11905,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality checks related to the incident successfully recalibrated"
         400:
@@ -12156,7 +12156,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality incident's issueUrl successfully updated"
         400:
@@ -12214,7 +12214,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality incident's status successfully updated"
         400:
@@ -12714,7 +12714,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Job was cancelled"
         500:
@@ -12907,7 +12907,7 @@ paths:
         200:
           description: "The cron scheduler was started or was already running"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         500:
           description: "Internal Server Error"
           schema:
@@ -12929,7 +12929,7 @@ paths:
         200:
           description: "The cron scheduler was stopped or was already not running"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         500:
           description: "Internal Server Error"
           schema:
@@ -13172,7 +13172,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13204,7 +13204,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13236,7 +13236,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13268,7 +13268,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13301,7 +13301,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "Password successfully updated"
         403:
@@ -13393,7 +13393,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New custom rule successfully created"
         400:
@@ -13435,7 +13435,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom rule successfully updated"
         400:
@@ -13466,7 +13466,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom rule definition successfully deleted"
         404:
@@ -13709,7 +13709,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New sensor successfully created"
         400:
@@ -13752,7 +13752,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Sensor model successfully updated"
         400:
@@ -13783,7 +13783,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom sensor definition successfully deleted"
         404:
@@ -13921,7 +13921,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New user successfully added"
         400:
@@ -13994,7 +13994,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "User successfully updated"
         403:
@@ -14025,7 +14025,7 @@ paths:
         200:
           description: "User deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         403:
           description: "DQOps instance is not authenticated to DQOps Cloud"
         404:
@@ -14065,7 +14065,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "Password successfully updated"
         403:
@@ -33065,11 +33065,11 @@ definitions:
           \ to run data quality checks."
   Mono:
     type: "object"
-  MonoDqoQueueJobId:
+  MonoResponseEntityMonoDqoQueueJobId:
     type: "object"
-  MonoObject:
+  MonoResponseEntityMonoObject:
     type: "object"
-  MonoVoid:
+  MonoResponseEntityMonoVoid:
     type: "object"
   MysqlParametersSpec:
     type: "object"
