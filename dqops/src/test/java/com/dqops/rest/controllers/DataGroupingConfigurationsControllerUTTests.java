@@ -90,14 +90,14 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
     void getDataStreams_whenSampleTableRequested_thenReturnsListOfDataStreams() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<DataGroupingConfigurationListModel>> responseEntity = this.sut.getTableGroupingConfigurations(
+        Mono<ResponseEntity<Flux<DataGroupingConfigurationListModel>>> responseEntity = this.sut.getTableGroupingConfigurations(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
-        List<DataGroupingConfigurationListModel> result = responseEntity.getBody().collectList().block();
+        List<DataGroupingConfigurationListModel> result = responseEntity.block().getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
@@ -112,15 +112,15 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<DataGroupingConfigurationModel>> responseEntity = this.sut.getTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<DataGroupingConfigurationModel>>> responseEntity = this.sut.getTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.block().getStatusCode());
 
-        DataGroupingConfigurationModel result = responseEntity.getBody().block();
+        DataGroupingConfigurationModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.getDataGroupingConfigurationName(), dataStreamName);
         Assertions.assertEquals(result.getSpec(), sampleTableSpec.getGroupings().get(dataStreamName));
@@ -139,7 +139,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -149,9 +149,9 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
                     setDataGroupingConfigurationName(newName);
                     setSpec(newSpec);
                 }});
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
         Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
 
@@ -174,7 +174,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -184,9 +184,9 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
                     setDataGroupingConfigurationName(substitutableName);
                     setSpec(newSpec);
                 }});
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         DataGroupingConfigurationSpec resultSpec = sampleTableSpec.getGroupings().get(DATASTREAM_NAME_1);
@@ -208,7 +208,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
             }});
         }};
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
@@ -218,9 +218,9 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
                     setDataGroupingConfigurationName(null);
                     setSpec(newSpec);
                 }});
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         DataGroupingConfigurationSpec resultSpec = sampleTableSpec.getGroupings().get(dataStreamName);
@@ -238,15 +238,15 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         DataGroupingConfigurationSpec specBeforeAction = sampleTableSpec.getGroupings().get(dataStreamName);
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.setTableDefaultGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.setTableDefaultGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         Assertions.assertEquals(dataStreamName, sampleTableSpec.getDefaultGroupingName());
@@ -261,15 +261,15 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = DATASTREAM_NAME_1;
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
@@ -283,15 +283,15 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = DATASTREAM_NAME_2;
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
@@ -305,15 +305,15 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
         String dataStreamName = "I'm_not_there";
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.deleteTableGroupingConfiguration(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.deleteTableGroupingConfiguration(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getPhysicalTableName().getSchemaName(),
                 sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
-        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.block().getStatusCode());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
 
         Assertions.assertNull(sampleTableSpec.getGroupings().get(dataStreamName));
