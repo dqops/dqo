@@ -15,8 +15,10 @@
  */
 package com.dqops.rest.controllers;
 
+import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
@@ -30,8 +32,6 @@ import com.dqops.rest.models.metadata.CheckDefinitionFolderModel;
 import com.dqops.rest.models.metadata.CheckDefinitionListModel;
 import com.dqops.rest.models.metadata.CheckDefinitionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import autovalue.shaded.com.google.common.base.Strings;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,11 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -84,13 +88,15 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckDefinitionListModel>> getAllChecks(
+    public Mono<ResponseEntity<Flux<CheckDefinitionListModel>>> getAllChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
-        List<CheckDefinitionListModel> allChecks = checkDefinitionFolderModel.getAllChecks();
-        allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
+            List<CheckDefinitionListModel> allChecks = checkDefinitionFolderModel.getAllChecks();
+            allChecks.sort(Comparator.comparing(model -> model.getFullCheckName()));
 
-        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -110,34 +116,36 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckDefinitionModel>> getCheck(
+    public Mono<ResponseEntity<Mono<CheckDefinitionModel>>> getCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullCheckName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullCheckName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        CheckDefinitionWrapper userCheckDefinitionWrapper = userHome.getChecks().getByObjectName(fullCheckName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            CheckDefinitionWrapper userCheckDefinitionWrapper = userHome.getChecks().getByObjectName(fullCheckName, true);
 
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        CheckDefinitionWrapper builtinCheckDefinitionWrapper = dqoHome.getChecks().getByObjectName(fullCheckName, true);
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            CheckDefinitionWrapper builtinCheckDefinitionWrapper = dqoHome.getChecks().getByObjectName(fullCheckName, true);
 
-        if (userCheckDefinitionWrapper == null && builtinCheckDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (userCheckDefinitionWrapper == null && builtinCheckDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        CheckDefinitionWrapper effectiveCheckDefinition = Optional.ofNullable(userCheckDefinitionWrapper).orElse(builtinCheckDefinitionWrapper);
+            CheckDefinitionWrapper effectiveCheckDefinition = Optional.ofNullable(userCheckDefinitionWrapper).orElse(builtinCheckDefinitionWrapper);
 
-        boolean isCustom = userCheckDefinitionWrapper != null;
-        boolean isBuiltIn = builtinCheckDefinitionWrapper != null;
-        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        CheckDefinitionModel checkDefinitionModel = new CheckDefinitionModel(effectiveCheckDefinition, isCustom, isBuiltIn, canEdit);
+            boolean isCustom = userCheckDefinitionWrapper != null;
+            boolean isBuiltIn = builtinCheckDefinitionWrapper != null;
+            boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            CheckDefinitionModel checkDefinitionModel = new CheckDefinitionModel(effectiveCheckDefinition, isCustom, isBuiltIn, canEdit);
 
-        return new ResponseEntity<>(Mono.just(checkDefinitionModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkDefinitionModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -160,34 +168,36 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createCheck(
+    public Mono<ResponseEntity<Mono<Void>>> createCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName,
             @ApiParam("Check model") @RequestBody CheckDefinitionModel checkDefinitionModel) {
-        if (checkDefinitionModel == null || Strings.isNullOrEmpty(fullCheckName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkDefinitionModel == null || Strings.isNullOrEmpty(fullCheckName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        String[] fullCheckNameSplit = fullCheckName.split("/");
-        if (!fullCheckNameSplit[fullCheckNameSplit.length - 1].equals(checkDefinitionModel.getCheckName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
-        }
+            String[] fullCheckNameSplit = fullCheckName.split("/");
+            if (!fullCheckNameSplit[fullCheckNameSplit.length - 1].equals(checkDefinitionModel.getCheckName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
-        CheckDefinitionWrapper existingCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
+            CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
+            CheckDefinitionWrapper existingCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
 
-        if (existingCheckDefinitionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+            if (existingCheckDefinitionWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+            }
 
-        CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-        checkDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
-        userHomeContext.flush();
+            CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
+            checkDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+        }));
     }
 
     /**
@@ -210,55 +220,57 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateCheck(
+    public Mono<ResponseEntity<Mono<Void>>> updateCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("List of check definitions") @RequestBody CheckDefinitionModel checkDefinitionModel,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullCheckName) || checkDefinitionModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullCheckName) || checkDefinitionModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
-        CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
+            CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
 
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        CheckDefinitionWrapper builtinCheckDefinitionWrapper = dqoHome.getChecks().getByObjectName(fullCheckName, true);
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            CheckDefinitionWrapper builtinCheckDefinitionWrapper = dqoHome.getChecks().getByObjectName(fullCheckName, true);
 
-        if (existingUserCheckDefinitionWrapper == null && builtinCheckDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (existingUserCheckDefinitionWrapper == null && builtinCheckDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        if (builtinCheckDefinitionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+            if (builtinCheckDefinitionWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+            }
 
-        if (checkDefinitionModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
-            if (existingUserCheckDefinitionWrapper != null) {
-                existingUserCheckDefinitionWrapper.markForDeletion(); // remove customization
+            if (checkDefinitionModel.equalsBuiltInCheck(builtinCheckDefinitionWrapper)) {
+                if (existingUserCheckDefinitionWrapper != null) {
+                    existingUserCheckDefinitionWrapper.markForDeletion(); // remove customization
+                }
+                else {
+                    // ignore saving
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                }
+            }
+
+            CheckDefinitionSpec newCheckDefinitionSpec = checkDefinitionModel.toCheckDefinitionSpec();
+            if (existingUserCheckDefinitionWrapper == null) {
+                CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
+                checkDefinitionWrapper.setSpec(newCheckDefinitionSpec);
             }
             else {
-                // ignore saving
-                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                CheckDefinitionSpec oldCheckDefinitionSpec = existingUserCheckDefinitionWrapper.getSpec();  // loading
+                existingUserCheckDefinitionWrapper.setSpec(newCheckDefinitionSpec);
             }
-        }
 
-        CheckDefinitionSpec newCheckDefinitionSpec = checkDefinitionModel.toCheckDefinitionSpec();
-        if (existingUserCheckDefinitionWrapper == null) {
-            CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-            checkDefinitionWrapper.setSpec(newCheckDefinitionSpec);
-        }
-        else {
-            CheckDefinitionSpec oldCheckDefinitionSpec = existingUserCheckDefinitionWrapper.getSpec();  // loading
-            existingUserCheckDefinitionWrapper.setSpec(newCheckDefinitionSpec);
-        }
+            userHomeContext.flush();
 
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -278,28 +290,30 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteCheck(
+    public Mono<ResponseEntity<Mono<Void>>> deleteCheck(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full check name") @PathVariable String fullCheckName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullCheckName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullCheckName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
-        CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
+            CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
+            CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
 
-        if (existingUserCheckDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (existingUserCheckDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        existingUserCheckDefinitionWrapper.markForDeletion();
-        userHomeContext.flush();
+            existingUserCheckDefinitionWrapper.markForDeletion();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -318,11 +332,13 @@ public class ChecksController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckDefinitionFolderModel>> getCheckFolderTree(
+    public Mono<ResponseEntity<Mono<CheckDefinitionFolderModel>>> getCheckFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CheckDefinitionFolderModel checkDefinitionFolderModel = createCheckTreeModel(principal);
 
-        return new ResponseEntity<>(Mono.just(checkDefinitionFolderModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkDefinitionFolderModel), HttpStatus.OK);
+        }));
     }
 
     /**

@@ -17,6 +17,7 @@ package com.dqops.rest.controllers;
 
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
@@ -27,7 +28,6 @@ import com.dqops.rest.models.metadata.DataGroupingConfigurationListModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationModel;
 import com.dqops.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.locking.RestApiLockService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -40,7 +40,11 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST api controller to manage the data grouping configurations on a table.
@@ -85,39 +89,41 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DataGroupingConfigurationListModel>> getTableGroupingConfigurations(
+    public Mono<ResponseEntity<Flux<DataGroupingConfigurationListModel>>> getTableGroupingConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DataGroupingConfigurationSpecMap dataGroupingsMapping = tableSpec.getGroupings();
-        if (dataGroupingsMapping == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DataGroupingConfigurationSpecMap dataGroupingsMapping = tableSpec.getGroupings();
+            if (dataGroupingsMapping == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        boolean canEditConfiguration = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        List<DataGroupingConfigurationListModel> result = new LinkedList<>();
-        List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
-        for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
-            String groupingConfigurationName = dataGroupingNamesList.get(i);
-            boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultGroupingName(), groupingConfigurationName);
-            result.add(new DataGroupingConfigurationListModel(){{
-                setConnectionName(connectionName);
-                setSchemaName(schemaName);
-                setTableName(tableName);
-                setDataGroupingConfigurationName(groupingConfigurationName);
-                setDefaultDataGroupingConfiguration(isDefaultDataGrouping);
-                setCanEdit(canEditConfiguration);
-            }});
-        }
+            boolean canEditConfiguration = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            List<DataGroupingConfigurationListModel> result = new LinkedList<>();
+            List<String> dataGroupingNamesList = new ArrayList<>(dataGroupingsMapping.keySet());
+            for (int i = 0; i < dataGroupingNamesList.size() ; i++) {
+                String groupingConfigurationName = dataGroupingNamesList.get(i);
+                boolean isDefaultDataGrouping = Objects.equals(tableSpec.getDefaultGroupingName(), groupingConfigurationName);
+                result.add(new DataGroupingConfigurationListModel(){{
+                    setConnectionName(connectionName);
+                    setSchemaName(schemaName);
+                    setTableName(tableName);
+                    setDataGroupingConfigurationName(groupingConfigurationName);
+                    setDefaultDataGroupingConfiguration(isDefaultDataGrouping);
+                    setCanEdit(canEditConfiguration);
+                }});
+            }
 
-        return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -141,34 +147,36 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DataGroupingConfigurationModel>> getTableGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<DataGroupingConfigurationModel>>> getTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String groupingConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
-        if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(groupingConfigurationName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
+            if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(groupingConfigurationName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DataGroupingConfigurationModel result = new DataGroupingConfigurationModel() {{
-            setConnectionName(connectionName);
-            setSchemaName(schemaName);
-            setTableName(tableName);
-            setDataGroupingConfigurationName(groupingConfigurationName);
-            setSpec(dataGroupingMapping.get(groupingConfigurationName));
-            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-            setYamlParsingError(tableSpec.getYamlParsingError());
-        }};
-        return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
+            DataGroupingConfigurationModel result = new DataGroupingConfigurationModel() {{
+                setConnectionName(connectionName);
+                setSchemaName(schemaName);
+                setTableName(tableName);
+                setDataGroupingConfigurationName(groupingConfigurationName);
+                setSpec(dataGroupingMapping.get(groupingConfigurationName));
+                setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+                setYamlParsingError(tableSpec.getYamlParsingError());
+            }};
+            return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
+        }));
     }
 
 
@@ -196,56 +204,58 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTableGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String dataGroupingConfigurationName,
             @ApiParam("Data grouping configuration simplified model") @RequestBody DataGroupingConfigurationTrimmedModel dataGroupingConfigurationModel) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(dataGroupingConfigurationName) ||
-                dataGroupingConfigurationModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    Strings.isNullOrEmpty(dataGroupingConfigurationName) ||
+                    dataGroupingConfigurationModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
-                    if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    String newName = dataGroupingConfigurationModel.getDataGroupingConfigurationName();
-                    if (Strings.isNullOrEmpty(newName)) {
-                        newName = dataGroupingConfigurationName;
-                    }
-
-                    if (!Objects.equals(newName, dataGroupingConfigurationName) && dataGroupingMapping.containsKey(newName)) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
-                    }
-
-                    DataGroupingConfigurationSpec newSpec = dataGroupingConfigurationModel.getSpec();
-                    dataGroupingMapping.put(newName, newSpec);
-                    if (!newName.equals(dataGroupingConfigurationName)) {
-                        // If renaming actually happened.
-                        dataGroupingMapping.remove(dataGroupingConfigurationName);
-                        if (Objects.equals(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationName)) {
-                            tableSpec.setDefaultGroupingName(newName);
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
-                    }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
+                        if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+
+                        String newName = dataGroupingConfigurationModel.getDataGroupingConfigurationName();
+                        if (Strings.isNullOrEmpty(newName)) {
+                            newName = dataGroupingConfigurationName;
+                        }
+
+                        if (!Objects.equals(newName, dataGroupingConfigurationName) && dataGroupingMapping.containsKey(newName)) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
+                        }
+
+                        DataGroupingConfigurationSpec newSpec = dataGroupingConfigurationModel.getSpec();
+                        dataGroupingMapping.put(newName, newSpec);
+                        if (!newName.equals(dataGroupingConfigurationName)) {
+                            // If renaming actually happened.
+                            dataGroupingMapping.remove(dataGroupingConfigurationName);
+                            if (Objects.equals(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationName)) {
+                                tableSpec.setDefaultGroupingName(newName);
+                            }
+                        }
+
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -269,37 +279,39 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createTableGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> createTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration simplified model") @RequestBody DataGroupingConfigurationTrimmedModel dataGroupingConfigurationModel) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                dataGroupingConfigurationModel == null               ||
-                Strings.isNullOrEmpty(dataGroupingConfigurationModel.getDataGroupingConfigurationName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    dataGroupingConfigurationModel == null               ||
+                    Strings.isNullOrEmpty(dataGroupingConfigurationModel.getDataGroupingConfigurationName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    if (tableSpec.getGroupings().containsKey(dataGroupingConfigurationModel.getDataGroupingConfigurationName())) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
-                    }
+                        if (tableSpec.getGroupings().containsKey(dataGroupingConfigurationModel.getDataGroupingConfigurationName())) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data grouping configuration with this name already exists
+                        }
 
-                    tableSpec.getGroupings().put(dataGroupingConfigurationModel.getDataGroupingConfigurationName(), dataGroupingConfigurationModel.getSpec());
+                        tableSpec.getGroupings().put(dataGroupingConfigurationModel.getDataGroupingConfigurationName(), dataGroupingConfigurationModel.getSpec());
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                    });
+        }));
     }
 
     /**
@@ -322,35 +334,37 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> setTableDefaultGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> setTableDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "dataGroupingConfigurationName", value = "Data grouping configuration name or empty to disable data grouping", required = true)
             @RequestParam(required = true) String dataGroupingConfigurationName) {
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
-                    if (!Strings.isNullOrEmpty(dataGroupingConfigurationName) && !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        DataGroupingConfigurationSpecMap dataGroupingMapping = tableSpec.getGroupings();
+                        if (!Strings.isNullOrEmpty(dataGroupingConfigurationName) && !dataGroupingMapping.containsKey(dataGroupingConfigurationName)) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    if (Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
-                        tableSpec.setDefaultGroupingName(null);
-                    } else {
-                        tableSpec.setDefaultGroupingName(dataGroupingConfigurationName);
-                    }
+                        if (Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
+                            tableSpec.setDefaultGroupingName(null);
+                        } else {
+                            tableSpec.setDefaultGroupingName(dataGroupingConfigurationName);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -374,41 +388,43 @@ public class DataGroupingConfigurationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteTableGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> deleteTableGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String dataGroupingConfigurationName) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    DataGroupingConfigurationSpecMap dataGroupingsMap = tableSpec.getGroupings();
-                    if (dataGroupingsMap == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    // If data grouping configuration is not found, return success (idempotence).
-                    dataGroupingsMap.remove(dataGroupingConfigurationName);
-                    if (Objects.equals(dataGroupingConfigurationName, tableSpec.getDefaultGroupingName())) {
-                        tableSpec.setDefaultGroupingName(null);
-                    }
-
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    Strings.isNullOrEmpty(dataGroupingConfigurationName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+    
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+    
+                        DataGroupingConfigurationSpecMap dataGroupingsMap = tableSpec.getGroupings();
+                        if (dataGroupingsMap == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+    
+                        // If data grouping configuration is not found, return success (idempotence).
+                        dataGroupingsMap.remove(dataGroupingConfigurationName);
+                        if (Objects.equals(dataGroupingConfigurationName, tableSpec.getDefaultGroupingName())) {
+                            tableSpec.setDefaultGroupingName(null);
+                        }
+    
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**

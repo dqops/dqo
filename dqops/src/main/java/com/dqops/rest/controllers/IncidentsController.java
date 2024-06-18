@@ -21,6 +21,7 @@ import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.IncidentIssueUrlChangeParameters;
 import com.dqops.core.incidents.IncidentStatusChangeParameters;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.*;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.models.*;
@@ -33,7 +34,6 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.calibration.CheckCalibrationService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +48,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Data quality incidents REST API controller.
@@ -109,19 +110,21 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<IncidentModel>> getIncident(
+    public Mono<ResponseEntity<Mono<IncidentModel>>> getIncident(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
 
-        if (incidentModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (incidentModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        return new ResponseEntity<>(Mono.just(incidentModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(incidentModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -154,7 +157,7 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckResultEntryModel>> getIncidentIssues(
+    public Mono<ResponseEntity<Flux<CheckResultEntryModel>>> getIncidentIssues(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -178,44 +181,46 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<CheckResultSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
             @RequestParam(required = false) Optional<SortDirection> direction) {
-        CheckResultListFilterParameters filterParameters = new CheckResultListFilterParameters();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CheckResultListFilterParameters filterParameters = new CheckResultListFilterParameters();
 
-        if (page.isPresent()) {
-            filterParameters.setPage(page.get());
-        }
-        if (limit.isPresent()) {
-            filterParameters.setLimit(limit.get());
-        }
-        if (filter.isPresent()) {
-            filterParameters.setFilter(filter.get());
-        }
-        if (days.isPresent()) {
-            filterParameters.setDays(days.get());
-        }
-        if (date.isPresent()) {
-            filterParameters.setDate(date.get());
-        }
-        if (column.isPresent()) {
-            filterParameters.setColumn(column.get());
-        }
-        if (check.isPresent()) {
-            filterParameters.setCheck(check.get());
-        }
-        if (order.isPresent()) {
-            filterParameters.setOrder(order.get());
-        }
-        if (direction.isPresent()) {
-            filterParameters.setSortDirection(direction.get());
-        }
+            if (page.isPresent()) {
+                filterParameters.setPage(page.get());
+            }
+            if (limit.isPresent()) {
+                filterParameters.setLimit(limit.get());
+            }
+            if (filter.isPresent()) {
+                filterParameters.setFilter(filter.get());
+            }
+            if (days.isPresent()) {
+                filterParameters.setDays(days.get());
+            }
+            if (date.isPresent()) {
+                filterParameters.setDate(date.get());
+            }
+            if (column.isPresent()) {
+                filterParameters.setColumn(column.get());
+            }
+            if (check.isPresent()) {
+                filterParameters.setCheck(check.get());
+            }
+            if (order.isPresent()) {
+                filterParameters.setOrder(order.get());
+            }
+            if (direction.isPresent()) {
+                filterParameters.setSortDirection(direction.get());
+            }
 
-        CheckResultEntryModel[] checkResultEntryModels = this.incidentsDataService.loadCheckResultsForIncident(
-                connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
+            CheckResultEntryModel[] checkResultEntryModels = this.incidentsDataService.loadCheckResultsForIncident(
+                    connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
-        if (checkResultEntryModels == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (checkResultEntryModels == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        return new ResponseEntity<>(Flux.just(checkResultEntryModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.just(checkResultEntryModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -245,7 +250,7 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<IncidentIssueHistogramModel>> getIncidentHistogram(
+    public Mono<ResponseEntity<Mono<IncidentIssueHistogramModel>>> getIncidentHistogram(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -261,31 +266,33 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<String> column,
             @ApiParam(name = "check", value = "Optional check name filter", required = false)
             @RequestParam(required = false) Optional<String> check) {
-        IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
-        if (filter.isPresent()) {
-            filterParameters.setFilter(filter.get());
-        }
-        if (days.isPresent()) {
-            filterParameters.setDays(days.get());
-        }
-        if (date.isPresent()) {
-            filterParameters.setDate(date.get());
-        }
-        if (column.isPresent()) {
-            filterParameters.setColumn(column.get());
-        }
-        if (check.isPresent()) {
-            filterParameters.setCheck(check.get());
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
+            if (filter.isPresent()) {
+                filterParameters.setFilter(filter.get());
+            }
+            if (days.isPresent()) {
+                filterParameters.setDays(days.get());
+            }
+            if (date.isPresent()) {
+                filterParameters.setDate(date.get());
+            }
+            if (column.isPresent()) {
+                filterParameters.setColumn(column.get());
+            }
+            if (check.isPresent()) {
+                filterParameters.setCheck(check.get());
+            }
 
-        IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
-                connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
+            IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
+                    connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
-        if (histogramModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (histogramModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        return new ResponseEntity<>(Mono.just(histogramModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(histogramModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -315,7 +322,7 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<IncidentModel>> findRecentIncidentsOnConnection(
+    public Mono<ResponseEntity<Flux<IncidentModel>>> findRecentIncidentsOnConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam(name = "months", value = "Number of recent months to load, the default is 3 months", required = false)
@@ -342,38 +349,40 @@ public class IncidentsController {
                 @RequestParam(required = false) Optional<IncidentSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
                @RequestParam(required = false) Optional<SortDirection> direction) {
-        IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
-        filterParameters.setRecentMonths(months.orElse(3));
-        filterParameters.setOpen(open.orElse(Boolean.TRUE));
-        filterParameters.setAcknowledged(acknowledged.orElse(Boolean.TRUE));
-        filterParameters.setResolved(resolved.orElse(Boolean.FALSE));
-        filterParameters.setMuted(muted.orElse(Boolean.FALSE));
-        filterParameters.setDimension(dimension.orElse(null));
-        filterParameters.setCategory(category.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
+            filterParameters.setRecentMonths(months.orElse(3));
+            filterParameters.setOpen(open.orElse(Boolean.TRUE));
+            filterParameters.setAcknowledged(acknowledged.orElse(Boolean.TRUE));
+            filterParameters.setResolved(resolved.orElse(Boolean.FALSE));
+            filterParameters.setMuted(muted.orElse(Boolean.FALSE));
+            filterParameters.setDimension(dimension.orElse(null));
+            filterParameters.setCategory(category.orElse(null));
 
-        if (page.isPresent()) {
-            filterParameters.setPage(page.get());
-        }
-        if (limit.isPresent()) {
-            filterParameters.setLimit(limit.get());
-        }
-        if (filter.isPresent()) {
-            filterParameters.setFilter(filter.get());
-        }
-        if (order.isPresent()) {
-            filterParameters.setOrder(order.get());
-        }
-        if (direction.isPresent()) {
-            filterParameters.setSortDirection(direction.get());
-        }
+            if (page.isPresent()) {
+                filterParameters.setPage(page.get());
+            }
+            if (limit.isPresent()) {
+                filterParameters.setLimit(limit.get());
+            }
+            if (filter.isPresent()) {
+                filterParameters.setFilter(filter.get());
+            }
+            if (order.isPresent()) {
+                filterParameters.setOrder(order.get());
+            }
+            if (direction.isPresent()) {
+                filterParameters.setSortDirection(direction.get());
+            }
 
-        Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(
-                connectionName, filterParameters, principal.getDataDomainIdentity());
-        if (incidentModels == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
-        }
+            Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(
+                    connectionName, filterParameters, principal.getDataDomainIdentity());
+            if (incidentModels == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(incidentModels.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(incidentModels.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -392,10 +401,12 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<IncidentsPerConnectionModel>> findConnectionIncidentStats(
+    public Mono<ResponseEntity<Flux<IncidentsPerConnectionModel>>> findConnectionIncidentStats(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats(principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats(principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -414,7 +425,7 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TopIncidentsModel>> findTopIncidentsGrouped(
+    public Mono<ResponseEntity<Mono<TopIncidentsModel>>> findTopIncidentsGrouped(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "status", value = "Incident status to group. When this parameter is missing, the 'open' (new) incidents are grouped by default.", required = false)
             @RequestParam(required = false) Optional<IncidentStatus> status,
@@ -424,13 +435,15 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "limit", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
             @RequestParam(required = false) Optional<Integer> days) {
-        TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
-                groupBy.orElse(TopIncidentGrouping.category),
-                status.orElse(IncidentStatus.open),
-                limit.orElse(TOP_INCIDENTS_LIMIT_PER_GROUP),
-                days.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsDays()),
-                principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Mono.just(topIncidentsModel), HttpStatus.OK);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
+                    groupBy.orElse(TopIncidentGrouping.category),
+                    status.orElse(IncidentStatus.open),
+                    limit.orElse(TOP_INCIDENTS_LIMIT_PER_GROUP),
+                    days.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsDays()),
+                    principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Mono.just(topIncidentsModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -455,7 +468,7 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> setIncidentStatus(
+    public Mono<ResponseEntity<Mono<Void>>> setIncidentStatus(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
@@ -463,20 +476,22 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(
-                connectionName, year, month, incidentId, status, connectionWrapper.getSpec().getIncidentGrouping());
-        this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
+            IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(
+                    connectionName, year, month, incidentId, status, connectionWrapper.getSpec().getIncidentGrouping());
+            this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -500,17 +515,19 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> setIncidentIssueUrl(
+    public Mono<ResponseEntity<Mono<Void>>> setIncidentIssueUrl(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "issueUrl", value = "New incident's issueUrl") @RequestParam String issueUrl) {
-        IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
-        this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
+            this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -534,32 +551,34 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> disableChecksForIncident(
+    public Mono<ResponseEntity<Mono<Void>>> disableChecksForIncident(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
+            IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
 
-        if (incidentModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (incidentModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
-        this.checkCalibrationService.disableChecks(checkSearchFilter, userHome, false);
-        userHomeContext.flush();
+            CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
+            this.checkCalibrationService.disableChecks(checkSearchFilter, userHome, false);
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -583,31 +602,33 @@ public class IncidentsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> recalibrateChecksForIncident(
+    public Mono<ResponseEntity<Mono<Void>>> recalibrateChecksForIncident(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
+            IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
 
-        if (incidentModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (incidentModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
-        this.checkCalibrationService.decreaseCheckSensitivity(checkSearchFilter, userHome, false);
-        userHomeContext.flush();
+            CheckSearchFilters checkSearchFilter = incidentModel.toCheckSearchFilter();
+            this.checkCalibrationService.decreaseCheckSensitivity(checkSearchFilter, userHome, false);
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 }

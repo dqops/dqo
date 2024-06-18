@@ -21,14 +21,11 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.metadata.credentials.SharedCredentialList;
-import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dictionaries.DictionaryList;
 import com.dqops.metadata.dictionaries.DictionaryWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.credentials.SharedCredentialModel;
 import com.dqops.rest.models.dictionaries.DataDictionaryListModel;
 import com.dqops.rest.models.dictionaries.DataDictionaryModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
@@ -45,10 +42,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -86,23 +83,25 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DataDictionaryListModel>> getAllDictionaries(
+    public Mono<ResponseEntity<Flux<DataDictionaryListModel>>> getAllDictionaries(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<DictionaryWrapper> dictionaryWrappers = userHome.getDictionaries().toList();
-        List<DataDictionaryListModel> dictionaryListModelList = dictionaryWrappers.stream()
-                .map(wrapper -> new DataDictionaryListModel() {{
-                    setDictionaryName(wrapper.getDictionaryName());
-                    setCanAccessDictionary(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
-                    setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-                }})
-                .collect(Collectors.toList());
+            List<DictionaryWrapper> dictionaryWrappers = userHome.getDictionaries().toList();
+            List<DataDictionaryListModel> dictionaryListModelList = dictionaryWrappers.stream()
+                    .map(wrapper -> new DataDictionaryListModel() {{
+                        setDictionaryName(wrapper.getDictionaryName());
+                        setCanAccessDictionary(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
+                        setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                    }})
+                    .collect(Collectors.toList());
 
-        dictionaryListModelList.sort(Comparator.comparing(model -> model.getDictionaryName()));
+            dictionaryListModelList.sort(Comparator.comparing(model -> model.getDictionaryName()));
 
-        return new ResponseEntity<>(Flux.fromStream(dictionaryListModelList.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(dictionaryListModelList.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -123,28 +122,30 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<DataDictionaryModel>> getDictionary(
+    public Mono<ResponseEntity<Mono<DataDictionaryModel>>> getDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary CSV file name") @PathVariable String dictionaryName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(dictionaryName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(dictionaryName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
 
-        if (dictionaryWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (dictionaryWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        FileContent credentialFileContent = dictionaryWrapper.getObject();
-        DataDictionaryModel sharedCredentialModel = new DataDictionaryModel();
-        sharedCredentialModel.setDictionaryName(dictionaryName);
-        sharedCredentialModel.setFileContent(credentialFileContent.getTextContent());
+            FileContent credentialFileContent = dictionaryWrapper.getObject();
+            DataDictionaryModel sharedCredentialModel = new DataDictionaryModel();
+            sharedCredentialModel.setDictionaryName(dictionaryName);
+            sharedCredentialModel.setFileContent(credentialFileContent.getTextContent());
 
-        return new ResponseEntity<>(Mono.just(sharedCredentialModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(sharedCredentialModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -164,29 +165,31 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<byte[]>> downloadDictionary(
+    public Mono<ResponseEntity<Mono<byte[]>>> downloadDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary CSV file name") @PathVariable String dictionaryName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(dictionaryName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(dictionaryName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            DictionaryWrapper dictionaryWrapper = userHome.getDictionaries().getByObjectName(dictionaryName, true);
 
-        if (dictionaryWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (dictionaryWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        FileContent credentialFileContent = dictionaryWrapper.getObject();
-        byte[] binaryFileContent = credentialFileContent.getTextContent().getBytes(StandardCharsets.UTF_8);
+            FileContent credentialFileContent = dictionaryWrapper.getObject();
+            byte[] binaryFileContent = credentialFileContent.getTextContent().getBytes(StandardCharsets.UTF_8);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentDisposition(ContentDisposition.attachment().filename(dictionaryName).build());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.attachment().filename(dictionaryName).build());
 
-        return new ResponseEntity<>(Mono.just(binaryFileContent), headers, HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(binaryFileContent), headers, HttpStatus.OK);
+        }));
     }
 
     /**
@@ -210,32 +213,34 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createDictionary(
+    public Mono<ResponseEntity<Mono<Void>>> createDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary model") @RequestBody DataDictionaryModel dataDictionaryModel) {
-        if (Strings.isNullOrEmpty(dataDictionaryModel.getDictionaryName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(dataDictionaryModel.getDictionaryName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        DictionaryList dictionaryList = userHome.getDictionaries();
-        DictionaryWrapper existingDictionary = dictionaryList.getByObjectName(dataDictionaryModel.getDictionaryName(), true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            DictionaryList dictionaryList = userHome.getDictionaries();
+            DictionaryWrapper existingDictionary = dictionaryList.getByObjectName(dataDictionaryModel.getDictionaryName(), true);
 
-        if (existingDictionary != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+            if (existingDictionary != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+            }
 
-        if (dataDictionaryModel.getFileContent() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (dataDictionaryModel.getFileContent() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        DictionaryWrapper dictionaryWrapper = dictionaryList.createAndAddNew(dataDictionaryModel.getDictionaryName());
-        dictionaryWrapper.setObject(new FileContent(dataDictionaryModel.getFileContent()));
+            DictionaryWrapper dictionaryWrapper = dictionaryList.createAndAddNew(dataDictionaryModel.getDictionaryName());
+            dictionaryWrapper.setObject(new FileContent(dataDictionaryModel.getFileContent()));
 
-        userHomeContext.flush();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+        }));
     }
 
     /**
@@ -257,37 +262,39 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDictionary(
+    public Mono<ResponseEntity<Mono<Void>>> updateDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary model") @RequestBody DataDictionaryModel dataDictionaryModel,
             @ApiParam("Data dictionary file name that will be updated") @PathVariable String dictionaryName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(dictionaryName) || dataDictionaryModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(dictionaryName) || dataDictionaryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        if (!Objects.equals(dictionaryName, dataDictionaryModel.getDictionaryName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (!Objects.equals(dictionaryName, dataDictionaryModel.getDictionaryName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        DictionaryList dictionaryList = userHome.getDictionaries();
-        DictionaryWrapper dictionaryWrapper = dictionaryList.getByObjectName(dictionaryName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            DictionaryList dictionaryList = userHome.getDictionaries();
+            DictionaryWrapper dictionaryWrapper = dictionaryList.getByObjectName(dictionaryName, true);
 
-        if (dictionaryWrapper == null || dictionaryWrapper.getObject() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (dictionaryWrapper == null || dictionaryWrapper.getObject() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        if (dataDictionaryModel.getFileContent() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (dataDictionaryModel.getFileContent() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        dictionaryWrapper.setObject(new FileContent(dataDictionaryModel.getFileContent()));
+            dictionaryWrapper.setObject(new FileContent(dataDictionaryModel.getFileContent()));
 
-        userHomeContext.flush();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -307,27 +314,29 @@ public class DictionariesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteDictionary(
+    public Mono<ResponseEntity<Mono<Void>>> deleteDictionary(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data dictionary name") @PathVariable String dictionaryName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(dictionaryName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(dictionaryName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        DictionaryList dictionaryList = userHome.getDictionaries();
-        DictionaryWrapper dictionaryWrapper = dictionaryList.getByObjectName(dictionaryName, true);
+            DictionaryList dictionaryList = userHome.getDictionaries();
+            DictionaryWrapper dictionaryWrapper = dictionaryList.getByObjectName(dictionaryName, true);
 
-        if (dictionaryWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (dictionaryWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        dictionaryWrapper.markForDeletion();
-        userHomeContext.flush();
+            dictionaryWrapper.markForDeletion();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 }

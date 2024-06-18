@@ -22,6 +22,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -32,7 +33,6 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.check.CheckTemplate;
 import com.dqops.rest.models.metadata.SchemaModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.models.CheckContainerTypeModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
 import com.dqops.services.metadata.SchemaService;
@@ -46,9 +46,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -88,58 +90,60 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SchemaModel>> getSchemas(
+    public Mono<ResponseEntity<Flux<SchemaModel>>> getSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        List<String> schemaNameList = connectionWrapper.getTables().toList()
-                .stream()
-                .map(tw -> tw.getPhysicalTableName().getSchemaName())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+            List<String> schemaNameList = connectionWrapper.getTables().toList()
+                    .stream()
+                    .map(tw -> tw.getPhysicalTableName().getSchemaName())
+                    .distinct()
+                    .sorted()
+                    .collect(Collectors.toList());
 
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
 
-        if(connectionSpec.getProviderType() != null
-                && connectionSpec.getProviderType().equals(ProviderType.duckdb)
-                && duckdbParametersSpec != null) {
-            schemaNameList.addAll(connectionWrapper.getSpec().getDuckdb().getDirectories().keySet().stream()
-                    .filter(s -> !schemaNameList.contains(s)).collect(Collectors.toList()));
-        }
+            if(connectionSpec.getProviderType() != null
+                    && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                    && duckdbParametersSpec != null) {
+                schemaNameList.addAll(connectionWrapper.getSpec().getDuckdb().getDirectories().keySet().stream()
+                        .filter(s -> !schemaNameList.contains(s)).collect(Collectors.toList()));
+            }
 
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        Stream<SchemaModel> modelStream = schemaNameList.stream()
-                .map(schemaName -> {
-                    String directoryPrefix = null;
-                    if(connectionSpec.getProviderType() != null
-                            && connectionSpec.getProviderType().equals(ProviderType.duckdb)
-                            && duckdbParametersSpec != null){
-                        directoryPrefix = duckdbParametersSpec.getDirectories().get(schemaName);
-                    }
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            Stream<SchemaModel> modelStream = schemaNameList.stream()
+                    .map(schemaName -> {
+                        String directoryPrefix = null;
+                        if(connectionSpec.getProviderType() != null
+                                && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                                && duckdbParametersSpec != null){
+                            directoryPrefix = duckdbParametersSpec.getDirectories().get(schemaName);
+                        }
 
-                    SchemaModel schemaModel = SchemaModel.fromSchemaNameStrings(connectionName, schemaName, directoryPrefix, isEditor, isOperator);
+                        SchemaModel schemaModel = SchemaModel.fromSchemaNameStrings(connectionName, schemaName, directoryPrefix, isEditor, isOperator);
 
-                    if(connectionSpec.getProviderType() != null
-                            && connectionSpec.getProviderType().equals(ProviderType.duckdb)
-                            && directoryPrefix == null){
-                        schemaModel.setErrorMessage("The schema mapping to the directory with data is missing.");
-                    }
+                        if(connectionSpec.getProviderType() != null
+                                && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                                && directoryPrefix == null){
+                            schemaModel.setErrorMessage("The schema mapping to the directory with data is missing.");
+                        }
 
-                    return schemaModel;
-                });
+                        return schemaModel;
+                    });
 
-        return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -170,7 +174,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaProfilingChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getSchemaProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -192,29 +196,31 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+            if (tableWrappers == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.profiling, null),
-                tableNamePattern.orElse(null),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                checkTarget.orElse(null),
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                    connectionName, schemaName, new CheckContainerTypeModel(CheckType.profiling, null),
+                    tableNamePattern.orElse(null),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    checkTarget.orElse(null),
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -246,7 +252,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaMonitoringChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getSchemaMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -269,29 +275,31 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+            if (tableWrappers == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
-                tableNamePattern.orElse(null),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                checkTarget.orElse(null),
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                    connectionName, schemaName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
+                    tableNamePattern.orElse(null),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    checkTarget.orElse(null),
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -323,7 +331,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getSchemaPartitionedChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getSchemaPartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -346,29 +354,31 @@ public class SchemasController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+            if (tableWrappers == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
-                connectionName, schemaName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
-                tableNamePattern.orElse(null),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                checkTarget.orElse(null),
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            List<CheckConfigurationModel> checkConfigurationModels = this.schemaService.getCheckConfigurationsOnSchema(
+                    connectionName, schemaName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
+                    tableNamePattern.orElse(null),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    checkTarget.orElse(null),
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -393,21 +403,23 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getSchemaProfilingChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.profiling,
-                null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                    connectionName, schemaName, CheckType.profiling,
+                    null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -433,7 +445,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaMonitoringChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getSchemaMonitoringChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -441,14 +453,16 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.monitoring,
-                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                    connectionName, schemaName, CheckType.monitoring,
+                    timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -474,7 +488,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaPartitionedChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getSchemaPartitionedChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -482,13 +496,15 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
-                connectionName, schemaName, CheckType.partitioned,
-                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                    connectionName, schemaName, CheckType.partitioned,
+                    timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 }

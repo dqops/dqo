@@ -20,6 +20,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -30,7 +31,6 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.comparison.TableComparisonConfigurationModel;
 import com.dqops.rest.models.comparison.TableComparisonModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.locking.RestApiLockService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -45,6 +45,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST api controller to manage the configuration of table comparisons between data sources.
@@ -93,7 +94,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<TableComparisonConfigurationModel>> getTableComparisonConfigurations(
+    public Mono<ResponseEntity<Flux<TableComparisonConfigurationModel>>> getTableComparisonConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -102,30 +103,32 @@ public class TableComparisonsController {
             @RequestParam(required = false) Optional<CheckType> checkType,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        List<TableComparisonConfigurationModel> result = new LinkedList<>();
-        boolean canCompareTables = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-
-        for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
-            if (checkType.isPresent() && checkType.get() != tableComparisonConfigurationSpec.getCheckType()) {
-                continue;
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+            if (tableComparisonConfigurationSpecMap == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            if (checkTimeScale.isPresent() && checkTimeScale.get() != tableComparisonConfigurationSpec.getTimeScale()) {
-                continue;
+            List<TableComparisonConfigurationModel> result = new LinkedList<>();
+            boolean canCompareTables = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
+            for (TableComparisonConfigurationSpec tableComparisonConfigurationSpec : tableComparisonConfigurationSpecMap.values()) {
+                if (checkType.isPresent() && checkType.get() != tableComparisonConfigurationSpec.getCheckType()) {
+                    continue;
+                }
+
+                if (checkTimeScale.isPresent() && checkTimeScale.get() != tableComparisonConfigurationSpec.getTimeScale()) {
+                    continue;
+                }
+
+                TableComparisonConfigurationModel tableComparisonConfigurationModel =
+                        TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec, canCompareTables);
+                result.add(tableComparisonConfigurationModel);
             }
 
-            TableComparisonConfigurationModel tableComparisonConfigurationModel =
-                    TableComparisonConfigurationModel.fromTableComparisonSpec(tableComparisonConfigurationSpec, canCompareTables);
-            result.add(tableComparisonConfigurationModel);
-        }
-
-        return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -149,26 +152,28 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonConfigurationModel>> getTableComparisonConfiguration(
+    public Mono<ResponseEntity<Mono<TableComparisonConfigurationModel>>> getTableComparisonConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-        if (tableComparisonConfigurationSpecMap == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+            if (tableComparisonConfigurationSpecMap == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
-        if (tableComparisonConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+            if (tableComparisonConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(
-                tableComparisonConfigurationSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
+            TableComparisonConfigurationModel tableComparisonConfigurationModel = TableComparisonConfigurationModel.fromTableComparisonSpec(
+                    tableComparisonConfigurationSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonConfigurationModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -196,7 +201,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -204,48 +209,50 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison model with the configuration of the tables to compare")
                 @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
-                tableComparisonConfigurationModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    Strings.isNullOrEmpty(tableComparisonConfigurationName) ||
+                    tableComparisonConfigurationModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableComparisonConfigurationSpecMap == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableComparisonConfigurationSpecMap == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
-                    if (tableComparisonConfigurationSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = tableComparisonConfigurationSpecMap.get(tableComparisonConfigurationName);
+                        if (tableComparisonConfigurationSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    String newName = tableComparisonConfigurationModel.getTableComparisonConfigurationName();
-                    if (Strings.isNullOrEmpty(newName)) {
-                        newName = tableComparisonConfigurationName;
-                    }
+                        String newName = tableComparisonConfigurationModel.getTableComparisonConfigurationName();
+                        if (Strings.isNullOrEmpty(newName)) {
+                            newName = tableComparisonConfigurationName;
+                        }
 
-                    if (!Objects.equals(newName, tableComparisonConfigurationName) && tableComparisonConfigurationSpecMap.containsKey(newName)) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a reference table configuration with this name already exists
-                    }
+                        if (!Objects.equals(newName, tableComparisonConfigurationName) && tableComparisonConfigurationSpecMap.containsKey(newName)) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a reference table configuration with this name already exists
+                        }
 
-                    if (!newName.equals(tableComparisonConfigurationName)) {
-                        // If renaming actually happened.
-                        tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
-                        tableComparisonConfigurationSpec.setHierarchyId(null);
-                        tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
-                    }
+                        if (!newName.equals(tableComparisonConfigurationName)) {
+                            // If renaming actually happened.
+                            tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
+                            tableComparisonConfigurationSpec.setHierarchyId(null);
+                            tableComparisonConfigurationSpecMap.put(newName, tableComparisonConfigurationSpec);
+                        }
 
-                    tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
+                        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -270,39 +277,41 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model") @RequestBody TableComparisonConfigurationModel tableComparisonConfigurationModel) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                tableComparisonConfigurationModel == null               ||
-                Strings.isNullOrEmpty(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    tableComparisonConfigurationModel == null               ||
+                    Strings.isNullOrEmpty(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    if (tableSpec.getTableComparisons().containsKey(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
-                    }
+                        if (tableSpec.getTableComparisons().containsKey(tableComparisonConfigurationModel.getTableComparisonConfigurationName())) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table comparison configuration with this name already exists
+                        }
 
-                    TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
-                    tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
-                    tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
+                        TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec();
+                        tableComparisonConfigurationModel.copyToTableComparisonSpec(tableComparisonConfigurationSpec);
+                        tableSpec.getTableComparisons().put(tableComparisonConfigurationModel.getTableComparisonConfigurationName(), tableComparisonConfigurationSpec);
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                    });
+        }));
     }
 
     /**
@@ -326,43 +335,45 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> deleteTableComparisonConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> deleteTableComparisonConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
-        if (Strings.isNullOrEmpty(connectionName)     ||
-                Strings.isNullOrEmpty(schemaName)     ||
-                Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(tableComparisonConfigurationName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName)     ||
+                    Strings.isNullOrEmpty(schemaName)     ||
+                    Strings.isNullOrEmpty(tableName)      ||
+                    Strings.isNullOrEmpty(tableComparisonConfigurationName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = tableSpec.getTableComparisons();
-                    if (tableComparisonConfigurationSpecMap == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = tableSpec.getTableComparisons();
+                        if (tableComparisonConfigurationSpecMap == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    // If reference table configuration is not found, return success (idempotence).
-                    tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
+                        // If reference table configuration is not found, return success (idempotence).
+                        tableComparisonConfigurationSpecMap.remove(tableComparisonConfigurationName);
 
-                    Collection<AbstractComparisonCheckCategorySpecMap<?>> comparisonCheckCategoryMaps = this.hierarchyNodeTreeSearcher.findComparisonCheckCategoryMaps(tableSpec);
-                    for (AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap : comparisonCheckCategoryMaps) {
-                        comparisonCheckCategorySpecMap.remove(tableComparisonConfigurationName);
-                    }
+                        Collection<AbstractComparisonCheckCategorySpecMap<?>> comparisonCheckCategoryMaps = this.hierarchyNodeTreeSearcher.findComparisonCheckCategoryMaps(tableSpec);
+                        for (AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap : comparisonCheckCategoryMaps) {
+                            comparisonCheckCategorySpecMap.remove(tableComparisonConfigurationName);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -386,32 +397,34 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonProfiling(
+    public Mono<ResponseEntity<Mono<TableComparisonModel>>> getTableComparisonProfiling(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
-        if (referenceTableConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
+            if (referenceTableConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
-                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
-                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
-                referenceTableConfigurationSpec.getReferenceTableName());
+            TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                    referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                    referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                    referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
-                tableComparisonConfigurationName, CheckType.profiling, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+            TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                    tableComparisonConfigurationName, CheckType.profiling, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -435,32 +448,34 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringDaily(
+    public Mono<ResponseEntity<Mono<TableComparisonModel>>> getTableComparisonMonitoringDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
-        if (referenceTableConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
+            if (referenceTableConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
-                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
-                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
-                referenceTableConfigurationSpec.getReferenceTableName());
+            TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                    referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                    referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                    referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
-                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+            TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                    tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.daily,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -484,32 +499,34 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonMonitoringMonthly(
+    public Mono<ResponseEntity<Mono<TableComparisonModel>>> getTableComparisonMonitoringMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
-        if (referenceTableConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
+            if (referenceTableConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
-                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
-                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
-                referenceTableConfigurationSpec.getReferenceTableName());
+            TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                    referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                    referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                    referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
-                tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+            TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                    tableComparisonConfigurationName, CheckType.monitoring, CheckTimeScale.monthly,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -533,32 +550,34 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonPartitionedDaily(
+    public Mono<ResponseEntity<Mono<TableComparisonModel>>> getTableComparisonPartitionedDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
-        if (referenceTableConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
+            if (referenceTableConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
-                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
-                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
-                referenceTableConfigurationSpec.getReferenceTableName());
+            TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                    referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                    referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                    referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
-                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+            TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                    tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.daily,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -582,32 +601,34 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonModel>> getTableComparisonPartitionedMonthly(
+    public Mono<ResponseEntity<Mono<TableComparisonModel>>> getTableComparisonPartitionedMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
-        if (referenceTableConfigurationSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableComparisonConfigurationSpec referenceTableConfigurationSpec = tableSpec.getTableComparisons().get(tableComparisonConfigurationName);
+            if (referenceTableConfigurationSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
-                referenceTableConfigurationSpec.getReferenceTableConnectionName(),
-                referenceTableConfigurationSpec.getReferenceTableSchemaName(),
-                referenceTableConfigurationSpec.getReferenceTableName());
+            TableSpec referencedTableSpec = this.readTableSpec(userHomeContext,
+                    referenceTableConfigurationSpec.getReferenceTableConnectionName(),
+                    referenceTableConfigurationSpec.getReferenceTableSchemaName(),
+                    referenceTableConfigurationSpec.getReferenceTableName());
 
-        TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
-                tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+            TableComparisonModel tableComparisonModel = TableComparisonModel.fromTableSpec(tableSpec, referencedTableSpec,
+                    tableComparisonConfigurationName, CheckType.partitioned, CheckTimeScale.monthly,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(tableComparisonModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -684,14 +705,16 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonProfiling(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonProfiling(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel, CheckType.profiling, null);
+        }));
     }
 
     /**
@@ -715,15 +738,17 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonMonitoringDaily(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonMonitoringDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.monitoring, CheckTimeScale.daily);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                    CheckType.monitoring, CheckTimeScale.daily);
+        }));
     }
 
     /**
@@ -747,15 +772,17 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonMonitoringMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonMonitoringMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.monitoring, CheckTimeScale.monthly);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                    CheckType.monitoring, CheckTimeScale.monthly);
+        }));
     }
 
     /**
@@ -779,15 +806,17 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonPartitionedDaily(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonPartitionedDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.partitioned, CheckTimeScale.daily);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                    CheckType.partitioned, CheckTimeScale.daily);
+        }));
     }
 
     /**
@@ -811,15 +840,17 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> createTableComparisonPartitionedMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> createTableComparisonPartitionedMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
-                CheckType.partitioned, CheckTimeScale.monthly);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return createTableComparisonConfigurationWithChecks(principal, connectionName, schemaName, tableName, tableComparisonModel,
+                    CheckType.partitioned, CheckTimeScale.monthly);
+        }));
     }
 
     /**
@@ -898,7 +929,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonProfiling(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonProfiling(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -906,8 +937,10 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.profiling, null);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                    tableComparisonModel, CheckType.profiling, null);
+        }));
     }
 
     /**
@@ -932,7 +965,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonMonitoringDaily(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonMonitoringDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -940,8 +973,10 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.monitoring, CheckTimeScale.daily);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                    tableComparisonModel, CheckType.monitoring, CheckTimeScale.daily);
+        }));
     }
 
     /**
@@ -966,7 +1001,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonMonitoringMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonMonitoringMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -974,8 +1009,10 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.monitoring, CheckTimeScale.monthly);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                    tableComparisonModel, CheckType.monitoring, CheckTimeScale.monthly);
+        }));
     }
 
     /**
@@ -1000,7 +1037,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonPartitionedDaily(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonPartitionedDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1008,8 +1045,10 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.partitioned, CheckTimeScale.daily);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                    tableComparisonModel, CheckType.partitioned, CheckTimeScale.daily);
+        }));
     }
 
     /**
@@ -1034,7 +1073,7 @@ public class TableComparisonsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComparisonPartitionedMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComparisonPartitionedMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1042,8 +1081,10 @@ public class TableComparisonsController {
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName,
             @ApiParam("Table comparison configuration model with the selected checks to use for comparison")
             @RequestBody TableComparisonModel tableComparisonModel) {
-        return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
-                tableComparisonModel, CheckType.partitioned, CheckTimeScale.monthly);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return updateTableComparisonWithChecks(principal, connectionName, schemaName, tableName, tableComparisonConfigurationName,
+                    tableComparisonModel, CheckType.partitioned, CheckTimeScale.monthly);
+        }));
     }
 
     /**

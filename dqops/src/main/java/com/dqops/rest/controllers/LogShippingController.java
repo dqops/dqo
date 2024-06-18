@@ -16,9 +16,9 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.platform.ExternalLogEntry;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
@@ -29,6 +29,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST API controller that accepts logs received from the web application. The logs are logged locally.
@@ -58,16 +60,18 @@ public class LogShippingController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Void>> logDebug(
+    public Mono<ResponseEntity<Mono<Void>>> logDebug(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        if (log.isDebugEnabled()) {
-            String fullLogMessage = createLogMessage(logEntry);
-            log.debug(fullLogMessage);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (log.isDebugEnabled()) {
+                String fullLogMessage = createLogMessage(logEntry);
+                log.debug(fullLogMessage);
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -86,16 +90,18 @@ public class LogShippingController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Void>> logInfo(
+    public Mono<ResponseEntity<Mono<Void>>> logInfo(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        if (log.isInfoEnabled()) {
-            String fullLogMessage = createLogMessage(logEntry);
-            log.info(fullLogMessage);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (log.isInfoEnabled()) {
+                String fullLogMessage = createLogMessage(logEntry);
+                log.info(fullLogMessage);
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -114,16 +120,18 @@ public class LogShippingController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Void>> logWarn(
+    public Mono<ResponseEntity<Mono<Void>>> logWarn(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        if (log.isWarnEnabled()) {
-            String fullLogMessage = createLogMessage(logEntry);
-            log.warn(fullLogMessage);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (log.isWarnEnabled()) {
+                String fullLogMessage = createLogMessage(logEntry);
+                log.warn(fullLogMessage);
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -142,16 +150,18 @@ public class LogShippingController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Void>> logError(
+    public Mono<ResponseEntity<Mono<Void>>> logError(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Log entry")
             @RequestBody ExternalLogEntry logEntry) {
-        if (log.isErrorEnabled()) {
-            String fullLogMessage = createLogMessage(logEntry);
-            log.error(fullLogMessage);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (log.isErrorEnabled()) {
+                String fullLogMessage = createLogMessage(logEntry);
+                log.error(fullLogMessage);
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
