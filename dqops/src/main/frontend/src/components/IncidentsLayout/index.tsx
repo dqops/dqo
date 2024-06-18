@@ -107,7 +107,8 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
             marginLeft: 320,
-            maxWidth: `calc(100vw - 320px)`
+            maxWidth: `calc(100vw - 320px)`,
+            backgroundColor: '#F9FAFC'
           }}
         >
           <div className="flex-1 h-full flex flex-col ">

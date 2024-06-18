@@ -38,22 +38,26 @@ const HomePage = () => {
   return (
     <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
-      <div className="border-b border-gray-300 px-0 mt-18">
+      <div
+        className="border-b border-gray-300 px-0 top-[64px] fixed r-0 l-0 w-full z-[100]"
+        style={{ backgroundColor: '#F9FAFC', userSelect: 'none' }}
+      >
         <Tabs
           tabs={tabs}
           onChange={onChange}
           activeTab={activeTab}
-          className="z-[100]"
           disableTreeWidth={true}
         />
       </div>
-      {activeTab === '/home' && <StaticHomePage />}
-      {activeTab === '/tables' && <TableListView />}
-      {activeTab === '/columns' && <ColumnListView />}
-      {activeTab === '/global-incidents' && <GlobalIncidents />}
-      {/* {activeTab === '/global-incidents?groupBy=category' && (
+      <div className="mt-24.5">
+        {activeTab === '/home' && <StaticHomePage />}
+        {activeTab === '/tables' && <TableListView />}
+        {activeTab === '/columns' && <ColumnListView />}
+        {activeTab === '/global-incidents' && <GlobalIncidents />}
+        {/* {activeTab === '/global-incidents?groupBy=category' && (
         <GlobalIncidents groupBy="category" />
-      )} */}
+        )} */}
+      </div>
     </div>
   );
 };
