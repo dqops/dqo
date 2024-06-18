@@ -15,7 +15,6 @@
  */
 package com.dqops.oracle.sensors.column.schema;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -26,6 +25,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class OracleColumnColumnExistsSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class OracleColumnColumnExistsSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
     private ColumnColumnExistsSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnSchemaColumnExistsCheckSpec checkSpec;
