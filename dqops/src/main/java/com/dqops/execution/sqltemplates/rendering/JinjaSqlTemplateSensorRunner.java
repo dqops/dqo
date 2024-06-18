@@ -22,6 +22,7 @@ import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
@@ -108,8 +109,14 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
         try {
             JinjaTemplateRenderParameters templateRenderParameters = jinjaTemplateRenderParametersProvider.createFromTrimmedObjects(
                     executionContext, sensorRunParameters, sensorDefinition);
-            renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
-                    templateRenderParameters, progressListener);
+
+            if (templateRenderParameters.getErrorSampling() != null) {
+                renderedSql = this.jinjaTemplateRenderService.renderErrorSamplingTemplate(executionContext, sensorDefinition,
+                        templateRenderParameters, progressListener);
+            } else {
+                renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinition,
+                        templateRenderParameters, progressListener);
+            }
 
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = sensorDefinition.getProviderSensorDefinitionSpec();
 
@@ -243,6 +250,14 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
             Column<?> sampleIndexColumn = TableColumnUtility.findColumn(multiSensorTableResult, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
             if (sampleIndexColumn != null) {
                 sensorResultRows.addColumns(sampleIndexColumn);
+            }
+
+            // error sampling column for IDs
+            for (int i = 0; i < 5; i++) {
+                Column<?> sampleIdColumn = TableColumnUtility.findColumn(multiSensorTableResult, ErrorSamplesColumnNames.ROW_ID_COLUMN_NAME_PREFIX + i);
+                if (sampleIdColumn != null) {
+                    sensorResultRows.addColumns(sampleIdColumn);
+                }
             }
 
             List<Column<?>> allSourceColumns = multiSensorTableResult.columns();

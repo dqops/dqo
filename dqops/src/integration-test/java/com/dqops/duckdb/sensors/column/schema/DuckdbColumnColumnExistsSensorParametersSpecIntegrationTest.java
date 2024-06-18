@@ -48,7 +48,7 @@ public class DuckdbColumnColumnExistsSensorParametersSpecIntegrationTest extends
     @BeforeEach
     void setUp(){
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnColumnExistsSensorParametersSpec();
@@ -61,7 +61,7 @@ public class DuckdbColumnColumnExistsSensorParametersSpecIntegrationTest extends
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
                 .createForTableForProfilingCheck(sampleTableMetadata, this.checkSpec);
 
-        HierarchyId hierarchyId = new HierarchyId("spec", "columns", "date");   // only the last position in HierarchyId is a column name that is used, the rest does not matter
+        HierarchyId hierarchyId = new HierarchyId("spec", "columns", "date:LOCAL_DATE");   // only the last position in HierarchyId is a column name that is used, the rest does not matter
         ColumnSpec columnSpec = new ColumnSpec();
         columnSpec.setHierarchyId(hierarchyId);
         runParameters.setColumn(columnSpec);

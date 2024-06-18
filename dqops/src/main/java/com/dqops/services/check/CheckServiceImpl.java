@@ -21,10 +21,15 @@ import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
+import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJob;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesParameters;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
@@ -104,6 +109,34 @@ public class CheckServiceImpl implements CheckService {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         RunChecksParameters parameters = new RunChecksParameters(checkSearchFilters, timeWindowFilterParameters,
                 checkExecutionProgressListener, dummyRun);
+        runChecksJob.setParameters(parameters);
+
+        this.parentDqoJobQueue.pushJob(runChecksJob, principal);
+        return runChecksJob.getResult();
+    }
+
+    /**
+     * Runs error samplers for the data quality checks identified by a check search filter.
+     *
+     * @param checkSearchFilters             Check search filters.
+     * @param timeWindowFilterParameters     Optional user provided time window parameters, limits the time period that is analyzed.
+     * @param errorSamplesDataScope          Error sampling scope (whole table, or per data grouping).
+     * @param errorSamplerProgressListener   Progress listener that will report the progress.
+     * @param errorSamplesDataScope          Error sampling scope (whole table, or per data grouping).
+     * @param dummyRun                       Run the sensors in a dummy mode (sensors are not executed).
+     * @param principal                      Principal that will be used to run the job.
+     * @return Error sampler execution summary.
+     */
+    @Override
+    public ErrorSamplerExecutionSummary collectErrorSamples(CheckSearchFilters checkSearchFilters,
+                                                            TimeWindowFilterParameters timeWindowFilterParameters,
+                                                            ErrorSamplesDataScope  errorSamplesDataScope,
+                                                            ErrorSamplerExecutionProgressListener errorSamplerProgressListener,
+                                                            boolean dummyRun,
+                                                            DqoUserPrincipal principal) {
+        CollectErrorSamplesQueueJob runChecksJob = this.dqoQueueJobFactory.createCollectErrorSamplesJob();
+        CollectErrorSamplesParameters parameters = new CollectErrorSamplesParameters(
+                checkSearchFilters, timeWindowFilterParameters, errorSamplesDataScope, errorSamplerProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 
         this.parentDqoJobQueue.pushJob(runChecksJob, principal);

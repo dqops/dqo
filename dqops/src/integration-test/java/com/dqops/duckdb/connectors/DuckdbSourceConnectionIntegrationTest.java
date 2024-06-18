@@ -1,8 +1,12 @@
-package com.dqops.connectors.duckdb;
+package com.dqops.duckdb.connectors;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.DuckdbSourceConnection;
+import com.dqops.connectors.duckdb.DuckdbSourceConnectionObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.*;
@@ -11,10 +15,7 @@ import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.sampledata.SampleCsvFileNames;
-import com.dqops.sampledata.SampleCsvFilesFolderNames;
-import com.dqops.sampledata.SampleJsonFileNames;
-import com.dqops.sampledata.SampleParquetFileNames;
+import com.dqops.sampledata.*;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-class DuckdbSourceConnectionTest extends BaseTest {
+class DuckdbSourceConnectionIntegrationTest extends BaseTest {
 
     private DuckdbSourceConnection sut;
     private SecretValueLookupContext secretValueLookupContext;
@@ -302,6 +303,23 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
         Assertions.assertEquals(1, hikariConfig.getDataSourceProperties().size());
         Assertions.assertEquals("some_value", hikariConfig.getDataSourceProperties().get("some_key"));
+    }
+
+    @Test
+    void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
+        this.sut.setConnectionSpec(spec);
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile("");
+        String schemaPrefix = fileFormatSpec.getFilePaths().get(0) + "/";
+        spec.getDuckdb().getDirectories().put(schemaName, schemaPrefix);
+
+        String tableName = SampleCsvFileNames.nulls_and_uniqueness.replace(".csv", "");
+        String tableFilter = tableName.substring(2, tableName.length() - 3);
+
+        List<SourceTableModel> tables = this.sut.listTables(schemaName, tableFilter, 300, secretValueLookupContext);
+
+        Assertions.assertEquals(1, tables.size());
     }
 
 }

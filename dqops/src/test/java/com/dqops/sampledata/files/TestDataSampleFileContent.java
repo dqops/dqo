@@ -22,11 +22,11 @@ import java.util.Map;
 /**
  * Internal object that contains the file content and the proposed physical data types.
  */
-public class CsvSampleFileContent {
+public class TestDataSampleFileContent {
     private final Table table;
     private final Map<String, String> columnPhysicalDataTypes;
 
-    public CsvSampleFileContent(Table table, Map<String, String> columnPhysicalDataTypes) {
+    public TestDataSampleFileContent(Table table, Map<String, String> columnPhysicalDataTypes) {
         this.table = table;
         this.columnPhysicalDataTypes = columnPhysicalDataTypes;
     }

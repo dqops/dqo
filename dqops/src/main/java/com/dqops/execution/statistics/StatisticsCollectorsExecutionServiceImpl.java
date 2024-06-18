@@ -107,7 +107,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                     setProgressListener(progressListener);
                     setDummySensorExecution(dummySensorExecution);
                 }};
-                CollectStatisticsOnTableQueueJob collectStatisticsOnTableQueueJob = this.dqoQueueJobFactory.creteCollectStatisticsOnTableJob();
+                CollectStatisticsOnTableQueueJob collectStatisticsOnTableQueueJob = this.dqoQueueJobFactory.createCollectStatisticsOnTableJob();
                 collectStatisticsOnTableQueueJob.setParameters(runChecksOnTableQueueJobParameters);
                 childTableJobs.add(collectStatisticsOnTableQueueJob);
             }

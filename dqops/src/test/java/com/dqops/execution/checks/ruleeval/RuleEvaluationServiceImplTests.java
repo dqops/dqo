@@ -104,7 +104,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 null,
                 1000,
-                true);
+                true,
+                null);
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();

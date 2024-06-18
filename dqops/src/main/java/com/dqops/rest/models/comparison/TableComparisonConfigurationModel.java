@@ -72,11 +72,33 @@ public class TableComparisonConfigurationModel {
     @JsonPropertyDescription("The schema and table name of the reference table that has the expected data.")
     private PhysicalTableName referenceTable;
 
+    /**
+     * The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.
+     */
     @JsonPropertyDescription("The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is 'profiling'.")
     private CheckType checkType = CheckType.profiling;
 
+    /**
+     * The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.
+     */
     @JsonPropertyDescription("The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.")
     private CheckTimeScale timeScale;
+
+    /**
+     * Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table.
+     * This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.
+     */
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.")
+    private String comparedTableFilter;
+
+    /**
+     * Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth).
+     * This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.
+     */
+    @JsonPropertyDescription("Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). " +
+            "This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.")
+    private String referenceTableFilter;
 
     /**
      * List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause.
@@ -126,6 +148,8 @@ public class TableComparisonConfigurationModel {
         model.setReferenceTable(new PhysicalTableName(comparisonSpec.getReferenceTableSchemaName(), comparisonSpec.getReferenceTableName()));
         model.setCheckType(comparisonSpec.getCheckType());
         model.setTimeScale(comparisonSpec.getTimeScale());
+        model.setComparedTableFilter(comparisonSpec.getComparedTableFilter());
+        model.setReferenceTableFilter(comparisonSpec.getReferenceTableFilter());
         model.setCanEdit(canCompareTables);
         model.setCanRunCompareChecks(canCompareTables);
         model.setCanDeleteData(canCompareTables);
@@ -146,6 +170,8 @@ public class TableComparisonConfigurationModel {
     public void copyToTableComparisonSpec(TableComparisonConfigurationSpec comparisonSpec) {
         comparisonSpec.setCheckType(this.getCheckType());
         comparisonSpec.setTimeScale(this.getTimeScale());
+        comparisonSpec.setComparedTableFilter(this.getComparedTableFilter());
+        comparisonSpec.setReferenceTableFilter(this.getReferenceTableFilter());
         comparisonSpec.setReferenceTableConnectionName(this.getReferenceConnection());
         if (this.getReferenceTable() != null) {
             comparisonSpec.setReferenceTableSchemaName(this.getReferenceTable().getSchemaName());

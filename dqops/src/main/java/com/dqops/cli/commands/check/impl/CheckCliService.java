@@ -16,8 +16,11 @@
 package com.dqops.cli.commands.check.impl;
 
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
+import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
@@ -40,6 +43,21 @@ public interface CheckCliService {
                                     TimeWindowFilterParameters timeWindowFilterParameters,
                                     CheckExecutionProgressListener checkExecutionProgressListener,
                                     boolean dummyRun);
+
+    /**
+     * Collects error samples for data quality checks identified by filters.
+     * @param checkSearchFilters Check search filters.
+     * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
+     * @param errorSamplesDataScope Error sampling data scope - a whole table, or each data grouping.
+     * @param errorSamplerExecutionProgressListener Progress listener that will report the progress.
+     * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
+     * @return Error sampler execution summary.
+     */
+    ErrorSamplerExecutionSummary collectErrorSamples(CheckSearchFilters checkSearchFilters,
+                                                     TimeWindowFilterParameters timeWindowFilterParameters,
+                                                     ErrorSamplesDataScope errorSamplesDataScope,
+                                                     ErrorSamplerExecutionProgressListener errorSamplerExecutionProgressListener,
+                                                     boolean dummyRun);
 
     /**
      * Deactivates existing checks matching the provided filters.

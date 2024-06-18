@@ -25,6 +25,8 @@ public enum DqoJobType {
     run_checks_on_table,
     collect_statistics,
     collect_statistics_on_table,
+    collect_error_samples,
+    collect_error_samples_on_table,
     queue_thread_shutdown,
     synchronize_folder,
     synchronize_multiple_folders,

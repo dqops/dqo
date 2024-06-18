@@ -58,7 +58,7 @@ public class StatisticsResultsTableFactoryImpl implements StatisticsResultsTable
                 TextColumn.create(StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "8"),
                 TextColumn.create(StatisticsColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX + "9"),
                 LongColumn.create(StatisticsColumnNames.DATA_GROUP_HASH_COLUMN_NAME),
-                TextColumn.create(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME),
+                TextColumn.create(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME),
                 LongColumn.create(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME),

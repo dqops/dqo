@@ -41,6 +41,14 @@ import com.dqops.execution.checks.jobs.RunChecksQueueJobResult;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
+import com.dqops.execution.errorsampling.ErrorSamplerExecutionSummary;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesParameters;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJob;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesResult;
+import com.dqops.execution.errorsampling.jobs.ErrorSamplerResult;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListenerProvider;
+import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionReportingMode;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJob;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
@@ -84,6 +92,7 @@ public class JobsController {
     private JobSchedulerService jobSchedulerService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
+    private final ErrorSamplerExecutionProgressListenerProvider errorSamplerExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
@@ -96,8 +105,9 @@ public class JobsController {
      * @param dqoJobQueue Job queue used to publish or review running jobs.
      * @param parentDqoJobQueue Job queue for managing parent jobs (jobs that will start other child jobs).
      * @param jobSchedulerService Job scheduler service used to start and stop the scheduler.
-     * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
-     * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
+     * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "run checks" job.
+     * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "run collectors" job.
+     * @param errorSamplerExecutionProgressListenerProvider Error sampler execution progress listener factory to create a valid progress listener for the "collect error samples" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param dqoQueueConfigurationProperties Queue configuration parameters.
      * @param dqoSchedulerConfigurationProperties DQOps job scheduler configuration properties.
@@ -111,6 +121,7 @@ public class JobsController {
                           JobSchedulerService jobSchedulerService,
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
+                          ErrorSamplerExecutionProgressListenerProvider errorSamplerExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                           DqoQueueConfigurationProperties dqoQueueConfigurationProperties,
                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
@@ -122,6 +133,7 @@ public class JobsController {
         this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
+        this.errorSamplerExecutionProgressListenerProvider = errorSamplerExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
@@ -267,6 +279,131 @@ public class JobsController {
                     RunChecksQueueJobResult jobResult = new RunChecksQueueJobResult(
                             mostRecentJobModel.getJobId(),
                             mostRecentJobModel.getParameters().getRunChecksParameters().getRunChecksResult(),
+                            dqoJobStatus);
+                    return jobResult;
+                });
+
+        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+    }
+
+    /**
+     * Starts a new background job that will run selected data quality checks to capture their error samples.
+     * @param collectErrorSamplesParameters Run checks parameters with a check filter and an optional time range.
+     * @return Job summary response with the identity of the started job.
+     */
+    @PostMapping(value = "/collecterrorsamples", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "collectErrorSamples", notes = "Starts a new background job that will run selected data quality checks to collect their error samples",
+            response = CollectErrorSamplesResult.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New job that will collect error samples for data quality checks was added to the queue", response = CollectErrorSamplesResult.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.OPERATE})
+    public ResponseEntity<Mono<CollectErrorSamplesResult>> collectErrorSamples(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Data quality check run configuration (target checks and an optional time range)")
+            @RequestBody CollectErrorSamplesParameters collectErrorSamplesParameters,
+            @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
+            @RequestParam(required = false) Optional<String> jobBusinessKey,
+            @ApiParam(name = "wait", value = "Wait until the error sampling finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
+            @RequestParam(required = false) Optional<Boolean> wait,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
+        CollectErrorSamplesQueueJob collectErrorSamplesJob = this.dqoQueueJobFactory.createCollectErrorSamplesJob();
+        ErrorSamplerExecutionProgressListener progressListener = this.errorSamplerExecutionProgressListenerProvider.getProgressListener(
+                ErrorSamplerExecutionReportingMode.silent, false);
+        collectErrorSamplesParameters.setProgressListener(progressListener);
+        collectErrorSamplesJob.setParameters(collectErrorSamplesParameters);
+        collectErrorSamplesJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+
+        PushJobResult<ErrorSamplerExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(collectErrorSamplesJob, principal);
+
+        if (!wait.isPresent() || wait.get()) {
+            // wait for the result
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+            CompletableFuture<ErrorSamplerExecutionSummary> timeoutLimitedFuture = new CompletableFuture<ErrorSamplerExecutionSummary>()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            CompletableFuture<ErrorSamplerExecutionSummary> timeoutOrFinishedFuture =
+                    (CompletableFuture<ErrorSamplerExecutionSummary>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+
+            Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                    .map(summary -> {
+                        ErrorSamplerResult runChecksResult = ErrorSamplerResult.fromErrorSamplerExecutionSummary(summary);
+                        DqoJobCompletionStatus jobCompletionStatus = collectErrorSamplesJob.getCompletionStatus();
+                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(collectErrorSamplesJob.getJobId());
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        return new CollectErrorSamplesResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
+                    });
+
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+        }
+
+        Mono<CollectErrorSamplesResult> resultWithOnlyJobId = Mono.just(new CollectErrorSamplesResult(pushJobResult.getJobId()));
+        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Waits for a previously submitted "collect error samples" job. Returns the result that may contain the result if the job finished before the timeout elapsed.
+     * @return Job summary response with the identity of the started job.
+     */
+    @GetMapping(value = "/collecterrorsamples/{jobId}/wait", produces = "application/json")
+    @ApiOperation(value = "waitForCollectErrorSamplesJob", notes = "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
+            response = CollectErrorSamplesResult.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Collect error samples job information returned. When the wait timeout has elapsed, the job status could be still queued or running and the result will be missing.",
+                    response = CollectErrorSamplesResult.class),
+            @ApiResponse(code = 404, message = "The job was not found or it has finished and was already been removed from the job history store.",
+                    response = Void.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.VIEW})
+    public ResponseEntity<Mono<CollectErrorSamplesResult>> waitForCollectErrorSamplesJob(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Job id, it can be a job business key assigned to the job or a job id generated by DQOps") @PathVariable String jobId,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
+        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+
+        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+        if (jobHistoryEntryModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
+        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+
+        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+        CompletableFuture<CollectErrorSamplesResult> timeoutLimitedFuture = new CompletableFuture<CollectErrorSamplesResult>()
+                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+        CompletableFuture<CollectErrorSamplesResult> timeoutOrFinishedFuture =
+                (CompletableFuture<CollectErrorSamplesResult>)(CompletableFuture<?>)
+                        CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
+
+        Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                .map(_none -> {
+                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                    if (mostRecentJobModel == null) {
+                        return null;
+                    }
+
+                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+
+                    CollectErrorSamplesResult jobResult = new CollectErrorSamplesResult(
+                            mostRecentJobModel.getJobId(),
+                            mostRecentJobModel.getParameters().getCollectErrorSamplesParameters().getErrorSamplerResult(),
                             dqoJobStatus);
                     return jobResult;
                 });

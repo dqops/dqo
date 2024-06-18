@@ -23,7 +23,7 @@ import com.dqops.data.statistics.factory.*;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.utils.tables.TableColumnUtility;
-import org.apache.parquet.Strings;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -229,7 +229,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataGroupingNameColumn(dataStreamLevelColumns, resultRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
-        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
+        TextColumn dataStreamMappingNameColumn = TextColumn.create(StatisticsColumnNames.DATA_GROUPING_CONFIGURATION_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getDataGroupings() != null) {
             dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataGroupings().getDataGroupingConfigurationName());
         }
@@ -332,7 +332,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         TextColumn updatedByColumn = TextColumn.create(StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
         normalizedResults.addColumns(updatedByColumn);
 
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
+        TextColumn idColumn = this.commonNormalizationService.createStatisticsRowIdColumn(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
                 collectorHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
 

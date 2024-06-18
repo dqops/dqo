@@ -30,7 +30,7 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
 public class ErrorSamplingRenderParameters {
-    private int samplesLimit = 10;
+    private int samplesLimit = 50;
     private int totalSamplesLimit = 1000;
     private List<String> idColumns = new ArrayList<>();
 

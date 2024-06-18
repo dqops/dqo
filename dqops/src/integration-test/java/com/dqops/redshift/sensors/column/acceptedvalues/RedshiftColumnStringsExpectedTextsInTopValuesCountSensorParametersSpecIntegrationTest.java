@@ -27,7 +27,7 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSource;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.postgresql.BasePostgresqlIntegrationTest;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class RedshiftColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+public class RedshiftColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnExpectedTextsInTopValuesCountCheckSpec checkSpec;

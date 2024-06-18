@@ -22,20 +22,34 @@ public enum CheckRunCommandFailThreshold {
     /**
      * Any warning detected or any higher severity level (error, fatal) causes the "check run" command to fail.
      */
-    warning,
+    warning(1),
 
     /**
      * Any error detected or any higher severity level (fatal) causes the "check run" command to fail.
      */
-    error,
+    error(2),
 
     /**
      * Only fatal severity issues that were detected will cause the "check run" command to fail.
      */
-    fatal,
+    fatal(3),
 
     /**
      * Do not fail, just blindly run "check run" without returning an error code.
      */
-    none
+    none(4);
+
+    private int severityLevel;
+
+    CheckRunCommandFailThreshold(int severityLevel) {
+        this.severityLevel = severityLevel;
+    }
+
+    /**
+     * Returns the severity level at which the command will fail.
+     * @return Severity level to fail.
+     */
+    public int getSeverityLevel() {
+        return severityLevel;
+    }
 }

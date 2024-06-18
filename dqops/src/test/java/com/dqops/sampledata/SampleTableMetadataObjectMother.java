@@ -40,9 +40,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
-import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
-import com.dqops.sampledata.files.SampleDataFilesProvider;
-import com.dqops.sampledata.files.SampleTableFromCsv;
+import com.dqops.sampledata.files.*;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.columns.Column;
 
@@ -190,7 +188,7 @@ public class SampleTableMetadataObjectMother {
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         String targetSchema = getSchemaForProvider(connectionSpec);
-        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromCsv(csvFileName);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(physicalTableName);
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
@@ -251,7 +249,7 @@ public class SampleTableMetadataObjectMother {
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromCsv(csvFileName);
 
         String targetSchema = getSchemaForProvider(connectionSpec);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
@@ -297,7 +295,7 @@ public class SampleTableMetadataObjectMother {
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTableForFiles(csvFilesFolder);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableForFiles(csvFilesFolder);
 
         HashMap<String, String> header = new LinkedHashMap<>();
         List<Column<?>> columnList = Arrays.asList(sampleTable.getTable().columnArray());
@@ -331,12 +329,92 @@ public class SampleTableMetadataObjectMother {
     }
 
     /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param jsonFileName Sample data JSON file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForExplicitJsonFile(String jsonFileName,
+                                                                                   ConnectionSpec connectionSpecRaw) {
+        return createSampleTableMetadataForExplicitJsonFile(jsonFileName, connectionSpecRaw, "%Y-%m-%d");
+    }
+
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param jsonFileName Sample data JSON file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @param dateFormat Date format of the date column from csv file.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForExplicitJsonFile(String jsonFileName,
+                                                                                   ConnectionSpec connectionSpecRaw,
+                                                                                   String dateFormat) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
+        String connectionName = getConnectionNameForProvider(providerType);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromJson(jsonFileName);
+
+        String targetSchema = getSchemaForProvider(connectionSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
+        TableSpec tableSpec = new TableSpec();
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForJsonFile(jsonFileName);
+        tableSpec.setFileFormat(fileFormatSpec);
+        tableSpec.setPhysicalTableName(physicalTableName);
+        fileFormatSpec.getJson().setDateformat(dateFormat);
+
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+    }
+
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param parquetFileName Sample data JSON file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForExplicitParquetFile(String parquetFileName,
+                                                                                      ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
+        String connectionName = getConnectionNameForProvider(providerType);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        SampleTableFromTestDataFile sampleTable = TestDataSampleFilesObjectMother.getSampleTableFromParquet(parquetFileName);
+
+        String targetSchema = getSchemaForProvider(connectionSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
+        TableSpec tableSpec = new TableSpec();
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForParquetFile(parquetFileName);
+        tableSpec.setFileFormat(fileFormatSpec);
+        tableSpec.setPhysicalTableName(physicalTableName);
+
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+    }
+
+    /**
      * Fills column specifications basing on the sample data from csv file.
      * @param tableSpec The table spec that will be filled.
      * @param sampleTable The sample table from csv with the column details.
      * @param connectionSpec The connection spec for the
      */
-    private static void fillColumnSpecsInTableSpec(TableSpec tableSpec, SampleTableFromCsv sampleTable, ConnectionSpec connectionSpec){
+    private static void fillColumnSpecsInTableSpec(TableSpec tableSpec, SampleTableFromTestDataFile sampleTable, ConnectionSpec connectionSpec){
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(connectionSpec.getProviderType());
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {

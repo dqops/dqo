@@ -48,6 +48,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,18 +106,20 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<ConnectionModel>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+    public Mono<ResponseEntity<Flux<ConnectionModel>>> getAllConnections(@AuthenticationPrincipal DqoUserPrincipal principal) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        Stream<ConnectionModel> modelStream = connections.toList().stream()
-                .map(cw -> ConnectionModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
-                .sorted(Comparator.comparing(model -> model.getConnectionName()));
+            ConnectionList connections = userHome.getConnections();
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            Stream<ConnectionModel> modelStream = connections.toList().stream()
+                    .map(cw -> ConnectionModel.fromConnectionSpecification(cw.getName(), cw.getSpec(), isEditor, isOperator))
+                    .sorted(Comparator.comparing(model -> model.getConnectionName()));
 
-        return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
+        }));
     }
 
     /**

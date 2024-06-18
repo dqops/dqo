@@ -51,7 +51,7 @@ public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
             result.put(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, collectorTarget);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
-            result.put(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME, dataStreamName);
+            result.put(StatisticsColumnNames.DATA_GROUP_NAME_COLUMN_NAME, dataStreamName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
             result.put(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);

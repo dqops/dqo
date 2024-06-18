@@ -24,6 +24,8 @@ import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksOnTableQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksQueueJob;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesOnTableQueueJob;
+import com.dqops.execution.errorsampling.jobs.CollectErrorSamplesQueueJob;
 import com.dqops.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
 import com.dqops.execution.statistics.jobs.CollectStatisticsQueueJob;
 import org.springframework.beans.factory.BeanFactory;
@@ -82,8 +84,28 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
      * @return New collect statistics on table child job.
      */
     @Override
-    public CollectStatisticsOnTableQueueJob creteCollectStatisticsOnTableJob() {
+    public CollectStatisticsOnTableQueueJob createCollectStatisticsOnTableJob() {
         return this.beanFactory.getBean(CollectStatisticsOnTableQueueJob.class);
+    }
+
+    /**
+     * Creates a job that runs error samplers (collects error samples).
+     *
+     * @return New collect error samples parent job.
+     */
+    @Override
+    public CollectErrorSamplesQueueJob createCollectErrorSamplesJob() {
+        return this.beanFactory.getBean(CollectErrorSamplesQueueJob.class);
+    }
+
+    /**
+     * Creates a child job that runs error samplers (collects error samples) on a single table.
+     *
+     * @return New collect error samples on table child job.
+     */
+    @Override
+    public CollectErrorSamplesOnTableQueueJob createCollectErrorSamplesOnTableJob() {
+        return this.beanFactory.getBean(CollectErrorSamplesOnTableQueueJob.class);
     }
 
     /**

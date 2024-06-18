@@ -255,12 +255,12 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                        DateTimeColumn sortedTimePeriodColumn,
-                                        long checkHash,
-                                        long tableHash,
-                                        long columnHash,
-                                        int rowCount) {
+    public TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                  DateTimeColumn sortedTimePeriodColumn,
+                                                  long checkHash,
+                                                  long tableHash,
+                                                  long columnHash,
+                                                  int rowCount) {
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
@@ -313,20 +313,20 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @param sortedDataGroupingHashColumn Data grouping hashes column.
      * @param sortedTimePeriodColumn Time period column.
      * @param sampleIndexColumn Optional sample index column.
-     * @param checkHash Check hash value.
+     * @param collectorHash Collector hash value.
      * @param tableHash Table hash value.
      * @param columnHash Column hash value (or 0L when the check is not on a column level).
      * @param rowCount Row count.
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                        InstantColumn sortedTimePeriodColumn,
-                                        IntColumn sampleIndexColumn,
-                                        long checkHash,
-                                        long tableHash,
-                                        long columnHash,
-                                        int rowCount) {
+    public TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                  InstantColumn sortedTimePeriodColumn,
+                                                  IntColumn sampleIndexColumn,
+                                                  long collectorHash,
+                                                  long tableHash,
+                                                  long columnHash,
+                                                  int rowCount) {
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
         Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
 
@@ -336,7 +336,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
             long sampleIndexHashed = sampleIndexColumn == null || sampleIndexColumn.isMissing(i) ? 0L :
                     Hashing.farmHashFingerprint64().hashInt(sampleIndexColumn.get(i) + 1).asLong();
-            UUID uuid = new UUID(checkHash ^ timePeriodHashed ^ sampleIndexHashed,
+            UUID uuid = new UUID(collectorHash ^ timePeriodHashed ^ sampleIndexHashed,
                     dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~sampleIndexHashed);
             Integer lastSampleIndexForUuid = idsGenerated.get(uuid);
             if (lastSampleIndexForUuid == null) {
@@ -346,7 +346,57 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 idsGenerated.put(uuid, lastSampleIndexForUuid);
                 sampleIndexColumn.set(i, lastSampleIndexForUuid);
                 long newSampleIndexHashed = Hashing.farmHashFingerprint64().hashInt(lastSampleIndexForUuid + 1).asLong();
-                uuid = new UUID(checkHash ^ timePeriodHashed ^ newSampleIndexHashed,
+                uuid = new UUID(collectorHash ^ timePeriodHashed ^ newSampleIndexHashed,
+                        dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~newSampleIndexHashed);
+            }
+
+            String idString = uuid.toString();
+            idColumn.set(i, idString);
+        }
+
+        return idColumn;
+    }
+
+    /**
+     * Creates and fills the "id" column by combining hashes. Also when a hash was already seen, assigns a new index to it
+     * and updates the <code>sampleIndexColumn</code> with the next available index.
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
+     * @param collectedAtColumn Time period column.
+     * @param sampleIndexColumn Optional sample index column.
+     * @param collectorHash Collector hash value.
+     * @param tableHash Table hash value.
+     * @param columnHash Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount Row count.
+     * @return ID column, filled with values.
+     */
+    @Override
+    public TextColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                                   DateTimeColumn collectedAtColumn,
+                                                   IntColumn sampleIndexColumn,
+                                                   long collectorHash,
+                                                   long tableHash,
+                                                   long columnHash,
+                                                   int rowCount) {
+        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+        Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
+
+        for (int i = 0; i < rowCount ; i++) {
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
+            long timePeriodLong = collectedAtColumn.getLongInternal(i);
+            long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
+            long sampleIndexHashed = sampleIndexColumn == null || sampleIndexColumn.isMissing(i) ? 0L :
+                    Hashing.farmHashFingerprint64().hashInt(sampleIndexColumn.get(i) + 1).asLong();
+            UUID uuid = new UUID(collectorHash ^ timePeriodHashed ^ sampleIndexHashed,
+                    dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~sampleIndexHashed);
+            Integer lastSampleIndexForUuid = idsGenerated.get(uuid);
+            if (lastSampleIndexForUuid == null) {
+                idsGenerated.put(uuid, 0);
+            } else {
+                lastSampleIndexForUuid = lastSampleIndexForUuid + 1;
+                idsGenerated.put(uuid, lastSampleIndexForUuid);
+                sampleIndexColumn.set(i, lastSampleIndexForUuid);
+                long newSampleIndexHashed = Hashing.farmHashFingerprint64().hashInt(lastSampleIndexForUuid + 1).asLong();
+                uuid = new UUID(collectorHash ^ timePeriodHashed ^ newSampleIndexHashed,
                         dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~newSampleIndexHashed);
             }
 

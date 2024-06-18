@@ -133,7 +133,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private String[] labels;
 
     @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
-    private CheckRunCommandFailThreshold failAt;
+    private CheckRunCommandFailThreshold failAt = CheckRunCommandFailThreshold.warning;
 
     @CommandLine.Mixin
     private TimeWindowFilterParameters timeWindowFilterParameters;
@@ -455,19 +455,19 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckRunCommandFailThreshold checkRunCommandFailThreshold = this.failAt != null ? this.failAt : CheckRunCommandFailThreshold.error;
         switch (checkRunCommandFailThreshold) {
             case warning:
-                if (warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 1) && warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
                     return 1;
                 }
                 // move to the next level...
 
             case error:
-                if (errorIssuesCount > 0 && fatalIssuesCount == 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 2) && errorIssuesCount > 0 && fatalIssuesCount == 0) {
                     return 2;
                 }
                 // move to the next level...
 
             case fatal:
-                if (fatalIssuesCount > 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 3) && fatalIssuesCount > 0) {
                     return 3;
                 }
                 // move to the next level...

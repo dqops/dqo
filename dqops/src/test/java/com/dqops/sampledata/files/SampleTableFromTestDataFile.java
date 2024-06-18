@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Sample table holder. Stores a sample data for a single table, with a hash of the data.
  */
-public class SampleTableFromCsv {
+public class SampleTableFromTestDataFile {
     private final Table table;
     private final String hashedTableName;
     private final long hash;
@@ -32,11 +32,11 @@ public class SampleTableFromCsv {
     /**
      * Creates a sample table holder.
      * @param table Table content.
-     * @param hashedTableName Table name with a hash suffix, this is the name of the csv file (without the .csv file extension), followed by a hashcode of the table to make the tables unique.
+     * @param hashedTableName Table name with a hash suffix, this is the name of the file (without the file extension), followed by a hashcode of the table to make the tables unique.
      * @param hash Hash of the table content.
      * @param physicalColumnTypes Map of column names to physical colum names when a column has a hint to use a specified physical data type that is database specific.
      */
-    public SampleTableFromCsv(Table table, String hashedTableName, long hash, Map<String, String> physicalColumnTypes) {
+    public SampleTableFromTestDataFile(Table table, String hashedTableName, long hash, Map<String, String> physicalColumnTypes) {
         this.table = table;
         this.hashedTableName = hashedTableName;
         this.hash = hash;
