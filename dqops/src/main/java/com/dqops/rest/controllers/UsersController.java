@@ -39,6 +39,7 @@ import reactor.core.publisher.Mono;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 /**
@@ -73,17 +74,19 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DqoCloudUserModel>> getAllUsers(
+    public Mono<ResponseEntity<Flux<DqoCloudUserModel>>> getAllUsers(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        try {
-            Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
-            Stream<DqoCloudUserModel> sortedStream = dqoCloudUserModels.stream()
-                    .sorted(Comparator.comparing(model -> model.getEmail()));
-            return new ResponseEntity<>(Flux.fromStream(sortedStream), HttpStatus.OK);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            try {
+                Collection<DqoCloudUserModel> dqoCloudUserModels = this.userManagementService.listUsers(principal);
+                Stream<DqoCloudUserModel> sortedStream = dqoCloudUserModels.stream()
+                        .sorted(Comparator.comparing(model -> model.getEmail()));
+                return new ResponseEntity<>(Flux.fromStream(sortedStream), HttpStatus.OK);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
         }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
-        }
+        }));
     }
 
     /**
@@ -104,25 +107,27 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoCloudUserModel>> getUser(
+    public Mono<ResponseEntity<Mono<DqoCloudUserModel>>> getUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(email)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        try {
-            DqoCloudUserModel userByEmail = this.userManagementService.getUserByEmail(principal, email);
-            if (userByEmail == null) {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (Strings.isNullOrEmpty(email)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
             }
 
-            return new ResponseEntity<>(Mono.just(userByEmail), HttpStatus.OK);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
+            try {
+                DqoCloudUserModel userByEmail = this.userManagementService.getUserByEmail(principal, email);
+                if (userByEmail == null) {
+                    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                }
+
+                return new ResponseEntity<>(Mono.just(userByEmail), HttpStatus.OK);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+        }));
     }
 
     /**
@@ -144,24 +149,26 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<Void>> createUser(
+    public Mono<ResponseEntity<Mono<Void>>> createUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
-        if (userModel == null || Strings.isNullOrEmpty(userModel.getEmail())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (userModel == null || Strings.isNullOrEmpty(userModel.getEmail())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        try {
-            this.userManagementService.createUser(principal, userModel, null);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
-        catch (DqoUserLimitExceededException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
-        }
+            try {
+                this.userManagementService.createUser(principal, userModel, null);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+            catch (DqoUserLimitExceededException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+        }));
     }
 
     /**
@@ -184,26 +191,28 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<Void>> updateUser(
+    public Mono<ResponseEntity<Mono<Void>>> updateUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("User model") @RequestBody DqoCloudUserModel userModel) {
-        if (userModel == null || Strings.isNullOrEmpty(email) ||
-                !Objects.equals(email, userModel.getEmail())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (userModel == null || Strings.isNullOrEmpty(email) ||
+                    !Objects.equals(email, userModel.getEmail())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        try {
-            this.userManagementService.updateUser(principal, userModel);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
-        catch (DqoUserLimitExceededException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
-        }
+            try {
+                this.userManagementService.updateUser(principal, userModel);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+            catch (DqoUserLimitExceededException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -225,24 +234,26 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<Void>> deleteUser(
+    public Mono<ResponseEntity<Mono<Void>>> deleteUser(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(email)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(email)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        try {
-            this.userManagementService.deleteUser(principal, email);
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
-        }
-        catch (DqoUserNotFoundException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
+            try {
+                this.userManagementService.deleteUser(principal, email);
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            }
+            catch (DqoUserNotFoundException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+        }));
     }
 
     /**
@@ -265,25 +276,27 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.MANAGE_ACCOUNT})
-    public ResponseEntity<Mono<Void>> changeUserPassword(
+    public Mono<ResponseEntity<Mono<Void>>> changeUserPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("User's email") @PathVariable String email,
             @ApiParam("New Password") @RequestBody String password) {
-        if (Strings.isNullOrEmpty(email) || Strings.isNullOrEmpty(password)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(email) || Strings.isNullOrEmpty(password)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        try {
-            this.userManagementService.changePassword(principal, email, password);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
-        catch (DqoUserLimitExceededException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
-        }
+            try {
+                this.userManagementService.changePassword(principal, email, password);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+            catch (DqoUserLimitExceededException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -307,19 +320,21 @@ public class UsersController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Void>> changeCallerPassword(
+    public Mono<ResponseEntity<Mono<Void>>> changeCallerPassword(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("New Password") @RequestBody String password) {
-        try {
-            this.userManagementService.changePassword(principal, principal.getDataDomainIdentity().getUserName(), password);
-        }
-        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
-        }
-        catch (DqoUserLimitExceededException ex) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            try {
+                this.userManagementService.changePassword(principal, principal.getDataDomainIdentity().getUserName(), password);
+            }
+            catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
+            }
+            catch (DqoUserLimitExceededException ex) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 }

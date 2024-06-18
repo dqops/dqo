@@ -18,6 +18,8 @@ package com.dqops.rest.controllers;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.data.models.DeleteStoredDataResult;
@@ -26,8 +28,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -36,8 +38,6 @@ import com.dqops.rest.models.dictionaries.CommonColumnModel;
 import com.dqops.rest.models.metadata.ConnectionModel;
 import com.dqops.rest.models.metadata.ConnectionSpecificationModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoPermissionNames;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.models.AllChecksPatchParameters;
 import com.dqops.services.check.models.BulkCheckDeactivateParameters;
@@ -48,7 +48,6 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +56,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -139,28 +137,30 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ConnectionSpecificationModel>> getConnection(
+    public Mono<ResponseEntity<Mono<ConnectionSpecificationModel>>> getConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpecificationModel connectionSpecificationModel = new ConnectionSpecificationModel() {{
-            setConnectionName(connectionName);
-            setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
-            setSpec(connectionSpec);
-            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-            setYamlParsingError(connectionSpec.getYamlParsingError());
-        }};
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionSpecificationModel connectionSpecificationModel = new ConnectionSpecificationModel() {{
+                setConnectionName(connectionName);
+                setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
+                setSpec(connectionSpec);
+                setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                setYamlParsingError(connectionSpec.getYamlParsingError());
+            }};
 
-        return new ResponseEntity<>(Mono.just(connectionSpecificationModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(connectionSpecificationModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -180,25 +180,27 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ConnectionModel>> getConnectionBasic(
+    public Mono<ResponseEntity<Mono<ConnectionModel>>> getConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        ConnectionModel connectionModel = ConnectionModel.fromConnectionSpecification(
-                connectionName, connectionSpec, isEditor, isOperator);
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            ConnectionModel connectionModel = ConnectionModel.fromConnectionSpecification(
+                    connectionName, connectionSpec, isEditor, isOperator);
 
-        return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -219,28 +221,30 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<MonitoringScheduleSpec>> getConnectionSchedulingGroup(
+    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getConnectionSchedulingGroup(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
-        if (schedules == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            DefaultSchedulesSpec schedules = connectionSpec.getSchedules();
+            if (schedules == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+            MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
-        return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -260,22 +264,24 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CommentsListSpec>> getConnectionComments(
+    public Mono<ResponseEntity<Mono<CommentsListSpec>>> getConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        CommentsListSpec comments = connectionSpec.getComments();
+            CommentsListSpec comments = connectionSpec.getComments();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -295,22 +301,24 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<LabelSetSpec>> getConnectionLabels(
+    public Mono<ResponseEntity<Mono<LabelSetSpec>>> getConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        LabelSetSpec labels = connectionSpec.getLabels();
+            LabelSetSpec labels = connectionSpec.getLabels();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -331,22 +339,24 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getConnectionDefaultGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<DataGroupingConfigurationSpec>>> getConnectionDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        DataGroupingConfigurationSpec dataGroupingConfiguration = connectionSpec.getDefaultGroupingConfiguration();
+            DataGroupingConfigurationSpec dataGroupingConfiguration = connectionSpec.getDefaultGroupingConfiguration();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -367,22 +377,24 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ConnectionIncidentGroupingSpec>> getConnectionIncidentGrouping(
+    public Mono<ResponseEntity<Mono<ConnectionIncidentGroupingSpec>>> getConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        ConnectionIncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
+            ConnectionIncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(incidentGrouping), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(incidentGrouping), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -403,38 +415,40 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CommonColumnModel>> getConnectionCommonColumns(
+    public Mono<ResponseEntity<Flux<CommonColumnModel>>> getConnectionCommonColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<TableWrapper> tableWrapperList = connectionWrapper.getTables().toList();
-        Map<String, CommonColumnModel> foundColumns = new LinkedHashMap<>();
-        for (TableWrapper tableWrapper : tableWrapperList) {
-            ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
-            for (String columnName : columns.keySet()) {
-                CommonColumnModel commonColumnModel = foundColumns.get(columnName);
-                if (commonColumnModel == null) {
-                    commonColumnModel = new CommonColumnModel(columnName, 1);
-                    foundColumns.put(columnName, commonColumnModel);
-                } else {
-                    commonColumnModel.setTablesCount(commonColumnModel.getTablesCount() + 1);
+            List<TableWrapper> tableWrapperList = connectionWrapper.getTables().toList();
+            Map<String, CommonColumnModel> foundColumns = new LinkedHashMap<>();
+            for (TableWrapper tableWrapper : tableWrapperList) {
+                ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
+                for (String columnName : columns.keySet()) {
+                    CommonColumnModel commonColumnModel = foundColumns.get(columnName);
+                    if (commonColumnModel == null) {
+                        commonColumnModel = new CommonColumnModel(columnName, 1);
+                        foundColumns.put(columnName, commonColumnModel);
+                    } else {
+                        commonColumnModel.setTablesCount(commonColumnModel.getTablesCount() + 1);
+                    }
                 }
             }
-        }
 
-        List<CommonColumnModel> sortedCommonColumnList = foundColumns.values().stream()
-                .sorted(Comparator.comparing(CommonColumnModel::getColumnName))
-                .collect(Collectors.toList());
+            List<CommonColumnModel> sortedCommonColumnList = foundColumns.values().stream()
+                    .sorted(Comparator.comparing(CommonColumnModel::getColumnName))
+                    .collect(Collectors.toList());
 
-        return new ResponseEntity<>(Flux.fromIterable(sortedCommonColumnList), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(sortedCommonColumnList), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -457,32 +471,34 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createConnection(
+    public Mono<ResponseEntity<Mono<Void>>> createConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        if (Strings.isNullOrEmpty(connectionName) || connectionSpec == null || connectionSpec.getProviderType() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) || connectionSpec == null || connectionSpec.getProviderType() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper existingConnectionWrapper = connections.getByObjectName(connectionName, true);
-        if (existingConnectionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a connection with this name already exists
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper existingConnectionWrapper = connections.getByObjectName(connectionName, true);
+            if (existingConnectionWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a connection with this name already exists
+            }
 
-        ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
-        connectionWrapper.setSpec(connectionSpec);
-        if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
-        }
+            ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
+            connectionWrapper.setSpec(connectionSpec);
+            if (connectionSpec.getSchedules() == null) {
+                connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
+            }
 
-        userHomeContext.flush();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -505,33 +521,35 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createConnectionBasic(
+    public Mono<ResponseEntity<Mono<Void>>> createConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Basic connection model") @RequestBody ConnectionModel connectionModel) {
-        if (Strings.isNullOrEmpty(connectionName) || connectionModel == null || connectionModel.getProviderType() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) || connectionModel == null || connectionModel.getProviderType() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper existingConnectionWrapper = connections.getByObjectName(connectionName, true);
-        if (existingConnectionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a connection with this name already exists
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper existingConnectionWrapper = connections.getByObjectName(connectionName, true);
+            if (existingConnectionWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a connection with this name already exists
+            }
 
-        ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
-        ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionModel.copyToConnectionSpecification(connectionSpec);
-        if (connectionSpec.getSchedules() == null) {
-            connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
-        }
-        connectionWrapper.setSpec(connectionSpec);
-        userHomeContext.flush();
+            ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
+            ConnectionSpec connectionSpec = new ConnectionSpec();
+            connectionModel.copyToConnectionSpecification(connectionSpec);
+            if (connectionSpec.getSchedules() == null) {
+                connectionSpec.setSchedules(this.defaultSchedulesProvider.createMonitoringSchedulesSpecForNewConnection(userHome));
+            }
+            connectionWrapper.setSpec(connectionSpec);
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -553,27 +571,29 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateConnection(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    // TODO: validate the connectionSpec
-                    connectionWrapper.setSpec(connectionSpec);
-                    userHomeContext.flush();
+                        // TODO: validate the connectionSpec
+                        connectionWrapper.setSpec(connectionSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -595,33 +615,35 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateConnectionBasic(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection basic details") @RequestBody ConnectionModel connectionModel) {
-        if (!Objects.equals(connectionName, connectionModel.getConnectionName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (!Objects.equals(connectionName, connectionModel.getConnectionName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
+            }
 
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-                    connectionModel.copyToConnectionSpecification(existingConnectionSpec);
-                    // TODO: some validation should be executed before flushing
+                        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                        connectionModel.copyToConnectionSpecification(existingConnectionSpec);
+                        // TODO: some validation should be executed before flushing
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -645,64 +667,66 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateConnectionSchedulingGroup(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionSchedulingGroup(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Monitoring schedule definition to store") @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+                        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
 
-                    DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
-                    if (schedules == null) {
-                        schedules = new DefaultSchedulesSpec();
-                        existingConnectionSpec.setSchedules(schedules);
-                    }
+                        DefaultSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+                        if (schedules == null) {
+                            schedules = new DefaultSchedulesSpec();
+                            existingConnectionSpec.setSchedules(schedules);
+                        }
 
-                    switch (schedulingGroup) {
-                        case profiling:
-                            schedules.setProfiling(monitoringScheduleSpec);
-                            break;
+                        switch (schedulingGroup) {
+                            case profiling:
+                                schedules.setProfiling(monitoringScheduleSpec);
+                                break;
 
-                        case monitoring_daily:
-                            schedules.setMonitoringDaily(monitoringScheduleSpec);
-                            break;
+                            case monitoring_daily:
+                                schedules.setMonitoringDaily(monitoringScheduleSpec);
+                                break;
 
-                        case monitoring_monthly:
-                            schedules.setMonitoringMonthly(monitoringScheduleSpec);
-                            break;
+                            case monitoring_monthly:
+                                schedules.setMonitoringMonthly(monitoringScheduleSpec);
+                                break;
 
-                        case partitioned_daily:
-                            schedules.setPartitionedDaily(monitoringScheduleSpec);
-                            break;
+                            case partitioned_daily:
+                                schedules.setPartitionedDaily(monitoringScheduleSpec);
+                                break;
 
-                        case partitioned_monthly:
-                            schedules.setPartitionedMonthly(monitoringScheduleSpec);
-                            break;
+                            case partitioned_monthly:
+                                schedules.setPartitionedMonthly(monitoringScheduleSpec);
+                                break;
 
-                        default:
-                            throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
-                    }
+                            default:
+                                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
+                        }
 
-                    boolean scheduleChanged = existingConnectionSpec.isDirty();
-                    userHomeContext.flush();
+                        boolean scheduleChanged = existingConnectionSpec.isDirty();
+                        userHomeContext.flush();
 
-                    if (scheduleChanged) {
-                        this.jobSchedulerService.triggerMetadataSynchronization();
-                    }
+                        if (scheduleChanged) {
+                            this.jobSchedulerService.triggerMetadataSynchronization();
+                        }
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -724,26 +748,28 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateConnectionLabels(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of labels") @RequestBody LabelSetSpec labelSetSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    connectionWrapper.getSpec().setLabels(labelSetSpec);
-                    userHomeContext.flush();
+                        connectionWrapper.getSpec().setLabels(labelSetSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -765,26 +791,28 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateConnectionComments(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("List of comments") @RequestBody CommentsListSpec commentsListSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    connectionWrapper.getSpec().setComments(commentsListSpec);
-                    userHomeContext.flush();
+                        connectionWrapper.getSpec().setComments(commentsListSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -806,27 +834,29 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateConnectionDefaultGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Default data grouping configuration to be assigned to a connection")
                 @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
-                    userHomeContext.flush();
+                        connectionWrapper.getSpec().setDefaultGroupingConfiguration(dataGroupingConfigurationSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -849,26 +879,28 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateConnectionIncidentGrouping(
+    public Mono<ResponseEntity<Mono<Void>>> updateConnectionIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Incident grouping and notification configuration") @RequestBody ConnectionIncidentGroupingSpec incidentGroupingSpec) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
-                    userHomeContext.flush();
+                        connectionWrapper.getSpec().setIncidentGrouping(incidentGroupingSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -892,33 +924,36 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> bulkActivateConnectionChecks(
+    public Mono<ResponseEntity<Mono<Void>>> bulkActivateConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
             @RequestBody AllChecksPatchParameters updatePatchParameters) {
-        if (updatePatchParameters == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            if (updatePatchParameters == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
+            }
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
-                    updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
-                    checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
+                        updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
+                        checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
+
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -941,29 +976,31 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> bulkDeactivateConnectionChecks(
+    public Mono<ResponseEntity<Mono<Void>>> bulkDeactivateConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and table/column selectors.")
             @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
-                    bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
+                        bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
+                        bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
 
-                    checkService.deleteChecks(bulkDeactivateParameters, principal);
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        checkService.deleteChecks(bulkDeactivateParameters, principal);
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -983,22 +1020,24 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<DqoQueueJobId>> deleteConnection(
+    public Mono<ResponseEntity<Mono<DqoQueueJobId>>> deleteConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        return this.lockService.callSynchronouslyOnConnection(connectionName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnConnection(connectionName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.connectionService.deleteConnection(connectionName, principal);
-                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
-                });
+                        PushJobResult<DeleteStoredDataResult> backgroundJob = this.connectionService.deleteConnection(connectionName, principal);
+                        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    });
+        }));
     }
 }

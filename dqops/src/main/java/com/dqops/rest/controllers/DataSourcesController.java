@@ -17,13 +17,13 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.rest.models.metadata.ConnectionModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.rest.models.remote.ConnectionTestModel;
-import com.dqops.rest.models.remote.SchemaRemoteModel;
 import com.dqops.rest.models.remote.RemoteTableListModel;
-import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.rest.models.remote.SchemaRemoteModel;
 import com.dqops.services.remote.connections.SourceConnectionsService;
 import com.dqops.services.remote.schemas.SourceSchemasService;
 import com.dqops.services.remote.schemas.SourceSchemasServiceException;
@@ -42,6 +42,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Rest API controller that operates on target data sources, testing connections or retrieving the metadata.
@@ -89,19 +90,21 @@ public class DataSourcesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<ConnectionTestModel>> testConnection(
+    public Mono<ResponseEntity<Mono<ConnectionTestModel>>> testConnection(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(value = "Basic connection model") @RequestBody ConnectionModel connectionModel,
             @ApiParam(name = "verifyNameUniqueness", value = "Verify if the connection name is unique, the default value is true", required = false)
             @RequestParam(required = false) Optional<Boolean> verifyNameUniqueness) {
-        ConnectionTestModel connectionTestModel;
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            ConnectionTestModel connectionTestModel;
 
-        ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionModel.copyToConnectionSpecification(connectionSpec);
-        Boolean verifyNameUniquenessValue = verifyNameUniqueness.orElse(true);
+            ConnectionSpec connectionSpec = new ConnectionSpec();
+            connectionModel.copyToConnectionSpecification(connectionSpec);
+            Boolean verifyNameUniquenessValue = verifyNameUniqueness.orElse(true);
 
-        connectionTestModel = sourceConnectionsService.testConnection(principal, connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
-        return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
+            connectionTestModel = sourceConnectionsService.testConnection(principal, connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
+            return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -124,22 +127,24 @@ public class DataSourcesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Flux<SchemaRemoteModel>> getRemoteDataSourceSchemas(
+    public Mono<ResponseEntity<Flux<SchemaRemoteModel>>> getRemoteDataSourceSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        List<SchemaRemoteModel> result;
-        try {
-            result = sourceSchemasService.showSchemas(connectionName, principal);
-        }
-        catch (SourceSchemasServiceException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            List<SchemaRemoteModel> result;
+            try {
+                result = sourceSchemasService.showSchemas(connectionName, principal);
+            }
+            catch (SourceSchemasServiceException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            }
 
-        if (result == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (result == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(result.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(result.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -165,24 +170,26 @@ public class DataSourcesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Flux<RemoteTableListModel>> getRemoteDataSourceTables(
+    public Mono<ResponseEntity<Flux<RemoteTableListModel>>> getRemoteDataSourceTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(name = "tableNameContains", value = "Optional filter to return tables that contain this text inside the table name (case sensitive)", required = false)
             @RequestParam(required = false) Optional<String> tableNameContains) {
-        List<RemoteTableListModel> result;
-        try {
-            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, tableNameContains.orElse(null), principal);
-        }
-        catch (SourceTablesServiceException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            List<RemoteTableListModel> result;
+            try {
+                result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, tableNameContains.orElse(null), principal);
+            }
+            catch (SourceTablesServiceException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            }
 
-        if (result == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (result == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(result.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(result.stream()), HttpStatus.OK);
+        }));
     }
 }

@@ -46,12 +46,15 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObje
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.metadata.SchemaModel;
-import com.dqops.rules.comparison.*;
+import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.services.check.CheckFlatConfigurationFactory;
 import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.AllChecksModelFactoryImpl;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.models.CheckConfigurationModel;
 import com.dqops.services.metadata.SchemaService;
 import com.dqops.services.metadata.SchemaServiceImpl;
@@ -63,6 +66,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -182,7 +186,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        Mono<ResponseEntity<Flux<CheckConfigurationModel>>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
@@ -195,9 +199,9 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.of(true),
                 Optional.empty());
-        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.block().getBody());
 
-        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
+        List<CheckConfigurationModel> result = responseEntity.block().getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
         List<CheckConfigurationModel> resultAllTables = result.stream()
@@ -228,7 +232,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        Mono<ResponseEntity<Flux<CheckConfigurationModel>>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
@@ -241,9 +245,9 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.of(true),
                 Optional.empty());
-        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.block().getBody());
 
-        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
+        List<CheckConfigurationModel> result = responseEntity.block().getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
         List<CheckConfigurationModel> resultAllTables = result.stream()
@@ -272,7 +276,7 @@ public class SchemasControllerUTTests extends BaseTest {
         String connectionName = "conn";
         String schemaName = "sch";
 
-        ResponseEntity<Flux<CheckConfigurationModel>> responseEntity = this.sut.getSchemaProfilingChecksModel(
+        Mono<ResponseEntity<Flux<CheckConfigurationModel>>> responseEntity = this.sut.getSchemaProfilingChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName,
                 schemaName,
@@ -285,9 +289,9 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.of(true),
                 Optional.empty());
-        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.block().getBody());
 
-        List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
+        List<CheckConfigurationModel> result = responseEntity.block().getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
 
         List<CheckConfigurationModel> resultAllTables = result.stream()
@@ -324,12 +328,12 @@ public class SchemasControllerUTTests extends BaseTest {
                 new PhysicalTableName("schema1", "tab1"));
         userHomeContext.flush();
 
-        ResponseEntity<Flux<SchemaModel>> responseEntity = this.sut.getSchemas(
+        Mono<ResponseEntity<Flux<SchemaModel>>> responseEntity = this.sut.getSchemas(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 connectionName);
-        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.block().getBody());
 
-        List<SchemaModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
+        List<SchemaModel> result = responseEntity.block().getBody().toStream().collect(Collectors.toList());
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
     }

@@ -111,7 +111,7 @@ public class SearchController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<TableListModel>> findTables(
+    public Mono<ResponseEntity<Flux<TableListModel>>> findTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "connection", value = "Optional connection name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.", required = false)
             @RequestParam(required = false) Optional<String> connection,
@@ -127,87 +127,89 @@ public class SearchController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            ConnectionList connections = userHome.getConnections();
 
-        TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setConnection(connection.orElse(null));
+            TableSearchFilters tableSearchFilters = new TableSearchFilters();
+            tableSearchFilters.setConnection(connection.orElse(null));
 
-        String schemaNameFilter = schema.orElse("*");
-        String tableNameFilter = table.orElse("*");
-        if (Strings.isNullOrEmpty(schemaNameFilter)) {
-            schemaNameFilter = "*";
-        }
-        if (Strings.isNullOrEmpty(tableNameFilter)) {
-            tableNameFilter = "*";
-        }
-        tableSearchFilters.setFullTableName(schemaNameFilter + "." + tableNameFilter);
-
-        if (label.isPresent() && label.get().size() > 0) {
-            tableSearchFilters.setLabels(label.get().toArray(String[]::new));
-        }
-
-        Integer tableLimit = DEFAULT_SEARCH_LIMIT;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            String schemaNameFilter = schema.orElse("*");
+            String tableNameFilter = table.orElse("*");
+            if (Strings.isNullOrEmpty(schemaNameFilter)) {
+                schemaNameFilter = "*";
             }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            if (Strings.isNullOrEmpty(tableNameFilter)) {
+                tableNameFilter = "*";
+            }
+            tableSearchFilters.setFullTableName(schemaNameFilter + "." + tableNameFilter);
+
+            if (label.isPresent() && label.get().size() > 0) {
+                tableSearchFilters.setLabels(label.get().toArray(String[]::new));
             }
 
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(DEFAULT_SEARCH_LIMIT);
-            tableLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
+            Integer tableLimit = DEFAULT_SEARCH_LIMIT;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
 
-        tableSearchFilters.setMaxResults(tableLimit);
-        Collection<TableWrapper> matchingTableWrappers = this.hierarchyNodeTreeSearcher.findTables(
-                connections, tableSearchFilters);
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(DEFAULT_SEARCH_LIMIT);
+                tableLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
+            }
 
-        List<TableSpec> tableSpecs = matchingTableWrappers
-                .stream()
-                .skip(skip == null ? 0 : skip)
-                .map(TableWrapper::getSpec)
-                .collect(Collectors.toList());
+            tableSearchFilters.setMaxResults(tableLimit);
+            Collection<TableWrapper> matchingTableWrappers = this.hierarchyNodeTreeSearcher.findTables(
+                    connections, tableSearchFilters);
 
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        List<TableListModel> tableModelsList = tableSpecs.stream()
-                .map(ts -> TableListModel.fromTableSpecificationForListEntry(
-                        ts.getHierarchyId().getConnectionName(), ts, isEditor, isOperator))
-                .collect(Collectors.toList());
+            List<TableSpec> tableSpecs = matchingTableWrappers
+                    .stream()
+                    .skip(skip == null ? 0 : skip)
+                    .map(TableWrapper::getSpec)
+                    .collect(Collectors.toList());
 
-        tableModelsList.forEach(listModel -> {
-            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                    listModel.getConnectionName(), listModel.getTarget());
-            TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-            listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
-        });
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            List<TableListModel> tableModelsList = tableSpecs.stream()
+                    .map(ts -> TableListModel.fromTableSpecificationForListEntry(
+                            ts.getHierarchyId().getConnectionName(), ts, isEditor, isOperator))
+                    .collect(Collectors.toList());
 
-        if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
-            // the results not loaded yet, we need to wait until the queue is empty
-            CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+            tableModelsList.forEach(listModel -> {
+                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                        listModel.getConnectionName(), listModel.getTarget());
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+            });
 
-            Flux<TableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
-                    .thenMany(Flux.fromIterable(tableModelsList)
-                            .map(tableListModel -> {
-                                if (tableListModel.getDataQualityStatus() == null) {
-                                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                                            tableListModel.getConnectionName(), tableListModel.getTarget());
-                                    TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : new TableCurrentDataQualityStatusModel());
-                                }
-                                return tableListModel;
-                            }));
+            if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
 
-            return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
-        }
+                Flux<TableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(tableModelsList)
+                                .map(tableListModel -> {
+                                    if (tableListModel.getDataQualityStatus() == null) {
+                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                tableListModel.getConnectionName(), tableListModel.getTarget());
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : new TableCurrentDataQualityStatusModel());
+                                    }
+                                    return tableListModel;
+                                }));
 
-        return new ResponseEntity<>(Flux.fromStream(tableModelsList.stream()), HttpStatus.OK); // 200
+                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            }
+
+            return new ResponseEntity<>(Flux.fromStream(tableModelsList.stream()), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -234,7 +236,7 @@ public class SearchController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<ColumnListModel>> findColumns(
+    public Mono<ResponseEntity<Flux<ColumnListModel>>> findColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "connection", value = "Optional connection name filter, accepts filters in the form: fullname, *suffix, prefix*, *contains*.", required = false)
             @RequestParam(required = false) Optional<String> connection,
@@ -254,99 +256,101 @@ public class SearchController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            ConnectionList connections = userHome.getConnections();
 
-        ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
-        columnSearchFilters.setConnectionName(connection.orElse(null));
+            ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
+            columnSearchFilters.setConnectionName(connection.orElse(null));
 
-        String schemaNameFilter = schema.orElse("*");
-        String tableNameFilter = table.orElse("*");
-        if (Strings.isNullOrEmpty(schemaNameFilter)) {
-            schemaNameFilter = "*";
-        }
-        if (Strings.isNullOrEmpty(tableNameFilter)) {
-            tableNameFilter = "*";
-        }
-        columnSearchFilters.setSchemaTableName(schemaNameFilter + "." + tableNameFilter);
-
-        if (label.isPresent() && label.get().size() > 0) {
-            columnSearchFilters.setColumnLabels(label.get().toArray(String[]::new));
-        }
-
-        columnSearchFilters.setColumnName(column.orElse(null));
-        columnSearchFilters.setColumnDataType(columnType.orElse(null));
-
-        Integer resultsLimit = DEFAULT_SEARCH_LIMIT;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            String schemaNameFilter = schema.orElse("*");
+            String tableNameFilter = table.orElse("*");
+            if (Strings.isNullOrEmpty(schemaNameFilter)) {
+                schemaNameFilter = "*";
             }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            if (Strings.isNullOrEmpty(tableNameFilter)) {
+                tableNameFilter = "*";
+            }
+            columnSearchFilters.setSchemaTableName(schemaNameFilter + "." + tableNameFilter);
+
+            if (label.isPresent() && label.get().size() > 0) {
+                columnSearchFilters.setColumnLabels(label.get().toArray(String[]::new));
             }
 
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(DEFAULT_SEARCH_LIMIT);
-            resultsLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
+            columnSearchFilters.setColumnName(column.orElse(null));
+            columnSearchFilters.setColumnDataType(columnType.orElse(null));
 
-        columnSearchFilters.setMaxResults(resultsLimit);
-        Collection<ColumnSpec> allMatchingColumnSpecs = this.hierarchyNodeTreeSearcher.findColumns(
-                connections, columnSearchFilters);
+            Integer resultsLimit = DEFAULT_SEARCH_LIMIT;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
 
-        List<ColumnSpec> columnSpecsPage = allMatchingColumnSpecs
-                .stream()
-                .skip(skip == null ? 0 : skip)
-                .collect(Collectors.toList());
-
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        List<ColumnListModel> columnModelsList = columnSpecsPage.stream()
-                .map(colSpec -> ColumnListModel.fromColumnSpecificationForListEntry(
-                        colSpec.getHierarchyId().getConnectionName(),
-                        colSpec.getHierarchyId().getPhysicalTableName(),
-                        colSpec.getColumnName(),
-                        colSpec, isEditor, isOperator))
-                .collect(Collectors.toList());
-
-        columnModelsList.forEach(listModel -> {
-            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                    listModel.getConnectionName(), listModel.getTable());
-            TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-            if (currentTableStatus != null) {
-                ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
-                listModel.setDataQualityStatus(columnQualityStatusModel != null ?
-                        columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(DEFAULT_SEARCH_LIMIT);
+                resultsLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
             }
-        });
 
-        if (columnModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
-            // the results not loaded yet, we need to wait until the queue is empty
-            CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+            columnSearchFilters.setMaxResults(resultsLimit);
+            Collection<ColumnSpec> allMatchingColumnSpecs = this.hierarchyNodeTreeSearcher.findColumns(
+                    connections, columnSearchFilters);
 
-            Flux<ColumnListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
-                    .thenMany(Flux.fromIterable(columnModelsList)
-                            .map(listModel -> {
-                                if (listModel.getDataQualityStatus() == null) {
-                                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                                            listModel.getConnectionName(), listModel.getTable());
-                                    TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    if (currentTableStatus != null) {
-                                        ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
-                                        listModel.setDataQualityStatus(columnQualityStatusModel != null ?
-                                                columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
+            List<ColumnSpec> columnSpecsPage = allMatchingColumnSpecs
+                    .stream()
+                    .skip(skip == null ? 0 : skip)
+                    .collect(Collectors.toList());
+
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            List<ColumnListModel> columnModelsList = columnSpecsPage.stream()
+                    .map(colSpec -> ColumnListModel.fromColumnSpecificationForListEntry(
+                            colSpec.getHierarchyId().getConnectionName(),
+                            colSpec.getHierarchyId().getPhysicalTableName(),
+                            colSpec.getColumnName(),
+                            colSpec, isEditor, isOperator))
+                    .collect(Collectors.toList());
+
+            columnModelsList.forEach(listModel -> {
+                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                        listModel.getConnectionName(), listModel.getTable());
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                if (currentTableStatus != null) {
+                    ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
+                    listModel.setDataQualityStatus(columnQualityStatusModel != null ?
+                            columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
+                }
+            });
+
+            if (columnModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+
+                Flux<ColumnListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(columnModelsList)
+                                .map(listModel -> {
+                                    if (listModel.getDataQualityStatus() == null) {
+                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                listModel.getConnectionName(), listModel.getTable());
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        if (currentTableStatus != null) {
+                                            ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
+                                            listModel.setDataQualityStatus(columnQualityStatusModel != null ?
+                                                    columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
+                                        }
                                     }
-                                }
-                                return listModel;
-                            }));
+                                    return listModel;
+                                }));
 
-            return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
-        }
+                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(columnModelsList.stream()), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromStream(columnModelsList.stream()), HttpStatus.OK); // 200
+        }));
     }
 }

@@ -159,7 +159,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<RunChecksQueueJobResult>> runChecks(
+    public Mono<ResponseEntity<Mono<RunChecksQueueJobResult>>> runChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data quality check run configuration (target checks and an optional time range)")
             @RequestBody RunChecksParameters runChecksParameters,
@@ -169,39 +169,41 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
-        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
-                CheckRunReportingMode.silent, false);
-        runChecksParameters.setProgressListener(progressListener);
-        runChecksJob.setParameters(runChecksParameters);
-        runChecksJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
+            CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
+                    CheckRunReportingMode.silent, false);
+            runChecksParameters.setProgressListener(progressListener);
+            runChecksJob.setParameters(runChecksParameters);
+            runChecksJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob, principal);
+            PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
-            CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = new CompletableFuture<CheckExecutionSummary>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<CheckExecutionSummary> timeoutOrFinishedFuture =
-                    (CompletableFuture<CheckExecutionSummary>)(CompletableFuture<?>)
-                    CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = new CompletableFuture<CheckExecutionSummary>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<CheckExecutionSummary> timeoutOrFinishedFuture =
+                        (CompletableFuture<CheckExecutionSummary>)(CompletableFuture<?>)
+                        CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(summary -> {
-                        RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
-                        DqoJobCompletionStatus jobCompletionStatus = runChecksJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
-                    });
+                Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(summary -> {
+                            RunChecksResult runChecksResult = RunChecksResult.fromCheckExecutionSummary(summary);
+                            DqoJobCompletionStatus jobCompletionStatus = runChecksJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<RunChecksQueueJobResult> resultWithOnlyJobId = Mono.just(new RunChecksQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<RunChecksQueueJobResult> resultWithOnlyJobId = Mono.just(new RunChecksQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -243,47 +245,49 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<RunChecksQueueJobResult>> waitForRunChecksJob(
+    public Mono<ResponseEntity<Mono<RunChecksQueueJobResult>>> waitForRunChecksJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id, it can be a job business key assigned to the job or a job id generated by DQOps") @PathVariable String jobId,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
 
-        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-        if (jobHistoryEntryModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
-        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
-        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+            DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+            CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
+            long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
 
-        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
-        CompletableFuture<RunChecksQueueJobResult> timeoutLimitedFuture = new CompletableFuture<RunChecksQueueJobResult>()
-                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-        CompletableFuture<RunChecksQueueJobResult> timeoutOrFinishedFuture =
-                (CompletableFuture<RunChecksQueueJobResult>)(CompletableFuture<?>)
-                CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+            CompletableFuture<RunChecksQueueJobResult> timeoutLimitedFuture = new CompletableFuture<RunChecksQueueJobResult>()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            CompletableFuture<RunChecksQueueJobResult> timeoutOrFinishedFuture =
+                    (CompletableFuture<RunChecksQueueJobResult>)(CompletableFuture<?>)
+                    CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
 
-        Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                .map(_none -> {
-                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-                    if (mostRecentJobModel == null) {
-                        return null;
-                    }
+            Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                    .map(_none -> {
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        if (mostRecentJobModel == null) {
+                            return null;
+                        }
 
-                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
-                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
 
-                    RunChecksQueueJobResult jobResult = new RunChecksQueueJobResult(
-                            mostRecentJobModel.getJobId(),
-                            mostRecentJobModel.getParameters().getRunChecksParameters().getRunChecksResult(),
-                            dqoJobStatus);
-                    return jobResult;
-                });
+                        RunChecksQueueJobResult jobResult = new RunChecksQueueJobResult(
+                                mostRecentJobModel.getJobId(),
+                                mostRecentJobModel.getParameters().getRunChecksParameters().getRunChecksResult(),
+                                dqoJobStatus);
+                        return jobResult;
+                    });
 
-        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -304,7 +308,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<CollectErrorSamplesResult>> collectErrorSamples(
+    public Mono<ResponseEntity<Mono<CollectErrorSamplesResult>>> collectErrorSamples(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data quality check run configuration (target checks and an optional time range)")
             @RequestBody CollectErrorSamplesParameters collectErrorSamplesParameters,
@@ -314,39 +318,41 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        CollectErrorSamplesQueueJob collectErrorSamplesJob = this.dqoQueueJobFactory.createCollectErrorSamplesJob();
-        ErrorSamplerExecutionProgressListener progressListener = this.errorSamplerExecutionProgressListenerProvider.getProgressListener(
-                ErrorSamplerExecutionReportingMode.silent, false);
-        collectErrorSamplesParameters.setProgressListener(progressListener);
-        collectErrorSamplesJob.setParameters(collectErrorSamplesParameters);
-        collectErrorSamplesJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CollectErrorSamplesQueueJob collectErrorSamplesJob = this.dqoQueueJobFactory.createCollectErrorSamplesJob();
+            ErrorSamplerExecutionProgressListener progressListener = this.errorSamplerExecutionProgressListenerProvider.getProgressListener(
+                    ErrorSamplerExecutionReportingMode.silent, false);
+            collectErrorSamplesParameters.setProgressListener(progressListener);
+            collectErrorSamplesJob.setParameters(collectErrorSamplesParameters);
+            collectErrorSamplesJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<ErrorSamplerExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(collectErrorSamplesJob, principal);
+            PushJobResult<ErrorSamplerExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(collectErrorSamplesJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
-            CompletableFuture<ErrorSamplerExecutionSummary> timeoutLimitedFuture = new CompletableFuture<ErrorSamplerExecutionSummary>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<ErrorSamplerExecutionSummary> timeoutOrFinishedFuture =
-                    (CompletableFuture<ErrorSamplerExecutionSummary>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                CompletableFuture<ErrorSamplerExecutionSummary> timeoutLimitedFuture = new CompletableFuture<ErrorSamplerExecutionSummary>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<ErrorSamplerExecutionSummary> timeoutOrFinishedFuture =
+                        (CompletableFuture<ErrorSamplerExecutionSummary>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(summary -> {
-                        ErrorSamplerResult runChecksResult = ErrorSamplerResult.fromErrorSamplerExecutionSummary(summary);
-                        DqoJobCompletionStatus jobCompletionStatus = collectErrorSamplesJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(collectErrorSamplesJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new CollectErrorSamplesResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
-                    });
+                Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(summary -> {
+                            ErrorSamplerResult runChecksResult = ErrorSamplerResult.fromErrorSamplerExecutionSummary(summary);
+                            DqoJobCompletionStatus jobCompletionStatus = collectErrorSamplesJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(collectErrorSamplesJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new CollectErrorSamplesResult(pushJobResult.getJobId(), runChecksResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<CollectErrorSamplesResult> resultWithOnlyJobId = Mono.just(new CollectErrorSamplesResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<CollectErrorSamplesResult> resultWithOnlyJobId = Mono.just(new CollectErrorSamplesResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -368,47 +374,49 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CollectErrorSamplesResult>> waitForCollectErrorSamplesJob(
+    public Mono<ResponseEntity<Mono<CollectErrorSamplesResult>>> waitForCollectErrorSamplesJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id, it can be a job business key assigned to the job or a job id generated by DQOps") @PathVariable String jobId,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
 
-        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-        if (jobHistoryEntryModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
-        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
-        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+            DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+            CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
+            long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
 
-        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
-        CompletableFuture<CollectErrorSamplesResult> timeoutLimitedFuture = new CompletableFuture<CollectErrorSamplesResult>()
-                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-        CompletableFuture<CollectErrorSamplesResult> timeoutOrFinishedFuture =
-                (CompletableFuture<CollectErrorSamplesResult>)(CompletableFuture<?>)
-                        CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+            CompletableFuture<CollectErrorSamplesResult> timeoutLimitedFuture = new CompletableFuture<CollectErrorSamplesResult>()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            CompletableFuture<CollectErrorSamplesResult> timeoutOrFinishedFuture =
+                    (CompletableFuture<CollectErrorSamplesResult>)(CompletableFuture<?>)
+                            CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
 
-        Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                .map(_none -> {
-                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-                    if (mostRecentJobModel == null) {
-                        return null;
-                    }
+            Mono<CollectErrorSamplesResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                    .map(_none -> {
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        if (mostRecentJobModel == null) {
+                            return null;
+                        }
 
-                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
-                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                        DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
 
-                    CollectErrorSamplesResult jobResult = new CollectErrorSamplesResult(
-                            mostRecentJobModel.getJobId(),
-                            mostRecentJobModel.getParameters().getCollectErrorSamplesParameters().getErrorSamplerResult(),
-                            dqoJobStatus);
-                    return jobResult;
-                });
+                        CollectErrorSamplesResult jobResult = new CollectErrorSamplesResult(
+                                mostRecentJobModel.getJobId(),
+                                mostRecentJobModel.getParameters().getCollectErrorSamplesParameters().getErrorSamplerResult(),
+                                dqoJobStatus);
+                        return jobResult;
+                    });
 
-        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -429,7 +437,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<CollectStatisticsQueueJobResult>> collectStatisticsOnTable(
+    public Mono<ResponseEntity<Mono<CollectStatisticsQueueJobResult>>> collectStatisticsOnTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
@@ -438,43 +446,45 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
-        StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
-                StatisticsCollectorExecutionReportingMode.silent, false);
-        CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
-                statisticsCollectorSearchFilters,
-                progressListener,
-                StatisticsDataScope.table,
-                false);
-        runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
-        runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
+            StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
+                    StatisticsCollectorExecutionReportingMode.silent, false);
+            CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
+                    statisticsCollectorSearchFilters,
+                    progressListener,
+                    StatisticsDataScope.table,
+                    false);
+            runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
+            runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
+            PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
-                    (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+                CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
+                        (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(summary -> {
-                        CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
-                        DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
-                    });
+                Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(summary -> {
+                            CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
+                            DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<CollectStatisticsQueueJobResult> resultWithOnlyJobId = Mono.just(new CollectStatisticsQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<CollectStatisticsQueueJobResult> resultWithOnlyJobId = Mono.just(new CollectStatisticsQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -496,7 +506,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<CollectStatisticsQueueJobResult>> collectStatisticsOnDataGroups(
+    public Mono<ResponseEntity<Mono<CollectStatisticsQueueJobResult>>> collectStatisticsOnDataGroups(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
@@ -505,43 +515,45 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
-        StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
-                StatisticsCollectorExecutionReportingMode.silent, false);
-        CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
-                statisticsCollectorSearchFilters,
-                progressListener,
-                StatisticsDataScope.data_group,
-                false);
-        runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
-        runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
+            StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
+                    StatisticsCollectorExecutionReportingMode.silent, false);
+            CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
+                    statisticsCollectorSearchFilters,
+                    progressListener,
+                    StatisticsDataScope.data_group,
+                    false);
+            runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
+            runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
+            PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getCollectStatistics();
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
-                    (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getCollectStatistics();
+                CompletableFuture<StatisticsCollectionExecutionSummary> timeoutLimitedFuture = new CompletableFuture<StatisticsCollectionExecutionSummary>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<StatisticsCollectionExecutionSummary> timeoutOrFinishedFuture =
+                        (CompletableFuture<StatisticsCollectionExecutionSummary>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(summary -> {
-                        CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
-                        DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
-                    });
+                Mono<CollectStatisticsQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(summary -> {
+                            CollectStatisticsResult collectStatisticsResult = CollectStatisticsResult.fromStatisticsExecutionSummary(summary);
+                            DqoJobCompletionStatus jobCompletionStatus = runProfilersJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runProfilersJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new CollectStatisticsQueueJobResult(pushJobResult.getJobId(), collectStatisticsResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<CollectStatisticsQueueJobResult> resultWithOnlyJobId = Mono.just(new CollectStatisticsQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<CollectStatisticsQueueJobResult> resultWithOnlyJobId = Mono.just(new CollectStatisticsQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -561,10 +573,12 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>> getAllJobs(
+    public Mono<ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>>> getAllJobs(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
-        return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
+            return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -586,17 +600,19 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoJobHistoryEntryModel>> getJob(
+    public Mono<ResponseEntity<Mono<DqoJobHistoryEntryModel>>> getJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable String jobId) {
-        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
 
-        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-        if (jobHistoryEntryModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        return new ResponseEntity<>(Mono.just(jobHistoryEntryModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(jobHistoryEntryModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -618,46 +634,48 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoJobHistoryEntryModel>> waitForJob(
+    public Mono<ResponseEntity<Mono<DqoJobHistoryEntryModel>>> waitForJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable String jobId,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
 
-        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-        if (jobHistoryEntryModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+            if (jobHistoryEntryModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
-        CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
-        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getWaitTimeForJobType(jobHistoryEntryModel.getJobType());
+            DqoQueueJob<?> job = jobHistoryEntryModel.getJobQueueEntry().getJob();
+            CompletableFuture<?> jobFinishedFuture = job.getFinishedFuture();
+            long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getWaitTimeForJobType(jobHistoryEntryModel.getJobType());
 
-        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
-        CompletableFuture<?> timeoutLimitedFuture = new CompletableFuture<Void>()
-                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-        CompletableFuture<?> timeoutOrFinishedFuture = CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+            CompletableFuture<?> timeoutLimitedFuture = new CompletableFuture<Void>()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            CompletableFuture<?> timeoutOrFinishedFuture = CompletableFuture.anyOf(jobFinishedFuture, timeoutLimitedFuture);
 
-        Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                .map(_none -> {
-                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
-                    DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
-                    DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+            Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                    .map(_none -> {
+                        DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(dqoQueueJobId);
+                        DqoJobCompletionStatus jobCompletionStatus = job.getCompletionStatus();
+                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
 
-                    DqoJobHistoryEntryModel mostRecentStatusModel = mostRecentJobModel.clone();
-                    if (mostRecentStatusModel.getStatus() != dqoJobStatus) {
-                        mostRecentStatusModel.setStatus(dqoJobStatus);
-                        mostRecentStatusModel.setStatusChangedAt(Instant.now());
-                        if (dqoJobStatus == DqoJobStatus.failed && job.getJobExecutionException() != null) {
-                            mostRecentStatusModel.setErrorMessage(job.getJobExecutionException().getMessage());
+                        DqoJobHistoryEntryModel mostRecentStatusModel = mostRecentJobModel.clone();
+                        if (mostRecentStatusModel.getStatus() != dqoJobStatus) {
+                            mostRecentStatusModel.setStatus(dqoJobStatus);
+                            mostRecentStatusModel.setStatusChangedAt(Instant.now());
+                            if (dqoJobStatus == DqoJobStatus.failed && job.getJobExecutionException() != null) {
+                                mostRecentStatusModel.setErrorMessage(job.getJobExecutionException().getMessage());
+                            }
                         }
-                    }
 
-                    return mostRecentStatusModel;
-                });
+                        return mostRecentStatusModel;
+                    });
 
-        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -676,14 +694,16 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> cancelJob(
+    public Mono<ResponseEntity<Mono<Void>>> cancelJob(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Job id") @PathVariable String jobId) {
-        DqoQueueJobId dqoQueueJobId = findJobId(jobId);
-        this.dqoJobQueue.cancelJob(dqoQueueJobId);
-        this.parentDqoJobQueue.cancelJob(dqoQueueJobId);  // we don't know on which queue the job is running, but it cannot run on both and it is safe to cancel a missing job, so we cancel on both the queues
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoQueueJobId dqoQueueJobId = findJobId(jobId);
+            this.dqoJobQueue.cancelJob(dqoQueueJobId);
+            this.parentDqoJobQueue.cancelJob(dqoQueueJobId);  // we don't know on which queue the job is running, but it cannot run on both and it is safe to cancel a missing job, so we cancel on both the queues
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -703,22 +723,24 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoJobQueueIncrementalSnapshotModel>> getJobChangesSince(
+    public Mono<ResponseEntity<Mono<DqoJobQueueIncrementalSnapshotModel>>> getJobChangesSince(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
-        try {
-            Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
-                    sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
-            Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
-                    error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
-                            new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)));
-            return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
-        }
-        catch (Exception ex) {
-            log.error("Failed to retrieve recent jobs, error: " + ex.getMessage(), ex);
-            return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(
-                    new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)), HttpStatus.OK);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            try {
+                Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
+                        sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
+                Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
+                        error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
+                                new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)));
+                return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
+            }
+            catch (Exception ex) {
+                log.error("Failed to retrieve recent jobs, error: " + ex.getMessage(), ex);
+                return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(
+                        new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)), HttpStatus.OK);
+            }
+        }));
     }
 
     /**
@@ -737,7 +759,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<ImportTablesQueueJobResult>> importTables(
+    public Mono<ResponseEntity<Mono<ImportTablesQueueJobResult>>> importTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Import tables job parameters")
             @RequestBody ImportTablesQueueJobParameters importParameters,
@@ -747,35 +769,37 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
-        importTablesJob.setImportParameters(importParameters);
-        importTablesJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
+            importTablesJob.setImportParameters(importParameters);
+            importTablesJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<ImportTablesResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob, principal);
+            PushJobResult<ImportTablesResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getImportTables();
-            CompletableFuture<ImportTablesResult> timeoutLimitedFuture = new CompletableFuture<ImportTablesResult>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<ImportTablesResult> timeoutOrFinishedFuture =
-                    (CompletableFuture<ImportTablesResult>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getImportTables();
+                CompletableFuture<ImportTablesResult> timeoutLimitedFuture = new CompletableFuture<ImportTablesResult>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<ImportTablesResult> timeoutOrFinishedFuture =
+                        (CompletableFuture<ImportTablesResult>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(importTablesResult -> {
-                        DqoJobCompletionStatus jobCompletionStatus = importTablesJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new ImportTablesQueueJobResult(pushJobResult.getJobId(), importTablesResult, dqoJobStatus);
-                    });
+                Mono<ImportTablesQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(importTablesResult -> {
+                            DqoJobCompletionStatus jobCompletionStatus = importTablesJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(importTablesJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new ImportTablesQueueJobResult(pushJobResult.getJobId(), importTablesResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<ImportTablesQueueJobResult> resultWithOnlyJobId = Mono.just(new ImportTablesQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<ImportTablesQueueJobResult> resultWithOnlyJobId = Mono.just(new ImportTablesQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -795,7 +819,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<DeleteStoredDataQueueJobResult>> deleteStoredData(
+    public Mono<ResponseEntity<Mono<DeleteStoredDataQueueJobResult>>> deleteStoredData(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Delete stored data job parameters")
             @RequestBody DeleteStoredDataQueueJobParameters deleteStoredDataParameters,
@@ -805,35 +829,37 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
-        deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
-        deleteStoredDataJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
+            deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
+            deleteStoredDataJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
+            PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getDeleteStoredData();
-            CompletableFuture<DeleteStoredDataResult> timeoutLimitedFuture = new CompletableFuture<DeleteStoredDataResult>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<DeleteStoredDataResult> timeoutOrFinishedFuture =
-                    (CompletableFuture<DeleteStoredDataResult>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getDeleteStoredData();
+                CompletableFuture<DeleteStoredDataResult> timeoutLimitedFuture = new CompletableFuture<DeleteStoredDataResult>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<DeleteStoredDataResult> timeoutOrFinishedFuture =
+                        (CompletableFuture<DeleteStoredDataResult>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .map(deleteStoredDataResult -> {
-                        DqoJobCompletionStatus jobCompletionStatus = deleteStoredDataJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new DeleteStoredDataQueueJobResult(pushJobResult.getJobId(), deleteStoredDataResult, dqoJobStatus);
-                    });
+                Mono<DeleteStoredDataQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .map(deleteStoredDataResult -> {
+                            DqoJobCompletionStatus jobCompletionStatus = deleteStoredDataJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(deleteStoredDataJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new DeleteStoredDataQueueJobResult(pushJobResult.getJobId(), deleteStoredDataResult, dqoJobStatus);
+                        });
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<DeleteStoredDataQueueJobResult> resultWithOnlyJobId = Mono.just(new DeleteStoredDataQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<DeleteStoredDataQueueJobResult> resultWithOnlyJobId = Mono.just(new DeleteStoredDataQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -854,7 +880,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<SynchronizeMultipleFoldersQueueJobResult>> synchronizeFolders(
+    public Mono<ResponseEntity<Mono<SynchronizeMultipleFoldersQueueJobResult>>> synchronizeFolders(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Selection of folders that should be synchronized to the DQOps Cloud")
             @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters,
@@ -864,35 +890,37 @@ public class JobsController {
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
-        SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
-        synchronizeMultipleFoldersJob.setParameters(synchronizeFolderParameters);
-        synchronizeMultipleFoldersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
+            synchronizeMultipleFoldersJob.setParameters(synchronizeFolderParameters);
+            synchronizeMultipleFoldersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
 
-        PushJobResult<Void> pushJobResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
+            PushJobResult<Void> pushJobResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
 
-        if (!wait.isPresent() || wait.get()) {
-            // wait for the result
-            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
-                    this.dqoQueueWaitTimeoutsConfigurationProperties.getSynchronizeMultipleFolders();
-            CompletableFuture<Void> timeoutLimitedFuture = new CompletableFuture<Void>()
-                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            CompletableFuture<Void> timeoutOrFinishedFuture =
-                    (CompletableFuture<Void>)(CompletableFuture<?>)
-                            CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
+            if (!wait.isPresent() || wait.get()) {
+                // wait for the result
+                long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                        this.dqoQueueWaitTimeoutsConfigurationProperties.getSynchronizeMultipleFolders();
+                CompletableFuture<Void> timeoutLimitedFuture = new CompletableFuture<Void>()
+                        .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+                CompletableFuture<Void> timeoutOrFinishedFuture =
+                        (CompletableFuture<Void>)(CompletableFuture<?>)
+                                CompletableFuture.anyOf(pushJobResult.getFinishedFuture(), timeoutLimitedFuture);
 
-            Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
-                    .then(Mono.fromCallable(() -> {
-                        DqoJobCompletionStatus jobCompletionStatus = synchronizeMultipleFoldersJob.getCompletionStatus();
-                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
-                        DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
-                        return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), dqoJobStatus);
-                    }));
+                Mono<SynchronizeMultipleFoldersQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutOrFinishedFuture)
+                        .then(Mono.fromCallable(() -> {
+                            DqoJobCompletionStatus jobCompletionStatus = synchronizeMultipleFoldersJob.getCompletionStatus();
+                            DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(synchronizeMultipleFoldersJob.getJobId());
+                            DqoJobStatus dqoJobStatus = jobCompletionStatus != null ? jobCompletionStatus.toJobStatus() : jobHistoryEntryModel.getStatus();
+                            return new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId(), dqoJobStatus);
+                        }));
 
-            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
-        }
+                return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+            }
 
-        Mono<SynchronizeMultipleFoldersQueueJobResult> resultWithOnlyJobId = Mono.just(new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId()));
-        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+            Mono<SynchronizeMultipleFoldersQueueJobResult> resultWithOnlyJobId = Mono.just(new SynchronizeMultipleFoldersQueueJobResult(pushJobResult.getJobId()));
+            return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -912,10 +940,12 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<Boolean>> isCronSchedulerRunning(
+    public Mono<ResponseEntity<Mono<Boolean>>> isCronSchedulerRunning(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        Boolean started = this.jobSchedulerService.isStarted();
-        return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Boolean started = this.jobSchedulerService.isStarted();
+            return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -935,15 +965,17 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> startCronScheduler(
+    public Mono<ResponseEntity<Mono<Void>>> startCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        if (!this.jobSchedulerService.isStarted()) {
-            this.jobSchedulerService.start(
-                    this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
-                    this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-            this.jobSchedulerService.triggerMetadataSynchronization();
-        }
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (!this.jobSchedulerService.isStarted()) {
+                this.jobSchedulerService.start(
+                        this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                        this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+                this.jobSchedulerService.triggerMetadataSynchronization();
+            }
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -963,11 +995,13 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> stopCronScheduler(
+    public Mono<ResponseEntity<Mono<Void>>> stopCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        if (this.jobSchedulerService.isStarted()) {
-            this.jobSchedulerService.stop();
-        }
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (this.jobSchedulerService.isStarted()) {
+                this.jobSchedulerService.stop();
+            }
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+        }));
     }
 }
