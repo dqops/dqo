@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.postgresql.connection;
+package com.dqops.presto.connection;
 
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
-import com.dqops.connectors.postgresql.PostgresqlSourceConnection;
-import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
+import com.dqops.connectors.presto.PrestoSourceConnection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.TableSpec;
-import com.dqops.postgresql.BasePostgresqlIntegrationTest;
+import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -37,21 +35,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlSourceConnectionIntegrationTests extends BasePostgresqlIntegrationTest {
-    private PostgresqlSourceConnection sut;
+public class PrestoSourceConnectionIntegrationTests extends BasePrestoIntegrationTest {
+    private PrestoSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
-        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.postgresql);
+        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.presto);
         secretValueLookupContext = new SecretValueLookupContext(null);
-        connectionSpec = PostgresqlConnectionSpecObjectMother.create().expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-        this.sut = (PostgresqlSourceConnection)connectionProvider.createConnection(connectionSpec, false, this.secretValueLookupContext);
+        connectionSpec = PrestoConnectionSpecObjectMother.create().expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        this.sut = (PrestoSourceConnection)connectionProvider.createConnection(connectionSpec, false, this.secretValueLookupContext);
     }
 
     @AfterEach
@@ -67,7 +64,7 @@ public class PostgresqlSourceConnectionIntegrationTests extends BasePostgresqlIn
     @Test
     void listTables_whenDefaultSchemaListed_thenReturnsTables() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables(PostgresqlConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables(PrestoConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() == 0);
     }
@@ -75,7 +72,7 @@ public class PostgresqlSourceConnectionIntegrationTests extends BasePostgresqlIn
     @Test
     void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.postgresql);
+                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.presto);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
@@ -86,30 +83,6 @@ public class PostgresqlSourceConnectionIntegrationTests extends BasePostgresqlIn
         List<SourceTableModel> tables = this.sut.listTables(expectedSchema, tableFilter, 300, secretValueLookupContext);
 
         Assertions.assertEquals(1, tables.size());
-    }
-
-    @Test
-    void retrieveTableMetadata_tableHasUniqueColumn_columnHasSetIsIdFieldToTrue() {
-        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.postgresql);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-
-        this.sut.open(this.secretValueLookupContext);
-
-        String tableName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getTableName();
-
-        String alterTableQuery = String.format("ALTER TABLE %s ADD UNIQUE (id)", tableName);
-        this.sut.executeCommand(alterTableQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-        List<SourceTableModel> tables = this.sut.listTables("public", tableName, 300, secretValueLookupContext);
-        ArrayList<String> tableNames = new ArrayList<>();
-        tableNames.add(tables.get(0).getTableName().getTableName());
-
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("public", tableName, 300, tableNames, null, null);
-
-        TableSpec tableSpec = tableSpecs.get(0);
-        Assertions.assertTrue(tableSpec.getColumns().get("id").isId());
-        Assertions.assertFalse(tableSpec.getColumns().get("date").isId());
-        Assertions.assertFalse(tableSpec.getColumns().get("value").isId());
     }
 
 }

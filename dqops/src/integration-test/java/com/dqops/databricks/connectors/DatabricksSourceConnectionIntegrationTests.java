@@ -22,6 +22,10 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.databricks.BaseDatabricksIntegrationTest;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
+import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleTableMetadata;
+import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest
-public class DatabricksConnectionIntegrationTests extends BaseDatabricksIntegrationTest {
+public class DatabricksSourceConnectionIntegrationTests extends BaseDatabricksIntegrationTest {
     private DatabricksSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;
@@ -62,15 +66,31 @@ public class DatabricksConnectionIntegrationTests extends BaseDatabricksIntegrat
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
         Assertions.assertEquals(1, schemas.size());
-        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "default")));
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), DatabricksConnectionSpecObjectMother.getSchemaName())));
     }
 
     @Test
     void listTables_whenDefaultSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default", null, 300, secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables(DatabricksConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() == 0);
+    }
+
+    @Test
+    void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.databricks);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
+
+        String hashedTableName = sampleTableMetadata.getTableData().getHashedTableName();
+        String tableFilter = hashedTableName.substring(2, hashedTableName.length() - 3);
+
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, tableFilter, 300, secretValueLookupContext);
+
+        Assertions.assertEquals(1, tables.size());
     }
 
 }

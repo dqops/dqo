@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.spark.connectors;
+package com.dqops.oracle.connectors;
 
-import com.dqops.connectors.*;
-import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
-import com.dqops.connectors.spark.SparkSourceConnection;
+import com.dqops.connectors.ConnectionProvider;
+import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
+import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
+import com.dqops.connectors.oracle.OracleSourceConnection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,21 +36,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
-public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
-    private SparkSourceConnection sut;
+public class OracleSourceConnectionIntegrationTests extends BaseOracleIntegrationTest {
+    private OracleSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;
 
     @BeforeEach
     void setUp() {
-        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.spark);
+        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.oracle);
         this.secretValueLookupContext = new SecretValueLookupContext(null);
-        connectionSpec = SparkConnectionSpecObjectMother.create()
+        connectionSpec = OracleConnectionSpecObjectMother.create()
                 .expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-		this.sut = (SparkSourceConnection)connectionProvider.createConnection(connectionSpec, false, secretValueLookupContext);
+		this.sut = (OracleSourceConnection)connectionProvider.createConnection(connectionSpec, false, secretValueLookupContext);
     }
 
     @AfterEach
@@ -61,26 +63,17 @@ public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
     }
 
     @Test
-    void listSchemas_whenSchemasPresent_thenReturnsKnownSchemas() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceSchemaModel> schemas = this.sut.listSchemas();
-
-        Assertions.assertEquals(1, schemas.size());
-        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "default")));
-    }
-
-    @Test
     void listTables_whenDefaultSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default", null, 300, secretValueLookupContext);
+        List<SourceTableModel> tables = this.sut.listTables(OracleConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
 
-        Assertions.assertTrue(tables.isEmpty());
+        Assertions.assertTrue(tables.size() == 0);
     }
 
     @Test
     void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
-                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.spark);
+                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
