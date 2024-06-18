@@ -39,7 +39,7 @@ const HomePage = () => {
     <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
       <div
-        className="border-b border-gray-300 px-0 mt-18"
+        className="border-b border-gray-300 px-0 top-[64px] fixed r-0 l-0 w-full"
         style={{ backgroundColor: '#F9FAFC' }}
       >
         <Tabs
@@ -50,13 +50,15 @@ const HomePage = () => {
           disableTreeWidth={true}
         />
       </div>
-      {activeTab === '/home' && <StaticHomePage />}
-      {activeTab === '/tables' && <TableListView />}
-      {activeTab === '/columns' && <ColumnListView />}
-      {activeTab === '/global-incidents' && <GlobalIncidents />}
-      {/* {activeTab === '/global-incidents?groupBy=category' && (
+      <div className="mt-24.5">
+        {activeTab === '/home' && <StaticHomePage />}
+        {activeTab === '/tables' && <TableListView />}
+        {activeTab === '/columns' && <ColumnListView />}
+        {activeTab === '/global-incidents' && <GlobalIncidents />}
+        {/* {activeTab === '/global-incidents?groupBy=category' && (
         <GlobalIncidents groupBy="category" />
-      )} */}
+        )} */}
+      </div>
     </div>
   );
 };
