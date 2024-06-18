@@ -26680,7 +26680,7 @@
         },
         "date_format" : {
           "type" : "string",
-          "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+          "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
           "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
         }
       }
@@ -26703,7 +26703,7 @@
         },
         "date_format" : {
           "type" : "string",
-          "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+          "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
           "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
         }
       }
@@ -29441,7 +29441,7 @@
         },
         "date_format" : {
           "type" : "string",
-          "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+          "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
           "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
         }
       }
@@ -37199,6 +37199,62 @@
         }
       }
     },
+    "TableDataFreshnessAnomalyCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Max days since most recent event sensor parameters",
+          "$ref" : "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for max days since most recent event that raises a data quality error (alert)",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        }
+      }
+    },
     "TableDataFreshnessCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -39041,15 +39097,19 @@
           }
         },
         "daily_data_freshness" : {
-          "description" : "Daily  calculating the number of days since the most recent event timestamp (freshness)",
+          "description" : "Daily calculating the number of days since the most recent event timestamp (freshness)",
           "$ref" : "#/definitions/TableDataFreshnessCheckSpec"
         },
+        "daily_data_freshness_anomaly" : {
+          "description" : "Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/TableDataFreshnessAnomalyCheckSpec"
+        },
         "daily_data_staleness" : {
-          "description" : "Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
+          "description" : "Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
           "$ref" : "#/definitions/TableDataStalenessCheckSpec"
         },
         "daily_data_ingestion_delay" : {
-          "description" : "Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp",
+          "description" : "Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp",
           "$ref" : "#/definitions/TableDataIngestionDelayCheckSpec"
         }
       }
@@ -39167,6 +39227,10 @@
         "profile_data_freshness" : {
           "description" : "Calculates the number of days since the most recent event timestamp (freshness)",
           "$ref" : "#/definitions/TableDataFreshnessCheckSpec"
+        },
+        "profile_data_freshness_anomaly" : {
+          "description" : "Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/TableDataFreshnessAnomalyCheckSpec"
         },
         "profile_data_staleness" : {
           "description" : "Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
