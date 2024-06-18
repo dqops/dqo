@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 package com.dqops.checks.table.monitoring.timeliness;
+
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessAnomalyCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,22 +47,28 @@ public class TableTimelinessDailyMonitoringChecksSpec extends AbstractCheckCateg
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("daily_data_freshness", o -> o.dailyDataFreshness);
+           put("daily_data_freshness_anomaly", o -> o.dailyDataFreshnessAnomaly);
            put("daily_data_ingestion_delay", o -> o.dailyDataIngestionDelay);
            put("daily_data_staleness", o -> o.dailyDataStaleness);
         }
     };
 
-    @JsonPropertyDescription("Daily  calculating the number of days since the most recent event timestamp (freshness)")
+    @JsonPropertyDescription("Daily calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataFreshnessCheckSpec dailyDataFreshness;
 
-    @JsonPropertyDescription("Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    @JsonPropertyDescription("Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDataFreshnessAnomalyCheckSpec dailyDataFreshnessAnomaly;
+
+    @JsonPropertyDescription("Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataStalenessCheckSpec dailyDataStaleness;
 
-    @JsonPropertyDescription("Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
+    @JsonPropertyDescription("Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec dailyDataIngestionDelay;
@@ -81,6 +89,24 @@ public class TableTimelinessDailyMonitoringChecksSpec extends AbstractCheckCateg
 		this.setDirtyIf(!Objects.equals(this.dailyDataFreshness, dailyDataFreshness));
         this.dailyDataFreshness = dailyDataFreshness;
 		this.propagateHierarchyIdToField(dailyDataFreshness, "daily_data_freshness");
+    }
+
+    /**
+     * Returns the number of days since the most recent event value anomaly 90 days check specification.
+     * @return A number of days since the most recent event value anomaly 90 days check specification.
+     */
+    public TableDataFreshnessAnomalyCheckSpec getDailyDataFreshnessAnomaly() {
+        return dailyDataFreshnessAnomaly;
+    }
+
+    /**
+     * Sets the number of days since the most recent event value anomaly 90 days check specification.
+     * @param dailyDataFreshnessAnomaly freshness value anomaly 90 days check specification.
+     */
+    public void setDailyDataFreshnessAnomaly(TableDataFreshnessAnomalyCheckSpec dailyDataFreshnessAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyDataFreshnessAnomaly, dailyDataFreshnessAnomaly));
+        this.dailyDataFreshnessAnomaly = dailyDataFreshnessAnomaly;
+        this.propagateHierarchyIdToField(dailyDataFreshnessAnomaly, "daily_data_freshness_anomaly");
     }
 
     /**
