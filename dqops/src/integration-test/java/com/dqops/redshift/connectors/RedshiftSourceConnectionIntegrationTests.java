@@ -23,6 +23,10 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.redshift.BaseRedshiftIntegrationTest;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
+import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleTableMetadata;
+import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,6 +79,22 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseRedshiftIntegr
         List<SourceTableModel> tables = this.sut.listTables("public", null, 300, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() > 0);
+    }
+
+    @Test
+    void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
+
+        String hashedTableName = sampleTableMetadata.getTableData().getHashedTableName();
+        String tableFilter = hashedTableName.substring(2, hashedTableName.length() - 3);
+
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, tableFilter, 300, secretValueLookupContext);
+
+        Assertions.assertEquals(1, tables.size());
     }
 
     @Test

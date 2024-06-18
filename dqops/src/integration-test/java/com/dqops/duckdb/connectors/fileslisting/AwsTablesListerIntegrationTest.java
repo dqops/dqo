@@ -1,11 +1,12 @@
-package com.dqops.connectors.duckdb.fileslisting;
+package com.dqops.duckdb.connectors.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
-import com.dqops.connectors.duckdb.fileslisting.google.GcsTablesLister;
+import com.dqops.connectors.duckdb.fileslisting.TablesListerProviderObjectMother;
+import com.dqops.connectors.duckdb.fileslisting.aws.AwsTablesLister;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
@@ -18,14 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class GoogleTablesListerIntegrationTest extends BaseTest {
+class AwsTablesListerIntegrationTest extends BaseTest {
 
     private DuckdbParametersSpec duckdbParametersSpec;
     private String schemaName = "files";
-    private GcsTablesLister sut;
+    private AwsTablesLister sut;
 
     @BeforeEach
     void setUp() {
@@ -33,17 +33,18 @@ class GoogleTablesListerIntegrationTest extends BaseTest {
         SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
 
-        this.sut = (GcsTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.gcs);
+        this.sut = (AwsTablesLister) TablesListerProviderObjectMother.getProvider().createTablesLister(DuckdbStorageType.s3);
 
         this.duckdbParametersSpec = new DuckdbParametersSpec();
-        duckdbParametersSpec.setUser(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.GCS_DQO_AI_TESTING_INTEROPERABILITY_ACCESS_KEY, secretValueLookupContext));
-        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.GCS_DQO_AI_TESTING_INTEROPERABILITY_SECRET, secretValueLookupContext));
+        duckdbParametersSpec.setUser(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_ACCESS_KEY_ID, secretValueLookupContext));
+        duckdbParametersSpec.setPassword(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_SECRET_ACCESS_KEY, secretValueLookupContext));
+        duckdbParametersSpec.setRegion(secretValueProvider.expandValue(DevelopmentCredentialsSecretNames.AWS_S3_REGION, secretValueLookupContext));
         duckdbParametersSpec.setFilesFormatType(DuckdbFilesFormatType.csv);
     }
 
     @Test
     void listTables_straightlyFromBucket_returnFileAndFolder() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "gs://dqops-duckdb-test/");
+        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
@@ -58,7 +59,7 @@ class GoogleTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_straightlyFromBucketWithNoTrailingSlash_returnFileAndFolder() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "gs://dqops-duckdb-test");
+        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
@@ -73,7 +74,7 @@ class GoogleTablesListerIntegrationTest extends BaseTest {
 
     @Test
     void listTables_fromBucketPrefixWithSingleFile_returnOnlyOneFile() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "gs://dqops-duckdb-test/test-folder-1/data-set-1/");
+        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/test-folder-1/data-set-1/");
 
         List<SourceTableModel> sourceTableModels = sut.listTables(duckdbParametersSpec, schemaName, null, 300);
 
@@ -83,15 +84,5 @@ class GoogleTablesListerIntegrationTest extends BaseTest {
                         "continuous_days_one_row_per_day.csv"
                 );
     }
-
-    @Test
-    void listTables_passedNotGoogleScheme_throwsException() {
-        duckdbParametersSpec.getDirectories().put(schemaName, "s3://dqops-duckdb-test/test-folder-1/data-set-1/");
-
-        assertThrows(RuntimeException.class, ()->{
-            sut.listTables(duckdbParametersSpec, schemaName, null, 300);
-        });
-    }
-
 
 }

@@ -1,10 +1,11 @@
-package com.dqops.connectors.duckdb.fileslisting;
+package com.dqops.duckdb.connectors.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.fileslisting.TablesListerProviderObjectMother;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureTablesLister;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
