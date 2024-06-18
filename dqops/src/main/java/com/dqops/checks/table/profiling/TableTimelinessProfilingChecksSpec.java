@@ -19,8 +19,9 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessAnomalyCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -44,6 +45,7 @@ public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpe
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_data_freshness", o -> o.profileDataFreshness);
+            put("profile_data_freshness_anomaly", o -> o.profileDataFreshnessAnomaly);
             put("profile_data_staleness", o -> o.profileDataStaleness);
             put("profile_data_ingestion_delay", o -> o.profileDataIngestionDelay);
         }
@@ -51,6 +53,9 @@ public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpe
 
     @JsonPropertyDescription("Calculates the number of days since the most recent event timestamp (freshness)")
     private TableDataFreshnessCheckSpec profileDataFreshness;
+
+    @JsonPropertyDescription("Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.")
+    private TableDataFreshnessAnomalyCheckSpec profileDataFreshnessAnomaly;
 
     @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     private TableDataStalenessCheckSpec profileDataStaleness;
@@ -74,6 +79,24 @@ public class TableTimelinessProfilingChecksSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.profileDataFreshness, profileDataFreshness));
         this.profileDataFreshness = profileDataFreshness;
         propagateHierarchyIdToField(profileDataFreshness, "profile_data_freshness");
+    }
+
+    /**
+     * Returns the number of days since the most recent event value anomaly 90 days check specification.
+     * @return A number of days since the most recent event value anomaly 90 days check specification.
+     */
+    public TableDataFreshnessAnomalyCheckSpec getProfileDataFreshnessAnomaly() {
+        return profileDataFreshnessAnomaly;
+    }
+
+    /**
+     * Sets the number of days since the most recent event value anomaly 90 days check specification.
+     * @param profileDataFreshnessAnomaly freshness value anomaly 90 days check specification.
+     */
+    public void setProfileDataFreshnessAnomaly(TableDataFreshnessAnomalyCheckSpec profileDataFreshnessAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileDataFreshnessAnomaly, profileDataFreshnessAnomaly));
+        this.profileDataFreshnessAnomaly = profileDataFreshnessAnomaly;
+        this.propagateHierarchyIdToField(profileDataFreshnessAnomaly, "profile_data_freshness_anomaly");
     }
 
     /**
