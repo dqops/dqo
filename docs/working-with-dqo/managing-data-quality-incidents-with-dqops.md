@@ -63,9 +63,32 @@ On the Incidents and Notifications tab, you can customize:
 - The time duration for muted incidents. If the incident is muted, DQOps will not create a new one.
 
 
+## **View incidents summary**
+
+DQOps allows you for a quick overview of all incidents within your environment.
+To access **Incidents summary** click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
+
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary.png){ loading=lazy; width="1200px" }
+
+
+The **Incidents summary** screen allows you to view incidents grouped by either check category or data quality dimension.
+You can switch between these groupings using the radio buttons provided.
+The **Refresh** button located at the top right of the screen, allows you to refresh the displayed incident data.
+
+The summary screen displays incidents in a table format with the following columns:
+
+- **Connection** - The name of the connection where the incident was detected.
+- **Schema** - The schema name within the connection where the incident occurred.
+- **Table** - The name of the table where the incident was detected.
+- **Quality dimension** or **Check category** (depending on chosen grouping) - This column will display either the data quality dimension associated with the incident (e.g., Completeness, Validity, Consistency) or the check category that triggered the incident (e.g., anomaly, datetime, nulls, uniqueness).
+- **First seen** - The date the incident was first detected.
+- **Last seen** - The date the incident was last detected.
+
+Each table has a **Show more** button. Clicking this button will navigate you to the dedicated Incidents screen for a more detailed view.
+
 ## View and manage Incidents
 
-To access a summary of incidents that occur during data quality monitoring, navigate to the **Incidents** section.
+To view and manage incidents that occur during data quality monitoring, navigate to the **Incidents** section.
 
 ![Incidents screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen5.png){ loading=lazy; width="1200px" }
 
@@ -88,7 +111,7 @@ By default, incidents are grouped by table name, data quality dimension and chec
 will link you to the **Incidents and Notifications** tab in the **Data Source** section.
 Change the level of grouping for data quality incidents and click the **Save** button.
 
-## Filter incidents
+### **Filter incidents**
 
 Use filtering to restrict the types of issue groups that appear in the list.
 
@@ -105,13 +128,13 @@ months using the time range filter buttons.
 
 ![Time range filter](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/time-range-filter3.png){ loading=lazy; width="1200px" }
 
-## Sort incidents
+### **Sort incidents**
 
 You can sort the incidents table. Simply click on the sorting icon next to a column header to sort the incidents table by that column.
 
 ![Sort incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/sort-incidents3.png){ loading=lazy; width="1200px" }
 
-## Change the resolution status
+### **Change the resolution status**
 
 To help you manage the incidents, each of them can have the following resolution status values:
 
@@ -126,7 +149,7 @@ To help you manage the incidents, each of them can have the following resolution
 
 To change the resolution status, simply chose the status from the dropdown menu.
 
-## Add Issue link
+### **Add Issue link**
 
 You can add an **issue tracker link** to an incident by clicking the "+" button in the **Issue Link** column.
 
@@ -154,7 +177,7 @@ The upper right corner of the Incident details screen provides access to several
 - **Recalibrate checks for the incident**: Clicking on this button will decrease the check's thresholds by 30%.
 - **Change incident configuration**: This button opens the **Incident configuration** screen for the table where the incident originated. This allows you to manage incident settings, such as grouping and severity levels.
 
-## Filter data quality check results
+### **Filter data quality check results**
 
 Use filtering to restrict the types of data quality issues that appear in the list and on the bar chart.
 
@@ -164,13 +187,13 @@ Finally, you can filter the list of issues **by column** or **check names** by c
 
 ![Details filters](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/details-filters2.png){ loading=lazy; width="1200px" }
 
-## Sort issues
+### **Sort issues**
 
 To sort the issue table, simply click on the sorting icon next to any column header.
 
 ![Sorting issues](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/sort-issues4.png){ loading=lazy; width="1200px" }
 
-## View detailed check results
+### **View detailed check results**
 
 To view detailed check results, simply click the down arrow next to an issue in the detailed table. This will expand a 
 section displaying the historical record of the check's execution that raised the issue. 
@@ -180,7 +203,7 @@ If the check encountered any errors during execution, they will be displayed in 
 
 ![Check results on incidents details](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/check-results-on-incidents-details-screen.png){ loading=lazy; width="1200px" }
 
-## Disable check for the incident 
+### **Disable check for the incident** 
 
 To manage incidents, you have the option to disable the check responsible for the incident. Disabling a check can be 
 useful when you are actively working to resolve the underlying issue.
@@ -195,7 +218,7 @@ You can verify that the check has been disabled by navigating to the check edito
 ![Disabling check verification on Check editor](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-verification.png){ loading=lazy; width="1200px" }
 
 
-## Recalibrate check for the incident 
+### **Recalibrate check for the incident** 
 
 DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check. 
 This can be helpful in situations where the check might be overly sensitive.

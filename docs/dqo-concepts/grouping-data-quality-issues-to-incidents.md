@@ -152,4 +152,3 @@ use formatted messages that are shown on the Slack channels as shown below.
   in the *Working with DQOps* section.
 - Learn how to configure [data quality incident notifications with Slack](../integrations/slack/configuring-slack-notifications.md)
 - Learn how a generic integration using [webhooks](../integrations/webhooks/index.md) is used for incident notifications.
-
