@@ -29,26 +29,31 @@ $DQO_USER_HOME
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01 
 │   │               └─rule_results.0.parquet
-│   ├───errors(2)
+│   ├───error_samples(2)
+│   │   └───c=bigquery-public-data                                                
+│   │       └───t=america_health_rankings.ahr
+│   │           └───m=2023-02-01  
+│   │               └─errorsamples.0.parquet     
+│   ├───errors(3)
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01  
 │   │               └─errors.0.parquet                                          
-│   ├───incidents(3)
+│   ├───incidents(4)
 │   │   └───c=bigquery-public-data                                                
 │   │       └───m=2023-02-01
 │   │           └───incidents.0.parquet 
-│   ├───sensor_readouts(4)                                                            
+│   ├───sensor_readouts(5)                                                            
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01
 │   │               └─sensor_readout.0.parquet  
-│   └───statistics(5)                                                        
+│   └───statistics(6)                                                        
 │       └───c=bigquery-public-data                                                
 │           └───t=america_health_rankings.ahr
 │               └───m=2023-02-01   
 │                   └─statistics.0.parquet   
-├───.index(6) 
+├───.index(7) 
 │    ├─data_check_results.LOCAL.dqofidx.json
 │    ├─data_check_results.REMOTE.dqofidx.json
 │    ├─data_sensor_readouts.LOCAL.dqofidx.json
@@ -69,13 +74,14 @@ $DQO_USER_HOME
 ```
 
 1. The data quality [check results](../reference/parquetfiles/check_results.md).
-2. The execution [errors](../reference/parquetfiles/errors.md) detected during the sensor's Jinja2 template rendering, running Python rules or returned
+2. Error samples captured for failed data quality checks, supported for column level data quality checks that count or measure the percentage of invalid rows.
+3. The execution [errors](../reference/parquetfiles/errors.md) detected during the sensor's Jinja2 template rendering, running Python rules or returned
    by the data source when the query is executed.
-3. The data quality [incidents](../reference/parquetfiles/incidents.md)  which are groups of similar
+4. The data quality [incidents](../reference/parquetfiles/incidents.md)  which are groups of similar
    data quality issues (failed data quality checks) grouped into a single incident.
-4. The [sensor readouts](../reference/parquetfiles/sensor_readouts.md) which are the captured metrics about the quality of the data source. 
-5. Basic [statistics](../reference/parquetfiles/statistics.md) about the data sources at a table and column level, including the top 10 most common values for each column.
-6. The `.index` folder is used internally by DQOps to track the synchronization status of local files with the DQOps Cloud Data Lake.
+5. The [sensor readouts](../reference/parquetfiles/sensor_readouts.md) which are the captured metrics about the quality of the data source. 
+6. Basic [statistics](../reference/parquetfiles/statistics.md) about the data sources at a table and column level, including the top 10 most common values for each column.
+7. The `.index` folder is used internally by DQOps to track the synchronization status of local files with the DQOps Cloud Data Lake.
    This folder is not intended to be modified manually.
 
 The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. Those folders 
@@ -85,13 +91,14 @@ The detailed schema of each type of data table that is stored in the `.data` fol
 
 The schema of the following tables is documented:
 
-| Table name      | Purpose                                                                                                         | Table folder and schema                                               |
-|-----------------|-----------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| check results   | The results of data quality checks, evaluated by data quality rules                                             | [.data/check_results](../reference/parquetfiles/check_results.md)     |
-| errors          | Execution errors captured during the sensor rendering, rule evaluation or by running a query on the data source | [.data/errors](../reference/parquetfiles/errors.md)                   |
-| incidents       | Data quality incidents tracked by DQOps                                                                         | [.data/incidents](../reference/parquetfiles/incidents.md)             |
-| sensor readouts | Measures captured by data quality sensors                                                                       | [.data/sensor_readouts](../reference/parquetfiles/sensor_readouts.md) |
-| statistics      | Basic statistics about the data source, including column sample values                                          | [.data/statistics](../reference/parquetfiles/statistics.md)           |
+| Table name      | Purpose                                                                                                                                                    | Table folder and schema                                               |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| check results   | The results of data quality checks, evaluated by data quality rules                                                                                        | [.data/check_results](../reference/parquetfiles/check_results.md)     |
+| error_samples   | Error samples captured for failed data quality checks, supported for column level data quality checks that count or measure the percentage of invalid rows | [.data/error_samples](../reference/parquetfiles/error_samples.md)     |
+| errors          | Execution errors captured during the sensor rendering, rule evaluation or by running a query on the data source                                            | [.data/errors](../reference/parquetfiles/errors.md)                   |
+| incidents       | Data quality incidents tracked by DQOps                                                                                                                    | [.data/incidents](../reference/parquetfiles/incidents.md)             |
+| sensor readouts | Measures captured by data quality sensors                                                                                                                  | [.data/sensor_readouts](../reference/parquetfiles/sensor_readouts.md) |
+| statistics      | Basic statistics about the data source, including column sample values                                                                                     | [.data/statistics](../reference/parquetfiles/statistics.md)           |
 
 
 ## How data quality results are stored

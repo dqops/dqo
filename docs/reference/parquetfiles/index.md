@@ -14,6 +14,7 @@ The list of parquet tables used by DQOps to store data quality results in the *[
 |[incidents](./incidents.md)|The data quality incidents table that tracks open incidents.|
 |[sensor_readouts](./sensor_readouts.md)|The data quality sensor readouts table that stores readouts (measures) captured by DQOps sensors, before the value are evaluated by the data quality rules.|
 |[statistics](./statistics.md)|The basic profiling results (statistics) table that stores basic profiling statistical values.|
+|[error_samples](./error_samples.md)|The error samples table that stores sample column values that failed data quality checks that operate on rows (mostly Validity and Consistency checks).|
 
 
 ## What's more

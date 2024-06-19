@@ -548,6 +548,7 @@ nav:
       - incidents: 'reference/parquetfiles/incidents.md'
       - sensor_readouts: 'reference/parquetfiles/sensor_readouts.md'
       - statistics: 'reference/parquetfiles/statistics.md'
+      - error_samples: 'reference/parquetfiles/error_samples.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css

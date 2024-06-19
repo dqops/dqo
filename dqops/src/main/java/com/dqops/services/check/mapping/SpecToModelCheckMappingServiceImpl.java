@@ -655,6 +655,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 checkModel.pushError(CheckConfigurationRequirementsError.MISSING_PARTITION_BY_COLUMN);
             }
 
+            checkModel.setSupportsErrorSampling(providerSensorDefinition.getErrorSamplingTemplateLastModified() != null); // error sampling template is present
             checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
 
             if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresEventTimestamp() &&
