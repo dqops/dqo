@@ -195,7 +195,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 color="teal"
               />
               <div className="mt-2">
-                <p>For the time range:</p>
+                <p>For the time range</p>
                 <div className="flex space-x-6 items-center">
                   <DatePicker
                     showIcon

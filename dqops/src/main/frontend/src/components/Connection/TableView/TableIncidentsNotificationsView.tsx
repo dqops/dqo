@@ -121,7 +121,7 @@ export const TableIncidentsNotificationsView = () => {
       >
         <div className="flex mb-4">
           <Select
-            label="Data quality incident grouping level:"
+            label="Data quality incident grouping level"
             options={groupLevelOptions}
             value={incidentGrouping?.grouping_level}
             onChange={(value) => onChange({ grouping_level: value })}
@@ -132,7 +132,7 @@ export const TableIncidentsNotificationsView = () => {
         </div>
         <div className="flex mb-4">
           <Select
-            label="Minimum severity level:"
+            label="Minimum severity level"
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
@@ -142,7 +142,7 @@ export const TableIncidentsNotificationsView = () => {
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
-          <p>Create separate incidents for each data group:</p>
+          <p>Create separate incidents for each data group</p>
           <div className="w-6 h-6">
             <Checkbox
               checked={incidentGrouping?.divide_by_data_groups}

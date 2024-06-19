@@ -51,7 +51,7 @@ function SettingsPopUp() {
     profileSettings?.properties ? profileSettings.properties : {}
   ).map(([key, value]) => (
     <div key={key} className="flex">
-      <div className=" w-2/5 mr-5 whitespace-normal">{key}: </div>
+      <div className=" w-2/5 mr-5 whitespace-normal">{key} </div>
       <div className=" w-3/5 whitespace-normal">{renderValue(value)}</div>
     </div>
   ));

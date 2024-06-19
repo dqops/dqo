@@ -124,7 +124,7 @@ export const IncidentsNotificationsView = () => {
       <div className="flex flex-col">
         <div className="flex mb-4">
           <Select
-            label="Data quality incident grouping level:"
+            label="Data quality incident grouping level"
             options={groupLevelOptions}
             value={incidentGrouping?.grouping_level}
             onChange={(value) => onChange({ grouping_level: value })}
@@ -133,7 +133,7 @@ export const IncidentsNotificationsView = () => {
         </div>
         <div className="flex mb-4">
           <Select
-            label="Minimum severity level:"
+            label="Minimum severity level"
             options={minimumSeverityOptions}
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
@@ -141,7 +141,7 @@ export const IncidentsNotificationsView = () => {
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
-          <p>Create separate incidents for each data group:</p>
+          <p>Create separate incidents for each data group</p>
           <div className="w-6 h-6">
             <Checkbox
               checked={incidentGrouping?.divide_by_data_groups}
@@ -181,7 +181,7 @@ export const IncidentsNotificationsView = () => {
         >
           <Input
             className="mb-4"
-            label="A new incident was opened (detected):"
+            label="A new incident was opened (detected)"
             value={incidentGrouping?.webhooks?.incident_opened_webhook_url}
             onChange={(e) =>
               onChangeWebhooks({ incident_opened_webhook_url: e.target.value })
@@ -192,7 +192,7 @@ export const IncidentsNotificationsView = () => {
           />
           <Input
             className="mb-4"
-            label="An incident was acknowledged:"
+            label="An incident was acknowledged"
             value={
               incidentGrouping?.webhooks?.incident_acknowledged_webhook_url
             }
@@ -207,7 +207,7 @@ export const IncidentsNotificationsView = () => {
           />
           <Input
             className="mb-4"
-            label="An incident was resolved:"
+            label="An incident was resolved"
             value={incidentGrouping?.webhooks?.incident_resolved_webhook_url}
             onChange={(e) =>
               onChangeWebhooks({
@@ -220,7 +220,7 @@ export const IncidentsNotificationsView = () => {
           />
           <Input
             className="mb-4"
-            label="An incident was muted:"
+            label="An incident was muted"
             value={incidentGrouping?.webhooks?.incident_muted_webhook_url}
             onChange={(e) =>
               onChangeWebhooks({ incident_muted_webhook_url: e.target.value })
