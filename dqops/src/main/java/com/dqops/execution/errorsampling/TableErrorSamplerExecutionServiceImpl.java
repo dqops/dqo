@@ -154,7 +154,7 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
         this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), tableSpec, userHome); // expand checks configured by check patterns
 
         Collection<AbstractCheckSpec<?,?,?,?>> checks = this.hierarchyNodeTreeSearcher.findChecks(tableSpec, checkSearchFilters);
-        if (checks.size() == 0) {
+        if (checks.isEmpty()) {
             errorSamplerExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
             return errorSamplerExecutionSummary; // no checks for this table
         }
@@ -172,6 +172,10 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, tableSpec, executionContext, userHome, userTimeWindowFilters, progressListener,
                 executionStatistics, errorSamplesDataScope, jobCancellationToken);
+        if (allPreparedSensors.isEmpty()) {
+            errorSamplerExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
+            return errorSamplerExecutionSummary; // no checks for this table have any error sampling templates
+        }
 
         GroupedSensorsCollection groupedSensorsCollection = new GroupedSensorsCollection(1); // no merging, just find the same sensors
         groupedSensorsCollection.addAllPreparedSensors(allPreparedSensors);
@@ -418,42 +422,49 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
                                                                   ErrorSamplesDataScope errorSamplingDataScope,
                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
-        HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
-        ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
-        ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-        ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
+        try {
+            HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
+            ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
+            ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
+            ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+            ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
+            ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(tableSpec));
-        Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
-                .stream()
-                .filter(n -> n instanceof AbstractRootChecksContainerSpec)
-                .findFirst();
-        assert checkCategoryRootProvider.isPresent();
-        AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec) checkCategoryRootProvider.get();
-        CheckType checkType = rootChecksContainerSpec.getCheckType();
+            List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(tableSpec));
+            Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
+                    .stream()
+                    .filter(n -> n instanceof AbstractRootChecksContainerSpec)
+                    .findFirst();
+            assert checkCategoryRootProvider.isPresent();
+            AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec) checkCategoryRootProvider.get();
+            CheckType checkType = rootChecksContainerSpec.getCheckType();
 
-        CheckDefinitionSpec customCheckDefinitionSpec = null;
+            CheckDefinitionSpec customCheckDefinitionSpec = null;
 
-        if (checkSpec instanceof CustomCheckSpec) {
-            CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
-            customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
-                    rootChecksContainerSpec.getCheckTarget(), checkType,
-                    rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
-            if (customCheckDefinitionSpec == null) {
-                String fullCheckName = CheckDefinitionList.makeCheckName(rootChecksContainerSpec.getCheckTarget(), checkType,
+            if (checkSpec instanceof CustomCheckSpec) {
+                CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
+                customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
+                        rootChecksContainerSpec.getCheckTarget(), checkType,
                         rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
-                String errorMessage = "Cannot execute a custom check " + fullCheckName + " on the table " + tableSpec.toString() +
-                        " because the custom check is not defined. The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
-                this.userErrorLogger.logCheck(errorMessage, null);
-                throw new DqoRuntimeException(errorMessage);
+                if (customCheckDefinitionSpec == null) {
+                    String fullCheckName = CheckDefinitionList.makeCheckName(rootChecksContainerSpec.getCheckTarget(), checkType,
+                            rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
+                    String errorMessage = "Cannot execute a custom check " + fullCheckName + " on the table " + tableSpec.toString() +
+                            " because the custom check is not defined. The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
+                    this.userErrorLogger.logCheck(errorMessage, null);
+                    throw new DqoRuntimeException(errorMessage);
+                }
             }
-        }
 
-        SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createErrorSamplerSensorParameters(
-                dqoHome, userHome, connectionSpec, tableSpec, columnSpec, checkSpec,
-                customCheckDefinitionSpec, userTimeWindowFilters, errorSamplingDataScope, dialectSettings);
-        return sensorRunParameters; // may return null if the sensor is not supported on the data source
+            SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createErrorSamplerSensorParameters(
+                    dqoHome, userHome, connectionSpec, tableSpec, columnSpec, checkSpec,
+                    customCheckDefinitionSpec, userTimeWindowFilters, errorSamplingDataScope, dialectSettings);
+            return sensorRunParameters; // may return null if the sensor is not supported on the data source
+        }
+        catch (Throwable ex) {
+            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed for an error sampling query, message: " + ex.getMessage() +
+                    "The check that cannot capture the error samples: " +  checkSpec.getHierarchyId().toString(), ex);
+            return null;
+        }
     }
 }

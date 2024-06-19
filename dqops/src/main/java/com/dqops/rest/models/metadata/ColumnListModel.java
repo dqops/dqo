@@ -42,13 +42,22 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ColumnListModel", description = "Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.")
 public class ColumnListModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    /**
+     * Physical table name including the schema and table names.
+     */
     @JsonPropertyDescription("Physical table name including the schema and table names.")
     private PhysicalTableName table;
 
-    @JsonPropertyDescription("Column names.")
+    /**
+     * Column name.
+     */
+    @JsonPropertyDescription("Column name.")
     private String columnName;
 
     /**
@@ -57,32 +66,63 @@ public class ColumnListModel {
     @JsonPropertyDescription("List of labels applied to the table.")
     private String[] labels;
 
-    @JsonPropertyDescription("SQL expression.")
+    /**
+     * SQL expression for a calculated column, or a column that applies additional data transformation to the original column value. The original column value is referenced by a token {column}.
+     */
+    @JsonPropertyDescription("SQL expression for a calculated column, or a column that applies additional data transformation to the original column value. The original column value is referenced by a token {column}.")
     private String sqlExpression;
 
+    /**
+     * Column hash that identifies the column using a unique hash code.
+     */
     @JsonPropertyDescription("Column hash that identifies the column using a unique hash code.")
     private Long columnHash;
 
+    /**
+     * Disables all data quality checks on the column. Data quality checks will not be executed.
+     */
     @JsonPropertyDescription("Disables all data quality checks on the column. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("True when the column has any checks configured.")
+    /**
+     * Marks columns that are part of a primary or a unique key. DQOps captures their values during error sampling to match invalid values to the rows in which the value was found.
+     */
+    @JsonPropertyDescription("Marks columns that are part of a primary or a unique key. DQOps captures their values during error sampling to match invalid values to the rows in which the value was found.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean id;
+
+    /**
+     * True when the column has any checks configured (read-only).
+     */
+    @JsonPropertyDescription("True when the column has any checks configured (read-only).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredChecks;
 
-    @JsonPropertyDescription("True when the column has any profiling checks configured.")
+    /**
+     * True when the column has any profiling checks configured (read-only).
+     */
+    @JsonPropertyDescription("True when the column has any profiling checks configured (read-only).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
-    @JsonPropertyDescription("True when the column has any monitoring checks configured.")
+    /**
+     * True when the column has any monitoring checks configured (read-only).
+     */
+    @JsonPropertyDescription("True when the column has any monitoring checks configured (read-only).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredMonitoringChecks;
 
-    @JsonPropertyDescription("True when the column has any partition checks configured.")
+    /**
+     * True when the column has any partition checks configured (read-only).
+     */
+    @JsonPropertyDescription("True when the column has any partition checks configured (read-only).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredPartitionChecks;
 
+    /**
+     * Column data type that was retrieved when the table metadata was imported.
+     */
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
@@ -96,21 +136,39 @@ public class ColumnListModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnCurrentDataQualityStatusModel dataQualityStatus;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this column.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run monitoring checks within this column.")
     private CheckSearchFilters runMonitoringChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this column.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collector within this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
@@ -163,6 +221,7 @@ public class ColumnListModel {
             setLabels(columnSpec.getLabels() != null ? columnSpec.getLabels().toArray(String[]::new) : null);
             setSqlExpression(columnSpec.getSqlExpression());
             setDisabled(columnSpec.isDisabled());
+            setId(columnSpec.isId());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
@@ -251,6 +310,7 @@ public class ColumnListModel {
             setColumnName(columnName);
             setSqlExpression(columnSpec.getSqlExpression());
             setDisabled(columnSpec.isDisabled());
+            setId(columnSpec.isId());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.profiling));
@@ -270,6 +330,7 @@ public class ColumnListModel {
     public void copyToColumnSpecification(ColumnSpec targetColumnSpec) {
         targetColumnSpec.setSqlExpression(this.getSqlExpression());
         targetColumnSpec.setDisabled(this.isDisabled());
+        targetColumnSpec.setId(this.isId());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
     }
 
