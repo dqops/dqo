@@ -20,8 +20,22 @@ A table-level check that calculates the time difference between the most recent 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_data_freshness`</span>](./data-freshness.md#profile-data-freshness)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_data_freshness`</span>](./data-freshness.md#daily-data-freshness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_data_freshness`</span>](./data-freshness.md#daily-data-freshness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_data_freshness`</span>](./data-freshness.md#monthly-data-freshness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
+
+
+
+### [data freshness anomaly](./data-freshness-anomaly.md)
+This check calculates the most recent rows value and the current time and detects anomalies in a time series of previous averages.
+ The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
+ It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#profile-data-freshness-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#daily-data-freshness-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
 
 
 
@@ -35,7 +49,7 @@ A table-level check that calculates the time difference between the last timesta
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_data_staleness`</span>](./data-staleness.md#profile-data-staleness)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`daily_data_staleness`</span>](./data-staleness.md#daily-data-staleness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
+|[<span class="no-wrap-code">`daily_data_staleness`</span>](./data-staleness.md#daily-data-staleness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
 |[<span class="no-wrap-code">`monthly_data_staleness`</span>](./data-staleness.md#monthly-data-staleness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
 
 
@@ -51,7 +65,7 @@ A table-level check that calculates the time difference between the most recent 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_data_ingestion_delay`</span>](./data-ingestion-delay.md#profile-data-ingestion-delay)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`daily_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-data-ingestion-delay)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+|[<span class="no-wrap-code">`daily_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-data-ingestion-delay)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
 |[<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-data-ingestion-delay)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
 |[<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-partition-data-ingestion-delay)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
 |[<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-partition-data-ingestion-delay)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |

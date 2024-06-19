@@ -1655,7 +1655,7 @@ ___
 
 **Check description**
 
-Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

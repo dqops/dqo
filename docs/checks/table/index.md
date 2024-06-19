@@ -132,6 +132,14 @@ A table-level check that calculates the time difference between the most recent 
 
 
 
+### [data freshness anomaly](./timeliness/data-freshness-anomaly.md)
+This check calculates the most recent rows value and the current time and detects anomalies in a time series of previous averages.
+ The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
+ It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
+
+
+
 ### [data staleness](./timeliness/data-staleness.md)
 A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.
  This check can only be use when a data pipeline, ETL process, or trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded.

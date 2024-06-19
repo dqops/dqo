@@ -1697,7 +1697,7 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LEN( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})

@@ -138,8 +138,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -155,8 +155,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -170,8 +170,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -187,8 +187,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -202,8 +202,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -219,8 +219,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -234,8 +234,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -251,8 +251,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -267,8 +267,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -290,8 +290,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM(
@@ -309,8 +309,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -326,8 +326,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -341,8 +341,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -365,8 +365,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -384,8 +384,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -401,8 +401,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -416,8 +416,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -433,8 +433,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -448,8 +448,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -465,8 +465,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -480,8 +480,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -497,8 +497,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -512,8 +512,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -536,8 +536,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -602,8 +602,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -618,8 +618,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -636,8 +636,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -652,8 +652,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -670,8 +670,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -686,8 +686,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -704,8 +704,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -720,8 +720,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -739,8 +739,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -761,8 +761,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -788,8 +788,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -804,8 +804,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -822,8 +822,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -845,8 +845,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -872,8 +872,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -888,8 +888,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -906,8 +906,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -922,8 +922,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -940,8 +940,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -956,8 +956,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -974,8 +974,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -990,8 +990,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -1012,8 +1012,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1035,8 +1035,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -1186,8 +1186,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1203,8 +1203,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1218,8 +1218,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1235,8 +1235,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1250,8 +1250,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1267,8 +1267,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -1282,8 +1282,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1299,8 +1299,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1315,8 +1315,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1338,8 +1338,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM(
@@ -1357,8 +1357,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1374,8 +1374,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1389,8 +1389,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1413,8 +1413,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -1432,8 +1432,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1449,8 +1449,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1464,8 +1464,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1481,8 +1481,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1496,8 +1496,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1513,8 +1513,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1528,8 +1528,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1545,8 +1545,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1560,8 +1560,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1584,8 +1584,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -1651,8 +1651,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1667,8 +1667,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1685,8 +1685,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1701,8 +1701,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1719,8 +1719,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1735,8 +1735,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1753,8 +1753,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1769,8 +1769,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1788,8 +1788,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1810,8 +1810,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -1837,8 +1837,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1853,8 +1853,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1871,8 +1871,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1894,8 +1894,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -1921,8 +1921,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1937,8 +1937,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1955,8 +1955,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1971,8 +1971,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1989,8 +1989,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2005,8 +2005,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2023,8 +2023,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2039,8 +2039,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -2061,8 +2061,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2084,8 +2084,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -2235,8 +2235,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2252,8 +2252,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -2267,8 +2267,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2284,8 +2284,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2299,8 +2299,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2316,8 +2316,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -2331,8 +2331,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2348,8 +2348,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -2364,8 +2364,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2387,8 +2387,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM(
@@ -2406,8 +2406,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2423,8 +2423,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2438,8 +2438,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2462,8 +2462,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -2481,8 +2481,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2498,8 +2498,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2513,8 +2513,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2530,8 +2530,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2545,8 +2545,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2562,8 +2562,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2577,8 +2577,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2594,8 +2594,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -2609,8 +2609,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2633,8 +2633,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -2700,8 +2700,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2716,8 +2716,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2734,8 +2734,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2750,8 +2750,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2768,8 +2768,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2784,8 +2784,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2802,8 +2802,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2818,8 +2818,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2837,8 +2837,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2859,8 +2859,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -2886,8 +2886,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2902,8 +2902,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2920,8 +2920,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2943,8 +2943,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -2970,8 +2970,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2986,8 +2986,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3004,8 +3004,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3020,8 +3020,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3038,8 +3038,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3054,8 +3054,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3072,8 +3072,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3088,8 +3088,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -3110,8 +3110,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3133,8 +3133,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -3294,8 +3294,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3311,8 +3311,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3330,8 +3330,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3347,8 +3347,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3366,8 +3366,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3383,8 +3383,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3402,8 +3402,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3419,8 +3419,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
@@ -3439,8 +3439,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3462,8 +3462,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -3487,8 +3487,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3504,8 +3504,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3523,8 +3523,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3547,8 +3547,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -3572,8 +3572,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3589,8 +3589,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3608,8 +3608,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3625,8 +3625,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3644,8 +3644,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3661,8 +3661,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3680,8 +3680,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3697,8 +3697,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
@@ -3718,8 +3718,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3742,8 +3742,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -3825,8 +3825,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3841,8 +3841,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3861,8 +3861,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3877,8 +3877,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3897,8 +3897,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3913,8 +3913,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3933,8 +3933,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3949,8 +3949,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3970,8 +3970,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3992,8 +3992,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4023,8 +4023,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4039,8 +4039,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4059,8 +4059,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4082,8 +4082,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4113,8 +4113,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4129,8 +4129,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4149,8 +4149,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4165,8 +4165,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4185,8 +4185,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4201,8 +4201,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4221,8 +4221,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4237,8 +4237,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -4259,8 +4259,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4282,8 +4282,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4447,8 +4447,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4464,8 +4464,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
@@ -4483,8 +4483,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4500,8 +4500,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -4519,8 +4519,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4536,8 +4536,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4555,8 +4555,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4572,8 +4572,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
@@ -4592,8 +4592,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4615,8 +4615,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4640,8 +4640,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4657,8 +4657,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4676,8 +4676,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4700,8 +4700,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4725,8 +4725,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4742,8 +4742,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4761,8 +4761,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4778,8 +4778,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4797,8 +4797,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4814,8 +4814,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -4833,8 +4833,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4850,8 +4850,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
@@ -4871,8 +4871,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4895,8 +4895,8 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4978,8 +4978,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4994,8 +4994,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5014,8 +5014,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5030,8 +5030,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5050,8 +5050,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5066,8 +5066,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5086,8 +5086,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5102,8 +5102,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5123,8 +5123,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5145,8 +5145,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -5176,8 +5176,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5192,8 +5192,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5212,8 +5212,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5235,8 +5235,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -5266,8 +5266,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5282,8 +5282,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5302,8 +5302,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5318,8 +5318,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5338,8 +5338,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5354,8 +5354,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.`target_column` >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5374,8 +5374,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5390,8 +5390,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table.[target_column] >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
@@ -5412,8 +5412,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5435,8 +5435,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" < 0 THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" >= 0 THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             

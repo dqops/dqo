@@ -156,6 +156,7 @@ public class SensorsController {
                                 providerSensorWrapper.getProvider(),
                                 providerSensorWrapper.getSpec(),
                                 providerSensorWrapper.getSqlTemplate(),
+                                providerSensorWrapper.getErrorSamplingTemplate(),
                                 userHomeSensorDefinitionWrapperOptional.isPresent(),
                                 dqoHomeSensorDefinitionWrapperOptional.isPresent(),
                                 canEditDefinitions))
@@ -174,6 +175,7 @@ public class SensorsController {
                                 providerSensorWrapper.getProvider(),
                                 providerSensorWrapper.getSpec(),
                                 providerSensorWrapper.getSqlTemplate(),
+                                providerSensorWrapper.getErrorSamplingTemplate(),
                                 userHomeSensorDefinitionWrapperOptional.isPresent(),
                                 dqoHomeSensorDefinitionWrapperOptional.isPresent(),
                                 canEditDefinitions))
@@ -231,6 +233,7 @@ public class SensorsController {
             sensorModel.getProviderSensorList().forEach(n -> {
                 ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(n.getProviderType());
                 providerSensorDefinitionWrapper.setSqlTemplate(n.getSqlTemplate());
+                providerSensorDefinitionWrapper.setErrorSamplingTemplate(n.getErrorSamplingTemplate());
                 providerSensorDefinitionWrapper.setSpec(n.getProviderSensorDefinitionSpec());
 
             });
@@ -296,11 +299,12 @@ public class SensorsController {
                     for (ProviderSensorModel providerSensorModel: providerSensorModels){
                         ProviderSensorDefinitionWrapper providerSensorDefinition =
                                 dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
-                        if(!providerSensorModel.equalsProviderSensorDqo(providerSensorDefinition)){
+                        if (!providerSensorModel.equalsProviderSensorDqo(providerSensorDefinition)){
                             ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
                                     providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
                             userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                             userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                            userHomeProviderSensorDefinitionWrapper.setErrorSamplingTemplate(providerSensorModel.getErrorSamplingTemplate());
                         }
                     }
                 }
@@ -337,11 +341,14 @@ public class SensorsController {
                         userHomeProviderSensorDefinitionWrapper = userProviderSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
                         userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                         userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                        userHomeProviderSensorDefinitionWrapper.setErrorSamplingTemplate(providerSensorModel.getErrorSamplingTemplate());
                     } else if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper != null) {
                         ProviderSensorDefinitionSpec oldProviderDefinitionSpec = userHomeProviderSensorDefinitionWrapper.getSpec(); // force loading
                         String oldSqlTemplate = userHomeProviderSensorDefinitionWrapper.getSqlTemplate(); // force loading
+                        String oldErrorSamplingTemplate = userHomeProviderSensorDefinitionWrapper.getErrorSamplingTemplate(); // force loading
                         userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                         userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                        userHomeProviderSensorDefinitionWrapper.setErrorSamplingTemplate(providerSensorModel.getErrorSamplingTemplate());
                     } else if (userHomeProviderSensorDefinitionWrapper != null){
                         userHomeProviderSensorDefinitionWrapper.markForDeletion();
                     }

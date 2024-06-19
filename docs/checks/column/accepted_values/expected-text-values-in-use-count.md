@@ -155,7 +155,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -210,7 +210,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -271,7 +271,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -332,7 +332,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -393,7 +393,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -462,7 +462,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -523,7 +523,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -588,7 +588,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -649,7 +649,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -710,7 +710,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -771,7 +771,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -832,7 +832,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -950,7 +950,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1007,7 +1007,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -1070,7 +1070,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1133,7 +1133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1196,7 +1196,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1272,7 +1272,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1335,7 +1335,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1407,7 +1407,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1470,7 +1470,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1533,7 +1533,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -1596,7 +1596,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -1663,7 +1663,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1865,7 +1865,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -1920,7 +1920,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -1981,7 +1981,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2042,7 +2042,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2103,7 +2103,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2172,7 +2172,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2233,7 +2233,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2298,7 +2298,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2359,7 +2359,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2420,7 +2420,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -2481,7 +2481,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -2542,7 +2542,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2661,7 +2661,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2718,7 +2718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -2781,7 +2781,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2844,7 +2844,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2907,7 +2907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -2983,7 +2983,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3046,7 +3046,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3118,7 +3118,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3181,7 +3181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3244,7 +3244,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -3307,7 +3307,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -3374,7 +3374,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3576,7 +3576,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3631,7 +3631,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -3692,7 +3692,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3753,7 +3753,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3814,7 +3814,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3883,7 +3883,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -3944,7 +3944,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4009,7 +4009,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4070,7 +4070,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4131,7 +4131,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -4192,7 +4192,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -4253,7 +4253,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4372,7 +4372,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4429,7 +4429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -4492,7 +4492,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4555,7 +4555,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4618,7 +4618,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4694,7 +4694,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4757,7 +4757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4829,7 +4829,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4892,7 +4892,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -4955,7 +4955,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -5018,7 +5018,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -5085,7 +5085,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5297,7 +5297,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5356,7 +5356,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -5421,7 +5421,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5486,7 +5486,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5551,7 +5551,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5626,7 +5626,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5691,7 +5691,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5762,7 +5762,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5827,7 +5827,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -5892,7 +5892,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -5957,7 +5957,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -6024,7 +6024,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6159,7 +6159,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6218,7 +6218,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -6283,7 +6283,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6348,7 +6348,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6413,7 +6413,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6493,7 +6493,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6558,7 +6558,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6634,7 +6634,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6699,7 +6699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -6764,7 +6764,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -6829,7 +6829,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -6896,7 +6896,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7112,7 +7112,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7171,7 +7171,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -7236,7 +7236,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7301,7 +7301,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7366,7 +7366,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7441,7 +7441,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7506,7 +7506,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7577,7 +7577,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7642,7 +7642,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7707,7 +7707,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -7772,7 +7772,7 @@ spec:
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -7839,7 +7839,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -7974,7 +7974,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8033,7 +8033,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -8098,7 +8098,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8163,7 +8163,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    0
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8228,7 +8228,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                    MAX(NULL)
+                MAX(0)
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8308,7 +8308,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8373,7 +8373,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8449,7 +8449,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8514,7 +8514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE
@@ -8579,7 +8579,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                     COUNT(DISTINCT
                         CASE
@@ -8644,7 +8644,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro render_else() -%}
                 {%- if parameters.expected_values|length == 0 -%}
-                    NULL
+                0
                 {%- else -%}
                 COUNT_BIG(DISTINCT
                     CASE
@@ -8711,7 +8711,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                NULL
+                0
                 {%- else -%}
                 COUNT(DISTINCT
                     CASE

@@ -103,7 +103,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-15"
+```yaml hl_lines="7-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -113,6 +113,8 @@ spec:
       profiling_checks:
         numeric:
           profile_number_above_max_value:
+            parameters:
+              max_value: 0.0
             warning:
               max_count: 0
             error:
@@ -156,7 +158,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -188,7 +190,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -221,7 +223,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -254,7 +256,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -292,7 +294,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -329,7 +331,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -369,7 +371,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -406,7 +408,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -439,7 +441,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -471,7 +473,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -503,7 +505,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -542,7 +544,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -561,7 +563,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 27-32"
+    ```yaml hl_lines="5-13 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -580,6 +582,8 @@ Expand the *Configure with data grouping* section to see additional examples for
           profiling_checks:
             numeric:
               profile_number_above_max_value:
+                parameters:
+                  max_value: 0.0
                 warning:
                   max_count: 0
                 error:
@@ -624,7 +628,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -658,7 +662,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -693,7 +697,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -728,7 +732,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -768,7 +772,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -812,7 +816,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -854,7 +858,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -898,7 +902,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -933,7 +937,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -967,7 +971,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1001,7 +1005,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1046,7 +1050,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1160,7 +1164,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-16"
+```yaml hl_lines="7-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1171,6 +1175,8 @@ spec:
         daily:
           numeric:
             daily_number_above_max_value:
+              parameters:
+                max_value: 0.0
               warning:
                 max_count: 0
               error:
@@ -1214,7 +1220,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1246,7 +1252,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1279,7 +1285,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1312,7 +1318,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1350,7 +1356,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1387,7 +1393,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1427,7 +1433,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1464,7 +1470,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1497,7 +1503,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1529,7 +1535,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1561,7 +1567,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1600,7 +1606,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -1619,7 +1625,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 28-33"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1639,6 +1645,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               numeric:
                 daily_number_above_max_value:
+                  parameters:
+                    max_value: 0.0
                   warning:
                     max_count: 0
                   error:
@@ -1683,7 +1691,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1717,7 +1725,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1752,7 +1760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1787,7 +1795,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1827,7 +1835,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1871,7 +1879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1913,7 +1921,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -1957,7 +1965,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -1992,7 +2000,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2026,7 +2034,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2060,7 +2068,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2105,7 +2113,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2219,7 +2227,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-16"
+```yaml hl_lines="7-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2230,6 +2238,8 @@ spec:
         monthly:
           numeric:
             monthly_number_above_max_value:
+              parameters:
+                max_value: 0.0
               warning:
                 max_count: 0
               error:
@@ -2273,7 +2283,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2305,7 +2315,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2338,7 +2348,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -2371,7 +2381,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2409,7 +2419,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2446,7 +2456,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -2486,7 +2496,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2523,7 +2533,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -2556,7 +2566,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2588,7 +2598,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2620,7 +2630,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2659,7 +2669,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
@@ -2678,7 +2688,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 28-33"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2698,6 +2708,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               numeric:
                 monthly_number_above_max_value:
+                  parameters:
+                    max_value: 0.0
                   warning:
                     max_count: 0
                   error:
@@ -2742,7 +2754,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2776,7 +2788,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2811,7 +2823,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -2846,7 +2858,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2886,7 +2898,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -2930,7 +2942,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -2972,7 +2984,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3016,7 +3028,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -3051,7 +3063,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3085,7 +3097,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3119,7 +3131,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3164,7 +3176,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3278,7 +3290,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-21"
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3294,6 +3306,8 @@ spec:
         daily:
           numeric:
             daily_partition_number_above_max_value:
+              parameters:
+                max_value: 0.0
               warning:
                 max_count: 0
               error:
@@ -3342,7 +3356,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3378,7 +3392,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3415,7 +3429,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -3452,7 +3466,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3494,7 +3508,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3537,7 +3551,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -3581,7 +3595,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3624,7 +3638,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -3661,7 +3675,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3697,7 +3711,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3733,7 +3747,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3778,7 +3792,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3803,7 +3817,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-4 38-43"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3828,6 +3842,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               numeric:
                 daily_partition_number_above_max_value:
+                  parameters:
+                    max_value: 0.0
                   warning:
                     max_count: 0
                   error:
@@ -3877,7 +3893,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3913,7 +3929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -3950,7 +3966,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -3987,7 +4003,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4029,7 +4045,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4077,7 +4093,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -4121,7 +4137,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4169,7 +4185,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -4206,7 +4222,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4242,7 +4258,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4278,7 +4294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4323,7 +4339,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4441,7 +4457,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-21"
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4457,6 +4473,8 @@ spec:
         monthly:
           numeric:
             monthly_partition_number_above_max_value:
+              parameters:
+                max_value: 0.0
               warning:
                 max_count: 0
               error:
@@ -4505,7 +4523,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4541,7 +4559,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4578,7 +4596,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -4615,7 +4633,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4657,7 +4675,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4700,7 +4718,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -4744,7 +4762,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4787,7 +4805,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -4824,7 +4842,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4860,7 +4878,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4896,7 +4914,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4941,7 +4959,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -4966,7 +4984,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-4 38-43"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4991,6 +5009,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               numeric:
                 monthly_partition_number_above_max_value:
+                  parameters:
+                    max_value: 0.0
                   warning:
                     max_count: 0
                   error:
@@ -5040,7 +5060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5076,7 +5096,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5113,7 +5133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -5150,7 +5170,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5192,7 +5212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5240,7 +5260,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -5284,7 +5304,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5332,7 +5352,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0
+                        WHEN analyzed_table."target_column" > 0.0
                             THEN 1
                         ELSE 0
                     END
@@ -5369,7 +5389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5405,7 +5425,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` > 0 THEN 1
+                        WHEN analyzed_table.`target_column` > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5441,7 +5461,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] > 0 THEN 1
+                        WHEN analyzed_table.[target_column] > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -5486,7 +5506,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" > 0 THEN 1
+                        WHEN analyzed_table."target_column" > 0.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,

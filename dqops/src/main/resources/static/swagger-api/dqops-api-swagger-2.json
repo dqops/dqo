@@ -17490,6 +17490,10 @@
           "description" : "Threshold (alerting) rules defined for a check.",
           "$ref" : "#/definitions/RuleThresholdsModel"
         },
+        "supports_error_sampling" : {
+          "type" : "boolean",
+          "description" : "The data quality check supports capturing error samples, because an error sampling template is defined."
+        },
         "supports_grouping" : {
           "type" : "boolean",
           "description" : "The data quality check supports a custom data grouping configuration."
@@ -34910,6 +34914,10 @@
         "sqlTemplate" : {
           "type" : "string",
           "description" : "Provider specific Jinja2 SQL template"
+        },
+        "errorSamplingTemplate" : {
+          "type" : "string",
+          "description" : "Provider specific Jinja2 SQL template for capturing error samples"
         },
         "custom" : {
           "type" : "boolean",
