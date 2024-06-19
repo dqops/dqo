@@ -385,3 +385,74 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
+
+{% macro render_error_sampler(wrap_condition = '') %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
+WITH error_samples AS (
+    SELECT
+        {{ render_target_column('analyzed_table') }} AS sample_value
+        {{- render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+        {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+            {%- for id_column in error_sampling.id_columns -%}
+                {{ ',' }}
+        {{ render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif -%},
+        ROW_NUMBER() OVER (
+            PARTITION BY
+                {%- for attribute in data_groupings -%}
+                    {%- if not loop.first -%}
+                        {{ ',' }}
+                    {%- endif -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ eol()  }}{{ '                ' }}{{ make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ eol() }}{{ '                ' }}{{ render_column(data_grouping_level.column, 'analyzed_table') }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor %}
+            ORDER BY
+                {% if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+                    {%- for id_column in error_sampling.id_columns -%}
+                        {{- render_column(id_column, 'analyzed_table') }} ASC,{{ ' ' }}
+                    {%- endfor %}
+                {%- endif -%}
+                {{ render_target_column('analyzed_table') }} ASC
+        ) AS sample_index
+    FROM
+        {{ render_target_table() }} analyzed_table
+        {{- render_where_clause(extra_filter = render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~
+             wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
+)
+SELECT
+    sample_table.sample_value AS actual_value,
+    sample_table.sample_index AS sample_index
+    {%- for attribute in data_groupings -%}
+        {{ ',' }}
+    sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
+    {%- endfor -%}
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM error_samples sample_table
+WHERE sample_table.sample_index <= {{ error_sampling.samples_limit }}
+    AND ROWNUM <= {{ error_sampling.total_samples_limit }}
+    {%- else -%}
+SELECT
+    {{ render_target_column('analyzed_table') }} as actual_value
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    {{ render_column(id_column) }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM
+    {{ render_target_table() }} analyzed_table
+    {{- render_where_clause(render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+    AND ROWNUM <= {{ error_sampling.samples_limit }}
+    {%- endif -%}
+{%- endmacro %}
