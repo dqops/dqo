@@ -15,7 +15,6 @@ The references of all objects used by [jobs](../operations/jobs.md) REST API ope
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`executed_statistics_collectors`</span>|The total count of all executed statistics collectors.|*integer*|
-|<span class="no-wrap-code">`total_collectors_executed`</span>|The count of executed statistics collectors.|*integer*|
 |<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed a collector and tried to read the statistics.|*integer*|
 |<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain statistics.|*integer*|
 |<span class="no-wrap-code">`total_collectors_failed`</span>|The count of statistics collectors that failed to execute.|*integer*|
@@ -413,6 +412,78 @@ ___
 
 ___
 
+## ErrorSamplesDataScope
+Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`name`</span>|:mm|*string*|
+|<span class="no-wrap-code">`ordinal`</span>|:mm|*integer*|
+
+
+___
+
+## ErrorSamplerResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`executed_error_samplers`</span>|The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. |*integer*|
+|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed an error sampler and tried to collect error samples.|*integer*|
+|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain error samples.|*integer*|
+|<span class="no-wrap-code">`total_error_samplers_failed`</span>|The count of error samplers that failed to execute.|*integer*|
+|<span class="no-wrap-code">`total_error_samples_collected`</span>|The total number of error samples (values) that were collected.|*integer*|
+
+
+___
+
+## CollectErrorSamplesParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify the checks for which the error samples should be collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
+|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
+|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
+
+
+___
+
+## CollectErrorSamplesOnTableParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'collect error samples on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
+|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify data quality checks for which the error samples are collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
+|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
+|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
+
+
+___
+
 ## ImportSchemaQueueJobParameters
 Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.
 
@@ -474,17 +545,19 @@ Model object returned to UI that has typed fields for each supported job paramet
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`synchronize_root_folder_parameters`](#synchronizerootfolderdqoqueuejobparameters)</span>|:mm|*[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)*|
-|<span class="no-wrap-code">[`synchronize_multiple_folders_parameters`](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)</span>|:mm|*[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*|
-|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#monitoringschedulespec)</span>|:mm|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
-|<span class="no-wrap-code">[`run_checks_parameters`](./jobs.md#runchecksparameters)</span>|:mm|*[RunChecksParameters](./jobs.md#runchecksparameters)*|
-|<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|:mm|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
-|<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|:mm|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|
-|<span class="no-wrap-code">[`collect_statistics_on_table_parameters`](#collectstatisticsontablequeuejobparameters)</span>|:mm|*[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)*|
-|<span class="no-wrap-code">[`import_schema_parameters`](#importschemaqueuejobparameters)</span>|:mm|*[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)*|
-|<span class="no-wrap-code">[`import_table_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|:mm|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
-|<span class="no-wrap-code">[`delete_stored_data_parameters`](./jobs.md#deletestoreddataqueuejobparameters)</span>|:mm|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
-|<span class="no-wrap-code">[`repair_stored_data_parameters`](#repairstoreddataqueuejobparameters)</span>|:mm|*[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">[`synchronize_root_folder_parameters`](#synchronizerootfolderdqoqueuejobparameters)</span>|The job parameters for the "synchronize folder" queue job.|*[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)*|
+|<span class="no-wrap-code">[`synchronize_multiple_folders_parameters`](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)</span>|The job parameters for the "synchronize multiple folders" queue job.|*[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*|
+|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#monitoringschedulespec)</span>|The job parameters for the "run scheduled checks cron" queue job.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`run_checks_parameters`](./jobs.md#runchecksparameters)</span>|The job parameters for the "run checks" queue job.|*[RunChecksParameters](./jobs.md#runchecksparameters)*|
+|<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|The job parameters for the "run checks on table" queue job.|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
+|<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|The job parameters for the "collect statistics" queue job.|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|
+|<span class="no-wrap-code">[`collect_statistics_on_table_parameters`](#collectstatisticsontablequeuejobparameters)</span>|The job parameters for the "collect statistics on table" queue job.|*[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)*|
+|<span class="no-wrap-code">[`collect_error_samples_parameters`](#collecterrorsamplesparameters)</span>|The job parameters for the "collect error samples" queue job.|*[CollectErrorSamplesParameters](#collecterrorsamplesparameters)*|
+|<span class="no-wrap-code">[`collect_error_samples_on_table_parameters`](#collecterrorsamplesontableparameters)</span>|The job parameters for the "collect error samples on table" queue job.|*[CollectErrorSamplesOnTableParameters](#collecterrorsamplesontableparameters)*|
+|<span class="no-wrap-code">[`import_schema_parameters`](#importschemaqueuejobparameters)</span>|The job parameters for the "collect schema" queue job.|*[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)*|
+|<span class="no-wrap-code">[`import_table_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|The job parameters for the "collect tables" queue job.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
+|<span class="no-wrap-code">[`delete_stored_data_parameters`](./jobs.md#deletestoreddataqueuejobparameters)</span>|The job parameters for the "delete stored data" queue job.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">[`repair_stored_data_parameters`](#repairstoreddataqueuejobparameters)</span>|The job parameters for the "repair stored data" queue job.|*[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)*|
 
 
 ___

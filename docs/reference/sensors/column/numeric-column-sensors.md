@@ -1623,8 +1623,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1641,8 +1641,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1659,8 +1659,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1677,8 +1677,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1696,8 +1696,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1720,8 +1720,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1738,8 +1738,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1763,8 +1763,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1781,8 +1781,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1799,8 +1799,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1817,8 +1817,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1835,8 +1835,8 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} >= 0 THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1887,8 +1887,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -1908,8 +1908,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -1929,8 +1929,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -1950,8 +1950,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -1971,8 +1971,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -1980,14 +1980,14 @@ The templates used to generate the SQL query for each data source supported by D
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
-                       original_table.*
-                           {{- lib.render_data_grouping_projections('original_table') }}
-                           {{- lib.render_time_dimension_projection('original_table') }}
-                       FROM {{ lib.render_target_table() }} original_table
-             {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
 
@@ -1998,8 +1998,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2019,8 +2019,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2047,8 +2047,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2068,8 +2068,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2089,8 +2089,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2110,8 +2110,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
@@ -2127,13 +2127,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                        ELSE 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= 0 THEN 1
+                    ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2168,7 +2170,7 @@ The number above max value count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*double*| ||
 
 
 
@@ -2438,7 +2440,7 @@ The number above max value percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*double*| ||
 
 
 
@@ -2741,7 +2743,7 @@ The number below min value count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*double*| ||
 
 
 
@@ -3011,7 +3013,7 @@ The number below min value percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*double*| ||
 
 
 

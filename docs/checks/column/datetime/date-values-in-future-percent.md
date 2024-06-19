@@ -352,7 +352,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -381,7 +381,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -417,7 +417,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -452,7 +452,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1216,7 +1216,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -1244,7 +1244,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -1283,7 +1283,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1317,7 +1317,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2188,7 +2188,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2217,7 +2217,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2253,7 +2253,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2288,7 +2288,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3053,7 +3053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -3081,7 +3081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -3120,7 +3120,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3154,7 +3154,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4025,7 +4025,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4054,7 +4054,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4090,7 +4090,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4125,7 +4125,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4890,7 +4890,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4918,7 +4918,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4957,7 +4957,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4991,7 +4991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5884,7 +5884,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -5913,7 +5913,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -5953,7 +5953,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5988,7 +5988,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6809,7 +6809,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -6837,7 +6837,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -6878,7 +6878,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6912,7 +6912,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7825,7 +7825,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -7854,7 +7854,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -7894,7 +7894,7 @@ spec:
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7929,7 +7929,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8750,7 +8750,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -8778,7 +8778,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -8819,7 +8819,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         END
                 {%- else -%}
                         CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8853,7 +8853,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END

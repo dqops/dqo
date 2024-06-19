@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/timeliness/data_freshness
+  rule_name: percentile/anomaly_stationary_percentile_moving_average
+  help_text: Verifies that the number of days since the most recent event timestamp
+    (freshness) changes in a rate within a percentile boundary during the last 90
+    days.

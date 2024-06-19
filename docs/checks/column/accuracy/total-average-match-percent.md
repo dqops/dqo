@@ -501,10 +501,10 @@ spec:
             
             SELECT
                 (SELECT
-                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }} * 1.0)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                AVG({{ lib.render_target_column('analyzed_table')}} * 1.0) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -513,10 +513,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    AVG(referenced_table.[customer_id])
+                    AVG(referenced_table.[customer_id] * 1.0)
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                AVG(analyzed_table.[target_column]) AS actual_value
+                AVG(analyzed_table.[target_column] * 1.0) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1048,10 +1048,10 @@ spec:
             
             SELECT
                 (SELECT
-                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }} * 1.0)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                AVG({{ lib.render_target_column('analyzed_table')}} * 1.0) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -1060,10 +1060,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    AVG(referenced_table.[customer_id])
+                    AVG(referenced_table.[customer_id] * 1.0)
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                AVG(analyzed_table.[target_column]) AS actual_value
+                AVG(analyzed_table.[target_column] * 1.0) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1595,10 +1595,10 @@ spec:
             
             SELECT
                 (SELECT
-                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }} * 1.0)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                AVG({{ lib.render_target_column('analyzed_table')}} * 1.0) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -1607,10 +1607,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    AVG(referenced_table.[customer_id])
+                    AVG(referenced_table.[customer_id] * 1.0)
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                AVG(analyzed_table.[target_column]) AS actual_value
+                AVG(analyzed_table.[target_column] * 1.0) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"

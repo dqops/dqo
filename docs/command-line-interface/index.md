@@ -60,6 +60,14 @@ All command-line commands supported from the DQOps shell or directly from the sy
 
 
 
+## collect
+| Command&nbsp;name | Description |
+|--------------|-------------|
+ | <span class="no-wrap-code">[`dqo collect errorsamples`](./collect.md#dqo-collect-errorsamples)</span> | Run data quality checks on your dataset that match a given condition and capture their error samples. The command output is a table with the results that provides insight into the list of invalid values. |
+
+
+
+
 ## column
 | Command&nbsp;name | Description |
 |--------------|-------------|

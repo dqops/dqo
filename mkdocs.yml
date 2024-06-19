@@ -170,6 +170,7 @@ nav:
     - connection: 'command-line-interface/connection.md'
     - table: 'command-line-interface/table.md'
     - check: 'command-line-interface/check.md'
+    - collect: 'command-line-interface/collect.md'
     - column: 'command-line-interface/column.md'
     - settings: 'command-line-interface/settings.md'
     - cloud: 'command-line-interface/cloud.md'
@@ -275,6 +276,7 @@ nav:
       - timeliness:
         - 'checks/table/timeliness/index.md'
         - data freshness: 'checks/table/timeliness/data-freshness.md'
+        - data freshness anomaly: 'checks/table/timeliness/data-freshness-anomaly.md'
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - reload lag: 'checks/table/timeliness/reload-lag.md'

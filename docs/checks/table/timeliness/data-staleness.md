@@ -1550,7 +1550,7 @@ ___
 
 **Check description**
 
-Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
+Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

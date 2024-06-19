@@ -263,7 +263,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -346,7 +346,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -393,7 +393,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -524,7 +524,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -608,7 +608,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -655,7 +655,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -802,7 +802,7 @@ spec:
                         additional_table.*,
                         additional_table."target_column" top_value
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) top_col_values
@@ -933,7 +933,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -1024,7 +1024,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1074,7 +1074,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -1206,7 +1206,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -1337,7 +1337,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -1420,7 +1420,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1467,7 +1467,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -1604,7 +1604,7 @@ spec:
                         COUNT_BIG(*) AS total_values
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -1694,7 +1694,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1744,7 +1744,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -1932,7 +1932,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -2016,7 +2016,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2066,7 +2066,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -2201,7 +2201,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -2286,7 +2286,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2336,7 +2336,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -2492,7 +2492,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         additional_table."country" AS grouping_level_1,
                         additional_table."state" AS grouping_level_2
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) top_col_values
@@ -2627,7 +2627,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -2719,7 +2719,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2777,7 +2777,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -2913,7 +2913,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -3048,7 +3048,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -3132,7 +3132,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3182,7 +3182,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -3323,7 +3323,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.[state] AS grouping_level_2
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -3412,7 +3412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3470,7 +3470,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -3733,7 +3733,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -3816,7 +3816,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3863,7 +3863,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -3994,7 +3994,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -4078,7 +4078,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4125,7 +4125,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -4272,7 +4272,7 @@ spec:
                         additional_table.*,
                         additional_table."target_column" top_value
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) top_col_values
@@ -4403,7 +4403,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -4494,7 +4494,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4544,7 +4544,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -4676,7 +4676,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -4807,7 +4807,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -4890,7 +4890,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4937,7 +4937,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -5074,7 +5074,7 @@ spec:
                         COUNT_BIG(*) AS total_values
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -5164,7 +5164,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5214,7 +5214,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -5403,7 +5403,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -5487,7 +5487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5537,7 +5537,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -5672,7 +5672,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -5757,7 +5757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5807,7 +5807,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -5963,7 +5963,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         additional_table."country" AS grouping_level_1,
                         additional_table."state" AS grouping_level_2
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) top_col_values
@@ -6098,7 +6098,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -6190,7 +6190,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6248,7 +6248,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -6384,7 +6384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -6519,7 +6519,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -6603,7 +6603,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6653,7 +6653,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -6794,7 +6794,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.[state] AS grouping_level_2
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -6883,7 +6883,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6941,7 +6941,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -7204,7 +7204,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -7287,7 +7287,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7334,7 +7334,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -7465,7 +7465,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -7549,7 +7549,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7596,7 +7596,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -7743,7 +7743,7 @@ spec:
                         additional_table.*,
                         additional_table."target_column" top_value
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) top_col_values
@@ -7874,7 +7874,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -7965,7 +7965,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8015,7 +8015,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -8147,7 +8147,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -8278,7 +8278,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -8361,7 +8361,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8408,7 +8408,7 @@ spec:
                         COUNT(*) AS total_values
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY top_value
                     ORDER BY total_values DESC
                 ) AS top_col_values
@@ -8545,7 +8545,7 @@ spec:
                         COUNT_BIG(*) AS total_values
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -8635,7 +8635,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8685,7 +8685,7 @@ spec:
                                 original_table.*,
                                 original_table."target_column" AS top_value
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY top_value
                     ORDER BY total_values DESC
@@ -8874,7 +8874,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -8958,7 +8958,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9008,7 +9008,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -9143,7 +9143,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -9228,7 +9228,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9278,7 +9278,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -9434,7 +9434,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         additional_table."country" AS grouping_level_1,
                         additional_table."state" AS grouping_level_2
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) top_col_values
@@ -9569,7 +9569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -9661,7 +9661,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9719,7 +9719,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -9855,7 +9855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -9990,7 +9990,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table."state" AS grouping_level_2
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -10074,7 +10074,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10124,7 +10124,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.`state` AS grouping_level_2
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
                 ) AS top_col_values
@@ -10265,7 +10265,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         analyzed_table.[state] AS grouping_level_2
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -10354,7 +10354,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10412,7 +10412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, top_value
                     ORDER BY grouping_level_1, grouping_level_2, total_values DESC
@@ -10691,7 +10691,7 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -10776,7 +10776,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10829,7 +10829,7 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -10968,7 +10968,7 @@ spec:
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -11054,7 +11054,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11107,7 +11107,7 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -11264,7 +11264,7 @@ spec:
                         TRUNC(CAST(additional_table."date_column" AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
@@ -11403,7 +11403,7 @@ spec:
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -11496,7 +11496,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11554,7 +11554,7 @@ spec:
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
@@ -11694,7 +11694,7 @@ spec:
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -11833,7 +11833,7 @@ spec:
                         TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -11918,7 +11918,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11971,7 +11971,7 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -12116,7 +12116,7 @@ spec:
                         CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -12206,7 +12206,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12264,7 +12264,7 @@ spec:
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
@@ -12471,7 +12471,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -12555,7 +12555,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12611,7 +12611,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -12752,7 +12752,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -12837,7 +12837,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12893,7 +12893,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -13057,7 +13057,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(additional_table."date_column" AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
@@ -13198,7 +13198,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -13290,7 +13290,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13356,7 +13356,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
@@ -13498,7 +13498,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -13639,7 +13639,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -13723,7 +13723,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13779,7 +13779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -13926,7 +13926,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -14015,7 +14015,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14081,7 +14081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
@@ -14360,7 +14360,7 @@ spec:
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -14445,7 +14445,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14498,7 +14498,7 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -14637,7 +14637,7 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -14723,7 +14723,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14776,7 +14776,7 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -14933,7 +14933,7 @@ spec:
                         TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
@@ -15072,7 +15072,7 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -15165,7 +15165,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15223,7 +15223,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
@@ -15363,7 +15363,7 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -15502,7 +15502,7 @@ spec:
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -15587,7 +15587,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15640,7 +15640,7 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -15785,7 +15785,7 @@ spec:
                         CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -15875,7 +15875,7 @@ spec:
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15933,7 +15933,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
                     ORDER BY time_period, time_period_utc, total_values DESC
@@ -16140,7 +16140,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -16224,7 +16224,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16280,7 +16280,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -16421,7 +16421,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                          AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -16506,7 +16506,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16562,7 +16562,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -16726,7 +16726,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
@@ -16867,7 +16867,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -16959,7 +16959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17025,7 +17025,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
@@ -17167,7 +17167,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -17308,7 +17308,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-                    WHERE analyzed_table."target_column" IS NOT NULL
+                    WHERE (analyzed_table."target_column" IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -17392,7 +17392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17448,7 +17448,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
-                    WHERE analyzed_table.`target_column` IS NOT NULL
+                    WHERE (analyzed_table.`target_column` IS NOT NULL)
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
@@ -17595,7 +17595,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-                    WHERE analyzed_table.[target_column] IS NOT NULL
+                    WHERE (analyzed_table.[target_column] IS NOT NULL)
                     GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
@@ -17684,7 +17684,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
             {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-                NULL AS actual_value,
+                MAX(1 + NULL) AS actual_value,
                 MAX(0) AS expected_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17750,7 +17750,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
-            WHERE original_table."target_column" IS NOT NULL
+            WHERE (original_table."target_column" IS NOT NULL)
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC

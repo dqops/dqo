@@ -204,7 +204,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		  },
 		  "result" : {
 		    "executed_statistics_collectors" : 3,
-		    "total_collectors_executed" : 0,
 		    "columns_analyzed" : 1,
 		    "columns_successfully_analyzed" : 0,
 		    "total_collectors_failed" : 1,
@@ -257,7 +256,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -311,7 +309,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -368,7 +365,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -425,7 +421,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -508,7 +503,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		  },
 		  "result" : {
 		    "executed_statistics_collectors" : 3,
-		    "total_collectors_executed" : 0,
 		    "columns_analyzed" : 1,
 		    "columns_successfully_analyzed" : 0,
 		    "total_collectors_failed" : 1,
@@ -561,7 +555,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -615,7 +608,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -672,7 +664,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -729,7 +720,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,

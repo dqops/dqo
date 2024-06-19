@@ -226,6 +226,10 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*StatisticsDataScope*](./jobs.md#statisticsdatascope)|Enumeration of possible statistics scopes. &quot;table&quot; - a whole table was profiled, &quot;data_groupings&quot; - groups of rows were profiled.|
 |[*CollectStatisticsQueueJobParameters*](./jobs.md#collectstatisticsqueuejobparameters)||
 |[*CollectStatisticsOnTableQueueJobParameters*](./jobs.md#collectstatisticsontablequeuejobparameters)||
+|[*ErrorSamplesDataScope*](./jobs.md#errorsamplesdatascope)|Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.|
+|[*ErrorSamplerResult*](./jobs.md#errorsamplerresult)||
+|[*CollectErrorSamplesParameters*](./jobs.md#collecterrorsamplesparameters)||
+|[*CollectErrorSamplesOnTableParameters*](./jobs.md#collecterrorsamplesontableparameters)||
 |[*ImportSchemaQueueJobParameters*](./jobs.md#importschemaqueuejobparameters)|Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.|
 |[*ImportTablesQueueJobParameters*](./jobs.md#importtablesqueuejobparameters)|Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that imports selected tables from the source database.|
 |[*RepairStoredDataQueueJobParameters*](./jobs.md#repairstoreddataqueuejobparameters)|Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job that repairs data stored in user&#x27;s &quot;.data&quot; directory.|
