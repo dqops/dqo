@@ -1,10 +1,17 @@
 import moment from 'moment/moment';
 import { useParams } from 'react-router-dom';
 import {
+  CheckModel,
+  CheckSearchFiltersCheckTypeEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
   TableListModel
 } from '../api';
+import {
+  CheckResultApi,
+  ErrorsApi,
+  SensorReadoutsApi
+} from '../services/apiClient';
 import { CheckTypes } from '../shared/routes';
 
 export const getDaysString = (value: string | number) => {
@@ -268,4 +275,391 @@ export const limitTextLength = (str: string | undefined, maxSize: number) => {
     return str.slice(0, maxSize) + '...';
   }
   return str;
+};
+
+export const getLocalIncidentCheckResults = async ({
+  checkType,
+  connection,
+  schema,
+  table,
+  column,
+  dataGrouping,
+  checkName,
+  runCheckType,
+  startDate,
+  endDate,
+  timeScale,
+  category,
+  comparisonName
+}: {
+  checkType: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  dataGrouping?: string;
+  startDate: string;
+  endDate: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName: string;
+  runCheckType?: string;
+  category?: string;
+  comparisonName?: string;
+}) => {
+  if (JSON.stringify(startDate) !== JSON.stringify(endDate)) {
+    try {
+      if (column) {
+        if (checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          const res = await CheckResultApi.getColumnProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring
+        ) {
+          const res = await CheckResultApi.getColumnMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          const res = await CheckResultApi.getColumnPartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        }
+      } else {
+        if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+          const res = await CheckResultApi.getTableProfilingChecksResults(
+            connection,
+            schema,
+            table,
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring
+        ) {
+          const res = await CheckResultApi.getTableMonitoringChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned
+        ) {
+          const res = await CheckResultApi.getTablePartitionedChecksResults(
+            connection,
+            schema,
+            table,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+          return res.data;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching check results:', error);
+    }
+  }
+};
+
+export const getIncidentsSensorReadouts = async ({
+  checkType,
+  connection,
+  schema,
+  table,
+  column,
+  dataGrouping,
+  startDate,
+  endDate,
+  checkName,
+  runCheckType,
+  timeScale,
+  category,
+  comparisonName
+}: {
+  checkType: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  dataGrouping?: string;
+  check?: CheckModel;
+  startDate: string;
+  endDate: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName: string;
+  runCheckType?: string;
+  category?: string;
+  comparisonName?: string;
+}) => {
+  try {
+    if (column) {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await SensorReadoutsApi.getColumnProfilingSensorReadouts(
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await SensorReadoutsApi.getColumnMonitoringSensorReadouts(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res = await SensorReadoutsApi.getColumnPartitionedSensorReadouts(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      }
+    } else {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await SensorReadoutsApi.getTableProfilingSensorReadouts(
+          connection,
+          schema,
+          table,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await SensorReadoutsApi.getTableMonitoringSensorReadouts(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res = await SensorReadoutsApi.getTablePartitionedSensorReadouts(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching sensor readouts:', error);
+  }
+};
+
+export const getIncidentsErrors = async ({
+  checkType,
+  connection,
+  schema,
+  table,
+  column,
+  dataGrouping,
+  startDate,
+  endDate,
+  checkName,
+  runCheckType,
+  timeScale,
+  category,
+  comparisonName
+}: {
+  checkType: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  dataGrouping?: string;
+  check?: CheckModel;
+  startDate: string;
+  endDate: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName: string;
+  runCheckType?: string;
+  category?: string;
+  comparisonName?: string;
+}) => {
+  try {
+    if (column) {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await ErrorsApi.getColumnProfilingErrors(
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await ErrorsApi.getColumnMonitoringErrors(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res = await ErrorsApi.getColumnPartitionedErrors(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      }
+    } else {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await ErrorsApi.getTableProfilingErrors(
+          connection,
+          schema,
+          table,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await ErrorsApi.getTableMonitoringErrors(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res = await ErrorsApi.getTablePartitionedErrors(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching errors:', error);
+  }
 };
