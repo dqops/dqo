@@ -103,7 +103,7 @@ export default function RunChecksDialog({
         {checkType === CheckTypes.PARTITIONED && (
           <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
             <div className="w-[45%] ml-2">
-              From:
+              From
               <Input
                 value={timeWindowFilter?.from_date}
                 onChange={(e) =>
@@ -119,7 +119,7 @@ export default function RunChecksDialog({
               />
             </div>
             <div className="w-[45%] ml-2">
-              To:
+              To
               <Input
                 value={timeWindowFilter?.to_date}
                 onChange={(e) =>
@@ -139,7 +139,7 @@ export default function RunChecksDialog({
         )}
         <div className="flex justify-between border-b py-4 border-gray-300 text-black  ">
           <div className="w-[45%] ml-2">
-            Connection:
+            Connection
             <Input
               value={filters.connection}
               onChange={(e) => onChangeFilters({ connection: e.target.value })}
@@ -148,7 +148,7 @@ export default function RunChecksDialog({
             />
           </div>
           <div className="w-[45%] ml-2">
-            Schema and table name:
+            Schema and table name
             <Input
               value={filters.fullTableName}
               onChange={(e) =>
@@ -162,7 +162,7 @@ export default function RunChecksDialog({
         </div>
         <div className="flex justify-between py-4 text-black   items-center">
           <div className="w-1/3 ml-2">
-            Column name:
+            Column name
             <Input
               value={filters.column}
               onChange={(e) => onChangeFilters({ column: e.target.value })}
@@ -171,7 +171,7 @@ export default function RunChecksDialog({
             />
           </div>
           <div className="w-1/3 ml-2">
-            Column datatype:
+            Column datatype
             <Input
               value={filters.columnDataType}
               onChange={(e) =>
@@ -182,7 +182,7 @@ export default function RunChecksDialog({
             />
           </div>
           <div className="flex items-center gap-x-2 w-1/3 ml-4">
-            Column nullable:
+            Column nullable
             <CheckboxThreeSteps
               checked={!!filters.columnNullable}
               onChange={(value) => onChangeFilters({ columnNullable: value })}
@@ -206,7 +206,7 @@ export default function RunChecksDialog({
           >
             <div className="flex justify-between py-4 text-black  ">
               <div className="w-1/3 ml-2">
-                Check target:
+                Check target
                 <SelectInput
                   value={filters.checkTarget}
                   onChange={(value) => onChangeFilters({ checkTarget: value })}
@@ -220,7 +220,7 @@ export default function RunChecksDialog({
                 />
               </div>
               <div className="w-1/3 ml-2">
-                Check type:
+                Check type
                 <SelectInput
                   value={filters.checkType}
                   onChange={(value) => onChangeFilters({ checkType: value })}
@@ -237,7 +237,7 @@ export default function RunChecksDialog({
                 />
               </div>
               <div className="w-1/3 ml-2">
-                Time scale:
+                Time scale
                 <SelectInput
                   value={filters.timeScale}
                   onChange={(value) => onChangeFilters({ timeScale: value })}
@@ -256,7 +256,7 @@ export default function RunChecksDialog({
             </div>
             <div className="flex justify-between pt-4 text-black  ">
               <div className="w-1/3 ml-2">
-                Check name:
+                Check name
                 <Input
                   value={filters.checkName}
                   onChange={(e) =>
@@ -266,7 +266,7 @@ export default function RunChecksDialog({
                 />
               </div>
               <div className="w-1/3 ml-2">
-                Sensor name:
+                Sensor name
                 <Input
                   value={filters.sensorName}
                   onChange={(e) =>
@@ -276,7 +276,7 @@ export default function RunChecksDialog({
                 />
               </div>
               <div className="w-1/3 ml-2">
-                Table comparison name:
+                Table comparison name
                 <Input
                   value={filters.tableComparisonName}
                   onChange={(e) =>

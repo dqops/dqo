@@ -54,7 +54,7 @@ export const Pagination = ({
   return (
     <div className="flex items-center gap-4 justify-between text-sm">
       <div className="flex items-center gap-4">
-        <span>Rows per page:</span>
+        <span>Rows per page</span>
         <Select
           options={pageSizeOptions}
           value={pageSize}
