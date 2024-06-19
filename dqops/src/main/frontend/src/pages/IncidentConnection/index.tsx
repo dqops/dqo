@@ -215,8 +215,23 @@ export const IncidentConnection = () => {
         />
       ),
       label: 'Total issues',
-      className: 'text-right text-sm py-2 px-4 w-25',
-      value: 'failedChecksCount'
+      className: 'text-sm py-2 px-4 w-25',
+      value: 'failedChecksCount',
+      render: (value: number) => (
+        <div className="text-sm flex items-center justify-end gap-x-1">
+          <div>{value}</div>
+          <Tooltip
+            className="max-w-80 py-2 px-2 bg-gray-800"
+            content={
+              'The total number of detected issues can be higher than the count of data quality results when the results were deleted, or data quality checks were run again, overwritting previous results.'
+            }
+          >
+            <div>
+              <SvgIcon name="question_mark" className="w-5 h-5" />
+            </div>
+          </Tooltip>
+        </div>
+      )
     },
     {
       label: 'Schema',

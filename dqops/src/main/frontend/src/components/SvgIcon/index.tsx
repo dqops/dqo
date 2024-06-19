@@ -80,6 +80,7 @@ import { ReactComponent as PlaySvg } from './svg/play.svg';
 import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as ProfilingSvg } from './svg/profiling.svg';
+import { ReactComponent as QuestionmarkSvg } from './svg/question-mark.svg';
 import { ReactComponent as QueueSvg } from './svg/queue.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
 import { ReactComponent as RedshiftSvg } from './svg/redshift.svg';
@@ -235,7 +236,8 @@ const iconsMap: any = {
   incidents: IncidentsSvg,
   monitoring_checks: MonitoringChecksSvg,
   partitioned_checks: PartitionedChecksSvg,
-  minus: MinusSvg
+  minus: MinusSvg,
+  question_mark: QuestionmarkSvg
 };
 
 interface SvgIconProps {
