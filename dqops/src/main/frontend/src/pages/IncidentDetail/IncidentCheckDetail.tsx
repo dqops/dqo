@@ -1,8 +1,6 @@
 import moment from 'moment/moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { CheckModel, DeleteStoredDataQueueJobParameters } from '../../api';
-import DeleteOnlyDataDialog from '../../components/CustomTree/DeleteOnlyDataDialog';
+import { CheckModel } from '../../api';
 import CheckErrorsTab from '../../components/DataQualityChecks/CheckDetails/CheckErrorsTab';
 import CheckResultsTab from '../../components/DataQualityChecks/CheckDetails/CheckResultsTab';
 import SensorReadoutsTab from '../../components/DataQualityChecks/CheckDetails/SensorReadoutsTab';
@@ -10,13 +8,6 @@ import IconButton from '../../components/IconButton';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useTree } from '../../contexts/treeContext';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setCheckFilters } from '../../redux/actions/source.actions';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
-import { JobApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import {
   getIncidentsErrors,
@@ -53,8 +44,6 @@ interface CheckDetailsProps {
   timeScale?: 'daily' | 'monthly';
   checkName?: string;
   onClose: () => void;
-  data_clean_job_template?: DeleteStoredDataQueueJobParameters;
-  defaultFilters?: any;
   category?: string;
   comparisonName?: string;
   onChangeRefreshCheckObject?: (obj: IRefetchResultsProps) => void;
@@ -66,49 +55,20 @@ const IncidentCheckDetails = ({
   schema,
   table,
   column,
-  data_clean_job_template,
   runCheckType,
   checkName,
   timeScale,
   onClose,
-  defaultFilters,
   category,
   comparisonName,
   onChangeRefreshCheckObject
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
-  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [resultsData, setResultsData] = useState<any>();
   const [readoutsData, setReadoutsData] = useState<any>();
   const [errorsData, setErrorsData] = useState<any>();
   const [month, setMonth] = useState('Last 3 months');
   const [dataGroup, setDataGroup] = useState('no grouping');
-  const { checkFilters: filtersData } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
-  const checkNameWithComparisonName = comparisonName
-    ? checkName + '/' + comparisonName
-    : checkName;
-
-  const checkResults = resultsData
-    ? resultsData[checkNameWithComparisonName ?? ''] || []
-    : [];
-  const sensorReadouts = readoutsData
-    ? readoutsData[checkNameWithComparisonName ?? ''] || []
-    : [];
-  const sensorErrors = errorsData
-    ? errorsData[checkNameWithComparisonName ?? ''] || []
-    : [];
-  const filters =
-    filtersData && filtersData[checkNameWithComparisonName ?? '']
-      ? filtersData[checkNameWithComparisonName ?? '']
-      : defaultFilters || {
-          month: 'Last 3 months'
-        };
-
-  const dispatch = useActionDispatch();
 
   const { sidebarWidth } = useTree();
 
@@ -238,38 +198,14 @@ const IncidentCheckDetails = ({
     ]
   );
 
-  const openDeleteDialog = () => {
-    setDeleteDataDialogOpened(true);
-  };
-
   const onChangeDataGroup = (value: string) => {
-    dispatch(
-      setCheckFilters(
-        checkTypes,
-        firstLevelActiveTab,
-        checkNameWithComparisonName ?? '',
-        {
-          ...filters,
-          onChangeDataGroup: value
-        }
-      )
-    );
-    refetch(filters.month, value);
+    setDataGroup(value);
+    refetch(month, value);
   };
 
   const onChangeMonth = (value: string) => {
-    dispatch(
-      setCheckFilters(
-        checkTypes,
-        firstLevelActiveTab,
-        checkNameWithComparisonName ?? '',
-        {
-          ...filters,
-          month: value
-        }
-      )
-    );
-    refetch(value, filters.dataGroup);
+    setMonth(value);
+    refetch(value, dataGroup);
   };
 
   const refetch = (month: string, name?: string) => {
@@ -281,19 +217,18 @@ const IncidentCheckDetails = ({
   useEffect(() => {
     if (onChangeRefreshCheckObject) {
       onChangeRefreshCheckObject({
-        fetchCheckResults: () =>
-          fetchCheckResults(filters.month, filters.dataGroup)
+        fetchCheckResults: () => fetchCheckResults(month, dataGroup)
       });
     }
   }, [fetchCheckResults]);
 
   useEffect(() => {
     if (activeTab === 'check_results') {
-      fetchCheckResults(filters.month, filters.dataGroup);
+      fetchCheckResults(month, dataGroup);
     } else if (activeTab === 'sensor_readouts') {
-      fetchCheckReadouts(filters.month, filters.dataGroup);
+      fetchCheckReadouts(month, dataGroup);
     } else if (activeTab === 'execution_errors') {
-      fetchCheckErrors(filters.month, filters.dataGroup);
+      fetchCheckErrors(month, dataGroup);
     }
   }, [activeTab]);
   return (
@@ -311,16 +246,6 @@ const IncidentCheckDetails = ({
           <SvgIcon name="close" />
         </IconButton>
 
-        {(!!checkResults.length ||
-          !!sensorErrors.length ||
-          !!sensorReadouts.length) && (
-          <IconButton
-            className="absolute right-16 top-1.5 w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-700"
-            onClick={openDeleteDialog}
-          >
-            <SvgIcon name="delete" className="w-4" />
-          </IconButton>
-        )}
         <div className="border-b border-gray-300 px-0">
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
@@ -331,8 +256,8 @@ const IncidentCheckDetails = ({
               checkName={checkName || ''}
               timeScale={timeScale}
               results={resultsData || []}
-              dataGroup={filters.onChangeDataGroup}
-              month={filters.month}
+              dataGroup={dataGroup}
+              month={month}
               onChangeMonth={onChangeMonth}
               onChangeDataGroup={onChangeDataGroup}
               category={category}
@@ -342,8 +267,8 @@ const IncidentCheckDetails = ({
           {activeTab === 'sensor_readouts' && (
             <SensorReadoutsTab
               sensorReadouts={readoutsData || []}
-              dataGroup={filters.dataGroup}
-              month={filters.month}
+              dataGroup={dataGroup}
+              month={month}
               onChangeMonth={onChangeMonth}
               onChangeDataGroup={onChangeDataGroup}
             />
@@ -351,25 +276,13 @@ const IncidentCheckDetails = ({
           {activeTab === 'execution_errors' && (
             <CheckErrorsTab
               errors={errorsData || []}
-              dataGroup={filters.dataGroup}
-              month={filters.month}
+              dataGroup={dataGroup}
+              month={month}
               onChangeMonth={onChangeMonth}
               onChangeDataGroup={onChangeDataGroup}
             />
           )}
         </div>
-
-        <DeleteOnlyDataDialog
-          open={deleteDataDialogOpened}
-          onClose={() => setDeleteDataDialogOpened(false)}
-          onDelete={(params) => {
-            setDeleteDataDialogOpened(false);
-            JobApiClient.deleteStoredData(undefined, false, undefined, {
-              ...(data_clean_job_template || {}),
-              ...params
-            });
-          }}
-        />
       </div>
     </div>
   );
