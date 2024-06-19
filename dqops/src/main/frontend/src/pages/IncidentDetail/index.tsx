@@ -561,35 +561,49 @@ export const IncidentDetail = () => {
             </div>
           </SectionWrapper>
         </div>
-
-        <HistogramChart onChangeFilter={onChangeFilter} days={filters.days} />
-        <div className="px-4 text-sm mb-4">
-          <div
-            className="py-3 mb-5 overflow-auto"
-            style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
-          >
-            <IncidentIssueList
-              incidentDetail={incidentDetail}
-              filters={filters}
-              issues={issues || []}
+        {issues?.length === 0 &&
+        Object.keys(histograms?.checks ?? {}).length === 0 &&
+        Object.keys(histograms?.columns ?? {}).length === 0 ? (
+          <div className="text-center text-gray-500 mt-4">
+            No active data quality issues found, the data quality results were
+            deleted, or the checks were executed again with new rule thresholds
+            and passed.
+          </div>
+        ) : (
+          <>
+            <HistogramChart
               onChangeFilter={onChangeFilter}
+              days={filters.days}
             />
-          </div>
-          <div className="flex justify-end">
-            <Pagination
-              page={filters.page || 1}
-              pageSize={filters.pageSize || 10}
-              totalPages={10}
-              isEnd={(filters.pageSize || 10) > issues?.length}
-              onChange={(page, pageSize) =>
-                onChangeFilter({
-                  page,
-                  pageSize
-                })
-              }
-            />
-          </div>
-        </div>
+            <div className="px-4 text-sm mb-4">
+              <div
+                className="py-3 mb-5 overflow-auto"
+                style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
+              >
+                <IncidentIssueList
+                  incidentDetail={incidentDetail}
+                  filters={filters}
+                  issues={issues || []}
+                  onChangeFilter={onChangeFilter}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Pagination
+                  page={filters.page || 1}
+                  pageSize={filters.pageSize || 10}
+                  totalPages={10}
+                  isEnd={(filters.pageSize || 10) > issues?.length}
+                  onChange={(page, pageSize) =>
+                    onChangeFilter({
+                      page,
+                      pageSize
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <AddIssueUrlDialog
