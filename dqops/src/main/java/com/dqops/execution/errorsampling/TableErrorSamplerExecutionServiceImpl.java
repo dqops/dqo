@@ -34,10 +34,7 @@ import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshotFactory;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionFailedException;
-import com.dqops.execution.errorsampling.progress.ErrorSamplerExecutionProgressListener;
-import com.dqops.execution.errorsampling.progress.ExecuteErrorSamplerOnTableFinishedEvent;
-import com.dqops.execution.errorsampling.progress.ExecuteErrorSamplerOnTableStartEvent;
-import com.dqops.execution.errorsampling.progress.SavingErrorSamplesResultsEvent;
+import com.dqops.execution.errorsampling.progress.*;
 import com.dqops.execution.sensors.*;
 import com.dqops.execution.sensors.grouping.GroupedSensorExecutionResult;
 import com.dqops.execution.sensors.grouping.GroupedSensorsCollection;
@@ -164,16 +161,12 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
-        ErrorSamplesSnapshot errorSamplesSnapshot = this.errorSamplesSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
-        Table allNormalizedStatisticsTable = errorSamplesSnapshot.getTableDataChanges().getNewOrChangedRows();
-        Table allOldRows = null;
-
-        Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(checks, tableSpec, executionContext, userHome, userTimeWindowFilters, progressListener,
                 executionStatistics, errorSamplesDataScope, jobCancellationToken);
         if (allPreparedSensors.isEmpty()) {
             errorSamplerExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
+            progressListener.onErrorSamplersExecutionFinished(new ErrorSamplersExecutionFinishedEvent(errorSamplerExecutionSummary));
             return errorSamplerExecutionSummary; // no checks for this table have any error sampling templates
         }
 
@@ -182,6 +175,11 @@ public class TableErrorSamplerExecutionServiceImpl implements TableErrorSamplerE
 
         List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener,
                 executionStatistics, dummySensorExecution, jobCancellationToken);
+
+        ErrorSamplesSnapshot errorSamplesSnapshot = this.errorSamplesSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
+        Table allNormalizedStatisticsTable = errorSamplesSnapshot.getTableDataChanges().getNewOrChangedRows();
+        Table allOldRows = null;
+        Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
         if (!sensorExecutionResults.isEmpty()) {
             LocalDate currentMonth = errorSamplingSessionStartAt.toLocalDate();
