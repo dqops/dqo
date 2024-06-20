@@ -475,7 +475,21 @@ export const IncidentDetail = () => {
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Total issues:</div>
+              <div className="flex-[2]">
+                Total issues:
+                <span className='inline-flex'>
+                  <Tooltip
+                    className="max-w-80 py-2 px-2 bg-gray-800"
+                    content={
+                      'The total number of detected issues can be higher than the count of data quality results when the results were deleted, or data quality checks were run again, overwritting previous results.'
+                    }
+                  >
+                    <div>
+                      <SvgIcon name="question_mark" className="w-5 h-5" />
+                    </div>
+                  </Tooltip>
+                </span>
+              </div>
               <div className="flex-[1] text-right font-bold">
                 {incidentDetail?.failedChecksCount}
               </div>
