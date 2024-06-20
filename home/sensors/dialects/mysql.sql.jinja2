@@ -437,7 +437,7 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
-{% macro render_error_sampler(wrap_condition = '') %}
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
     SELECT
@@ -473,7 +473,7 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
-        {{- render_where_clause(extra_filter = render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~
+        {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
 SELECT
@@ -503,7 +503,7 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
-    {{- render_where_clause(render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+    {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}
