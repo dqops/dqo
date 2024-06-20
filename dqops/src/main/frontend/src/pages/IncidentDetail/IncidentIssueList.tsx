@@ -7,12 +7,12 @@ import {
   CheckResultEntryModelTimeGradientEnum,
   IncidentModel
 } from '../../api';
-import CheckDetails from '../../components/DataQualityChecks/CheckDetails/CheckDetails';
 import SvgIcon from '../../components/SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { SortableColumn } from '../IncidentConnection/SortableColumn';
+import IncidentCheckDetails from './IncidentCheckDetail';
 
 type IncidentIssueRowProps = {
   issue: CheckResultEntryModel;
@@ -276,7 +276,7 @@ export const IncidentIssueRow = ({
       {open && (
         <tr>
           <td colSpan={12}>
-            <CheckDetails
+            <IncidentCheckDetails
               checkTypes={
                 (issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes
               }
