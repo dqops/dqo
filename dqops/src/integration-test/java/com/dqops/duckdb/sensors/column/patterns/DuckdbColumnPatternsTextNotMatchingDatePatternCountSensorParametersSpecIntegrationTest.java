@@ -24,6 +24,9 @@ import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSource;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
@@ -39,6 +42,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @SpringBootTest
 public class DuckdbColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
@@ -50,9 +57,9 @@ public class DuckdbColumnPatternsTextNotMatchingDatePatternCountSensorParameters
     @BeforeEach
     void setUp() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
-        String csvFileName = SampleCsvFileNames.continuous_days_date_and_string_formats;
+        String csvFileName = SampleCsvFileNames.test_data_values_in_set;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(
-                csvFileName, connectionSpec, "%d/%m/%Y");
+                csvFileName, connectionSpec);   //, "%d/%m/%Y"
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec();
 		this.checkSpec = new ColumnTextNotMatchingDatePatternFoundCheckSpec();
@@ -82,69 +89,69 @@ public class DuckdbColumnPatternsTextNotMatchingDatePatternCountSensorParameters
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+                sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(18L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(18L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(18, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(3L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
+        Assertions.assertEquals(18L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }
