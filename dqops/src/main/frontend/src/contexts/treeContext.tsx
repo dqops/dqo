@@ -79,6 +79,7 @@ function TreeProvider(props: any) {
   const [openNodes, setOpenNodes] = useState<CustomTreeNode[]>([]);
   const [tabMaps, setTabMaps] = useState<Record<string, ITab[]>>({}); // `blue box tab level`
   const [subTabMap, setSubTabMap] = useState<{ [key: string]: string }>({}); // sub tab under `blue box tab level`
+  const [tablesLoading, setTablesLoading] = useState('');
   const tabs = useMemo(() => tabMaps[checkTypes] ?? [], [tabMaps, checkTypes]);
   const setTabs = useCallback(
     (_tabMaps: ITab[]) => {
@@ -207,7 +208,11 @@ function TreeProvider(props: any) {
     getConnections();
   }, []);
 
-  const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {
+  const resetTreeData = (
+    node: CustomTreeNode,
+    items: CustomTreeNode[],
+    loading?: boolean
+  ) => {
     setOpenNodes((prev) => [
       ...prev.filter(
         (item) => item.id.toString().indexOf(node.id.toString()) !== 0
@@ -222,7 +227,7 @@ function TreeProvider(props: any) {
           item.parentId !== node.id
       )
       .map((item) =>
-        item.id === node.id ? { ...item, open: !item.open } : item
+        item.id === node.id ? { ...item, open: loading ?? !item.open } : item
       );
     setTreeData([...newTreeData, ...items]);
   };
@@ -837,7 +842,6 @@ function TreeProvider(props: any) {
     node: CustomTreeNode,
     reset = true
   ): Promise<CustomTreeNode[]> => {
-    console.log(node);
     if (!node) return [];
     setLoadingNodes((prev) => ({
       ...prev,
@@ -1840,18 +1844,17 @@ function TreeProvider(props: any) {
 
   const loadMoreTables = async (
     data: any[],
-    data2: any
+    parentData: any
   ): Promise<CustomTreeNode[]> => {
-    console.log(data2);
-    console.log(data);
+    setTablesLoading(data[0].parentId);
     const tables = [...data];
     const connection = data[0].parentId.split('.')[0];
     const schema = data[0].parentId.split('.')[1];
-    const parentNode = data2[connection].find(
-      (item: any) => (item.id = data[0].parentId)
+    const parentNode = parentData[connection].find(
+      (item: any) => item.id === data[0].parentId
     );
-    console.log(parentNode);
-    const page = Math.floor(tables.length / TABLES_LIMIT_TREE_PAGING) + 1;
+
+    const page = Math.max(tables.length / TABLES_LIMIT_TREE_PAGING) + 1;
     const res: AxiosResponse<TableListModel[]> = await TableApiClient.getTables(
       connection,
       schema,
@@ -1860,12 +1863,14 @@ function TreeProvider(props: any) {
       TABLES_LIMIT_TREE_PAGING
     );
     const items = res.data.map((table) => ({
-      id: `${data[0].id}.${urlencodeDecoder(table.target?.table_name ?? '')}`,
+      id: `${parentNode.id}.${urlencodeDecoder(
+        table.target?.table_name ?? ''
+      )}`,
       label: table.target?.table_name || '',
       level: TREE_LEVEL.TABLE,
-      parentId: data[0].id,
+      parentId: parentNode.id,
       items: [],
-      tooltip: `${data[0].parentId?.toString() || ''}.${data[0].label}.${
+      tooltip: `${parentNode.id?.toString() || ''}.${data[0].label}.${
         table.target?.table_name
       }`,
       hasCheck:
@@ -1886,13 +1891,11 @@ function TreeProvider(props: any) {
       parsingYamlError: table.yaml_parsing_error
     }));
     const newItems = [...tables, ...items];
-    console.log(data[0].parentId);
-    const node = findTreeNode(tables, data[0].parentId);
-    console.log(node);
-    resetTreeData(parentNode, newItems);
-    console.log(newItems);
+    resetTreeData(parentNode, newItems, true);
+    setTablesLoading('');
     return items;
   };
+
   return (
     <TreeContext.Provider
       value={{
@@ -1933,7 +1936,8 @@ function TreeProvider(props: any) {
         objectNotFound,
         setObjectNotFound,
         reimportTableMetadata,
-        loadMoreTables
+        loadMoreTables,
+        tablesLoading
       }}
       {...props}
     />
