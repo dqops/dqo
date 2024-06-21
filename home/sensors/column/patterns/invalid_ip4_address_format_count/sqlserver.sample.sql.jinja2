@@ -1,0 +1,11 @@
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    NOT (
+                         ({{ lib.render_target_column('analyzed_table') }} LIKE '[0-9].[0-9].[0-9].[0-9]'
+                         OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9]'
+                         OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9]')
+                         AND (PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
+                         OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
+                         OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0)
+                    )
+{%- endcall -%}
