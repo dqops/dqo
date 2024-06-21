@@ -310,6 +310,38 @@
     {%- endif -%}
 {% endmacro %}
 
+{%- macro render_regex(regex) -%}
+     r{{ make_text_constant(regex) }}
+{%- endmacro -%}
+
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        '%Y-%m-%d'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        '%m/%d/%Y'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        '%d/%m/%Y'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        '%Y/%m/%d'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        '%b %d, %Y'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_regex(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+    {%- elif date_format == 'DD-MM-YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
+    {%- elif date_format == 'DD.MM.YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
+    {%- elif date_format == 'YYYY-MM-DD' -%}
+        "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+    {%- elif date_format == 'MM/DD/YYYY'-%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+    {%- endif -%}
+{% endmacro -%}
+
 {% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (

@@ -1,4 +1,4 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+    SAFE.PARSE_DATE({{lib.render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
 {%- endcall -%}

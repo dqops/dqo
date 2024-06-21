@@ -169,14 +169,14 @@ public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(5, resultTable.rowCount());
+        Assertions.assertEquals(15, resultTable.rowCount());
         Assertions.assertEquals(1, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains(16.0));
+        Assertions.assertTrue(sampleValues.contains(15.0));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(5, resultTable.rowCount());
+        Assertions.assertEquals(15, resultTable.rowCount());
         Assertions.assertEquals(3, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -199,12 +199,12 @@ public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecInte
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains(16.0));
+        Assertions.assertTrue(sampleValues.contains(15.0));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(16));
+        Assertions.assertTrue(rowId1Values.contains(15));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecInte
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(5, resultTable.rowCount());
+        Assertions.assertEquals(15, resultTable.rowCount());
         Assertions.assertEquals(5, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -236,18 +236,18 @@ public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecInte
         List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> ValueConverter.toDouble(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains(16.0));
+        Assertions.assertTrue(sampleValues.contains(15.0));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(1, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(0));
+        Assertions.assertTrue(groupingLevel1Values.contains(1));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(rowId1Values.contains(16));
+        Assertions.assertTrue(rowId1Values.contains(15));
     }
 }
