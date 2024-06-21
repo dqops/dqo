@@ -1,21 +1,21 @@
-full_name:STRING,result:INTEGER,date:LOCAL_DATE
-Nowak Michał,1,2023-01-11
-Kowalczyk Piotr,1,2023-01-11
-Wójcik Marcin,1,2023-01-11
-Woźniak Paweł,1,2023-01-11
-Krawczyk Tomasz,1,2023-01-11
-Kowalski Łukasz,1,2023-01-11
-Dąbrowski Maciej,1,2023-01-11
-Mazur Krzysztof,1,2023-01-11
-Pietrzak Jakub,1,2023-01-11
-Stępień Adam,1,2023-01-11
-Wiśniewski Rafał,1,2023-01-11
-Włodarczyk Grzegorz,1,2023-01-11
-Pawlak-Nowak Anna,1,2023-01-11
-Wieczorek Kowalska Agnieszka,1,2023-01-11
-M.Kamiński,1,2023-01-11
-(Majewski) Cezary,0,2023-02-11
-Olszewski J@nusz,0,2022-03-11
-KacprzakPatryk,0,2022-04-11
-123Szymczak Leszek,0,2022-05-11
-L Dawid,0,2022-06-11
+id:INTEGER,full_name:STRING,result:INTEGER,date:LOCAL_DATE
+1,Nowak Michał,1,2023-01-11
+2,Kowalczyk Piotr,1,2023-01-11
+3,Wójcik Marcin,1,2023-01-11
+4,Woźniak Paweł,1,2023-01-11
+5,Krawczyk Tomasz,1,2023-01-11
+6,Kowalski Łukasz,1,2023-01-11
+7,Dąbrowski Maciej,1,2023-01-11
+8,Mazur Krzysztof,1,2023-01-11
+9,Pietrzak Jakub,1,2023-01-11
+10,Stępień Adam,1,2023-01-11
+11,Wiśniewski Rafał,1,2023-01-11
+12,Włodarczyk Grzegorz,1,2023-01-11
+13,Pawlak-Nowak Anna,1,2023-01-11
+14,Wieczorek Kowalska Agnieszka,1,2023-01-11
+15,M.Kamiński,1,2023-01-11
+16,(Majewski) Cezary,0,2023-02-11
+17,Olszewski J@nusz,0,2022-03-11
+18,KacprzakPatryk,0,2022-04-11
+19,123Szymczak Leszek,0,2022-05-11
+20,L Dawid,0,2022-06-11
