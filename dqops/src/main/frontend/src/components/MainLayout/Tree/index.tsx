@@ -36,7 +36,8 @@ const Tree = () => {
     activeTab,
     switchTab,
     refreshNode,
-    setTreeData
+    setTreeData,
+    loadMoreTables
   } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -481,8 +482,20 @@ const Tree = () => {
     return (
       <div>
         {groupedData[parentId].map((item) => (
-          <div key={item.id}>{renderTreeNode(item, deep)}</div>
+          <>
+            <div key={item.id}>{renderTreeNode(item, deep)}</div>
+          </>
         ))}
+        {groupedData[parentId].find(
+          (item) => item?.level === TREE_LEVEL.TABLE
+        ) && (
+          <div
+            className="ml-4 pl-7 cursor-pointer flex text-sm hover:bg-gray-100 py-1.5 mb-0.5"
+            onClick={() => loadMoreTables(groupedData[parentId], groupedData)}
+          >
+            Load more tables
+          </div>
+        )}
       </div>
     );
   };
