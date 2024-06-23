@@ -43,6 +43,8 @@ class CheckResultEntryModel:
         quality_dimension (Union[Unset, str]): Data quality dimension
         sensor_name (Union[Unset, str]): Sensor name
         table_comparison (Union[Unset, str]): Table comparison name
+        updated_at (Union[Unset, int]): The timestamp when the check was recently updated with a new value because it as
+            rerun for the same period and the severity could be changed
     """
 
     id: Union[Unset, str] = UNSET
@@ -72,6 +74,7 @@ class CheckResultEntryModel:
     quality_dimension: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
     table_comparison: Union[Unset, str] = UNSET
+    updated_at: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -111,6 +114,7 @@ class CheckResultEntryModel:
         quality_dimension = self.quality_dimension
         sensor_name = self.sensor_name
         table_comparison = self.table_comparison
+        updated_at = self.updated_at
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -169,6 +173,8 @@ class CheckResultEntryModel:
             field_dict["sensorName"] = sensor_name
         if table_comparison is not UNSET:
             field_dict["tableComparison"] = table_comparison
+        if updated_at is not UNSET:
+            field_dict["updatedAt"] = updated_at
 
         return field_dict
 
@@ -244,6 +250,8 @@ class CheckResultEntryModel:
 
         table_comparison = d.pop("tableComparison", UNSET)
 
+        updated_at = d.pop("updatedAt", UNSET)
+
         check_result_entry_model = cls(
             id=id,
             check_hash=check_hash,
@@ -272,6 +280,7 @@ class CheckResultEntryModel:
             quality_dimension=quality_dimension,
             sensor_name=sensor_name,
             table_comparison=table_comparison,
+            updated_at=updated_at,
         )
 
         check_result_entry_model.additional_properties = d

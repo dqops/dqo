@@ -41,6 +41,8 @@ class CheckModel:
             checks.
         rule (Union[Unset, RuleThresholdsModel]): Model that returns the form definition and the form data to edit a
             single rule with all three threshold levels (low, medium, high).
+        supports_error_sampling (Union[Unset, bool]): The data quality check supports capturing error samples, because
+            an error sampling template is defined.
         supports_grouping (Union[Unset, bool]): The data quality check supports a custom data grouping configuration.
         standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
             checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
@@ -93,6 +95,7 @@ class CheckModel:
     sensor_name: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     rule: Union[Unset, "RuleThresholdsModel"] = UNSET
+    supports_error_sampling: Union[Unset, bool] = UNSET
     supports_grouping: Union[Unset, bool] = UNSET
     standard: Union[Unset, bool] = UNSET
     default_check: Union[Unset, bool] = UNSET
@@ -137,6 +140,7 @@ class CheckModel:
         if not isinstance(self.rule, Unset):
             rule = self.rule.to_dict()
 
+        supports_error_sampling = self.supports_error_sampling
         supports_grouping = self.supports_grouping
         standard = self.standard
         default_check = self.default_check
@@ -218,6 +222,8 @@ class CheckModel:
             field_dict["quality_dimension"] = quality_dimension
         if rule is not UNSET:
             field_dict["rule"] = rule
+        if supports_error_sampling is not UNSET:
+            field_dict["supports_error_sampling"] = supports_error_sampling
         if supports_grouping is not UNSET:
             field_dict["supports_grouping"] = supports_grouping
         if standard is not UNSET:
@@ -311,6 +317,8 @@ class CheckModel:
             rule = UNSET
         else:
             rule = RuleThresholdsModel.from_dict(_rule)
+
+        supports_error_sampling = d.pop("supports_error_sampling", UNSET)
 
         supports_grouping = d.pop("supports_grouping", UNSET)
 
@@ -422,6 +430,7 @@ class CheckModel:
             sensor_name=sensor_name,
             quality_dimension=quality_dimension,
             rule=rule,
+            supports_error_sampling=supports_error_sampling,
             supports_grouping=supports_grouping,
             standard=standard,
             default_check=default_check,

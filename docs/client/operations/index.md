@@ -279,6 +279,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`cancel_job`</span>](./jobs.md#cancel_job)|DELETE|Cancels a running job|
+|<span class="no-wrap-code">[`collect_error_samples`</span>](./jobs.md#collect_error_samples)|POST|Starts a new background job that will run selected data quality checks to collect their error samples|
 |<span class="no-wrap-code">[`collect_statistics_on_data_groups`</span>](./jobs.md#collect_statistics_on_data_groups)|POST|Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping|
 |<span class="no-wrap-code">[`collect_statistics_on_table`</span>](./jobs.md#collect_statistics_on_table)|POST|Starts a new background job that will run selected data statistics collectors for the entire table|
 |<span class="no-wrap-code">[`delete_stored_data`</span>](./jobs.md#delete_stored_data)|POST|Starts a new background job that will delete stored data about check results, sensor readouts etc.|
@@ -291,6 +292,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 |<span class="no-wrap-code">[`start_cron_scheduler`</span>](./jobs.md#start_cron_scheduler)|POST|Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
 |<span class="no-wrap-code">[`stop_cron_scheduler`</span>](./jobs.md#stop_cron_scheduler)|POST|Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
 |<span class="no-wrap-code">[`synchronize_folders`</span>](./jobs.md#synchronize_folders)|POST|Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).|
+|<span class="no-wrap-code">[`wait_for_collect_error_samples_job`</span>](./jobs.md#wait_for_collect_error_samples_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 |<span class="no-wrap-code">[`wait_for_job`</span>](./jobs.md#wait_for_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 |<span class="no-wrap-code">[`wait_for_run_checks_job`</span>](./jobs.md#wait_for_run_checks_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 

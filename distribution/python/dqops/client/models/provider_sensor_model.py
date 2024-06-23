@@ -21,6 +21,7 @@ class ProviderSensorModel:
         provider_type (Union[Unset, ProviderType]):
         provider_sensor_definition_spec (Union[Unset, ProviderSensorDefinitionSpec]):
         sql_template (Union[Unset, str]): Provider specific Jinja2 SQL template
+        error_sampling_template (Union[Unset, str]): Provider specific Jinja2 SQL template for capturing error samples
         custom (Union[Unset, bool]): Whether the provider sensor is a User Home provider sensor
         built_in (Union[Unset, bool]): This is a DQOps built-in provider sensor, whose parameters cannot be changed.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
@@ -34,6 +35,7 @@ class ProviderSensorModel:
         Unset, "ProviderSensorDefinitionSpec"
     ] = UNSET
     sql_template: Union[Unset, str] = UNSET
+    error_sampling_template: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
@@ -52,6 +54,7 @@ class ProviderSensorModel:
             )
 
         sql_template = self.sql_template
+        error_sampling_template = self.error_sampling_template
         custom = self.custom
         built_in = self.built_in
         can_edit = self.can_edit
@@ -66,6 +69,8 @@ class ProviderSensorModel:
             field_dict["providerSensorDefinitionSpec"] = provider_sensor_definition_spec
         if sql_template is not UNSET:
             field_dict["sqlTemplate"] = sql_template
+        if error_sampling_template is not UNSET:
+            field_dict["errorSamplingTemplate"] = error_sampling_template
         if custom is not UNSET:
             field_dict["custom"] = custom
         if built_in is not UNSET:
@@ -102,6 +107,8 @@ class ProviderSensorModel:
 
         sql_template = d.pop("sqlTemplate", UNSET)
 
+        error_sampling_template = d.pop("errorSamplingTemplate", UNSET)
+
         custom = d.pop("custom", UNSET)
 
         built_in = d.pop("builtIn", UNSET)
@@ -114,6 +121,7 @@ class ProviderSensorModel:
             provider_type=provider_type,
             provider_sensor_definition_spec=provider_sensor_definition_spec,
             sql_template=sql_template,
+            error_sampling_template=error_sampling_template,
             custom=custom,
             built_in=built_in,
             can_edit=can_edit,

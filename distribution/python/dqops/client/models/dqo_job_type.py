@@ -2,6 +2,8 @@ from enum import Enum
 
 
 class DqoJobType(str, Enum):
+    COLLECT_ERROR_SAMPLES = "collect_error_samples"
+    COLLECT_ERROR_SAMPLES_ON_TABLE = "collect_error_samples_on_table"
     COLLECT_STATISTICS = "collect_statistics"
     COLLECT_STATISTICS_ON_TABLE = "collect_statistics_on_table"
     DELETE_STORED_DATA = "delete_stored_data"

@@ -1022,6 +1022,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -1078,6 +1079,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1139,6 +1141,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1203,6 +1206,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1267,6 +1271,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1351,6 +1356,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -1407,6 +1413,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1468,6 +1475,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1532,6 +1540,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1596,6 +1605,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1680,6 +1690,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -1736,6 +1747,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1797,6 +1809,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1861,6 +1874,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -1925,6 +1939,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2009,6 +2024,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -2065,6 +2081,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2126,6 +2143,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2190,6 +2208,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2254,6 +2273,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2338,6 +2358,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -2394,6 +2415,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2455,6 +2477,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2519,6 +2542,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2583,6 +2607,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -3178,7 +3203,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -3214,6 +3239,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3273,6 +3299,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3335,6 +3362,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3397,6 +3425,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3471,7 +3500,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -3507,6 +3536,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3566,6 +3596,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3628,6 +3659,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3690,6 +3722,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/monitoring/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3764,7 +3797,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -3800,6 +3833,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3859,6 +3893,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3921,6 +3956,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -3983,6 +4019,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/daily
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4057,7 +4094,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -4093,6 +4130,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4152,6 +4190,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4214,6 +4253,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4276,6 +4316,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/partitioned/monthly
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4350,7 +4391,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -4386,6 +4427,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4445,6 +4487,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4507,6 +4550,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -4569,6 +4613,7 @@ http://localhost:8888/api/default/checks/table/{patternName}/profiling
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,

@@ -39,6 +39,8 @@ class ColumnSpec:
             column name. An example of extracting a value from a string column storing JSON in PostgreSQL:
             "{column}::json->'address'->'zip'".
         type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
+        id (Union[Unset, bool]): True when this column is a part of the primary key or a business key that identifies a
+            row. Error sampling captures values of id columns to identify the row where the error sample was found.
         profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
         monitoring_checks (Union[Unset, ColumnMonitoringCheckCategoriesSpec]):
         partitioned_checks (Union[Unset, ColumnPartitionedCheckCategoriesSpec]):
@@ -53,6 +55,7 @@ class ColumnSpec:
     disabled: Union[Unset, bool] = UNSET
     sql_expression: Union[Unset, str] = UNSET
     type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
+    id: Union[Unset, bool] = UNSET
     profiling_checks: Union[Unset, "ColumnProfilingCheckCategoriesSpec"] = UNSET
     monitoring_checks: Union[Unset, "ColumnMonitoringCheckCategoriesSpec"] = UNSET
     partitioned_checks: Union[Unset, "ColumnPartitionedCheckCategoriesSpec"] = UNSET
@@ -68,6 +71,7 @@ class ColumnSpec:
         if not isinstance(self.type_snapshot, Unset):
             type_snapshot = self.type_snapshot.to_dict()
 
+        id = self.id
         profiling_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profiling_checks, Unset):
             profiling_checks = self.profiling_checks.to_dict()
@@ -105,6 +109,8 @@ class ColumnSpec:
             field_dict["sql_expression"] = sql_expression
         if type_snapshot is not UNSET:
             field_dict["type_snapshot"] = type_snapshot
+        if id is not UNSET:
+            field_dict["id"] = id
         if profiling_checks is not UNSET:
             field_dict["profiling_checks"] = profiling_checks
         if monitoring_checks is not UNSET:
@@ -148,6 +154,8 @@ class ColumnSpec:
             type_snapshot = UNSET
         else:
             type_snapshot = ColumnTypeSnapshotSpec.from_dict(_type_snapshot)
+
+        id = d.pop("id", UNSET)
 
         _profiling_checks = d.pop("profiling_checks", UNSET)
         profiling_checks: Union[Unset, ColumnProfilingCheckCategoriesSpec]
@@ -198,6 +206,7 @@ class ColumnSpec:
             disabled=disabled,
             sql_expression=sql_expression,
             type_snapshot=type_snapshot,
+            id=id,
             profiling_checks=profiling_checks,
             monitoring_checks=monitoring_checks,
             partitioned_checks=partitioned_checks,

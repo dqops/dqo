@@ -53,7 +53,7 @@ Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryM
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|executedAt<br/>checkHash<br/>checkCategory<br/>checkName<br/>checkDisplayName<br/>checkType<br/>actualValue<br/>expectedValue<br/>severity<br/>columnName<br/>dataGroup<br/>timeGradient<br/>timePeriod<br/>qualityDimension<br/>sensorName<br/>|
+|string|executedAt<br/>checkHash<br/>checkCategory<br/>checkName<br/>checkDisplayName<br/>checkType<br/>actualValue<br/>expectedValue<br/>severity<br/>columnName<br/>dataGroup<br/>timeGradient<br/>timePeriod<br/>qualityDimension<br/>sensorName<br/>updatedAt<br/>|
 
 ___
 

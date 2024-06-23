@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="MonoDqoQueueJobId")
+T = TypeVar("T", bound="MonoResponseEntityMonoDqoQueueJobId")
 
 
 @_attrs_define
-class MonoDqoQueueJobId:
+class MonoResponseEntityMonoDqoQueueJobId:
     """ """
 
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -22,10 +22,10 @@ class MonoDqoQueueJobId:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        mono_dqo_queue_job_id = cls()
+        mono_response_entity_mono_dqo_queue_job_id = cls()
 
-        mono_dqo_queue_job_id.additional_properties = d
-        return mono_dqo_queue_job_id
+        mono_response_entity_mono_dqo_queue_job_id.additional_properties = d
+        return mono_response_entity_mono_dqo_queue_job_id
 
     @property
     def additional_keys(self) -> List[str]:

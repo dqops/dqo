@@ -6,6 +6,10 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.collect_error_samples_on_table_parameters import (
+        CollectErrorSamplesOnTableParameters,
+    )
+    from ..models.collect_error_samples_parameters import CollectErrorSamplesParameters
     from ..models.collect_statistics_on_table_queue_job_parameters import (
         CollectStatisticsOnTableQueueJobParameters,
     )
@@ -52,6 +56,10 @@ class DqoJobEntryParametersModel:
             and an optional time window.
         collect_statistics_parameters (Union[Unset, CollectStatisticsQueueJobParameters]):
         collect_statistics_on_table_parameters (Union[Unset, CollectStatisticsOnTableQueueJobParameters]):
+        collect_error_samples_parameters (Union[Unset, CollectErrorSamplesParameters]): Collect error samples job
+            parameters, specifies the target checks that should be executed to collect error samples and an optional time
+            window.
+        collect_error_samples_on_table_parameters (Union[Unset, CollectErrorSamplesOnTableParameters]):
         import_schema_parameters (Union[Unset, ImportSchemaQueueJobParameters]):
         import_table_parameters (Union[Unset, ImportTablesQueueJobParameters]):
         delete_stored_data_parameters (Union[Unset, DeleteStoredDataQueueJobParameters]):
@@ -72,6 +80,12 @@ class DqoJobEntryParametersModel:
     ] = UNSET
     collect_statistics_on_table_parameters: Union[
         Unset, "CollectStatisticsOnTableQueueJobParameters"
+    ] = UNSET
+    collect_error_samples_parameters: Union[
+        Unset, "CollectErrorSamplesParameters"
+    ] = UNSET
+    collect_error_samples_on_table_parameters: Union[
+        Unset, "CollectErrorSamplesOnTableParameters"
     ] = UNSET
     import_schema_parameters: Union[Unset, "ImportSchemaQueueJobParameters"] = UNSET
     import_table_parameters: Union[Unset, "ImportTablesQueueJobParameters"] = UNSET
@@ -122,6 +136,18 @@ class DqoJobEntryParametersModel:
                 self.collect_statistics_on_table_parameters.to_dict()
             )
 
+        collect_error_samples_parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.collect_error_samples_parameters, Unset):
+            collect_error_samples_parameters = (
+                self.collect_error_samples_parameters.to_dict()
+            )
+
+        collect_error_samples_on_table_parameters: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.collect_error_samples_on_table_parameters, Unset):
+            collect_error_samples_on_table_parameters = (
+                self.collect_error_samples_on_table_parameters.to_dict()
+            )
+
         import_schema_parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.import_schema_parameters, Unset):
             import_schema_parameters = self.import_schema_parameters.to_dict()
@@ -161,6 +187,14 @@ class DqoJobEntryParametersModel:
             field_dict[
                 "collectStatisticsOnTableParameters"
             ] = collect_statistics_on_table_parameters
+        if collect_error_samples_parameters is not UNSET:
+            field_dict[
+                "collectErrorSamplesParameters"
+            ] = collect_error_samples_parameters
+        if collect_error_samples_on_table_parameters is not UNSET:
+            field_dict[
+                "collectErrorSamplesOnTableParameters"
+            ] = collect_error_samples_on_table_parameters
         if import_schema_parameters is not UNSET:
             field_dict["importSchemaParameters"] = import_schema_parameters
         if import_table_parameters is not UNSET:
@@ -174,6 +208,12 @@ class DqoJobEntryParametersModel:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.collect_error_samples_on_table_parameters import (
+            CollectErrorSamplesOnTableParameters,
+        )
+        from ..models.collect_error_samples_parameters import (
+            CollectErrorSamplesParameters,
+        )
         from ..models.collect_statistics_on_table_queue_job_parameters import (
             CollectStatisticsOnTableQueueJobParameters,
         )
@@ -286,6 +326,32 @@ class DqoJobEntryParametersModel:
                 )
             )
 
+        _collect_error_samples_parameters = d.pop(
+            "collectErrorSamplesParameters", UNSET
+        )
+        collect_error_samples_parameters: Union[Unset, CollectErrorSamplesParameters]
+        if isinstance(_collect_error_samples_parameters, Unset):
+            collect_error_samples_parameters = UNSET
+        else:
+            collect_error_samples_parameters = CollectErrorSamplesParameters.from_dict(
+                _collect_error_samples_parameters
+            )
+
+        _collect_error_samples_on_table_parameters = d.pop(
+            "collectErrorSamplesOnTableParameters", UNSET
+        )
+        collect_error_samples_on_table_parameters: Union[
+            Unset, CollectErrorSamplesOnTableParameters
+        ]
+        if isinstance(_collect_error_samples_on_table_parameters, Unset):
+            collect_error_samples_on_table_parameters = UNSET
+        else:
+            collect_error_samples_on_table_parameters = (
+                CollectErrorSamplesOnTableParameters.from_dict(
+                    _collect_error_samples_on_table_parameters
+                )
+            )
+
         _import_schema_parameters = d.pop("importSchemaParameters", UNSET)
         import_schema_parameters: Union[Unset, ImportSchemaQueueJobParameters]
         if isinstance(_import_schema_parameters, Unset):
@@ -334,6 +400,8 @@ class DqoJobEntryParametersModel:
             run_checks_on_table_parameters=run_checks_on_table_parameters,
             collect_statistics_parameters=collect_statistics_parameters,
             collect_statistics_on_table_parameters=collect_statistics_on_table_parameters,
+            collect_error_samples_parameters=collect_error_samples_parameters,
+            collect_error_samples_on_table_parameters=collect_error_samples_on_table_parameters,
             import_schema_parameters=import_schema_parameters,
             import_table_parameters=import_table_parameters,
             delete_stored_data_parameters=delete_stored_data_parameters,
