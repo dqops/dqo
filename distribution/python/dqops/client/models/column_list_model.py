@@ -31,19 +31,22 @@ class ColumnListModel:
         Attributes:
             connection_name (Union[Unset, str]): Connection name.
             table (Union[Unset, PhysicalTableName]):
-            column_name (Union[Unset, str]): Column names.
+            column_name (Union[Unset, str]): Column name.
             labels (Union[Unset, List[str]]): List of labels applied to the table.
-            sql_expression (Union[Unset, str]): SQL expression.
+            sql_expression (Union[Unset, str]): SQL expression for a calculated column, or a column that applies additional
+                data transformation to the original column value. The original column value is referenced by a token {column}.
             column_hash (Union[Unset, int]): Column hash that identifies the column using a unique hash code.
             disabled (Union[Unset, bool]): Disables all data quality checks on the column. Data quality checks will not be
                 executed.
-            has_any_configured_checks (Union[Unset, bool]): True when the column has any checks configured.
+            id (Union[Unset, bool]): Marks columns that are part of a primary or a unique key. DQOps captures their values
+                during error sampling to match invalid values to the rows in which the value was found.
+            has_any_configured_checks (Union[Unset, bool]): True when the column has any checks configured (read-only).
             has_any_configured_profiling_checks (Union[Unset, bool]): True when the column has any profiling checks
-                configured.
+                configured (read-only).
             has_any_configured_monitoring_checks (Union[Unset, bool]): True when the column has any monitoring checks
-                configured.
+                configured (read-only).
             has_any_configured_partition_checks (Union[Unset, bool]): True when the column has any partition checks
-                configured.
+                configured (read-only).
             type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
             data_quality_status (Union[Unset, ColumnCurrentDataQualityStatusModel]): The column's most recent data quality
                 status. It is a summary of the results of the most recently executed data quality checks on the column. Verify
@@ -72,6 +75,7 @@ class ColumnListModel:
     sql_expression: Union[Unset, str] = UNSET
     column_hash: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
+    id: Union[Unset, bool] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
@@ -106,6 +110,7 @@ class ColumnListModel:
         sql_expression = self.sql_expression
         column_hash = self.column_hash
         disabled = self.disabled
+        id = self.id
         has_any_configured_checks = self.has_any_configured_checks
         has_any_configured_profiling_checks = self.has_any_configured_profiling_checks
         has_any_configured_monitoring_checks = self.has_any_configured_monitoring_checks
@@ -172,6 +177,8 @@ class ColumnListModel:
             field_dict["column_hash"] = column_hash
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
+        if id is not UNSET:
+            field_dict["id"] = id
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
@@ -255,6 +262,8 @@ class ColumnListModel:
         column_hash = d.pop("column_hash", UNSET)
 
         disabled = d.pop("disabled", UNSET)
+
+        id = d.pop("id", UNSET)
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)
 
@@ -366,6 +375,7 @@ class ColumnListModel:
             sql_expression=sql_expression,
             column_hash=column_hash,
             disabled=disabled,
+            id=id,
             has_any_configured_checks=has_any_configured_checks,
             has_any_configured_profiling_checks=has_any_configured_profiling_checks,
             has_any_configured_monitoring_checks=has_any_configured_monitoring_checks,

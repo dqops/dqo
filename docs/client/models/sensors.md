@@ -69,6 +69,7 @@ Provider sensor model returned from REST API.
 |<span class="no-wrap-code">[`provider_type`](./common.md#providertype)</span>|Provider type.|*[ProviderType](./common.md#providertype)*|
 |<span class="no-wrap-code">[`provider_sensor_definition_spec`](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)</span>|Provider specific sensor definition specification|*[ProviderSensorDefinitionSpec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)*|
 |<span class="no-wrap-code">`sql_template`</span>|Provider specific Jinja2 SQL template|*string*|
+|<span class="no-wrap-code">`error_sampling_template`</span>|Provider specific Jinja2 SQL template for capturing error samples|*string*|
 |<span class="no-wrap-code">`custom`</span>|Whether the provider sensor is a User Home provider sensor|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This is a DQOps built-in provider sensor, whose parameters cannot be changed.|*boolean*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|

@@ -91,6 +91,11 @@ from .check_type import CheckType
 from .cloud_synchronization_folders_status_model import (
     CloudSynchronizationFoldersStatusModel,
 )
+from .collect_error_samples_on_table_parameters import (
+    CollectErrorSamplesOnTableParameters,
+)
+from .collect_error_samples_parameters import CollectErrorSamplesParameters
+from .collect_error_samples_result import CollectErrorSamplesResult
 from .collect_statistics_on_table_queue_job_parameters import (
     CollectStatisticsOnTableQueueJobParameters,
 )
@@ -1402,6 +1407,8 @@ from .effective_schedule_model import EffectiveScheduleModel
 from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
+from .error_sampler_result import ErrorSamplerResult
+from .error_samples_data_scope import ErrorSamplesDataScope
 from .errors_list_model import ErrorsListModel
 from .external_log_entry import ExternalLogEntry
 from .field_model import FieldModel
@@ -1464,9 +1471,11 @@ from .min_percent_rule_100_warning_parameters_spec import (
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
 from .monitoring_schedule_spec import MonitoringScheduleSpec
 from .mono import Mono
-from .mono_dqo_queue_job_id import MonoDqoQueueJobId
-from .mono_object import MonoObject
-from .mono_void import MonoVoid
+from .mono_response_entity_mono_dqo_queue_job_id import (
+    MonoResponseEntityMonoDqoQueueJobId,
+)
+from .mono_response_entity_mono_object import MonoResponseEntityMonoObject
+from .mono_response_entity_mono_void import MonoResponseEntityMonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
 from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
@@ -1727,6 +1736,7 @@ from .table_daily_partitioned_check_categories_spec_comparisons import (
 from .table_daily_partitioned_check_categories_spec_custom import (
     TableDailyPartitionedCheckCategoriesSpecCustom,
 )
+from .table_data_freshness_anomaly_check_spec import TableDataFreshnessAnomalyCheckSpec
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
@@ -1986,6 +1996,9 @@ __all__ = (
     "CheckTimeScale",
     "CheckType",
     "CloudSynchronizationFoldersStatusModel",
+    "CollectErrorSamplesOnTableParameters",
+    "CollectErrorSamplesParameters",
+    "CollectErrorSamplesResult",
     "CollectStatisticsOnTableQueueJobParameters",
     "CollectStatisticsQueueJobParameters",
     "CollectStatisticsQueueJobResult",
@@ -2523,6 +2536,8 @@ __all__ = (
     "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",
+    "ErrorSamplerResult",
+    "ErrorSamplesDataScope",
     "ErrorsListModel",
     "ExternalLogEntry",
     "FieldModel",
@@ -2577,9 +2592,9 @@ __all__ = (
     "MinPercentRule95ParametersSpec",
     "MonitoringScheduleSpec",
     "Mono",
-    "MonoDqoQueueJobId",
-    "MonoObject",
-    "MonoVoid",
+    "MonoResponseEntityMonoDqoQueueJobId",
+    "MonoResponseEntityMonoObject",
+    "MonoResponseEntityMonoVoid",
     "MysqlEngineType",
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
@@ -2726,6 +2741,7 @@ __all__ = (
     "TableDailyPartitionedCheckCategoriesSpec",
     "TableDailyPartitionedCheckCategoriesSpecComparisons",
     "TableDailyPartitionedCheckCategoriesSpecCustom",
+    "TableDataFreshnessAnomalyCheckSpec",
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
     "TableDataStalenessCheckSpec",

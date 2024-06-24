@@ -22,6 +22,8 @@ def _get_kwargs(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
+    dimension: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
@@ -43,6 +45,10 @@ def _get_kwargs(
     params["limit"] = limit
 
     params["filter"] = filter_
+
+    params["dimension"] = dimension
+
+    params["category"] = category
 
     json_order: Union[Unset, None, str] = UNSET
     if not isinstance(order, Unset):
@@ -108,6 +114,8 @@ def sync_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
+    dimension: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
@@ -125,6 +133,8 @@ def sync_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
+        dimension (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
         order (Union[Unset, None, IncidentSortOrder]):
         direction (Union[Unset, None, SortDirection]):
 
@@ -146,6 +156,8 @@ def sync_detailed(
         page=page,
         limit=limit,
         filter_=filter_,
+        dimension=dimension,
+        category=category,
         order=order,
         direction=direction,
     )
@@ -169,6 +181,8 @@ def sync(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
+    dimension: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
@@ -186,6 +200,8 @@ def sync(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
+        dimension (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
         order (Union[Unset, None, IncidentSortOrder]):
         direction (Union[Unset, None, SortDirection]):
 
@@ -208,6 +224,8 @@ def sync(
         page=page,
         limit=limit,
         filter_=filter_,
+        dimension=dimension,
+        category=category,
         order=order,
         direction=direction,
     ).parsed
@@ -225,6 +243,8 @@ async def asyncio_detailed(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
+    dimension: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Response[List["IncidentModel"]]:
@@ -242,6 +262,8 @@ async def asyncio_detailed(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
+        dimension (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
         order (Union[Unset, None, IncidentSortOrder]):
         direction (Union[Unset, None, SortDirection]):
 
@@ -263,6 +285,8 @@ async def asyncio_detailed(
         page=page,
         limit=limit,
         filter_=filter_,
+        dimension=dimension,
+        category=category,
         order=order,
         direction=direction,
     )
@@ -284,6 +308,8 @@ async def asyncio(
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
+    dimension: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Optional[List["IncidentModel"]]:
@@ -301,6 +327,8 @@ async def asyncio(
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
+        dimension (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
         order (Union[Unset, None, IncidentSortOrder]):
         direction (Union[Unset, None, SortDirection]):
 
@@ -324,6 +352,8 @@ async def asyncio(
             page=page,
             limit=limit,
             filter_=filter_,
+            dimension=dimension,
+            category=category,
             order=order,
             direction=direction,
         )

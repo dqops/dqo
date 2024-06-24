@@ -5,6 +5,105 @@ title: DQOps REST API jobs models reference
 The references of all objects used by [jobs](../operations/jobs.md) REST API operations are listed below.
 
 
+## TimeWindowFilterParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`daily_partitioning_recent_days`</span>|The number of recent days to analyze incrementally by daily partitioned data quality checks.|*integer*|
+|<span class="no-wrap-code">`daily_partitioning_include_today`</span>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.|*boolean*|
+|<span class="no-wrap-code">`monthly_partitioning_recent_months`</span>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.|*integer*|
+|<span class="no-wrap-code">`monthly_partitioning_include_current_month`</span>|Analyze also the current month and later months when running monthly partitioned checks. By default, monthly partitioned checks will not analyze the current month and future months. Setting true will disable filtering the end dates.|*boolean*|
+|<span class="no-wrap-code">`from_date`</span>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.|*date*|
+|<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
+|<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
+|<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
+
+
+___
+
+## ErrorSamplesDataScope
+Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|table<br/>data_group<br/>|
+
+___
+
+## ErrorSamplerResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`executed_error_samplers`</span>|The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. |*integer*|
+|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed an error sampler and tried to collect error samples.|*integer*|
+|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain error samples.|*integer*|
+|<span class="no-wrap-code">`total_error_samplers_failed`</span>|The count of error samplers that failed to execute.|*integer*|
+|<span class="no-wrap-code">`total_error_samples_collected`</span>|The total number of error samples (values) that were collected.|*integer*|
+
+
+___
+
+## CollectErrorSamplesParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify the checks for which the error samples should be collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`time_window_filter`](#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
+|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
+|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
+
+
+___
+
+## DqoJobStatus
+Job status of a job on the queue.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|queued<br/>running<br/>waiting<br/>finished<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
+
+___
+
+## CollectErrorSamplesResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">[`result`](./jobs.md#errorsamplerresult)</span>|Optional result object that is returned only when the wait parameter was true and the "collect error samples" job has finished. Contains the summary result of collecting error samples, including the number of error samplers that were executed, and the number of error samples collected. |*[ErrorSamplerResult](./jobs.md#errorsamplerresult)*|
+|<span class="no-wrap-code">[`status`](#dqojobstatus)</span>|Job status|*[DqoJobStatus](#dqojobstatus)*|
+
+
+___
+
 ## CollectStatisticsResult
 
 
@@ -23,19 +122,6 @@ The references of all objects used by [jobs](../operations/jobs.md) REST API ope
 
 ___
 
-## DqoJobStatus
-Job status of a job on the queue.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|queued<br/>running<br/>waiting<br/>finished<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
-
-___
-
 ## CollectStatisticsQueueJobResult
 
 
@@ -47,7 +133,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
 |<span class="no-wrap-code">[`result`](#collectstatisticsresult)</span>|Optional result object that is returned only when the wait parameter was true and the "collect statistics" job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |*[CollectStatisticsResult](#collectstatisticsresult)*|
-|<span class="no-wrap-code">[`status`](#dqojobstatus)</span>|Job status|*[DqoJobStatus](#dqojobstatus)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|Job status|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 
 
 ___
@@ -95,7 +181,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
 
 ___
 
@@ -172,7 +258,7 @@ Job type that identifies a job by type.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_statistics_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
+|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_statistics_on_table<br/>collect_error_samples<br/>collect_error_samples_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
 
 ___
 
@@ -249,27 +335,6 @@ Simple object for starting multiple folder synchronization jobs with the same co
 
 ___
 
-## TimeWindowFilterParameters
-
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`daily_partitioning_recent_days`</span>|The number of recent days to analyze incrementally by daily partitioned data quality checks.|*integer*|
-|<span class="no-wrap-code">`daily_partitioning_include_today`</span>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.|*boolean*|
-|<span class="no-wrap-code">`monthly_partitioning_recent_months`</span>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.|*integer*|
-|<span class="no-wrap-code">`monthly_partitioning_include_current_month`</span>|Analyze also the current month and later months when running monthly partitioned checks. By default, monthly partitioned checks will not analyze the current month and future months. Setting true will disable filtering the end dates.|*boolean*|
-|<span class="no-wrap-code">`from_date`</span>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.|*date*|
-|<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
-|<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
-|<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
-
-
-___
-
 ## RunChecksResult
 
 
@@ -300,7 +365,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`time_window_filter`](#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](#runchecksresult)*|
 
@@ -412,57 +477,6 @@ ___
 
 ___
 
-## ErrorSamplesDataScope
-Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`ordinal`</span>|:mm|*integer*|
-
-
-___
-
-## ErrorSamplerResult
-
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`executed_error_samplers`</span>|The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. |*integer*|
-|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed an error sampler and tried to collect error samples.|*integer*|
-|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain error samples.|*integer*|
-|<span class="no-wrap-code">`total_error_samplers_failed`</span>|The count of error samplers that failed to execute.|*integer*|
-|<span class="no-wrap-code">`total_error_samples_collected`</span>|The total number of error samples (values) that were collected.|*integer*|
-
-
-___
-
-## CollectErrorSamplesParameters
-
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify the checks for which the error samples should be collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
-|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
-|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
-|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
-
-
-___
-
 ## CollectErrorSamplesOnTableParameters
 
 
@@ -477,9 +491,9 @@ ___
 |<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify data quality checks for which the error samples are collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
-|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
+|<span class="no-wrap-code">[`data_scope`](./jobs.md#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.|*[ErrorSamplesDataScope](./jobs.md#errorsamplesdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
-|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
+|<span class="no-wrap-code">[`error_sampler_result`](./jobs.md#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](./jobs.md#errorsamplerresult)*|
 
 
 ___
@@ -552,7 +566,7 @@ Model object returned to UI that has typed fields for each supported job paramet
 |<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|The job parameters for the "run checks on table" queue job.|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
 |<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|The job parameters for the "collect statistics" queue job.|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|
 |<span class="no-wrap-code">[`collect_statistics_on_table_parameters`](#collectstatisticsontablequeuejobparameters)</span>|The job parameters for the "collect statistics on table" queue job.|*[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)*|
-|<span class="no-wrap-code">[`collect_error_samples_parameters`](#collecterrorsamplesparameters)</span>|The job parameters for the "collect error samples" queue job.|*[CollectErrorSamplesParameters](#collecterrorsamplesparameters)*|
+|<span class="no-wrap-code">[`collect_error_samples_parameters`](./jobs.md#collecterrorsamplesparameters)</span>|The job parameters for the "collect error samples" queue job.|*[CollectErrorSamplesParameters](./jobs.md#collecterrorsamplesparameters)*|
 |<span class="no-wrap-code">[`collect_error_samples_on_table_parameters`](#collecterrorsamplesontableparameters)</span>|The job parameters for the "collect error samples on table" queue job.|*[CollectErrorSamplesOnTableParameters](#collecterrorsamplesontableparameters)*|
 |<span class="no-wrap-code">[`import_schema_parameters`](#importschemaqueuejobparameters)</span>|The job parameters for the "collect schema" queue job.|*[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)*|
 |<span class="no-wrap-code">[`import_table_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|The job parameters for the "collect tables" queue job.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
