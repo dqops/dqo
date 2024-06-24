@@ -125,9 +125,9 @@ DQOps finds the two most recent timestamps and compares them.
 
 - The most recent timestamp of loading the record.
 
-| order_id | customer_id | created_at                | **loaded_at**               | Data staleness formula: `MAX(loaded_at) - MAX(created_at)` | Data lag          |
-|----------|-------------|---------------------------|-----------------------------|------------------------------------------------------------|-------------------|
-| 102      | 4           | **_2023-11-14 10:25:00_** | **_2023-11-14 11:00:00_**   | _"2023-11-14 11:00:00"_ - _"2023-11-14 10:25:00"_          | **0 days 1h 20m** |
+| order_id | customer_id | created_at                | **loaded_at**               | Data ingestion delay formula: `MAX(loaded_at) - MAX(created_at)` | Data lag          |
+|----------|-------------|---------------------------|-----------------------------|------------------------------------------------------------------|-------------------|
+| 102      | 4           | **_2023-11-14 10:25:00_** | **_2023-11-14 11:00:00_**   | _"2023-11-14 11:00:00"_ - _"2023-11-14 10:25:00"_                | **0 days 1h 20m** |
 
 The ingestion delay for the dataset shown above is 1 hour 20 minutes.
 
