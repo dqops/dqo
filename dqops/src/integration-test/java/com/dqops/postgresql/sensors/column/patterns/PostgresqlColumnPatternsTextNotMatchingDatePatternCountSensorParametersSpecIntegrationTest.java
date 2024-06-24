@@ -55,7 +55,7 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.postgresql);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec();
@@ -86,7 +86,7 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+                sampleTableMetadata, "date_iso", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -100,7 +100,7 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -114,7 +114,7 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -128,12 +128,12 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
@@ -142,12 +142,12 @@ public class PostgresqlColumnPatternsTextNotMatchingDatePatternCountSensorParame
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
