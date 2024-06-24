@@ -376,6 +376,20 @@
     {%- endif -%}
 {% endmacro -%}
 
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        '%Y-%m-%d'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        '%m/%d/%Y'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        '%d/%m/%Y'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        '%Y/%m/%d'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        '%b %d, %Y'
+    {%- endif -%}
+{% endmacro -%}
+
 {% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (

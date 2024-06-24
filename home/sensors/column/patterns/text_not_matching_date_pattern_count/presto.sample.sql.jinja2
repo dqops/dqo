@@ -1,4 +1,4 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
+    TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
 {%- endcall -%}

@@ -386,6 +386,20 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        'YYYY-MM-DD'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        'MM/DD/YYYY'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        'DD/MM/YYYY'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        'YYYY/MM/DD'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        'MON DD, YYYY'
+    {%- endif -%}
+{% endmacro -%}
+
 {% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
