@@ -62,6 +62,7 @@ import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
 import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
 import { ReactComponent as JsonSvg } from './svg/json-icon.svg';
+import { ReactComponent as KeySvg } from './svg/key.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
@@ -237,7 +238,8 @@ const iconsMap: any = {
   monitoring_checks: MonitoringChecksSvg,
   partitioned_checks: PartitionedChecksSvg,
   minus: MinusSvg,
-  question_mark: QuestionmarkSvg
+  question_mark: QuestionmarkSvg,
+  key: KeySvg
 };
 
 interface SvgIconProps {
