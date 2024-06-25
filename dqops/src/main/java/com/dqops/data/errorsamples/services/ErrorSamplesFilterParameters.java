@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.errors.services;
+package com.dqops.data.errorsamples.services;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -25,12 +25,12 @@ import java.time.LocalDate;
 
 
 /**
- * The parameters for retrieving the execution errors model.
+ * The parameters for retrieving the error samples models.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class ErrorsDetailedFilterParameters {
+public class ErrorSamplesFilterParameters {
     /**
      * The default limit of results per check to load.
      */
@@ -61,10 +61,10 @@ public class ErrorsDetailedFilterParameters {
     private String tableComparison;
 
     /**
-     * Name of the data group for which to get the errors.
+     * Name of the data group for which to get the error samples.
      * If null, the default one is picked.
      */
-    @JsonPropertyDescription("Data group for which to load the errors.")
+    @JsonPropertyDescription("Data group for which to load the error samples.")
     private String dataGroupName = null;
 
     /**

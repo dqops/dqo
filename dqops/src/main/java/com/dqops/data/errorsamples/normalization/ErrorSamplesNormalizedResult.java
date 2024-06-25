@@ -15,9 +15,11 @@
  */
 package com.dqops.data.errorsamples.normalization;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 
@@ -55,7 +57,9 @@ public class ErrorSamplesNormalizedResult {
     private final TextColumn checkNameColumn;
     private final TextColumn checkDisplayNameColumn;
     private final TextColumn checkTypeColumn;
+    private final TextColumn timeGradientColumn;
     private final TextColumn checkCategoryColumn;
+    private final TextColumn tableComparisonNameColumn;
     private final TextColumn qualityDimensionColumn;
     private final TextColumn sensorNameColumn;
     private final TextColumn timeSeriesIdColumn;
@@ -130,15 +134,17 @@ public class ErrorSamplesNormalizedResult {
         this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SCHEMA_NAME_COLUMN_NAME, addColumWhenMissing);
         this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_NAME_COLUMN_NAME, addColumWhenMissing);
         this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_STAGE_COLUMN_NAME, addColumWhenMissing);
-        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
+        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, ErrorSamplesColumnNames.TABLE_PRIORITY_COLUMN_NAME, addColumWhenMissing);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.COLUMN_HASH_COLUMN_NAME, addColumWhenMissing);
         this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, addColumWhenMissing);
-        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
-        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
+        this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME, addColumWhenMissing);
+        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME, addColumWhenMissing);
+        this.timeGradientColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, addColumWhenMissing);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, addColumWhenMissing);
+        this.tableComparisonNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, addColumWhenMissing);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, addColumWhenMissing);
         this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SENSOR_NAME_COLUMN_NAME, addColumWhenMissing);
         this.sampleFilterColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.SAMPLE_FILTER_COLUMN_NAME, addColumWhenMissing);
         this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorSamplesColumnNames.TIME_SERIES_ID_COLUMN_NAME, addColumWhenMissing);
@@ -478,11 +484,28 @@ public class ErrorSamplesNormalizedResult {
     }
 
     /**
+     * Time gradient column that returns the time gradient that was used by the sensor. It is a lower case name of
+     * a time gradient from {@link TimePeriodGradient} enumeration.
+     * @return Time gradient name, e.q. "day", "week", "month".
+     */
+    public TextColumn getTimeGradientColumn() {
+        return timeGradientColumn;
+    }
+
+    /**
      * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
      * @return Quality check category name column.
      */
     public TextColumn getCheckCategoryColumn() {
         return checkCategoryColumn;
+    }
+
+    /**
+     * Returns the column that contains the table comparison name for data comparison checks.
+     * @return Table comparison name column.
+     */
+    public TextColumn getTableComparisonNameColumn() {
+        return tableComparisonNameColumn;
     }
 
     /**

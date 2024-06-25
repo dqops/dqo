@@ -18,14 +18,15 @@ package com.dqops.data.errorsamples.normalization;
 
 import com.cronutils.utils.StringUtils;
 import com.dqops.core.configuration.DqoErrorSamplingConfigurationProperties;
+import com.dqops.data.errorsamples.factory.ErrorSampleResultDataType;
 import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
 import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.normalization.SensorResultNormalizeException;
-import com.dqops.data.statistics.factory.*;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.utils.tables.TableColumnUtility;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,20 +87,20 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         normalizedResults.addColumns(resultTypeColumn); // we will set the data type when we detect it...
 
         if (normalizedResultColumn == null) {
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.NULL.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.NULL.getName());
         }
 
         if (normalizedResultColumn instanceof TextColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.STRING.getName());
         }
         else {
             if (normalizedResultColumn instanceof StringColumn) {
                 TextColumn normalizedTextColumn = TableColumnUtility.convertToTextColumn(normalizedResultColumn);
                 normalizedTextColumn.setName(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME);
                 normalizedResults.addColumns(normalizedTextColumn);
-                resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
+                resultTypeColumn.setMissingTo(ErrorSampleResultDataType.STRING.getName());
             }
             else {
                 TextColumn resultStringColumn = TextColumn.create(ErrorSamplesColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
@@ -110,14 +111,14 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof LongColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_INTEGER_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.INTEGER.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.INTEGER.getName());
         }
         else {
             if (normalizedResultColumn instanceof IntColumn || normalizedResultColumn instanceof ShortColumn) {
                 LongColumn normalizedLongColumn = TableColumnUtility.convertToLongColumn(normalizedResultColumn);
                 normalizedLongColumn.setName(ErrorSamplesColumnNames.RESULT_INTEGER_COLUMN_NAME);
                 normalizedResults.addColumns(normalizedLongColumn);
-                resultTypeColumn.setMissingTo(StatisticsResultDataType.INTEGER.getName());
+                resultTypeColumn.setMissingTo(ErrorSampleResultDataType.INTEGER.getName());
             }
             else {
                 LongColumn resultIntegerColumn = LongColumn.create(ErrorSamplesColumnNames.RESULT_INTEGER_COLUMN_NAME, resultRowCount);
@@ -128,14 +129,14 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof DoubleColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_FLOAT_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.FLOAT.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.FLOAT.getName());
         }
         else {
             if (normalizedResultColumn instanceof FloatColumn) {
                 normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_FLOAT_COLUMN_NAME);
                 DoubleColumn normalizedDoubleColumn = TableColumnUtility.convertToDoubleColumn(normalizedResultColumn);
                 normalizedResults.addColumns(normalizedDoubleColumn);
-                resultTypeColumn.setMissingTo(StatisticsResultDataType.FLOAT.getName());
+                resultTypeColumn.setMissingTo(ErrorSampleResultDataType.FLOAT.getName());
             }
             else {
                 DoubleColumn resultFloatColumn = DoubleColumn.create(ErrorSamplesColumnNames.RESULT_FLOAT_COLUMN_NAME, resultRowCount);
@@ -146,7 +147,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof BooleanColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_BOOLEAN_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.BOOLEAN.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.BOOLEAN.getName());
         }
         else {
             BooleanColumn resultBooleanColumn = BooleanColumn.create(ErrorSamplesColumnNames.RESULT_BOOLEAN_COLUMN_NAME, resultRowCount);
@@ -156,7 +157,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof DateColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_DATE_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.DATE.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.DATE.getName());
         }
         else {
             DateColumn resultDateColumn = DateColumn.create(ErrorSamplesColumnNames.RESULT_DATE_COLUMN_NAME, resultRowCount);
@@ -166,7 +167,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof DateTimeColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_DATE_TIME_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.DATETIME.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.DATETIME.getName());
         }
         else {
             DateTimeColumn resultDateTimeColumn = DateTimeColumn.create(ErrorSamplesColumnNames.RESULT_DATE_TIME_COLUMN_NAME, resultRowCount);
@@ -176,7 +177,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof InstantColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_INSTANT_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.INSTANT.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.INSTANT.getName());
         }
         else {
             InstantColumn resultInstantColumn = InstantColumn.create(ErrorSamplesColumnNames.RESULT_INSTANT_COLUMN_NAME, resultRowCount);
@@ -186,7 +187,7 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         if (normalizedResultColumn instanceof TimeColumn) {
             normalizedResultColumn.setName(ErrorSamplesColumnNames.RESULT_TIME_COLUMN_NAME);
             normalizedResults.addColumns(normalizedResultColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.TIME.getName());
+            resultTypeColumn.setMissingTo(ErrorSampleResultDataType.TIME.getName());
         }
         else {
             TimeColumn resultTimeColumn = TimeColumn.create(ErrorSamplesColumnNames.RESULT_TIME_COLUMN_NAME, resultRowCount);
@@ -304,10 +305,24 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         }
         normalizedResults.addColumns(checkTypeColumn);
 
+        TimePeriodGradient timePeriodGradient = sensorRunParameters.getTimePeriodGradient();
+        TextColumn timeGradientColumn = TextColumn.create(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME, resultRowCount);
+        if (timePeriodGradient != null) {
+            timeGradientColumn.setMissingTo(timePeriodGradient.name());
+        }
+        normalizedResults.addColumns(timeGradientColumn);
+
         TextColumn checkCategoryColumn = TextColumn.create(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultRowCount);
         String categoryName = sensorRunParameters.getCheck().getCategoryName();
         checkCategoryColumn.setMissingTo(categoryName);
         normalizedResults.addColumns(checkCategoryColumn);
+
+        TextColumn tableComparisonNameColumn = TextColumn.create(ErrorSamplesColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME, resultRowCount);
+        if (sensorRunParameters.getTableComparisonConfiguration() != null) {
+            String tableComparisonName = sensorRunParameters.getTableComparisonConfiguration().getComparisonName();
+            tableComparisonNameColumn.setMissingTo(tableComparisonName);
+        }
+        normalizedResults.addColumns(tableComparisonNameColumn);
 
         TextColumn qualityDimensionColumn = TextColumn.create(ErrorSamplesColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultRowCount);
         String effectiveDataQualityDimension = sensorRunParameters.getCheck().getEffectiveDataQualityDimension();

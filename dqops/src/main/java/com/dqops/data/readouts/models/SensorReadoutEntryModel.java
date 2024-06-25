@@ -16,7 +16,10 @@
 package com.dqops.data.readouts.models;
 
 import com.dqops.checks.CheckType;
+import com.dqops.data.errors.models.ErrorEntryModel;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +28,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Detailed results for a single sensor. Represent one row in the sensor readouts table.
@@ -69,4 +73,22 @@ public class SensorReadoutEntryModel {
 
     @JsonPropertyDescription("Table comparison name")
     String tableComparison;
+
+    public static class SensorReadoutEntryModelSampleFactory implements SampleValueFactory<SensorReadoutEntryModel> {
+        @Override
+        public SensorReadoutEntryModel createSample() {
+            return new SensorReadoutEntryModel() {{
+                setActualValue(12.1);
+                setCheckType(CheckType.monitoring);
+                setTimeGradient(TimePeriodGradient.day);
+                setColumnName("col1");
+                setCheckName("daily_sum_in_range");
+                setProvider("spark");
+                setDurationMs(123);
+                setExecutedAt(LocalDateTime.of(2023, 10, 11, 18, 0, 0).toInstant(ZoneOffset.UTC));
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+                setTimePeriod(LocalDateTime.of(2023, 10, 11, 0, 0, 0));
+            }};
+        }
+    }
 }

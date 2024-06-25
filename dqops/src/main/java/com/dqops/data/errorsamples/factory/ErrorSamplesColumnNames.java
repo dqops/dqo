@@ -135,9 +135,19 @@ public class ErrorSamplesColumnNames {
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
     /**
+     * The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
+     */
+    public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
+
+    /**
      * The data quality check category name.
      */
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
+
+    /**
+     * The name of a table comparison configuration used for a data comparison (accuracy) check.
+     */
+    public static final String TABLE_COMPARISON_NAME_COLUMN_NAME = "table_comparison";
 
     /**
      * The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness.
@@ -244,4 +254,47 @@ public class ErrorSamplesColumnNames {
      * The login of the user that updated the row.
      */
     public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
+
+    /**
+     * List of column names that should be loaded from the parquet files when we will be only reading, not updating.
+     */
+    public static final String[] COLUMN_NAMES_FOR_READ_ONLY_ACCESS = new String[] {
+            ID_COLUMN_NAME,
+            COLLECTED_AT_COLUMN_NAME,
+
+            RESULT_TYPE_COLUMN_NAME,
+            RESULT_STRING_COLUMN_NAME,
+            RESULT_INTEGER_COLUMN_NAME,
+            RESULT_FLOAT_COLUMN_NAME,
+            RESULT_BOOLEAN_COLUMN_NAME,
+            RESULT_DATE_COLUMN_NAME,
+            RESULT_DATE_TIME_COLUMN_NAME,
+            RESULT_INSTANT_COLUMN_NAME,
+            RESULT_TIME_COLUMN_NAME,
+            SAMPLE_INDEX_COLUMN_NAME,
+
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_DISPLAY_NAME_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+
+            COLUMN_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
+
+            DURATION_MS_COLUMN_NAME,
+            EXECUTED_AT_COLUMN_NAME,
+
+            PROVIDER_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME,
+            SENSOR_NAME_COLUMN_NAME,
+
+            ROW_ID_COLUMN_NAME_PREFIX + "1",
+            ROW_ID_COLUMN_NAME_PREFIX + "2",
+            ROW_ID_COLUMN_NAME_PREFIX + "3",
+            ROW_ID_COLUMN_NAME_PREFIX + "4",
+            ROW_ID_COLUMN_NAME_PREFIX + "5",
+    };
 }

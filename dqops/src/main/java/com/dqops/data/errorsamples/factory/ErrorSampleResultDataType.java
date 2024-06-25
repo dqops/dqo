@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.data.statistics.factory;
+package com.dqops.data.errorsamples.factory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of data types that were detected as the statistics collector result.
+ * Enumeration of data types that were detected as the error sample collector result.
  */
-public enum StatisticsResultDataType {
+public enum ErrorSampleResultDataType {
     @JsonProperty("null")
     NULL("null"),
 
@@ -50,24 +50,24 @@ public enum StatisticsResultDataType {
 
     private String name;
 
-    StatisticsResultDataType(String name) {
+    ErrorSampleResultDataType(String name) {
         this.name = name;
     }
 
     /**
-     * Returns the statistics type name.
-     * @return Statistics type name.
+     * Returns the data type name.
+     * @return Data type name name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Creates a statistics result data type from the name.
+     * Creates a error sample result data type from the name.
      * @param name result data type name.
-     * @return Statistics result type.
+     * @return Error sample result type.
      */
-    public static StatisticsResultDataType fromName(String name) {
+    public static ErrorSampleResultDataType fromName(String name) {
         switch (name) {
             case "null":
                 return NULL;
