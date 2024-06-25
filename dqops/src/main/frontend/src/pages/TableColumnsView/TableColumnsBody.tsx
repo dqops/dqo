@@ -208,7 +208,12 @@ export default function TableColumnsBody({
         <tr key={index}>
           <td className="border-b border-gray-100 text-right px-2 py-2 text-sm">
             <div className="flex items-center gap-x-2">
-              <SvgIcon name="key" className="w-4 h-4 cursor-move" />
+              {' '}
+              {column.id ? (
+                <SvgIcon name="key" className="w-4 h-4 cursor-move" />
+              ) : (
+                <div className="w-4 h-4" />
+              )}
               <Checkbox
                 checked={!!checkedColumns?.find((x) => x === column.nameOfCol)}
                 onChange={() => {

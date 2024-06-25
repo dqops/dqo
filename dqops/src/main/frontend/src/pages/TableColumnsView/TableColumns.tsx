@@ -110,7 +110,10 @@ const TableColumns = ({
             labels: getLabelsOverview(
               columns.find((col) => col.column_name === column.column_name)
                 ?.labels ?? []
-            )
+            ),
+            id: (columns ?? [])?.find(
+              (col) => col.column_name === column.column_name
+            )?.id
           };
         }
       );

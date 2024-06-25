@@ -54,6 +54,7 @@ export interface MyData {
     | undefined
   )[];
   labels?: string;
+  id?: boolean;
 }
 
 export interface ITableColumnsProps {
