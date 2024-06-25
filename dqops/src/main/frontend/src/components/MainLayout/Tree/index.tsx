@@ -55,6 +55,7 @@ const Tree = () => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
   const [search, setSearch] = useState<Record<string, string>>({});
+  const [funnel, setFunnel] = useState<Record<string, boolean>>({});
 
   const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
@@ -451,7 +452,7 @@ const Tree = () => {
               className="max-w-120 py-4 px-4  delay-300 pointer-events-none"
               placement="top-start"
             >
-              <div className="flex flex-1 justify-between items-center">
+              <div className="flex flex-1 justify-between items-center relative">
                 <div
                   className={clsx(
                     `flex-1 truncate`,
@@ -460,6 +461,20 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
+                {node.level === TREE_LEVEL.SCHEMA && (
+                  <div className="!absolute right-7 h-7 w-7 flex items-center justify-center  rounded-full">
+                    <SvgIcon
+                      name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
+                      className="w-5 h-5"
+                      onClick={() => {
+                        setFunnel({
+                          ...funnel,
+                          [node.id]: !funnel[node.id]
+                        });
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="relative ">
                   {node.parsingYamlError && node.parsingYamlError.length > 0
                     ? renderParsingYamlErrorToolTip(node)
@@ -534,7 +549,7 @@ const Tree = () => {
 
     return (
       <div>
-        {isTableLevel && searchForTable()}
+        {isTableLevel && funnel[parentId] && searchForTable()}
         {groupedData[parentId].map((item) => (
           <>
             <div key={item.id}>{renderTreeNode(item, deep)}</div>
