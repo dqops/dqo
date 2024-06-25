@@ -95,6 +95,7 @@ public class CheckServiceImpl implements CheckService {
      * Runs checks given the filters.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
+     * @param collectErrorSamples Collect error samples while running checks.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @param principal Principal that will be used to run the job.
@@ -103,12 +104,13 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                            TimeWindowFilterParameters timeWindowFilterParameters,
+                                           boolean collectErrorSamples,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun,
                                            DqoUserPrincipal principal) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         RunChecksParameters parameters = new RunChecksParameters(checkSearchFilters, timeWindowFilterParameters,
-                checkExecutionProgressListener, dummyRun);
+                collectErrorSamples, checkExecutionProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 
         this.parentDqoJobQueue.pushJob(runChecksJob, principal);

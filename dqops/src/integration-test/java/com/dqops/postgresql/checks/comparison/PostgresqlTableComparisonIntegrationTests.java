@@ -140,6 +140,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -178,6 +179,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -219,6 +221,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -253,6 +256,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -286,6 +290,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -324,6 +329,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -358,6 +364,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -391,6 +398,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());
@@ -422,6 +430,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
                 comparedTableWrapper,
                 checkSearchFilters,
                 null,
+                false,
                 new CheckExecutionProgressListenerStub(),
                 false,
                 JobCancellationToken.createDummyJobCancellationToken());

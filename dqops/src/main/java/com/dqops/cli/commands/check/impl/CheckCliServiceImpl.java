@@ -65,6 +65,7 @@ public class CheckCliServiceImpl implements CheckCliService {
      * Runs checks given the filters.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
+     * @param collectErrorSamples Collect error samples for failed checks.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @return Check execution summary.
@@ -72,10 +73,11 @@ public class CheckCliServiceImpl implements CheckCliService {
     @Override
     public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
                                            TimeWindowFilterParameters timeWindowFilterParameters,
+                                           boolean collectErrorSamples,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
         DqoUserPrincipal principal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
-        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun, principal);
+        return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, collectErrorSamples, checkExecutionProgressListener, dummyRun, principal);
     }
 
     /**

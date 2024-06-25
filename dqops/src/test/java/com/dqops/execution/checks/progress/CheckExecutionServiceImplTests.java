@@ -28,9 +28,12 @@ import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec
 import com.dqops.checks.table.monitoring.customsql.TableCustomSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.configuration.DqoErrorSamplingConfigurationProperties;
 import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
+import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
@@ -40,12 +43,16 @@ import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
 import com.dqops.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryObjectMother;
+import com.dqops.data.errorsamples.factory.ErrorSamplesTableFactoryImpl;
+import com.dqops.data.errorsamples.normalization.ErrorSamplesNormalizationServiceImpl;
+import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshotFactoryImpl;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryObjectMother;
 import com.dqops.data.checkresults.snapshot.RuleResultsSnapshotFactoryObjectMother;
+import com.dqops.data.storage.DummyParquetPartitionStorageService;
 import com.dqops.execution.CheckExecutionContextObjectMother;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.checks.CheckExecutionServiceImpl;
@@ -55,9 +62,12 @@ import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindService;
 import com.dqops.execution.checks.scheduled.ScheduledTargetChecksFindServiceImpl;
+import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
+import com.dqops.execution.sensors.DataQualitySensorRunnerImpl;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
+import com.dqops.execution.sensors.SensorExecutionRunParametersFactory;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
@@ -151,10 +161,26 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         DqoQueueJobFactoryImpl dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
 
+        ConnectionProviderRegistry connectionProviderRegistry = ConnectionProviderRegistryObjectMother.getInstance();
+        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
+        ErrorSamplesNormalizationServiceImpl errorSamplesNormalizationService =
+                new ErrorSamplesNormalizationServiceImpl(commonTableNormalizationService, new DqoErrorSamplingConfigurationProperties());
+        DummyParquetPartitionStorageService dummyParquetPartitionStorageService = new DummyParquetPartitionStorageService();
+        ErrorSamplesSnapshotFactoryImpl errorSamplesSnapshotFactory =
+                new ErrorSamplesSnapshotFactoryImpl(dummyParquetPartitionStorageService, new ErrorSamplesTableFactoryImpl());
+
+        SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory = SensorExecutionRunParametersObjectMother.getFactory();
+        DataQualitySensorRunnerImpl dataQualitySensorRunner = DataQualitySensorRunnerObjectMother.getDefault();
+
+        TableErrorSamplerExecutionServiceImpl tableErrorSamplerExecutionService = new TableErrorSamplerExecutionServiceImpl(
+                hierarchyNodeTreeSearcher, sensorExecutionRunParametersFactory, dataQualitySensorRunner,
+                connectionProviderRegistry, errorSamplesNormalizationService, errorSamplesSnapshotFactory,
+                new DqoSensorLimitsConfigurationProperties(), userErrorLogger, defaultObservabilityConfigurationService);
+
         TableCheckExecutionServiceImpl tableCheckExecutionService = new TableCheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
-                SensorExecutionRunParametersObjectMother.getFactory(),
-                DataQualitySensorRunnerObjectMother.getDefault(),
+                sensorExecutionRunParametersFactory,
+                dataQualitySensorRunner,
                 ConnectionProviderRegistryObjectMother.getInstance(),
                 sensorReadoutsNormalizationService,
                 ruleEvaluationService,
@@ -165,8 +191,10 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
                 DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
-                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()),
-                defaultObservabilityConfigurationService);
+                userErrorLogger,
+                defaultObservabilityConfigurationService,
+                tableErrorSamplerExecutionService,
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
@@ -194,17 +222,17 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
-                this.executionContext, profilingFilters, null, this.progressListener, true,
+                this.executionContext, profilingFilters, null, false, this.progressListener, true,
                 false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary monitoringSummary = this.sut.executeChecks(
-                this.executionContext, monitoringFilters, null, this.progressListener, true,
+                this.executionContext, monitoringFilters, null, false, this.progressListener, true,
                 false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
-                this.executionContext, partitionedFilters, null, this.progressListener, true,
+                this.executionContext, partitionedFilters, null, false, this.progressListener, true,
                 false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
-                this.executionContext, allFilters, null, this.progressListener, true,
+                this.executionContext, allFilters, null, false, this.progressListener, true,
                 false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken(), principal);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());

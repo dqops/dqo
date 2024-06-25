@@ -90,6 +90,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
                 this.parameters.getTable(),
                 this.parameters.getCheckSearchFilters(),
                 this.parameters.getTimeWindowFilter(),
+                this.parameters.isCollectErrorSamples(),
                 this.parameters.getProgressListener(),
                 this.parameters.isDummyExecution(),
                 jobExecutionContext.getCancellationToken());

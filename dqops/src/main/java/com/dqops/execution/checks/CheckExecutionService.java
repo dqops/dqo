@@ -34,6 +34,7 @@ public interface CheckExecutionService {
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param checkSearchFilters Check search filters to find the right checks.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
+     * @param collectErrorSamples Collect error samples for failed checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
@@ -45,6 +46,7 @@ public interface CheckExecutionService {
     CheckExecutionSummary executeChecks(ExecutionContext executionContext,
                                         CheckSearchFilters checkSearchFilters,
                                         TimeWindowFilterParameters userTimeWindowFilters,
+                                        boolean collectErrorSamples,
                                         CheckExecutionProgressListener progressListener,
                                         boolean dummySensorExecution,
                                         boolean startChildJobsPerTable,
@@ -77,6 +79,7 @@ public interface CheckExecutionService {
      * @param targetTable Full name of the target table.
      * @param checkSearchFilters Check search filters, may not specify the connection and the table name.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
+     * @param collectErrorSamples Collect error samples for failed checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token.
@@ -87,6 +90,7 @@ public interface CheckExecutionService {
                                                        PhysicalTableName targetTable,
                                                        CheckSearchFilters checkSearchFilters,
                                                        TimeWindowFilterParameters userTimeWindowFilters,
+                                                       boolean collectErrorSamples,
                                                        CheckExecutionProgressListener progressListener,
                                                        boolean dummySensorExecution,
                                                        JobCancellationToken jobCancellationToken);

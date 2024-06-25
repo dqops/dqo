@@ -239,6 +239,15 @@ public class RuleEvaluationResult {
     }
 
     /**
+     * Counts results with an issue severity level that is at least <code>minimumSeverityLevel</code>. Use 1 to count checks that failed with a warning, error or fatal severity levels.
+     * @param minimumSeverityLevel Minimum severity level to include in the count.
+     * @return Count of issues at the given or higher severity levels.
+     */
+    public int countIssueSeverityResults(int minimumSeverityLevel) {
+        return this.getSeverityColumn().isLessThanOrEqualTo(minimumSeverityLevel).size();
+    }
+
+    /**
      * Copy a row at index <code>sourceRowIndex</code> from <code>sourceTable</code> source table to the row result table (handled by this instance)
      * at the <code>targetRowIndex</code> target row index.
      * @param targetRowIndex Target row index.

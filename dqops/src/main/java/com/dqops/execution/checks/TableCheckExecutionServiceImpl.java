@@ -38,6 +38,7 @@ import com.dqops.data.errors.normalization.ErrorsNormalizationService;
 import com.dqops.data.errors.normalization.ErrorsNormalizedResult;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationService;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -47,6 +48,8 @@ import com.dqops.execution.checks.comparison.ComparisonDataHolder;
 import com.dqops.execution.checks.progress.*;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationResult;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationService;
+import com.dqops.execution.errorsampling.TableErrorSamplerExecutionService;
+import com.dqops.execution.errorsampling.progress.SilentErrorSamplerExecutionProgressListener;
 import com.dqops.execution.rules.finder.RuleDefinitionFindResult;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.sensors.*;
@@ -73,6 +76,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.HistoricDataPointsGrouping;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.logging.UserErrorLogger;
@@ -110,6 +114,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
     private final UserErrorLogger userErrorLogger;
     private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private final TableErrorSamplerExecutionService tableErrorSamplerExecutionService;
+    private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates a data quality check execution service.
@@ -128,6 +134,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param dqoSensorLimitsConfigurationProperties DQOps sensor limit configuration parameters.
      * @param userErrorLogger Check execution logger.
      * @param defaultObservabilityConfigurationService Default observability configuration service.
+     * @param tableErrorSamplerExecutionService Table error sampling service, to collect error samples for failed data quality checks (when requested).
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public TableCheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -144,7 +152,9 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                           IncidentImportQueueService incidentImportQueueService,
                                           DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
                                           UserErrorLogger userErrorLogger,
-                                          DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+                                          DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+                                          TableErrorSamplerExecutionService tableErrorSamplerExecutionService,
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -160,6 +170,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
         this.userErrorLogger = userErrorLogger;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.tableErrorSamplerExecutionService = tableErrorSamplerExecutionService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -170,6 +182,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param targetTable Target table.
      * @param checkSearchFilters Check search filters.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
+     * @param collectErrorSamples Collect error samples for failed checks.
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token.
@@ -182,6 +195,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                                       TableWrapper targetTable,
                                                       CheckSearchFilters checkSearchFilters,
                                                       TimeWindowFilterParameters userTimeWindowFilters,
+                                                      boolean collectErrorSamples,
                                                       CheckExecutionProgressListener progressListener,
                                                       boolean dummySensorExecution,
                                                       JobCancellationToken jobCancellationToken) {
@@ -194,6 +208,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
         // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
 
+        List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassed = new ArrayList<>();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(tableSpec, checkSearchFilters);
         if (checks.size() == 0) {
             return checkExecutionSummary; // no checks for this table
@@ -225,7 +240,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 .collect(Collectors.toList());
         executeSingleTableChecks(executionContext, userHome, userTimeWindowFilters, progressListener, dummySensorExecution, jobCancellationToken,
                 checkExecutionSummary, singleTableChecks, tableSpec, sensorReadoutsSnapshot, allNormalizedSensorResultsTable, checkResultsSnapshot,
-                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
+                allRuleEvaluationResultsTable, allErrorsTable, executionStatistics, checksNotPassed);
 
         List<AbstractCheckSpec<?, ?, ?, ?>> tableComparisonChecks = checks.stream().filter(c -> c.isTableComparisonCheck())
                 .collect(Collectors.toList());
@@ -249,11 +264,6 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             errorsSnapshot.save();
         }
 
-        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(
-                connectionWrapper, tableSpec, checks, executionStatistics));
-
-        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
-
         if (this.incidentImportQueueService != null && executionStatistics.hasAnyFailedRules()) {
             TableIncidentImportBatch tableIncidentImportBatch = new TableIncidentImportBatch(
                     checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
@@ -261,6 +271,27 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     tableSpec);
             this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch, userDomainIdentity);
         }
+
+        if (collectErrorSamples && !checksNotPassed.isEmpty()) {
+            LocalDateTime errorSamplingSessionStartAt = LocalDateTime.now(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
+            CheckSearchFilters errorSamplingChecksFilters = checkSearchFilters.clone();
+            errorSamplingChecksFilters.setCheckHierarchyIds(
+                    checksNotPassed.stream()
+                            .map(checkSpec -> checkSpec.getHierarchyId())
+                            .collect(Collectors.toSet())
+            );
+
+            this.tableErrorSamplerExecutionService.captureErrorSamplesOnTable(
+                    executionContext, userHome, connectionWrapper, targetTable, errorSamplingChecksFilters,
+                    userTimeWindowFilters, new SilentErrorSamplerExecutionProgressListener(), dummySensorExecution,
+                    errorSamplingSessionStartAt, ErrorSamplesDataScope.table, jobCancellationToken);
+        }
+
+        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinishedEvent(
+                connectionWrapper, tableSpec, checks, executionStatistics));
+
+        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, executionStatistics);
+
 
         return checkExecutionSummary;
     }
@@ -283,7 +314,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             CheckResultsSnapshot checkResultsSnapshot,
             Table allRuleEvaluationResultsTable,
             Table allErrorsTable,
-            TableChecksExecutionStatistics executionStatistics) {
+            TableChecksExecutionStatistics executionStatistics,
+            List<AbstractCheckSpec<?, ?, ?, ?>> checksNotPassedCollector) {
         if (checks.isEmpty()) {
             return;
         }
@@ -349,6 +381,11 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
                     allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
                     executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
+
+                    int countOfNotPassedResults = ruleEvaluationResult.countIssueSeverityResults(1);
+                    if (countOfNotPassedResults > 0) {
+                        checksNotPassedCollector.add(sensorRunParameters.getCheck());
+                    }
                 }
                 catch (Throwable ex) {
                     this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage() +

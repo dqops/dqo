@@ -34474,6 +34474,10 @@ definitions:
         description: "Set the value to true when the data quality checks should be\
           \ executed in a dummy mode (without running checks on the target systems\
           \ and storing the results). Only the jinja2 sensors will be rendered."
+      collect_error_samples:
+        type: "boolean"
+        description: "Set the value to true to collect error samples for failed data\
+          \ quality checks."
       run_checks_result:
         description: "The result of running the check, updated when the run checks\
           \ job finishes. Contains the count of executed checks."
@@ -34492,6 +34496,10 @@ definitions:
           \ is analyzed or the number of recent days/months to analyze for day or\
           \ month partitioned data."
         $ref: "#/definitions/TimeWindowFilterParameters"
+      collect_error_samples:
+        type: "boolean"
+        description: "Set the value to true to collect error samples for failed data\
+          \ quality checks."
       dummy_execution:
         type: "boolean"
         description: "Set the value to true when the data quality checks should be\

@@ -119,6 +119,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
+    @CommandLine.Option(names = {"-ces", "--collect-error-samples"}, description = "Collects error samples for failed data quality checks", defaultValue = "false")
+    private boolean collectErrorSamples;
+
     @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
     private boolean failOnExecutionErrors = true;
 
@@ -331,6 +334,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns true if error samples should be collected while running checks.
+     * @return Collect error samples.
+     */
+    public boolean isCollectErrorSamples() {
+        return collectErrorSamples;
+    }
+
+    /**
+     * Sets the flag to collect error samples for failed checks.
+     * @param collectErrorSamples True - collect error samples.
+     */
+    public void setCollectErrorSamples(boolean collectErrorSamples) {
+        this.collectErrorSamples = collectErrorSamples;
+    }
+
+    /**
      * Gets the progress reporting mode.
      * @return Progress reporting mode.
      */
@@ -384,7 +403,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, this.collectErrorSamples, progressListener, this.dummyRun);
 
         if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
             this.terminalFactory.getWriter().writeLine("No checks with these filters were found.");
