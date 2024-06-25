@@ -13,12 +13,12 @@ import {
 import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { ConnectionApiClient } from '../../../services/apiClient';
+import { TABLES_LIMIT_TREE_PAGING } from '../../../shared/config';
 import { TREE_LEVEL } from '../../../shared/enums';
 import { CustomTreeNode } from '../../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { urlencodeDecoder, useDecodedParams } from '../../../utils';
 import { findTreeNode } from '../../../utils/tree';
-import Button from '../../Button';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
 import AddTableDialog from '../../CustomTree/AddTableDialog';
@@ -55,6 +55,7 @@ const Tree = () => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
   const [search, setSearch] = useState<Record<string, string>>({});
+  const [funnel, setFunnel] = useState<Record<string, boolean>>({});
 
   const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
@@ -451,7 +452,7 @@ const Tree = () => {
               className="max-w-120 py-4 px-4  delay-300 pointer-events-none"
               placement="top-start"
             >
-              <div className="flex flex-1 justify-between items-center">
+              <div className="flex flex-1 justify-between items-center relative">
                 <div
                   className={clsx(
                     `flex-1 truncate`,
@@ -460,6 +461,21 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
+                {node.level === TREE_LEVEL.SCHEMA && (
+                  <div className="!absolute right-8 h-7 w-7 flex items-center justify-center  rounded-full bg-white">
+                    <SvgIcon
+                      name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
+                      className="w-5 h-5"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setFunnel({
+                          ...funnel,
+                          [node.id]: !funnel[node.id]
+                        });
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="relative ">
                   {node.parsingYamlError && node.parsingYamlError.length > 0
                     ? renderParsingYamlErrorToolTip(node)
@@ -510,7 +526,7 @@ const Tree = () => {
       return (
         <div
           className={clsx(
-            'ml-4 pl-7 cursor-pointer flex items-center gap-x-2 text-sm py-1 mb-0.5'
+            'ml-4 pl-2 cursor-pointer flex items-center gap-x-2 text-sm py-1 mb-0.5'
           )}
         >
           <Input
@@ -520,46 +536,40 @@ const Tree = () => {
             onChange={(e) => onChangeSearchTable(e, parentId)}
             onKeyDown={(e) => onKeyDownSearchTable(e, parentId)}
           />
-          <Button
-            leftIcon={<SvgIcon name="search" className="w-3 h-3" />}
-            color="primary"
-            className="ml-0 mr-0 pl-2 pr-2 !h-7"
-            onClick={() =>
-              searchTable(groupedData[parentId], groupedData, search[parentId])
-            }
-          ></Button>
         </div>
       );
     };
 
     return (
       <div>
-        {isTableLevel && searchForTable()}
+        {isTableLevel && funnel[parentId] && searchForTable()}
         {groupedData[parentId].map((item) => (
           <>
             <div key={item.id}>{renderTreeNode(item, deep)}</div>
           </>
         ))}
-        {isTableLevel && !loadedTables[parentId] && (
-          <div
-            className={clsx(
-              'ml-4 pl-7 cursor-pointer flex text-sm hover:bg-gray-100 py-1.5 mb-0.5 text-teal-500',
-              parentId === tablesLoading && 'pl-0'
-            )}
-            onClick={() =>
-              loadMoreTables(
-                groupedData[parentId],
-                groupedData,
-                search[parentId]
-              )
-            }
-          >
-            {parentId === tablesLoading && (
-              <Loader className="w-4 h-4 ml-1" isFull={false} />
-            )}
-            Load more tables
-          </div>
-        )}
+        {isTableLevel &&
+          !loadedTables[parentId] &&
+          groupedData[parentId].length % TABLES_LIMIT_TREE_PAGING === 0 && (
+            <div
+              className={clsx(
+                'ml-4 pl-7 cursor-pointer flex text-sm hover:bg-gray-100 py-1.5 mb-0.5 text-teal-500',
+                parentId === tablesLoading && 'pl-0'
+              )}
+              onClick={() =>
+                loadMoreTables(
+                  groupedData[parentId],
+                  groupedData,
+                  search[parentId]
+                )
+              }
+            >
+              {parentId === tablesLoading && (
+                <Loader className="w-4 h-4 ml-1" isFull={false} />
+              )}
+              Load more tables
+            </div>
+          )}
       </div>
     );
   };

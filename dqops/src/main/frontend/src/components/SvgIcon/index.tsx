@@ -52,7 +52,9 @@ import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
 import { ReactComponent as EditSvg } from './svg/edit.svg';
 import { ReactComponent as FacebookSvg } from './svg/facebook.svg';
 import { ReactComponent as FailedSvg } from './svg/failed.svg';
+import { ReactComponent as FilledFunnel } from './svg/filled-funnel.svg';
 import { ReactComponent as FolderSvg } from './svg/folder.svg';
+import { ReactComponent as Funnel } from './svg/funnel.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
@@ -239,7 +241,9 @@ const iconsMap: any = {
   partitioned_checks: PartitionedChecksSvg,
   minus: MinusSvg,
   question_mark: QuestionmarkSvg,
-  key: KeySvg
+  key: KeySvg,
+  filled_funnel: FilledFunnel,
+  funnel: Funnel
 };
 
 interface SvgIconProps {
