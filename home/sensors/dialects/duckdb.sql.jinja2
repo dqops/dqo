@@ -373,6 +373,16 @@
     {%- endif -%}
 {% endmacro -%}
 
+{% macro render_date_format_cast()%}
+    {%- if is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    {{ render_target_column('analyzed_table') }}
+    {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- else -%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- endif -%}
+{% endmacro %}
+
 {% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
