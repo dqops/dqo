@@ -185,6 +185,7 @@ export default function SelectColumnGrouping({
         title="Data grouping on compared table"
         placeholder="Select column on compared table"
         onChangeDataGroupingArray={onChangeDataGroupingArray}
+        onChangeParameters={onChangeParameters}
         columnOptions={[
           { label: '', value: '' },
           ...columnOptions.comparedColumnsOptions
@@ -206,6 +207,7 @@ export default function SelectColumnGrouping({
             'dqo.sensor.limits.sensor-readout-limit'
           ]
         )}
+        filter={editConfigurationParameters.compared_table_filter}
       />
       <SelectGroupColumnsTable
         className="flex-1"
@@ -216,6 +218,7 @@ export default function SelectColumnGrouping({
           ...columnOptions.referencedColumnsOptions
         ]}
         onChangeDataGroupingArray={onChangeDataGroupingArray}
+        onChangeParameters={onChangeParameters}
         requiredColumnsIndexes={
           getRequiredColumnsIndexes(
             editConfigurationParameters.dataGroupingArray ?? []
@@ -234,6 +237,7 @@ export default function SelectColumnGrouping({
             'dqo.sensor.limits.sensor-readout-limit'
           ]
         )}
+        filter={editConfigurationParameters.reference_table_filter}
       />
     </div>
   );
