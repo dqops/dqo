@@ -24,6 +24,7 @@ export interface IInputProps {
   disabled?: boolean;
   defaultValue?: string;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  labelClassName?: string;
 }
 
 const Input = ({
@@ -42,7 +43,8 @@ const Input = ({
   tooltipText,
   disabled,
   defaultValue,
-  onKeyDown
+  onKeyDown,
+  labelClassName
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
@@ -51,7 +53,8 @@ const Input = ({
           htmlFor={name}
           className={clsx(
             'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
-            error ? 'text-red-500' : ''
+            error ? 'text-red-500' : '',
+            labelClassName
           )}
         >
           <span>{label}</span>
