@@ -40,6 +40,7 @@ public class HadoopConfigurationProviderImpl implements HadoopConfigurationProvi
                 hadoopConfiguration.get("dqo.fake.property"); // called only to load the configuration in the current thread, to avoid race condition
                 hadoopConfiguration.set("fs.inmemory.size.mb", "100"); // max in-memory file system size
                 hadoopConfiguration.set("io.file.buffer.size", "65536"); // copy block size
+                hadoopConfiguration.set("fs.defaultFS", "file:///");
                 hadoopConfiguration.set("fs.ramfs.impl", com.dqops.data.storage.parquet.DqoInMemoryFileSystem.class.getName());
                 hadoopConfiguration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
             }

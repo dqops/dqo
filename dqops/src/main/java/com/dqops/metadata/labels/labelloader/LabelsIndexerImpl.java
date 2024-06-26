@@ -151,6 +151,10 @@ public class LabelsIndexerImpl implements LabelsIndexer {
 
             if (waitTimeoutMilliseconds != null) {
                 booleanCompletableFuture = booleanCompletableFuture.completeOnTimeout(false, waitTimeoutMilliseconds, TimeUnit.MILLISECONDS);
+
+//                CompletableFuture<Boolean> timeoutFuture = new CompletableFuture<Boolean>().completeOnTimeout(false, waitTimeoutMilliseconds, TimeUnit.MILLISECONDS);
+//                booleanCompletableFuture = (CompletableFuture<Boolean>)(CompletableFuture<?>)CompletableFuture.anyOf(booleanCompletableFuture, timeoutFuture);
+
             }
 
             return booleanCompletableFuture;
