@@ -24,6 +24,8 @@ export type TParameters = {
   refSchema?: string;
   refTable?: string;
   dataGroupingArray?: TableComparisonGroupingColumnPairModel[];
+  reference_table_filter?: string;
+  compared_table_filter?: string;
 };
 
 export interface IFilterTemplate {
@@ -34,11 +36,11 @@ export interface IFilterTemplate {
   checkCategory?: string | undefined;
   checkName?: string | undefined;
   activeOffCheck?: boolean;
-  selectedCheck?: CheckTemplate
+  selectedCheck?: CheckTemplate;
 }
-export type TJobDictionary =  DqoJobHistoryEntryModel & {
+export type TJobDictionary = DqoJobHistoryEntryModel & {
   childs: DqoJobHistoryEntryModel[];
-}
+};
 
 export type TJobList = Record<string, string[]>;
 

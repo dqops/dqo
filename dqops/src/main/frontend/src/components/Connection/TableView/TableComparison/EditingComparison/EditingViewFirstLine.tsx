@@ -6,11 +6,11 @@ import { IRootState } from '../../../../../redux/reducers';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
 import { TParameters } from '../../../../../shared/constants';
 import { CheckTypes } from '../../../../../shared/routes';
+import { useDecodedParams } from '../../../../../utils';
 import Button from '../../../../Button';
 import DeleteOnlyDataDialog from '../../../../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../../../../SvgIcon';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
-import { useDecodedParams } from '../../../../../utils';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   selectedReference: string;
@@ -70,7 +70,10 @@ export default function EditingViewFirstLine({
         grouping_columns: editConfigurationParameters.dataGroupingArray,
         check_type:
           checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
-        time_scale: timePartitioned
+        time_scale: timePartitioned,
+        reference_table_filter:
+          editConfigurationParameters.reference_table_filter,
+        compared_table_filter: editConfigurationParameters.compared_table_filter
       }
     );
     onChangeIsUpdated(false);

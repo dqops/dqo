@@ -14,11 +14,11 @@ import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
 import { TParameters } from '../../../../../shared/constants';
 import { CheckTypes } from '../../../../../shared/routes';
+import { useDecodedParams } from '../../../../../utils';
 import Button from '../../../../Button';
 import Input from '../../../../Input';
 import SvgIcon from '../../../../SvgIcon';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
-import { useDecodedParams } from '../../../../../utils';
 
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
@@ -75,7 +75,10 @@ export default function FirstLineNameConfiguration({
           schema_name: editConfigurationParameters.refSchema,
           table_name: editConfigurationParameters.refTable
         },
-        grouping_columns: editConfigurationParameters.dataGroupingArray ?? []
+        grouping_columns: editConfigurationParameters.dataGroupingArray ?? [],
+        reference_table_filter:
+          editConfigurationParameters.reference_table_filter,
+        compared_table_filter: editConfigurationParameters.compared_table_filter
       };
       if (checkTypes === CheckTypes.PROFILING) {
         await TableComparisonsApi.createTableComparisonProfiling(

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import FirstLineNameConfiguration from './CreatingComparison/FirstLineNameConfiguration';
-import EditingViewFirstLine from './EditingComparison/EditingViewFirstLine';
-import SelectConnectionSchemaTableOverlook from './EditingComparison/SelectConnectionSchemaTableOverlook';
-import SelectConnectionSchemaTable from './CreatingComparison/SelectConnectionSchemaTable';
 import { TParameters } from '../../../../shared/constants';
+import FirstLineNameConfiguration from './CreatingComparison/FirstLineNameConfiguration';
 import SelectColumnGrouping from './CreatingComparison/SelectColumnGrouping';
+import SelectConnectionSchemaTable from './CreatingComparison/SelectConnectionSchemaTable';
+import EditingViewFirstLine from './EditingComparison/EditingViewFirstLine';
 import SelectColumnGroupingOverlook from './EditingComparison/SelectColumnGroupingOverlook';
+import SelectConnectionSchemaTableOverlook from './EditingComparison/SelectConnectionSchemaTableOverlook';
 import { TEditReferenceTable } from './TableComparisonConstans';
 
 export default function EditReferenceTable({
