@@ -113,6 +113,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                    setTimeWindowFilter(userTimeWindowFilters);
                    setProgressListener(progressListener);
                    setDummyExecution(dummySensorExecution);
+                   setCollectErrorSamples(collectErrorSamples);
                 }};
                 RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
                 runChecksOnTableJob.setParameters(runChecksOnTableParameters);

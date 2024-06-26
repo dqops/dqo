@@ -244,7 +244,7 @@ public class RuleEvaluationResult {
      * @return Count of issues at the given or higher severity levels.
      */
     public int countIssueSeverityResults(int minimumSeverityLevel) {
-        return this.getSeverityColumn().isLessThanOrEqualTo(minimumSeverityLevel).size();
+        return this.getSeverityColumn().isGreaterThanOrEqualTo(minimumSeverityLevel).size();
     }
 
     /**
