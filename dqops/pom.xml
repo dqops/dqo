@@ -244,7 +244,7 @@
 		<dependency>
 			<groupId>net.tlabs-data</groupId>
 			<artifactId>tablesaw_${tablesaw.version}-parquet</artifactId>
-			<version>0.10.1</version>
+			<version>0.11.0</version>
 			<!-- Exclusions used to limit some useless hadoop dependencies that take the space, following the documentation at: https://github.com/tlabs-data/tablesaw-parquet/blob/master/docs/hadoop_dependency.md -->
 			<exclusions>
 				<exclusion>

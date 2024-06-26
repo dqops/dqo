@@ -147,12 +147,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             }
             TablesawParquetReadOptions readOptions = optionsBuilder.build();
 
-            Table data = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration()).read(readOptions);
-            TableCompressUtility.internStrings(data);
+            try (DqoTablesawParquetReader dqoTablesawParquetReader = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration())) {
+                Table data = dqoTablesawParquetReader.read(readOptions);
+                TableCompressUtility.internStrings(data);
 
-            LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
-            this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedPartition);
-            return loadedPartition;
+                LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
+                this.localFileSystemCache.storeParquetFile(targetParquetFilePath, loadedPartition);
+                return loadedPartition;
+            }
         }
         catch (RuntimeIOException ex) {
             if (ex.getCause() instanceof ChecksumException) {

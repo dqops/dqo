@@ -44,7 +44,7 @@ public class ErrorSamplesTableFactoryImplTests extends BaseTest {
     void createEmptyErrorSamplesTable_whenCalled_thenCreatesTableWithErrorSampleRelatedColumns() {
         Table table = this.sut.createEmptyErrorSamplesTable("tab");
         Assertions.assertNotNull(table);
-        Assertions.assertEquals(39, table.columnCount());
+        Assertions.assertEquals(57, table.columnCount());
     }
 
     // This is a special test, it produces an empty rule results parquet file in the target/parquet-samples/rule-results-empty.parquet file
