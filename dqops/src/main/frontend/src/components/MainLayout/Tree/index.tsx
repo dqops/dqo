@@ -462,10 +462,10 @@ const Tree = () => {
                   {node.label}
                 </div>
                 {node.level === TREE_LEVEL.SCHEMA && (
-                  <div className="!absolute right-8 h-7 w-7 flex items-center justify-center  rounded-full bg-white">
+                  <div className="!absolute right-7 h-5 w-5 flex items-center justify-center  rounded-full bg-white">
                     <SvgIcon
                       name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
-                      className="w-5 h-5"
+                      className="w-3 h-3"
                       onClick={(event) => {
                         event.stopPropagation();
                         setFunnel({
