@@ -76,6 +76,22 @@ const Select = ({
     setMenuWidth(ref.current?.offsetWidth || 0);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = () => {
+      closeMenu();
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, closeMenu]);
+
   return (
     <div className={clsx('relative', className)}>
       {label && (

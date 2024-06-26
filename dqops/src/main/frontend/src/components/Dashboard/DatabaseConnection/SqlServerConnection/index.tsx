@@ -1,15 +1,15 @@
 import React from 'react';
 
-import SectionWrapper from '../../SectionWrapper';
 import {
   SharedCredentialListModel,
   SqlServerParametersSpec,
   SqlServerParametersSpecAuthenticationModeEnum
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Checkbox from '../../../Checkbox';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
+import SectionWrapper from '../../SectionWrapper';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface ISqlServerConnectionProps {
   sqlserver?: SqlServerParametersSpec;
@@ -28,14 +28,15 @@ const authenticationModes = [
       SqlServerParametersSpecAuthenticationModeEnum.active_directory_password
   },
   // service principal is not supported yet
-//   {
-//     label: 'Active Directory Service Principal',
-//     value:
-//       SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
-//   },
+  //   {
+  //     label: 'Active Directory Service Principal',
+  //     value:
+  //       SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
+  //   },
   {
     label: 'Active Directory Default',
-    value: SqlServerParametersSpecAuthenticationModeEnum.active_directory_default
+    value:
+      SqlServerParametersSpecAuthenticationModeEnum.active_directory_default
   }
 ];
 
@@ -89,6 +90,7 @@ const SqlServerConnection = ({
         onChange={(value) => {
           handleChange({ authentication_mode: value });
         }}
+        menuClassName="!top-14"
       />
 
       {sqlserver?.authentication_mode !==

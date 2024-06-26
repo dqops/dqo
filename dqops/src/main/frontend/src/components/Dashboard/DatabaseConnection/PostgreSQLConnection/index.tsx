@@ -5,10 +5,10 @@ import {
   PostgresqlParametersSpecSslmodeEnum,
   SharedCredentialListModel
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
@@ -105,6 +105,7 @@ const PostgreSQLConnection = ({
         className="mb-4"
         value={postgresql?.sslmode}
         onChange={(value) => handleChange({ sslmode: value })}
+        menuClassName="!top-14"
       />
       <JdbcPropertiesView
         properties={postgresql?.properties}

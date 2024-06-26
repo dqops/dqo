@@ -74,6 +74,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         disabled={userProfile.can_manage_data_sources !== true}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
       <Select
         label="GCP project to create BigQuery jobs, where the authenticated principal has bigquery.jobs.create permission"
@@ -91,6 +92,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         disabled={userProfile.can_manage_data_sources !== true}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
       <FieldTypeInput
         className="mb-4"
