@@ -100,7 +100,7 @@ const TimestampsView = () => {
       <SectionWrapper title="Partition checks" className='mt-8'>
         <div className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
           <ColumnSelect
-            label="Date or datetime column name used for date/time partitioning used in partition checks"
+            label="Date or datetime column name used for date/time partitioning in partition checks"
             value={tablePartitioning?.timestamp_columns?.partition_by_column}
             onChange={(column) =>
               handleChangeTimestamps({
