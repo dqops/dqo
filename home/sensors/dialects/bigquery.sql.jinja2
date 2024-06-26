@@ -310,6 +310,48 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- elif (target_column_data_type == 'BIGNUMERIC') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DECIMAL') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BIGDECIMAL') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'FLOAT64') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INT64') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'NUMERIC') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'SMALLINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INTEGER') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BIGINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TINYINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BYTEINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DATE') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DATETIME') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TIME') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TIMESTAMP') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BOOLEAN') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- else -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- endif -%}
+{% endmacro -%}
+
 {%- macro render_regex(regex) -%}
      r{{ make_text_constant(regex) }}
 {%- endmacro -%}

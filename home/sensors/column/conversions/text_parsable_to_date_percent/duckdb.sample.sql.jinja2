@@ -1,0 +1,11 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    TRY_CAST({{lib.render_target_column('analyzed_table')}}::VARCHAR AS DATETIME) IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%d/%m/%Y') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%d-%m-%Y') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%m-%d-%Y') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%d/%m/%Y') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%m/%d/%Y') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%Y/%m/%d') IS NOT NULL
+        OR TRY_STRPTIME({{lib.render_target_column('analyzed_table')}}::VARCHAR, '%b %-d, %Y') IS NOT NULL
+{%- endcall -%}

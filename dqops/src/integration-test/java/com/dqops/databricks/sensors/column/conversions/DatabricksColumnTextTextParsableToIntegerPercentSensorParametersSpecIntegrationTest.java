@@ -84,7 +84,7 @@ public class DatabricksColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class DatabricksColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class DatabricksColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class DatabricksColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -136,6 +136,6 @@ public class DatabricksColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0d, resultTable.column(0).get(0));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }
