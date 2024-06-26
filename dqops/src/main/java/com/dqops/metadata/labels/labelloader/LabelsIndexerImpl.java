@@ -98,6 +98,8 @@ public class LabelsIndexerImpl implements LabelsIndexer {
         this.globalLabelsContainer = globalLabelsContainer;
         this.emitFailureHandlerPublisher = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                 this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+        this.queueEmptyFuture = new CompletableFuture<>();
+        this.queueEmptyFuture.complete(0);
     }
 
     /**
