@@ -44,7 +44,7 @@ const storageTypeOptions = [
   {
     label: 'Google Cloud Storage',
     value: DuckdbParametersSpecStorageTypeEnum.gcs
-  },
+  }
   // todo: uncomment below when implemented
   // {
   //   label: 'Cloudflare R2',
@@ -85,9 +85,9 @@ const azureAuthenticationOptions = [
 ];
 
 enum StoragePrefixes {
-  S3 = "s3://",
-  AZ = "az://",
-  GCS = "gs://",
+  S3 = 's3://',
+  AZ = 'az://',
+  GCS = 'gs://'
 }
 
 const DuckdbConnection = ({
@@ -145,11 +145,11 @@ const DuckdbConnection = ({
     const directories = { ...copiedDatabase?.directories };
 
     Object.keys(directories ?? {}).forEach((key) => {
-
-      if (directories[key].length 
-        && directories[key] !== StoragePrefixes.S3 
-        && directories[key] !== StoragePrefixes.AZ 
-        && directories[key] !== StoragePrefixes.GCS
+      if (
+        directories[key].length &&
+        directories[key] !== StoragePrefixes.S3 &&
+        directories[key] !== StoragePrefixes.AZ &&
+        directories[key] !== StoragePrefixes.GCS
       ) {
         return;
       }
@@ -163,7 +163,6 @@ const DuckdbConnection = ({
       } else {
         directories[key] = '';
       }
-
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
@@ -241,8 +240,8 @@ const DuckdbConnection = ({
           />
         )}
       </>
-    )
-  }
+    );
+  };
 
   const azureStorageForm = (): JSX.Element => {
     return (
@@ -277,7 +276,7 @@ const DuckdbConnection = ({
             />
           </>
         )}
-        
+
         {copiedDatabase?.azure_authentication_mode ===
           DuckdbParametersSpecAzureAuthenticationModeEnum.credential_chain && (
           <>
@@ -336,8 +335,8 @@ const DuckdbConnection = ({
           </>
         )}
       </>
-    )
-  }
+    );
+  };
 
   const googleStorageForm = (): JSX.Element => {
     return (
@@ -362,8 +361,8 @@ const DuckdbConnection = ({
           }
         />
       </>
-    )
-  }
+    );
+  };
 
   return (
     <SectionWrapper
@@ -378,13 +377,17 @@ const DuckdbConnection = ({
         onChange={changeStorageTypeDirectoryPrefixes}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.gcs && googleStorageForm()}
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.gcs && googleStorageForm()}
 
       <FileFormatConfiguration
         fileFormatType={
@@ -422,7 +425,6 @@ const DuckdbConnection = ({
       />
     </SectionWrapper>
   );
-
 };
 
 export default DuckdbConnection;

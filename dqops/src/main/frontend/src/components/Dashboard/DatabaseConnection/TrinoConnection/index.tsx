@@ -88,6 +88,7 @@ const TrinoConnection = ({
         }}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
       {trino?.trino_engine_type ===
         TrinoParametersSpecTrinoEngineTypeEnum.trino && (
@@ -136,6 +137,7 @@ const TrinoConnection = ({
             }}
             onClickValue={setSelectedInput}
             selectedMenu={selectedInput}
+            menuClassName="!top-14"
           />
           {trino?.aws_authentication_mode ===
             TrinoParametersSpecAwsAuthenticationModeEnum.iam && (

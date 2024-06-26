@@ -129,6 +129,7 @@ export const IncidentsNotificationsView = () => {
             value={incidentGrouping?.grouping_level}
             onChange={(value) => onChange({ grouping_level: value })}
             className="text-sm"
+            menuClassName="!top-14"
           />
         </div>
         <div className="flex mb-4">
@@ -138,6 +139,7 @@ export const IncidentsNotificationsView = () => {
             value={incidentGrouping?.minimum_severity}
             onChange={(value) => onChange({ minimum_severity: value })}
             className="text-sm"
+            menuClassName="!top-14"
           />
         </div>
         <div className="flex gap-4 items-center mb-4 text-sm">
