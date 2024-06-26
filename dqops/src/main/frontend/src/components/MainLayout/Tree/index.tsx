@@ -452,7 +452,7 @@ const Tree = () => {
               className="max-w-120 py-4 px-4  delay-300 pointer-events-none"
               placement="top-start"
             >
-              <div className="flex flex-1 justify-between items-center relative">
+              <div className="flex flex-1 justify-between items-center">
                 <div
                   className={clsx(
                     `flex-1 truncate`,
@@ -526,11 +526,11 @@ const Tree = () => {
       return (
         <div
           className={clsx(
-            'ml-4 pl-2 cursor-pointer flex items-center gap-x-2 text-sm py-1 mb-0.5'
+            'ml-4 pl-2 cursor-pointer flex items-center gap-x-2 text-[13px] py-1 mb-0.5'
           )}
         >
           <Input
-            className="w-1/2 !h-7"
+            className="w-1/2 !h-7 !text-[13px]"
             placeholder="Search"
             value={search[parentId]}
             onChange={(e) => onChangeSearchTable(e, parentId)}
@@ -553,7 +553,7 @@ const Tree = () => {
           groupedData[parentId].length % TABLES_LIMIT_TREE_PAGING === 0 && (
             <div
               className={clsx(
-                'ml-4 pl-7 cursor-pointer flex text-sm hover:bg-gray-100 py-1.5 mb-0.5 text-teal-500',
+                'ml-4 pl-7 cursor-pointer flex text-[13px] hover:bg-gray-100 py-1.5 mb-0.5 text-teal-500',
                 parentId === tablesLoading && 'pl-0'
               )}
               onClick={() =>
