@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React from 'react';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
-import Input from '../../Input';
+import TextArea from '../../TextArea';
 
 type SelectDataGroupingForTableProps = {
   title: string;
@@ -113,8 +113,7 @@ export const SelectGroupColumnsTable = ({
             );
           })}
           <tr className="my-2">
-            <Input
-              label="SQL Where expression"
+            <TextArea
               className="w-full my-2 py-2"
               value={filter}
               onChange={(e) =>

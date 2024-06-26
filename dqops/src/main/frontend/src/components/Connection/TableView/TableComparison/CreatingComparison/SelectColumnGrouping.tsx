@@ -179,6 +179,7 @@ export default function SelectColumnGrouping({
             )}
           </div>
         ))}
+        <div className="mt-8">WHERE filters</div>
       </div>
       <SelectGroupColumnsTable
         className="flex-1"
