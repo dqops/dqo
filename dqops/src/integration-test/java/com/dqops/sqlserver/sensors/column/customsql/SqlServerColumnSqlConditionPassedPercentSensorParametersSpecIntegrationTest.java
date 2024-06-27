@@ -159,7 +159,7 @@ public class SqlServerColumnSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
-        this.sut.setSqlCondition("length({column}) >= 8");
+        this.sut.setSqlCondition("LEN(REPLACE({column}, ' ', '_')) >= 8");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
@@ -179,7 +179,7 @@ public class SqlServerColumnSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingButWithIdColumns_thenReturnsErrorSamples() {
-        this.sut.setSqlCondition("length({column}) >= 8");
+        this.sut.setSqlCondition("LEN(REPLACE({column}, ' ', '_')) >= 8");
 
         sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
         sampleTableMetadata.getTableSpec().getColumns().getAt(1).setId(true);
@@ -208,7 +208,7 @@ public class SqlServerColumnSqlConditionPassedPercentSensorParametersSpecIntegra
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithDataGroupingAndWithIdColumns_thenReturnsErrorSamples() {
-        this.sut.setSqlCondition("length({column}) >= 8");
+        this.sut.setSqlCondition("LEN(REPLACE({column}, ' ', '_')) >= 8");
 
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec() {{
             setLevel1(new DataGroupingDimensionSpec() {{

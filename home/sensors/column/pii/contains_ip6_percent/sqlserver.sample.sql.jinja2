@@ -1,4 +1,11 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+
+{% set byte = "[0-9A-Fa-f]" %}
+{% set qbyte = byte + byte + byte + byte %}
+{% set negbyte = "[^g-z]" %}
+{% set tested_column = "CAST(" ~ lib.render_target_column('analyzed_table') ~ " AS NVARCHAR(MAX))" %}
+{% set colons_count = "len(" ~ lib.render_target_column('analyzed_table') ~ ") - len(replace(" ~  lib.render_target_column('analyzed_table') ~ ", ':', ''))" %}
+
 {%- call lib.render_error_sampler() -%}
     {{ tested_column }} LIKE '%{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}:{{qbyte}}%'
                         OR
