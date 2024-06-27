@@ -126,7 +126,7 @@ export const setErrorSamples = (
   activeTab: string,
   checkName: string,
   comparisonName: string,
-  errors: ErrorSamplesListModel[]
+  errorSamples: ErrorSamplesListModel[]
 ) => {
   return {
     type: SOURCE_ACTION.SET_ERROR_SAMPLES,
@@ -134,7 +134,7 @@ export const setErrorSamples = (
     activeTab,
     data: {
       checkName,
-      errorSamples: errors,
+      errorSamples,
       comparisonName
     }
   };
@@ -935,7 +935,7 @@ export const getErrorSamples =
   (dispatch: any) => {
     dispatch(getErrorSamplesRequest(checkType, activeTab));
 
-    const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
+    const successCallback = (res: AxiosResponse<ErrorSamplesListModel[]>) => {
       const errorSamples = [...res.data];
 
       // if (
@@ -953,6 +953,8 @@ export const getErrorSamples =
       // const filteredErrors = errors.filter(
       //   (item) => item.checkName === checkName
       // );
+
+      //todo check if this is correct
 
       dispatch(
         setErrorSamples(

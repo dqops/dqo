@@ -77,14 +77,13 @@ const CheckDetails = ({
     sensorReadouts: readoutsData,
     sensorErrors: errorsData,
     checkFilters: filtersData,
-    errorSamples,
+    errorSamples: errorSamplesData,
     currentJobId
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  console.log(errorSamples);
   const currentJob = currentJobId
     ? job_dictionary_state[currentJobId]
     : undefined;
@@ -101,6 +100,9 @@ const CheckDetails = ({
     : [];
   const sensorErrors = errorsData
     ? errorsData[checkNameWithComparisonName ?? ''] || []
+    : [];
+  const errorSamples = errorSamplesData
+    ? errorSamplesData[checkNameWithComparisonName ?? ''] || []
     : [];
   const filters =
     filtersData && filtersData[checkNameWithComparisonName ?? '']
@@ -354,7 +356,6 @@ const CheckDetails = ({
       isDisabled: check?.supports_error_sampling !== true
     }
   ];
-  console.log(check);
   return (
     <div
       className="my-4"
