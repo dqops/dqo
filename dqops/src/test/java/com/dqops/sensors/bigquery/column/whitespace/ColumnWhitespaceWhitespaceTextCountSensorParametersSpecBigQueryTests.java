@@ -102,8 +102,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -138,8 +138,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -172,8 +172,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -202,8 +202,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -243,8 +243,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -279,8 +279,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -315,8 +315,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -363,8 +363,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -405,8 +405,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
@@ -445,8 +445,8 @@ public class ColumnWhitespaceWhitespaceTextCountSensorParametersSpecBigQueryTest
                 SUM(
                     CASE
                         WHEN %s IS NOT NULL
-                        AND %s <> ''
-                        AND TRIM(%s) = ''
+                                AND %s <> ''
+                                AND TRIM(%s) = ''
                             THEN 1
                         ELSE 0
                     END
