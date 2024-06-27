@@ -13,11 +13,11 @@ interface ErrorSamplesTabProps {
   onChangeMonth: (month: string) => void;
   onChangeDataGroup: (name: string) => void;
 }
-const getRowId = () => {
+const getRowIds = () => {
   const idColumns = [];
   for (let i = 1; i <= 5; i++) {
     idColumns.push({
-      label: `Row id ${i}`,
+      label: `ID ${i}`,
       value: `rowId${i}`,
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     });
@@ -32,7 +32,6 @@ const ErrorSamplesTab = ({
   month,
   onChangeMonth
 }: ErrorSamplesTabProps) => {
-  console.log(errorSamples);
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -42,8 +41,8 @@ const ErrorSamplesTab = ({
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30'
     },
     {
-      label: 'Executed At',
-      value: 'executedAt',
+      label: 'Collected at',
+      value: 'collectedAt',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-60'
     },
 
@@ -57,7 +56,7 @@ const ErrorSamplesTab = ({
       value: 'resultDataType',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
-    ...getRowId(),
+    ...getRowIds(),
     {
       label: 'Data grouping',
       value: 'dataGroup',
@@ -124,8 +123,8 @@ const ErrorSamplesTab = ({
             data={(result.errorSamplesEntries || []).map((item) => ({
               ...item,
               checkName: result.checkName,
-              executedAt: moment(
-                getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+              collectedAt: moment(
+                getLocalDateInUserTimeZone(new Date(String(item.collectedAt)))
               ).format('YYYY-MM-DD HH:mm:ss')
             }))}
             emptyMessage="No Data"
