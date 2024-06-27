@@ -9,6 +9,7 @@ import {
 } from '../api';
 import {
   CheckResultApi,
+  ErrorSamplesApiClient,
   ErrorsApi,
   SensorReadoutsApi
 } from '../services/apiClient';
@@ -645,6 +646,133 @@ export const getIncidentsErrors = async ({
         return res.data;
       } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
         const res = await ErrorsApi.getTablePartitionedErrors(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching errors:', error);
+  }
+};
+
+export const getIncidentsErrorSamples = async ({
+  checkType,
+  connection,
+  schema,
+  table,
+  column,
+  dataGrouping,
+  startDate,
+  endDate,
+  checkName,
+  runCheckType,
+  timeScale,
+  category,
+  comparisonName
+}: {
+  checkType: CheckTypes;
+  connection: string;
+  schema: string;
+  table: string;
+  column?: string;
+  dataGrouping?: string;
+  check?: CheckModel;
+  startDate: string;
+  endDate: string;
+  timeScale?: 'daily' | 'monthly';
+  checkName: string;
+  runCheckType?: string;
+  category?: string;
+  comparisonName?: string;
+}) => {
+  try {
+    if (column) {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await ErrorSamplesApiClient.getColumnProfilingErrorSamples(
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await ErrorSamplesApiClient.getColumnMonitoringErrorSamples(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res =
+          await ErrorSamplesApiClient.getColumnPartitionedErrorSamples(
+            connection,
+            schema,
+            table,
+            column,
+            timeScale || 'daily',
+            dataGrouping,
+            startDate,
+            endDate,
+            checkName,
+            category,
+            comparisonName
+          );
+        return res.data;
+      }
+    } else {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        const res = await ErrorSamplesApiClient.getTableProfilingErrorSamples(
+          connection,
+          schema,
+          table,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        const res = await ErrorSamplesApiClient.getTableMonitoringErrorSamples(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        );
+        return res.data;
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        const res = await ErrorSamplesApiClient.getTablePartitionedErrorSamples(
           connection,
           schema,
           table,

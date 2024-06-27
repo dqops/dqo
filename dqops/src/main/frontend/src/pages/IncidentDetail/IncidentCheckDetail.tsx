@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CheckModel } from '../../api';
 import CheckErrorsTab from '../../components/DataQualityChecks/CheckDetails/CheckErrorsTab';
 import CheckResultsTab from '../../components/DataQualityChecks/CheckDetails/CheckResultsTab';
+import ErrorSamplesTab from '../../components/DataQualityChecks/CheckDetails/ErrorSamplesTab';
 import SensorReadoutsTab from '../../components/DataQualityChecks/CheckDetails/SensorReadoutsTab';
 import IconButton from '../../components/IconButton';
 import SvgIcon from '../../components/SvgIcon';
@@ -10,25 +11,12 @@ import Tabs from '../../components/Tabs';
 import { useTree } from '../../contexts/treeContext';
 import { CheckTypes } from '../../shared/routes';
 import {
+  getIncidentsErrorSamples,
   getIncidentsErrors,
   getIncidentsSensorReadouts,
   getLocalIncidentCheckResults
 } from '../../utils';
 
-const tabs = [
-  {
-    label: 'Check results',
-    value: 'check_results'
-  },
-  {
-    label: 'Sensor readouts',
-    value: 'sensor_readouts'
-  },
-  {
-    label: 'Execution errors',
-    value: 'execution_errors'
-  }
-];
 interface IRefetchResultsProps {
   fetchCheckResults: () => void;
 }
@@ -61,12 +49,14 @@ const IncidentCheckDetails = ({
   onClose,
   category,
   comparisonName,
-  onChangeRefreshCheckObject
+  onChangeRefreshCheckObject,
+  check
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [resultsData, setResultsData] = useState<any>();
   const [readoutsData, setReadoutsData] = useState<any>();
   const [errorsData, setErrorsData] = useState<any>();
+  const [errorSamples, setErrorSamples] = useState<any>();
   const [month, setMonth] = useState('Last 3 months');
   const [dataGroup, setDataGroup] = useState('no grouping');
 
@@ -198,6 +188,42 @@ const IncidentCheckDetails = ({
     ]
   );
 
+  const fetchErrorSamples = useCallback(
+    (month: string, dataGrouping?: string) => {
+      const { startDate, endDate } = calculateDateRange(
+        month ?? 'Last 3 months'
+      );
+
+      getIncidentsErrorSamples({
+        checkType: checkTypes,
+        connection,
+        schema,
+        table,
+        column,
+        dataGrouping,
+        startDate,
+        endDate,
+        runCheckType,
+        timeScale,
+        checkName: checkName ?? '',
+        category,
+        comparisonName
+      }).then((res) => {
+        setErrorSamples(res);
+      });
+    },
+    [
+      runCheckType,
+      checkName,
+      timeScale,
+      connection,
+      schema,
+      table,
+      column,
+      category
+    ]
+  );
+
   const onChangeDataGroup = (value: string) => {
     setDataGroup(value);
     refetch(month, value);
@@ -212,6 +238,7 @@ const IncidentCheckDetails = ({
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
     fetchCheckReadouts(month, name);
+    fetchErrorSamples(month, name);
   };
 
   useEffect(() => {
@@ -229,8 +256,29 @@ const IncidentCheckDetails = ({
       fetchCheckReadouts(month, dataGroup);
     } else if (activeTab === 'execution_errors') {
       fetchCheckErrors(month, dataGroup);
+    } else if (activeTab === 'error_sampling') {
+      fetchErrorSamples(month, dataGroup);
     }
   }, [activeTab]);
+  const tabs = [
+    {
+      label: 'Check results',
+      value: 'check_results'
+    },
+    {
+      label: 'Sensor readouts',
+      value: 'sensor_readouts'
+    },
+    {
+      label: 'Execution errors',
+      value: 'execution_errors'
+    },
+    {
+      label: 'Error sampling',
+      value: 'error_sampling',
+      isDisabled: check?.supports_error_sampling !== true
+    }
+  ];
   return (
     <div
       className="my-4"
@@ -276,6 +324,15 @@ const IncidentCheckDetails = ({
           {activeTab === 'execution_errors' && (
             <CheckErrorsTab
               errors={errorsData || []}
+              dataGroup={dataGroup}
+              month={month}
+              onChangeMonth={onChangeMonth}
+              onChangeDataGroup={onChangeDataGroup}
+            />
+          )}
+          {activeTab === 'error_sampling' && (
+            <ErrorSamplesTab
+              errorSamples={errorSamples || []}
               dataGroup={dataGroup}
               month={month}
               onChangeMonth={onChangeMonth}
