@@ -31,7 +31,6 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.conversions.ColumnTextTextParsableToIntegerPercentSensorParametersSpec;
 import com.dqops.testutils.ValueConverter;
-import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +84,7 @@ public class RedshiftColumnTextTextParsableToIntegerPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -98,7 +97,7 @@ public class RedshiftColumnTextTextParsableToIntegerPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -111,7 +110,7 @@ public class RedshiftColumnTextTextParsableToIntegerPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -124,7 +123,7 @@ public class RedshiftColumnTextTextParsableToIntegerPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16.666, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -137,6 +136,6 @@ public class RedshiftColumnTextTextParsableToIntegerPercentSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(41.379, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

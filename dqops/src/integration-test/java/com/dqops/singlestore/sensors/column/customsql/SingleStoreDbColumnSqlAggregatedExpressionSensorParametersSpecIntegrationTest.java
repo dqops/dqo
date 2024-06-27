@@ -37,6 +37,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @SpringBootTest
 public class SingleStoreDbColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
     private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
@@ -128,5 +131,24 @@ public class SingleStoreDbColumnSqlAggregatedExpressionSensorParametersSpecInteg
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(20L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsDataSamples() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(27, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> String.valueOf(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains("  name"));
     }
 }

@@ -1,0 +1,4 @@
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
+{%- endcall -%}

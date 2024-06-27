@@ -1,0 +1,5 @@
+{% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                       {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
+{%- endcall -%}

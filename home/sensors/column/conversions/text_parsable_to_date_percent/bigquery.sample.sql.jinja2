@@ -1,0 +1,11 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+        OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+        OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+{%- endcall -%}

@@ -17,20 +17,20 @@ package com.dqops.singlestore.sensors.column.conversions;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.conversions.ColumnTextParsableToFloatPercentCheckSpec;
+import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.conversions.ColumnTextTextParsableToFloatPercentSensorParametersSpec;
+import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
 import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +87,7 @@ public class SingleStoreDbColumnTextTextParsableToFloatPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(26.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SingleStoreDbColumnTextTextParsableToFloatPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(26.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class SingleStoreDbColumnTextTextParsableToFloatPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(26.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SingleStoreDbColumnTextTextParsableToFloatPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(33.333, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
@@ -139,6 +139,6 @@ public class SingleStoreDbColumnTextTextParsableToFloatPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(26.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 }

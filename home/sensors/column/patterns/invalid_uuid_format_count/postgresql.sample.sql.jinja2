@@ -1,0 +1,4 @@
+{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+{%- endcall -%}

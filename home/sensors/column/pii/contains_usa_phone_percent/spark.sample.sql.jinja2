@@ -1,0 +1,7 @@
+{% import '/dialects/spark.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    REGEXP(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        "(^|[ \t.,:;\"'`|\n\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \t.,:;\"'`|\n\r]|$)"
+                    )
+{%- endcall -%}

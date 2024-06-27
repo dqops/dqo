@@ -1,0 +1,4 @@
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }}
+{%- endcall -%}

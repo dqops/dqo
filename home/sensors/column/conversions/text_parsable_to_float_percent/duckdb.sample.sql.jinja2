@@ -1,0 +1,4 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^([0-9]+\.?[0-9]*|\.[0-9]+)$') IS TRUE
+{%- endcall -%}

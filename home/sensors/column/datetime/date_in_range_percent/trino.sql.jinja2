@@ -1,21 +1,11 @@
 {% import '/dialects/trino.sql.jinja2' as lib with context -%}
 
-{% macro render_date_format_cast() -%}
-    {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-    {{ lib.render_target_column('analyzed_table') }}
-    {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-    {%- else -%}
-    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-    {%- endif -%}
-{%- endmacro -%}
-
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE CAST(100.0 * SUM(
             CASE
-                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                 ELSE 0
             END
         ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})

@@ -104,8 +104,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -141,8 +141,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -176,8 +176,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -207,8 +207,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -249,8 +249,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -286,8 +286,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -323,8 +323,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -372,8 +372,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -415,8 +415,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END
@@ -456,8 +456,8 @@ public class ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSp
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN (%1$s) IS NOT NULL
-                            AND TRIM(%1$s) <> ''
-                            AND (%1$s) <> TRIM(%1$s)
+                                    AND TRIM(%1$s) <> ''
+                                    AND (%1$s) <> TRIM(%1$s)
                                 THEN 1
                             ELSE 0
                         END

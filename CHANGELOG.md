@@ -1,6 +1,7 @@
-# 1.4.1
-* Small fixes to the code that calculates the current data quality status of tables and columns
-* Fixed permalinks to screens
-* Small changes to handling empty tables in column level data quality checks
-* Incident generation fixed for monitoring checks (full table scan checks)
-
+# 1.5.0
+* Error sampling
+* DuckDB 1.0.0 upgrade
+* Global incident management screen
+* Support for analyzing flat files on GCP
+* Freshness anomaly check
+* Filtering tables by name on the table import screen

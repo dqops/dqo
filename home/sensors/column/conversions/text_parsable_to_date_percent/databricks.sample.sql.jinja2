@@ -1,0 +1,11 @@
+{% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'dd-MM-yyyy') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'MM-dd-yyyy') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'dd/MM/yyyy') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'MM/dd/yyyy') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'yyyy/MM/dd') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'yyyy.MM.dd') IS NOT NULL
+        OR TO_DATE({{lib.render_target_column('analyzed_table')}}, 'MMM d, yyyy') IS NOT NULL
+{%- endcall -%}
