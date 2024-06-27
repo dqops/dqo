@@ -5,7 +5,6 @@ import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
 import Select from '../../Select';
 import { Table } from '../../Table';
-import ErrorText from './ErrorText';
 
 interface ErrorSamplesTabProps {
   errorSamples: ErrorSamplesListModel[];
@@ -14,6 +13,17 @@ interface ErrorSamplesTabProps {
   onChangeMonth: (month: string) => void;
   onChangeDataGroup: (name: string) => void;
 }
+const getRowId = () => {
+  const idColumns = [];
+  for (let i = 1; i <= 5; i++) {
+    idColumns.push({
+      label: `Row id ${i}`,
+      value: `rowId${i}`,
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+    });
+  }
+  return idColumns;
+};
 
 const ErrorSamplesTab = ({
   errorSamples,
@@ -22,45 +32,43 @@ const ErrorSamplesTab = ({
   month,
   onChangeMonth
 }: ErrorSamplesTabProps) => {
+  console.log(errorSamples);
   const { sidebarWidth } = useTree();
 
   const columns = [
+    {
+      label: 'Sample index',
+      value: 'sampleIndex',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30'
+    },
     {
       label: 'Executed At',
       value: 'executedAt',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-60'
     },
+
     {
-      label: 'Error Source',
-      value: 'errorSource',
+      label: 'Result',
+      value: 'result',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
     {
-      label: 'Error Message',
-      value: 'errorMessage',
-      className: 'text-sm !py-2 text-gray-700 w-120',
-      render: (text: string) => <ErrorText text={text} />
+      label: 'Result data type',
+      value: 'resultDataType',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+    },
+    ...getRowId(),
+    {
+      label: 'Data grouping',
+      value: 'dataGroup',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
     {
-      label: 'Readout Id',
-      value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-right'
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700'
     }
   ];
-
-  const getRowId = (sample: ErrorSamplesListModel) => {
-    if (!sample.errorSamplesEntries) return;
-    const idColumns = [];
-    for (let i = 1; i <= 5; i++) {
-      if (`rowId${i}` in sample.errorSamplesEntries) {
-        idColumns.push({
-          label: `rowId${i}`,
-          value: `rowId${i}`,
-          className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
-        });
-      }
-    }
-  };
 
   const monthOptions = useMemo(() => {
     return [
