@@ -4,10 +4,8 @@ Learn about the advanced import configuration of files in DQOps.
 
 ## Import configuration
 
-There are two levels of settings for configuring the import of file formats: the connection and the table.
-
-Both of these settings allow for slightly different configurations of the available sections.
-The file format configuration consists of three sections:
+An import of a file format provides two settings levels - a connection level and a table level.
+They are allow for a different configuration in the three sections:
 
 - File format
 - Virtual schema name to path mappings
@@ -18,7 +16,7 @@ To open the table view, expand the connection, then schema and click on the tabl
 
 ### File format
 
-The selection of the file format can only be configured at the connection settings when creating a new connection.
+The selection of the file format can only be configured at **the connection level** settings when creating a new connection.
 
 !!! warning "Changing the file format"
 
@@ -33,9 +31,10 @@ A connection can store multiple schemas.
 The configuration of the **virtual schema name**, which is an alias for the parent directory with data, is only available at the connection settings level.
 
 A **path** is an absolute path to that parent directory.
-Depending on the setting level, the configured path is utilized differently.
+The path is utilized differently, depending on the configuration level.
+
 The configuration at **the connection level** sets the parent directory in which directories or files are read.
-It is used on the import stage where is used for listing objects in the given directory.
+It is used on the import stage where lists objects in the given directory.
 
 The configuration at **the table level** provides a path pattern to the files allowing to work on them.
 
@@ -54,18 +53,17 @@ The configuration at **the table level** provides a path pattern to the files al
 
 ### Additional format options
 
-When working with file formats, there are additional configuration options that can be set at two levels: connection settings and table settings.
-
-The additional format options set at connection settings are considered as default settings, which are common to all tables in the connection.
+The additional format options are available **on both setting levels**. 
+The options settings on the connection level are considered as default settings, which are common to all tables in the connection.
 Whereas, the additional format options set at table settings override the default settings from the connection when they are configured in the table settings.
 
 
 ## Working with multiple tables in a single schema
 
-### Different CSV or JSON formats
+### Different file formats
 
-If you want to add a CSV or JSON file in a format that differs from the common CSV or JSON format used for other files in the schema,
-override the configuration on that new file (table) level.
+If you want to add a new file that differs in a format from the common setting used for other files in the schema,
+override the configuration on that new file at the table level.
 
 The loaded table will try to use the properties described in the table’s YAML, if available.
 If not, it will use the properties configured in the YAML file of the table connection.
