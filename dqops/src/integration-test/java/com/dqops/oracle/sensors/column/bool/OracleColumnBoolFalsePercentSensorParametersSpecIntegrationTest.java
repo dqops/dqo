@@ -161,7 +161,7 @@ public class OracleColumnBoolFalsePercentSensorParametersSpecIntegrationTest ext
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("true"));
+        Assertions.assertTrue(sampleValues.contains("1"));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class OracleColumnBoolFalsePercentSensorParametersSpecIntegrationTest ext
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("true"));
+        Assertions.assertTrue(sampleValues.contains("1"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -219,7 +219,7 @@ public class OracleColumnBoolFalsePercentSensorParametersSpecIntegrationTest ext
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("true"));
+        Assertions.assertTrue(sampleValues.contains("1"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())

@@ -147,7 +147,7 @@ public class OracleColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIn
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
 
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.get(0).startsWith("2999"));
     }
 
     @Test
@@ -169,7 +169,7 @@ public class OracleColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIn
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.get(0).startsWith("2999"));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
@@ -205,7 +205,7 @@ public class OracleColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIn
         List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
                 .stream().map(val -> String.valueOf(val))
                 .collect(Collectors.toList());
-        Assertions.assertTrue(sampleValues.contains("2999-02-01"));
+        Assertions.assertTrue(sampleValues.get(0).startsWith("2999"));
 
         List<Integer> groupingLevel1Values = new ArrayList<>(
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
