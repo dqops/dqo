@@ -80,7 +80,6 @@ const FieldControl = ({
     (value === undefined ||
       value === '' ||
       (Array.isArray(value) && value.length === 0));
-  console.log(field);
   return (
     <div>
       {type === 'boolean' && (
