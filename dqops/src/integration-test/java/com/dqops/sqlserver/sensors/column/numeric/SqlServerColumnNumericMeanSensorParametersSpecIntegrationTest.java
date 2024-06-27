@@ -22,6 +22,9 @@ import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSource;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -36,6 +39,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -137,5 +144,24 @@ public class SqlServerColumnNumericMeanSensorParametersSpecIntegrationTest exten
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(38, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsDataSamples() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "negative", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> ValueConverter.toDouble(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains(91.0));
     }
 }

@@ -1,0 +1,7 @@
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(13) + '][0-9]%.%[0-9]%.%[0-9]%.%[0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(13) + ']%' OR
+                      {{ lib.render_target_column('analyzed_table') }} LIKE '%[ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(13) + '][0-9]%.%[0-9]%.%[0-9]%.%[0-9]' OR
+                      {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9]%.%[0-9]%.%[0-9]%.%[0-9][ .,:;"''`|' + CHAR(9) + CHAR(10) + CHAR(13) + ']%' OR
+                      {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9]%.%[0-9]%.%[0-9]%.%[0-9]'
+{%- endcall -%}

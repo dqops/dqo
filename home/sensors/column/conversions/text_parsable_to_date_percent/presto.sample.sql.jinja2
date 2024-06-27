@@ -1,0 +1,11 @@
+{% import '/dialects/presto.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    TRY_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d/%m/%Y')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d-%m-%Y')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%m-%d-%Y')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%d/%m/%Y')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%m/%d/%Y')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%Y/%m/%d')) IS NOT NULL
+        OR TRY(DATE_PARSE({{lib.render_column_cast_to_string('analyzed_table')}}, '%b %e, %Y')) IS NOT NULL
+{%- endcall -%}

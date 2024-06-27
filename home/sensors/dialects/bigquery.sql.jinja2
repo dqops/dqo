@@ -310,7 +310,91 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_error_sampler(wrap_condition = '') %}
+{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- elif (target_column_data_type == 'BIGNUMERIC') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DECIMAL') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BIGDECIMAL') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'FLOAT64') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INT64') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'NUMERIC') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'SMALLINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'INTEGER') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BIGINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TINYINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BYTEINT') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DATE') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'DATETIME') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TIME') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'TIMESTAMP') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- elif (target_column_data_type == 'BOOLEAN') -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- else -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- endif -%}
+{% endmacro -%}
+
+{%- macro render_regex(regex) -%}
+     r{{ make_text_constant(regex) }}
+{%- endmacro -%}
+
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        '%Y-%m-%d'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        '%m/%d/%Y'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        '%d/%m/%Y'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        '%Y/%m/%d'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        '%b %d, %Y'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_regex(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+    {%- elif date_format == 'DD-MM-YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
+    {%- elif date_format == 'DD.MM.YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
+    {%- elif date_format == 'YYYY-MM-DD' -%}
+        "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+    {%- elif date_format == 'MM/DD/YYYY'-%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_cast() -%}
+    {%- if is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    {{ render_target_column('analyzed_table') }}
+    {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- else -%}
+    SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- endif -%}
+{%- endmacro -%}
+
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
     SELECT
@@ -346,7 +430,7 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
-        {{- render_where_clause(extra_filter = render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~
+        {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
 SELECT
@@ -376,7 +460,7 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
-    {{- render_where_clause(render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+    {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}

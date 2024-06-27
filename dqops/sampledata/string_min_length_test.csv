@@ -1,21 +1,21 @@
-text:STRING,result:INTEGER,date:LOCAL_DATE
-Sample text,1,2023-01-11
-Sample string,1,2023-01-11
-12345,1,2023-01-11
-Python,1,2023-01-11
-Data,1,2023-01-11
-Google Cloud,1,2023-01-11
-Integer,1,2023-01-11
-Java,1,2023-01-11
-ABCDEFGH,1,2023-01-11
-Brain Embassy,1,2023-01-11
-Home Office,1,2023-01-11
-"Wikipedia is a free online encyclopedia, created and edited by volunteers around the world and hosted by the Wikimedia Foundation.",1,2023-01-11
-"Data science is an interdisciplinary academic field that uses statistics, scientific computing, scientific methods, processes, algorithms and systems to extract or extrapolate knowledge and insights from noisy, structured and unstructured data.",1,2023-01-11
-"Statistics is a mathematical body of science that pertains to the collection, analysis, interpretation or explanation, and presentation of data,[9] or as a branch of mathematics.",1,2023-01-11
-CommandLine,1,2023-01-11
-ABC,0,2023-02-12
-XYZ,0,2022-03-13
-AI,0,2022-04-14
-DQO,0,2022-05-15
-SQL,0,2022-06-16
+id:INTEGER,text:STRING,result:INTEGER,date:LOCAL_DATE
+1,Sample text,1,2023-01-11
+2,Sample string,1,2023-01-11
+3,12345,1,2023-01-11
+4,Python,1,2023-01-11
+5,Data,1,2023-01-11
+6,Google Cloud,1,2023-01-11
+7,Integer,1,2023-01-11
+8,Java,1,2023-01-11
+9,ABCDEFGH,1,2023-01-11
+10,Brain Embassy,1,2023-01-11
+11,Home Office,1,2023-01-11
+12,"Wikipedia is a free online encyclopedia, created and edited by volunteers around the world and hosted by the Wikimedia Foundation.",1,2023-01-11
+13,"Data science is an interdisciplinary academic field that uses statistics, scientific computing, scientific methods, processes, algorithms and systems to extract or extrapolate knowledge and insights from noisy, structured and unstructured data.",1,2023-01-11
+14,"Statistics is a mathematical body of science that pertains to the collection, analysis, interpretation or explanation, and presentation of data,[9] or as a branch of mathematics.",1,2023-01-11
+15,CommandLine,1,2023-01-11
+16,ABC,0,2023-02-12
+17,XYZ,0,2022-03-13
+18,AI,0,2022-04-14
+19,DQO,0,2022-05-15
+20,SQL,0,2022-06-16

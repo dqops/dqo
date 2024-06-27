@@ -1,0 +1,4 @@
+{% import '/dialects/presto.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+{%- endcall -%}

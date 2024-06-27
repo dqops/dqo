@@ -120,10 +120,10 @@ public class ColumnAccuracyTotalMaxMatchPercentSensorParametersSpecBigQueryTests
                 SELECT
                     (SELECT
                         MAX(referenced_table.`result`)
-                    FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip6_test_4377921782622923667` AS referenced_table
+                    FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip6_test_1065018549043604182` AS referenced_table
                     ) AS expected_value,
                     MAX(analyzed_table.`result`) AS actual_value
-                FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_3914369825998677835` AS analyzed_table
+                FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_9089433916044345932` AS analyzed_table
                 WHERE (analyzed_table.`correct` = 1)""";
 
         Assertions.assertEquals(String.format(target_query,
@@ -153,10 +153,10 @@ public class ColumnAccuracyTotalMaxMatchPercentSensorParametersSpecBigQueryTests
                 SELECT
                     (SELECT
                         MAX(referenced_table.`result`)
-                    FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip6_test_4377921782622923667` AS referenced_table
+                    FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip6_test_1065018549043604182` AS referenced_table
                     ) AS expected_value,
                     MAX(analyzed_table.`result`) AS actual_value
-                FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_3914369825998677835` AS analyzed_table
+                FROM `dqo-ai-testing`.`dqo_ai_test_data`.`ip4_test_9089433916044345932` AS analyzed_table
                 WHERE (analyzed_table.`correct` = 1)""";
 
         Assertions.assertEquals(String.format(target_query,

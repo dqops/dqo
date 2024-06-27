@@ -1,0 +1,7 @@
+{% import '/dialects/spark.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "(^|[ \t.,:;\"'`|\n\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \t.,:;\"'`|\n\r]|$)") OR
+                        REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "(^|[ \t.,:;\"'`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;\"'`|\n\r]|$)")
+{%- endcall -%}

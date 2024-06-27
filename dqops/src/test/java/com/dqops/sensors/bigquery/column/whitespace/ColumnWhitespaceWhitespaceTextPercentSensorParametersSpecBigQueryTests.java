@@ -104,8 +104,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -143,8 +143,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -180,8 +180,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -213,8 +213,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -257,8 +257,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -296,8 +296,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -335,8 +335,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -386,8 +386,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -431,8 +431,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END
@@ -474,8 +474,8 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s IS NOT NULL
-                            AND %2$s <> ''
-                            AND TRIM(%3$s) = ''
+                                    AND %2$s <> ''
+                                    AND TRIM(%3$s) = ''
                                 THEN 1
                             ELSE 0
                         END

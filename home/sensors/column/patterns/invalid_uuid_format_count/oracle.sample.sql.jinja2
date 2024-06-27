@@ -1,0 +1,4 @@
+{% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+{%- endcall -%}

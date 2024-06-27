@@ -1,0 +1,4 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\''\''', '-', '')
+{%- endcall -%}

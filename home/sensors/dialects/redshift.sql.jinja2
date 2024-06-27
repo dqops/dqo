@@ -350,7 +350,45 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_error_sampler(wrap_condition = '') %}
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        '%YYYY-%MM-%DD'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        '%MM/%DD/%YYYY'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        '%DD/%MM/%YYYY'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        '%YYYY/%MM/%DD'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        '%Month %DD,%YYYY'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_cast() %}
+    {%- if is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    {{ render_target_column('analyzed_table') }}
+    {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- else -%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_date_format_regex(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+    {%- elif date_format == 'DD-MM-YYYY' -%}
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+    {%- elif date_format == 'DD.MM.YYYY' -%}
+        '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+    {%- elif date_format == 'YYYY-MM-DD' -%}
+        '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+    {%- elif date_format == 'MM/DD/YYYY'-%}
+        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
     SELECT
@@ -386,7 +424,7 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
-        {{- render_where_clause(extra_filter = render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~
+        {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
 SELECT
@@ -416,7 +454,7 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
-    {{- render_where_clause(render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+    {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}

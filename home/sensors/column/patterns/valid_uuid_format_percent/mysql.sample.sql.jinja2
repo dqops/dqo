@@ -1,0 +1,4 @@
+{% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+{%- endcall -%}

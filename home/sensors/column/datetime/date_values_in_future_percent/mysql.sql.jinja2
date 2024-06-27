@@ -1,38 +1,23 @@
 {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
 
-{% macro render_value_in_future() -%}
-    {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                    THEN 1
-                ELSE 0
-            END
-    {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                    THEN 1
-                ELSE 0
-            END
-    {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                    THEN 1
-                ELSE 0
-            END
-    {%- else -%}
-            CASE
-                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
-                    THEN 1
-                ELSE 0
-            END
-    {%- endif -%}
-{%- endmacro -%}
-
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE 100.0 * SUM(
-            {{ render_value_in_future() }}
+            CASE
+                WHEN
+                    {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                    {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                    {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                    {% else -%}
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                    {% endif -%}
+                    THEN 1
+                ELSE 0
+            END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
