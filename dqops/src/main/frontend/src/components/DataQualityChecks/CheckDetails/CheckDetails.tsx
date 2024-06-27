@@ -41,6 +41,11 @@ const tabs = [
   {
     label: 'Execution errors',
     value: 'execution_errors'
+  },
+  {
+    label: 'Error sampling',
+    value: 'error_sampling',
+    isDisabled: true
   }
 ];
 interface IRefetchResultsProps {
@@ -237,6 +242,40 @@ const CheckDetails = ({
       table,
       column,
       category
+    ]
+  );
+
+  const fetchErrorSamplings = useCallback(
+    (month: string, dataGrouping?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(
+        getCheckErrors(checkTypes, firstLevelActiveTab, {
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? '',
+          category,
+          comparisonName
+        })
+      );
+    },
+    [
+      checkName,
+      timeScale,
+      runCheckType,
+      connection,
+      schema,
+      table,
+      column,
+      category,
+      comparisonName
     ]
   );
 

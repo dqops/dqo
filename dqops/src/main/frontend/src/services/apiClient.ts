@@ -31,6 +31,7 @@ import {
   DefaultsApiFactory,
   DictionariesApiFactory,
   EnvironmentApiFactory,
+  ErrorSamplesApiFactory,
   ErrorsApiFactory,
   IncidentsApiFactory,
   JobsApiFactory,
@@ -165,3 +166,9 @@ export const DefaultColumnCheckPatternsApiClient =
 export const SearchApiClient = SearchApiFactory(new Configuration(), '', axios);
 
 export const LabelsApiClient = LabelsApiFactory(new Configuration(), '', axios);
+
+export const ErrorSamplesApiClient = ErrorSamplesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);

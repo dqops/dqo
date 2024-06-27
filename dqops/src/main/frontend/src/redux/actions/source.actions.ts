@@ -22,6 +22,7 @@ import {
   CheckSearchFiltersCheckTypeEnum,
   CheckTemplate,
   ConnectionIncidentGroupingSpec,
+  ErrorSamplesListModel,
   ErrorsListModel,
   SensorReadoutsListModel,
   TableIncidentGroupingSpec
@@ -29,6 +30,7 @@ import {
 import {
   CheckResultApi,
   ConnectionApiClient,
+  ErrorSamplesApiClient,
   ErrorsApi,
   SensorReadoutsApi,
   TableApiClient
@@ -114,6 +116,25 @@ export const setSensorErrors = (
     data: {
       checkName,
       sensorErrors: errors,
+      comparisonName
+    }
+  };
+};
+
+export const setErrorSamples = (
+  checkType: CheckTypes,
+  activeTab: string,
+  checkName: string,
+  comparisonName: string,
+  errors: ErrorSamplesListModel[]
+) => {
+  return {
+    type: SOURCE_ACTION.SET_ERROR_SAMPLES,
+    checkType,
+    activeTab,
+    data: {
+      checkName,
+      errorSamples: errors,
       comparisonName
     }
   };
@@ -313,10 +334,8 @@ export const getCheckResults =
   (dispatch: any) => {
     dispatch(getCheckResultsRequest(checkType, activeTab));
 
-    const successCallback = (
-      res: AxiosResponse<CheckResultsListModel[]>
-    ) => {
-      const filteredChecks = [...res.data]
+    const successCallback = (res: AxiosResponse<CheckResultsListModel[]>) => {
+      const filteredChecks = [...res.data];
 
       dispatch(
         getCheckResultsSuccess(
@@ -324,15 +343,15 @@ export const getCheckResults =
           activeTab,
           checkName,
           filteredChecks ?? []
-          )
-          );
-          
+        )
+      );
+
       dispatch(
         setCheckResults(
           checkType,
           activeTab,
           checkName,
-          comparisonName ?? "",
+          comparisonName ?? '',
           filteredChecks ?? []
         )
       );
@@ -357,7 +376,9 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring
+        ) {
           CheckResultApi.getColumnMonitoringChecksResults(
             connection,
             schema,
@@ -407,7 +428,9 @@ export const getCheckResults =
           )
             .then(successCallback)
             .catch(errCallback);
-        } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        } else if (
+          runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring
+        ) {
           CheckResultApi.getTableMonitoringChecksResults(
             connection,
             schema,
@@ -513,16 +536,25 @@ export const getCheckReadouts =
   (dispatch: any) => {
     dispatch(getCheckReadoutsRequest(checkType, activeTab));
 
-    const successCallback = (
-      res: AxiosResponse<SensorReadoutsListModel[]>
-    ) => {
-      const sensors = [...res.data]
+    const successCallback = (res: AxiosResponse<SensorReadoutsListModel[]>) => {
+      const sensors = [...res.data];
 
-      if (sensors && sensors[0] && sensors[0].sensorReadoutEntries && comparisonName && comparisonName.length > 0) {
-        sensors[0].sensorReadoutEntries = sensors[0].sensorReadoutEntries.filter(entry => entry.tableComparison === comparisonName);
+      if (
+        sensors &&
+        sensors[0] &&
+        sensors[0].sensorReadoutEntries &&
+        comparisonName &&
+        comparisonName.length > 0
+      ) {
+        sensors[0].sensorReadoutEntries =
+          sensors[0].sensorReadoutEntries.filter(
+            (entry) => entry.tableComparison === comparisonName
+          );
       }
-      
-      const filteredSensors = sensors.filter((item) => item.checkName === checkName)
+
+      const filteredSensors = sensors.filter(
+        (item) => item.checkName === checkName
+      );
 
       dispatch(
         setSensorReadouts(
@@ -660,6 +692,39 @@ export const getCheckErrorsSuccess = (
   }
 });
 
+export const getErrorSamplesRequest = (
+  checkType: CheckTypes,
+  activeTab: string
+) => ({
+  type: SOURCE_ACTION.GET_ERROR_SAMPLES_REQUEST,
+  checkType,
+  activeTab
+});
+
+export const getErrorSamplesSuccess = (
+  checkType: CheckTypes,
+  activeTab: string,
+  checkName: string,
+  errorSamples: ErrorSamplesListModel[]
+) => ({
+  type: SOURCE_ACTION.GET_ERROR_SAMPLES_SUCCESS,
+  checkType,
+  activeTab,
+  data: {
+    checkName,
+    errorSamples
+  }
+});
+
+export const getErrorSamplesError = (
+  checkType: CheckTypes,
+  activeTab: string
+) => ({
+  type: SOURCE_ACTION.GET_ERROR_SAMPLES_ERROR,
+  checkType,
+  activeTab
+});
+
 export const getCheckErrorsError = (
   checkType: CheckTypes,
   activeTab: string
@@ -705,13 +770,23 @@ export const getCheckErrors =
     dispatch(getCheckErrorsRequest(checkType, activeTab));
 
     const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
-      const errors = [...res.data]
+      const errors = [...res.data];
 
-      if (errors && errors[0] && errors[0].errorEntries && comparisonName && comparisonName.length > 0) {
-        errors[0].errorEntries = errors[0].errorEntries.filter((item) => item.tableComparison === comparisonName)
+      if (
+        errors &&
+        errors[0] &&
+        errors[0].errorEntries &&
+        comparisonName &&
+        comparisonName.length > 0
+      ) {
+        errors[0].errorEntries = errors[0].errorEntries.filter(
+          (item) => item.tableComparison === comparisonName
+        );
       }
 
-      const filteredErrors = errors.filter((item) => item.checkName === checkName)
+      const filteredErrors = errors.filter(
+        (item) => item.checkName === checkName
+      );
 
       dispatch(
         setSensorErrors(
@@ -808,6 +883,172 @@ export const getCheckErrors =
           .catch(errCallback);
       } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
         ErrorsApi.getTablePartitionedErrors(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      }
+    }
+  };
+
+export const getErrorSamples =
+  (
+    checkType: CheckTypes,
+    activeTab: string,
+    {
+      connection,
+      schema,
+      table,
+      column,
+      dataGrouping,
+      startDate,
+      endDate,
+      checkName,
+      runCheckType,
+      timeScale,
+      category,
+      comparisonName
+    }: {
+      connection: string;
+      schema: string;
+      table: string;
+      column?: string;
+      dataGrouping?: string;
+      startDate: string;
+      endDate: string;
+      timeScale?: 'daily' | 'monthly';
+      checkName: string;
+      runCheckType?: string;
+      category?: string;
+      comparisonName?: string;
+    }
+  ) =>
+  (dispatch: any) => {
+    dispatch(getErrorSamplesRequest(checkType, activeTab));
+
+    const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
+      const errorSamples = [...res.data];
+
+      // if (
+      //   errors &&
+      //   errors[0] &&
+      //   errors[0].errorEntries &&
+      //   comparisonName &&
+      //   comparisonName.length > 0
+      // ) {
+      //   errors[0].errorEntries = errors[0].errorEntries.filter(
+      //     (item) => item.tableComparison === comparisonName
+      //   );
+      // }
+
+      // const filteredErrors = errors.filter(
+      //   (item) => item.checkName === checkName
+      // );
+
+      dispatch(
+        setErrorSamples(
+          checkType,
+          activeTab,
+          checkName,
+          comparisonName ?? '',
+          errorSamples ?? []
+        )
+      );
+    };
+    const errCallback = () => {
+      dispatch(getErrorSamplesError(checkType, activeTab));
+    };
+
+    if (column) {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        ErrorSamplesApiClient.getColumnProfilingErrorSamples(
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorSamplesApiClient.getColumnMonitoringErrorSamples(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        ErrorSamplesApiClient.getColumnPartitionedErrorSamples(
+          connection,
+          schema,
+          table,
+          column,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      }
+    } else {
+      if (runCheckType === CheckSearchFiltersCheckTypeEnum.profiling) {
+        ErrorSamplesApiClient.getTableProfilingErrorSamples(
+          connection,
+          schema,
+          table,
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.monitoring) {
+        ErrorSamplesApiClient.getTableMonitoringErrorSamples(
+          connection,
+          schema,
+          table,
+          timeScale || 'daily',
+          dataGrouping,
+          startDate,
+          endDate,
+          checkName,
+          category,
+          comparisonName
+        )
+          .then(successCallback)
+          .catch(errCallback);
+      } else if (runCheckType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+        ErrorSamplesApiClient.getTablePartitionedErrorSamples(
           connection,
           schema,
           table,
@@ -981,10 +1222,10 @@ export const setMultiCheckFilters = (
   timeScale: 'daily' | 'monthly' | 'advanced'
 ) => ({
   type: SOURCE_ACTION.SET_MULTICHECK_FILTERS,
-  data: {[timeScale]: multiCheckFilters},
+  data: { [timeScale]: multiCheckFilters },
   activeTab,
-  checkType,
-})
+  checkType
+});
 
 export const setMultiCheckSearchedChecks = (
   checkType: CheckTypes,
@@ -993,15 +1234,13 @@ export const setMultiCheckSearchedChecks = (
   timeScale: 'daily' | 'monthly' | 'advanced'
 ) => ({
   type: SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
-  data: {[timeScale]: multiCheckSearchedChecks},
+  data: { [timeScale]: multiCheckSearchedChecks },
   activeTab,
   checkType,
-  timeScale 
-})
+  timeScale
+});
 
-export const setHomeFirstLevelTab = (
-data: string
-) => ({
+export const setHomeFirstLevelTab = (data: string) => ({
   type: SOURCE_ACTION.SET_FIRST_LEVEL_HOME_TAB,
   data
-})
+});
