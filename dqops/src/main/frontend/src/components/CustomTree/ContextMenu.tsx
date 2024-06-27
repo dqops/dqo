@@ -67,12 +67,14 @@ const ContextMenu = ({
 
   const handleRunChecks = (
     filter?: CheckSearchFilters,
-    value?: TimeWindowFilterParameters
+    value?: TimeWindowFilterParameters,
+    collectErrorSample?: boolean
   ) => {
     // console.log(filter, value);
     runPartitionedChecks({
       check_search_filters: filter,
-      time_window_filter: value
+      time_window_filter: value,
+      collect_error_samples: collectErrorSample
     });
     setOpen(false);
   };
@@ -202,9 +204,10 @@ const ContextMenu = ({
                 }}
                 onClick={(
                   filter: CheckSearchFilters,
-                  timeWindowFilter?: TimeWindowFilterParameters
+                  timeWindowFilter?: TimeWindowFilterParameters,
+                  collectErrorSample?: boolean
                 ) => {
-                  handleRunChecks(filter, timeWindowFilter);
+                  handleRunChecks(filter, timeWindowFilter, collectErrorSample);
                   setOpen(false);
                   setRunChecksDialogOpened(false);
                 }}
