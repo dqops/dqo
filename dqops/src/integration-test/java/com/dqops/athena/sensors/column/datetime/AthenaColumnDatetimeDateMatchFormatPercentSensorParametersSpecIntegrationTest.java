@@ -242,7 +242,7 @@ public class AthenaColumnDatetimeDateMatchFormatPercentSensorParametersSpecInteg
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
         Assertions.assertEquals(2, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(7));
+        Assertions.assertTrue(groupingLevel1Values.contains(1));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))

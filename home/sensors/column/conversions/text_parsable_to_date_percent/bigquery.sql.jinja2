@@ -12,7 +12,7 @@ SELECT
                     OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
                     OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
                     OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                    OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                    OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                         THEN 1
                 ELSE 0
             END

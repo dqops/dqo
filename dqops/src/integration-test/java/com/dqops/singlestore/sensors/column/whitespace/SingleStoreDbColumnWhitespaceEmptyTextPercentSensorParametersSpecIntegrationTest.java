@@ -56,7 +56,7 @@ public class SingleStoreDbColumnWhitespaceEmptyTextPercentSensorParametersSpecIn
     @BeforeEach
     void setUp() {
         this.connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, connectionSpec);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceEmptyTextPercentSensorParametersSpec();

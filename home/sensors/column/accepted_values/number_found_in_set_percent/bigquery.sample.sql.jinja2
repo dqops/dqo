@@ -1,4 +1,4 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
-    {{ lib.render_target_column('analyzed_table') }} IN ({{parameters.expected_values|join(', ')}} }})
+    {{ lib.render_target_column('analyzed_table') }} IN ({{parameters.expected_values|join(', ')}})
 {%- endcall -%}
