@@ -27,6 +27,8 @@ import com.dqops.data.errorsamples.models.ErrorSamplesListModel;
 import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshot;
 import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshotFactory;
 import com.dqops.data.normalization.CommonTableNormalizationService;
+import com.dqops.data.storage.LoadedMonthlyPartition;
+import com.dqops.data.storage.ParquetPartitionId;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -34,6 +36,7 @@ import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.tables.TableRowUtility;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +50,7 @@ import tech.tablesaw.selection.Selection;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -84,87 +84,102 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table errorSamplesTable = loadRecentErrorSamples(loadParameters, connectionName, physicalTableName, userDomainIdentity);
-        if (errorSamplesTable == null || errorSamplesTable.isEmpty()) {
+        ErrorSamplesSnapshot samplesSnapshot = loadRecentErrorSamples(loadParameters, connectionName, physicalTableName, userDomainIdentity);
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = samplesSnapshot.getLoadedMonthlyPartitions();
+        if (loadedMonthlyPartitions == null || loadedMonthlyPartitions.isEmpty()) {
             return new ErrorSamplesListModel[0]; // empty array
         }
 
-        Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, errorSamplesTable, loadParameters);
-        if (filteredTable.isEmpty()) {
-            return new ErrorSamplesListModel[0]; // empty array
-        }
+        ArrayList<LoadedMonthlyPartition> loadedPartitions = new ArrayList<>(loadedMonthlyPartitions.values());
+        Lists.reverse(loadedPartitions);
 
-        Table filteredTableByDataGroup = filteredTable;
-        if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
-        }
-
-        if (filteredTableByDataGroup.isEmpty()) {
-            return new ErrorSamplesListModel[0]; // empty array
-        }
-
-        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME); // most recent execution first
-
-        LongColumn checkHashColumn = sortedTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
-        LongColumn checkHashColumnUnsorted = filteredTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-        TextColumn allDataGroupColumn = sortedTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-
-        int rowCount = sortedTable.rowCount();
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            Long checkHash = checkHashColumn.get(rowIndex);
-            String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
-            ErrorSamplesListModel errorsListModel = errorMap.get(checkHash);
-
-            ErrorSampleEntryModel singleModel = null;
-
-            if (errorsListModel != null) {
-                if (errorsListModel.getErrorSamplesEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
-                    continue; // enough results loaded
-                }
-
-                if (!Objects.equals(dataGroupNameForCheck, errorsListModel.getDataGroup())) {
-                    continue; // we are not mixing groups, results for a different group were already loaded
-                }
-            } else {
-                Row row = sortedTable.row(rowIndex);
-                singleModel = createErrorSingleModel(row);
-                String checkCategory = row.getString(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-                String checkDisplayName = row.getString(ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-                String checkName = row.getString(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME);
-                String checkTypeString = row.getString(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME);
-
-                errorsListModel = new ErrorSamplesListModel();
-                errorsListModel.setCheckCategory(checkCategory);
-                errorsListModel.setCheckName(checkName);
-                errorsListModel.setCheckHash(checkHash);
-                errorsListModel.setCheckType(CheckType.fromString(checkTypeString));
-                errorsListModel.setCheckDisplayName(checkDisplayName);
-                errorsListModel.setDataGroup(dataGroupNameForCheck);
-
-                Selection resultsForCheckHash = checkHashColumnUnsorted.isIn(checkHash);
-                List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash)
-                        .unique().asList().stream().sorted().collect(Collectors.toList());
-
-                if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
-                    dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                    dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
-                }
-
-                errorsListModel.setDataGroupsNames(dataGroupsForCheck);
-                errorMap.put(checkHash, errorsListModel);
+        for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions) {
+            if (loadedMonthlyPartition == null || loadedMonthlyPartition.getData() == null) {
+                continue;
             }
 
-            if (singleModel == null) {
-                singleModel = createErrorSingleModel(sortedTable.row(rowIndex));
+            Table errorSamplesTable = loadedMonthlyPartition.getData();
+            Table filteredTable = filterTableToRootChecksContainerAndFilterParameters(rootChecksContainerSpec, errorSamplesTable, loadParameters);
+            if (filteredTable.isEmpty()) {
+                continue; // empty array
             }
 
-            errorsListModel.getErrorSamplesEntries().add(singleModel);
+            Table filteredTableByDataGroup = filteredTable;
+            if (!Strings.isNullOrEmpty(loadParameters.getDataGroupName())) {
+                TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(loadParameters.getDataGroupName()));
+            }
+
+            if (filteredTableByDataGroup.isEmpty()) {
+                continue; // empty array
+            }
+
+            Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
+                    ErrorSamplesColumnNames.EXECUTED_AT_COLUMN_NAME); // most recent execution first
+
+            LongColumn checkHashColumn = sortedTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
+            LongColumn checkHashColumnUnsorted = filteredTable.longColumn(ErrorSamplesColumnNames.CHECK_HASH_COLUMN_NAME);
+            TextColumn allDataGroupColumnUnsorted = filteredTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+            TextColumn allDataGroupColumn = sortedTable.textColumn(ErrorSamplesColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+
+            int rowCount = sortedTable.rowCount();
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                Long checkHash = checkHashColumn.get(rowIndex);
+                String dataGroupNameForCheck = allDataGroupColumn.get(rowIndex);
+                ErrorSamplesListModel errorsListModel = errorMap.get(checkHash);
+
+                ErrorSampleEntryModel singleModel = null;
+
+                if (errorsListModel != null) {
+                    if (errorsListModel.getErrorSamplesEntries().size() >= loadParameters.getMaxResultsPerCheck()) {
+                        continue; // enough results loaded
+                    }
+
+                    if (!Objects.equals(dataGroupNameForCheck, errorsListModel.getDataGroup())) {
+                        continue; // we are not mixing groups, results for a different group were already loaded
+                    }
+                } else {
+                    Row row = sortedTable.row(rowIndex);
+                    singleModel = createErrorSingleModel(row);
+                    String checkCategory = row.getString(ErrorSamplesColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+                    String checkDisplayName = row.getString(ErrorSamplesColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+                    String checkName = row.getString(ErrorSamplesColumnNames.CHECK_NAME_COLUMN_NAME);
+                    String checkTypeString = row.getString(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME);
+
+                    errorsListModel = new ErrorSamplesListModel();
+                    errorsListModel.setCheckCategory(checkCategory);
+                    errorsListModel.setCheckName(checkName);
+                    errorsListModel.setCheckHash(checkHash);
+                    errorsListModel.setCheckType(CheckType.fromString(checkTypeString));
+                    errorsListModel.setCheckDisplayName(checkDisplayName);
+                    errorsListModel.setDataGroup(dataGroupNameForCheck);
+
+                    Selection resultsForCheckHash = checkHashColumnUnsorted.isIn(checkHash);
+                    List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash)
+                            .unique().asList().stream().sorted().collect(Collectors.toList());
+
+                    if (dataGroupsForCheck.size() > 1 && dataGroupsForCheck.contains(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME)) {
+                        dataGroupsForCheck.remove(CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                        dataGroupsForCheck.add(0, CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME);
+                    }
+
+                    errorsListModel.setDataGroupsNames(dataGroupsForCheck);
+                    errorMap.put(checkHash, errorsListModel);
+                }
+
+                if (singleModel == null) {
+                    singleModel = createErrorSingleModel(sortedTable.row(rowIndex));
+                }
+
+                errorsListModel.getErrorSamplesEntries().add(singleModel);
+            }
+
+            if (!errorMap.isEmpty()) {
+                return errorMap.values().toArray(ErrorSamplesListModel[]::new);
+            }
         }
 
-        return errorMap.values().toArray(ErrorSamplesListModel[]::new);
+        return new ErrorSamplesListModel[0]; // no results found
     }
 
     /**
@@ -347,10 +362,10 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
      * @param userDomainIdentity User identity within the data domain.
      * @return Table with error samples for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentErrorSamples(ErrorSamplesFilterParameters loadParameters,
-                                           String connectionName,
-                                           PhysicalTableName physicalTableName,
-                                           UserDomainIdentity userDomainIdentity) {
+    protected ErrorSamplesSnapshot loadRecentErrorSamples(ErrorSamplesFilterParameters loadParameters,
+                                                          String connectionName,
+                                                          PhysicalTableName physicalTableName,
+                                                          UserDomainIdentity userDomainIdentity) {
         ErrorSamplesSnapshot errorSamplesSnapshot = this.errorSamplesSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, ErrorSamplesColumnNames.COLUMN_NAMES_FOR_READ_ONLY_ACCESS, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
@@ -365,7 +380,6 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
         }
 
         errorSamplesSnapshot.ensureNRecentMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth(), maxMonthsToLoad);
-        Table ruleResultsData = errorSamplesSnapshot.getAllData();
-        return ruleResultsData;
+        return errorSamplesSnapshot;
     }
 }
