@@ -86,7 +86,7 @@ public class SparkColumnPatternsTextMatchingDatePatternPercentSensorParametersSp
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+                sampleTableMetadata, "date_iso", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -100,7 +100,7 @@ public class SparkColumnPatternsTextMatchingDatePatternPercentSensorParametersSp
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -114,7 +114,7 @@ public class SparkColumnPatternsTextMatchingDatePatternPercentSensorParametersSp
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -128,7 +128,7 @@ public class SparkColumnPatternsTextMatchingDatePatternPercentSensorParametersSp
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -142,7 +142,7 @@ public class SparkColumnPatternsTextMatchingDatePatternPercentSensorParametersSp
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

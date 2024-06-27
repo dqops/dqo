@@ -6,7 +6,7 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                        CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format_regex(parameters.date_format)}} IS NOT NULL
+                        CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                     THEN 1
                 ELSE 0
             END
