@@ -1,4 +1,4 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
-    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+{%- call lib.render_error_sampler() -%}
+    TRY_CONVERT(INT, {{ lib.render_target_column('analyzed_table') }}) IS NULL
 {%- endcall -%}
