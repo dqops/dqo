@@ -62,7 +62,7 @@ const initialState: ISourceState = {
     tabs: []
   },
   home: {
-    activeTab: window.location.pathname === '/home' ? '/home' : '/tables'
+    activeTab: '/home'
   }
 };
 
