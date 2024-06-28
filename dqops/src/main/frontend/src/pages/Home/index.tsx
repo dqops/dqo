@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -34,6 +34,14 @@ const HomePage = () => {
     dispatch(setHomeFirstLevelTab(activeTab));
     history.push(activeTab);
   };
+
+  useEffect(() => {
+    if (!activeTab) {
+      dispatch(setHomeFirstLevelTab('/home'));
+    } else if (activeTab !== history.location.pathname) {
+      history.push(activeTab);
+    }
+  }, [activeTab]);
 
   return (
     <div style={{ height: 'calc(100vh - 200px)' }}>
