@@ -385,7 +385,7 @@ const Tree = () => {
         <div
           style={{
             position: 'absolute',
-            right: '30px',
+            right: '70px',
             top: '-9px',
             borderRadius: '3px'
           }}
@@ -407,7 +407,7 @@ const Tree = () => {
         <div
           style={{
             position: 'absolute',
-            right: '30px',
+            right: '45px',
             top: '-9px',
             borderRadius: '3px'
           }}

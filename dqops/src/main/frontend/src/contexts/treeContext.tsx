@@ -1656,25 +1656,25 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      if (firstLevelActiveTab === location.pathname) {
+      const value = ROUTES.TABLE_COLUMNS_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? ''
+      );
+
+      if (firstLevelActiveTab === url) {
         return;
       }
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: url,
+          value,
           state: {},
           label: node.label
         })
       );
-      history.push(
-        ROUTES.TABLE_COLUMNS(
-          checkType,
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? ''
-        )
-      );
+      history.push(url);
     } else if (node.level === TREE_LEVEL.TABLE_INCIDENTS) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
