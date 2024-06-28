@@ -245,7 +245,7 @@ public class AthenaColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegra
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(9, resultTable.rowCount());
+        Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals(2, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("row_id_1", resultTable.column(1).name());
@@ -285,7 +285,7 @@ public class AthenaColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegra
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(9, resultTable.rowCount());
+        Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals(4, resultTable.columnCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals("sample_index", resultTable.column(1).name());
@@ -308,8 +308,8 @@ public class AthenaColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegra
                 List.of(resultTable.column("grouping_level_1").asObjectArray())
                         .stream().map(val -> ValueConverter.toInteger(val))
                         .collect(Collectors.toSet()));
-        Assertions.assertEquals(1, groupingLevel1Values.size());
-        Assertions.assertTrue(groupingLevel1Values.contains(0));
+        Assertions.assertEquals(8, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains(3465));
 
         List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
                 .stream().map(val -> ValueConverter.toInteger(val))
