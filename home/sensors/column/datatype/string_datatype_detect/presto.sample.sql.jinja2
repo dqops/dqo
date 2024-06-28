@@ -14,7 +14,7 @@ UNION ALL
 UNION ALL
 (
 {% call lib.render_error_sampler(override_samples_limit = 5) -%} {# floats - 2 #}
-    REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,][0-9]+$')
+    REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
 {%- endcall -%}
 )
 UNION ALL
