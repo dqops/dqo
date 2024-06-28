@@ -424,7 +424,7 @@
     {%- endif -%}
 {% endmacro -%}
 
-{% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true, override_samples_limit = none) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
     SELECT
@@ -477,7 +477,7 @@ SELECT
         {%- endfor -%}
     {%- endif %}
 FROM error_samples sample_table
-WHERE sample_table.sample_index <= {{ error_sampling.samples_limit }}
+WHERE sample_table.sample_index <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
     AND ROWNUM <= {{ error_sampling.total_samples_limit }}
     {%- else -%}
 SELECT
@@ -491,6 +491,6 @@ SELECT
 FROM
     {{ render_target_table() }} analyzed_table
     {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
-    AND ROWNUM <= {{ error_sampling.samples_limit }}
+    AND ROWNUM <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
     {%- endif -%}
 {%- endmacro %}

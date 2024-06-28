@@ -22,6 +22,9 @@ import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSource;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.mysql.BaseMysqlIntegrationTest;
@@ -36,6 +39,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -199,5 +206,113 @@ public class MysqlColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrat
         Assertions.assertEquals(3, ValueConverter.toInteger(resultTable.column(0).get(0)));
         Assertions.assertEquals(2, ValueConverter.toInteger(resultTable.column(0).get(1)));
         Assertions.assertEquals(1, ValueConverter.toInteger(resultTable.column(0).get(2)));
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "mixed8", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(9, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> String.valueOf(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains("2020/02/19"));
+        Assertions.assertTrue(sampleValues.contains("0.192"));
+        Assertions.assertTrue(sampleValues.contains("10"));
+        Assertions.assertTrue(sampleValues.contains("2020-12-10 0:00:01"));
+        Assertions.assertTrue(sampleValues.contains("something"));
+        Assertions.assertTrue(sampleValues.contains("TRUE"));
+        Assertions.assertTrue(sampleValues.contains("2020-01-31T03:51:22Z"));
+        Assertions.assertTrue(sampleValues.contains("abc-001"));
+
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingButWithIdColumns_thenReturnsErrorSamples() {
+        sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "mixed8", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(9, resultTable.rowCount());
+        Assertions.assertEquals(2, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals("row_id_1", resultTable.column(1).name());
+        List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> String.valueOf(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains("2020/02/19"));
+        Assertions.assertTrue(sampleValues.contains("0.192"));
+        Assertions.assertTrue(sampleValues.contains("10"));
+        Assertions.assertTrue(sampleValues.contains("2020-12-10 0:00:01"));
+        Assertions.assertTrue(sampleValues.contains("something"));
+        Assertions.assertTrue(sampleValues.contains("TRUE"));
+        Assertions.assertTrue(sampleValues.contains("2020-01-31T03:51:22Z"));
+        Assertions.assertTrue(sampleValues.contains("abc-001"));
+
+        List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
+                .stream().map(val -> ValueConverter.toInteger(val))
+                .collect(Collectors.toList());
+        Assertions.assertTrue(rowId1Values.contains(3465));
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithDataGroupingAndWithIdColumns_thenReturnsErrorSamples() {
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec() {{
+            setLevel1(new DataGroupingDimensionSpec() {{
+                setSource(DataGroupingDimensionSource.column_value);
+                setColumn("int1");
+            }});
+        }};
+        sampleTableMetadata.getTableSpec().setDefaultDataGroupingConfiguration(dataGroupingConfigurationSpec);
+        sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "mixed8", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(9, resultTable.rowCount());
+        Assertions.assertEquals(4, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals("sample_index", resultTable.column(1).name());
+        Assertions.assertEquals("grouping_level_1", resultTable.column(2).name());
+        Assertions.assertEquals("row_id_1", resultTable.column(3).name());
+        List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> String.valueOf(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains("2020/02/19"));
+        Assertions.assertTrue(sampleValues.contains("0.192"));
+        Assertions.assertTrue(sampleValues.contains("10"));
+        Assertions.assertTrue(sampleValues.contains("2020-12-10 0:00:01"));
+        Assertions.assertTrue(sampleValues.contains("something"));
+        Assertions.assertTrue(sampleValues.contains("TRUE"));
+        Assertions.assertTrue(sampleValues.contains("2020-01-31T03:51:22Z"));
+        Assertions.assertTrue(sampleValues.contains("abc-001"));
+
+        List<Integer> groupingLevel1Values = new ArrayList<>(
+                List.of(resultTable.column("grouping_level_1").asObjectArray())
+                        .stream().map(val -> ValueConverter.toInteger(val))
+                        .collect(Collectors.toSet()));
+        Assertions.assertEquals(1, groupingLevel1Values.size());
+        Assertions.assertTrue(groupingLevel1Values.contains(0));
+
+        List<Integer> rowId1Values = List.of(resultTable.column("row_id_1").asObjectArray())
+                .stream().map(val -> ValueConverter.toInteger(val))
+                .collect(Collectors.toList());
+        Assertions.assertTrue(rowId1Values.contains(3465));
     }
 }

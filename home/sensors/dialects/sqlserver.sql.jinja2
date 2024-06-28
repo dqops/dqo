@@ -396,7 +396,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_error_sampler(wrap_condition = '', render_null_check = true) %}
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true, override_samples_limit = none) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
 WITH error_samples AS (
     SELECT
@@ -449,9 +449,9 @@ SELECT TOP ({{ error_sampling.total_samples_limit }})
         {%- endfor -%}
     {%- endif %}
 FROM error_samples AS sample_table
-WHERE sample_table.sample_index <= {{ error_sampling.samples_limit }}
+WHERE sample_table.sample_index <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
     {%- else -%}
-SELECT TOP ({{ error_sampling.samples_limit }})
+SELECT TOP ({{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }})
     {{ render_target_column('analyzed_table') }} as actual_value
     {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
         {%- for id_column in error_sampling.id_columns -%}
