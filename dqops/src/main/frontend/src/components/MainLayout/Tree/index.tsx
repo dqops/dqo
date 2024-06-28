@@ -389,7 +389,7 @@ const Tree = () => {
             top: '-9px',
             borderRadius: '3px'
           }}
-          className="bg-white "
+          className="bg-white"
         >
           <SvgIcon name="warning" className="w-5 h-5" />
         </div>
