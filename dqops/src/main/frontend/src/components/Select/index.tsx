@@ -55,7 +55,7 @@ const Select = ({
   onClickValue
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
   const selectedOption = useMemo(() => {
     return options.find(
@@ -75,22 +75,6 @@ const Select = ({
   useEffect(() => {
     setMenuWidth(ref.current?.offsetWidth || 0);
   }, []);
-
-  useEffect(() => {
-    const handleClickOutside = () => {
-      closeMenu();
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen, closeMenu]);
 
   return (
     <div className={clsx('relative', className)}>
@@ -128,6 +112,7 @@ const Select = ({
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
               error ? 'border-red-500' : 'border-gray-300'
             )}
+            ref={ref}
             onClick={() =>
               !disabled
                 ? (toggleMenu(), onClickValue && onClickValue(label ?? ''))
