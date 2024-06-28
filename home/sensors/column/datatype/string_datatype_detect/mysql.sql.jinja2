@@ -14,7 +14,7 @@ SELECT
             THEN 1
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
-                CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                         THEN 1
                     ELSE 0
                 END

@@ -16,7 +16,7 @@ SELECT
             SUM(
                 CASE
                     WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                         REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                         REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                         THEN 1
                     ELSE 0
                     END
