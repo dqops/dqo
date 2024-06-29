@@ -309,7 +309,10 @@ export const SensorDetail = () => {
             variant="contained"
             label={'Save'}
             className="w-40 !h-10"
-            disabled={!isUpdated || userProfile.can_manage_definitions !== true}
+            disabled={
+              (!isUpdated && !copied) ||
+              userProfile.can_manage_definitions !== true
+            }
             onClick={onCreateUpdateCheck}
             loading={isUpdating}
           />
