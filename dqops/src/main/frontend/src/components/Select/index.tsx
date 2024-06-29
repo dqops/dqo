@@ -77,7 +77,7 @@ const Select = ({
   }, []);
 
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx('relative', className)} ref={ref}>
       {label && (
         <div className="flex space-x-1">
           <div
@@ -112,7 +112,6 @@ const Select = ({
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
               error ? 'border-red-500' : 'border-gray-300'
             )}
-            ref={ref}
             onClick={() =>
               !disabled
                 ? (toggleMenu(), onClickValue && onClickValue(label ?? ''))
