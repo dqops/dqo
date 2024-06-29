@@ -28,7 +28,11 @@ import { TABLES_LIMIT_TREE_PAGING } from '../shared/config';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { CheckTypes, ROUTES } from '../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder } from '../utils';
+import {
+  getFirstLevelColumnTab,
+  urlencodeDecoder,
+  urlencodeEncoder
+} from '../utils';
 import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
@@ -1711,17 +1715,7 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      let tab = subTabMap[node.id];
-      if (
-        checkType === CheckTypes.MONITORING ||
-        checkType === CheckTypes.PARTITIONED
-      ) {
-        tab = tab || 'daily';
-      } else if (checkType === CheckTypes.PROFILING) {
-        tab = tab || 'statistics';
-      } else {
-        tab = tab || 'detail';
-      }
+      const tab = subTabMap[node.id] || getFirstLevelColumnTab(checkType);
 
       const url = ROUTES.COLUMN_LEVEL_PAGE(
         checkType,
@@ -1742,7 +1736,7 @@ function TreeProvider(props: any) {
             connectionNode?.label ?? ''
           }/schema/${schemaNode?.label ?? ''}/table/${
             tableNode?.label ?? ''
-          }/columns/${node.label}`,
+          }/columns/${node.label}/${tab}`,
           state: {},
           label: node.label
         })
