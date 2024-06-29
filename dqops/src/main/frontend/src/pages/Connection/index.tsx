@@ -19,7 +19,7 @@ import {
   getFirstLevelState
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { getFirstLevelConnectionTab, useDecodedParams } from '../../utils';
 import ColumnListView from '../ColumnListView/ColumnListView';
 import TableListView from '../TableListView/TableListView';
 
@@ -168,8 +168,7 @@ const ConnectionPage = () => {
     if (checkTypes === CheckTypes.SOURCES) {
       return;
     }
-    // if (import_schema === 'true') {
-    setTabs([
+    const newTabs = [
       {
         label: 'Schemas',
         value: 'schemas'
@@ -182,7 +181,12 @@ const ConnectionPage = () => {
         label: 'Columns',
         value: 'columns'
       }
-    ]);
+    ];
+    if (!newTabs.find((x) => x.value === activeTab)) {
+      onChangeTab(getFirstLevelConnectionTab(checkTypes));
+    }
+    setTabs(newTabs);
+
     // } else {
     //   setTabs(initCheckTabs);
     // }

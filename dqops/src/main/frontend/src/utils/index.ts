@@ -245,6 +245,19 @@ export const filterPropertiesDirectories = (db: ConnectionModel) => {
   };
 };
 
+export const getFirstLevelConnectionTab = (checkType: CheckTypes) => {
+  switch (checkType) {
+    case CheckTypes.SOURCES:
+      return 'detail';
+    case CheckTypes.PROFILING:
+      return 'schemas';
+    case CheckTypes.PARTITIONED:
+      return 'schemas';
+    case CheckTypes.MONITORING:
+      return 'schemas';
+  }
+};
+
 export const getFirstLevelTableTab = (checkType: CheckTypes) => {
   switch (checkType) {
     case CheckTypes.SOURCES:
