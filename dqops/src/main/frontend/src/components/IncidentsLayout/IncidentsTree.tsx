@@ -92,7 +92,6 @@ const IncidentsTree = () => {
       }
       return;
     }
-
     // if (path.length < 3) {
     //   return;
     // }
@@ -133,7 +132,7 @@ const IncidentsTree = () => {
   };
   useEffect(() => {
     openCorrectTabFromUrl();
-  }, [window.location.pathname]);
+  }, [window.location.pathname, connections]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
