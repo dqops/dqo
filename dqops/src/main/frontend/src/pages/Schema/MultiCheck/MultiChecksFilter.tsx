@@ -12,7 +12,7 @@ interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
-  timeScale: 'daily' | 'monthly'
+  timeScale: 'daily' | 'monthly';
 }
 export default function MultiChecksFilter({
   filterParameters,
@@ -52,12 +52,12 @@ export default function MultiChecksFilter({
         }))
       );
       if (filterParameters?.checkName && filterParameters?.checkName) {
-      const selectedCheck = res.data.find(
-        (x) =>
-          x.check_category === filterParameters?.checkCategory &&
-          x.check_name === filterParameters?.checkName
-      );
-      onChangeFilterParameters({selectedCheck: selectedCheck});
+        const selectedCheck = res.data.find(
+          (x) =>
+            x.check_category === filterParameters?.checkCategory &&
+            x.check_name === filterParameters?.checkName
+        );
+        onChangeFilterParameters({ selectedCheck: selectedCheck });
       }
     };
     if (checkTypes === CheckTypes.PROFILING) {
@@ -66,18 +66,14 @@ export default function MultiChecksFilter({
         schema,
         filterParameters?.checkTarget
       ).then(processResult);
-    } else if (
-      checkTypes === CheckTypes.MONITORING
-    ) {
+    } else if (checkTypes === CheckTypes.MONITORING) {
       SchemaApiClient.getSchemaMonitoringChecksTemplates(
         connection,
         schema,
         timeScale,
         filterParameters?.checkTarget
       ).then(processResult);
-    } else if (
-      checkTypes === CheckTypes.PARTITIONED
-    ) {
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
       SchemaApiClient.getSchemaPartitionedChecksTemplates(
         connection,
         schema,
@@ -118,67 +114,69 @@ export default function MultiChecksFilter({
           x.check_category === filterParameters?.checkCategory &&
           x.check_name === filterParameters?.checkName
       );
-      onChangeFilterParameters({selectedCheck: selectedCheck});
+      onChangeFilterParameters({ selectedCheck: selectedCheck });
     }
   }, [filterParameters?.checkName, timeScale, connection, schema]);
 
   return (
     <div className="flex w-full">
-        <div className="flex flex-col gap-3 w-45">
-          <p>Check target</p>
-          <div className="flex gap-x-3 mr-10">
-            <RadioButton
-              label="Table"
-              onClick={() => {
-                onChangeFilterParameters({
-                  checkTarget: 'table',
-                  columnNamePattern: undefined,
-                  columnDataType: undefined,
-                  tableNamePattern: undefined,
-                  checkName: undefined,
-                  checkCategory: undefined
-                }),
-                  onChangeChecks([]);
-                setCheckNameOptions([]);
-              }}
-              checked={filterParameters?.checkTarget === 'table'}
-            />
-            <RadioButton
-              label="Column"
-              onClick={() => {
-                onChangeFilterParameters({
-                  checkTarget: 'column',
-                  checkName: undefined,
-                  checkCategory: undefined
-                });
+      <div className="flex flex-col gap-3 w-45">
+        <p>Check target</p>
+        <div className="flex gap-x-3 mr-10">
+          <RadioButton
+            label="Table"
+            onClick={() => {
+              onChangeFilterParameters({
+                checkTarget: 'table',
+                columnNamePattern: undefined,
+                columnDataType: undefined,
+                tableNamePattern: undefined,
+                checkName: undefined,
+                checkCategory: undefined
+              }),
                 onChangeChecks([]);
-                setCheckNameOptions([]);
-              }}
-              checked={filterParameters?.checkTarget === 'column'}
-            />
-          </div>
+              setCheckNameOptions([]);
+            }}
+            checked={filterParameters?.checkTarget === 'table'}
+          />
+          <RadioButton
+            label="Column"
+            onClick={() => {
+              onChangeFilterParameters({
+                checkTarget: 'column',
+                checkName: undefined,
+                checkCategory: undefined
+              });
+              onChangeChecks([]);
+              setCheckNameOptions([]);
+            }}
+            checked={filterParameters?.checkTarget === 'column'}
+          />
         </div>
-          <Select
-            label="Check category"
-            options={sortObjects(checkCategoryOptions)}
-            value={filterParameters?.checkCategory}
-            onChange={(value) => {
-              onChangeFilterParameters({ checkCategory: value });
-              onChangeCheckOptions();
-              onChangeChecks([]);
-            }}
-            className='min-w-60'
-          />
-          <Select
-            options={checkNameOptions}
-            label="Check name"
-            value={filterParameters?.checkName}
-            onChange={(value) => {
-              onChangeFilterParameters({ checkName: value });
-              onChangeChecks([]);
-            }}
-            className='ml-10 min-w-60'
-          />
+      </div>
+      <Select
+        label="Check category"
+        options={sortObjects(checkCategoryOptions)}
+        value={filterParameters?.checkCategory}
+        onChange={(value) => {
+          onChangeFilterParameters({ checkCategory: value });
+          onChangeCheckOptions();
+          onChangeChecks([]);
+        }}
+        className="min-w-60"
+        menuClassName="!top-14"
+      />
+      <Select
+        options={checkNameOptions}
+        label="Check name"
+        value={filterParameters?.checkName}
+        onChange={(value) => {
+          onChangeFilterParameters({ checkName: value });
+          onChangeChecks([]);
+        }}
+        className="ml-10 min-w-60"
+        menuClassName="!top-14"
+      />
     </div>
   );
 }

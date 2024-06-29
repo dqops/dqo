@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function usePopup(ref: any) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const openMenu = () => setIsOpen(true);
+  const closeMenu = () => setIsOpen(false);
+
+  const toggleMenu = () => setIsOpen((prevIsOpen) => !prevIsOpen);
+
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
-        setIsOpen(false);
+        closeMenu();
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -14,11 +19,6 @@ function usePopup(ref: any) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
-
-  const openMenu = () => setIsOpen(true);
-  const closeMenu = () => setIsOpen(false);
-
-  const toggleMenu = () => setIsOpen((prevIsOpen) => !prevIsOpen);
 
   return {
     isOpen,
