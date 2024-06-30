@@ -98,42 +98,42 @@ const ConnectionActionGroup = ({
             onClick={() => setIsOpen(true)}
             disabled={userProfile.can_manage_data_sources !== true}
           />
-
-          {tab === 'schemas' ? (
-            <Button
-              className="!h-10"
-              label="Manage metadata"
-              color={
-                !(userProfile.can_manage_data_sources !== true)
-                  ? 'primary'
-                  : 'secondary'
-              }
-              variant={
-                !(userProfile.can_manage_data_sources !== true)
-                  ? 'outlined'
-                  : 'contained'
-              }
-              onClick={importMetaData}
-              disabled={userProfile.can_manage_data_sources !== true}
-            />
-          ) : (
-            <Button
-              className="!h-10"
-              label="Import metadata"
-              color={
-                !(userProfile.can_manage_data_sources !== true)
-                  ? 'primary'
-                  : 'secondary'
-              }
-              variant={
-                !(userProfile.can_manage_data_sources !== true)
-                  ? 'outlined'
-                  : 'contained'
-              }
-              onClick={() => importMetaData()}
-              disabled={userProfile.can_manage_data_sources !== true}
-            />
-          )}
+          {!location.href.includes('schemas?import_schema=true') &&
+            (tab === 'schemas' ? (
+              <Button
+                className="!h-10"
+                label="Manage metadata"
+                color={
+                  !(userProfile.can_manage_data_sources !== true)
+                    ? 'primary'
+                    : 'secondary'
+                }
+                variant={
+                  !(userProfile.can_manage_data_sources !== true)
+                    ? 'outlined'
+                    : 'contained'
+                }
+                onClick={importMetaData}
+                disabled={userProfile.can_manage_data_sources !== true}
+              />
+            ) : (
+              <Button
+                className="!h-10"
+                label="Import metadata"
+                color={
+                  !(userProfile.can_manage_data_sources !== true)
+                    ? 'primary'
+                    : 'secondary'
+                }
+                variant={
+                  !(userProfile.can_manage_data_sources !== true)
+                    ? 'outlined'
+                    : 'contained'
+                }
+                onClick={() => importMetaData()}
+                disabled={userProfile.can_manage_data_sources !== true}
+              />
+            ))}
         </>
       )}
 
