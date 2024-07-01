@@ -22,7 +22,6 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { SensorsApi } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
-import { urlencodeDecoder } from '../../utils';
 import ProvideSensor from './ProvideSensor';
 import SensorDefinition from './SensorDefinition';
 
@@ -85,9 +84,8 @@ export const SensorDetail = () => {
   const { full_sensor_name, sensorDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { refreshSensorsTreeIndicator } = useSelector(
-    (state: IRootState) => state.definition
-  );
+  const { refreshSensorsTreeIndicator, activeTab: firstLevelActiveTab } =
+    useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -126,16 +124,8 @@ export const SensorDetail = () => {
     dispatch(
       refreshSensorsFolderTree(refreshSensorsTreeIndicator ? false : true)
     );
-    dispatch(
-      closeFirstLevelTab(
-        urlencodeDecoder(
-          '/definitions/sensors/' +
-            String(full_sensor_name).split('/')[
-              String(full_sensor_name).split('/').length - 1
-            ]
-        )
-      )
-    );
+
+    dispatch(closeFirstLevelTab(firstLevelActiveTab));
   };
 
   const handleChangeProvideSensor = (
