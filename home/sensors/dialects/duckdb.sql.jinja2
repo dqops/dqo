@@ -419,6 +419,10 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
+    {% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+    LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+    {% endif -%}
         {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
@@ -449,6 +453,10 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
+{% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+{% endif %}
     {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
     {%- endif -%}
