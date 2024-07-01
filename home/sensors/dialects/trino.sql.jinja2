@@ -24,6 +24,14 @@
     {{ quote_identifier(macro_catalog_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
+{%- macro render_referenced_table(foreign_table) -%}
+{%- if foreign_table.find(".") < 0 -%}
+   {{ quote_identifier(macro_catalog_name) }}.{{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(foreign_table) -}}
+{%- else -%}
+   {{ foreign_table }}
+{%- endif -%}
+{%- endmacro -%}
+
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}
         ({{ calculated_column_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
@@ -450,6 +458,10 @@ WITH error_samples AS (
         ) AS sample_index
     FROM
         {{ render_target_table() }} AS analyzed_table
+    {% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+    LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+    {% endif %}
         {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
 )
@@ -480,6 +492,10 @@ SELECT
     {%- endif %}
 FROM
     {{ render_target_table() }} AS analyzed_table
+{% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+{% endif %}
     {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
 LIMIT {{ error_sampling.samples_limit }}
     {%- endif -%}
