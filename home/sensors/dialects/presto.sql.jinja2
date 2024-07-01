@@ -416,7 +416,21 @@
 
 {% macro render_error_sampler(wrap_condition = '', render_null_check = true, override_samples_limit = none) %}
     {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
-WITH error_samples AS (
+SELECT
+    sample_table.sample_value AS actual_value,
+    sample_table.sample_index AS sample_index
+    {%- for attribute in data_groupings -%}
+        {{ ',' }}
+    sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
+    {%- endfor -%}
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM
+(
     SELECT
         {{ render_target_column('analyzed_table') }} AS sample_value
         {{- render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
@@ -452,21 +466,7 @@ WITH error_samples AS (
         {{ render_target_table() }} AS analyzed_table
         {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
              wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
-)
-SELECT
-    sample_table.sample_value AS actual_value,
-    sample_table.sample_index AS sample_index
-    {%- for attribute in data_groupings -%}
-        {{ ',' }}
-    sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
-    {%- endfor -%}
-    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
-        {%- for id_column in error_sampling.id_columns -%}
-            {{ ',' }}
-    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
-        {%- endfor -%}
-    {%- endif %}
-FROM error_samples AS sample_table
+) AS sample_table
 WHERE sample_table.sample_index <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
 LIMIT {{ error_sampling.total_samples_limit }}
     {%- else -%}
