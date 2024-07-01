@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 
 import clsx from 'clsx';
 
@@ -39,7 +45,7 @@ const SelectInput = ({
   error,
   limit
 }: SelectInputProps) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
   const [isChanged, setIsChanged] = useState(false);
 
@@ -67,6 +73,18 @@ const SelectInput = ({
     }
     setIsChanged(true);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
 
   const dataOptions = limit ? filteredOptions.slice(0, limit) : filteredOptions;
 

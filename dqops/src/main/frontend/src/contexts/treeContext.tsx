@@ -28,7 +28,12 @@ import { TABLES_LIMIT_TREE_PAGING } from '../shared/config';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { CheckTypes, ROUTES } from '../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder } from '../utils';
+import {
+  getFirstLevelColumnTab,
+  getFirstLevelTableTab,
+  urlencodeDecoder,
+  urlencodeEncoder
+} from '../utils';
 import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
@@ -1160,13 +1165,14 @@ function TreeProvider(props: any) {
         node.label,
         defaultConnectionTab
       );
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.CONNECTION_LEVEL_VALUE(checkType, node.label);
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: ROUTES.CONNECTION_LEVEL_VALUE(checkType, node.label),
+          value,
           state: {},
           label: node.label
         })
@@ -1180,8 +1186,12 @@ function TreeProvider(props: any) {
         node.label,
         'tables'
       );
-
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.SCHEMA_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        node.label
+      );
+      if (firstLevelActiveTab === value) {
         return;
       }
 
@@ -1209,17 +1219,7 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      let tab = subTabMap[node.id];
-      if (
-        checkType === CheckTypes.MONITORING ||
-        checkType === CheckTypes.PARTITIONED
-      ) {
-        tab = tab || 'table-quality-status-daily';
-      } else if (checkType === CheckTypes.PROFILING) {
-        tab = tab || 'statistics';
-      } else {
-        tab = tab || 'detail';
-      }
+      const tab = subTabMap[node.id] || getFirstLevelTableTab(checkType);
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
         checkType,
@@ -1229,19 +1229,21 @@ function TreeProvider(props: any) {
         tab
       );
 
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.TABLE_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        node.label
+      );
+
+      if (firstLevelActiveTab === value) {
         return;
       }
 
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: ROUTES.TABLE_LEVEL_VALUE(
-            checkType,
-            connectionNode?.label ?? '',
-            schemaNode?.label ?? '',
-            node.label
-          ),
+          value,
           state: {},
           label: node.label
         })
@@ -1342,7 +1344,7 @@ function TreeProvider(props: any) {
         );
       }
 
-      if (firstLevelActiveTab === url) {
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
@@ -1452,7 +1454,7 @@ function TreeProvider(props: any) {
         );
       }
 
-      if (url === firstLevelActiveTab) {
+      if (value === firstLevelActiveTab) {
         return;
       }
 
@@ -1656,25 +1658,25 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      if (firstLevelActiveTab === location.pathname) {
+      const value = ROUTES.TABLE_COLUMNS_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? ''
+      );
+
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: url,
+          value,
           state: {},
           label: node.label
         })
       );
-      history.push(
-        ROUTES.TABLE_COLUMNS(
-          checkType,
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? ''
-        )
-      );
+      history.push(url);
     } else if (node.level === TREE_LEVEL.TABLE_INCIDENTS) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -1711,17 +1713,7 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      let tab = subTabMap[node.id];
-      if (
-        checkType === CheckTypes.MONITORING ||
-        checkType === CheckTypes.PARTITIONED
-      ) {
-        tab = tab || 'daily';
-      } else if (checkType === CheckTypes.PROFILING) {
-        tab = tab || 'statistics';
-      } else {
-        tab = tab || 'detail';
-      }
+      const tab = subTabMap[node.id] || getFirstLevelColumnTab(checkType);
 
       const url = ROUTES.COLUMN_LEVEL_PAGE(
         checkType,
@@ -1731,32 +1723,26 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
-      if (url === firstLevelActiveTab) {
+      const value = ROUTES.COLUMN_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        node.label
+      );
+      if (value === firstLevelActiveTab) {
         return;
       }
 
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: `/${checkType}/connection/${
-            connectionNode?.label ?? ''
-          }/schema/${schemaNode?.label ?? ''}/table/${
-            tableNode?.label ?? ''
-          }/columns/${node.label}`,
+          value,
           state: {},
           label: node.label
         })
       );
-      history.push(
-        ROUTES.COLUMN_LEVEL_PAGE(
-          checkType,
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? '',
-          node.label,
-          tab
-        )
-      );
+      history.push(url);
     } else {
       history.push('/checks');
     }

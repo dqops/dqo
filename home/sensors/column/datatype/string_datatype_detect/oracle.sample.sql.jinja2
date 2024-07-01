@@ -1,0 +1,79 @@
+{% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+(
+{%- call lib.render_error_sampler(render_null_check = false, override_samples_limit = 5) -%} {# nulls - null #}
+    {{ lib.render_target_column('analyzed_table') }} IS NULL
+        OR TRIM({{ lib.render_target_column('analyzed_table') }}) IS NULL
+{%- endcall %}
+)
+UNION ALL
+(
+{%- call lib.render_error_sampler(override_samples_limit = 5) -%} {# integers - 1 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[-+]?\d+$')
+{%- endcall %}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# floats - 2 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
+{%- endcall -%}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# dates - 3 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+{%- endcall -%}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# datetimes - 4 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])[:]([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+{%- endcall -%}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# timestamps - 5 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[[:space:]]?[T]?[[:space:]]?([0]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[[:space:]]?([.]\d{0,12})?[[:space:]]?((GMT)|(UTC))?(([-+]\d{2}[:]?(\d{2})?)|[zZ])?)$')
+{%- endcall -%}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# booleans - 6 #}
+    REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$')
+{%- endcall -%}
+)
+UNION ALL
+(
+{% call lib.render_error_sampler(override_samples_limit = 5) -%} {# texts - 7 #}
+    NOT( {{ lib.render_target_column('analyzed_table') }} IS NULL
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[-+]?\d+$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])[:]([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])\s([0]|2[0-3]|[01][0-9])\:([0-5][0-9])\:([0-5][0-9])\s?(am|pm|AM|PM)?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[[:space:]]?[T]?[[:space:]]?([0]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[[:space:]]?([.]\d{0,12})?[[:space:]]?((GMT)|(UTC))?(([-+]\d{2}[:]?(\d{2})?)|[zZ])?)$')
+        OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$')
+    )
+    AND TRIM({{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+{%- endcall -%}
+)

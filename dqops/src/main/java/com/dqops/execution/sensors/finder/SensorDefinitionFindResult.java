@@ -21,6 +21,7 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.time.Instant;
 
@@ -38,6 +39,7 @@ public class SensorDefinitionFindResult {
     private final HomeFilePath errorSamplingTemplateFilePath;
     private final String errorSamplingTemplateText;
     private final Instant errorSamplingTemplateLastModified;
+    private final boolean errorSamplingTemplatePresent;
     private final ProviderType providerType;
 
     /**
@@ -69,6 +71,7 @@ public class SensorDefinitionFindResult {
         this.sqlTemplateLastModified = sqlTemplateLastModified != null ? sqlTemplateLastModified : Instant.now();
         this.errorSamplingTemplateText = errorSamplingTemplateText;
         this.errorSamplingTemplateLastModified = errorSamplingTemplateLastModified != null ? errorSamplingTemplateLastModified : Instant.now();
+        this.errorSamplingTemplatePresent = errorSamplingTemplateLastModified != null || !Strings.isNullOrEmpty(errorSamplingTemplateText);
         this.providerType = providerType;
         this.home = home;
         this.templateFilePath = templateFilePath;
@@ -121,6 +124,14 @@ public class SensorDefinitionFindResult {
      */
     public Instant getErrorSamplingTemplateLastModified() {
         return errorSamplingTemplateLastModified;
+    }
+
+    /**
+     * Returns true if the error sampling template is present, which means that error sampling is supported for that check
+     * @return True - error sampling is supported.
+     */
+    public boolean isErrorSamplingTemplatePresent() {
+        return errorSamplingTemplatePresent;
     }
 
     /**
