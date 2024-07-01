@@ -191,7 +191,7 @@ export const IncidentConnection = () => {
         return (
           <div className="flex items-center">
             <Select
-              className="!text-sm"
+              className="!text-sm w-50"
               value={value}
               options={statusOptions}
               onChange={(status) => onChangeIncidentStatus(row, status)}
