@@ -1,0 +1,57 @@
+{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+
+WITH error_samples AS (
+    SELECT
+        {{ lib.render_target_column('analyzed_table') }} AS sample_value
+        {{- lib.render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+        {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+            {%- for id_column in error_sampling.id_columns -%}
+                {{ ',' }}
+        {{ lib.render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif -%},
+        ROW_NUMBER() OVER (
+            PARTITION BY
+                {{ lib.render_target_column('analyzed_table') }} {{ ' ' }}
+                {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol()  }}{{ '                ' }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ '                ' }}{{ lib.render_column(data_grouping_level.column, 'analyzed_table') }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor %}
+                {%- endif -%} {{ ' ' }}
+            ORDER BY
+                {% if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+                    {%- for id_column in error_sampling.id_columns -%}
+                        {{- lib.render_column(id_column, 'analyzed_table') }} ASC,{{ ' ' }}
+                    {%- endfor %}
+                {%- endif -%}
+                {{ lib.render_target_column('analyzed_table') }} ASC
+        ) AS sample_index
+    FROM
+        {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL',
+            table_alias_prefix = 'analyzed_table', indentation = '    ') }}
+)
+SELECT
+    sample_table.sample_value AS actual_value
+    {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
+        {%- for attribute in lib.data_groupings -%}
+            {{ ',' }}
+            sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM error_samples AS sample_table
+WHERE sample_table.sample_index = 2
+LIMIT {{ error_sampling.total_samples_limit }}
