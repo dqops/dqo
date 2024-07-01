@@ -1,86 +1,85 @@
-# Working with files
+# Working with files - advanced import configuration options
 
-Learn about the advanced import configuration of files in DQOps.  
+This guide dives into the advanced import configuration options for files in DQOps. 
+It covers how to define file formats, specify data paths, and handle scenarios with multiple tables or varying file formats within a schema.
 
 ## Import configuration
 
-There are two levels of settings for configuring the import of file formats: the connection and the table.
+DQOps allows configuration for file imports at connection and table levels. You can configure:
 
-Both of these settings allow for slightly different configurations of the available sections.
-The file format configuration consists of three sections:
+- **File format:** The overall format for files associated with the connection (e.g., CSV, JSON).
+- **Virtual schema name to path mappings:** Define an alias (virtual schema name) for the parent directory containing your data files.
+- **Additional format options:** Define format-specific options relevant to the particular table.
 
-- File format
-- Virtual schema name to path mappings
-- Additional format options
+Table-level settings become available on the table view after adding a new connection and adding a table. 
+To access the table view, expand the connection on the tree view on the left, then the schema, and click on the table.
 
-The table level settings are available on the table view after finishing of adding a new connection.
-To open the table view, expand the connection, then schema and click on the table.
+### File format configuration
 
-### File format
+**Setting the file format:** File format selection can only be configured at the connection level settings when creating a new connection.
 
-The selection of the file format can only be configured at the connection settings when creating a new connection.
-
-!!! warning "Changing the file format"
-
-    Changing the type of file format requires creating a new connection.
-
-    You should never change the file format type after the connection creation. This will lead to connection resource corruption.
+**Changing the file format:** Modifying the file format type requires creating a new connection. **Never attempt to change the format after connection creation**, as it can corrupt the connection resource.
 
 ### Virtual schema name to path mappings
 
-A connection can store multiple schemas.
+A connection can store multiple schemas (virtual names) representing data directories.
+**The virtual schema name**, which is an alias for the parent directory with data, can only be configured at the connection settings level.
 
-The configuration of the **virtual schema name**, which is an alias for the parent directory with data, is only available at the connection settings level.
+**A path** is an absolute path to the parent directory. Depending on the configuration level, the path is utilized differently:
 
-A **path** is an absolute path to that parent directory.
-Depending on the setting level, the configured path is utilized differently.
-The configuration at **the connection level** sets the parent directory in which directories or files are read.
-It is used on the import stage where is used for listing objects in the given directory.
+**Connection level:** The configuration at the connection level sets the parent directory in which directories or files are read. It is used in the import stage, which lists objects in the given directory.
 
-The configuration at **the table level** provides a path pattern to the files allowing to work on them.
+**Table level:** The configuration at the table level provides a path pattern to the files, allowing you to work on them.
 
 !!! info "Automatic path creation"
 
-    When importing a new table, the path patten to the table is created automatically based on the connection level setting.
+    When importing a new table, DQOps automatically generates a path pattern to the table based on the connection-level setting.
+    
+    You can modify this path pattern at the table level for further customization.
 
-    The path pattern is filled to the settings at the table level based on the path. You can always modify the path pattern.
 
 !!! info "The wildcards in the path"
 
-    The wildcard sign (\*) replaces any number of characters on the folder level (between two slashes).
-    The double wildcard sign (\*\*) replaces any characters (including any folders down).
-    This helps to define a hive partitioning pattern because a pattern does not need to contain folder-level wildcard for each of the partitions.
+    The wildcard sign (\*) replaces any number of characters on the folder level (between two slashes). 
+    The double wildcard sign (\*\*) replaces any characters (including any folders below). 
+    This is useful for defining Hive partitioning patterns because a pattern does not need to contain a folder-level wildcard for each of the partitions.
 
 
 ### Additional format options
 
-When working with file formats, there are additional configuration options that can be set at two levels: connection settings and table settings.
+Additional format options are available at both connection and table levels.
 
-The additional format options set at connection settings are considered as default settings, which are common to all tables in the connection.
-Whereas, the additional format options set at table settings override the default settings from the connection when they are configured in the table settings.
+**Connection level:** These settings define defaults for all tables within the connection.
 
+**Table level:** The additional format options, set in table settings, override the default settings from the connection.
 
 ## Working with multiple tables in a single schema
 
-### Different CSV or JSON formats
+### Different file formats
 
-If you want to add a CSV or JSON file in a format that differs from the common CSV or JSON format used for other files in the schema,
-override the configuration on that new file (table) level.
+If a new file has a format different from others within the schema, override the default connection settings at the table level.
 
-The loaded table will try to use the properties described in the table’s YAML, if available.
-If not, it will use the properties configured in the YAML file of the table connection.
-Finally, if both are not set explicitly, the automatically detected properties of the CSV or JSON format are used.
+If available, the loaded table will try to use the properties configured at the table level in the YAML file. 
+If no table-level configuration is present in the YAML file, connection-level properties are used. 
+Finally, if no configuration is configured, DQOps attempts automatic format detection (for CSV and JSON).
 
 ### No common prefix for files
 
-When files are placed in different locations where you cannot specify a common prefix, you can use an absolute path for each file.
-The absolute path has to be added on the table level setting.
+When files reside in various locations without a common prefix, use absolute paths for each file. The absolute path must be added at the table-level setting.
 
-You have to manually create a table in the UI. Open Data Sources, expand your connection, and select three dots on the schema to which you want to add a new table.
+To do that, you have to manually create a table in the user interface:
 
-Fill in the "File path or file name pattern" field with the absolute path to the file and add the new table by clicking the **Save** button.
+1. Navigate to the  Data Sources section.
+2. Expand your connection and click on the three-dots icon next to the name of the schema to which you want to add a new table.
+3. In the Add table popup window, Fill in the "File path or file name pattern" field with the absolute path to the file
+4. Click on the Save button to add a new table.
 
-!!! tip "Creating a new table manually in the user home"
+### Creating a new table manually in the DQOps user home folder
 
-    You can also add a new table manually in the sources folder of your user home by creating a new YAML file in the connection folder.
+You can also manually add a new table by creating a new YAML file within the connection's folder located in the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md).
 
+## Next steps
+
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
