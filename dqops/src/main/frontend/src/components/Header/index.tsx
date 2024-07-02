@@ -137,13 +137,13 @@ const Header = () => {
         column
       );
     }
-    if (value === firstLevelActiveTab) {
-      return;
-    }
     if (!url) {
       url = `/` + newCheckTypes;
       history.push(url);
     } else {
+      if (value === firstLevelActiveTab) {
+        return;
+      }
       dispatch(
         addFirstLevelTab(newCheckTypes, {
           url,
