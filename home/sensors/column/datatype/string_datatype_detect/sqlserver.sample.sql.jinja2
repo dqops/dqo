@@ -8,7 +8,7 @@
 UNION ALL
 (
 {%- call lib.render_error_sampler(override_samples_limit = 5) -%} {# integers - 1 #}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+    CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
 {%- endcall %}
 )
 UNION ALL
@@ -78,7 +78,7 @@ UNION ALL
             OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 30) IS NOT NULL    --  ydd-yyyy-mm hh:mm:ss:nnn
             OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 109) IS NOT NULL   --  ydd-yyyy-mm hh:mm:ss:nnn
             OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 113) IS NOT NULL   --  ydd-yyyy-mm hh:mm:ss:nnn
-{%- endcall -%}
+{% endcall %}
 )
 UNION ALL
 (
@@ -144,5 +144,6 @@ UNION ALL
              OR TRY_CONVERT(date, CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), 113) IS NOT NULL        --  ydd-yyyy-mm hh:mm:ss:nnn
       OR LOWER(CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX))) IN ('TRUE', 'FALSE', 'YES', 'NO', 'Y', 'N', 'T', 'F')
     AND TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX))) <> ''
+    )
 {%- endcall -%}
 )
