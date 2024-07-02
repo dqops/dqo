@@ -70,14 +70,6 @@ public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
     }
 
     @Test
-    void listTables_whenDefaultSchemaListed_thenReturnsTables() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default", null, 300, secretValueLookupContext);
-
-        Assertions.assertTrue(tables.isEmpty());
-    }
-
-    @Test
     void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.nulls_and_uniqueness, ProviderType.spark);

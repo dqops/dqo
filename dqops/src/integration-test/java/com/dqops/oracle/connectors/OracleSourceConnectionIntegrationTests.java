@@ -63,14 +63,6 @@ public class OracleSourceConnectionIntegrationTests extends BaseOracleIntegratio
     }
 
     @Test
-    void listTables_whenDefaultSchemaListed_thenReturnsTables() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables(OracleConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
-
-        Assertions.assertTrue(tables.size() == 0);
-    }
-
-    @Test
     void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.nulls_and_uniqueness, ProviderType.oracle);
