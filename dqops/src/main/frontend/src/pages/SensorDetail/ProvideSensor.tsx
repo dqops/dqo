@@ -58,7 +58,7 @@ const ProvideSensor = ({
       ...obj
     });
   };
-  console.log(providerSensor);
+
   return (
     <div className="p-4">
       <div className="flex gap-4 text-sm items-center mb-4">

@@ -18,7 +18,6 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { RulesApi } from '../../services/apiClient';
 import { ROUTES } from '../../shared/routes';
-import { urlencodeDecoder } from '../../utils';
 import PythonCode from './PythonCode';
 import RuleDefinition from './RuleDefinition';
 
@@ -37,9 +36,8 @@ export const RuleDetail = () => {
   const { full_rule_name, ruleDetail, path, type, copied } = useSelector(
     getFirstLevelSensorState
   );
-  const { refreshRulesTreeIndicator } = useSelector(
-    (state: IRootState) => state.definition
-  );
+  const { refreshRulesTreeIndicator, activeTab: firstLevelActiveTab } =
+    useSelector((state: IRootState) => state.definition);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
   const [ruleName, setRuleName] = useState(
@@ -136,16 +134,7 @@ export const RuleDetail = () => {
 
   const closeRuleFirstLevelTab = () => {
     dispatch(refreshRuleFolderTree(refreshRulesTreeIndicator ? false : true));
-    dispatch(
-      closeFirstLevelTab(
-        urlencodeDecoder(
-          '/definitions/rules/' +
-            String(full_rule_name).split('/')[
-              String(full_rule_name).split('/').length - 1
-            ]
-        )
-      )
-    );
+    dispatch(closeFirstLevelTab(firstLevelActiveTab));
   };
 
   const onChangeRuleName = (e: ChangeEvent<HTMLInputElement>) => {
