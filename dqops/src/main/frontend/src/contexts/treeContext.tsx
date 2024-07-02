@@ -22,9 +22,13 @@ import {
   ConnectionApiClient,
   JobApiClient,
   SchemaApiClient,
+  SearchApiClient,
   TableApiClient
 } from '../services/apiClient';
-import { TABLES_LIMIT_TREE_PAGING } from '../shared/config';
+import {
+  COLUMNS_LIMIT_TREE_PAGING,
+  TABLES_LIMIT_TREE_PAGING
+} from '../shared/config';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { CheckTypes, ROUTES } from '../shared/routes';
@@ -85,6 +89,7 @@ function TreeProvider(props: any) {
   const [tabMaps, setTabMaps] = useState<Record<string, ITab[]>>({}); // `blue box tab level`
   const [subTabMap, setSubTabMap] = useState<{ [key: string]: string }>({}); // sub tab under `blue box tab level`
   const [tablesLoading, setTablesLoading] = useState('');
+  const [columnsLoading, setColumnsLoading] = useState('');
   const tabs = useMemo(() => tabMaps[checkTypes] ?? [], [tabMaps, checkTypes]);
   const setTabs = useCallback(
     (_tabMaps: ITab[]) => {
@@ -112,6 +117,9 @@ function TreeProvider(props: any) {
   const [loadedTables, setLoadedTables] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [loadedColumns, setLoadedColumns] = useState<{
+    [key: string]: boolean;
+  }>({});
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -1956,6 +1964,70 @@ function TreeProvider(props: any) {
     setTablesLoading('');
   };
 
+  const searchColumn = async (data: any[], parentData: any, search: string) => {
+    const columns = [...data];
+    const table = data[0].parentId.split('.')[2];
+    const connection = data[0].parentId.split('.')[0];
+    const schema = data[0].parentId.split('.')[1];
+    const parentNode = parentData[connection].find(
+      (item: any) => item.id === data[0].parentId
+    );
+    const addPrefix = (str: string) => {
+      return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
+    };
+    const page = Math.max(columns.length / COLUMNS_LIMIT_TREE_PAGING) + 1;
+    const res: AxiosResponse<ColumnListModel[]> =
+      await SearchApiClient.findColumns(
+        connection,
+        schema,
+        table,
+        search && addPrefix(search),
+        undefined,
+        undefined,
+        page,
+        COLUMNS_LIMIT_TREE_PAGING
+      );
+    const items = res.data.map((column) => ({
+      id: `${parentNode.id}.${urlencodeDecoder(column.column_name ?? '')}`,
+      label: column.column_name || '',
+      level: TREE_LEVEL.COLUMN,
+      parentId: parentNode.id,
+      items: [],
+      tooltip: `${connection}.${schema}.${table}.${column.column_name}`,
+      hasCheck:
+        !!column?.[
+          checkTypesToHasConfiguredCheckKey[
+            checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
+          ] as keyof ColumnListModel
+        ],
+      run_checks_job_template: column[
+        checkTypesToJobTemplateKey[
+          checkTypes as keyof typeof checkTypesToJobTemplateKey
+        ] as keyof ColumnListModel
+      ] as CheckSearchFilters,
+      collect_statistics_job_template: column.collect_statistics_job_template,
+      data_clean_job_template: column.data_clean_job_template,
+      open: false,
+      configured:
+        column.has_any_configured_checks ||
+        column.has_any_configured_partition_checks ||
+        column.has_any_configured_profiling_checks ||
+        column.has_any_configured_monitoring_checks
+    }));
+
+    if (items.length === 0) {
+      const oldLoadedColumns = { ...loadedColumns };
+      oldLoadedColumns[parentNode.id] = true;
+      setLoadedColumns(oldLoadedColumns);
+    } else {
+      const oldLoadedColumns = { ...loadedColumns };
+      oldLoadedColumns[parentNode.id] = false;
+      setLoadedColumns(oldLoadedColumns);
+    }
+    resetTreeData(parentNode, items, true);
+    setColumnsLoading('');
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -1999,7 +2071,10 @@ function TreeProvider(props: any) {
         loadMoreTables,
         tablesLoading,
         searchTable,
-        loadedTables
+        loadedTables,
+        columnsLoading,
+        searchColumn,
+        loadedColumns
       }}
       {...props}
     />

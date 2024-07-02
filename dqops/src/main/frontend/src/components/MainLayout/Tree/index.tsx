@@ -43,7 +43,11 @@ const Tree = () => {
     loadMoreTables,
     tablesLoading,
     searchTable,
-    loadedTables
+    loadedTables,
+    loadMoreColumns,
+    columnsLoading,
+    searchColumn,
+    loadedColumns
   } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -461,21 +465,22 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
-                {node.level === TREE_LEVEL.SCHEMA && (
-                  <div className="!absolute right-5.5 h-5 w-5 flex items-center justify-center  rounded-full bg-white">
-                    <SvgIcon
-                      name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
-                      className="w-3 h-3"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setFunnel({
-                          ...funnel,
-                          [node.id]: !funnel[node.id]
-                        });
-                      }}
-                    />
-                  </div>
-                )}
+                {node.level === TREE_LEVEL.SCHEMA ||
+                  (node.level === TREE_LEVEL.TABLE && (
+                    <div className="!absolute right-5.5 h-5 w-5 flex items-center justify-center  rounded-full bg-white">
+                      <SvgIcon
+                        name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
+                        className="w-3 h-3"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setFunnel({
+                            ...funnel,
+                            [node.id]: !funnel[node.id]
+                          });
+                        }}
+                      />
+                    </div>
+                  ))}
                 <div className="relative ">
                   {node.parsingYamlError && node.parsingYamlError.length > 0
                     ? renderParsingYamlErrorToolTip(node)
@@ -507,7 +512,11 @@ const Tree = () => {
       (item) => item?.level === TREE_LEVEL.TABLE
     );
 
-    const searchForTable = () => {
+    const isColumnLevel = groupedData[parentId].find(
+      (item) => item?.level === TREE_LEVEL.COLUMN
+    );
+
+    const searchForSource = () => {
       const onChangeSearchTable = (
         e: React.ChangeEvent<HTMLInputElement>,
         parentId: string
@@ -542,7 +551,9 @@ const Tree = () => {
 
     return (
       <div>
-        {isTableLevel && funnel[parentId] && searchForTable()}
+        {(isTableLevel || isColumnLevel) &&
+          funnel[parentId] &&
+          searchForSource()}
         {groupedData[parentId].map((item) => (
           <>
             <div key={item.id}>{renderTreeNode(item, deep)}</div>
