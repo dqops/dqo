@@ -85,7 +85,7 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+                sampleTableMetadata, "date_iso", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -96,7 +96,6 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     }
 
     @Test
-    @Disabled("TODO: Not covered test case")
     void runSensor_whenSensorExecutedMonitoringDailyOnMixedValues_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "mix_of_values", this.checkSpec, CheckTimeScale.daily);
@@ -110,7 +109,6 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     }
 
     @Test
-    @Disabled("TODO: Not covered test case")
     void runSensor_whenSensorExecutedMonitoringMonthlyOnDateMDY_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_mdy", this.checkSpec, CheckTimeScale.monthly);
@@ -126,7 +124,7 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -150,7 +148,6 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     }
 
     @Test
-    @Disabled("TODO: Not covered test case")
     void runSensor_whenSensorExecutedProfilingOnDateBDY_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_bdy", this.checkSpec);
@@ -164,7 +161,6 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     }
 
     @Test
-    @Disabled("TODO: Not covered test case")
     void runSensor_whenSensorExecutedProfilingOnDateDMY_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_dmy", this.checkSpec);
@@ -178,7 +174,6 @@ public class OracleColumnTextTextParsableToDatePercentSensorParametersSpecIntegr
     }
 
     @Test
-    @Disabled("TODO: Not covered test case")
     void runSensor_whenSensorExecutedProfilingOnNotDate_thenReturnsZeroPercent() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "not_date", this.checkSpec);
