@@ -6,7 +6,7 @@ SELECT
         WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
                 CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                         THEN 1
                     ELSE 0
                 END
