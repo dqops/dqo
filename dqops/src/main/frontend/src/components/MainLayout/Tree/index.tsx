@@ -44,10 +44,7 @@ const Tree = () => {
     tablesLoading,
     searchTable,
     loadedTables,
-    loadMoreColumns,
-    columnsLoading,
-    searchColumn,
-    loadedColumns
+    searchColumn
   } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -466,7 +463,7 @@ const Tree = () => {
                   {node.label}
                 </div>
                 {node.level === TREE_LEVEL.SCHEMA ||
-                  (node.level === TREE_LEVEL.TABLE && (
+                  (node.level === TREE_LEVEL.COLUMNS && (
                     <div className="!absolute right-5.5 h-5 w-5 flex items-center justify-center  rounded-full bg-white">
                       <SvgIcon
                         name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
@@ -516,7 +513,7 @@ const Tree = () => {
       (item) => item?.level === TREE_LEVEL.COLUMN
     );
 
-    const searchForSource = () => {
+    const searchForSource = (column: boolean) => {
       const onChangeSearchTable = (
         e: React.ChangeEvent<HTMLInputElement>,
         parentId: string
@@ -528,7 +525,11 @@ const Tree = () => {
         parentId: string
       ) => {
         if (e.key === 'Enter') {
-          searchTable(groupedData[parentId], groupedData, search[parentId]);
+          if (column) {
+            searchColumn(groupedData[parentId], groupedData, search[parentId]);
+          } else {
+            searchTable(groupedData[parentId], groupedData, search[parentId]);
+          }
         }
       };
 
@@ -553,7 +554,7 @@ const Tree = () => {
       <div>
         {(isTableLevel || isColumnLevel) &&
           funnel[parentId] &&
-          searchForSource()}
+          searchForSource(isColumnLevel)}
         {groupedData[parentId].map((item) => (
           <>
             <div key={item.id}>{renderTreeNode(item, deep)}</div>

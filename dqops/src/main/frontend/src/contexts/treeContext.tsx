@@ -22,13 +22,9 @@ import {
   ConnectionApiClient,
   JobApiClient,
   SchemaApiClient,
-  SearchApiClient,
   TableApiClient
 } from '../services/apiClient';
-import {
-  COLUMNS_LIMIT_TREE_PAGING,
-  TABLES_LIMIT_TREE_PAGING
-} from '../shared/config';
+import { TABLES_LIMIT_TREE_PAGING } from '../shared/config';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { CheckTypes, ROUTES } from '../shared/routes';
@@ -117,9 +113,6 @@ function TreeProvider(props: any) {
   const [loadedTables, setLoadedTables] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [loadedColumns, setLoadedColumns] = useState<{
-    [key: string]: boolean;
-  }>({});
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -1965,28 +1958,17 @@ function TreeProvider(props: any) {
   };
 
   const searchColumn = async (data: any[], parentData: any, search: string) => {
-    const columns = [...data];
+    const parentId = data[0].parentId;
+    const tableParentId = String(parentId).replace('.columns', '');
+    const parentNode = parentData[tableParentId].find(
+      (item: any) => item.id === parentId
+    );
     const table = data[0].parentId.split('.')[2];
     const connection = data[0].parentId.split('.')[0];
     const schema = data[0].parentId.split('.')[1];
-    const parentNode = parentData[connection].find(
-      (item: any) => item.id === data[0].parentId
-    );
-    const addPrefix = (str: string) => {
-      return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
-    };
-    const page = Math.max(columns.length / COLUMNS_LIMIT_TREE_PAGING) + 1;
+
     const res: AxiosResponse<ColumnListModel[]> =
-      await SearchApiClient.findColumns(
-        connection,
-        schema,
-        table,
-        search && addPrefix(search),
-        undefined,
-        undefined,
-        page,
-        COLUMNS_LIMIT_TREE_PAGING
-      );
+      await ColumnApiClient.getColumns(connection, schema, table);
     const items = res.data.map((column) => ({
       id: `${parentNode.id}.${urlencodeDecoder(column.column_name ?? '')}`,
       label: column.column_name || '',
@@ -2015,16 +1997,11 @@ function TreeProvider(props: any) {
         column.has_any_configured_monitoring_checks
     }));
 
-    if (items.length === 0) {
-      const oldLoadedColumns = { ...loadedColumns };
-      oldLoadedColumns[parentNode.id] = true;
-      setLoadedColumns(oldLoadedColumns);
-    } else {
-      const oldLoadedColumns = { ...loadedColumns };
-      oldLoadedColumns[parentNode.id] = false;
-      setLoadedColumns(oldLoadedColumns);
-    }
-    resetTreeData(parentNode, items, true);
+    const newItems = items.filter((item) =>
+      item.label.toLowerCase().includes(search.toLowerCase())
+    );
+
+    resetTreeData(parentNode, newItems, true);
     setColumnsLoading('');
   };
 
@@ -2073,8 +2050,7 @@ function TreeProvider(props: any) {
         searchTable,
         loadedTables,
         columnsLoading,
-        searchColumn,
-        loadedColumns
+        searchColumn
       }}
       {...props}
     />
