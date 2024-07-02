@@ -99,9 +99,9 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
     custom: Union[Unset, "ColumnDailyMonitoringCheckCategoriesSpecCustom"] = UNSET
     nulls: Union[Unset, "ColumnNullsDailyMonitoringChecksSpec"] = UNSET
     uniqueness: Union[Unset, "ColumnUniquenessDailyMonitoringChecksSpec"] = UNSET
-    accepted_values: Union[
-        Unset, "ColumnAcceptedValuesDailyMonitoringChecksSpec"
-    ] = UNSET
+    accepted_values: Union[Unset, "ColumnAcceptedValuesDailyMonitoringChecksSpec"] = (
+        UNSET
+    )
     text: Union[Unset, "ColumnTextDailyMonitoringChecksSpec"] = UNSET
     whitespace: Union[Unset, "ColumnWhitespaceDailyMonitoringChecksSpec"] = UNSET
     conversions: Union[Unset, "ColumnConversionsDailyMonitoringChecksSpec"] = UNSET
@@ -116,9 +116,9 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
     custom_sql: Union[Unset, "ColumnCustomSqlDailyMonitoringChecksSpec"] = UNSET
     datatype: Union[Unset, "ColumnDatatypeDailyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "ColumnSchemaDailyMonitoringChecksSpec"] = UNSET
-    comparisons: Union[
-        Unset, "ColumnDailyMonitoringCheckCategoriesSpecComparisons"
-    ] = UNSET
+    comparisons: Union[Unset, "ColumnDailyMonitoringCheckCategoriesSpecComparisons"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

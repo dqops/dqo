@@ -126,16 +126,16 @@ class ColumnNumericDailyMonitoringChecksSpec:
     custom_checks: Union[
         Unset, "ColumnNumericDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    daily_number_below_min_value: Union[
-        Unset, "ColumnNumberBelowMinValueCheckSpec"
-    ] = UNSET
-    daily_number_above_max_value: Union[
-        Unset, "ColumnNumberAboveMaxValueCheckSpec"
-    ] = UNSET
+    daily_number_below_min_value: Union[Unset, "ColumnNumberBelowMinValueCheckSpec"] = (
+        UNSET
+    )
+    daily_number_above_max_value: Union[Unset, "ColumnNumberAboveMaxValueCheckSpec"] = (
+        UNSET
+    )
     daily_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
-    daily_negative_values_percent: Union[
-        Unset, "ColumnNegativePercentCheckSpec"
-    ] = UNSET
+    daily_negative_values_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = (
+        UNSET
+    )
     daily_number_below_min_value_percent: Union[
         Unset, "ColumnNumberBelowMinValuePercentCheckSpec"
     ] = UNSET
@@ -154,21 +154,21 @@ class ColumnNumericDailyMonitoringChecksSpec:
     daily_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
     daily_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
     daily_percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = UNSET
-    daily_percentile_10_in_range: Union[
-        Unset, "ColumnPercentile10InRangeCheckSpec"
-    ] = UNSET
-    daily_percentile_25_in_range: Union[
-        Unset, "ColumnPercentile25InRangeCheckSpec"
-    ] = UNSET
-    daily_percentile_75_in_range: Union[
-        Unset, "ColumnPercentile75InRangeCheckSpec"
-    ] = UNSET
-    daily_percentile_90_in_range: Union[
-        Unset, "ColumnPercentile90InRangeCheckSpec"
-    ] = UNSET
-    daily_sample_stddev_in_range: Union[
-        Unset, "ColumnSampleStddevInRangeCheckSpec"
-    ] = UNSET
+    daily_percentile_10_in_range: Union[Unset, "ColumnPercentile10InRangeCheckSpec"] = (
+        UNSET
+    )
+    daily_percentile_25_in_range: Union[Unset, "ColumnPercentile25InRangeCheckSpec"] = (
+        UNSET
+    )
+    daily_percentile_75_in_range: Union[Unset, "ColumnPercentile75InRangeCheckSpec"] = (
+        UNSET
+    )
+    daily_percentile_90_in_range: Union[Unset, "ColumnPercentile90InRangeCheckSpec"] = (
+        UNSET
+    )
+    daily_sample_stddev_in_range: Union[Unset, "ColumnSampleStddevInRangeCheckSpec"] = (
+        UNSET
+    )
     daily_population_stddev_in_range: Union[
         Unset, "ColumnPopulationStddevInRangeCheckSpec"
     ] = UNSET
@@ -182,9 +182,9 @@ class ColumnNumericDailyMonitoringChecksSpec:
     daily_valid_latitude_percent: Union[
         Unset, "ColumnValidLatitudePercentCheckSpec"
     ] = UNSET
-    daily_invalid_longitude: Union[
-        Unset, "ColumnInvalidLongitudeCountCheckSpec"
-    ] = UNSET
+    daily_invalid_longitude: Union[Unset, "ColumnInvalidLongitudeCountCheckSpec"] = (
+        UNSET
+    )
     daily_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
     ] = UNSET
@@ -339,19 +339,19 @@ class ColumnNumericDailyMonitoringChecksSpec:
         if daily_negative_values_percent is not UNSET:
             field_dict["daily_negative_values_percent"] = daily_negative_values_percent
         if daily_number_below_min_value_percent is not UNSET:
-            field_dict[
-                "daily_number_below_min_value_percent"
-            ] = daily_number_below_min_value_percent
+            field_dict["daily_number_below_min_value_percent"] = (
+                daily_number_below_min_value_percent
+            )
         if daily_number_above_max_value_percent is not UNSET:
-            field_dict[
-                "daily_number_above_max_value_percent"
-            ] = daily_number_above_max_value_percent
+            field_dict["daily_number_above_max_value_percent"] = (
+                daily_number_above_max_value_percent
+            )
         if daily_number_in_range_percent is not UNSET:
             field_dict["daily_number_in_range_percent"] = daily_number_in_range_percent
         if daily_integer_in_range_percent is not UNSET:
-            field_dict[
-                "daily_integer_in_range_percent"
-            ] = daily_integer_in_range_percent
+            field_dict["daily_integer_in_range_percent"] = (
+                daily_integer_in_range_percent
+            )
         if daily_min_in_range is not UNSET:
             field_dict["daily_min_in_range"] = daily_min_in_range
         if daily_max_in_range is not UNSET:
@@ -375,17 +375,17 @@ class ColumnNumericDailyMonitoringChecksSpec:
         if daily_sample_stddev_in_range is not UNSET:
             field_dict["daily_sample_stddev_in_range"] = daily_sample_stddev_in_range
         if daily_population_stddev_in_range is not UNSET:
-            field_dict[
-                "daily_population_stddev_in_range"
-            ] = daily_population_stddev_in_range
+            field_dict["daily_population_stddev_in_range"] = (
+                daily_population_stddev_in_range
+            )
         if daily_sample_variance_in_range is not UNSET:
-            field_dict[
-                "daily_sample_variance_in_range"
-            ] = daily_sample_variance_in_range
+            field_dict["daily_sample_variance_in_range"] = (
+                daily_sample_variance_in_range
+            )
         if daily_population_variance_in_range is not UNSET:
-            field_dict[
-                "daily_population_variance_in_range"
-            ] = daily_population_variance_in_range
+            field_dict["daily_population_variance_in_range"] = (
+                daily_population_variance_in_range
+            )
         if daily_invalid_latitude is not UNSET:
             field_dict["daily_invalid_latitude"] = daily_invalid_latitude
         if daily_valid_latitude_percent is not UNSET:
@@ -397,9 +397,9 @@ class ColumnNumericDailyMonitoringChecksSpec:
         if daily_non_negative_values is not UNSET:
             field_dict["daily_non_negative_values"] = daily_non_negative_values
         if daily_non_negative_values_percent is not UNSET:
-            field_dict[
-                "daily_non_negative_values_percent"
-            ] = daily_non_negative_values_percent
+            field_dict["daily_non_negative_values_percent"] = (
+                daily_non_negative_values_percent
+            )
 
         return field_dict
 

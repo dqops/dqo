@@ -24,7 +24,7 @@ Run data quality checks on your dataset that match a given condition. The comman
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
+$ dqo [dqo options...] check run [-deh] [-ces] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -43,7 +43,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
 **DQOps shell synopsis**
 
 ```
-dqo> check run [-deh] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
+dqo> check run [-deh] [-ces] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -70,6 +70,7 @@ All parameters supported by the command are listed below.
 |<div id="check run-cat" class="no-wrap-code">`-cat`</div><div id="check run--category" class="no-wrap-code">`--category`</div>|Check category name (volume, nulls, numeric, etc.)| ||
 |<div id="check run-ch" class="no-wrap-code">`-ch`</div><div id="check run--check" class="no-wrap-code">`--check`</div>|Data quality check name, supports patterns like '*_id'| ||
 |<div id="check run-ct" class="no-wrap-code">`-ct`</div><div id="check run--check-type" class="no-wrap-code">`--check-type`</div>|Data quality check type (profiling, monitoring, partitioned)| |*profiling*<br/>*monitoring*<br/>*partitioned*<br/>|
+|<div id="check run-ces" class="no-wrap-code">`-ces`</div><div id="check run--collect-error-samples" class="no-wrap-code">`--collect-error-samples`</div>|Collects error samples for failed data quality checks| ||
 |<div id="check run-col" class="no-wrap-code">`-col`</div><div id="check run--column" class="no-wrap-code">`--column`</div>|Column name, supports patterns like '*_id'| ||
 |<div id="check run-c" class="no-wrap-code">`-c`</div><div id="check run--connection" class="no-wrap-code">`--connection`</div>|Connection name, supports patterns like 'conn*'| ||
 |<div id="check run--daily-partitioning-include-today" class="no-wrap-code">`--daily-partitioning-include-today`</div>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.| ||

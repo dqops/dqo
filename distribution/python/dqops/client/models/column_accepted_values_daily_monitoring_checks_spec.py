@@ -130,33 +130,33 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_text_found_in_set_percent is not UNSET:
-            field_dict[
-                "daily_text_found_in_set_percent"
-            ] = daily_text_found_in_set_percent
+            field_dict["daily_text_found_in_set_percent"] = (
+                daily_text_found_in_set_percent
+            )
         if daily_number_found_in_set_percent is not UNSET:
-            field_dict[
-                "daily_number_found_in_set_percent"
-            ] = daily_number_found_in_set_percent
+            field_dict["daily_number_found_in_set_percent"] = (
+                daily_number_found_in_set_percent
+            )
         if daily_expected_text_values_in_use_count is not UNSET:
-            field_dict[
-                "daily_expected_text_values_in_use_count"
-            ] = daily_expected_text_values_in_use_count
+            field_dict["daily_expected_text_values_in_use_count"] = (
+                daily_expected_text_values_in_use_count
+            )
         if daily_expected_texts_in_top_values_count is not UNSET:
-            field_dict[
-                "daily_expected_texts_in_top_values_count"
-            ] = daily_expected_texts_in_top_values_count
+            field_dict["daily_expected_texts_in_top_values_count"] = (
+                daily_expected_texts_in_top_values_count
+            )
         if daily_expected_numbers_in_use_count is not UNSET:
-            field_dict[
-                "daily_expected_numbers_in_use_count"
-            ] = daily_expected_numbers_in_use_count
+            field_dict["daily_expected_numbers_in_use_count"] = (
+                daily_expected_numbers_in_use_count
+            )
         if daily_text_valid_country_code_percent is not UNSET:
-            field_dict[
-                "daily_text_valid_country_code_percent"
-            ] = daily_text_valid_country_code_percent
+            field_dict["daily_text_valid_country_code_percent"] = (
+                daily_text_valid_country_code_percent
+            )
         if daily_text_valid_currency_code_percent is not UNSET:
-            field_dict[
-                "daily_text_valid_currency_code_percent"
-            ] = daily_text_valid_currency_code_percent
+            field_dict["daily_text_valid_currency_code_percent"] = (
+                daily_text_valid_currency_code_percent
+            )
 
         return field_dict
 

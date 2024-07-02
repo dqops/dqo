@@ -65,9 +65,9 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
         if monthly_lookup_key_not_found is not UNSET:
             field_dict["monthly_lookup_key_not_found"] = monthly_lookup_key_not_found
         if monthly_lookup_key_found_percent is not UNSET:
-            field_dict[
-                "monthly_lookup_key_found_percent"
-            ] = monthly_lookup_key_found_percent
+            field_dict["monthly_lookup_key_found_percent"] = (
+                monthly_lookup_key_found_percent
+            )
 
         return field_dict
 

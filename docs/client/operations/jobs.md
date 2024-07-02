@@ -2622,7 +2622,7 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"collect_error_samples\":false}"
 	
     ```
 
@@ -2673,6 +2673,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2730,6 +2731,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2790,6 +2792,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2850,6 +2853,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	

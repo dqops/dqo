@@ -88,9 +88,9 @@ class ColumnUniquenessDailyMonitoringChecksSpec:
     daily_distinct_percent_anomaly: Union[
         Unset, "ColumnDistinctPercentAnomalyStationaryCheckSpec"
     ] = UNSET
-    daily_distinct_count_change: Union[
-        Unset, "ColumnDistinctCountChangeCheckSpec"
-    ] = UNSET
+    daily_distinct_count_change: Union[Unset, "ColumnDistinctCountChangeCheckSpec"] = (
+        UNSET
+    )
     daily_distinct_percent_change: Union[
         Unset, "ColumnDistinctPercentChangeCheckSpec"
     ] = UNSET
@@ -205,37 +205,37 @@ class ColumnUniquenessDailyMonitoringChecksSpec:
         if daily_distinct_count_anomaly is not UNSET:
             field_dict["daily_distinct_count_anomaly"] = daily_distinct_count_anomaly
         if daily_distinct_percent_anomaly is not UNSET:
-            field_dict[
-                "daily_distinct_percent_anomaly"
-            ] = daily_distinct_percent_anomaly
+            field_dict["daily_distinct_percent_anomaly"] = (
+                daily_distinct_percent_anomaly
+            )
         if daily_distinct_count_change is not UNSET:
             field_dict["daily_distinct_count_change"] = daily_distinct_count_change
         if daily_distinct_percent_change is not UNSET:
             field_dict["daily_distinct_percent_change"] = daily_distinct_percent_change
         if daily_distinct_count_change_1_day is not UNSET:
-            field_dict[
-                "daily_distinct_count_change_1_day"
-            ] = daily_distinct_count_change_1_day
+            field_dict["daily_distinct_count_change_1_day"] = (
+                daily_distinct_count_change_1_day
+            )
         if daily_distinct_count_change_7_days is not UNSET:
-            field_dict[
-                "daily_distinct_count_change_7_days"
-            ] = daily_distinct_count_change_7_days
+            field_dict["daily_distinct_count_change_7_days"] = (
+                daily_distinct_count_change_7_days
+            )
         if daily_distinct_count_change_30_days is not UNSET:
-            field_dict[
-                "daily_distinct_count_change_30_days"
-            ] = daily_distinct_count_change_30_days
+            field_dict["daily_distinct_count_change_30_days"] = (
+                daily_distinct_count_change_30_days
+            )
         if daily_distinct_percent_change_1_day is not UNSET:
-            field_dict[
-                "daily_distinct_percent_change_1_day"
-            ] = daily_distinct_percent_change_1_day
+            field_dict["daily_distinct_percent_change_1_day"] = (
+                daily_distinct_percent_change_1_day
+            )
         if daily_distinct_percent_change_7_days is not UNSET:
-            field_dict[
-                "daily_distinct_percent_change_7_days"
-            ] = daily_distinct_percent_change_7_days
+            field_dict["daily_distinct_percent_change_7_days"] = (
+                daily_distinct_percent_change_7_days
+            )
         if daily_distinct_percent_change_30_days is not UNSET:
-            field_dict[
-                "daily_distinct_percent_change_30_days"
-            ] = daily_distinct_percent_change_30_days
+            field_dict["daily_distinct_percent_change_30_days"] = (
+                daily_distinct_percent_change_30_days
+            )
 
         return field_dict
 

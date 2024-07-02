@@ -31,9 +31,9 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         Unset, "TableVolumeMonthlyPartitionedChecksSpecCustomChecks"
     ] = UNSET
     monthly_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
-    monthly_partition_row_count_change: Union[
-        Unset, "TableRowCountChangeCheckSpec"
-    ] = UNSET
+    monthly_partition_row_count_change: Union[Unset, "TableRowCountChangeCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -59,9 +59,9 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         if monthly_partition_row_count is not UNSET:
             field_dict["monthly_partition_row_count"] = monthly_partition_row_count
         if monthly_partition_row_count_change is not UNSET:
-            field_dict[
-                "monthly_partition_row_count_change"
-            ] = monthly_partition_row_count_change
+            field_dict["monthly_partition_row_count_change"] = (
+                monthly_partition_row_count_change
+            )
 
         return field_dict
 

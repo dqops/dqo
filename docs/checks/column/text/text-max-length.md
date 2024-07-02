@@ -134,51 +134,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -567,51 +525,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1120,51 +1036,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1554,51 +1428,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2107,51 +1939,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2541,51 +2331,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3104,51 +2852,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3604,51 +3310,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4195,51 +3859,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4695,51 +4317,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 MAX(
-                    LENGTH({{render_column_cast_to_string('analyzed_table')}})
+                    LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}

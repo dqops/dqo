@@ -34,9 +34,9 @@ class TableComparisonMonthlyMonitoringChecksSpec:
     custom_checks: Union[
         Unset, "TableComparisonMonthlyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    monthly_row_count_match: Union[
-        Unset, "TableComparisonRowCountMatchCheckSpec"
-    ] = UNSET
+    monthly_row_count_match: Union[Unset, "TableComparisonRowCountMatchCheckSpec"] = (
+        UNSET
+    )
     monthly_column_count_match: Union[
         Unset, "TableComparisonColumnCountMatchCheckSpec"
     ] = UNSET

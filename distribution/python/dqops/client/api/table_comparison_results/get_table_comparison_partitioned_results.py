@@ -17,6 +17,7 @@ def _get_kwargs(
     time_scale: CheckTimeScale,
     table_comparison_configuration_name: str,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

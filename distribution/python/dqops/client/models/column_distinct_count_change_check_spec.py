@@ -64,9 +64,9 @@ class ColumnDistinctCountChangeCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "ChangePercentRule10ParametersSpec"] = UNSET
     error: Union[Unset, "ChangePercentRule20ParametersSpec"] = UNSET
     fatal: Union[Unset, "ChangePercentRule50ParametersSpec"] = UNSET

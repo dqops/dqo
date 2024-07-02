@@ -138,14 +138,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -157,7 +149,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -185,14 +177,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -204,7 +188,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -277,14 +261,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -296,7 +272,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -328,14 +304,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -354,7 +322,7 @@ spec:
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
@@ -362,6 +330,8 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -389,14 +359,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -408,7 +370,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -417,6 +379,8 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -436,14 +400,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -462,7 +418,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -498,14 +454,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -517,7 +465,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -526,6 +474,8 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -545,14 +495,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -564,7 +506,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -592,14 +534,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -611,7 +545,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -639,14 +573,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -658,7 +584,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -686,14 +612,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -712,7 +630,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -792,14 +710,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -811,7 +721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -841,14 +751,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -860,7 +762,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -937,14 +839,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -956,7 +850,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -990,14 +884,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1016,13 +902,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1058,14 +946,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1077,7 +957,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1085,6 +965,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1107,14 +989,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1133,7 +1007,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1176,14 +1050,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1195,7 +1061,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1203,6 +1069,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1225,14 +1093,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1244,7 +1104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1274,14 +1134,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1293,7 +1145,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1323,14 +1175,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1342,7 +1186,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1376,14 +1220,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1402,7 +1238,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1566,14 +1402,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1585,7 +1413,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1613,14 +1441,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1632,7 +1452,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1705,14 +1525,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1724,7 +1536,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1756,14 +1568,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1782,7 +1586,7 @@ spec:
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
@@ -1790,6 +1594,8 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1817,14 +1623,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1836,7 +1634,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1845,6 +1643,8 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1864,14 +1664,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1890,7 +1682,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1926,14 +1718,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1945,7 +1729,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -1954,6 +1738,8 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -1973,14 +1759,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -1992,7 +1770,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2020,14 +1798,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2039,7 +1809,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2067,14 +1837,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2086,7 +1848,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2114,14 +1876,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2140,7 +1894,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2221,14 +1975,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2240,7 +1986,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2270,14 +2016,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2289,7 +2027,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2366,14 +2104,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2385,7 +2115,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2419,14 +2149,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2445,13 +2167,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -2487,14 +2211,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2506,7 +2222,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2514,6 +2230,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -2536,14 +2254,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2562,7 +2272,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2605,14 +2315,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2624,7 +2326,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2632,6 +2334,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -2654,14 +2358,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2673,7 +2369,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2703,14 +2399,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2722,7 +2410,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2752,14 +2440,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2771,7 +2451,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2805,14 +2485,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -2831,7 +2503,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -2995,14 +2667,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3014,7 +2678,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3042,14 +2706,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3061,7 +2717,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3134,14 +2790,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3153,7 +2801,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3185,14 +2833,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3211,7 +2851,7 @@ spec:
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
@@ -3219,6 +2859,8 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -3246,14 +2888,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3265,7 +2899,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3274,6 +2908,8 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -3293,14 +2929,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3319,7 +2947,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3355,14 +2983,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3374,7 +2994,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3383,6 +3003,8 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -3402,14 +3024,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3421,7 +3035,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3449,14 +3063,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3468,7 +3074,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3496,14 +3102,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3515,7 +3113,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3543,14 +3141,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3569,7 +3159,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3650,14 +3240,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3669,7 +3251,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3699,14 +3281,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3718,7 +3292,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3795,14 +3369,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3814,7 +3380,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3848,14 +3414,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3874,13 +3432,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -3916,14 +3476,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3935,7 +3487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -3943,6 +3495,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -3965,14 +3519,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -3991,7 +3537,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4034,14 +3580,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4053,7 +3591,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4061,6 +3599,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -4083,14 +3623,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4102,7 +3634,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4132,14 +3664,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4151,7 +3675,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4181,14 +3705,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4200,7 +3716,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4234,14 +3750,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4260,7 +3768,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4434,14 +3942,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4453,7 +3953,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4485,14 +3985,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4504,7 +3996,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4585,14 +4077,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4604,7 +4088,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4640,14 +4124,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4666,7 +4142,7 @@ spec:
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
@@ -4674,6 +4150,8 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -4707,14 +4185,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4726,7 +4196,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4735,6 +4205,8 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -4758,14 +4230,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4784,7 +4248,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4826,14 +4290,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4845,7 +4301,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4854,6 +4310,8 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -4877,14 +4335,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4896,7 +4346,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4928,14 +4378,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4947,7 +4389,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -4979,14 +4421,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -4998,7 +4432,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5032,14 +4466,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5058,7 +4484,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5155,14 +4581,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5174,7 +4592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5206,14 +4624,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5225,7 +4635,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5306,14 +4716,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5325,7 +4727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5361,14 +4763,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5387,13 +4781,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -5433,14 +4829,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5452,7 +4840,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5460,6 +4848,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -5484,14 +4874,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5510,7 +4892,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5557,14 +4939,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5576,7 +4950,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5584,6 +4958,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -5608,14 +4984,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5627,7 +4995,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5659,14 +5027,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5678,7 +5038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5710,14 +5070,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5729,7 +5081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5763,14 +5115,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5789,7 +5133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -5967,14 +5311,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -5986,7 +5322,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6018,14 +5354,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6037,7 +5365,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6118,14 +5446,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6137,7 +5457,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6173,14 +5493,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6199,7 +5511,7 @@ spec:
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
@@ -6207,6 +5519,8 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -6240,14 +5554,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6259,7 +5565,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6268,6 +5574,8 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -6291,14 +5599,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6317,7 +5617,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6359,14 +5659,6 @@ spec:
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6378,7 +5670,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6387,6 +5679,8 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -6410,14 +5704,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6429,7 +5715,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6461,14 +5747,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6480,7 +5758,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6512,14 +5790,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6531,7 +5801,7 @@ spec:
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6565,14 +5835,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6591,7 +5853,7 @@ spec:
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6688,14 +5950,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6707,7 +5961,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6739,14 +5993,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6758,7 +6004,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6839,14 +6085,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6858,7 +6096,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6894,14 +6132,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6920,13 +6150,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                 FROM {{ lib.render_target_table() }} original_table
                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
             ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_group_by() -}}
             {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -6966,14 +6198,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -6985,7 +6209,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -6993,6 +6217,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -7017,14 +6243,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7043,7 +6261,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -7090,14 +6308,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
             {%- endmacro %}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7109,7 +6319,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -7117,6 +6327,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
+            
+            
             SELECT
                 SUM(
                     CASE
@@ -7141,14 +6353,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7160,7 +6364,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -7192,14 +6396,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7211,7 +6407,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -7243,14 +6439,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7262,7 +6450,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}
@@ -7296,14 +6484,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {%- macro render_foreign_table(foreign_table) -%}
-            {%- if foreign_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-            {%- else -%}
-               {{ foreign_table }}
-            {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 SUM(
                     CASE
@@ -7322,7 +6502,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     FROM {{ lib.render_target_table() }} original_table
                     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
                 ) analyzed_table
-            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
             ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
             {{- lib.render_where_clause() -}}
             {{- lib.render_group_by() -}}

@@ -16,6 +16,7 @@ class AllChecksPatchParametersSelectedTablesToColumns:
     additional_properties: Dict[str, List[str]] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+
         field_dict: Dict[str, Any] = {}
         for prop_name, prop in self.additional_properties.items():
             field_dict[prop_name] = prop

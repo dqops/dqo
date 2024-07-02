@@ -43,9 +43,9 @@ class ColumnPiiDailyPartitionedChecksSpec:
         daily_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnPiiDailyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnPiiDailyPartitionedChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_partition_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -80,9 +80,9 @@ class ColumnPiiDailyPartitionedChecksSpec:
                 self.daily_partition_contains_email_percent.to_dict()
             )
 
-        daily_partition_contains_usa_zipcode_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_contains_usa_zipcode_percent, Unset):
             daily_partition_contains_usa_zipcode_percent = (
                 self.daily_partition_contains_usa_zipcode_percent.to_dict()
@@ -106,25 +106,25 @@ class ColumnPiiDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_contains_usa_phone_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_usa_phone_percent"
-            ] = daily_partition_contains_usa_phone_percent
+            field_dict["daily_partition_contains_usa_phone_percent"] = (
+                daily_partition_contains_usa_phone_percent
+            )
         if daily_partition_contains_email_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_email_percent"
-            ] = daily_partition_contains_email_percent
+            field_dict["daily_partition_contains_email_percent"] = (
+                daily_partition_contains_email_percent
+            )
         if daily_partition_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_usa_zipcode_percent"
-            ] = daily_partition_contains_usa_zipcode_percent
+            field_dict["daily_partition_contains_usa_zipcode_percent"] = (
+                daily_partition_contains_usa_zipcode_percent
+            )
         if daily_partition_contains_ip4_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_ip4_percent"
-            ] = daily_partition_contains_ip4_percent
+            field_dict["daily_partition_contains_ip4_percent"] = (
+                daily_partition_contains_ip4_percent
+            )
         if daily_partition_contains_ip6_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_ip6_percent"
-            ] = daily_partition_contains_ip6_percent
+            field_dict["daily_partition_contains_ip6_percent"] = (
+                daily_partition_contains_ip6_percent
+            )
 
         return field_dict
 

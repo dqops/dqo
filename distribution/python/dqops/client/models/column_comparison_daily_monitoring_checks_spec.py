@@ -60,9 +60,9 @@ class ColumnComparisonDailyMonitoringChecksSpec:
     daily_not_null_count_match: Union[
         Unset, "ColumnComparisonNotNullCountMatchCheckSpec"
     ] = UNSET
-    daily_null_count_match: Union[
-        Unset, "ColumnComparisonNullCountMatchCheckSpec"
-    ] = UNSET
+    daily_null_count_match: Union[Unset, "ColumnComparisonNullCountMatchCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

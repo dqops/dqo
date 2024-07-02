@@ -139,27 +139,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -196,27 +182,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -294,32 +266,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -335,8 +287,6 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -357,26 +307,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -422,27 +358,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -464,7 +386,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -479,27 +401,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -547,28 +455,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -605,28 +498,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -663,27 +541,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -720,27 +584,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -756,8 +606,6 @@ spec:
         === "Rendered SQL for SQL Server"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -779,27 +627,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -896,27 +730,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -955,27 +775,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1057,32 +863,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -1097,8 +883,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -1122,26 +906,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -1194,27 +964,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1235,7 +991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1253,27 +1009,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -1328,28 +1070,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -1388,28 +1115,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -1448,27 +1160,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1507,27 +1205,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -1542,8 +1226,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for SQL Server"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -1572,27 +1254,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -1773,27 +1441,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1830,27 +1484,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -1928,32 +1568,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -1969,8 +1589,6 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -1991,26 +1609,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -2056,27 +1660,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2098,7 +1688,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2113,27 +1703,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -2181,28 +1757,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -2239,28 +1800,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -2297,27 +1843,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2354,27 +1886,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -2390,8 +1908,6 @@ spec:
         === "Rendered SQL for SQL Server"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -2413,27 +1929,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -2531,27 +2033,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2590,27 +2078,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -2692,32 +2166,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -2732,8 +2186,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -2757,26 +2209,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -2829,27 +2267,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2870,7 +2294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2888,27 +2312,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -2963,28 +2373,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3023,28 +2418,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3083,27 +2463,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3142,27 +2508,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -3177,8 +2529,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for SQL Server"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -3207,27 +2557,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3408,27 +2744,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3465,27 +2787,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3563,32 +2871,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -3604,8 +2892,6 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -3626,26 +2912,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -3691,27 +2963,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3733,7 +2991,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3748,27 +3006,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3816,28 +3060,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3874,28 +3103,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -3932,27 +3146,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -3989,27 +3189,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -4025,8 +3211,6 @@ spec:
         === "Rendered SQL for SQL Server"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -4048,27 +3232,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -4166,27 +3336,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4225,27 +3381,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4327,32 +3469,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -4367,8 +3489,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -4392,26 +3512,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -4464,27 +3570,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4505,7 +3597,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4523,27 +3615,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -4598,28 +3676,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -4658,28 +3721,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -4718,27 +3766,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -4777,27 +3811,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -4812,8 +3832,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for SQL Server"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -4842,27 +3860,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -5053,27 +4057,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5114,27 +4104,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5220,32 +4196,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -5261,8 +4217,6 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -5287,26 +4241,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -5358,27 +4298,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5400,7 +4326,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5419,27 +4345,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -5493,28 +4405,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -5555,28 +4452,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -5617,27 +4499,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5678,27 +4546,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -5714,8 +4568,6 @@ spec:
         === "Rendered SQL for SQL Server"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -5743,27 +4595,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -5877,27 +4715,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -5938,27 +4762,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6044,32 +4854,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -6084,8 +4874,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -6111,26 +4899,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -6187,27 +4961,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6228,7 +4988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6248,27 +5008,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -6327,28 +5073,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -6389,28 +5120,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -6451,27 +5167,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6512,27 +5214,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -6547,8 +5235,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for SQL Server"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -6577,27 +5263,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -6792,27 +5464,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6853,27 +5511,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -6959,32 +5603,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -7000,8 +5624,6 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -7026,26 +5648,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -7097,27 +5705,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7139,7 +5733,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7158,27 +5752,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -7232,28 +5812,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -7294,28 +5859,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -7356,27 +5906,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -7417,27 +5953,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -7453,8 +5975,6 @@ spec:
         === "Rendered SQL for SQL Server"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -7482,27 +6002,13 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -7616,27 +6122,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -7677,27 +6169,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -7783,32 +6261,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            {% macro render_regex(column, regex_pattern) %}
-                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                               {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -7823,8 +6281,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
@@ -7850,26 +6306,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-              {%- if date_format == 'DD/MM/YYYY'-%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-              {%- elif date_format == 'DD-MM-YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-              {%- elif date_format == 'DD.MM.YYYY' -%}
-              '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-              {%- elif date_format == 'YYYY-MM-DD' -%}
-              '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-              {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-              {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                               REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                              THEN 1
                           ELSE 0
                         END
@@ -7926,27 +6368,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                                    CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7967,7 +6395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
-                                 CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
+                                    CAST(analyzed_table."target_column" AS VARCHAR) ~ '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$' IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7987,27 +6415,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -8066,28 +6480,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                                 {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -8128,28 +6527,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-                {%- endif -%}
-            {% endmacro -%}
-            
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END
@@ -8190,27 +6574,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                                 REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                                 THEN 1
                             ELSE 0
                         END
@@ -8251,27 +6621,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                                 THEN 1
                             ELSE 0
                         END
@@ -8286,8 +6642,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for SQL Server"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
@@ -8316,27 +6670,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format(date_format) %}
-                {%- if date_format == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-                {%- elif date_format == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-                {%- elif date_format == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-                {%- elif date_format == 'YYYY-MM-DD' -%}
-                    '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-                {%- elif date_format == 'MM/DD/YYYY'-%}
-                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                                 REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                                 THEN 1
                             ELSE 0
                         END

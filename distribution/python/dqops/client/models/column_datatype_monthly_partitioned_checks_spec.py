@@ -48,9 +48,9 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        monthly_partition_detected_datatype_in_text: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_detected_datatype_in_text: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_detected_datatype_in_text, Unset):
             monthly_partition_detected_datatype_in_text = (
                 self.monthly_partition_detected_datatype_in_text.to_dict()
@@ -72,13 +72,13 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_detected_datatype_in_text is not UNSET:
-            field_dict[
-                "monthly_partition_detected_datatype_in_text"
-            ] = monthly_partition_detected_datatype_in_text
+            field_dict["monthly_partition_detected_datatype_in_text"] = (
+                monthly_partition_detected_datatype_in_text
+            )
         if monthly_partition_detected_datatype_in_text_changed is not UNSET:
-            field_dict[
-                "monthly_partition_detected_datatype_in_text_changed"
-            ] = monthly_partition_detected_datatype_in_text_changed
+            field_dict["monthly_partition_detected_datatype_in_text_changed"] = (
+                monthly_partition_detected_datatype_in_text_changed
+            )
 
         return field_dict
 

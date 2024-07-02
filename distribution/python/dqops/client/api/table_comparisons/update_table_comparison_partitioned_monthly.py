@@ -17,6 +17,7 @@ def _get_kwargs(
     *,
     json_body: TableComparisonModel,
 ) -> Dict[str, Any]:
+
     pass
 
     json_json_body = json_body.to_dict()

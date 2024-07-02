@@ -39,9 +39,9 @@ class ColumnConversionsProfilingChecksSpec:
         profile_text_parsable_to_date_percent (Union[Unset, ColumnTextParsableToDatePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnConversionsProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnConversionsProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_text_parsable_to_boolean_percent: Union[
         Unset, "ColumnTextParsableToBooleanPercentCheckSpec"
     ] = UNSET
@@ -91,21 +91,21 @@ class ColumnConversionsProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_text_parsable_to_boolean_percent is not UNSET:
-            field_dict[
-                "profile_text_parsable_to_boolean_percent"
-            ] = profile_text_parsable_to_boolean_percent
+            field_dict["profile_text_parsable_to_boolean_percent"] = (
+                profile_text_parsable_to_boolean_percent
+            )
         if profile_text_parsable_to_integer_percent is not UNSET:
-            field_dict[
-                "profile_text_parsable_to_integer_percent"
-            ] = profile_text_parsable_to_integer_percent
+            field_dict["profile_text_parsable_to_integer_percent"] = (
+                profile_text_parsable_to_integer_percent
+            )
         if profile_text_parsable_to_float_percent is not UNSET:
-            field_dict[
-                "profile_text_parsable_to_float_percent"
-            ] = profile_text_parsable_to_float_percent
+            field_dict["profile_text_parsable_to_float_percent"] = (
+                profile_text_parsable_to_float_percent
+            )
         if profile_text_parsable_to_date_percent is not UNSET:
-            field_dict[
-                "profile_text_parsable_to_date_percent"
-            ] = profile_text_parsable_to_date_percent
+            field_dict["profile_text_parsable_to_date_percent"] = (
+                profile_text_parsable_to_date_percent
+            )
 
         return field_dict
 

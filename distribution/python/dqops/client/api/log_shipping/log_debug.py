@@ -13,6 +13,7 @@ def _get_kwargs(
     *,
     json_body: ExternalLogEntry,
 ) -> Dict[str, Any]:
+
     pass
 
     json_json_body = json_body.to_dict()

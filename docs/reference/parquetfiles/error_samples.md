@@ -50,8 +50,10 @@ The columns of this table are described below.
  | <span class="no-wrap-code">`check_name`</span> | The data quality check name. | *STRING* |
  | <span class="no-wrap-code">`check_display_name`</span> | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | *STRING* |
  | <span class="no-wrap-code">`check_type`</span> | The data quality check type (profiling, monitoring, partitioned). | *STRING* |
+ | <span class="no-wrap-code">`time_gradient`</span> | The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | *STRING* |
  | <span class="no-wrap-code">`check_category`</span> | The data quality check category name. | *STRING* |
  | <span class="no-wrap-code">`quality_dimension`</span> | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | *STRING* |
+ | <span class="no-wrap-code">`table_comparison`</span> | The name of a table comparison configuration used for a data comparison (accuracy) check. | *STRING* |
  | <span class="no-wrap-code">`sensor_name`</span> | The data quality sensor name. | *STRING* |
  | <span class="no-wrap-code">`time_series_id`</span> | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_group_hash. | *STRING* |
  | <span class="no-wrap-code">`result_type`</span> | The sample&#x27;s result data type. | *STRING* |

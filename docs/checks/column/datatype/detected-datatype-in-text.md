@@ -147,7 +147,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -233,7 +233,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -318,7 +318,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -404,7 +404,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -489,7 +489,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -575,7 +575,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -659,7 +659,7 @@ spec:
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -744,7 +744,7 @@ spec:
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -886,7 +886,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -999,7 +999,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -1108,7 +1108,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1194,7 +1194,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1279,7 +1279,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -1372,7 +1372,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -1461,7 +1461,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1547,7 +1547,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1632,7 +1632,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -1717,7 +1717,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -1801,7 +1801,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1887,7 +1887,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -1963,7 +1963,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -2139,7 +2139,7 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -2324,7 +2324,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -2418,7 +2418,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -2549,7 +2549,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -2634,7 +2634,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -2722,7 +2722,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -2807,7 +2807,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -2895,7 +2895,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -2980,7 +2980,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -3067,7 +3067,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -3151,7 +3151,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -3296,7 +3296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -3408,7 +3408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -3525,7 +3525,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -3610,7 +3610,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -3698,7 +3698,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -3790,7 +3790,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -3887,7 +3887,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -3972,7 +3972,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -4060,7 +4060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -4144,7 +4144,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -4231,7 +4231,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -4316,7 +4316,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -4395,7 +4395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -4570,7 +4570,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -4762,7 +4762,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -4855,7 +4855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -5071,7 +5071,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -5157,7 +5157,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -5242,7 +5242,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -5328,7 +5328,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -5413,7 +5413,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -5499,7 +5499,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -5583,7 +5583,7 @@ spec:
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -5668,7 +5668,7 @@ spec:
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -5810,7 +5810,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -5923,7 +5923,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -6032,7 +6032,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6118,7 +6118,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6203,7 +6203,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -6296,7 +6296,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -6385,7 +6385,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6471,7 +6471,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6556,7 +6556,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -6641,7 +6641,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -6725,7 +6725,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6811,7 +6811,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -6887,7 +6887,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -7063,7 +7063,7 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -7248,7 +7248,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7342,7 +7342,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7474,7 +7474,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7559,7 +7559,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7647,7 +7647,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -7732,7 +7732,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -7820,7 +7820,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7905,7 +7905,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -7992,7 +7992,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -8076,7 +8076,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -8221,7 +8221,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -8333,7 +8333,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -8450,7 +8450,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -8535,7 +8535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -8623,7 +8623,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -8715,7 +8715,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -8812,7 +8812,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -8897,7 +8897,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -8985,7 +8985,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -9069,7 +9069,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -9156,7 +9156,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -9241,7 +9241,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -9320,7 +9320,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -9495,7 +9495,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -9687,7 +9687,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -9780,7 +9780,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -9996,7 +9996,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -10082,7 +10082,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -10167,7 +10167,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -10253,7 +10253,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -10338,7 +10338,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -10424,7 +10424,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -10508,7 +10508,7 @@ spec:
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -10593,7 +10593,7 @@ spec:
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -10735,7 +10735,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -10848,7 +10848,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -10957,7 +10957,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11043,7 +11043,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11128,7 +11128,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -11221,7 +11221,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -11310,7 +11310,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11396,7 +11396,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11481,7 +11481,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -11566,7 +11566,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -11650,7 +11650,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11736,7 +11736,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -11812,7 +11812,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -11988,7 +11988,7 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -12173,7 +12173,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12267,7 +12267,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12399,7 +12399,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12484,7 +12484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12572,7 +12572,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -12657,7 +12657,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -12745,7 +12745,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12830,7 +12830,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -12917,7 +12917,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -13001,7 +13001,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -13146,7 +13146,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -13258,7 +13258,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -13375,7 +13375,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -13460,7 +13460,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -13548,7 +13548,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -13640,7 +13640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -13737,7 +13737,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -13822,7 +13822,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -13910,7 +13910,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -13994,7 +13994,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -14081,7 +14081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -14166,7 +14166,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -14245,7 +14245,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -14420,7 +14420,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -14612,7 +14612,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -14705,7 +14705,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -14931,7 +14931,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -15017,7 +15017,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -15106,7 +15106,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -15192,7 +15192,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -15281,7 +15281,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -15367,7 +15367,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -15455,7 +15455,7 @@ spec:
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -15540,7 +15540,7 @@ spec:
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -15686,7 +15686,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -15799,7 +15799,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -15914,7 +15914,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16000,7 +16000,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16089,7 +16089,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -16182,7 +16182,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -16277,7 +16277,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16363,7 +16363,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16452,7 +16452,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -16537,7 +16537,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -16625,7 +16625,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16711,7 +16711,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -16791,7 +16791,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -16967,7 +16967,7 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -17158,7 +17158,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17252,7 +17252,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17400,7 +17400,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17485,7 +17485,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17575,7 +17575,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -17660,7 +17660,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -17750,7 +17750,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17835,7 +17835,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -17924,7 +17924,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -18008,7 +18008,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -18155,7 +18155,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -18267,7 +18267,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -18388,7 +18388,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -18473,7 +18473,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -18563,7 +18563,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -18655,7 +18655,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -18756,7 +18756,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -18841,7 +18841,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -18931,7 +18931,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -19015,7 +19015,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -19104,7 +19104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -19189,7 +19189,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -19270,7 +19270,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -19445,7 +19445,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -19637,7 +19637,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -19730,7 +19730,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -19960,7 +19960,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -20046,7 +20046,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -20135,7 +20135,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -20221,7 +20221,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -20310,7 +20310,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -20396,7 +20396,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -20484,7 +20484,7 @@ spec:
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -20569,7 +20569,7 @@ spec:
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -20715,7 +20715,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -20828,7 +20828,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -20943,7 +20943,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21029,7 +21029,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21118,7 +21118,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -21211,7 +21211,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -21306,7 +21306,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21392,7 +21392,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21481,7 +21481,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -21566,7 +21566,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -21654,7 +21654,7 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21740,7 +21740,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -21820,7 +21820,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -21996,7 +21996,7 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -22187,7 +22187,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22281,7 +22281,7 @@ spec:
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22429,7 +22429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22514,7 +22514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22604,7 +22604,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -22689,7 +22689,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -22779,7 +22779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22864,7 +22864,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                                 END
@@ -22953,7 +22953,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
-                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?[0-9]*[.,]?[0-9]+$') }}
                                     THEN 1
                                 ELSE 0
                             END
@@ -23037,7 +23037,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         THEN 1
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
-                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?([0-9]*[.])[0-9]+$')
+                            CASE WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -23184,7 +23184,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -23296,7 +23296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(analyzed_table."target_column", '[+-]?([0-9]*[.,])[0-9]+E[+-][0-9]*$')
-                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?([0-9]*[.,])[0-9]+$')
+                                    OR REGEXP_LIKE(analyzed_table."target_column", '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                             END
@@ -23417,7 +23417,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -23502,7 +23502,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -23592,7 +23592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -23684,7 +23684,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -23785,7 +23785,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -23870,7 +23870,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?[0-9]*[.,]?[0-9]+$' IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -23960,7 +23960,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -24044,7 +24044,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?([0-9]*[.])[0-9]+$'
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) REGEXP '^[+-]?[0-9]*[.,]?[0-9]+$'
                                     THEN 1
                                 ELSE 0
                             END
@@ -24133,7 +24133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -24218,7 +24218,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
-                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                WHEN REGEXP(CAST(analyzed_table.`target_column` AS STRING), "^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                                     THEN 1
                                 ELSE 0
                             END
@@ -24299,7 +24299,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
-                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -24474,7 +24474,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
-                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^0-9]%'
+                                WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) NOT LIKE '%[^-+0-9]%'
                                     THEN 1
                                 ELSE 0
                             END
@@ -24666,7 +24666,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR {# Casting double to varchar in trino results in a scientific notation #}
-                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END
@@ -24759,7 +24759,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         SUM(
                             CASE
                                 WHEN REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]{1}[.][0-9]*E[-]?[0-9]+$') OR 
-                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?([0-9]*[.])[0-9]+$')
+                                     REGEXP_LIKE(TRY_CAST(analyzed_table."target_column" AS VARCHAR), '^[+-]?[0-9]*[.,]?[0-9]+$')
                                     THEN 1
                                 ELSE 0
                                 END

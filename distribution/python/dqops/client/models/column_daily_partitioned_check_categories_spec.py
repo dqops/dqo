@@ -91,9 +91,9 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
     custom: Union[Unset, "ColumnDailyPartitionedCheckCategoriesSpecCustom"] = UNSET
     nulls: Union[Unset, "ColumnNullsDailyPartitionedChecksSpec"] = UNSET
     uniqueness: Union[Unset, "ColumnUniquenessDailyPartitionedChecksSpec"] = UNSET
-    accepted_values: Union[
-        Unset, "ColumnAcceptedValuesDailyPartitionedChecksSpec"
-    ] = UNSET
+    accepted_values: Union[Unset, "ColumnAcceptedValuesDailyPartitionedChecksSpec"] = (
+        UNSET
+    )
     text: Union[Unset, "ColumnTextDailyPartitionedChecksSpec"] = UNSET
     whitespace: Union[Unset, "ColumnWhitespaceDailyPartitionedChecksSpec"] = UNSET
     conversions: Union[Unset, "ColumnConversionsDailyPartitionedChecksSpec"] = UNSET

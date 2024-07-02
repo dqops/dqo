@@ -33,9 +33,9 @@ class ColumnSchemaProfilingChecksSpec:
 
     custom_checks: Union[Unset, "ColumnSchemaProfilingChecksSpecCustomChecks"] = UNSET
     profile_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
-    profile_column_type_changed: Union[
-        Unset, "ColumnSchemaTypeChangedCheckSpec"
-    ] = UNSET
+    profile_column_type_changed: Union[Unset, "ColumnSchemaTypeChangedCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

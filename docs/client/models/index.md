@@ -173,11 +173,20 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DqoUserProfileModel*](./environment.md#dqouserprofilemodel)|The model that describes the current user and his access rights.|
 
 
+## error_samples
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*ErrorSampleResultDataType*](./error_samples.md#errorsampleresultdatatype)|Enumeration of data types that were detected as the error sample collector result.|
+|[*TimePeriodGradient*](./error_samples.md#timeperiodgradient)|Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).|
+|[*ErrorSampleEntryModel*](./error_samples.md#errorsampleentrymodel)|Detailed error samples captured for a single check. Represent one row in the error_samples table.|
+|[*ErrorSamplesListModel*](./error_samples.md#errorsampleslistmodel)|List of error samples for a single check. Returned in the context of a single data group, with a supplied list of other data groups.|
+
+
 ## errors
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*TimePeriodGradient*](./errors.md#timeperiodgradient)|Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).|
 |[*ErrorEntryModel*](./errors.md#errorentrymodel)|Detailed error statuses for a single check. Represent one row in the errors table.|
 |[*ErrorsListModel*](./errors.md#errorslistmodel)|Error detailed statuses. Returned in the context of a single data group, with a supplied list of other data groups.|
 

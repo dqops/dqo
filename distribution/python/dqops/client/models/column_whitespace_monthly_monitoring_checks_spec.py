@@ -121,17 +121,17 @@ class ColumnWhitespaceMonthlyMonitoringChecksSpec:
                 self.monthly_null_placeholder_text_percent.to_dict()
             )
 
-        monthly_text_surrounded_by_whitespace_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_text_surrounded_by_whitespace_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_text_surrounded_by_whitespace_found, Unset):
             monthly_text_surrounded_by_whitespace_found = (
                 self.monthly_text_surrounded_by_whitespace_found.to_dict()
             )
 
-        monthly_text_surrounded_by_whitespace_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_text_surrounded_by_whitespace_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_text_surrounded_by_whitespace_percent, Unset):
             monthly_text_surrounded_by_whitespace_percent = (
                 self.monthly_text_surrounded_by_whitespace_percent.to_dict()
@@ -147,27 +147,27 @@ class ColumnWhitespaceMonthlyMonitoringChecksSpec:
         if monthly_whitespace_text_found is not UNSET:
             field_dict["monthly_whitespace_text_found"] = monthly_whitespace_text_found
         if monthly_null_placeholder_text_found is not UNSET:
-            field_dict[
-                "monthly_null_placeholder_text_found"
-            ] = monthly_null_placeholder_text_found
+            field_dict["monthly_null_placeholder_text_found"] = (
+                monthly_null_placeholder_text_found
+            )
         if monthly_empty_text_percent is not UNSET:
             field_dict["monthly_empty_text_percent"] = monthly_empty_text_percent
         if monthly_whitespace_text_percent is not UNSET:
-            field_dict[
-                "monthly_whitespace_text_percent"
-            ] = monthly_whitespace_text_percent
+            field_dict["monthly_whitespace_text_percent"] = (
+                monthly_whitespace_text_percent
+            )
         if monthly_null_placeholder_text_percent is not UNSET:
-            field_dict[
-                "monthly_null_placeholder_text_percent"
-            ] = monthly_null_placeholder_text_percent
+            field_dict["monthly_null_placeholder_text_percent"] = (
+                monthly_null_placeholder_text_percent
+            )
         if monthly_text_surrounded_by_whitespace_found is not UNSET:
-            field_dict[
-                "monthly_text_surrounded_by_whitespace_found"
-            ] = monthly_text_surrounded_by_whitespace_found
+            field_dict["monthly_text_surrounded_by_whitespace_found"] = (
+                monthly_text_surrounded_by_whitespace_found
+            )
         if monthly_text_surrounded_by_whitespace_percent is not UNSET:
-            field_dict[
-                "monthly_text_surrounded_by_whitespace_percent"
-            ] = monthly_text_surrounded_by_whitespace_percent
+            field_dict["monthly_text_surrounded_by_whitespace_percent"] = (
+                monthly_text_surrounded_by_whitespace_percent
+            )
 
         return field_dict
 

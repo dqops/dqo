@@ -139,16 +139,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -716,16 +712,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -1413,16 +1405,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -1991,16 +1979,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -2688,16 +2672,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -3266,16 +3246,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -3973,16 +3949,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -4617,16 +4589,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -5352,16 +5320,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
@@ -5996,16 +5960,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {%- macro render_regex(regex) -%}
-                 r{{ lib.make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END

@@ -75,9 +75,9 @@ class ColumnUniquenessProfilingChecksSpec:
         profile_distinct_percent_change_30_days (Union[Unset, ColumnDistinctPercentChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnUniquenessProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnUniquenessProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
     profile_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     profile_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
@@ -207,43 +207,43 @@ class ColumnUniquenessProfilingChecksSpec:
         if profile_duplicate_percent is not UNSET:
             field_dict["profile_duplicate_percent"] = profile_duplicate_percent
         if profile_distinct_count_anomaly is not UNSET:
-            field_dict[
-                "profile_distinct_count_anomaly"
-            ] = profile_distinct_count_anomaly
+            field_dict["profile_distinct_count_anomaly"] = (
+                profile_distinct_count_anomaly
+            )
         if profile_distinct_percent_anomaly is not UNSET:
-            field_dict[
-                "profile_distinct_percent_anomaly"
-            ] = profile_distinct_percent_anomaly
+            field_dict["profile_distinct_percent_anomaly"] = (
+                profile_distinct_percent_anomaly
+            )
         if profile_distinct_count_change is not UNSET:
             field_dict["profile_distinct_count_change"] = profile_distinct_count_change
         if profile_distinct_percent_change is not UNSET:
-            field_dict[
-                "profile_distinct_percent_change"
-            ] = profile_distinct_percent_change
+            field_dict["profile_distinct_percent_change"] = (
+                profile_distinct_percent_change
+            )
         if profile_distinct_count_change_1_day is not UNSET:
-            field_dict[
-                "profile_distinct_count_change_1_day"
-            ] = profile_distinct_count_change_1_day
+            field_dict["profile_distinct_count_change_1_day"] = (
+                profile_distinct_count_change_1_day
+            )
         if profile_distinct_count_change_7_days is not UNSET:
-            field_dict[
-                "profile_distinct_count_change_7_days"
-            ] = profile_distinct_count_change_7_days
+            field_dict["profile_distinct_count_change_7_days"] = (
+                profile_distinct_count_change_7_days
+            )
         if profile_distinct_count_change_30_days is not UNSET:
-            field_dict[
-                "profile_distinct_count_change_30_days"
-            ] = profile_distinct_count_change_30_days
+            field_dict["profile_distinct_count_change_30_days"] = (
+                profile_distinct_count_change_30_days
+            )
         if profile_distinct_percent_change_1_day is not UNSET:
-            field_dict[
-                "profile_distinct_percent_change_1_day"
-            ] = profile_distinct_percent_change_1_day
+            field_dict["profile_distinct_percent_change_1_day"] = (
+                profile_distinct_percent_change_1_day
+            )
         if profile_distinct_percent_change_7_days is not UNSET:
-            field_dict[
-                "profile_distinct_percent_change_7_days"
-            ] = profile_distinct_percent_change_7_days
+            field_dict["profile_distinct_percent_change_7_days"] = (
+                profile_distinct_percent_change_7_days
+            )
         if profile_distinct_percent_change_30_days is not UNSET:
-            field_dict[
-                "profile_distinct_percent_change_30_days"
-            ] = profile_distinct_percent_change_30_days
+            field_dict["profile_distinct_percent_change_30_days"] = (
+                profile_distinct_percent_change_30_days
+            )
 
         return field_dict
 

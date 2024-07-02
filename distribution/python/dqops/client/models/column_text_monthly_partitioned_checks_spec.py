@@ -56,12 +56,12 @@ class ColumnTextMonthlyPartitionedChecksSpec:
     custom_checks: Union[
         Unset, "ColumnTextMonthlyPartitionedChecksSpecCustomChecks"
     ] = UNSET
-    monthly_partition_text_min_length: Union[
-        Unset, "ColumnTextMinLengthCheckSpec"
-    ] = UNSET
-    monthly_partition_text_max_length: Union[
-        Unset, "ColumnTextMaxLengthCheckSpec"
-    ] = UNSET
+    monthly_partition_text_min_length: Union[Unset, "ColumnTextMinLengthCheckSpec"] = (
+        UNSET
+    )
+    monthly_partition_text_max_length: Union[Unset, "ColumnTextMaxLengthCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_text_mean_length: Union[
         Unset, "ColumnTextMeanLengthCheckSpec"
     ] = UNSET
@@ -105,9 +105,9 @@ class ColumnTextMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_mean_length.to_dict()
             )
 
-        monthly_partition_text_length_below_min_length: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_text_length_below_min_length: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_text_length_below_min_length, Unset):
             monthly_partition_text_length_below_min_length = (
                 self.monthly_partition_text_length_below_min_length.to_dict()
@@ -123,9 +123,9 @@ class ColumnTextMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_length_below_min_length_percent.to_dict()
             )
 
-        monthly_partition_text_length_above_max_length: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_text_length_above_max_length: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_text_length_above_max_length, Unset):
             monthly_partition_text_length_above_max_length = (
                 self.monthly_partition_text_length_above_max_length.to_dict()
@@ -141,9 +141,9 @@ class ColumnTextMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_length_above_max_length_percent.to_dict()
             )
 
-        monthly_partition_text_length_in_range_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_text_length_in_range_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_text_length_in_range_percent, Unset):
             monthly_partition_text_length_in_range_percent = (
                 self.monthly_partition_text_length_in_range_percent.to_dict()
@@ -155,37 +155,37 @@ class ColumnTextMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_text_min_length is not UNSET:
-            field_dict[
-                "monthly_partition_text_min_length"
-            ] = monthly_partition_text_min_length
+            field_dict["monthly_partition_text_min_length"] = (
+                monthly_partition_text_min_length
+            )
         if monthly_partition_text_max_length is not UNSET:
-            field_dict[
-                "monthly_partition_text_max_length"
-            ] = monthly_partition_text_max_length
+            field_dict["monthly_partition_text_max_length"] = (
+                monthly_partition_text_max_length
+            )
         if monthly_partition_text_mean_length is not UNSET:
-            field_dict[
-                "monthly_partition_text_mean_length"
-            ] = monthly_partition_text_mean_length
+            field_dict["monthly_partition_text_mean_length"] = (
+                monthly_partition_text_mean_length
+            )
         if monthly_partition_text_length_below_min_length is not UNSET:
-            field_dict[
-                "monthly_partition_text_length_below_min_length"
-            ] = monthly_partition_text_length_below_min_length
+            field_dict["monthly_partition_text_length_below_min_length"] = (
+                monthly_partition_text_length_below_min_length
+            )
         if monthly_partition_text_length_below_min_length_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_length_below_min_length_percent"
-            ] = monthly_partition_text_length_below_min_length_percent
+            field_dict["monthly_partition_text_length_below_min_length_percent"] = (
+                monthly_partition_text_length_below_min_length_percent
+            )
         if monthly_partition_text_length_above_max_length is not UNSET:
-            field_dict[
-                "monthly_partition_text_length_above_max_length"
-            ] = monthly_partition_text_length_above_max_length
+            field_dict["monthly_partition_text_length_above_max_length"] = (
+                monthly_partition_text_length_above_max_length
+            )
         if monthly_partition_text_length_above_max_length_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_length_above_max_length_percent"
-            ] = monthly_partition_text_length_above_max_length_percent
+            field_dict["monthly_partition_text_length_above_max_length_percent"] = (
+                monthly_partition_text_length_above_max_length_percent
+            )
         if monthly_partition_text_length_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_length_in_range_percent"
-            ] = monthly_partition_text_length_in_range_percent
+            field_dict["monthly_partition_text_length_in_range_percent"] = (
+                monthly_partition_text_length_in_range_percent
+            )
 
         return field_dict
 

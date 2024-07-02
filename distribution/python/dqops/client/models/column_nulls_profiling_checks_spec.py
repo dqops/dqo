@@ -61,9 +61,9 @@ class ColumnNullsProfilingChecksSpec:
     ] = UNSET
     profile_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
     profile_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
-    profile_nulls_percent_change: Union[
-        Unset, "ColumnNullPercentChangeCheckSpec"
-    ] = UNSET
+    profile_nulls_percent_change: Union[Unset, "ColumnNullPercentChangeCheckSpec"] = (
+        UNSET
+    )
     profile_nulls_percent_change_1_day: Union[
         Unset, "ColumnNullPercentChange1DayCheckSpec"
     ] = UNSET
@@ -140,17 +140,17 @@ class ColumnNullsProfilingChecksSpec:
         if profile_nulls_percent_change is not UNSET:
             field_dict["profile_nulls_percent_change"] = profile_nulls_percent_change
         if profile_nulls_percent_change_1_day is not UNSET:
-            field_dict[
-                "profile_nulls_percent_change_1_day"
-            ] = profile_nulls_percent_change_1_day
+            field_dict["profile_nulls_percent_change_1_day"] = (
+                profile_nulls_percent_change_1_day
+            )
         if profile_nulls_percent_change_7_days is not UNSET:
-            field_dict[
-                "profile_nulls_percent_change_7_days"
-            ] = profile_nulls_percent_change_7_days
+            field_dict["profile_nulls_percent_change_7_days"] = (
+                profile_nulls_percent_change_7_days
+            )
         if profile_nulls_percent_change_30_days is not UNSET:
-            field_dict[
-                "profile_nulls_percent_change_30_days"
-            ] = profile_nulls_percent_change_30_days
+            field_dict["profile_nulls_percent_change_30_days"] = (
+                profile_nulls_percent_change_30_days
+            )
 
         return field_dict
 

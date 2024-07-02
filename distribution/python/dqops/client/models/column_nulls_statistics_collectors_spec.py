@@ -34,12 +34,12 @@ class ColumnNullsStatisticsCollectorsSpec:
     """
 
     nulls_count: Union[Unset, "ColumnNullsNullsCountStatisticsCollectorSpec"] = UNSET
-    nulls_percent: Union[
-        Unset, "ColumnNullsNullsPercentStatisticsCollectorSpec"
-    ] = UNSET
-    not_nulls_count: Union[
-        Unset, "ColumnNullsNotNullsCountStatisticsCollectorSpec"
-    ] = UNSET
+    nulls_percent: Union[Unset, "ColumnNullsNullsPercentStatisticsCollectorSpec"] = (
+        UNSET
+    )
+    not_nulls_count: Union[Unset, "ColumnNullsNotNullsCountStatisticsCollectorSpec"] = (
+        UNSET
+    )
     not_nulls_percent: Union[
         Unset, "ColumnNullsNotNullsPercentStatisticsCollectorSpec"
     ] = UNSET

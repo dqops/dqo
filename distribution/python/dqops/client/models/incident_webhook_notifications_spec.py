@@ -44,9 +44,9 @@ class IncidentWebhookNotificationsSpec:
         if incident_opened_webhook_url is not UNSET:
             field_dict["incident_opened_webhook_url"] = incident_opened_webhook_url
         if incident_acknowledged_webhook_url is not UNSET:
-            field_dict[
-                "incident_acknowledged_webhook_url"
-            ] = incident_acknowledged_webhook_url
+            field_dict["incident_acknowledged_webhook_url"] = (
+                incident_acknowledged_webhook_url
+            )
         if incident_resolved_webhook_url is not UNSET:
             field_dict["incident_resolved_webhook_url"] = incident_resolved_webhook_url
         if incident_muted_webhook_url is not UNSET:

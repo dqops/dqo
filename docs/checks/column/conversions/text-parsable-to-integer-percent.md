@@ -204,8 +204,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -221,8 +221,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
@@ -233,12 +233,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -254,8 +253,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -266,15 +265,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -295,11 +290,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM(
@@ -316,8 +308,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -333,8 +325,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -345,7 +337,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -392,8 +383,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -409,8 +400,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -421,7 +412,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -681,8 +671,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -697,8 +687,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -712,12 +702,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -732,8 +721,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -747,15 +736,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Oracle"
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -775,11 +760,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -804,8 +786,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -820,8 +802,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -835,7 +817,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Presto"
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -889,8 +870,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -905,8 +886,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -920,7 +901,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -1270,8 +1250,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1287,8 +1267,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
@@ -1299,12 +1279,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1320,8 +1299,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1332,15 +1311,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1361,11 +1336,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM(
@@ -1382,8 +1354,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1399,8 +1371,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1411,7 +1383,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -1458,8 +1429,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1475,8 +1446,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1487,7 +1458,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -1748,8 +1718,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1764,8 +1734,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1779,12 +1749,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1799,8 +1768,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1814,15 +1783,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Oracle"
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1842,11 +1807,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -1871,8 +1833,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1887,8 +1849,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1902,7 +1864,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Presto"
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -1956,8 +1917,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1972,8 +1933,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1987,7 +1948,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -2337,8 +2297,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2354,8 +2314,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM  AS analyzed_table
@@ -2366,12 +2326,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2387,8 +2346,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -2399,15 +2358,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2428,11 +2383,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM(
@@ -2449,8 +2401,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2466,8 +2418,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2478,7 +2430,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -2525,8 +2476,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2542,8 +2493,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2554,7 +2505,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -2815,8 +2765,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2831,8 +2781,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2846,12 +2796,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2866,8 +2815,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2881,15 +2830,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Oracle"
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2909,11 +2854,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -2938,8 +2880,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2954,8 +2896,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2969,7 +2911,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Presto"
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -3023,8 +2964,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3039,8 +2980,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3054,7 +2995,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -3422,8 +3362,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3439,8 +3379,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3455,12 +3395,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3476,8 +3415,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
@@ -3492,15 +3431,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3521,11 +3456,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -3548,8 +3480,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3565,8 +3497,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3581,7 +3513,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -3634,8 +3565,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3651,8 +3582,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3667,7 +3598,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -3962,8 +3892,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3978,8 +3908,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3995,12 +3925,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4015,8 +3944,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4032,15 +3961,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Oracle"
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4060,11 +3985,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -4093,8 +4015,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4109,8 +4031,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4126,7 +4048,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Presto"
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -4184,8 +4105,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4200,8 +4121,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4217,7 +4138,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -4593,8 +4513,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4610,8 +4530,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4626,12 +4546,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4647,8 +4566,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
@@ -4663,15 +4582,11 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4692,11 +4607,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -4719,8 +4631,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4736,8 +4648,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4752,7 +4664,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -4805,8 +4716,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4822,8 +4733,8 @@ spec:
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4838,7 +4749,6 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -5133,8 +5043,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table') }}, '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5149,8 +5059,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_MATCHES(analyzed_table."target_column", '^[0-9]*$') IS TRUE THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5166,12 +5076,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
+                    ELSE 100.0 * SUM(
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]+$') }}
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5186,8 +5095,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]$')
+                    ELSE 100.0 * SUM(
+                        REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9]+$')
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5203,15 +5112,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Oracle"
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5231,11 +5136,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1
-                            ELSE NULL
-                        END
+                    ELSE 100.0 * SUM(
+                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9]*$') THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -5264,8 +5166,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5280,8 +5182,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5297,7 +5199,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Presto"
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -5355,8 +5256,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5371,8 +5272,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        analyzed_table."target_column" ~ '^[0-9]$'
+                    ELSE 100.0 * SUM(
+                        CASE WHEN analyzed_table."target_column" ~ '^[0-9]+$' THEN 1 ELSE 0 END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5388,7 +5289,6 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0

@@ -25,9 +25,9 @@ class TableAvailabilityProfilingChecksSpec:
         profile_table_availability (Union[Unset, TableAvailabilityCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableAvailabilityProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableAvailabilityProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_table_availability: Union[Unset, "TableAvailabilityCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 

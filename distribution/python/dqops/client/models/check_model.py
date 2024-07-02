@@ -259,9 +259,9 @@ class CheckModel:
         if check_target is not UNSET:
             field_dict["check_target"] = check_target
         if configuration_requirements_errors is not UNSET:
-            field_dict[
-                "configuration_requirements_errors"
-            ] = configuration_requirements_errors
+            field_dict["configuration_requirements_errors"] = (
+                configuration_requirements_errors
+            )
         if similar_checks is not UNSET:
             field_dict["similar_checks"] = similar_checks
         if can_edit is not UNSET:

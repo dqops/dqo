@@ -141,22 +141,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -190,22 +180,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -239,22 +219,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -269,8 +239,6 @@ spec:
         === "Rendered SQL for DuckDB"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -290,22 +258,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -339,22 +297,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -375,8 +323,6 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -400,22 +346,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -430,8 +366,6 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -451,22 +385,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -511,22 +435,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -541,8 +455,6 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -562,22 +474,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -611,22 +513,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -660,16 +552,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -691,7 +573,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -727,22 +609,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -837,22 +709,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -888,22 +750,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -939,22 +791,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -968,8 +810,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for DuckDB"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -992,22 +832,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1043,22 +873,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1078,8 +898,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Oracle"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1111,22 +929,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1140,8 +948,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1164,22 +970,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1231,22 +1027,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1260,8 +1046,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1284,22 +1068,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1335,22 +1109,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1386,16 +1150,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -1417,7 +1171,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -1456,22 +1210,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1650,22 +1394,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1699,22 +1433,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1748,22 +1472,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1778,8 +1492,6 @@ spec:
         === "Rendered SQL for DuckDB"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1799,22 +1511,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1848,22 +1550,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1884,8 +1576,6 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1909,22 +1599,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1939,8 +1619,6 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -1960,22 +1638,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2020,22 +1688,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2050,8 +1708,6 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -2071,22 +1727,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2120,22 +1766,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2169,16 +1805,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -2200,7 +1826,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2236,22 +1862,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2347,22 +1963,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2398,22 +2004,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2449,22 +2045,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2478,8 +2064,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for DuckDB"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -2502,22 +2086,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2553,22 +2127,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2588,8 +2152,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Oracle"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -2621,22 +2183,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2650,8 +2202,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -2674,22 +2224,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2741,22 +2281,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2770,8 +2300,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -2794,22 +2322,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2845,22 +2363,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2896,16 +2404,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -2927,7 +2425,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2966,22 +2464,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3160,22 +2648,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3209,22 +2687,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3258,22 +2726,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3288,8 +2746,6 @@ spec:
         === "Rendered SQL for DuckDB"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -3309,22 +2765,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3358,22 +2804,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3394,8 +2830,6 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -3419,22 +2853,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3449,8 +2873,6 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -3470,22 +2892,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3530,22 +2942,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3560,8 +2962,6 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -3581,22 +2981,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3630,22 +3020,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3679,16 +3059,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -3710,7 +3080,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -3746,22 +3116,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3857,22 +3217,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3908,22 +3258,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3959,22 +3299,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3988,8 +3318,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for DuckDB"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4012,22 +3340,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4063,22 +3381,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4098,8 +3406,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Oracle"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4131,22 +3437,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4160,8 +3456,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4184,22 +3478,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4251,22 +3535,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4280,8 +3554,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4304,22 +3576,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4355,22 +3617,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4406,16 +3658,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -4437,7 +3679,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -4476,22 +3718,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4680,22 +3912,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4733,22 +3955,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4786,22 +3998,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4816,8 +4018,6 @@ spec:
         === "Rendered SQL for DuckDB"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4841,22 +4041,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4894,22 +4084,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4930,8 +4110,6 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -4961,22 +4139,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4991,8 +4159,6 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5016,22 +4182,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5082,22 +4238,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5112,8 +4258,6 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5137,22 +4281,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5190,22 +4324,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5243,16 +4367,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -5274,7 +4388,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -5313,22 +4427,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5440,22 +4544,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5493,22 +4587,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5546,22 +4630,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5575,8 +4649,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for DuckDB"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5601,22 +4673,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5654,22 +4716,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5689,8 +4741,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Oracle"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5726,22 +4776,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5755,8 +4795,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5781,22 +4819,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5852,22 +4880,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5881,8 +4899,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -5907,22 +4923,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5960,22 +4966,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6013,16 +5009,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -6044,7 +5030,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -6083,22 +5069,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6291,22 +5267,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6344,22 +5310,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6397,22 +5353,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6427,8 +5373,6 @@ spec:
         === "Rendered SQL for DuckDB"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -6452,22 +5396,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6505,22 +5439,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6541,8 +5465,6 @@ spec:
         === "Rendered SQL for Oracle"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -6572,22 +5494,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6602,8 +5514,6 @@ spec:
         === "Rendered SQL for PostgreSQL"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -6627,22 +5537,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6693,22 +5593,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6723,8 +5613,6 @@ spec:
         === "Rendered SQL for Redshift"
 
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -6748,22 +5636,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6801,22 +5679,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6854,16 +5722,6 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -6885,7 +5743,7 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -6924,22 +5782,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7051,22 +5899,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7104,22 +5942,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7157,22 +5985,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7186,8 +6004,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for DuckDB"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -7212,22 +6028,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7265,22 +6071,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7300,8 +6096,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Oracle"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -7337,22 +6131,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7366,8 +6150,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for PostgreSQL"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -7392,22 +6174,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7463,22 +6235,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast()%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {% endmacro %}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7492,8 +6254,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for Redshift"
             ```sql
-            
-            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
@@ -7518,22 +6278,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7571,22 +6321,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7624,16 +6364,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             {% macro render_ordering_column_names() %}
                 {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
                     ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
@@ -7655,7 +6385,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                             ELSE 0
                         END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -7694,22 +6424,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_format_cast() -%}
-                {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                {{ lib.render_target_column('analyzed_table') }}
-                {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- else -%}
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                            WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                             ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})

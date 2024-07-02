@@ -104,9 +104,9 @@ class ColumnWhitespaceMonthlyPartitionedChecksSpec:
                 self.monthly_partition_whitespace_text_found.to_dict()
             )
 
-        monthly_partition_null_placeholder_text_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_null_placeholder_text_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_null_placeholder_text_found, Unset):
             monthly_partition_null_placeholder_text_found = (
                 self.monthly_partition_null_placeholder_text_found.to_dict()
@@ -158,37 +158,37 @@ class ColumnWhitespaceMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_empty_text_found is not UNSET:
-            field_dict[
-                "monthly_partition_empty_text_found"
-            ] = monthly_partition_empty_text_found
+            field_dict["monthly_partition_empty_text_found"] = (
+                monthly_partition_empty_text_found
+            )
         if monthly_partition_whitespace_text_found is not UNSET:
-            field_dict[
-                "monthly_partition_whitespace_text_found"
-            ] = monthly_partition_whitespace_text_found
+            field_dict["monthly_partition_whitespace_text_found"] = (
+                monthly_partition_whitespace_text_found
+            )
         if monthly_partition_null_placeholder_text_found is not UNSET:
-            field_dict[
-                "monthly_partition_null_placeholder_text_found"
-            ] = monthly_partition_null_placeholder_text_found
+            field_dict["monthly_partition_null_placeholder_text_found"] = (
+                monthly_partition_null_placeholder_text_found
+            )
         if monthly_partition_empty_text_percent is not UNSET:
-            field_dict[
-                "monthly_partition_empty_text_percent"
-            ] = monthly_partition_empty_text_percent
+            field_dict["monthly_partition_empty_text_percent"] = (
+                monthly_partition_empty_text_percent
+            )
         if monthly_partition_whitespace_text_percent is not UNSET:
-            field_dict[
-                "monthly_partition_whitespace_text_percent"
-            ] = monthly_partition_whitespace_text_percent
+            field_dict["monthly_partition_whitespace_text_percent"] = (
+                monthly_partition_whitespace_text_percent
+            )
         if monthly_partition_null_placeholder_text_percent is not UNSET:
-            field_dict[
-                "monthly_partition_null_placeholder_text_percent"
-            ] = monthly_partition_null_placeholder_text_percent
+            field_dict["monthly_partition_null_placeholder_text_percent"] = (
+                monthly_partition_null_placeholder_text_percent
+            )
         if monthly_partition_text_surrounded_by_whitespace_found is not UNSET:
-            field_dict[
-                "monthly_partition_text_surrounded_by_whitespace_found"
-            ] = monthly_partition_text_surrounded_by_whitespace_found
+            field_dict["monthly_partition_text_surrounded_by_whitespace_found"] = (
+                monthly_partition_text_surrounded_by_whitespace_found
+            )
         if monthly_partition_text_surrounded_by_whitespace_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_surrounded_by_whitespace_percent"
-            ] = monthly_partition_text_surrounded_by_whitespace_percent
+            field_dict["monthly_partition_text_surrounded_by_whitespace_percent"] = (
+                monthly_partition_text_surrounded_by_whitespace_percent
+            )
 
         return field_dict
 

@@ -37,9 +37,9 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
     monthly_partition_data_ingestion_delay: Union[
         Unset, "TableDataIngestionDelayCheckSpec"
     ] = UNSET
-    monthly_partition_reload_lag: Union[
-        Unset, "TablePartitionReloadLagCheckSpec"
-    ] = UNSET
+    monthly_partition_reload_lag: Union[Unset, "TablePartitionReloadLagCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -63,9 +63,9 @@ class TableTimelinessMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_data_ingestion_delay is not UNSET:
-            field_dict[
-                "monthly_partition_data_ingestion_delay"
-            ] = monthly_partition_data_ingestion_delay
+            field_dict["monthly_partition_data_ingestion_delay"] = (
+                monthly_partition_data_ingestion_delay
+            )
         if monthly_partition_reload_lag is not UNSET:
             field_dict["monthly_partition_reload_lag"] = monthly_partition_reload_lag
 

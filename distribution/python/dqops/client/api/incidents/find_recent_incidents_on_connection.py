@@ -27,6 +27,7 @@ def _get_kwargs(
     order: Union[Unset, None, IncidentSortOrder] = UNSET,
     direction: Union[Unset, None, SortDirection] = UNSET,
 ) -> Dict[str, Any]:
+
     pass
 
     params: Dict[str, Any] = {}

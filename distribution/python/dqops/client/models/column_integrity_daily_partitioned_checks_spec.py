@@ -65,13 +65,13 @@ class ColumnIntegrityDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_lookup_key_not_found is not UNSET:
-            field_dict[
-                "daily_partition_lookup_key_not_found"
-            ] = daily_partition_lookup_key_not_found
+            field_dict["daily_partition_lookup_key_not_found"] = (
+                daily_partition_lookup_key_not_found
+            )
         if daily_partition_lookup_key_found_percent is not UNSET:
-            field_dict[
-                "daily_partition_lookup_key_found_percent"
-            ] = daily_partition_lookup_key_found_percent
+            field_dict["daily_partition_lookup_key_found_percent"] = (
+                daily_partition_lookup_key_found_percent
+            )
 
         return field_dict
 

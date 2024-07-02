@@ -16,6 +16,7 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

@@ -87,9 +87,9 @@ class MysqlParametersSpec:
         if sslmode is not UNSET:
             field_dict["sslmode"] = sslmode
         if single_store_db_parameters_spec is not UNSET:
-            field_dict[
-                "single_store_db_parameters_spec"
-            ] = single_store_db_parameters_spec
+            field_dict["single_store_db_parameters_spec"] = (
+                single_store_db_parameters_spec
+            )
         if mysql_engine_type is not UNSET:
             field_dict["mysql_engine_type"] = mysql_engine_type
         if properties is not UNSET:

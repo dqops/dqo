@@ -60,9 +60,9 @@ class TableComparisonConfigurationModel:
     time_scale: Union[Unset, CheckTimeScale] = UNSET
     compared_table_filter: Union[Unset, str] = UNSET
     reference_table_filter: Union[Unset, str] = UNSET
-    grouping_columns: Union[
-        Unset, List["TableComparisonGroupingColumnPairModel"]
-    ] = UNSET
+    grouping_columns: Union[Unset, List["TableComparisonGroupingColumnPairModel"]] = (
+        UNSET
+    )
     can_edit: Union[Unset, bool] = UNSET
     can_run_compare_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
@@ -106,9 +106,9 @@ class TableComparisonConfigurationModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if table_comparison_configuration_name is not UNSET:
-            field_dict[
-                "table_comparison_configuration_name"
-            ] = table_comparison_configuration_name
+            field_dict["table_comparison_configuration_name"] = (
+                table_comparison_configuration_name
+            )
         if compared_connection is not UNSET:
             field_dict["compared_connection"] = compared_connection
         if compared_table is not UNSET:

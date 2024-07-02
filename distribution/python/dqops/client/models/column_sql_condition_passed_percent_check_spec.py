@@ -64,9 +64,9 @@ class ColumnSqlConditionPassedPercentCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnSqlConditionPassedPercentSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnSqlConditionPassedPercentSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
     error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET

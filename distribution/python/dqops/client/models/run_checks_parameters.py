@@ -23,6 +23,8 @@ class RunChecksParameters:
             checks on which tables and columns should be executed.
         time_window_filter (Union[Unset, TimeWindowFilterParameters]): Time window configuration for partitioned checks
             (the number of recent days or months to analyze in an incremental mode) or an absolute time range to analyze.
+        collect_error_samples (Union[Unset, bool]): Set the value to true to collect error samples for failed data
+            quality checks.
         dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
             dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
             be rendered.
@@ -32,6 +34,7 @@ class RunChecksParameters:
 
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
+    collect_error_samples: Union[Unset, bool] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
     run_checks_result: Union[Unset, "RunChecksResult"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -45,6 +48,7 @@ class RunChecksParameters:
         if not isinstance(self.time_window_filter, Unset):
             time_window_filter = self.time_window_filter.to_dict()
 
+        collect_error_samples = self.collect_error_samples
         dummy_execution = self.dummy_execution
         run_checks_result: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_result, Unset):
@@ -57,6 +61,8 @@ class RunChecksParameters:
             field_dict["check_search_filters"] = check_search_filters
         if time_window_filter is not UNSET:
             field_dict["time_window_filter"] = time_window_filter
+        if collect_error_samples is not UNSET:
+            field_dict["collect_error_samples"] = collect_error_samples
         if dummy_execution is not UNSET:
             field_dict["dummy_execution"] = dummy_execution
         if run_checks_result is not UNSET:
@@ -87,6 +93,8 @@ class RunChecksParameters:
                 _time_window_filter
             )
 
+        collect_error_samples = d.pop("collect_error_samples", UNSET)
+
         dummy_execution = d.pop("dummy_execution", UNSET)
 
         _run_checks_result = d.pop("run_checks_result", UNSET)
@@ -99,6 +107,7 @@ class RunChecksParameters:
         run_checks_parameters = cls(
             check_search_filters=check_search_filters,
             time_window_filter=time_window_filter,
+            collect_error_samples=collect_error_samples,
             dummy_execution=dummy_execution,
             run_checks_result=run_checks_result,
         )

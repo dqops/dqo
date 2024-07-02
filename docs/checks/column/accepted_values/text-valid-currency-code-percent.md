@@ -136,54 +136,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -740,54 +698,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -1464,54 +1380,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2069,54 +1943,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -2793,54 +2625,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -3398,54 +3188,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4132,54 +3880,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -4803,54 +4509,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -5565,54 +5229,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END
@@ -6236,54 +5858,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                            WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                                 THEN 1
                             ELSE 0
                         END

@@ -366,6 +366,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
+|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks.|*boolean*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](#runchecksresult)*|
 
@@ -387,6 +388,7 @@ ___
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
+|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](./jobs.md#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](./jobs.md#runchecksresult)*|
 
 

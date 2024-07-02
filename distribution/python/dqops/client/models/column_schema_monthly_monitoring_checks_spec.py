@@ -35,9 +35,9 @@ class ColumnSchemaMonthlyMonitoringChecksSpec:
         Unset, "ColumnSchemaMonthlyMonitoringChecksSpecCustomChecks"
     ] = UNSET
     monthly_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
-    monthly_column_type_changed: Union[
-        Unset, "ColumnSchemaTypeChangedCheckSpec"
-    ] = UNSET
+    monthly_column_type_changed: Union[Unset, "ColumnSchemaTypeChangedCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

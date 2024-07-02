@@ -43,9 +43,9 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         monthly_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnPiiMonthlyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnPiiMonthlyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     monthly_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -100,17 +100,17 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_contains_usa_phone_percent is not UNSET:
-            field_dict[
-                "monthly_contains_usa_phone_percent"
-            ] = monthly_contains_usa_phone_percent
+            field_dict["monthly_contains_usa_phone_percent"] = (
+                monthly_contains_usa_phone_percent
+            )
         if monthly_contains_email_percent is not UNSET:
-            field_dict[
-                "monthly_contains_email_percent"
-            ] = monthly_contains_email_percent
+            field_dict["monthly_contains_email_percent"] = (
+                monthly_contains_email_percent
+            )
         if monthly_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "monthly_contains_usa_zipcode_percent"
-            ] = monthly_contains_usa_zipcode_percent
+            field_dict["monthly_contains_usa_zipcode_percent"] = (
+                monthly_contains_usa_zipcode_percent
+            )
         if monthly_contains_ip4_percent is not UNSET:
             field_dict["monthly_contains_ip4_percent"] = monthly_contains_ip4_percent
         if monthly_contains_ip6_percent is not UNSET:

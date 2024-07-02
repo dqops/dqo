@@ -130,33 +130,33 @@ class ColumnAcceptedValuesMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_text_found_in_set_percent is not UNSET:
-            field_dict[
-                "monthly_text_found_in_set_percent"
-            ] = monthly_text_found_in_set_percent
+            field_dict["monthly_text_found_in_set_percent"] = (
+                monthly_text_found_in_set_percent
+            )
         if monthly_number_found_in_set_percent is not UNSET:
-            field_dict[
-                "monthly_number_found_in_set_percent"
-            ] = monthly_number_found_in_set_percent
+            field_dict["monthly_number_found_in_set_percent"] = (
+                monthly_number_found_in_set_percent
+            )
         if monthly_expected_text_values_in_use_count is not UNSET:
-            field_dict[
-                "monthly_expected_text_values_in_use_count"
-            ] = monthly_expected_text_values_in_use_count
+            field_dict["monthly_expected_text_values_in_use_count"] = (
+                monthly_expected_text_values_in_use_count
+            )
         if monthly_expected_texts_in_top_values_count is not UNSET:
-            field_dict[
-                "monthly_expected_texts_in_top_values_count"
-            ] = monthly_expected_texts_in_top_values_count
+            field_dict["monthly_expected_texts_in_top_values_count"] = (
+                monthly_expected_texts_in_top_values_count
+            )
         if monthly_expected_numbers_in_use_count is not UNSET:
-            field_dict[
-                "monthly_expected_numbers_in_use_count"
-            ] = monthly_expected_numbers_in_use_count
+            field_dict["monthly_expected_numbers_in_use_count"] = (
+                monthly_expected_numbers_in_use_count
+            )
         if monthly_text_valid_country_code_percent is not UNSET:
-            field_dict[
-                "monthly_text_valid_country_code_percent"
-            ] = monthly_text_valid_country_code_percent
+            field_dict["monthly_text_valid_country_code_percent"] = (
+                monthly_text_valid_country_code_percent
+            )
         if monthly_text_valid_currency_code_percent is not UNSET:
-            field_dict[
-                "monthly_text_valid_currency_code_percent"
-            ] = monthly_text_valid_currency_code_percent
+            field_dict["monthly_text_valid_currency_code_percent"] = (
+                monthly_text_valid_currency_code_percent
+            )
 
         return field_dict
 

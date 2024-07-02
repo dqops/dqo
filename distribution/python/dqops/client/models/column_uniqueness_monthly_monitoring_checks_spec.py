@@ -105,9 +105,9 @@ class ColumnUniquenessMonthlyMonitoringChecksSpec:
         if monthly_distinct_count_change is not UNSET:
             field_dict["monthly_distinct_count_change"] = monthly_distinct_count_change
         if monthly_distinct_percent_change is not UNSET:
-            field_dict[
-                "monthly_distinct_percent_change"
-            ] = monthly_distinct_percent_change
+            field_dict["monthly_distinct_percent_change"] = (
+                monthly_distinct_percent_change
+            )
 
         return field_dict
 

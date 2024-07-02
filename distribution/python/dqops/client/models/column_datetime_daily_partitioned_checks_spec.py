@@ -54,9 +54,9 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_partition_date_values_in_future_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_date_values_in_future_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_date_values_in_future_percent, Unset):
             daily_partition_date_values_in_future_percent = (
                 self.daily_partition_date_values_in_future_percent.to_dict()
@@ -68,9 +68,9 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
                 self.daily_partition_date_in_range_percent.to_dict()
             )
 
-        daily_partition_text_match_date_format_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_text_match_date_format_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_text_match_date_format_percent, Unset):
             daily_partition_text_match_date_format_percent = (
                 self.daily_partition_text_match_date_format_percent.to_dict()
@@ -82,17 +82,17 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_date_values_in_future_percent is not UNSET:
-            field_dict[
-                "daily_partition_date_values_in_future_percent"
-            ] = daily_partition_date_values_in_future_percent
+            field_dict["daily_partition_date_values_in_future_percent"] = (
+                daily_partition_date_values_in_future_percent
+            )
         if daily_partition_date_in_range_percent is not UNSET:
-            field_dict[
-                "daily_partition_date_in_range_percent"
-            ] = daily_partition_date_in_range_percent
+            field_dict["daily_partition_date_in_range_percent"] = (
+                daily_partition_date_in_range_percent
+            )
         if daily_partition_text_match_date_format_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_match_date_format_percent"
-            ] = daily_partition_text_match_date_format_percent
+            field_dict["daily_partition_text_match_date_format_percent"] = (
+                daily_partition_text_match_date_format_percent
+            )
 
         return field_dict
 

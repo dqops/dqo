@@ -43,16 +43,16 @@ class TableSchemaDailyMonitoringChecksSpec:
         daily_column_types_changed (Union[Unset, TableSchemaColumnTypesChangedCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableSchemaDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableSchemaDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_column_count: Union[Unset, "TableSchemaColumnCountCheckSpec"] = UNSET
     daily_column_count_changed: Union[
         Unset, "TableSchemaColumnCountChangedCheckSpec"
     ] = UNSET
-    daily_column_list_changed: Union[
-        Unset, "TableSchemaColumnListChangedCheckSpec"
-    ] = UNSET
+    daily_column_list_changed: Union[Unset, "TableSchemaColumnListChangedCheckSpec"] = (
+        UNSET
+    )
     daily_column_list_or_order_changed: Union[
         Unset, "TableSchemaColumnListOrOrderChangedCheckSpec"
     ] = UNSET
@@ -100,9 +100,9 @@ class TableSchemaDailyMonitoringChecksSpec:
         if daily_column_list_changed is not UNSET:
             field_dict["daily_column_list_changed"] = daily_column_list_changed
         if daily_column_list_or_order_changed is not UNSET:
-            field_dict[
-                "daily_column_list_or_order_changed"
-            ] = daily_column_list_or_order_changed
+            field_dict["daily_column_list_or_order_changed"] = (
+                daily_column_list_or_order_changed
+            )
         if daily_column_types_changed is not UNSET:
             field_dict["daily_column_types_changed"] = daily_column_types_changed
 

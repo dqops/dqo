@@ -11,6 +11,7 @@ from ...types import Response
 def _get_kwargs(
     full_rule_name: str,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

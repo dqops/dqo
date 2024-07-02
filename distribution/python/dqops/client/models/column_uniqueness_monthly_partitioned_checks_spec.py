@@ -46,15 +46,15 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
     custom_checks: Union[
         Unset, "ColumnUniquenessMonthlyPartitionedChecksSpecCustomChecks"
     ] = UNSET
-    monthly_partition_distinct_count: Union[
-        Unset, "ColumnDistinctCountCheckSpec"
-    ] = UNSET
+    monthly_partition_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_distinct_percent: Union[
         Unset, "ColumnDistinctPercentCheckSpec"
     ] = UNSET
-    monthly_partition_duplicate_count: Union[
-        Unset, "ColumnDuplicateCountCheckSpec"
-    ] = UNSET
+    monthly_partition_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_duplicate_percent: Union[
         Unset, "ColumnDuplicatePercentCheckSpec"
     ] = UNSET
@@ -113,29 +113,29 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_distinct_count is not UNSET:
-            field_dict[
-                "monthly_partition_distinct_count"
-            ] = monthly_partition_distinct_count
+            field_dict["monthly_partition_distinct_count"] = (
+                monthly_partition_distinct_count
+            )
         if monthly_partition_distinct_percent is not UNSET:
-            field_dict[
-                "monthly_partition_distinct_percent"
-            ] = monthly_partition_distinct_percent
+            field_dict["monthly_partition_distinct_percent"] = (
+                monthly_partition_distinct_percent
+            )
         if monthly_partition_duplicate_count is not UNSET:
-            field_dict[
-                "monthly_partition_duplicate_count"
-            ] = monthly_partition_duplicate_count
+            field_dict["monthly_partition_duplicate_count"] = (
+                monthly_partition_duplicate_count
+            )
         if monthly_partition_duplicate_percent is not UNSET:
-            field_dict[
-                "monthly_partition_duplicate_percent"
-            ] = monthly_partition_duplicate_percent
+            field_dict["monthly_partition_duplicate_percent"] = (
+                monthly_partition_duplicate_percent
+            )
         if monthly_partition_distinct_count_change is not UNSET:
-            field_dict[
-                "monthly_partition_distinct_count_change"
-            ] = monthly_partition_distinct_count_change
+            field_dict["monthly_partition_distinct_count_change"] = (
+                monthly_partition_distinct_count_change
+            )
         if monthly_partition_distinct_percent_change is not UNSET:
-            field_dict[
-                "monthly_partition_distinct_percent_change"
-            ] = monthly_partition_distinct_percent_change
+            field_dict["monthly_partition_distinct_percent_change"] = (
+                monthly_partition_distinct_percent_change
+            )
 
         return field_dict
 

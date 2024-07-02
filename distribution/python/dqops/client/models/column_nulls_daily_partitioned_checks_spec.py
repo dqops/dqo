@@ -53,17 +53,17 @@ class ColumnNullsDailyPartitionedChecksSpec:
         daily_partition_nulls_percent_change_30_days (Union[Unset, ColumnNullPercentChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnNullsDailyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnNullsDailyPartitionedChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     daily_partition_nulls_percent_anomaly: Union[
         Unset, "ColumnNullPercentAnomalyStationaryCheckSpec"
     ] = UNSET
-    daily_partition_not_nulls_count: Union[
-        Unset, "ColumnNotNullsCountCheckSpec"
-    ] = UNSET
+    daily_partition_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = (
+        UNSET
+    )
     daily_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
@@ -124,17 +124,17 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 self.daily_partition_nulls_percent_change_1_day.to_dict()
             )
 
-        daily_partition_nulls_percent_change_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_nulls_percent_change_7_days: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_nulls_percent_change_7_days, Unset):
             daily_partition_nulls_percent_change_7_days = (
                 self.daily_partition_nulls_percent_change_7_days.to_dict()
             )
 
-        daily_partition_nulls_percent_change_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_nulls_percent_change_30_days: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_nulls_percent_change_30_days, Unset):
             daily_partition_nulls_percent_change_30_days = (
                 self.daily_partition_nulls_percent_change_30_days.to_dict()
@@ -150,33 +150,33 @@ class ColumnNullsDailyPartitionedChecksSpec:
         if daily_partition_nulls_percent is not UNSET:
             field_dict["daily_partition_nulls_percent"] = daily_partition_nulls_percent
         if daily_partition_nulls_percent_anomaly is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_anomaly"
-            ] = daily_partition_nulls_percent_anomaly
+            field_dict["daily_partition_nulls_percent_anomaly"] = (
+                daily_partition_nulls_percent_anomaly
+            )
         if daily_partition_not_nulls_count is not UNSET:
-            field_dict[
-                "daily_partition_not_nulls_count"
-            ] = daily_partition_not_nulls_count
+            field_dict["daily_partition_not_nulls_count"] = (
+                daily_partition_not_nulls_count
+            )
         if daily_partition_not_nulls_percent is not UNSET:
-            field_dict[
-                "daily_partition_not_nulls_percent"
-            ] = daily_partition_not_nulls_percent
+            field_dict["daily_partition_not_nulls_percent"] = (
+                daily_partition_not_nulls_percent
+            )
         if daily_partition_nulls_percent_change is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change"
-            ] = daily_partition_nulls_percent_change
+            field_dict["daily_partition_nulls_percent_change"] = (
+                daily_partition_nulls_percent_change
+            )
         if daily_partition_nulls_percent_change_1_day is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change_1_day"
-            ] = daily_partition_nulls_percent_change_1_day
+            field_dict["daily_partition_nulls_percent_change_1_day"] = (
+                daily_partition_nulls_percent_change_1_day
+            )
         if daily_partition_nulls_percent_change_7_days is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change_7_days"
-            ] = daily_partition_nulls_percent_change_7_days
+            field_dict["daily_partition_nulls_percent_change_7_days"] = (
+                daily_partition_nulls_percent_change_7_days
+            )
         if daily_partition_nulls_percent_change_30_days is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change_30_days"
-            ] = daily_partition_nulls_percent_change_30_days
+            field_dict["daily_partition_nulls_percent_change_30_days"] = (
+                daily_partition_nulls_percent_change_30_days
+            )
 
         return field_dict
 

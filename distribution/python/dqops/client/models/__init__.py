@@ -1407,8 +1407,12 @@ from .effective_schedule_model import EffectiveScheduleModel
 from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
+from .error_sample_entry_model import ErrorSampleEntryModel
+from .error_sample_entry_model_result import ErrorSampleEntryModelResult
+from .error_sample_result_data_type import ErrorSampleResultDataType
 from .error_sampler_result import ErrorSamplerResult
 from .error_samples_data_scope import ErrorSamplesDataScope
+from .error_samples_list_model import ErrorSamplesListModel
 from .errors_list_model import ErrorsListModel
 from .external_log_entry import ExternalLogEntry
 from .field_model import FieldModel
@@ -2536,8 +2540,12 @@ __all__ = (
     "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",
+    "ErrorSampleEntryModel",
+    "ErrorSampleEntryModelResult",
+    "ErrorSampleResultDataType",
     "ErrorSamplerResult",
     "ErrorSamplesDataScope",
+    "ErrorSamplesListModel",
     "ErrorsListModel",
     "ExternalLogEntry",
     "FieldModel",

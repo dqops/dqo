@@ -182,17 +182,17 @@ class ColumnListModel:
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
-            field_dict[
-                "has_any_configured_profiling_checks"
-            ] = has_any_configured_profiling_checks
+            field_dict["has_any_configured_profiling_checks"] = (
+                has_any_configured_profiling_checks
+            )
         if has_any_configured_monitoring_checks is not UNSET:
-            field_dict[
-                "has_any_configured_monitoring_checks"
-            ] = has_any_configured_monitoring_checks
+            field_dict["has_any_configured_monitoring_checks"] = (
+                has_any_configured_monitoring_checks
+            )
         if has_any_configured_partition_checks is not UNSET:
-            field_dict[
-                "has_any_configured_partition_checks"
-            ] = has_any_configured_partition_checks
+            field_dict["has_any_configured_partition_checks"] = (
+                has_any_configured_partition_checks
+            )
         if type_snapshot is not UNSET:
             field_dict["type_snapshot"] = type_snapshot
         if data_quality_status is not UNSET:
@@ -200,21 +200,21 @@ class ColumnListModel:
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
-            field_dict[
-                "run_profiling_checks_job_template"
-            ] = run_profiling_checks_job_template
+            field_dict["run_profiling_checks_job_template"] = (
+                run_profiling_checks_job_template
+            )
         if run_monitoring_checks_job_template is not UNSET:
-            field_dict[
-                "run_monitoring_checks_job_template"
-            ] = run_monitoring_checks_job_template
+            field_dict["run_monitoring_checks_job_template"] = (
+                run_monitoring_checks_job_template
+            )
         if run_partition_checks_job_template is not UNSET:
-            field_dict[
-                "run_partition_checks_job_template"
-            ] = run_partition_checks_job_template
+            field_dict["run_partition_checks_job_template"] = (
+                run_partition_checks_job_template
+            )
         if collect_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_statistics_job_template"
-            ] = collect_statistics_job_template
+            field_dict["collect_statistics_job_template"] = (
+                collect_statistics_job_template
+            )
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
         if can_edit is not UNSET:

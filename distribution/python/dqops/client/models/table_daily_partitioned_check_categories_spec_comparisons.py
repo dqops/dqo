@@ -19,9 +19,9 @@ class TableDailyPartitionedCheckCategoriesSpecComparisons:
 
     """
 
-    additional_properties: Dict[
-        str, "TableComparisonDailyPartitionedChecksSpec"
-    ] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, "TableComparisonDailyPartitionedChecksSpec"] = (
+        _attrs_field(init=False, factory=dict)
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         pass

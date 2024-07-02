@@ -82,17 +82,17 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_date_values_in_future_percent is not UNSET:
-            field_dict[
-                "monthly_partition_date_values_in_future_percent"
-            ] = monthly_partition_date_values_in_future_percent
+            field_dict["monthly_partition_date_values_in_future_percent"] = (
+                monthly_partition_date_values_in_future_percent
+            )
         if monthly_partition_date_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_partition_date_in_range_percent"
-            ] = monthly_partition_date_in_range_percent
+            field_dict["monthly_partition_date_in_range_percent"] = (
+                monthly_partition_date_in_range_percent
+            )
         if monthly_partition_text_match_date_format_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_match_date_format_percent"
-            ] = monthly_partition_text_match_date_format_percent
+            field_dict["monthly_partition_text_match_date_format_percent"] = (
+                monthly_partition_text_match_date_format_percent
+            )
 
         return field_dict
 

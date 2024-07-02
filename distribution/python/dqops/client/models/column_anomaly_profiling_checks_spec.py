@@ -86,9 +86,9 @@ class ColumnAnomalyProfilingChecksSpec:
     custom_checks: Union[Unset, "ColumnAnomalyProfilingChecksSpecCustomChecks"] = UNSET
     profile_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     profile_mean_anomaly: Union[Unset, "ColumnMeanAnomalyStationaryCheckSpec"] = UNSET
-    profile_median_anomaly: Union[
-        Unset, "ColumnMedianAnomalyStationaryCheckSpec"
-    ] = UNSET
+    profile_median_anomaly: Union[Unset, "ColumnMedianAnomalyStationaryCheckSpec"] = (
+        UNSET
+    )
     profile_min_anomaly: Union[Unset, "ColumnMinAnomalyDifferencingCheckSpec"] = UNSET
     profile_max_anomaly: Union[Unset, "ColumnMaxAnomalyDifferencingCheckSpec"] = UNSET
     profile_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
@@ -98,12 +98,12 @@ class ColumnAnomalyProfilingChecksSpec:
     profile_mean_change_7_days: Union[Unset, "ColumnMeanChange7DaysCheckSpec"] = UNSET
     profile_mean_change_30_days: Union[Unset, "ColumnMeanChange30DaysCheckSpec"] = UNSET
     profile_median_change_1_day: Union[Unset, "ColumnMedianChange1DayCheckSpec"] = UNSET
-    profile_median_change_7_days: Union[
-        Unset, "ColumnMedianChange7DaysCheckSpec"
-    ] = UNSET
-    profile_median_change_30_days: Union[
-        Unset, "ColumnMedianChange30DaysCheckSpec"
-    ] = UNSET
+    profile_median_change_7_days: Union[Unset, "ColumnMedianChange7DaysCheckSpec"] = (
+        UNSET
+    )
+    profile_median_change_30_days: Union[Unset, "ColumnMedianChange30DaysCheckSpec"] = (
+        UNSET
+    )
     profile_sum_change_1_day: Union[Unset, "ColumnSumChange1DayCheckSpec"] = UNSET
     profile_sum_change_7_days: Union[Unset, "ColumnSumChange7DaysCheckSpec"] = UNSET
     profile_sum_change_30_days: Union[Unset, "ColumnSumChange30DaysCheckSpec"] = UNSET

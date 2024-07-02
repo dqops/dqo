@@ -49,9 +49,9 @@ class ColumnComparisonProfilingChecksSpec:
         profile_null_count_match (Union[Unset, ColumnComparisonNullCountMatchCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnComparisonProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnComparisonProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     reference_column: Union[Unset, str] = UNSET
     profile_sum_match: Union[Unset, "ColumnComparisonSumMatchCheckSpec"] = UNSET
     profile_min_match: Union[Unset, "ColumnComparisonMinMatchCheckSpec"] = UNSET
