@@ -85,6 +85,7 @@ function TreeProvider(props: any) {
   const [tabMaps, setTabMaps] = useState<Record<string, ITab[]>>({}); // `blue box tab level`
   const [subTabMap, setSubTabMap] = useState<{ [key: string]: string }>({}); // sub tab under `blue box tab level`
   const [tablesLoading, setTablesLoading] = useState('');
+  const [columnsLoading, setColumnsLoading] = useState('');
   const tabs = useMemo(() => tabMaps[checkTypes] ?? [], [tabMaps, checkTypes]);
   const setTabs = useCallback(
     (_tabMaps: ITab[]) => {
@@ -1956,6 +1957,54 @@ function TreeProvider(props: any) {
     setTablesLoading('');
   };
 
+  const searchColumn = async (data: any[], parentData: any, search: string) => {
+    const parentId = data[0].parentId;
+    const tableParentId = String(parentId).replace('.columns', '');
+    const parentNode = parentData[tableParentId].find(
+      (item: any) => item.id === parentId
+    );
+    const table = data[0].parentId.split('.')[2];
+    const connection = data[0].parentId.split('.')[0];
+    const schema = data[0].parentId.split('.')[1];
+
+    const res: AxiosResponse<ColumnListModel[]> =
+      await ColumnApiClient.getColumns(connection, schema, table);
+    const items = res.data.map((column) => ({
+      id: `${parentNode.id}.${urlencodeDecoder(column.column_name ?? '')}`,
+      label: column.column_name || '',
+      level: TREE_LEVEL.COLUMN,
+      parentId: parentNode.id,
+      items: [],
+      tooltip: `${connection}.${schema}.${table}.${column.column_name}`,
+      hasCheck:
+        !!column?.[
+          checkTypesToHasConfiguredCheckKey[
+            checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
+          ] as keyof ColumnListModel
+        ],
+      run_checks_job_template: column[
+        checkTypesToJobTemplateKey[
+          checkTypes as keyof typeof checkTypesToJobTemplateKey
+        ] as keyof ColumnListModel
+      ] as CheckSearchFilters,
+      collect_statistics_job_template: column.collect_statistics_job_template,
+      data_clean_job_template: column.data_clean_job_template,
+      open: false,
+      configured:
+        column.has_any_configured_checks ||
+        column.has_any_configured_partition_checks ||
+        column.has_any_configured_profiling_checks ||
+        column.has_any_configured_monitoring_checks
+    }));
+
+    const newItems = items.filter((item) =>
+      item.label.toLowerCase().includes(search.toLowerCase())
+    );
+
+    resetTreeData(parentNode, newItems, true);
+    setColumnsLoading('');
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -1999,7 +2048,9 @@ function TreeProvider(props: any) {
         loadMoreTables,
         tablesLoading,
         searchTable,
-        loadedTables
+        loadedTables,
+        columnsLoading,
+        searchColumn
       }}
       {...props}
     />
