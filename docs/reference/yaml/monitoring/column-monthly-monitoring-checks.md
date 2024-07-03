@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of column level monthly monitoring checks. Contains categories of monthly monitoring checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -41,24 +34,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNullsMonthlyMonitoringChecksSpec
 Container of nulls data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -73,24 +52,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnUniquenessMonthlyMonitoringChecksSpec
 Container of uniqueness data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -107,24 +72,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAcceptedValuesMonthlyMonitoringChecksSpec
 Container of accepted values data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -142,24 +93,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTextMonthlyMonitoringChecksSpec
 Container of text data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -178,24 +115,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnWhitespaceMonthlyMonitoringChecksSpec
 Container of whitespace value detection data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -214,24 +137,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnConversionsMonthlyMonitoringChecksSpec
 Container of conversion test checks that are monitoring if text values are convertible to a target data type at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -246,24 +155,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPatternsMonthlyMonitoringChecksSpec
 Container of built-in preconfigured monthly monitoring checks on a column level that are checking for values matching patterns (regular expressions) in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -285,24 +180,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPiiMonthlyMonitoringChecksSpec
 Container of PII data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -318,24 +199,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNumericMonthlyMonitoringChecksSpec
 Container of built-in preconfigured data quality monitoring on a column level that are checking numeric values at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -374,24 +241,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatetimeMonthlyMonitoringChecksSpec
 Container of date-time data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -405,24 +258,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnBoolMonthlyMonitoringChecksSpec
 Container of boolean monitoring data quality checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -435,24 +274,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnIntegrityMonthlyMonitoringChecksSpec
 Container of integrity data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -465,24 +290,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAccuracyMonthlyMonitoringChecksSpec
 Container of accuracy data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -498,24 +309,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnCustomSqlMonthlyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -530,24 +327,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatatypeMonthlyMonitoringChecksSpec
 Container of datatype data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -560,24 +343,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnSchemaMonthlyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking the column schema at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -590,26 +359,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonMonthlyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -620,26 +375,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonMonthlyMonitoringChecksSpec
 Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
  between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
  This is the configuration for monthly monitoring checks that are counted in KPIs.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -657,12 +398,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

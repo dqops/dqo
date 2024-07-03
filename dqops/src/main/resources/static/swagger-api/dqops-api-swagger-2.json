@@ -33642,6 +33642,10 @@
           "type" : "boolean",
           "description" : "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts."
         },
+        "deleteErrorSamples" : {
+          "type" : "boolean",
+          "description" : "Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples."
+        },
         "columnNames" : {
           "type" : "array",
           "description" : "The list of column names to delete the data for column level results or errors only for selected columns.",

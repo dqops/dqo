@@ -155,6 +155,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`delete_statistics`</span>|Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|*boolean*|
 |<span class="no-wrap-code">`delete_check_results`</span>|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|*boolean*|
 |<span class="no-wrap-code">`delete_sensor_readouts`</span>|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|*boolean*|
+|<span class="no-wrap-code">`delete_error_samples`</span>|Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
 |<span class="no-wrap-code">`column_names`</span>|The list of column names to delete the data for column level results or errors only for selected columns.|*List[string]*|
 |<span class="no-wrap-code">`check_category`</span>|The check category name, for example *volume* or *anomaly*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|*string*|
@@ -284,9 +285,9 @@ Parameter object for starting a file synchronization job. Identifies the folder 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`folder`](./jobs.md#dqoroot)</span>|:mm|*[DqoRoot](./jobs.md#dqoroot)*|
-|<span class="no-wrap-code">[`direction`](#filesynchronizationdirection)</span>|:mm|*[FileSynchronizationDirection](#filesynchronizationdirection)*|
-|<span class="no-wrap-code">`force_refresh_native_table`</span>|:mm|*boolean*|
+|<span class="no-wrap-code">[`folder`](./jobs.md#dqoroot)</span>||*[DqoRoot](./jobs.md#dqoroot)*|
+|<span class="no-wrap-code">[`direction`](#filesynchronizationdirection)</span>||*[FileSynchronizationDirection](#filesynchronizationdirection)*|
+|<span class="no-wrap-code">`force_refresh_native_table`</span>||*boolean*|
 
 
 ___
@@ -300,7 +301,7 @@ Parameters object for a job that synchronizes one folder with DQOps Cloud.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`synchronization_parameter`](#synchronizerootfolderparameters)</span>|:mm|*[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)*|
+|<span class="no-wrap-code">[`synchronization_parameter`](#synchronizerootfolderparameters)</span>||*[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)*|
 
 
 ___
@@ -542,12 +543,12 @@ Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`connection_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`schema_table_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`repair_errors`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_statistics`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_check_results`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_sensor_readouts`</span>|:mm|*boolean*|
+|<span class="no-wrap-code">`connection_name`</span>||*string*|
+|<span class="no-wrap-code">`schema_table_name`</span>||*string*|
+|<span class="no-wrap-code">`repair_errors`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_statistics`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_check_results`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_sensor_readouts`</span>||*boolean*|
 
 
 ___
@@ -587,11 +588,11 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|:mm|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`job_type`](#dqojobtype)</span>|:mm|*[DqoJobType](#dqojobtype)*|
-|<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>|:mm|*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
-|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|:mm|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
-|<span class="no-wrap-code">`error_message`</span>|:mm|*string*|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">[`job_type`](#dqojobtype)</span>||*[DqoJobType](#dqojobtype)*|
+|<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>||*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
+|<span class="no-wrap-code">`error_message`</span>||*string*|
 
 
 ___
@@ -605,10 +606,10 @@ Describes a change to the job status or the job queue (such as a new job was add
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|:mm|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
-|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|:mm|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">`change_sequence`</span>|:mm|*long*|
-|<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>|:mm|*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">`change_sequence`</span>||*long*|
+|<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
 
 
 ___
@@ -661,9 +662,9 @@ Job history snapshot model that returns only changes after a given change sequen
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`job_changes`</span>|:mm|*List[[DqoJobChangeModel](#dqojobchangemodel)]*|
-|<span class="no-wrap-code">[`folder_synchronization_status`](#cloudsynchronizationfoldersstatusmodel)</span>|:mm|*[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)*|
-|<span class="no-wrap-code">`last_sequence_number`</span>|:mm|*long*|
+|<span class="no-wrap-code">`job_changes`</span>||*List[[DqoJobChangeModel](#dqojobchangemodel)]*|
+|<span class="no-wrap-code">[`folder_synchronization_status`](#cloudsynchronizationfoldersstatusmodel)</span>||*[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)*|
+|<span class="no-wrap-code">`last_sequence_number`</span>||*long*|
 
 
 ___
@@ -677,9 +678,9 @@ Returns the current snapshot of running jobs.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`jobs`</span>|:mm|*List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]*|
-|<span class="no-wrap-code">[`folder_synchronization_status`](./jobs.md#cloudsynchronizationfoldersstatusmodel)</span>|:mm|*[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)*|
-|<span class="no-wrap-code">`last_sequence_number`</span>|:mm|*long*|
+|<span class="no-wrap-code">`jobs`</span>||*List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]*|
+|<span class="no-wrap-code">[`folder_synchronization_status`](./jobs.md#cloudsynchronizationfoldersstatusmodel)</span>||*[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)*|
+|<span class="no-wrap-code">`last_sequence_number`</span>||*long*|
 
 
 ___

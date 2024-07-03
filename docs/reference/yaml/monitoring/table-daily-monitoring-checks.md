@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of table level daily monitoring. Contains categories of daily monitoring.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -31,24 +24,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableVolumeDailyMonitoringChecksSpec
 Container of table level daily monitoring for volume data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -65,24 +44,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableTimelinessDailyMonitoringChecksSpec
 Container of table level daily monitoring for timeliness data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -97,24 +62,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableAccuracyDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are verifying the accuracy of the table, comparing it with another reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -126,24 +77,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableCustomSqlDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -158,24 +95,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableAvailabilityDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -187,24 +110,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableSchemaDailyMonitoringChecksSpec
 Container of built-in preconfigured volume data quality checks on a table level that are executed as a daily monitoring (checkpoint) checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -220,26 +129,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains the daily monitoring comparison checks for each configured reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -250,25 +145,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyMonitoringChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the daily monitoring comparison checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -281,12 +162,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

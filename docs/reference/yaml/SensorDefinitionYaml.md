@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Data quality sensor definition YAML schema for a data quality sensor specification.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,24 +19,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## SensorDefinitionSpec
 Data Quality sensor definition specification. Provides the configuration for a data quality sensor definition, sensor&#x27;s parameters, etc.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -58,38 +37,24 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ParameterDefinitionsListSpec
 List of parameter definitions - the parameters for custom sensors or custom rules.
 
 
+The structure of this object is described below
 
-
-
-
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[[ParameterDefinitionSpec](./SensorDefinitionYaml.md#parameterdefinitionspec)]*| | | |
 
 
 
 ___
 
-
 ## ParameterDefinitionSpec
 Defines a single field that is a sensor parameter or a rule parameter.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -107,12 +72,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

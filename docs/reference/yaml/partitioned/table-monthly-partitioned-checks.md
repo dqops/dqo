@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -28,24 +21,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableVolumeMonthlyPartitionedChecksSpec
 Container of table level monthly partitioned volume data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -58,24 +37,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableTimelinessMonthlyPartitionedChecksSpec
 Container of table level monthly partitioned timeliness data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -88,24 +53,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableCustomSqlMonthlyPartitionedChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -120,26 +71,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonMonthlyPartitionedChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains the monthly partitioned comparison checks for each configured reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -150,25 +87,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonMonthlyPartitionedChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the monthly partitioned comparison checks, comparing each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -180,12 +103,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

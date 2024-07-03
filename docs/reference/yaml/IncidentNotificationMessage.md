@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Notification message payload that is posted (HTTP POST) to a notification endpoint with the details of a new or updated data quality incident.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -39,12 +32,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

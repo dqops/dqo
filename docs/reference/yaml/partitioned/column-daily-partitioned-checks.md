@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of data quality partitioned checks on a column level that are checking numeric values at a daily level.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -40,24 +33,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNullsDailyPartitionedChecksSpec
 Container of nulls data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -77,24 +56,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnUniquenessDailyPartitionedChecksSpec
 Container of uniqueness data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -119,25 +84,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
 This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window.
  The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -159,24 +110,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAcceptedValuesDailyPartitionedChecksSpec
 Container of accepted values data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -194,24 +131,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTextDailyPartitionedChecksSpec
 Container of text data quality partitioned checks on a column level that are checking at a daily partition level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -230,24 +153,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnWhitespaceDailyPartitionedChecksSpec
 Container of whitespace values detection data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -266,24 +175,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnConversionsDailyPartitionedChecksSpec
 Container of conversion test checks that are monitoring if text values are convertible to a target data type at a daily partition level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -298,24 +193,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPatternsDailyPartitionedChecksSpec
 Container of built-in preconfigured daily partition checks on a column level that are checking for values matching patterns (regular expressions) in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -337,24 +218,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPiiDailyPartitionedChecksSpec
 Container of PII data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -370,24 +237,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNumericDailyPartitionedChecksSpec
 Container of numeric data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -426,24 +279,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAnomalyDailyPartitionedChecksSpec
 Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -471,26 +310,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnSumAnomalyStationaryPartitionCheckSpec
 This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
  It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
  This data quality check uses a 90-day time window and requires a history of at least 30 days.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -512,27 +337,13 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnMinAnomalyStationaryCheckSpec
 This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
  It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
  values in the time series (it is a new minimum value, far from the previous one).
  This data quality check uses a 90-day time window and requires a history of at least 30 days.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -554,27 +365,13 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnMaxAnomalyStationaryCheckSpec
 This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
  It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
  values in the time series (it is a new maximum value, far from the previous one).
  This data quality check uses a 90-day time window and requires a history of at least 30 days.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -596,24 +393,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatetimeDailyPartitionedChecksSpec
 Container of date-time data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -627,24 +410,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnBoolDailyPartitionedChecksSpec
 Container of boolean data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -657,24 +426,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnIntegrityDailyPartitionedChecksSpec
 Container of integrity data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -687,24 +442,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnCustomSqlDailyPartitionedChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -719,24 +460,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatatypeDailyPartitionedChecksSpec
 Container of datatype data quality partitioned checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -749,26 +476,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonDailyPartitionedChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -779,26 +492,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonDailyPartitionedChecksSpec
 Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
  between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
  This is the configuration for daily partitioned checks that are counted in KPIs.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -816,12 +515,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

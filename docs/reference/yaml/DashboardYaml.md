@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Data quality dashboard definition YAML schema for a data quality dashboards list specification.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,36 +19,24 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DashboardsFolderListSpec
 List of dashboard folders.
 
 
+The structure of this object is described below
 
-
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[[DashboardsFolderSpec](./DashboardYaml.md#dashboardsfolderspec)]*| | | |
 
 
 
 ___
 
-
 ## DashboardsFolderSpec
 Description of a folder with multiple dashboards or other folders.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -69,46 +50,24 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DashboardListSpec
 List of dashboards.
 
 
+The structure of this object is described below
 
-
-
-
-
-
-
-
-
-
-
-
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[[DashboardSpec](./DashboardYaml.md#dashboardspec)]*| | | |
 
 
 
 ___
 
-
 ## DashboardSpec
 Description of a single dashboard that is available in the platform.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -125,12 +84,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

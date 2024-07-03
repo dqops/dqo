@@ -247,7 +247,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -823,7 +823,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -1513,7 +1513,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2090,7 +2090,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -2780,7 +2780,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -3357,7 +3357,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4065,7 +4065,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -4704,7 +4704,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -5436,7 +5436,7 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END
@@ -6075,7 +6075,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS TRUE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, 'yyyy-mm-dd') IS TRUE
                                 THEN 1
                             ELSE 0
                         END

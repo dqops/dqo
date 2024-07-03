@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Connection definition for a data source connection that is covered by data quality checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,24 +19,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ConnectionSpec
 Data source (connection) specification.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -72,24 +51,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## BigQueryParametersSpec
 BigQuery connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -106,24 +71,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## SnowflakeParametersSpec
 Snowflake connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -140,24 +91,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## PostgresqlParametersSpec
 Postgresql connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -175,24 +112,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DuckdbParametersSpec
 DuckDB connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -220,24 +143,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CsvFileFormatSpec
 Csv file format specification for querying data in the csv format files.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -265,24 +174,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## JsonFileFormatSpec
 Json file format specification for querying data in the json format files.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -306,24 +201,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ParquetFileFormatSpec
 Parquet file format specification for querying data in the parquet format files.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -340,24 +221,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## RedshiftParametersSpec
 Redshift connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -374,24 +241,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## SqlServerParametersSpec
 Microsoft SQL Server connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -409,24 +262,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## PrestoParametersSpec
 Presto connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -442,24 +281,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TrinoParametersSpec
 Trino connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -480,24 +305,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## MysqlParametersSpec
 MySql connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -516,24 +327,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## SingleStoreDbParametersSpec
 Single Store DB connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -547,24 +344,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## OracleParametersSpec
 Oracle connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -581,24 +364,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## SparkParametersSpec
 Apache Spark connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -613,24 +382,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DatabricksParametersSpec
 Databricks connection parameters.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -648,14 +403,7 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DataGroupingConfigurationSpec
 Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
@@ -663,13 +411,6 @@ Configuration of the data groupings that is used to calculate data quality check
  We can also pull data grouping levels directly from the database if a table has a column that identifies a business area.
  Data quality results for new groups are dynamically identified in the database by the GROUP BY clause. Sensor values are extracted for each data group separately,
  a time series is build for each data group separately.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -688,24 +429,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DataGroupingDimensionSpec
 Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -719,14 +446,7 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DefaultSchedulesSpec
 Container of all monitoring schedules (cron expressions) for each type of checks.
@@ -734,13 +454,6 @@ Container of all monitoring schedules (cron expressions) for each type of checks
  Each group of checks can be further divided by time scale (daily, monthly, etc).
  Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
  These schedules are defined in this object.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -755,24 +468,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ConnectionIncidentGroupingSpec
 Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -789,25 +488,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## IncidentWebhookNotificationsSpec
 Configuration of Webhook URLs used for new or updated incident&#x27;s notifications.
  Specifies the URLs of webhooks where the notification messages are sent.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -821,22 +506,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## LabelSetSpec
 A collection of unique labels assigned to items (tables, columns, checks) that can be targeted for a data quality check execution.
 
 
 
-
-
 ___
-
 

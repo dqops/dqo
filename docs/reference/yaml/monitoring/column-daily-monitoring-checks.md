@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of column level daily monitoring checks. Contains categories of daily monitoring checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -42,24 +35,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNullsDailyMonitoringChecksSpec
 Container of nulls data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -79,24 +58,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnUniquenessDailyMonitoringChecksSpec
 Container of uniqueness data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -121,24 +86,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAcceptedValuesDailyMonitoringChecksSpec
 Container of accepted values data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -156,24 +107,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTextDailyMonitoringChecksSpec
 Container of text data quality monitoring checks on a column level that are monitoring tables at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -192,24 +129,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnWhitespaceDailyMonitoringChecksSpec
 Container of whitespace value detection data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -228,24 +151,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnConversionsDailyMonitoringChecksSpec
 Container of conversion test checks that are monitoring if text values are convertible to a target data type at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -260,24 +169,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPatternsDailyMonitoringChecksSpec
 Container of built-in preconfigured daily monitoring checks on a column level that are checking for values matching patterns (regular expressions) in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -299,24 +194,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPiiDailyMonitoringChecksSpec
 Container of PII data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -332,24 +213,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNumericDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality monitoring on a column level that are checking numeric values at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -388,24 +255,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAnomalyDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -433,24 +286,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatetimeDailyMonitoringChecksSpec
 Container of date-time data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -464,24 +303,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnBoolDailyMonitoringChecksSpec
 Container of boolean data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -494,24 +319,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnIntegrityDailyMonitoringChecksSpec
 Container of integrity data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -524,24 +335,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAccuracyDailyMonitoringChecksSpec
 Container of accuracy data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -557,24 +354,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnCustomSqlDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -589,24 +372,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatatypeDailyMonitoringChecksSpec
 Container of datatype data quality monitoring checks on a column level that are checking at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -619,24 +388,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnSchemaDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking the column schema at a daily level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -649,26 +404,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonDailyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -679,26 +420,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonDailyMonitoringChecksSpec
 Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
  between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
  This is the configuration for daily monitoring checks that are counted in KPIs.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -716,12 +443,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

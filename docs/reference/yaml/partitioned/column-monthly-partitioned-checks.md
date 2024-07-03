@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of data quality partitioned checks on a column level that are checking numeric values at a monthly level.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -39,24 +32,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNullsMonthlyPartitionedChecksSpec
 Container of nulls data quality partitioned checks on a column level that are checking monthly partitions or rows for each day of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -71,24 +50,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnUniquenessMonthlyPartitionedChecksSpec
 Container of uniqueness data quality partitioned checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -105,24 +70,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAcceptedValuesMonthlyPartitionedChecksSpec
 Container of accepted values data quality partitioned checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -140,24 +91,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTextMonthlyPartitionedChecksSpec
 Container of text data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -176,24 +113,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnWhitespaceMonthlyPartitionedChecksSpec
 Container of whitespace values detection data quality partitioned checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -212,24 +135,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnConversionsMonthlyPartitionedChecksSpec
 Container of conversion test checks that are monitoring if text values are convertible to a target data type at a monthly partition level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -244,24 +153,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPatternsMonthlyPartitionedChecksSpec
 Container of built-in preconfigured monthly partition checks on a column level that are checking for values matching patterns (regular expressions) in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -283,24 +178,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPiiMonthlyPartitionedChecksSpec
 Container of PII data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -316,24 +197,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNumericMonthlyPartitionedChecksSpec
 Container of numeric data quality partitioned checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -372,24 +239,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatetimeMonthlyPartitionedChecksSpec
 Container of date-time data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -403,24 +256,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnBoolMonthlyPartitionedChecksSpec
 Container of boolean data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -433,24 +272,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnIntegrityMonthlyPartitionedChecksSpec
 Container of integrity data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -463,24 +288,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnCustomSqlMonthlyPartitionedChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -495,24 +306,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatatypeMonthlyPartitionedChecksSpec
 Container of datatype data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -525,26 +322,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonMonthlyPartitionedChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -555,26 +338,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonMonthlyPartitionedChecksSpec
 Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
  between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
  This is the configuration for daily partitioned checks that are counted in KPIs.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -592,12 +361,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

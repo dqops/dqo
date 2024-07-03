@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,24 +19,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## RuleDefinitionSpec
 Custom data quality rule specification. Provides the custom rule configuration. For example, rules that require a range of historic values will have this configuration.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -59,24 +38,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## RuleTimeWindowSettingsSpec
 Rule historic data configuration. Specifies the number of past values for rules that are analyzing historic data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -89,12 +54,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

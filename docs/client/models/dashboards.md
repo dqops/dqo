@@ -50,7 +50,7 @@ List of dashboards.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardSpec](./dashboards.md#dashboardspec)]*|
+|<span class="no-wrap-code">`self`</span>||*List[[DashboardSpec](./dashboards.md#dashboardspec)]*|
 
 
 ___
@@ -64,7 +64,7 @@ List of dashboard folders.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardsFolderSpec](./dashboards.md#dashboardsfolderspec)]*|
+|<span class="no-wrap-code">`self`</span>||*List[[DashboardsFolderSpec](./dashboards.md#dashboardsfolderspec)]*|
 
 
 ___

@@ -250,7 +250,7 @@ List of comments.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[CommentSpec](./common.md#commentspec)]*|
+|<span class="no-wrap-code">`self`</span>||*List[[CommentSpec](./common.md#commentspec)]*|
 
 
 ___
