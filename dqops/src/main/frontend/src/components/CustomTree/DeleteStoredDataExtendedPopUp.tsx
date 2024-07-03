@@ -61,6 +61,7 @@ const DeleteStoredDataExtendedPopUp = ({
     deleteStatistics: true,
     deleteCheckResults: true,
     deleteSensorReadouts: true,
+    deleteErrorSamples: true,
     checkType: checkTypes === 'sources' ? undefined : checkTypes
   });
 
@@ -74,7 +75,7 @@ const DeleteStoredDataExtendedPopUp = ({
     const { schema, table, ...restParams } = params;
     const newParams: DeleteStoredDataQueueJobParameters = {
       ...restParams,
-      fullTableName: `${schema}.${table}`
+      fullTableName: (schema || table) ? `${schema}.${table}` : undefined
     };
     if (mode === 'part') {
       onDelete({
@@ -436,13 +437,23 @@ const DeleteStoredDataExtendedPopUp = ({
               }
             />
           </div>
-          <div className="w-1/4 flex items-start">
-            <Checkbox
-              checked={params.deleteErrors}
-              onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
-              label="Execution errors"
-              checkClassName="bg-teal-500"
-            />
+          <div className="w-1/4 flex flex-col items-start">
+            <div>
+              <Checkbox
+                checked={params.deleteErrors}
+                onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
+                label="Execution errors"
+                checkClassName="bg-teal-500"
+              />
+            </div>
+            <div>
+              <Checkbox
+                checked={params.deleteErrorSamples}
+                onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
+                label="Error samples"
+                checkClassName="bg-teal-500"
+              />
+            </div>
           </div>
         </div>
       </DialogBody>
