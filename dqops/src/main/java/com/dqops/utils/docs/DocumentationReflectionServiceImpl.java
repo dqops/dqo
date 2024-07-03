@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 public class DocumentationReflectionServiceImpl implements DocumentationReflectionService {
     private static final String REFLECTIVE_FIELD_NAME = "self";
     private final ReflectionService reflectionService;
+
     private final ClassInfo reflectedList;
     private final ClassInfo reflectedMap;
 
@@ -68,6 +69,11 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
         if (!(clazz.getGenericSuperclass() instanceof ParameterizedType)) {
             return;
         }
+
+        if (classInfo.getFields().stream().anyMatch(fieldInfo -> fieldInfo.getClassFieldName().equals(REFLECTIVE_FIELD_NAME))) {
+            return;
+        }
+
         ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
         ParameterizedType javaSuperclass = getJavaParameterizedSuperclass(parameterizedSuperclass);
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType((Class<?>) javaSuperclass.getRawType(),
@@ -79,7 +85,16 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
 
     protected void sanitizeMapClassInfo(Class<?> clazz, ClassInfo classInfo) {
         sanitizeClassInfoFieldListByClassFieldName(reflectedMap.getFields(), classInfo);
-        FieldInfo thisField = new FieldInfo() {{
+
+        if (!(clazz.getGenericSuperclass() instanceof ParameterizedType)) {
+            return;
+        }
+
+        if (classInfo.getFields().stream().anyMatch(fieldInfo -> fieldInfo.getClassFieldName().equals(REFLECTIVE_FIELD_NAME))) {
+            return;
+        }
+
+        FieldInfo selfField = new FieldInfo() {{
             setClazz(clazz);
             setClassFieldName(REFLECTIVE_FIELD_NAME);
             setYamlFieldName(REFLECTIVE_FIELD_NAME);
@@ -87,16 +102,13 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
             setDisplayHint(DisplayHint.textarea);
         }};
 
-        if (!(clazz.getGenericSuperclass() instanceof ParameterizedType)) {
-            return;
-        }
         ParameterizedType parameterizedSuperclass = (ParameterizedType) clazz.getGenericSuperclass();
         ParameterizedType javaSuperclass = getJavaParameterizedSuperclass(parameterizedSuperclass);
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType((Class<?>) javaSuperclass.getRawType(),
                 javaSuperclass,
-                thisField);
-        thisField.setDataType(parameterDataType);
-        classInfo.getFields().add(thisField);
+                selfField);
+        selfField.setDataType(parameterDataType);
+        classInfo.getFields().add(selfField);
     }
 
     private ParameterizedType getJavaParameterizedSuperclass(ParameterizedType type) {
