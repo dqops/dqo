@@ -19,7 +19,7 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 
 /**
  * Command line operation that modifies the ~/.testcontainers.properties file and changes values of properties.
- * It is used to enable or disable teh reusable containers.
+ * It is used to enable or disable the reusable containers.
  */
 public class SetTestContainersUserConfigProperty {
     /**

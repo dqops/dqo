@@ -198,7 +198,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         SimilarChecksContainer similarChecksContainer = new SimilarChecksContainer();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setEnabled(true);
-            // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
+            // TODO: we could add additional filters on the connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
         ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());

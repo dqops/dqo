@@ -16,7 +16,7 @@
 package com.dqops.cli.exceptions;
 
 /**
- * Exception thrown from teh terminal reader when a parameter value was prompted, but the mode was --headless and asking user is disabled.
+ * Exception thrown from the terminal reader when a parameter value was prompted, but the mode was --headless and asking user is disabled.
  */
 public class CliRequiredParameterMissingException extends BaseCliParameterException {
     private final String parameterName;

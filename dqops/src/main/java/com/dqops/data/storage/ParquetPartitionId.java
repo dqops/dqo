@@ -39,7 +39,7 @@ public class ParquetPartitionId implements Comparable<ParquetPartitionId> {
     @JsonPropertyDescription("Table name (schema.table).")
     private PhysicalTableName tableName;
 
-    @JsonPropertyDescription("The date of teh first day of the month that identifies a monthly partition.")
+    @JsonPropertyDescription("The date of the first day of the month that identifies a monthly partition.")
     private LocalDate month;
 
     /**
