@@ -360,6 +360,20 @@
 {% endmacro %}
 
 {% macro render_date_format(date_format) %}
+   {%- if date_format == 'YYYY-MM-DD'-%}
+           'yyyy-mm-dd'
+       {%- elif date_format == 'MM/DD/YYYY' -%}
+           'mm/dd/yyyy'
+       {%- elif date_format == 'DD/MM/YYYY' -%}
+           'dd/mm/yyyy'
+       {%- elif date_format == 'YYYY/MM/DD'-%}
+           'yyyy/mm/dd'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        'Month DD,YYYY'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_regex(date_format) %}
     {%- if date_format == 'DD/MM/YYYY'-%}
         '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
     {%- elif date_format == 'DD-MM-YYYY' -%}
