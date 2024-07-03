@@ -18,7 +18,6 @@ package com.dqops.core.principal;
 
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import org.apache.parquet.Strings;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.Objects;
 
@@ -29,7 +28,7 @@ public class UserDomainIdentity {
     /**
      * Empty user to identify the system user.
      */
-    private static final String SYSTEM_USER = "";
+    public static final String SYSTEM_USER_NAME = "";
 
     /**
      * The name of the default data domain.
@@ -44,7 +43,7 @@ public class UserDomainIdentity {
     /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
-    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN,
+    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER_NAME, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN,
             DEFAULT_DATA_DOMAIN, null, null, null);
 
     private final String userName;
@@ -88,7 +87,7 @@ public class UserDomainIdentity {
      * @return System user identity for the given data domain.
      */
     public static UserDomainIdentity createDataDomainAdminIdentity(String dataDomainFolder, String dataDomainCloud) {
-        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud, null, null, null);
+        return  new UserDomainIdentity(SYSTEM_USER_NAME, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud, null, null, null);
     }
 
     /**

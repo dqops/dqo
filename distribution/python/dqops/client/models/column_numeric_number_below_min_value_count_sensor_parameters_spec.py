@@ -14,12 +14,12 @@ class ColumnNumericNumberBelowMinValueCountSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        min_value (Union[Unset, int]): This field can be used to define custom value. In order to define custom value,
+        min_value (Union[Unset, float]): This field can be used to define custom value. In order to define custom value,
             user should write correct value as an integer. If value is not defined by user then default value is 0
     """
 
     filter_: Union[Unset, str] = UNSET
-    min_value: Union[Unset, int] = UNSET
+    min_value: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

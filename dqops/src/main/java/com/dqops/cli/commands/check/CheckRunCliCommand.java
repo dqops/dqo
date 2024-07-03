@@ -119,6 +119,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
+    @CommandLine.Option(names = {"-ces", "--collect-error-samples"}, description = "Collects error samples for failed data quality checks", defaultValue = "false")
+    private boolean collectErrorSamples;
+
     @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
     private boolean failOnExecutionErrors = true;
 
@@ -133,7 +136,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private String[] labels;
 
     @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
-    private CheckRunCommandFailThreshold failAt;
+    private CheckRunCommandFailThreshold failAt = CheckRunCommandFailThreshold.warning;
 
     @CommandLine.Mixin
     private TimeWindowFilterParameters timeWindowFilterParameters;
@@ -331,6 +334,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns true if error samples should be collected while running checks.
+     * @return Collect error samples.
+     */
+    public boolean isCollectErrorSamples() {
+        return collectErrorSamples;
+    }
+
+    /**
+     * Sets the flag to collect error samples for failed checks.
+     * @param collectErrorSamples True - collect error samples.
+     */
+    public void setCollectErrorSamples(boolean collectErrorSamples) {
+        this.collectErrorSamples = collectErrorSamples;
+    }
+
+    /**
      * Gets the progress reporting mode.
      * @return Progress reporting mode.
      */
@@ -384,7 +403,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, this.collectErrorSamples, progressListener, this.dummyRun);
 
         if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
             this.terminalFactory.getWriter().writeLine("No checks with these filters were found.");
@@ -455,19 +474,19 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckRunCommandFailThreshold checkRunCommandFailThreshold = this.failAt != null ? this.failAt : CheckRunCommandFailThreshold.error;
         switch (checkRunCommandFailThreshold) {
             case warning:
-                if (warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 1) && warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
                     return 1;
                 }
                 // move to the next level...
 
             case error:
-                if (errorIssuesCount > 0 && fatalIssuesCount == 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 2) && errorIssuesCount > 0 && fatalIssuesCount == 0) {
                     return 2;
                 }
                 // move to the next level...
 
             case fatal:
-                if (fatalIssuesCount > 0) {
+                if ((this.failAt == null || this.failAt.getSeverityLevel() <= 3) && fatalIssuesCount > 0) {
                     return 3;
                 }
                 // move to the next level...

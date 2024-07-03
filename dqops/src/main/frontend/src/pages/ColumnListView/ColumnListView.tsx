@@ -142,7 +142,7 @@ export default function ColumnListView() {
 
   return (
     <>
-      <div className="flex items-center justify-between bg-white">
+      <div className="flex items-center bg-white">
         <div className="flex items-center gap-x-4 mb-4 mt-5 px-4">
           {!connection && (
             <Input
@@ -201,7 +201,7 @@ export default function ColumnListView() {
               className={clsx('w-4 h-4 mr-3', loading ? 'animate-spin' : '')}
             />
           }
-          className="mb-4 mt-7 !mr-8 pr-0 pl-3 z-[1]"
+          className="!mr-8 pr-0 pl-3 z-[1] mt-6"
           onClick={() =>
             getColumns(
               labels

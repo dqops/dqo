@@ -31,12 +31,12 @@ class TableComparisonProfilingChecksSpec:
         profile_column_count_match (Union[Unset, TableComparisonColumnCountMatchCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableComparisonProfilingChecksSpecCustomChecks"
-    ] = UNSET
-    profile_row_count_match: Union[
-        Unset, "TableComparisonRowCountMatchCheckSpec"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableComparisonProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
+    profile_row_count_match: Union[Unset, "TableComparisonRowCountMatchCheckSpec"] = (
+        UNSET
+    )
     profile_column_count_match: Union[
         Unset, "TableComparisonColumnCountMatchCheckSpec"
     ] = UNSET

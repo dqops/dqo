@@ -49,7 +49,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"check_model_patch\":{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false},\"override_conflicts\":true}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"check_model_patch\":{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false},\"override_conflicts\":true}"
 	
     ```
 
@@ -87,6 +87,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			],
 			sensor_name='sample_target/sample_category/sample_sensor',
 			quality_dimension='sample_quality_dimension',
+			supports_error_sampling=False,
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
@@ -144,6 +145,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			],
 			sensor_name='sample_target/sample_category/sample_sensor',
 			quality_dimension='sample_quality_dimension',
+			supports_error_sampling=False,
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
@@ -204,6 +206,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			],
 			sensor_name='sample_target/sample_category/sample_sensor',
 			quality_dimension='sample_quality_dimension',
+			supports_error_sampling=False,
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
@@ -264,6 +267,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			],
 			sensor_name='sample_target/sample_category/sample_sensor',
 			quality_dimension='sample_quality_dimension',
+			supports_error_sampling=False,
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
@@ -789,7 +793,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":false},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -856,7 +860,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -935,7 +940,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -1017,7 +1023,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -1099,7 +1106,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -1394,7 +1402,8 @@ http://localhost:8888/api/connections
 		    "deleteErrors" : true,
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
+		    "deleteSensorReadouts" : true,
+		    "deleteErrorSamples" : false
 		  },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
@@ -1440,7 +1449,8 @@ http://localhost:8888/api/connections
 		    "deleteErrors" : true,
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
+		    "deleteSensorReadouts" : true,
+		    "deleteErrorSamples" : false
 		  },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
@@ -1486,7 +1496,8 @@ http://localhost:8888/api/connections
 		    "deleteErrors" : true,
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
+		    "deleteSensorReadouts" : true,
+		    "deleteErrorSamples" : false
 		  },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
@@ -1563,7 +1574,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1612,7 +1624,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1661,7 +1674,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1740,7 +1754,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1789,7 +1804,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1838,7 +1854,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1920,7 +1937,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -1969,7 +1987,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -2018,7 +2037,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -2100,7 +2120,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -2149,7 +2170,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -2198,7 +2220,8 @@ http://localhost:8888/api/connections
 					delete_errors=True,
 					delete_statistics=True,
 					delete_check_results=True,
-					delete_sensor_readouts=True
+					delete_sensor_readouts=True,
+					delete_error_samples=False
 				),
 				can_edit=False,
 				can_collect_statistics=True,
@@ -2486,7 +2509,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		    "deleteErrors" : true,
 		    "deleteStatistics" : true,
 		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
+		    "deleteSensorReadouts" : true,
+		    "deleteErrorSamples" : false
 		  },
 		  "can_edit" : false,
 		  "can_collect_statistics" : true,
@@ -2563,7 +2587,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 				delete_errors=True,
 				delete_statistics=True,
 				delete_check_results=True,
-				delete_sensor_readouts=True
+				delete_sensor_readouts=True,
+				delete_error_samples=False
 			),
 			can_edit=False,
 			can_collect_statistics=True,
@@ -2641,7 +2666,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 				delete_errors=True,
 				delete_statistics=True,
 				delete_check_results=True,
-				delete_sensor_readouts=True
+				delete_sensor_readouts=True,
+				delete_error_samples=False
 			),
 			can_edit=False,
 			can_collect_statistics=True,
@@ -2722,7 +2748,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 				delete_errors=True,
 				delete_statistics=True,
 				delete_check_results=True,
-				delete_sensor_readouts=True
+				delete_sensor_readouts=True,
+				delete_error_samples=False
 			),
 			can_edit=False,
 			can_collect_statistics=True,
@@ -2803,7 +2830,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 				delete_errors=True,
 				delete_statistics=True,
 				delete_check_results=True,
-				delete_sensor_readouts=True
+				delete_sensor_readouts=True,
+				delete_error_samples=False
 			),
 			can_edit=False,
 			can_collect_statistics=True,
@@ -4435,7 +4463,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":false},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -4502,7 +4530,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -4581,7 +4610,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -4663,7 +4693,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,
@@ -4745,7 +4776,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
 			delete_errors=True,
 			delete_statistics=True,
 			delete_check_results=True,
-			delete_sensor_readouts=True
+			delete_sensor_readouts=True,
+			delete_error_samples=False
 		),
 		can_edit=False,
 		can_collect_statistics=True,

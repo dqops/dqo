@@ -16,16 +16,26 @@
 package com.dqops.data.storage;
 
 import com.dqops.core.synchronization.contract.DqoRoot;
+import com.dqops.data.normalization.CommonColumnNames;
 
 /**
  * Configuration for the parquet file storage for each type of supported table (sensor readouts, rule results, etc.)
  */
 public class FileStorageSettings {
+    /**
+     * An array of the default column names that are copied for updated rows from the old row, to the new version of the row.
+     */
+    public static final String[] DEFAULT_COPIED_COLUMN_NAMES = {
+            CommonColumnNames.CREATED_AT_COLUMN_NAME,
+            CommonColumnNames.CREATED_BY_COLUMN_NAME
+        };
+
     private DqoRoot tableType;
     private String dataSubfolderName;
     private String parquetFileName;
     private String timePeriodColumnName;
     private String idStringColumnName;
+    private String[] copiedColumnNames;
     private TablePartitioningPattern partitioningPattern;
 
     /**
@@ -36,6 +46,7 @@ public class FileStorageSettings {
      * @param timePeriodColumnName {@link tech.tablesaw.api.DateTimeColumn} that stores the exact time that is used for monthly partitioning
      *                             (but it is not the column that stores date of the first day of the month).
      * @param idStringColumnName Column name (of String type) that stores the primary key for each row, that is used to find rows to be deleted.
+     * @param copiedColumnNames An array of column names that are copied for updated rows from the old row to the new row. By default, we should copy the created_at and created_by column values.
      * @param partitioningPattern Table partitioning format.
      */
     public FileStorageSettings(DqoRoot tableType,
@@ -43,12 +54,14 @@ public class FileStorageSettings {
                                String parquetFileName,
                                String timePeriodColumnName,
                                String idStringColumnName,
+                               String[] copiedColumnNames,
                                TablePartitioningPattern partitioningPattern) {
         this.tableType = tableType;
         this.dataSubfolderName = dataSubfolderName;
         this.parquetFileName = parquetFileName;
         this.timePeriodColumnName = timePeriodColumnName;
         this.idStringColumnName = idStringColumnName;
+        this.copiedColumnNames = copiedColumnNames;
         this.partitioningPattern = partitioningPattern;
     }
 
@@ -92,6 +105,14 @@ public class FileStorageSettings {
      */
     public String getIdStringColumnName() {
         return idStringColumnName;
+    }
+
+    /**
+     * Returns an array of column names that are copied from the old row to the new version of the row for updated rows.
+     * @return Array of rows to copy.
+     */
+    public String[] getCopiedColumnNames() {
+        return this.copiedColumnNames;
     }
 
     /**

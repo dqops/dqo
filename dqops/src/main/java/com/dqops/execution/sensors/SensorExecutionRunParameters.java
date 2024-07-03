@@ -20,6 +20,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
+import com.dqops.execution.sqltemplates.rendering.ErrorSamplingRenderParameters;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
@@ -79,6 +80,7 @@ public class SensorExecutionRunParameters {
     private List<String> additionalFilters = new ArrayList<>();
     private int rowCountLimit = 1000;
     private boolean failOnSensorReadoutLimitExceeded = true;
+    private ErrorSamplingRenderParameters errorSamplingRenderParameters;
 
 
     /**
@@ -111,6 +113,7 @@ public class SensorExecutionRunParameters {
      * @param checkSearchFilter Check search filter to find this particular check.
      * @param rowCountLimit Sets the row count limit.
      * @param failOnSensorReadoutLimitExceeded Fail when the row count limit is exceeded.
+     * @param errorSamplingRenderParameters Optional parameters for error sampling. When present (not null), an error sampling template is used to capture error samples.
      */
     public SensorExecutionRunParameters(
 			ConnectionSpec connection,
@@ -129,7 +132,8 @@ public class SensorExecutionRunParameters {
 			ProviderDialectSettings dialectSettings,
             CheckSearchFilters checkSearchFilter,
             int rowCountLimit,
-            boolean failOnSensorReadoutLimitExceeded) {
+            boolean failOnSensorReadoutLimitExceeded,
+            ErrorSamplingRenderParameters errorSamplingRenderParameters) {
         this.success = true;
         this.connection = connection;
         this.table = table;
@@ -148,6 +152,7 @@ public class SensorExecutionRunParameters {
         this.checkSearchFilter = checkSearchFilter;
         this.rowCountLimit = rowCountLimit;
         this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
+        this.errorSamplingRenderParameters = errorSamplingRenderParameters;
     }
 
     /**
@@ -528,6 +533,22 @@ public class SensorExecutionRunParameters {
      */
     public void setFailOnSensorReadoutLimitExceeded(boolean failOnSensorReadoutLimitExceeded) {
         this.failOnSensorReadoutLimitExceeded = failOnSensorReadoutLimitExceeded;
+    }
+
+    /**
+     * Returns the configuration of error sampling. When this object is not null, error sampling is used instead of running the sensor.
+     * @return Error sampling configuration.
+     */
+    public ErrorSamplingRenderParameters getErrorSamplingRenderParameters() {
+        return errorSamplingRenderParameters;
+    }
+
+    /**
+     * Sets an error sampling configuration.
+     * @param errorSamplingRenderParameters Error sampling configuration, when not null, captures error samples.
+     */
+    public void setErrorSamplingRenderParameters(ErrorSamplingRenderParameters errorSamplingRenderParameters) {
+        this.errorSamplingRenderParameters = errorSamplingRenderParameters;
     }
 
     /**

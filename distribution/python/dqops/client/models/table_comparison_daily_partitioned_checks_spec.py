@@ -52,9 +52,9 @@ class TableComparisonDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_row_count_match is not UNSET:
-            field_dict[
-                "daily_partition_row_count_match"
-            ] = daily_partition_row_count_match
+            field_dict["daily_partition_row_count_match"] = (
+                daily_partition_row_count_match
+            )
 
         return field_dict
 

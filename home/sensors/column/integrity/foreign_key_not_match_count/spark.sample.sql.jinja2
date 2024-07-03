@@ -1,0 +1,4 @@
+{% import '/dialects/spark.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+{%- endcall -%}

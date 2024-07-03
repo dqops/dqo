@@ -15,7 +15,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?[0-9]*[.,]?[0-9]+$") IS TRUE
                         THEN 1
                     ELSE 0
                     END

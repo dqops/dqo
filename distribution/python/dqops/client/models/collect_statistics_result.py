@@ -14,7 +14,6 @@ class CollectStatisticsResult:
 
     Attributes:
         executed_statistics_collectors (Union[Unset, int]): The total count of all executed statistics collectors.
-        total_collectors_executed (Union[Unset, int]): The count of executed statistics collectors.
         columns_analyzed (Union[Unset, int]): The count of columns for which DQOps executed a collector and tried to
             read the statistics.
         columns_successfully_analyzed (Union[Unset, int]): The count of columns for which DQOps managed to obtain
@@ -24,7 +23,6 @@ class CollectStatisticsResult:
     """
 
     executed_statistics_collectors: Union[Unset, int] = UNSET
-    total_collectors_executed: Union[Unset, int] = UNSET
     columns_analyzed: Union[Unset, int] = UNSET
     columns_successfully_analyzed: Union[Unset, int] = UNSET
     total_collectors_failed: Union[Unset, int] = UNSET
@@ -33,7 +31,6 @@ class CollectStatisticsResult:
 
     def to_dict(self) -> Dict[str, Any]:
         executed_statistics_collectors = self.executed_statistics_collectors
-        total_collectors_executed = self.total_collectors_executed
         columns_analyzed = self.columns_analyzed
         columns_successfully_analyzed = self.columns_successfully_analyzed
         total_collectors_failed = self.total_collectors_failed
@@ -43,11 +40,9 @@ class CollectStatisticsResult:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if executed_statistics_collectors is not UNSET:
-            field_dict[
-                "executed_statistics_collectors"
-            ] = executed_statistics_collectors
-        if total_collectors_executed is not UNSET:
-            field_dict["total_collectors_executed"] = total_collectors_executed
+            field_dict["executed_statistics_collectors"] = (
+                executed_statistics_collectors
+            )
         if columns_analyzed is not UNSET:
             field_dict["columns_analyzed"] = columns_analyzed
         if columns_successfully_analyzed is not UNSET:
@@ -64,8 +59,6 @@ class CollectStatisticsResult:
         d = src_dict.copy()
         executed_statistics_collectors = d.pop("executed_statistics_collectors", UNSET)
 
-        total_collectors_executed = d.pop("total_collectors_executed", UNSET)
-
         columns_analyzed = d.pop("columns_analyzed", UNSET)
 
         columns_successfully_analyzed = d.pop("columns_successfully_analyzed", UNSET)
@@ -76,7 +69,6 @@ class CollectStatisticsResult:
 
         collect_statistics_result = cls(
             executed_statistics_collectors=executed_statistics_collectors,
-            total_collectors_executed=total_collectors_executed,
             columns_analyzed=columns_analyzed,
             columns_successfully_analyzed=columns_successfully_analyzed,
             total_collectors_failed=total_collectors_failed,

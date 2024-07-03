@@ -19,9 +19,9 @@ class TableMonthlyPartitionedCheckCategoriesSpecComparisons:
 
     """
 
-    additional_properties: Dict[
-        str, "TableComparisonMonthlyPartitionedChecksSpec"
-    ] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, "TableComparisonMonthlyPartitionedChecksSpec"] = (
+        _attrs_field(init=False, factory=dict)
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         pass

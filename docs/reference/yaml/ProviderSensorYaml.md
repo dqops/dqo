@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Provider specific data quality sensor definition YAML schema for a data quality sensor configuration specification.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,24 +19,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ProviderSensorDefinitionSpec
 Specification (configuration) for a provider specific implementation of a data quality sensor or an SQL template.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -59,12 +38,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

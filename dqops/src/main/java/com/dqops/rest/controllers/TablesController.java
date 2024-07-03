@@ -168,7 +168,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<TableListModel>> getTables(
+    public Mono<ResponseEntity<Flux<TableListModel>>> getTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -182,85 +182,87 @@ public class TablesController {
             @RequestParam(required = false) Optional<String> filter,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        if (label.isPresent() && label.get().size() > 0) {
-            tableSearchFilters.setLabels(label.get().toArray(String[]::new));
-        }
-        if (filter.isEmpty() || Strings.isNullOrEmpty(filter.get())) {
-            tableSearchFilters.setFullTableName(schemaName + ".*");
-        } else {
-            tableSearchFilters.setFullTableName(schemaName + "." + filter.get());
-        }
-
-        Integer tableLimit = null;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
             }
 
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(100);
-            tableLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
+            TableSearchFilters tableSearchFilters = new TableSearchFilters();
+            if (label.isPresent() && label.get().size() > 0) {
+                tableSearchFilters.setLabels(label.get().toArray(String[]::new));
+            }
+            if (filter.isEmpty() || Strings.isNullOrEmpty(filter.get())) {
+                tableSearchFilters.setFullTableName(schemaName + ".*");
+            } else {
+                tableSearchFilters.setFullTableName(schemaName + "." + filter.get());
+            }
 
-        tableSearchFilters.setMaxResults(tableLimit);
-        Collection<TableWrapper> matchingTableWrappers = this.hierarchyNodeTreeSearcher.findTables(
-                connectionWrapper.getTables(), tableSearchFilters);
+            Integer tableLimit = null;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
 
-        List<TableSpec> tableSpecs = matchingTableWrappers
-                .stream()
-                .skip(skip == null ? 0 : skip)
-                .map(TableWrapper::getSpec)
-                .collect(Collectors.toList());
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(100);
+                tableLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
+            }
 
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        List<TableListModel> tableModelsList = tableSpecs.stream()
-                .map(ts -> TableListModel.fromTableSpecificationForListEntry(
-                        connectionName, ts, isEditor, isOperator))
-                .collect(Collectors.toList());
+            tableSearchFilters.setMaxResults(tableLimit);
+            Collection<TableWrapper> matchingTableWrappers = this.hierarchyNodeTreeSearcher.findTables(
+                    connectionWrapper.getTables(), tableSearchFilters);
 
-        tableModelsList.forEach(listModel -> {
-            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                    listModel.getConnectionName(), listModel.getTarget());
-            TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-            listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
-        });
+            List<TableSpec> tableSpecs = matchingTableWrappers
+                    .stream()
+                    .skip(skip == null ? 0 : skip)
+                    .map(TableWrapper::getSpec)
+                    .collect(Collectors.toList());
 
-        if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
-            // the results not loaded yet, we need to wait until the queue is empty
-            CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            List<TableListModel> tableModelsList = tableSpecs.stream()
+                    .map(ts -> TableListModel.fromTableSpecificationForListEntry(
+                            connectionName, ts, isEditor, isOperator))
+                    .collect(Collectors.toList());
 
-            Flux<TableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
-                    .thenMany(Flux.fromIterable(tableModelsList)
-                            .map(tableListModel -> {
-                                if (tableListModel.getDataQualityStatus() == null) {
-                                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                                            tableListModel.getConnectionName(), tableListModel.getTarget());
-                                    TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                    tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
-                                }
-                                return tableListModel;
-                            }));
+            tableModelsList.forEach(listModel -> {
+                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                        listModel.getConnectionName(), listModel.getTarget());
+                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                listModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+            });
 
-            return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
-        }
+            if (tableModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+                // the results not loaded yet, we need to wait until the queue is empty
+                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
 
-        return new ResponseEntity<>(Flux.fromStream(tableModelsList.stream()), HttpStatus.OK); // 200
+                Flux<TableListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                        .thenMany(Flux.fromIterable(tableModelsList)
+                                .map(tableListModel -> {
+                                    if (tableListModel.getDataQualityStatus() == null) {
+                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                tableListModel.getConnectionName(), tableListModel.getTarget());
+                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                        tableListModel.setDataQualityStatus(currentTableStatus != null ? currentTableStatus.shallowCloneWithoutCheckResultsAndColumns() : null);
+                                    }
+                                    return tableListModel;
+                                }));
+
+                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            }
+
+            return new ResponseEntity<>(Flux.fromStream(tableModelsList.stream()), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -282,36 +284,38 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableModel>> getTable(
+    public Mono<ResponseEntity<Mono<TableModel>>> getTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        TableModel tableModel = new TableModel() {{
-            setConnectionName(connectionWrapper.getName());
-            setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
-            setSpec(tableSpec);
-            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-            setYamlParsingError(tableSpec.getYamlParsingError());
-        }};
+            TableSpec tableSpec = tableWrapper.getSpec();
+            TableModel tableModel = new TableModel() {{
+                setConnectionName(connectionWrapper.getName());
+                setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
+                setSpec(tableSpec);
+                setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                setYamlParsingError(tableSpec.getYamlParsingError());
+            }};
 
-        return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -333,33 +337,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableListModel>> getTableBasic(
+    public Mono<ResponseEntity<Mono<TableListModel>>> getTableBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        TableListModel tableListModel = TableListModel.fromTableSpecification(
-                connectionWrapper.getName(), tableSpec,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            TableSpec tableSpec = tableWrapper.getSpec();
+            TableListModel tableListModel = TableListModel.fromTableSpecification(
+                    connectionWrapper.getName(), tableSpec,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(tableListModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(tableListModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -381,31 +387,33 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TablePartitioningModel>> getTablePartitioning(
+    public Mono<ResponseEntity<Mono<TablePartitioningModel>>> getTablePartitioning(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(
-                connectionWrapper.getName(), tableSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            TableSpec tableSpec = tableWrapper.getSpec();
+            TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(
+                    connectionWrapper.getName(), tableSpec, principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(tablePartitioningModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(tablePartitioningModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -428,30 +436,32 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DataGroupingConfigurationSpec>> getTableDefaultGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<DataGroupingConfigurationSpec>>> getTableDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        DataGroupingConfigurationSpec dataGroupingConfiguration = tableSpec.getDefaultDataGroupingConfiguration();
+            TableSpec tableSpec = tableWrapper.getSpec();
+            DataGroupingConfigurationSpec dataGroupingConfiguration = tableSpec.getDefaultDataGroupingConfiguration();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(dataGroupingConfiguration), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -475,36 +485,38 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<MonitoringScheduleSpec>> getTableSchedulingGroupOverride(
+    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getTableSchedulingGroupOverride(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
-        if (schedules == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+            if (schedules == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
+            MonitoringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
-        return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -527,34 +539,36 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableIncidentGroupingSpec>> getTableIncidentGrouping(
+    public Mono<ResponseEntity<Mono<TableIncidentGroupingSpec>>> getTableIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        TableIncidentGroupingSpec tableIncidentGrouping = tableSpec.getIncidentGrouping();
-        if (tableIncidentGrouping == null) {
-            tableIncidentGrouping = new TableIncidentGroupingSpec();
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            TableIncidentGroupingSpec tableIncidentGrouping = tableSpec.getIncidentGrouping();
+            if (tableIncidentGrouping == null) {
+                tableIncidentGrouping = new TableIncidentGroupingSpec();
+            }
 
-        return new ResponseEntity<>(Mono.just(tableIncidentGrouping), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(tableIncidentGrouping), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -576,30 +590,32 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<LabelSetSpec>> getTableLabels(
+    public Mono<ResponseEntity<Mono<LabelSetSpec>>> getTableLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        LabelSetSpec labels = tableSpec.getLabels();
+            TableSpec tableSpec = tableWrapper.getSpec();
+            LabelSetSpec labels = tableSpec.getLabels();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -621,32 +637,33 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CommentsListSpec>> getTableComments(
+    public Mono<ResponseEntity<Mono<CommentsListSpec>>> getTableComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        CommentsListSpec comments = tableSpec.getComments();
+            TableSpec tableSpec = tableWrapper.getSpec();
+            CommentsListSpec comments = tableSpec.getComments();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+        }));
     }
-
     
     /**
      * Retrieves the configuration of data quality checks on a table given a connection name and a table names.
@@ -668,33 +685,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableProfilingCheckCategoriesSpec>> getTableProfilingChecks(
+    public Mono<ResponseEntity<Mono<TableProfilingCheckCategoriesSpec>>> getTableProfilingChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        
-        TableProfilingCheckCategoriesSpec checks = tableSpec.getProfilingChecks();
-        return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableProfilingCheckCategoriesSpec checks = tableSpec.getProfilingChecks();
+            return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -718,33 +737,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>> getTableDailyMonitoringChecks(
+    public Mono<ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>>> getTableDailyMonitoringChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        
-        TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = tableSpec.getMonitoringChecks().getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+
+            TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = tableSpec.getMonitoringChecks().getDaily();
+            return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -768,33 +789,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableMonthlyMonitoringCheckCategoriesSpec>> getTableMonitoringChecksMonthly(
+    public Mono<ResponseEntity<Mono<TableMonthlyMonitoringCheckCategoriesSpec>>> getTableMonitoringChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = tableSpec.getMonitoringChecks().getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
+            TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = tableSpec.getMonitoringChecks().getMonthly();
+            return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
+        }));
     }
     
     /**
@@ -818,33 +841,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> getTableDailyPartitionedChecks(
+    public Mono<ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>>> getTableDailyPartitionedChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = tableSpec.getPartitionedChecks().getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
+            TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = tableSpec.getPartitionedChecks().getDaily();
+            return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -868,33 +893,35 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableMonthlyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksMonthly(
+    public Mono<ResponseEntity<Mono<TableMonthlyPartitionedCheckCategoriesSpec>>> getTablePartitionedChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = tableSpec.getPartitionedChecks().getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
+            TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = tableSpec.getPartitionedChecks().getMonthly();
+            return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -918,54 +945,56 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTableProfilingChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTableProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                     new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -989,54 +1018,56 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTableMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1060,56 +1091,57 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTablePartitionedChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTablePartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
-
 
     /**
      * Retrieves a simplistic list of data quality profiling checks as a UI friendly model on a table given a connection name and a table name.
@@ -1131,39 +1163,41 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getTableProfilingChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getTableProfilingChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1187,40 +1221,42 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getTableMonitoringChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getTableMonitoringChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1244,39 +1280,41 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getTablePartitionedChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getTablePartitionedChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1301,58 +1339,60 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTableProfilingChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTableProfilingChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1379,7 +1419,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTableMonitoringChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTableMonitoringChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1387,51 +1427,53 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1458,7 +1500,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getTablePartitionedChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getTablePartitionedChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1466,50 +1508,52 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
-                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+            TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                    connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1533,53 +1577,55 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableStatisticsModel>> getTableStatistics(
+    public Mono<ResponseEntity<Mono<TableStatisticsModel>>> getTableStatistics(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                physicalTableName, true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
-                this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, principal.getDataDomainIdentity());
+            StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
+                    this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
+                            CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, principal.getDataDomainIdentity());
 
-        TableStatisticsModel resultModel = new TableStatisticsModel();
-        resultModel.setConnectionName(connectionName);
-        resultModel.setTable(physicalTableName);
-        resultModel.setStatistics(mostRecentStatisticsMetricsForTable.getMetrics());
-        resultModel.setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            TableStatisticsModel resultModel = new TableStatisticsModel();
+            resultModel.setConnectionName(connectionName);
+            resultModel.setTable(physicalTableName);
+            resultModel.setStatistics(mostRecentStatisticsMetricsForTable.getMetrics());
+            resultModel.setCanCollectStatistics(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
-        {{
-            setConnection(connectionName);
-            setFullTableName(physicalTableName.toTableSearchFilter());
-            setTarget(StatisticsCollectorTarget.table);
-            setEnabled(true);
-        }});
+            resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+            {{
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setTarget(StatisticsCollectorTarget.table);
+                setEnabled(true);
+            }});
 
-        resultModel.setCollectTableAndColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
-        {{
-            setConnection(connectionName);
-            setFullTableName(physicalTableName.toTableSearchFilter());
-            setEnabled(true);
-        }});
+            resultModel.setCollectTableAndColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+            {{
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setEnabled(true);
+            }});
 
-        return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -1609,7 +1655,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsProfilingChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getTableColumnsProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1628,29 +1674,31 @@ public class TablesController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.profiling, null),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                CheckTarget.column,
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                    connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.profiling, null),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    CheckTarget.column,
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
+
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1681,7 +1729,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsMonitoringChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getTableColumnsMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1701,29 +1749,31 @@ public class TablesController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                CheckTarget.column,
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                    connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.monitoring, timeScale),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    CheckTarget.column,
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1754,7 +1804,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckConfigurationModel>> getTableColumnsPartitionedChecksModel(
+    public Mono<ResponseEntity<Flux<CheckConfigurationModel>>> getTableColumnsPartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1774,29 +1824,31 @@ public class TablesController {
             Optional<Boolean> checkConfigured,
             @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
             Optional<Integer> limit) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
-                connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
-                columnNamePattern.orElse(null),
-                columnDataType.orElse(null),
-                CheckTarget.column,
-                checkCategory.orElse(null),
-                checkName.orElse(null),
-                checkEnabled.orElse(null),
-                checkConfigured.orElse(null),
-                limit.orElse(1000),
-                principal
-        );
+            List<CheckConfigurationModel> checkConfigurationModels = this.tableService.getCheckConfigurationsOnTable(
+                    connectionName, schemaTableName, new CheckContainerTypeModel(CheckType.partitioned, timeScale),
+                    columnNamePattern.orElse(null),
+                    columnDataType.orElse(null),
+                    CheckTarget.column,
+                    checkCategory.orElse(null),
+                    checkName.orElse(null),
+                    checkEnabled.orElse(null),
+                    checkConfigured.orElse(null),
+                    limit.orElse(1000),
+                    principal
+            );
 
-        return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkConfigurationModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1820,27 +1872,29 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getTableProfilingChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getTableProfilingChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.profiling,
-                null, checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
+                    connectionName, fullTableName, CheckType.profiling,
+                    null, checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1865,7 +1919,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getTableMonitoringChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getTableMonitoringChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1873,20 +1927,22 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.monitoring,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
+                    connectionName, fullTableName, CheckType.monitoring,
+                    timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1911,7 +1967,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<CheckTemplate>> getTablePartitionedChecksTemplates(
+    public Mono<ResponseEntity<Flux<CheckTemplate>>> getTablePartitionedChecksTemplates(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1919,20 +1975,22 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.partitioned,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
+            List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
+                    connectionName, fullTableName, CheckType.partitioned,
+                    timeScale, checkCategory.orElse(null), checkName.orElse(null), principal);
 
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+        }));
     }
 
 
@@ -1958,39 +2016,41 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createTable(
+    public Mono<ResponseEntity<Mono<Void>>> createTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table specification") @RequestBody TableSpec tableSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper existingTableWrapper = tables.getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (existingTableWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table with this name already exists
-        }
+            TableList tables = connectionWrapper.getTables();
+            TableWrapper existingTableWrapper = tables.getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (existingTableWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a table with this name already exists
+            }
 
-        TableWrapper tableWrapper = tables.createAndAddNew(new PhysicalTableName(schemaName, tableName));
-        tableWrapper.setSpec(tableSpec);
-        userHomeContext.flush();
+            TableWrapper tableWrapper = tables.createAndAddNew(new PhysicalTableName(schemaName, tableName));
+            tableWrapper.setSpec(tableSpec);
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+        }));
     }
 
     /**
@@ -2015,41 +2075,43 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTable(
+    public Mono<ResponseEntity<Mono<Void>>> updateTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Full table specification") @RequestBody TableSpec tableSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    // TODO: validate the tableSpec
-                    tableWrapper.setSpec(tableSpec);
-                    userHomeContext.flush();
+                        // TODO: validate the tableSpec
+                        tableWrapper.setSpec(tableSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2074,48 +2136,50 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTableBasic(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table basic model with the updated settings") @RequestBody TableListModel tableListModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        if (tableListModel.getTarget() == null ||
-                !Objects.equals(schemaName, tableListModel.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tableListModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
-        }
+            if (tableListModel.getTarget() == null ||
+                    !Objects.equals(schemaName, tableListModel.getTarget().getSchemaName()) ||
+                    !Objects.equals(tableName, tableListModel.getTarget().getTableName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    // TODO: validate the tableSpec
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    tableListModel.copyToTableSpecification(tableSpec);
-                    userHomeContext.flush();
+                        // TODO: validate the tableSpec
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        tableListModel.copyToTableSpecification(tableSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2140,47 +2204,49 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTablePartitioning(
+    public Mono<ResponseEntity<Mono<Void>>> updateTablePartitioning(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table partitioning model with the updated settings") @RequestBody TablePartitioningModel tablePartitioningModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        if (tablePartitioningModel.getTarget() == null ||
-                !Objects.equals(schemaName, tablePartitioningModel.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tablePartitioningModel.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
-        }
+            if (tablePartitioningModel.getTarget() == null ||
+                    !Objects.equals(schemaName, tablePartitioningModel.getTarget().getSchemaName()) ||
+                    !Objects.equals(tableName, tablePartitioningModel.getTarget().getTableName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    tablePartitioningModel.copyToTableSpecification(tableSpec);
-                    userHomeContext.flush();
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        tablePartitioningModel.copyToTableSpecification(tableSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2205,55 +2271,57 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTableDefaultGroupingConfiguration(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableDefaultGroupingConfiguration(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level")
             @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    if (dataGroupingConfigurationSpec != null) {
-                        if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
-                            tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
-                            tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec);
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        if (dataGroupingConfigurationSpec != null) {
+                            if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
+                                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec);
+                            } else {
+                                tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+                                tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+                            }
                         } else {
-                            tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
-                            tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+                            if (tableSpec.getDefaultGroupingName() != null) {
+                                tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
+                                tableSpec.setDefaultGroupingName(null);
+                            }
                         }
-                    } else {
-                        if (tableSpec.getDefaultGroupingName() != null) {
-                            tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
-                            tableSpec.setDefaultGroupingName(null);
-                        }
-                    }
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2279,7 +2347,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTableSchedulingGroupOverride(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableSchedulingGroupOverride(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2287,48 +2355,49 @@ public class TablesController {
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
                 @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
-                    if (schedules == null) {
-                        schedules = new DefaultSchedulesSpec();
-                        tableSpec.setSchedulesOverride(schedules);
-                    }
-                    schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+                        if (schedules == null) {
+                            schedules = new DefaultSchedulesSpec();
+                            tableSpec.setSchedulesOverride(schedules);
+                        }
+                        schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
 
-                    boolean scheduleUpdated = tableSpec.isDirty();
-                    userHomeContext.flush();
+                        boolean scheduleUpdated = tableSpec.isDirty();
+                        userHomeContext.flush();
 
-                    if (scheduleUpdated && this.jobSchedulerService != null) {
-                        this.jobSchedulerService.triggerMetadataSynchronization();
-                    }
+                        if (scheduleUpdated && this.jobSchedulerService != null) {
+                            this.jobSchedulerService.triggerMetadataSynchronization();
+                        }
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
-
 
     /**
      * Updates the configuration of incident grouping on an existing table.
@@ -2352,42 +2421,44 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateTableIncidentGrouping(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableIncidentGrouping(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("New configuration of the table's incident grouping")
             @RequestBody TableIncidentGroupingSpec incidentGrouping) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    tableSpec.setIncidentGrouping(incidentGrouping);
-                    userHomeContext.flush();
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        tableSpec.setIncidentGrouping(incidentGrouping);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2412,41 +2483,43 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableLabels(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("List of labels to attach (replace) on a table or an empty object to clear the list of labels on a table")
             @RequestBody LabelSetSpec labelSetSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    tableWrapper.getSpec().setLabels(labelSetSpec);
-                    userHomeContext.flush();
+                        tableWrapper.getSpec().setLabels(labelSetSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2471,41 +2544,43 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableComments(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table")
             @RequestBody CommentsListSpec commentsListSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    tableWrapper.getSpec().setComments(commentsListSpec);
-                    userHomeContext.flush();
+                        tableWrapper.getSpec().setComments(commentsListSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecks(
@@ -2561,13 +2636,14 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableProfilingChecks(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableProfilingChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).")
             @RequestBody TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2593,6 +2669,7 @@ public class TablesController {
         } else {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+        }));
     }
 
     /**
@@ -2617,13 +2694,14 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableDailyMonitoringChecks(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableDailyMonitoringChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
             @RequestBody TableDailyMonitoringCheckCategoriesSpec tableDailyMonitoringSpec) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2643,6 +2721,7 @@ public class TablesController {
         } else {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+        }));
     }
 
     /**
@@ -2667,13 +2746,14 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableMonitoringChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
             @RequestBody TableMonthlyMonitoringCheckCategoriesSpec tableMonthlyMonitoringSpec) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2693,6 +2773,7 @@ public class TablesController {
         } else {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+        }));
     }
 
     /**
@@ -2717,13 +2798,14 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksDaily(
+    public Mono<ResponseEntity<Mono<Void>>> updateTablePartitionedChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
             @RequestBody TableDailyPartitionedCheckCategoriesSpec tableDailyPartitionedSpec) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2743,6 +2825,7 @@ public class TablesController {
         } else {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+        }));
     }
 
     /**
@@ -2767,32 +2850,34 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTablePartitionedChecksMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateTablePartitionedChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
             @RequestBody TableMonthlyPartitionedCheckCategoriesSpec tableMonthlyPartitionedSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        boolean success = this.updateTableGenericChecks(
-                principal,
-                spec -> spec.getPartitionedChecks().setMonthly(tableMonthlyPartitionedSpec),
-                connectionName,
-                schemaName,
-                tableName
-        );
+            boolean success = this.updateTableGenericChecks(
+                    principal,
+                    spec -> spec.getPartitionedChecks().setMonthly(tableMonthlyPartitionedSpec),
+                    connectionName,
+                    schemaName,
+                    tableName
+            );
 
-        if (success) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-        } else {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (success) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            } else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+        }));
     }
 
     protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecksModel(
@@ -2859,34 +2944,36 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableProfilingChecksModel(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration.")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        boolean success = this.updateTableGenericChecksModel(
-                principal,
-                TableSpec::getProfilingChecks,
-                connectionName,
-                schemaName,
-                tableName,
-                checkContainerModel
-        );
+            boolean success = this.updateTableGenericChecksModel(
+                    principal,
+                    TableSpec::getProfilingChecks,
+                    connectionName,
+                    schemaName,
+                    tableName,
+                    checkContainerModel
+            );
 
-        if (success) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-        }
-        else {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (success) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+        }));
     }
 
     /**
@@ -2912,7 +2999,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateTableMonitoringChecksModel(
+    public Mono<ResponseEntity<Mono<Void>>> updateTableMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2920,27 +3007,29 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality monitoring configuration.")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        boolean success = this.updateTableGenericChecksModel(
-                principal,
-                spec -> spec.getTableCheckRootContainer(CheckType.monitoring, timeScale, true),
-                connectionName,
-                schemaName,
-                tableName,
-                checkContainerModel
-        );
+            boolean success = this.updateTableGenericChecksModel(
+                    principal,
+                    spec -> spec.getTableCheckRootContainer(CheckType.monitoring, timeScale, true),
+                    connectionName,
+                    schemaName,
+                    tableName,
+                    checkContainerModel
+            );
 
-        if (success) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-        }
-        else {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (success) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+        }));
     }
 
     /**
@@ -2966,7 +3055,7 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecksModel(
+    public Mono<ResponseEntity<Mono<?>>> updateTablePartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2974,27 +3063,29 @@ public class TablesController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration.")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        boolean success = this.updateTableGenericChecksModel(
-                principal,
-                spec -> spec.getTableCheckRootContainer(CheckType.partitioned, timeScale, true),
-                connectionName,
-                schemaName,
-                tableName,
-                checkContainerModel
-        );
+            boolean success = this.updateTableGenericChecksModel(
+                    principal,
+                    spec -> spec.getTableCheckRootContainer(CheckType.partitioned, timeScale, true),
+                    connectionName,
+                    schemaName,
+                    tableName,
+                    checkContainerModel
+            );
 
-        if (success) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-        }
-        else {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (success) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            }
+            else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
+        }));
     }
 
     /**
@@ -3016,32 +3107,34 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<DqoQueueJobId>> deleteTable(
+    public Mono<ResponseEntity<Mono<DqoQueueJobId>>> deleteTable(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    ConnectionList connections = userHome.getConnections();
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-                    if (connectionWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        ConnectionList connections = userHome.getConnections();
+                        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+                        if (connectionWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableList tables = connectionWrapper.getTables();
-                    TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+                        TableList tables = connectionWrapper.getTables();
+                        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
-                            connectionName, tableWrapper.getPhysicalTableName(), principal);
+                        PushJobResult<DeleteStoredDataResult> backgroundJob = this.tableService.deleteTable(
+                                connectionName, tableWrapper.getPhysicalTableName(), principal);
 
-                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
-                });
+                        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    });
+        }));
     }
 }

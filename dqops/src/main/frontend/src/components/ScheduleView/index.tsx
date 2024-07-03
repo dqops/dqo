@@ -229,7 +229,7 @@ const ScheduleView = ({
                 mode !== 'custom' && 'opacity-60'
               )}
             >
-              <div>Unix cron expression:</div>
+              <div>Unix cron expression</div>
             </td>
             <td className="px-4 py-4 text-sm">
               <Input
@@ -254,7 +254,7 @@ const ScheduleView = ({
           </tr>
           <tr>
             <td className="pr-4 py-2 text-sm">
-              <div>Disable schedule:</div>
+              <div>Disable schedule</div>
             </td>
             <td
               className={clsx(

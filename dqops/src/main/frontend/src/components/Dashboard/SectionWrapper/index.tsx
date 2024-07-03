@@ -9,6 +9,7 @@ interface ISectionWrapperProps {
   className?: string;
   svgIcon?: boolean;
   onClick?: () => void;
+  titleClassName?: string;
 }
 
 const SectionWrapper = ({
@@ -16,7 +17,8 @@ const SectionWrapper = ({
   children,
   className,
   svgIcon,
-  onClick
+  onClick,
+  titleClassName
 }: ISectionWrapperProps) => {
   return (
     <div
@@ -28,7 +30,8 @@ const SectionWrapper = ({
       <div
         className={clsx(
           'px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold',
-          svgIcon ? 'flex items-center justify-center' : ''
+          svgIcon ? 'flex items-center justify-center' : '',
+          titleClassName
         )}
         onClick={onClick}
       >

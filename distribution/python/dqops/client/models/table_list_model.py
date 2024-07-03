@@ -88,9 +88,9 @@ class TableListModel:
     filter_: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
-    profiling_checks_result_truncation: Union[
-        Unset, ProfilingTimePeriodTruncation
-    ] = UNSET
+    profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriodTruncation] = (
+        UNSET
+    )
     file_format: Union[Unset, "FileFormatSpec"] = UNSET
     data_quality_status: Union[Unset, "TableCurrentDataQualityStatusModel"] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
@@ -211,9 +211,9 @@ class TableListModel:
         if owner is not UNSET:
             field_dict["owner"] = owner
         if profiling_checks_result_truncation is not UNSET:
-            field_dict[
-                "profiling_checks_result_truncation"
-            ] = profiling_checks_result_truncation
+            field_dict["profiling_checks_result_truncation"] = (
+                profiling_checks_result_truncation
+            )
         if file_format is not UNSET:
             field_dict["file_format"] = file_format
         if data_quality_status is not UNSET:
@@ -221,39 +221,39 @@ class TableListModel:
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
-            field_dict[
-                "has_any_configured_profiling_checks"
-            ] = has_any_configured_profiling_checks
+            field_dict["has_any_configured_profiling_checks"] = (
+                has_any_configured_profiling_checks
+            )
         if has_any_configured_monitoring_checks is not UNSET:
-            field_dict[
-                "has_any_configured_monitoring_checks"
-            ] = has_any_configured_monitoring_checks
+            field_dict["has_any_configured_monitoring_checks"] = (
+                has_any_configured_monitoring_checks
+            )
         if has_any_configured_partition_checks is not UNSET:
-            field_dict[
-                "has_any_configured_partition_checks"
-            ] = has_any_configured_partition_checks
+            field_dict["has_any_configured_partition_checks"] = (
+                has_any_configured_partition_checks
+            )
         if partitioning_configuration_missing is not UNSET:
-            field_dict[
-                "partitioning_configuration_missing"
-            ] = partitioning_configuration_missing
+            field_dict["partitioning_configuration_missing"] = (
+                partitioning_configuration_missing
+            )
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
-            field_dict[
-                "run_profiling_checks_job_template"
-            ] = run_profiling_checks_job_template
+            field_dict["run_profiling_checks_job_template"] = (
+                run_profiling_checks_job_template
+            )
         if run_monitoring_checks_job_template is not UNSET:
-            field_dict[
-                "run_monitoring_checks_job_template"
-            ] = run_monitoring_checks_job_template
+            field_dict["run_monitoring_checks_job_template"] = (
+                run_monitoring_checks_job_template
+            )
         if run_partition_checks_job_template is not UNSET:
-            field_dict[
-                "run_partition_checks_job_template"
-            ] = run_partition_checks_job_template
+            field_dict["run_partition_checks_job_template"] = (
+                run_partition_checks_job_template
+            )
         if collect_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_statistics_job_template"
-            ] = collect_statistics_job_template
+            field_dict["collect_statistics_job_template"] = (
+                collect_statistics_job_template
+            )
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
         if can_edit is not UNSET:

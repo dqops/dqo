@@ -13,6 +13,7 @@ import {
 import { IRootState } from '../../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { ConnectionApiClient } from '../../../services/apiClient';
+import { TABLES_LIMIT_TREE_PAGING } from '../../../shared/config';
 import { TREE_LEVEL } from '../../../shared/enums';
 import { CustomTreeNode } from '../../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
@@ -23,6 +24,8 @@ import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
 import AddTableDialog from '../../CustomTree/AddTableDialog';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import ContextMenu from '../../CustomTree/ContextMenu';
+import Input from '../../Input';
+import Loader from '../../Loader';
 import SvgIcon from '../../SvgIcon';
 
 const Tree = () => {
@@ -36,7 +39,12 @@ const Tree = () => {
     activeTab,
     switchTab,
     refreshNode,
-    setTreeData
+    setTreeData,
+    loadMoreTables,
+    tablesLoading,
+    searchTable,
+    loadedTables,
+    searchColumn
   } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -47,6 +55,9 @@ const Tree = () => {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+  const [search, setSearch] = useState<Record<string, string>>({});
+  const [funnel, setFunnel] = useState<Record<string, boolean>>({});
+
   const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -375,7 +386,7 @@ const Tree = () => {
         <div
           style={{
             position: 'absolute',
-            right: '30px',
+            right: '70px',
             top: '-9px',
             borderRadius: '3px'
           }}
@@ -397,7 +408,7 @@ const Tree = () => {
         <div
           style={{
             position: 'absolute',
-            right: '30px',
+            right: '45px',
             top: '-9px',
             borderRadius: '3px'
           }}
@@ -408,7 +419,6 @@ const Tree = () => {
       </Tooltip>
     );
   };
-
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
@@ -452,6 +462,25 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
+                {(node.level === TREE_LEVEL.SCHEMA ||
+                  node.level === TREE_LEVEL.COLUMNS) && (
+                  <div className="!absolute right-5.5 h-5 w-5 flex items-center justify-center  rounded-full bg-white">
+                    <SvgIcon
+                      name={funnel[node.id] ? 'filled_funnel' : 'funnel'}
+                      className="w-3 h-3"
+                      onClick={(event) => {
+                        if (!funnel[node.id] && !node.open) {
+                          toggleOpenNode(node.id);
+                        }
+                        event.stopPropagation();
+                        setFunnel({
+                          ...funnel,
+                          [node.id]: !funnel[node.id]
+                        });
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="relative ">
                   {node.parsingYamlError && node.parsingYamlError.length > 0
                     ? renderParsingYamlErrorToolTip(node)
@@ -479,11 +508,83 @@ const Tree = () => {
 
   const renderTree = (parentId: string, deep: number) => {
     if (!groupedData[parentId]) return;
+    const isTableLevel = groupedData[parentId].find(
+      (item) => item?.level === TREE_LEVEL.TABLE
+    );
+
+    const isColumnLevel = groupedData[parentId].find(
+      (item) => item?.level === TREE_LEVEL.COLUMN
+    );
+
+    const searchForSource = (column: boolean) => {
+      const onChangeSearchTable = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        parentId: string
+      ) => {
+        setSearch({ ...search, [parentId]: e.target.value });
+      };
+      const onKeyDownSearchTable = (
+        e: React.KeyboardEvent<HTMLInputElement>,
+        parentId: string
+      ) => {
+        if (e.key === 'Enter') {
+          if (column) {
+            searchColumn(groupedData[parentId], groupedData, search[parentId]);
+          } else {
+            searchTable(groupedData[parentId], groupedData, search[parentId]);
+          }
+        }
+      };
+
+      return (
+        <div
+          className={clsx(
+            'ml-4 pl-2 cursor-pointer flex items-center gap-x-2 text-[13px] py-1 mb-0.5'
+          )}
+        >
+          <Input
+            className="w-1/2 !h-7 !text-[13px]"
+            placeholder="Search"
+            value={search[parentId]}
+            onChange={(e) => onChangeSearchTable(e, parentId)}
+            onKeyDown={(e) => onKeyDownSearchTable(e, parentId)}
+          />
+        </div>
+      );
+    };
+
     return (
       <div>
+        {(isTableLevel || isColumnLevel) &&
+          funnel[parentId] &&
+          searchForSource(isColumnLevel)}
         {groupedData[parentId].map((item) => (
-          <div key={item.id}>{renderTreeNode(item, deep)}</div>
+          <>
+            <div key={item.id}>{renderTreeNode(item, deep)}</div>
+          </>
         ))}
+        {isTableLevel &&
+          !loadedTables[parentId] &&
+          groupedData[parentId].length % TABLES_LIMIT_TREE_PAGING === 0 && (
+            <div
+              className={clsx(
+                'ml-4 pl-7 cursor-pointer flex text-[13px] hover:bg-gray-100 py-1.5 mb-0.5 text-teal-500',
+                parentId === tablesLoading && 'pl-0'
+              )}
+              onClick={() =>
+                loadMoreTables(
+                  groupedData[parentId],
+                  groupedData,
+                  search[parentId]
+                )
+              }
+            >
+              {parentId === tablesLoading && (
+                <Loader className="w-4 h-4 ml-1" isFull={false} />
+              )}
+              Load more tables
+            </div>
+          )}
       </div>
     );
   };

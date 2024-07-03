@@ -7,7 +7,7 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_container_model import CheckContainerModel
 from ...models.check_time_scale import CheckTimeScale
-from ...models.mono_object import MonoObject
+from ...models.mono_response_entity_mono_object import MonoResponseEntityMonoObject
 from ...types import Response
 
 
@@ -19,6 +19,7 @@ def _get_kwargs(
     *,
     json_body: CheckContainerModel,
 ) -> Dict[str, Any]:
+
     pass
 
     json_json_body = json_body.to_dict()
@@ -37,9 +38,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[MonoObject]:
+) -> Optional[MonoResponseEntityMonoObject]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = MonoObject.from_dict(response.json())
+        response_200 = MonoResponseEntityMonoObject.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -50,7 +51,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[MonoObject]:
+) -> Response[MonoResponseEntityMonoObject]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -67,7 +68,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
-) -> Response[MonoObject]:
+) -> Response[MonoResponseEntityMonoObject]:
     """updateTablePartitionedChecksModel
 
      Updates the data quality partitioned checks from a model that contains a patch with changes.
@@ -85,7 +86,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoResponseEntityMonoObject]
     """
 
     kwargs = _get_kwargs(
@@ -111,7 +112,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
-) -> Optional[MonoObject]:
+) -> Optional[MonoResponseEntityMonoObject]:
     """updateTablePartitionedChecksModel
 
      Updates the data quality partitioned checks from a model that contains a patch with changes.
@@ -129,7 +130,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoResponseEntityMonoObject
     """
 
     return sync_detailed(
@@ -150,7 +151,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
-) -> Response[MonoObject]:
+) -> Response[MonoResponseEntityMonoObject]:
     """updateTablePartitionedChecksModel
 
      Updates the data quality partitioned checks from a model that contains a patch with changes.
@@ -168,7 +169,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoObject]
+        Response[MonoResponseEntityMonoObject]
     """
 
     kwargs = _get_kwargs(
@@ -192,7 +193,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     json_body: CheckContainerModel,
-) -> Optional[MonoObject]:
+) -> Optional[MonoResponseEntityMonoObject]:
     """updateTablePartitionedChecksModel
 
      Updates the data quality partitioned checks from a model that contains a patch with changes.
@@ -210,7 +211,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoObject
+        MonoResponseEntityMonoObject
     """
 
     return (

@@ -15,7 +15,6 @@
  */
 package com.dqops.snowflake.sensors.table.timeliness;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -30,6 +29,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.table.timeliness.TableTimelinessPartitionReloadLagSensorParametersSpec;
+import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeTableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeTableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableTimelinessPartitionReloadLagSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TablePartitionReloadLagCheckSpec checkSpec;

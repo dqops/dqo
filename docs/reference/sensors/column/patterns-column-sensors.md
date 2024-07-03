@@ -35,9 +35,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$")
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -54,9 +54,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -92,9 +92,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$') }}
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -111,9 +111,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -154,9 +154,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -199,9 +199,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -218,9 +218,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[a-zA-Z0-9-.]+[.][a-zA-Z]{2,4}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -237,13 +237,13 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
+                WHEN NOT ({{ lib.render_target_column('analyzed_table') }} LIKE '%[-a-zA-Z0-9!#$%&''*+\/=?^_`{|}~]@%.__%'
                         AND len({{ lib.render_target_column('analyzed_table') }}) - len(replace({{ lib.render_target_column('analyzed_table') }}, '@', '')) = 1	-- single use of @ char
                         AND right({{ lib.render_target_column('analyzed_table') }}, len({{ lib.render_target_column('analyzed_table') }}) - charindex('@', {{ lib.render_target_column('analyzed_table') }})) NOT LIKE '%[^-a-zA-Z0-9.]%' -- domain check
                         AND len(left({{ lib.render_target_column('analyzed_table') }}, charindex('@', {{ lib.render_target_column('analyzed_table') }}))) < 64 -- local part length
                         AND {{ lib.render_target_column('analyzed_table') }} not like '%@.%'
-                    THEN 0
-                ELSE 1
+                    ) THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -260,9 +260,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[a-zA-Z0-9.!#$%&''*+\/=?^_`{|}~-]{0,63}[a-zA-Z0-9!#$%&''*+\/=?^_`{|}~-]@[-a-zA-Z0-9.]+[.][a-zA-Z]{2,4}$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -637,9 +637,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -656,9 +656,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -675,9 +675,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -694,9 +694,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$') }}
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$') }}
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -713,9 +713,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -738,9 +738,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -757,9 +757,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -783,9 +783,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -802,9 +802,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -821,9 +821,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -840,14 +840,15 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN ({{ lib.render_target_column('analyzed_table') }} LIKE '[0-9].[0-9].[0-9].[0-9]'
-                 OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9]'
-                 OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9]')
-                 AND (PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
-                 OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
-                 OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0)
-                    THEN 0
-                ELSE 1
+                WHEN NOT (
+                         ({{ lib.render_target_column('analyzed_table') }} LIKE '[0-9].[0-9].[0-9].[0-9]'
+                         OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9]'
+                         OR {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9]')
+                         AND (PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
+                         OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0
+                         OR PATINDEX('%[^0-9.]%', {{ lib.render_target_column('analyzed_table') }}) = 0)
+                    ) THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -864,9 +865,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -915,9 +916,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -934,9 +935,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -953,9 +954,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -972,9 +973,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') }}
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') }}
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -991,10 +992,10 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
-                    OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                    AND NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1017,9 +1018,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1036,9 +1037,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1062,7 +1063,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
                     THEN 0
                 ELSE 1
             END
@@ -1081,9 +1082,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1100,9 +1101,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT ({{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1119,9 +1120,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table') }} NOT LIKE '[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1138,9 +1139,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1189,9 +1190,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1208,9 +1209,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1227,9 +1228,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1246,9 +1247,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1265,9 +1266,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1290,9 +1291,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1309,9 +1310,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1335,9 +1336,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1354,9 +1355,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1373,9 +1374,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                    THEN 0
-                ELSE 1
+                WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1392,7 +1393,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                     THEN 0
                 ELSE 1
             END
@@ -1411,9 +1412,9 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                    THEN 0
-                ELSE 1
+                WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1450,7 +1451,7 @@ The text matching date patterns percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`date_format`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
+|<span class="no-wrap-code">`date_format`</span>|Expected date format. The sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
 
 
 
@@ -1466,26 +1467,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{lib.render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1503,26 +1490,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-       {%- if date_format == 'YYYY-MM-DD'-%}
-               'yyyy-mm-dd'
-           {%- elif date_format == 'MM/DD/YYYY' -%}
-               'mm/dd/yyyy'
-           {%- elif date_format == 'DD/MM/YYYY' -%}
-               'dd/mm/yyyy'
-           {%- elif date_format == 'YYYY/MM/DD'-%}
-               'yyyy/mm/dd'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            'Month DD,YYYY'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_TO_TIMESTAMP ({{ lib.render_target_column('analyzed_table') }},{{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN TRY_TO_TIMESTAMP ({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1563,26 +1536,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1600,26 +1559,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            'YYYY-MM-DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            'MM/DD/YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            'DD/MM/YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            'YYYY/MM/DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            'MON DD, YYYY'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END
@@ -1642,26 +1587,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%YYYY-%MM-%DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%MM/%DD/%YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%DD/%MM/%YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%YYYY/%MM/%DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%Month %DD,%YYYY'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -1679,26 +1611,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NOT NULL
+                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1722,26 +1640,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%YYYY-%MM-%DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%MM/%DD/%YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%DD/%MM/%YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%YYYY/%MM/%DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%Month %DD,%YYYY'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1759,26 +1664,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            'YYYY-MM-DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            'MM/DD/YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            'DD/MM/YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            'YYYY/MM/DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            'Month DD,YYYY'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1796,26 +1687,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-       {%- if date_format == 'YYYY-MM-DD'-%}
-               'yyyy-mm-dd'
-           {%- elif date_format == 'MM/DD/YYYY' -%}
-               'mm/dd/yyyy'
-           {%- elif date_format == 'DD/MM/YYYY' -%}
-               'dd/mm/yyyy'
-           {%- elif date_format == 'YYYY/MM/DD'-%}
-               'yyyy/mm/dd'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            'Month DD,YYYY'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1833,26 +1710,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            120
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            101
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            103
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            111
-        {%- elif date_format == 'Month D, YYYY'-%}
-            107
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TRY_CONVERT(DATETIME, {{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NOT NULL
+                    WHEN TRY_CONVERT(DATETIME, {{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1870,26 +1733,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NOT NULL
+                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2238,7 +2087,7 @@ The text not matching date pattern count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`date_format`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
+|<span class="no-wrap-code">`date_format`</span>|Expected date format. The sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
 
 
 
@@ -2254,26 +2103,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN SAFE.PARSE_DATE({{lib.render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2290,24 +2125,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD' -%}
-            'yyyy-MM-dd'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            'MM/dd/yyyy'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            'dd/MM/yyyy'
-        {%- elif date_format == 'YYYY/MM/DD' -%}
-            'yyyy/MM/dd'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2328,7 +2152,7 @@ The templates used to generate the SQL query for each data source supported by D
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
-            ELSE 100.0 * SUM(
+            ELSE SUM(
                 CASE
                     WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
                         THEN 1
@@ -2348,26 +2172,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2385,26 +2195,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            'YYYY-MM-DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            'MM/DD/YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            'DD/MM/YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            'YYYY/MM/DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            'MON DD, YYYY'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END
@@ -2427,26 +2223,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%YYYY-%MM-%DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%MM/%DD/%YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%DD/%MM/%YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%YYYY/%MM/%DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%MM %DD,%YYYY'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{lib.render_date_format_regex(parameters.date_format)}} IS FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -2464,26 +2247,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(SUM(
                 CASE
-                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
+                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2507,26 +2276,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%YYYY-%MM-%DD'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%MM/%DD/%YYYY'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%DD/%MM/%YYYY'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%YYYY/%MM/%DD'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%MM %DD,%YYYY'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2544,26 +2300,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2580,24 +2322,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD' -%}
-            'yyyy-MM-dd'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            'MM/dd/yyyy'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            'dd/MM/yyyy'
-        {%- elif date_format == 'YYYY/MM/DD' -%}
-            'yyyy/MM/dd'
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2614,26 +2345,13 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            120
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            101
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            103
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            111
-        {%- elif date_format == 'Month D, YYYY'-%}
-            107
-        {%- endif -%}
-    {% endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                    WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{lib.render_date_format(parameters.date_format)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2651,26 +2369,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
-        {%- elif date_format == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
-        {%- elif date_format == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
-        {%- elif date_format == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
-        {%- elif date_format == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
+                    WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format(parameters.date_format)}})) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2726,16 +2430,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro render_regex(regex) -%}
-         r{{ lib.make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
@@ -3057,16 +2757,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro render_regex(regex) -%}
-         r{{ lib.make_text_constant(regex) }}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
@@ -3427,14 +3123,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

@@ -49,9 +49,9 @@ class TableVolumeProfilingChecksSpec:
         Unset, "TableRowCountAnomalyDifferencingCheckSpec"
     ] = UNSET
     profile_row_count_change: Union[Unset, "TableRowCountChangeCheckSpec"] = UNSET
-    profile_row_count_change_1_day: Union[
-        Unset, "TableRowCountChange1DayCheckSpec"
-    ] = UNSET
+    profile_row_count_change_1_day: Union[Unset, "TableRowCountChange1DayCheckSpec"] = (
+        UNSET
+    )
     profile_row_count_change_7_days: Union[
         Unset, "TableRowCountChange7DaysCheckSpec"
     ] = UNSET
@@ -107,17 +107,17 @@ class TableVolumeProfilingChecksSpec:
         if profile_row_count_change is not UNSET:
             field_dict["profile_row_count_change"] = profile_row_count_change
         if profile_row_count_change_1_day is not UNSET:
-            field_dict[
-                "profile_row_count_change_1_day"
-            ] = profile_row_count_change_1_day
+            field_dict["profile_row_count_change_1_day"] = (
+                profile_row_count_change_1_day
+            )
         if profile_row_count_change_7_days is not UNSET:
-            field_dict[
-                "profile_row_count_change_7_days"
-            ] = profile_row_count_change_7_days
+            field_dict["profile_row_count_change_7_days"] = (
+                profile_row_count_change_7_days
+            )
         if profile_row_count_change_30_days is not UNSET:
-            field_dict[
-                "profile_row_count_change_30_days"
-            ] = profile_row_count_change_30_days
+            field_dict["profile_row_count_change_30_days"] = (
+                profile_row_count_change_30_days
+            )
 
         return field_dict
 

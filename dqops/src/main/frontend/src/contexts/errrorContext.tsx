@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ErrorModal from '../components/ErrorModal';
-import { LogErrorsApi } from "../services/apiClient";
-import { LogShippingApi } from "../api";
 import { useActionDispatch } from '../hooks/useActionDispatch';
 import { setError, setIsErrorModalOpen } from '../redux/actions/job.actions';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../redux/reducers';
+import { LogErrorsApi } from '../services/apiClient';
 
 const ErrorContext = React.createContext({} as any);
 
@@ -18,7 +17,7 @@ export interface IError {
 
 function ErrorProvider({ children }: any) {
   const [errors, setErrors] = useState<IError[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>()
+  const [errorMessage, setErrorMessage] = useState<string>();
   const dispatch = useActionDispatch();
 
   const { isErrorModalOpen } = useSelector(
@@ -35,12 +34,12 @@ function ErrorProvider({ children }: any) {
       }
 
       if (response && response?.status !== 503 && response?.status !== 504) {
-        const newError : IError = {
+        const newError: IError = {
           name: response?.data?.error,
           message: response?.data?.trace,
           date: response?.data?.timestamp
         };
-        dispatch(setError(newError))
+        dispatch(setError(newError));
 
         if (newError.name) {
           setErrors([...errors, newError]);
@@ -57,11 +56,11 @@ function ErrorProvider({ children }: any) {
       }
 
       if (response?.status < 500) {
-        if (response.request?.responseURL?.indexOf("api/logs/error") < 0) {
+        if (response.request?.responseURL?.indexOf('api/logs/error') < 0) {
           LogErrorsApi.logError({
             window_location: window.location.href,
             message: response?.data?.trace
-          })
+          });
         }
       }
 
@@ -70,15 +69,13 @@ function ErrorProvider({ children }: any) {
         return Promise.reject(error);
       }
 
-      if (error && error.response?.status !== 404){
-       return Promise.reject(error);
+      if (error && error.response?.status !== 404) {
+        return Promise.reject(error);
       }
     });
   }, [errors]);
   const removeError = (error: IError) => {
-    setErrors(
-      errors.filter((item) => item.date !== error.date)
-    );
+    setErrors(errors.filter((item) => item.date !== error.date));
   };
 
   return (
@@ -90,7 +87,13 @@ function ErrorProvider({ children }: any) {
       }}
     >
       {children}
-      <ErrorModal open={isErrorModalOpen} onClose={() => dispatch(() => {setIsErrorModalOpen(false); setErrorMessage(undefined); })} message = {errorMessage}/>
+      <ErrorModal
+        open={isErrorModalOpen}
+        onClose={() => {
+          dispatch(setIsErrorModalOpen(false)), setErrorMessage(undefined);
+        }}
+        message={errorMessage}
+      />
     </ErrorContext.Provider>
   );
 }
@@ -99,9 +102,7 @@ function useError() {
   const context = React.useContext(ErrorContext);
 
   if (context === undefined) {
-    throw new Error(
-      'useError must be used within a ErrorProvider'
-    );
+    throw new Error('useError must be used within a ErrorProvider');
   }
   return context;
 }

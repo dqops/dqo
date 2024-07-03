@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Table and column definition file that defines a list of tables and columns that are covered by data quality checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,24 +19,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableSpec
 Table specification that defines data quality tests that are enabled on a table and its columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -73,25 +52,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TimestampColumnsSpec
 Configuration of timestamp related columns on a table level.
  Timestamp columns are used for timeliness data quality checks and for date/time partitioned checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -104,24 +69,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## PartitionIncrementalTimeWindowSpec
 Configuration of the time window for running incremental partition checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -135,24 +86,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## DataGroupingConfigurationSpecMap
 Dictionary of named data grouping configurations defined on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -163,25 +100,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonConfigurationSpecMap
 Dictionary of data comparison configurations between the current table (the parent of this node) and another reference table (the source of truth)
  to which we are comparing the tables to measure the accuracy of the data.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -192,24 +115,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonConfigurationSpec
 Identifies a data comparison configuration between a parent table (the compared table) and the target table from another data source (a reference table).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -227,24 +136,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonGroupingColumnsPairsListSpec
 List of column pairs used for grouping and joining in the table comparison checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -255,25 +150,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonGroupingColumnsPairSpec
 Configuration of a pair of columns on the compared table and the reference table (the source of truth) that are joined
  and used for grouping to perform data comparison of aggregated results (sums of columns, row counts, etc.).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -285,24 +166,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableIncidentGroupingSpec
 Configuration of data quality incident grouping on a table level. Defines how similar data quality issues are grouped into incidents.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -316,24 +183,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableOwnerSpec
 Table owner information.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -345,24 +198,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableMonitoringCheckCategoriesSpec
 Container of table level monitoring, divided by the time window (daily, monthly, etc.)
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -374,24 +213,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TablePartitionedCheckCategoriesSpec
 Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -403,23 +228,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## TableStatisticsCollectorsRootCategoriesSpec
-
-
-
-
-
-
-
 
 
 
@@ -432,23 +243,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## TableVolumeStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -460,23 +257,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## TableVolumeRowCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -489,23 +272,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## TableSchemaStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -517,23 +286,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## TableSchemaColumnCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -546,44 +301,24 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnSpecMap
 Dictionary of columns indexed by a physical column name.
 
 
+The structure of this object is described below
 
-
-
-
-
-
-
-
-
-
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*Dict[string, [ColumnSpec](./TableYaml.md#columnspec)]*| | | |
 
 
 
 ___
 
-
 ## ColumnSpec
 Column specification that identifies a single column.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -593,6 +328,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`disabled`</span>|Disables all data quality checks on the column. Data quality checks will not be executed.|*boolean*| | | |
 |<span class="no-wrap-code ">`sql_expression`</span>|SQL expression used for calculated fields or when additional column value transformation is required before the column can be used for analysis with data quality checks (data type conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of the table under analysis, or {column} to replace the content with the analyzed column name. An example of extracting a value from a string column storing JSON in PostgreSQL: &quot;{column}::json-&gt;&#x27;address&#x27;-&gt;&#x27;zip&#x27;&quot;.|*string*| | | |
 |<span class="no-wrap-code ">[`type_snapshot`](./TableYaml.md#columntypesnapshotspec)</span>|Column data type that was retrieved when the table metadata was imported.|*[ColumnTypeSnapshotSpec](./TableYaml.md#columntypesnapshotspec)*| | | |
+|<span class="no-wrap-code ">`id`</span>|True when this column is a part of the primary key or a business key that identifies a row. Error sampling captures values of id columns to identify the row where the error sample was found.|*boolean*| | | |
 |<span class="no-wrap-code ">[`profiling_checks`](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[ColumnProfilingCheckCategoriesSpec](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#columnmonitoringcheckcategoriesspec)</span>|Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.|*[ColumnMonitoringCheckCategoriesSpec](./TableYaml.md#columnmonitoringcheckcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`partitioned_checks`](./TableYaml.md#columnpartitionedcheckcategoriesspec)</span>|Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[ColumnPartitionedCheckCategoriesSpec](./TableYaml.md#columnpartitionedcheckcategoriesspec)*| | | |
@@ -602,24 +338,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTypeSnapshotSpec
 Stores the column data type captured at the time of the table metadata import.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -635,24 +357,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnMonitoringCheckCategoriesSpec
 Container of column level monitoring, divided by the time window (daily, monthly, etc.)
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -664,24 +372,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPartitionedCheckCategoriesSpec
 Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -693,23 +387,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnStatisticsCollectorsRootCategoriesSpec
-
-
-
-
-
-
-
 
 
 
@@ -725,23 +405,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnNullsStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -756,23 +422,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnNullsNullsCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -785,23 +437,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnNullsNullsPercentStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -814,23 +452,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnNullsNotNullsCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -843,23 +467,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnNullsNotNullsPercentStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -872,23 +482,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnTextStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -903,23 +499,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnTextTextMaxLengthStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -932,23 +514,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnTextTextMeanLengthStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -961,23 +529,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnTextTextMinLengthStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -990,23 +544,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnTextTextDatatypeDetectStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1019,23 +559,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnUniquenessStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -1050,23 +576,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnUniquenessDistinctCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1079,23 +591,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnUniquenessDistinctPercentStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1108,23 +606,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnUniquenessDuplicateCountStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1137,23 +621,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnUniquenessDuplicatePercentStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1166,23 +636,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnRangeStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -1197,23 +653,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnRangeMinValueStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1226,25 +668,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnRangeMinValueSensorParametersSpec
 Column level sensor that finds the minimum value. It works on any data type that supports the MIN functions.
  The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -1255,23 +683,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnRangeMedianValueStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1284,23 +698,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnRangeMaxValueStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1313,25 +713,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnRangeMaxValueSensorParametersSpec
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
  The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -1342,23 +728,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnRangeSumValueStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1371,23 +743,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnSamplingStatisticsCollectorsSpec
-
-
-
-
-
-
-
 
 
 
@@ -1399,23 +757,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## ColumnSamplingColumnSamplesStatisticsCollectorSpec
-
-
-
-
-
-
-
 
 
 
@@ -1428,24 +772,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## FileFormatSpec
 File format specification for data loaded from the physical files of one of supported formats.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -1459,23 +789,9 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
 
-
 ## FilePathListSpec
-
-
-
-
-
-
-
 
 
 
@@ -1487,12 +803,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

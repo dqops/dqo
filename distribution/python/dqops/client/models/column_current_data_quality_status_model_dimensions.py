@@ -16,9 +16,9 @@ T = TypeVar("T", bound="ColumnCurrentDataQualityStatusModelDimensions")
 class ColumnCurrentDataQualityStatusModelDimensions:
     """Dictionary of the current data quality statues for each data quality dimension."""
 
-    additional_properties: Dict[
-        str, "DimensionCurrentDataQualityStatusModel"
-    ] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, "DimensionCurrentDataQualityStatusModel"] = (
+        _attrs_field(init=False, factory=dict)
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         pass

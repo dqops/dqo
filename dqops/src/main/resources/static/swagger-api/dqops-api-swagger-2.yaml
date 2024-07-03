@@ -57,6 +57,10 @@ tags:
 - name: "Errors"
   description: "Operations that return the execution errors captured when data quality\
     \ checks were executed on data sources, and sensors or rules failed with an error."
+- name: "ErrorSamples"
+  description: "Operations that return the error samples collected when data quality\
+    \ checks were executed on data sources from the check editor, and rules failed\
+    \ with an error."
 - name: "Healthcheck"
   description: "Health check operations for checking if the DQOps service is up and\
     \ operational. Used for monitoring by load balancers."
@@ -187,7 +191,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New custom check successfully created"
         400:
@@ -229,7 +233,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom check successfully updated"
         400:
@@ -262,7 +266,7 @@ paths:
         200:
           description: "Custom check definition successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Custom check not found"
         500:
@@ -348,7 +352,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New connection successfully created"
         400:
@@ -389,7 +393,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection successfully updated"
         400:
@@ -484,7 +488,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New connection successfully created"
         400:
@@ -525,7 +529,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's basic parameters successfully updated"
         400:
@@ -571,7 +575,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Checks enabled in bulk"
         400:
@@ -617,7 +621,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Checks disabled"
         400:
@@ -688,7 +692,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's comments successfully updated"
         400:
@@ -786,7 +790,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's default data grouping configuration successfully\
             \ updated"
@@ -856,7 +860,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's incident configuration successfully updated"
         400:
@@ -927,7 +931,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's labels successfully updated"
         400:
@@ -1017,7 +1021,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Connection's schedule successfully updated"
         400:
@@ -1654,7 +1658,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table successfully created"
         400:
@@ -1705,7 +1709,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table successfully updated"
         400:
@@ -1832,7 +1836,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table successfully updated"
         400:
@@ -2444,7 +2448,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New column successfully created"
         400:
@@ -2501,7 +2505,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column successfully updated"
         400:
@@ -2643,7 +2647,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column basic information successfully updated"
         400:
@@ -2747,7 +2751,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column's list of comments successfully updated"
         400:
@@ -2851,7 +2855,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column's list of labels successfully updated"
         400:
@@ -2955,7 +2959,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily column level data quality monitoring successfully updated"
         400:
@@ -3059,7 +3063,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly column level data quality monitoring checks successfully\
             \ updated"
@@ -3160,6 +3164,99 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ErrorsListModel"
+        404:
+          description: "Connection or table not found or time scale invalid"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errorsamples
+  : get:
+      tags:
+      - "ErrorSamples"
+      summary: "getColumnMonitoringErrorSamples"
+      description: "Returns error samples related to a column level monitoring checks\
+        \ at a requested time scale"
+      operationId: "getColumnMonitoringErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "View of error samples for the monitoring checks at a requested\
+            \ time scale on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
         404:
           description: "Connection or table not found or time scale invalid"
         500:
@@ -3272,7 +3369,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality monitoring successfully updated"
         400:
@@ -3743,7 +3840,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily column level data quality partitioned checks successfully\
             \ updated"
@@ -3848,7 +3945,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly column level data quality partitioned checks successfully\
             \ updated"
@@ -3949,6 +4046,99 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ErrorsListModel"
+        404:
+          description: "Connection or table not found or time scale invalid"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errorsamples
+  : get:
+      tags:
+      - "ErrorSamples"
+      summary: "getColumnPartitionedErrorSamples"
+      description: "Returns the error samples related to column level partitioned\
+        \ checks for a requested time scale"
+      operationId: "getColumnPartitionedErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "View of error samples related to column level partitioned\
+            \ checks for a requested time scale on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
         404:
           description: "Connection or table not found or time scale invalid"
         500:
@@ -4061,7 +4251,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality partitioned checks successfully\
             \ updated"
@@ -4533,7 +4723,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality profiling checks successfully updated"
         400:
@@ -4633,6 +4823,91 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errorsamples:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getColumnProfilingErrorSamples"
+      description: "Returns the error samples related to a profiling check for all\
+        \ column level data quality profiling checks on a column"
+      operationId: "getColumnProfilingErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "columnName"
+        in: "path"
+        description: "Column name"
+        required: true
+        type: "string"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples related to a check runs for column level data\
+            \ quality profiling checks on a column returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/model:
     get:
       tags:
@@ -4721,7 +4996,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Column level data quality profiling checks successfully updated"
         400:
@@ -5186,7 +5461,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's comments successfully updated"
         400:
@@ -5276,7 +5551,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's default data grouping configuration successfully updated"
         400:
@@ -5367,7 +5642,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New data grouping configuration successfully created"
         400:
@@ -5417,7 +5692,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration successfully set as the default\
             \ for the table"
@@ -5472,7 +5747,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration successfully updated"
         404:
@@ -5520,7 +5795,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data grouping configuration removed"
         404:
@@ -5650,7 +5925,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's incident grouping configuration successfully updated"
         400:
@@ -5744,7 +6019,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's labels successfully updated"
         400:
@@ -5838,7 +6113,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily table level data quality monitoring successfully updated"
         400:
@@ -5932,7 +6207,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly table level data quality monitoring successfully updated"
         400:
@@ -6088,6 +6363,94 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errorsamples:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTableMonitoringErrorSamples"
+      description: "Returns the error samples related to a table level monitoring\
+        \ check a requested time scale"
+      operationId: "getTableMonitoringErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples related to a monitoring check at a requested\
+            \ time scale on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found or time scale invalid"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model:
     get:
       tags:
@@ -6182,7 +6545,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality monitoring successfully updated"
         400:
@@ -6619,7 +6982,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Daily table level data quality monitoring successfully updated"
         400:
@@ -6713,7 +7076,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Monthly table level data quality partitioned checks successfully\
             \ updated"
@@ -6870,6 +7233,94 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errorsamples:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTablePartitionedErrorSamples"
+      description: "Returns error samples related to a table level partitioned check\
+        \ for a requested time scale"
+      operationId: "getTablePartitionedErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "The error samples related to a partitioned check a requested\
+            \ time scale on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found or time scale invalid"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model:
     get:
       tags:
@@ -6964,7 +7415,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoObject"
+            $ref: "#/definitions/MonoResponseEntityMonoObject"
         204:
           description: "Table level data quality partitioned checks successfully updated"
         400:
@@ -7396,7 +7847,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table partitioning successfully updated"
         400:
@@ -7490,7 +7941,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
         400:
@@ -7630,6 +8081,86 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errorsamples:
+    get:
+      tags:
+      - "ErrorSamples"
+      summary: "getTableProfilingErrorSamples"
+      description: "Returns the error samples related to a check for all table level\
+        \ data quality profiling checks on a table"
+      operationId: "getTableProfilingErrorSamples"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "dataGroup"
+        in: "query"
+        description: "Data group"
+        required: false
+        type: "string"
+      - name: "monthStart"
+        in: "query"
+        description: "Month start boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "monthEnd"
+        in: "query"
+        description: "Month end boundary"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "checkName"
+        in: "query"
+        description: "Check name"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Check category name"
+        required: false
+        type: "string"
+      - name: "tableComparison"
+        in: "query"
+        description: "Table comparison name"
+        required: false
+        type: "string"
+      - name: "maxResultsPerCheck"
+        in: "query"
+        description: "Maximum number of results per check, the default is 100"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Error samples related to the check for table level data quality\
+            \ profiling checks on a table returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ErrorSamplesListModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/model:
     get:
       tags:
@@ -7708,7 +8239,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
         400:
@@ -8124,7 +8655,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table's overridden schedule configuration successfully updated"
         400:
@@ -8392,7 +8923,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration successfully created"
         400:
@@ -8493,7 +9024,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison configuration successfully updated"
         404:
@@ -8542,7 +9073,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison configuration removed"
         404:
@@ -8594,7 +9125,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for daily monitoring checks\
             \ successfully created"
@@ -8651,7 +9182,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily monitoring checks successfully updated"
         404:
@@ -8703,7 +9234,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for monthly monitoring\
             \ checks successfully created"
@@ -8760,7 +9291,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily monitoring checks successfully updated"
         404:
@@ -8812,7 +9343,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for daily partitioned checks\
             \ successfully created"
@@ -8870,7 +9401,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison daily partitioned checks successfully updated"
         404:
@@ -8922,7 +9453,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for monthly partitioned\
             \ checks successfully created"
@@ -8980,7 +9511,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison monthly partitioned checks successfully updated"
         404:
@@ -9031,7 +9562,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New table comparison configuration for profiling checks successfully\
             \ created"
@@ -9088,7 +9619,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table comparison profiling checks successfully updated"
         404:
@@ -9349,7 +9880,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Shared credential successfully updated"
         400:
@@ -9409,7 +9940,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New shared credential successfully created"
         400:
@@ -9471,7 +10002,7 @@ paths:
         200:
           description: "Shared credential file successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Shared credential file not found"
         500:
@@ -9999,7 +10530,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10041,7 +10572,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully updated"
         400:
@@ -10072,7 +10603,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully deleted"
         404:
@@ -10141,7 +10672,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily monitoring checks successfully\
             \ updated."
@@ -10215,7 +10746,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly monitoring checks successfully\
             \ updated."
@@ -10289,7 +10820,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily partitioned checks successfully\
             \ updated."
@@ -10363,7 +10894,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly partitioned checks successfully\
             \ updated."
@@ -10437,7 +10968,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of profiling checks successfully\
             \ updated."
@@ -10507,7 +11038,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10549,7 +11080,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default column-level checks pattern successfully updated"
         400:
@@ -10642,7 +11173,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -10684,7 +11215,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully updated"
         400:
@@ -10715,7 +11246,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully deleted"
         404:
@@ -10784,7 +11315,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily monitoring checks successfully\
             \ updated."
@@ -10858,7 +11389,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly monitoring checks successfully\
             \ updated."
@@ -10932,7 +11463,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of daily partitioned checks successfully\
             \ updated."
@@ -11006,7 +11537,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of monthly partitioned checks successfully\
             \ updated."
@@ -11080,7 +11611,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of profiling checks successfully\
             \ updated."
@@ -11150,7 +11681,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New checks pattern successfully created"
         400:
@@ -11192,7 +11723,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Default table-level checks pattern successfully updated"
         400:
@@ -11270,7 +11801,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of schedules successfully updated."
         400:
@@ -11326,7 +11857,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "The default configuration of notification webhooks successfully\
             \ updated."
@@ -11453,7 +11984,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New data dictionary successfully created"
         400:
@@ -11523,7 +12054,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data dictionary successfully updated"
         400:
@@ -11555,7 +12086,7 @@ paths:
         200:
           description: "Data dictionary CSV file successfully deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         404:
           description: "Data dictionary file not found"
         500:
@@ -11724,6 +12255,17 @@ paths:
           \ and nest*ed filter expressions"
         required: false
         type: "string"
+      - name: "dimension"
+        in: "query"
+        description: "Optional filter for the data quality dimension name, case sensitive"
+        required: false
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "Optional filter for the data quality check category name, case\
+          \ sensitive"
+        required: false
+        type: "string"
       - name: "order"
         in: "query"
         description: "Optional sort order, the default sort order is by the number\
@@ -11843,7 +12385,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality checks related to the incident successfully disabled"
         400:
@@ -11894,7 +12436,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality checks related to the incident successfully recalibrated"
         400:
@@ -12080,6 +12622,7 @@ paths:
         - "timePeriod"
         - "qualityDimension"
         - "sensorName"
+        - "updatedAt"
       - name: "direction"
         in: "query"
         description: "Optional sort direction, the default sort direction is ascending"
@@ -12144,7 +12687,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality incident's issueUrl successfully updated"
         400:
@@ -12202,7 +12745,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Data quality incident's status successfully updated"
         400:
@@ -12263,6 +12806,110 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
         503:
           description: "DQOps instance is not healthy or is still starting"
+  /api/jobs/collecterrorsamples:
+    post:
+      tags:
+      - "Jobs"
+      summary: "collectErrorSamples"
+      description: "Starts a new background job that will run selected data quality\
+        \ checks to collect their error samples"
+      operationId: "collectErrorSamples"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data quality check run configuration (target checks and an optional\
+          \ time range)"
+        required: false
+        schema:
+          $ref: "#/definitions/CollectErrorSamplesParameters"
+      - name: "jobBusinessKey"
+        in: "query"
+        description: "Optional job business key that is a user assigned unique job\
+          \ id, used to check the job status by looking up the job by a user assigned\
+          \ identifier, instead of the DQOps assigned job identifier."
+        required: false
+        type: "string"
+      - name: "wait"
+        in: "query"
+        description: "Wait until the error sampling finish to run, the default value\
+          \ is true (queue a background job and wait for the job to finish, up to\
+          \ waitTimeout seconds)"
+        required: false
+        type: "boolean"
+      - name: "waitTimeout"
+        in: "query"
+        description: "The wait timeout in seconds, when the wait timeout elapses and\
+          \ the checks are still running, only the job id is returned without the\
+          \ results. The default timeout is 120 seconds, but it can be reconfigured\
+          \ (see the 'dqo' cli command documentation)."
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CollectErrorSamplesResult"
+        201:
+          description: "New job that will collect error samples for data quality checks\
+            \ was added to the queue"
+          schema:
+            $ref: "#/definitions/CollectErrorSamplesResult"
+        400:
+          description: "Bad request, adjust before retrying"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/jobs/collecterrorsamples/{jobId}/wait:
+    get:
+      tags:
+      - "Jobs"
+      summary: "waitForCollectErrorSamplesJob"
+      description: "Waits for a job to finish. Returns the status of a finished job\
+        \ or a current state of a job that is still running, but the wait timeout\
+        \ elapsed."
+      operationId: "waitForCollectErrorSamplesJob"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "jobId"
+        in: "path"
+        description: "Job id, it can be a job business key assigned to the job or\
+          \ a job id generated by DQOps"
+        required: true
+        type: "string"
+      - name: "waitTimeout"
+        in: "query"
+        description: "The wait timeout in seconds, when the wait timeout elapses and\
+          \ the job is still running, the method returns the job model that is not\
+          \ yet finished and has no results. The default timeout is 120 seconds, but\
+          \ it can be reconfigured (see the 'dqo' cli command documentation)."
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Collect error samples job information returned. When the wait\
+            \ timeout has elapsed, the job status could be still queued or running\
+            \ and the result will be missing."
+          schema:
+            $ref: "#/definitions/CollectErrorSamplesResult"
+        404:
+          description: "The job was not found or it has finished and was already been\
+            \ removed from the job history store."
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/jobs/collectstatistics/table:
     post:
       tags:
@@ -12598,7 +13245,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Job was cancelled"
         500:
@@ -12791,7 +13438,7 @@ paths:
         200:
           description: "The cron scheduler was started or was already running"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         500:
           description: "Internal Server Error"
           schema:
@@ -12813,7 +13460,7 @@ paths:
         200:
           description: "The cron scheduler was stopped or was already not running"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         500:
           description: "Internal Server Error"
           schema:
@@ -13056,7 +13703,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13088,7 +13735,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13120,7 +13767,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13152,7 +13799,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Log entry was logged on the server"
         500:
@@ -13185,7 +13832,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "Password successfully updated"
         403:
@@ -13277,7 +13924,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New custom rule successfully created"
         400:
@@ -13319,7 +13966,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom rule successfully updated"
         400:
@@ -13350,7 +13997,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom rule definition successfully deleted"
         404:
@@ -13593,7 +14240,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New sensor successfully created"
         400:
@@ -13636,7 +14283,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Sensor model successfully updated"
         400:
@@ -13667,7 +14314,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Custom sensor definition successfully deleted"
         404:
@@ -13805,7 +14452,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "New user successfully added"
         400:
@@ -13878,7 +14525,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "User successfully updated"
         403:
@@ -13909,7 +14556,7 @@ paths:
         200:
           description: "User deleted"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         403:
           description: "DQOps instance is not authenticated to DQOps Cloud"
         404:
@@ -13949,7 +14596,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/MonoVoid"
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
         201:
           description: "Password successfully updated"
         403:
@@ -14713,6 +15360,10 @@ definitions:
       rule:
         description: "Threshold (alerting) rules defined for a check."
         $ref: "#/definitions/RuleThresholdsModel"
+      supports_error_sampling:
+        type: "boolean"
+        description: "The data quality check supports capturing error samples, because\
+          \ an error sampling template is defined."
       supports_grouping:
         type: "boolean"
         description: "The data quality check supports a custom data grouping configuration."
@@ -14941,6 +15592,12 @@ definitions:
       tableComparison:
         type: "string"
         description: "Table comparison name"
+      updatedAt:
+        type: "integer"
+        format: "int64"
+        description: "The timestamp when the check was recently updated with a new\
+          \ value because it as rerun for the same period and the severity could be\
+          \ changed"
   CheckResultsListModel:
     type: "object"
     properties:
@@ -15292,6 +15949,105 @@ definitions:
         - "unchanged"
         - "changed"
         - "synchronizing"
+  CollectErrorSamplesOnTableParameters:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "The name of the target connection."
+      max_jobs_per_connection:
+        type: "integer"
+        format: "int32"
+        description: "The maximum number of concurrent 'collect error samples on table'\
+          \ jobs that can be run on this connection. Limits the number of concurrent\
+          \ jobs."
+      table:
+        description: "The full physical name (schema.table) of the target table."
+        $ref: "#/definitions/PhysicalTableName"
+      check_search_filters:
+        description: "Check search filters that identify data quality checks for which\
+          \ the error samples are collected."
+        $ref: "#/definitions/CheckSearchFilters"
+      time_window_filter:
+        description: "Optional time window filter, configures the time range for partitioned\
+          \ tables that is analyzed to find error samples."
+        $ref: "#/definitions/TimeWindowFilterParameters"
+      data_scope:
+        type: "string"
+        description: "The target scope of collecting error samples. Error samples\
+          \ can be collected for the entire or for each data grouping separately."
+        enum:
+        - "table"
+        - "data_group"
+      dummy_sensor_execution:
+        type: "boolean"
+        description: "Boolean flag that enables a dummy error samples collection (sensors\
+          \ are executed, but the error samples results are not written to the parquet\
+          \ files)."
+      error_sampler_result:
+        description: "The summary of the error sampling collection job after if finished.\
+          \ Returns the number of error samplers that collected samples, columns analyzed,\
+          \ error samples (values) captured."
+        $ref: "#/definitions/ErrorSamplerResult"
+  CollectErrorSamplesParameters:
+    type: "object"
+    properties:
+      check_search_filters:
+        description: "Check search filters that identify the checks for which the\
+          \ error samples should be collected."
+        $ref: "#/definitions/CheckSearchFilters"
+      time_window_filter:
+        description: "Optional time window filter, configures the time range for partitioned\
+          \ tables that is analyzed to find error samples."
+        $ref: "#/definitions/TimeWindowFilterParameters"
+      data_scope:
+        type: "string"
+        description: "The target scope of collecting error samples. Error samples\
+          \ can be collected for the entire table or for each data grouping separately."
+        enum:
+        - "table"
+        - "data_group"
+      dummy_sensor_execution:
+        type: "boolean"
+        description: "Boolean flag that enables a dummy error sample collection (sensors\
+          \ are executed, but the error samples results are not written to the parquet\
+          \ files)."
+      error_sampler_result:
+        description: "The summary of the error sampling collection job after if finished.\
+          \ Returns the number of error samplers executed, columns analyzed, error\
+          \ samples (values) captured."
+        $ref: "#/definitions/ErrorSamplerResult"
+    description: "Collect error samples job parameters, specifies the target checks\
+      \ that should be executed to collect error samples and an optional time window."
+  CollectErrorSamplesResult:
+    type: "object"
+    properties:
+      jobId:
+        description: "Job id that identifies a job that was started on the DQOps job\
+          \ queue."
+        $ref: "#/definitions/DqoQueueJobId"
+      result:
+        description: "Optional result object that is returned only when the wait parameter\
+          \ was true and the \"collect error samples\" job has finished. Contains\
+          \ the summary result of collecting error samples, including the number of\
+          \ error samplers that were executed, and the number of error samples collected. "
+        $ref: "#/definitions/ErrorSamplerResult"
+      status:
+        type: "string"
+        description: "Job status"
+        enum:
+        - "queued"
+        - "running"
+        - "waiting"
+        - "finished"
+        - "failed"
+        - "cancel_requested"
+        - "cancelled"
+    description: "Object returned from the operation that queues a \"collect error\
+      \ samples\" job. The result contains the job id that was started and optionally\
+      \ can also contain the result of collecting the error samples  if the operation\
+      \ was started with wait=true parameter to wait for the \"collect error samples\"\
+      \ job to finish."
   CollectStatisticsOnTableQueueJobParameters:
     type: "object"
     properties:
@@ -15387,10 +16143,6 @@ definitions:
         type: "integer"
         format: "int32"
         description: "The total count of all executed statistics collectors."
-      total_collectors_executed:
-        type: "integer"
-        format: "int32"
-        description: "The count of executed statistics collectors."
       columns_analyzed:
         type: "integer"
         format: "int32"
@@ -20484,7 +21236,7 @@ definitions:
         $ref: "#/definitions/PhysicalTableName"
       column_name:
         type: "string"
-        description: "Column names."
+        description: "Column name."
       labels:
         type: "array"
         description: "List of labels applied to the table."
@@ -20492,7 +21244,9 @@ definitions:
           type: "string"
       sql_expression:
         type: "string"
-        description: "SQL expression."
+        description: "SQL expression for a calculated column, or a column that applies\
+          \ additional data transformation to the original column value. The original\
+          \ column value is referenced by a token {column}."
       column_hash:
         type: "integer"
         format: "int64"
@@ -20501,18 +21255,23 @@ definitions:
         type: "boolean"
         description: "Disables all data quality checks on the column. Data quality\
           \ checks will not be executed."
+      id:
+        type: "boolean"
+        description: "Marks columns that are part of a primary or a unique key. DQOps\
+          \ captures their values during error sampling to match invalid values to\
+          \ the rows in which the value was found."
       has_any_configured_checks:
         type: "boolean"
-        description: "True when the column has any checks configured."
+        description: "True when the column has any checks configured (read-only)."
       has_any_configured_profiling_checks:
         type: "boolean"
-        description: "True when the column has any profiling checks configured."
+        description: "True when the column has any profiling checks configured (read-only)."
       has_any_configured_monitoring_checks:
         type: "boolean"
-        description: "True when the column has any monitoring checks configured."
+        description: "True when the column has any monitoring checks configured (read-only)."
       has_any_configured_partition_checks:
         type: "boolean"
-        description: "True when the column has any partition checks configured."
+        description: "True when the column has any partition checks configured (read-only)."
       type_snapshot:
         description: "Column data type that was retrieved when the table metadata\
           \ was imported."
@@ -24043,8 +24802,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       max_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24056,8 +24815,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       max_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24069,8 +24828,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       min_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24082,8 +24841,8 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
       min_value:
-        type: "integer"
-        format: "int32"
+        type: "number"
+        format: "double"
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
@@ -24679,8 +25438,8 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       date_format:
         type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
+        description: "Expected date format. The sensor will try to parse the column\
+          \ records and cast the data using this format."
         enum:
         - "YYYY-MM-DD"
         - "MM/DD/YYYY"
@@ -24703,8 +25462,8 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       date_format:
         type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
+        description: "Expected date format. The sensor will try to parse the column\
+          \ records and cast the data using this format."
         enum:
         - "YYYY-MM-DD"
         - "MM/DD/YYYY"
@@ -26217,6 +26976,11 @@ definitions:
         description: "Column data type that was retrieved when the table metadata\
           \ was imported."
         $ref: "#/definitions/ColumnTypeSnapshotSpec"
+      id:
+        type: "boolean"
+        description: "True when this column is a part of the primary key or a business\
+          \ key that identifies a row. Error sampling captures values of id columns\
+          \ to identify the row where the error sample was found."
       profiling_checks:
         description: "Configuration of data quality profiling checks that are enabled.\
           \ Pick a check from a category, apply the parameters and rules to enable\
@@ -27661,8 +28425,8 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       date_format:
         type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
+        description: "Expected date format. The sensor will try to parse the column\
+          \ records and cast the data using this format."
         enum:
         - "DD/MM/YYYY"
         - "DD-MM-YYYY"
@@ -31403,6 +32167,11 @@ definitions:
         description: "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md)\
           \ table. Because the default value is *false*, this parameter must be set\
           \ to *true* to delete the sensor readouts."
+      deleteErrorSamples:
+        type: "boolean"
+        description: "Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the error samples."
       columnNames:
         type: "array"
         description: "The list of column names to delete the data for column level\
@@ -31636,26 +32405,47 @@ definitions:
     type: "object"
     properties:
       synchronizeRootFolderParameters:
+        description: "The job parameters for the \"synchronize folder\" queue job."
         $ref: "#/definitions/SynchronizeRootFolderDqoQueueJobParameters"
       synchronizeMultipleFoldersParameters:
+        description: "The job parameters for the \"synchronize multiple folders\"\
+          \ queue job."
         $ref: "#/definitions/SynchronizeMultipleFoldersDqoQueueJobParameters"
       runScheduledChecksParameters:
+        description: "The job parameters for the \"run scheduled checks cron\" queue\
+          \ job."
         $ref: "#/definitions/MonitoringScheduleSpec"
       runChecksParameters:
+        description: "The job parameters for the \"run checks\" queue job."
         $ref: "#/definitions/RunChecksParameters"
       runChecksOnTableParameters:
+        description: "The job parameters for the \"run checks on table\" queue job."
         $ref: "#/definitions/RunChecksOnTableParameters"
       collectStatisticsParameters:
+        description: "The job parameters for the \"collect statistics\" queue job."
         $ref: "#/definitions/CollectStatisticsQueueJobParameters"
       collectStatisticsOnTableParameters:
+        description: "The job parameters for the \"collect statistics on table\" queue\
+          \ job."
         $ref: "#/definitions/CollectStatisticsOnTableQueueJobParameters"
+      collectErrorSamplesParameters:
+        description: "The job parameters for the \"collect error samples\" queue job."
+        $ref: "#/definitions/CollectErrorSamplesParameters"
+      collectErrorSamplesOnTableParameters:
+        description: "The job parameters for the \"collect error samples on table\"\
+          \ queue job."
+        $ref: "#/definitions/CollectErrorSamplesOnTableParameters"
       importSchemaParameters:
+        description: "The job parameters for the \"collect schema\" queue job."
         $ref: "#/definitions/ImportSchemaQueueJobParameters"
       importTableParameters:
+        description: "The job parameters for the \"collect tables\" queue job."
         $ref: "#/definitions/ImportTablesQueueJobParameters"
       deleteStoredDataParameters:
+        description: "The job parameters for the \"delete stored data\" queue job."
         $ref: "#/definitions/DeleteStoredDataQueueJobParameters"
       repairStoredDataParameters:
+        description: "The job parameters for the \"repair stored data\" queue job."
         $ref: "#/definitions/RepairStoredDataQueueJobParameters"
   DqoJobHistoryEntryModel:
     type: "object"
@@ -31669,6 +32459,8 @@ definitions:
         - "run_checks_on_table"
         - "collect_statistics"
         - "collect_statistics_on_table"
+        - "collect_error_samples"
+        - "collect_error_samples_on_table"
         - "queue_thread_shutdown"
         - "synchronize_folder"
         - "synchronize_multiple_folders"
@@ -31915,6 +32707,7 @@ definitions:
         - "local"
         - "s3"
         - "azure"
+        - "gcs"
       aws_authentication_mode:
         type: "string"
         description: "The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE}\
@@ -32096,6 +32889,164 @@ definitions:
       tableComparison:
         type: "string"
         description: "Table comparison name"
+  ErrorSampleEntryModel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique ID of the error sample value"
+      result:
+        type: "object"
+        description: "Error sample (value)"
+      resultDataType:
+        type: "string"
+        description: "Error sample result data type"
+        enum:
+        - "null"
+        - "boolean"
+        - "string"
+        - "integer"
+        - "float"
+        - "date"
+        - "datetime"
+        - "instant"
+        - "time"
+      collectedAt:
+        type: "string"
+        format: "date-time"
+        description: "The local timestamp when the error sample was collected"
+      sampleIndex:
+        type: "integer"
+        format: "int32"
+        description: "The index of the result that was returned. Identifies a single\
+          \ error sample within a list."
+      checkType:
+        type: "string"
+        description: "Check type"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      timeGradient:
+        type: "string"
+        description: "Time gradient"
+        enum:
+        - "year"
+        - "quarter"
+        - "month"
+        - "week"
+        - "day"
+        - "hour"
+        - "millisecond"
+      durationMs:
+        type: "integer"
+        format: "int32"
+        description: "Execution duration (ms)"
+      executedAt:
+        type: "integer"
+        format: "int64"
+        description: "Executed at"
+      rowId1:
+        type: "string"
+        description: "The value of the first column of the unique identifier that\
+          \ identifies a row containing the error sample."
+      rowId2:
+        type: "string"
+        description: "The value of the second column of the unique identifier that\
+          \ identifies a row containing the error sample."
+      rowId3:
+        type: "string"
+        description: "The value of the third column of the unique identifier that\
+          \ identifies a row containing the error sample."
+      rowId4:
+        type: "string"
+        description: "The value of the fourth column of the unique identifier that\
+          \ identifies a row containing the error sample."
+      rowId5:
+        type: "string"
+        description: "The value of the fifth column of the unique identifier that\
+          \ identifies a row containing the error sample."
+      columnName:
+        type: "string"
+        description: "Column name"
+      dataGroup:
+        type: "string"
+        description: "Data group"
+      provider:
+        type: "string"
+        description: "Provider name"
+      qualityDimension:
+        type: "string"
+        description: "Data quality dimension"
+      sensorName:
+        type: "string"
+        description: "Sensor name"
+      tableComparison:
+        type: "string"
+        description: "Table comparison name"
+  ErrorSamplerResult:
+    type: "object"
+    properties:
+      executed_error_samplers:
+        type: "integer"
+        format: "int32"
+        description: "The total count of all executed error samplers. This count only\
+          \ includes data quality checks that have an error sampling template defined. "
+      columns_analyzed:
+        type: "integer"
+        format: "int32"
+        description: "The count of columns for which DQOps executed an error sampler\
+          \ and tried to collect error samples."
+      columns_successfully_analyzed:
+        type: "integer"
+        format: "int32"
+        description: "The count of columns for which DQOps managed to obtain error\
+          \ samples."
+      total_error_samplers_failed:
+        type: "integer"
+        format: "int32"
+        description: "The count of error samplers that failed to execute."
+      total_error_samples_collected:
+        type: "integer"
+        format: "int32"
+        description: "The total number of error samples (values) that were collected."
+    description: "Returns the result with the summary of the error samples collected."
+  ErrorSamplesListModel:
+    type: "object"
+    properties:
+      checkName:
+        type: "string"
+        description: "Check name"
+      checkDisplayName:
+        type: "string"
+        description: "Check display name"
+      checkType:
+        type: "string"
+        description: "Check type"
+        enum:
+        - "profiling"
+        - "monitoring"
+        - "partitioned"
+      checkHash:
+        type: "integer"
+        format: "int64"
+        description: "Check hash"
+      checkCategory:
+        type: "string"
+        description: "Check category name"
+      dataGroupsNames:
+        type: "array"
+        description: "Data groups list"
+        items:
+          type: "string"
+      dataGroup:
+        type: "string"
+        description: "Selected data group"
+      errorSamplesEntries:
+        type: "array"
+        description: "Error samples entries"
+        items:
+          $ref: "#/definitions/ErrorSampleEntryModel"
   ErrorsListModel:
     type: "object"
     properties:
@@ -32792,11 +33743,11 @@ definitions:
           \ to run data quality checks."
   Mono:
     type: "object"
-  MonoDqoQueueJobId:
+  MonoResponseEntityMonoDqoQueueJobId:
     type: "object"
-  MonoObject:
+  MonoResponseEntityMonoObject:
     type: "object"
-  MonoVoid:
+  MonoResponseEntityMonoVoid:
     type: "object"
   MysqlParametersSpec:
     type: "object"
@@ -33193,6 +34144,9 @@ definitions:
       sqlTemplate:
         type: "string"
         description: "Provider specific Jinja2 SQL template"
+      errorSamplingTemplate:
+        type: "string"
+        description: "Provider specific Jinja2 SQL template for capturing error samples"
       custom:
         type: "boolean"
         description: "Whether the provider sensor is a User Home provider sensor"
@@ -33525,6 +34479,10 @@ definitions:
         description: "Set the value to true when the data quality checks should be\
           \ executed in a dummy mode (without running checks on the target systems\
           \ and storing the results). Only the jinja2 sensors will be rendered."
+      collect_error_samples:
+        type: "boolean"
+        description: "Set the value to true to collect error samples for failed data\
+          \ quality checks."
       run_checks_result:
         description: "The result of running the check, updated when the run checks\
           \ job finishes. Contains the count of executed checks."
@@ -33543,6 +34501,10 @@ definitions:
           \ is analyzed or the number of recent days/months to analyze for day or\
           \ month partitioned data."
         $ref: "#/definitions/TimeWindowFilterParameters"
+      collect_error_samples:
+        type: "boolean"
+        description: "Set the value to true to collect error samples for failed data\
+          \ quality checks."
       dummy_execution:
         type: "boolean"
         description: "Set the value to true when the data quality checks should be\
@@ -34392,6 +35354,7 @@ definitions:
         - "data_check_results"
         - "data_statistics"
         - "data_errors"
+        - "data_error_samples"
         - "data_incidents"
         - "sources"
         - "sensors"
@@ -34823,6 +35786,18 @@ definitions:
         enum:
         - "daily"
         - "monthly"
+      compared_table_filter:
+        type: "string"
+        description: "Optional custom SQL filter expression that is added to the SQL\
+          \ query that retrieves the data from the compared table. This expression\
+          \ must be a SQL expression that will be added to the WHERE clause when querying\
+          \ the compared table."
+      reference_table_filter:
+        type: "string"
+        description: "Optional custom SQL filter expression that is added to the SQL\
+          \ query that retrieves the data from the reference table (the source of\
+          \ truth). This expression must be a SQL expression that will be added to\
+          \ the WHERE clause when querying the reference table."
       grouping_columns:
         type: "array"
         description: "List of column pairs from both the compared table and the reference\
@@ -34999,6 +35974,18 @@ definitions:
         description: "The schema and table name of the reference table that has the\
           \ expected data."
         $ref: "#/definitions/PhysicalTableName"
+      compared_table_filter:
+        type: "string"
+        description: "Optional custom SQL filter expression that is added to the SQL\
+          \ query that retrieves the data from the compared table. This expression\
+          \ must be a SQL expression that will be added to the WHERE clause when querying\
+          \ the compared table."
+      reference_table_filter:
+        type: "string"
+        description: "Optional custom SQL filter expression that is added to the SQL\
+          \ query that retrieves the data from the reference table (the source of\
+          \ truth). This expression must be a SQL expression that will be added to\
+          \ the WHERE clause when querying the reference table."
       grouping_columns:
         type: "array"
         description: "List of column pairs from both the compared table and the reference\
@@ -35542,6 +36529,67 @@ definitions:
           \ comparison that is configured on the parent table."
         additionalProperties:
           $ref: "#/definitions/TableComparisonDailyPartitionedChecksSpec"
+  TableDataFreshnessAnomalyCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Max days since most recent event sensor parameters"
+        $ref: "#/definitions/TableTimelinessDataFreshnessSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for max days since most recent event\
+          \ that raises a data quality error (alert)"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableDataFreshnessCheckSpec:
     type: "object"
     properties:
@@ -37568,15 +38616,20 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_data_freshness:
-        description: "Daily  calculating the number of days since the most recent\
-          \ event timestamp (freshness)"
+        description: "Daily calculating the number of days since the most recent event\
+          \ timestamp (freshness)"
         $ref: "#/definitions/TableDataFreshnessCheckSpec"
+      daily_data_freshness_anomaly:
+        description: "Verifies that the number of days since the most recent event\
+          \ timestamp (freshness) changes in a rate within a percentile boundary during\
+          \ the last 90 days."
+        $ref: "#/definitions/TableDataFreshnessAnomalyCheckSpec"
       daily_data_staleness:
-        description: "Daily  calculating the time difference in days between the current\
+        description: "Daily calculating the time difference in days between the current\
           \ date and the most recent data ingestion timestamp (staleness)"
         $ref: "#/definitions/TableDataStalenessCheckSpec"
       daily_data_ingestion_delay:
-        description: "Daily  calculating the time difference in days between the most\
+        description: "Daily calculating the time difference in days between the most\
           \ recent event timestamp and the most recent ingestion timestamp"
         $ref: "#/definitions/TableDataIngestionDelayCheckSpec"
   TableTimelinessDailyPartitionedChecksSpec:
@@ -37688,6 +38741,11 @@ definitions:
         description: "Calculates the number of days since the most recent event timestamp\
           \ (freshness)"
         $ref: "#/definitions/TableDataFreshnessCheckSpec"
+      profile_data_freshness_anomaly:
+        description: "Verifies that the number of days since the most recent event\
+          \ timestamp (freshness) changes in a rate within a percentile boundary during\
+          \ the last 90 days."
+        $ref: "#/definitions/TableDataFreshnessAnomalyCheckSpec"
       profile_data_staleness:
         description: "Calculates the time difference in days between the current date\
           \ and the most recent data ingestion timestamp (staleness)"

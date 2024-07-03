@@ -100,11 +100,19 @@ export default function TableQualityStatusOverview({
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Current severity level:</div>
-          <div>{data.currentSeverity}</div>
+          <div>
+            {data.currentSeverity
+              ? data.currentSeverity.replace(/_/g, ' ')
+              : ''}
+          </div>
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Highest historical severity level:</div>
-          <div>{data.highestSeverity}</div>
+          <div>
+            {data.highestSeverity
+              ? data.highestSeverity.replace(/_/g, ' ')
+              : ''}
+          </div>
         </div>
         <div className="flex gap-x-2">
           <div className="w-49">Category:</div>

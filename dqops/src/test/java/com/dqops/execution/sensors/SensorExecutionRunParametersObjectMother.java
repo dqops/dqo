@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.execution.sqltemplates.rendering.ErrorSamplingRenderParameters;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import com.dqops.metadata.sources.*;
@@ -28,6 +29,9 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Object mother for SensorExecutionRunParameters.
@@ -49,7 +53,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createEmptyBigQuery() {
         return new SensorExecutionRunParameters(BigQueryConnectionSpecObjectMother.create(),
                 null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, 1000, false);
+                null, null, null, null, null, 1000, false, null);
     }
 
     /**
@@ -276,6 +280,32 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, columnSpec,
                 checkSpec, null, CheckType.partitioned, null, null,
                 timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run an error sampling query to capture error samples.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param columnName Target column name.
+     * @param checkSpec Check specification.
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableColumnForErrorSampling(
+            SampleTableMetadata sampleTableMetadata,
+            String columnName,
+            AbstractCheckSpec<?,?,?,?> checkSpec) {
+        SensorExecutionRunParameters sensorExecutionRunParameters = createForTableColumnForProfilingCheck(sampleTableMetadata, columnName, checkSpec);
+
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        ErrorSamplingRenderParameters errorSamplingRenderParameters = new ErrorSamplingRenderParameters();
+        List<String> idColumns = tableSpec.getColumns().values().stream()
+                .filter(c -> c.isId())
+                .map(c -> c.getColumnName())
+                .collect(Collectors.toList());
+        errorSamplingRenderParameters.setIdColumns(idColumns);
+
+        sensorExecutionRunParameters.setErrorSamplingRenderParameters(errorSamplingRenderParameters);
+
         return sensorExecutionRunParameters;
     }
 }

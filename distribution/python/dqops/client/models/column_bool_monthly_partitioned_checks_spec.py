@@ -57,13 +57,13 @@ class ColumnBoolMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_true_percent is not UNSET:
-            field_dict[
-                "monthly_partition_true_percent"
-            ] = monthly_partition_true_percent
+            field_dict["monthly_partition_true_percent"] = (
+                monthly_partition_true_percent
+            )
         if monthly_partition_false_percent is not UNSET:
-            field_dict[
-                "monthly_partition_false_percent"
-            ] = monthly_partition_false_percent
+            field_dict["monthly_partition_false_percent"] = (
+                monthly_partition_false_percent
+            )
 
         return field_dict
 

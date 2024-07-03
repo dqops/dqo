@@ -496,6 +496,7 @@ export const ROUTES = {
     HOME: '/home',
     TABLES: '/tables',
     COLUMNS: '/columns',
+    GLOBAL_INCIDENTS: '/global-incidents',
     DASHBOARDS: '/dashboards',
     CREATE: '/:checkTypes/create',
     DEFINITIONS: '/definitions',

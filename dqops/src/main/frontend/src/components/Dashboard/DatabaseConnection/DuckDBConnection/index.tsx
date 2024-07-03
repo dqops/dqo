@@ -41,11 +41,11 @@ const storageTypeOptions = [
     label: 'Azure Blob Storage',
     value: DuckdbParametersSpecStorageTypeEnum.azure
   },
+  {
+    label: 'Google Cloud Storage',
+    value: DuckdbParametersSpecStorageTypeEnum.gcs
+  }
   // todo: uncomment below when implemented
-  // {
-  //   label: 'Google Cloud Storage',
-  //   value: DuckdbParametersSpecStorageTypeEnum.gcs
-  // },
   // {
   //   label: 'Cloudflare R2',
   //   value: DuckdbParametersSpecStorageTypeEnum.r2
@@ -85,8 +85,9 @@ const azureAuthenticationOptions = [
 ];
 
 enum StoragePrefixes {
-  S3 = "s3://",
-  AZ = "az://",
+  S3 = 's3://',
+  AZ = 'az://',
+  GCS = 'gs://'
 }
 
 const DuckdbConnection = ({
@@ -144,8 +145,12 @@ const DuckdbConnection = ({
     const directories = { ...copiedDatabase?.directories };
 
     Object.keys(directories ?? {}).forEach((key) => {
-
-      if (directories[key].length && directories[key] !== StoragePrefixes.S3 && directories[key] !== StoragePrefixes.AZ) {
+      if (
+        directories[key].length &&
+        directories[key] !== StoragePrefixes.S3 &&
+        directories[key] !== StoragePrefixes.AZ &&
+        directories[key] !== StoragePrefixes.GCS
+      ) {
         return;
       }
 
@@ -153,10 +158,11 @@ const DuckdbConnection = ({
         directories[key] = StoragePrefixes.S3;
       } else if (storage_type === DuckdbParametersSpecStorageTypeEnum.azure) {
         directories[key] = StoragePrefixes.AZ;
+      } else if (storage_type === DuckdbParametersSpecStorageTypeEnum.gcs) {
+        directories[key] = StoragePrefixes.GCS;
       } else {
         directories[key] = '';
       }
-
     });
     setCopiedDatabase((prev) => ({ ...prev, directories, storage_type }));
   };
@@ -234,8 +240,8 @@ const DuckdbConnection = ({
           />
         )}
       </>
-    )
-  }
+    );
+  };
 
   const azureStorageForm = (): JSX.Element => {
     return (
@@ -270,7 +276,7 @@ const DuckdbConnection = ({
             />
           </>
         )}
-        
+
         {copiedDatabase?.azure_authentication_mode ===
           DuckdbParametersSpecAzureAuthenticationModeEnum.credential_chain && (
           <>
@@ -329,8 +335,34 @@ const DuckdbConnection = ({
           </>
         )}
       </>
-    )
-  }
+    );
+  };
+
+  const googleStorageForm = (): JSX.Element => {
+    return (
+      <>
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Access Key"
+          className="mb-4 text-sm"
+          value={copiedDatabase?.user}
+          onChange={(value) =>
+            setCopiedDatabase((prev) => ({ ...prev, user: value }))
+          }
+        />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Secret"
+          className="mb-4 text-sm"
+          maskingType="password"
+          value={copiedDatabase?.password}
+          onChange={(value) =>
+            setCopiedDatabase((prev) => ({ ...prev, password: value }))
+          }
+        />
+      </>
+    );
+  };
 
   return (
     <SectionWrapper
@@ -345,11 +377,17 @@ const DuckdbConnection = ({
         onChange={changeStorageTypeDirectoryPrefixes}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.s3 && awsStorageForm()}
 
-      {copiedDatabase?.storage_type === DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.azure && azureStorageForm()}
+
+      {copiedDatabase?.storage_type ===
+        DuckdbParametersSpecStorageTypeEnum.gcs && googleStorageForm()}
 
       <FileFormatConfiguration
         fileFormatType={
@@ -387,7 +425,6 @@ const DuckdbConnection = ({
       />
     </SectionWrapper>
   );
-
 };
 
 export default DuckdbConnection;

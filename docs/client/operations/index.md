@@ -235,6 +235,19 @@ DQOps environment and configuration controller, provides access to the DQOps con
 |<span class="no-wrap-code">[`issue_api_key`</span>](./environment.md#issue_api_key)|GET|Issues a local API Key for the calling user. This API Key can be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.|
 
 
+## error_samples
+Operations that return the error samples collected when data quality checks were executed on data sources from the check editor, and rules failed with an error.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`get_column_monitoring_error_samples`</span>](./error_samples.md#get_column_monitoring_error_samples)|GET|Returns error samples related to a column level monitoring checks at a requested time scale|
+|<span class="no-wrap-code">[`get_column_partitioned_error_samples`</span>](./error_samples.md#get_column_partitioned_error_samples)|GET|Returns the error samples related to column level partitioned checks for a requested time scale|
+|<span class="no-wrap-code">[`get_column_profiling_error_samples`</span>](./error_samples.md#get_column_profiling_error_samples)|GET|Returns the error samples related to a profiling check for all column level data quality profiling checks on a column|
+|<span class="no-wrap-code">[`get_table_monitoring_error_samples`</span>](./error_samples.md#get_table_monitoring_error_samples)|GET|Returns the error samples related to a table level monitoring check a requested time scale|
+|<span class="no-wrap-code">[`get_table_partitioned_error_samples`</span>](./error_samples.md#get_table_partitioned_error_samples)|GET|Returns error samples related to a table level partitioned check for a requested time scale|
+|<span class="no-wrap-code">[`get_table_profiling_error_samples`</span>](./error_samples.md#get_table_profiling_error_samples)|GET|Returns the error samples related to a check for all table level data quality profiling checks on a table|
+
+
 ## errors
 Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.
 
@@ -279,6 +292,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`cancel_job`</span>](./jobs.md#cancel_job)|DELETE|Cancels a running job|
+|<span class="no-wrap-code">[`collect_error_samples`</span>](./jobs.md#collect_error_samples)|POST|Starts a new background job that will run selected data quality checks to collect their error samples|
 |<span class="no-wrap-code">[`collect_statistics_on_data_groups`</span>](./jobs.md#collect_statistics_on_data_groups)|POST|Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping|
 |<span class="no-wrap-code">[`collect_statistics_on_table`</span>](./jobs.md#collect_statistics_on_table)|POST|Starts a new background job that will run selected data statistics collectors for the entire table|
 |<span class="no-wrap-code">[`delete_stored_data`</span>](./jobs.md#delete_stored_data)|POST|Starts a new background job that will delete stored data about check results, sensor readouts etc.|
@@ -291,6 +305,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 |<span class="no-wrap-code">[`start_cron_scheduler`</span>](./jobs.md#start_cron_scheduler)|POST|Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
 |<span class="no-wrap-code">[`stop_cron_scheduler`</span>](./jobs.md#stop_cron_scheduler)|POST|Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
 |<span class="no-wrap-code">[`synchronize_folders`</span>](./jobs.md#synchronize_folders)|POST|Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).|
+|<span class="no-wrap-code">[`wait_for_collect_error_samples_job`</span>](./jobs.md#wait_for_collect_error_samples_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 |<span class="no-wrap-code">[`wait_for_job`</span>](./jobs.md#wait_for_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 |<span class="no-wrap-code">[`wait_for_run_checks_job`</span>](./jobs.md#wait_for_run_checks_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 

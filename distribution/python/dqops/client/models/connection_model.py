@@ -237,21 +237,21 @@ class ConnectionModel:
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
-            field_dict[
-                "run_profiling_checks_job_template"
-            ] = run_profiling_checks_job_template
+            field_dict["run_profiling_checks_job_template"] = (
+                run_profiling_checks_job_template
+            )
         if run_monitoring_checks_job_template is not UNSET:
-            field_dict[
-                "run_monitoring_checks_job_template"
-            ] = run_monitoring_checks_job_template
+            field_dict["run_monitoring_checks_job_template"] = (
+                run_monitoring_checks_job_template
+            )
         if run_partition_checks_job_template is not UNSET:
-            field_dict[
-                "run_partition_checks_job_template"
-            ] = run_partition_checks_job_template
+            field_dict["run_partition_checks_job_template"] = (
+                run_partition_checks_job_template
+            )
         if collect_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_statistics_job_template"
-            ] = collect_statistics_job_template
+            field_dict["collect_statistics_job_template"] = (
+                collect_statistics_job_template
+            )
         if data_clean_job_template is not UNSET:
             field_dict["data_clean_job_template"] = data_clean_job_template
         if can_edit is not UNSET:

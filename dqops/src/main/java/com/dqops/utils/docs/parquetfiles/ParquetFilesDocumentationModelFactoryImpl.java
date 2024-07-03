@@ -19,6 +19,8 @@ import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
+import com.dqops.data.errorsamples.factory.ErrorSamplesTableFactoryImpl;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.factory.IncidentsTableFactoryImpl;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
@@ -85,6 +87,10 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
         StatisticsResultsTableFactoryImpl statisticsResultsTableFactory = new StatisticsResultsTableFactoryImpl();
         Table statisticsResultsTable = statisticsResultsTableFactory.createEmptyStatisticsTable("statistics");
         parquetFilesClasses.put(statisticsResultsTable, StatisticsColumnNames.class);
+
+        ErrorSamplesTableFactoryImpl errorSamplesTableFactory = new ErrorSamplesTableFactoryImpl();
+        Table errorSamplesTable = errorSamplesTableFactory.createEmptyErrorSamplesTable("error_samples");
+        parquetFilesClasses.put(errorSamplesTable, ErrorSamplesColumnNames.class);
 
         for (Map.Entry<Table, Class<?>> parquetFilesClass : parquetFilesClasses.entrySet()) {
             parquetFileDocumentationModels.add(generateParquetFileDocumentationModel(parquetFilesClass.getKey(), parquetFilesClass.getValue()));

@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of table level daily partitioned checks. Contains categories of daily partitioned checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -28,24 +21,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableVolumeDailyPartitionedChecksSpec
 Container of table level date partitioned volume data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -62,26 +41,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableRowCountAnomalyStationaryPartitionCheckSpec
 This check detects anomalies in the day-to-day changes to the table volume (the row count).
  It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.
  This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -103,14 +68,7 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
 Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
@@ -119,13 +77,6 @@ Data quality rule that detects anomalies in time series of data quality measures
  The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -134,14 +85,7 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
 Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
@@ -150,13 +94,6 @@ Data quality rule that detects anomalies in time series of data quality measures
  The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -165,24 +102,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableTimelinessDailyPartitionedChecksSpec
 Container of table level date partitioned timeliness data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -195,24 +118,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableCustomSqlDailyPartitionedChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -227,26 +136,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyPartitionedChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains the daily partitioned comparison checks for each configured reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -257,25 +152,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyPartitionedChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the daily partitioned comparison checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -287,12 +168,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

@@ -49,13 +49,13 @@ class DataGroupingConfigurationListModel:
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
         if data_grouping_configuration_name is not UNSET:
-            field_dict[
-                "data_grouping_configuration_name"
-            ] = data_grouping_configuration_name
+            field_dict["data_grouping_configuration_name"] = (
+                data_grouping_configuration_name
+            )
         if default_data_grouping_configuration is not UNSET:
-            field_dict[
-                "default_data_grouping_configuration"
-            ] = default_data_grouping_configuration
+            field_dict["default_data_grouping_configuration"] = (
+                default_data_grouping_configuration
+            )
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
 

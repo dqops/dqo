@@ -153,6 +153,10 @@ dqo:
   statistics:
     truncated-strings-length: 50
     viewed-statistics-age-months: 3
+  error-sampling:
+    truncated-strings-length: 50
+    samples-limit: 50
+    total-samples-limit: 1000
   incidents:
     count-open-incidents-days: 60
     column-histogram-size: 10

@@ -1,0 +1,6 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+{%- endcall -%}

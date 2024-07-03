@@ -82,6 +82,12 @@ public class RunChecksOnTableParameters implements Cloneable {
     private boolean dummyExecution;
 
     /**
+     * Set the value to true to collect error samples for failed data quality checks.
+     */
+    @JsonPropertyDescription("Set the value to true to collect error samples for failed data quality checks.")
+    private boolean collectErrorSamples;
+
+    /**
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
@@ -100,6 +106,7 @@ public class RunChecksOnTableParameters implements Cloneable {
      * @param table The full physical name (schema.table) of the target table.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
+     * @param collectErrorSamples Collect error samples.
      * @param progressListener Progress listener to receive events during the check execution.
      * @param dummyExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
@@ -108,6 +115,7 @@ public class RunChecksOnTableParameters implements Cloneable {
                                       PhysicalTableName table,
                                       CheckSearchFilters checkSearchFilters,
                                       TimeWindowFilterParameters timeWindowFilter,
+                                      boolean collectErrorSamples,
                                       CheckExecutionProgressListener progressListener,
                                       boolean dummyExecution) {
         this.connection = connection;
@@ -117,6 +125,7 @@ public class RunChecksOnTableParameters implements Cloneable {
         this.timeWindowFilter = timeWindowFilter;
         this.progressListener = progressListener;
         this.dummyExecution = dummyExecution;
+        this.collectErrorSamples = collectErrorSamples;
     }
 
     /**
@@ -197,6 +206,22 @@ public class RunChecksOnTableParameters implements Cloneable {
      */
     public void setTimeWindowFilter(TimeWindowFilterParameters timeWindowFilter) {
         this.timeWindowFilter = timeWindowFilter;
+    }
+
+    /**
+     * Returns true if error samples should be collected for failed data quality checks.
+     * @return Collect error samples.
+     */
+    public boolean isCollectErrorSamples() {
+        return collectErrorSamples;
+    }
+
+    /**
+     * Sets the flag to enable collecting error samples for checks that would fail.
+     * @param collectErrorSamples When true, error samples are collected.
+     */
+    public void setCollectErrorSamples(boolean collectErrorSamples) {
+        this.collectErrorSamples = collectErrorSamples;
     }
 
     /**

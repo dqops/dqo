@@ -50,6 +50,12 @@ public class RunChecksParameters implements Cloneable {
     private TimeWindowFilterParameters timeWindowFilter;
 
     /**
+     * Set the value to true to collect error samples for failed data quality checks.
+     */
+    @JsonPropertyDescription("Set the value to true to collect error samples for failed data quality checks.")
+    private boolean collectErrorSamples;
+
+    /**
      * Job progress listener that will receive events showing the progress of execution.
      */
     @JsonIgnore
@@ -79,17 +85,20 @@ public class RunChecksParameters implements Cloneable {
      * Creates a check run parameters.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
+     * @param collectErrorSamples Error samples are collected for failed data quality checks.
      * @param progressListener Progress listener to receive events during the check execution.
      * @param dummyExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
     public RunChecksParameters(CheckSearchFilters checkSearchFilters,
                                TimeWindowFilterParameters timeWindowFilter,
+                               boolean collectErrorSamples,
                                CheckExecutionProgressListener progressListener,
                                boolean dummyExecution) {
         this.checkSearchFilters = checkSearchFilters;
         this.timeWindowFilter = timeWindowFilter;
         this.progressListener = progressListener;
         this.dummyExecution = dummyExecution;
+        this.collectErrorSamples = collectErrorSamples;
     }
 
     /**
@@ -122,6 +131,22 @@ public class RunChecksParameters implements Cloneable {
      */
     public void setTimeWindowFilter(TimeWindowFilterParameters timeWindowFilter) {
         this.timeWindowFilter = timeWindowFilter;
+    }
+
+    /**
+     * Returns true if error samples should be collected for failed data quality checks.
+     * @return Collect error samples.
+     */
+    public boolean isCollectErrorSamples() {
+        return collectErrorSamples;
+    }
+
+    /**
+     * Sets the flag to enable collecting error samples for checks that would fail.
+     * @param collectErrorSamples When true, error samples are collected.
+     */
+    public void setCollectErrorSamples(boolean collectErrorSamples) {
+        this.collectErrorSamples = collectErrorSamples;
     }
 
     /**

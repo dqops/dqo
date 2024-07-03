@@ -21,6 +21,7 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.HomeType;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.time.Instant;
 
@@ -35,6 +36,10 @@ public class SensorDefinitionFindResult {
     private final HomeFilePath templateFilePath;
     private final String sqlTemplateText;
     private final Instant sqlTemplateLastModified;
+    private final HomeFilePath errorSamplingTemplateFilePath;
+    private final String errorSamplingTemplateText;
+    private final Instant errorSamplingTemplateLastModified;
+    private final boolean errorSamplingTemplatePresent;
     private final ProviderType providerType;
 
     /**
@@ -43,24 +48,34 @@ public class SensorDefinitionFindResult {
      * @param providerSensorDefinitionSpec Provider specific sensor definition.
      * @param sqlTemplateText Jinja sql template text (if the sensor is defined as a Jinja2 template).
      * @param sqlTemplateLastModified The timestamp when the SQL template file was last modified.
+     * @param errorSamplingTemplateText Jinja sql template text for the error sampling template (if the sensor is defined as a Jinja2 template).
+     * @param errorSamplingTemplateLastModified The timestamp when the error sampling SQL template file was last modified.
      * @param providerType Provider type.
      * @param home Home type where the template was found.
      * @param templateFilePath Template file path in the home folder.
+     * @param errorSamplingTemplateFilePath Error sampling template file path in the home folder.
      */
     public SensorDefinitionFindResult(SensorDefinitionSpec sensorDefinitionSpec,
 									  ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
 									  String sqlTemplateText,
                                       Instant sqlTemplateLastModified,
+                                      String errorSamplingTemplateText,
+                                      Instant errorSamplingTemplateLastModified,
 									  ProviderType providerType,
 									  HomeType home,
-									  HomeFilePath templateFilePath) {
+									  HomeFilePath templateFilePath,
+                                      HomeFilePath errorSamplingTemplateFilePath) {
         this.sensorDefinitionSpec = sensorDefinitionSpec;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplateText = sqlTemplateText;
         this.sqlTemplateLastModified = sqlTemplateLastModified != null ? sqlTemplateLastModified : Instant.now();
+        this.errorSamplingTemplateText = errorSamplingTemplateText;
+        this.errorSamplingTemplateLastModified = errorSamplingTemplateLastModified != null ? errorSamplingTemplateLastModified : Instant.now();
+        this.errorSamplingTemplatePresent = errorSamplingTemplateLastModified != null || !Strings.isNullOrEmpty(errorSamplingTemplateText);
         this.providerType = providerType;
         this.home = home;
         this.templateFilePath = templateFilePath;
+        this.errorSamplingTemplateFilePath = errorSamplingTemplateFilePath;
     }
 
     /**
@@ -96,6 +111,30 @@ public class SensorDefinitionFindResult {
     }
 
     /**
+     * Jinja2 SQL template text for the error sampling template - if the sensor is implemented as a template.
+     * @return Error sampling sql template.
+     */
+    public String getErrorSamplingTemplateText() {
+        return errorSamplingTemplateText;
+    }
+
+    /**
+     * Returns the timestamp when the error sampling SQL template file was modified for the last time.
+     * @return Error sampling SQL Template file last modification timestamp.
+     */
+    public Instant getErrorSamplingTemplateLastModified() {
+        return errorSamplingTemplateLastModified;
+    }
+
+    /**
+     * Returns true if the error sampling template is present, which means that error sampling is supported for that check
+     * @return True - error sampling is supported.
+     */
+    public boolean isErrorSamplingTemplatePresent() {
+        return errorSamplingTemplatePresent;
+    }
+
+    /**
      * Returns the provider type.
      * @return Provider type.
      */
@@ -115,5 +154,13 @@ public class SensorDefinitionFindResult {
      */
     public HomeFilePath getTemplateFilePath() {
         return templateFilePath;
+    }
+
+    /**
+     * Error sampling template file path in respective home (user home or DQO_HOME) where a sensor template is located. It is a path to a jinja2 template.
+     * @return Path to the jinja2 error sampling template of the sensor.
+     */
+    public HomeFilePath getErrorSamplingTemplateFilePath() {
+        return errorSamplingTemplateFilePath;
     }
 }

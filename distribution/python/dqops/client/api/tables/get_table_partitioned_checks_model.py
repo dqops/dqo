@@ -16,6 +16,7 @@ def _get_kwargs(
     table_name: str,
     time_scale: CheckTimeScale,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

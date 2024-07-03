@@ -1,0 +1,5 @@
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+{%- endcall -%}

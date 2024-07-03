@@ -2,9 +2,9 @@
 SELECT
     SUM(
         CASE
-            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$') }}
-                THEN 0
-            ELSE 1
+            WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$') }}
+                THEN 1
+            ELSE 0
         END
     ) AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}

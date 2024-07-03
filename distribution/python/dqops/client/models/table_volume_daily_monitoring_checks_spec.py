@@ -43,20 +43,20 @@ class TableVolumeDailyMonitoringChecksSpec:
         daily_row_count_change_30_days (Union[Unset, TableRowCountChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableVolumeDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableVolumeDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     daily_row_count_anomaly: Union[
         Unset, "TableRowCountAnomalyDifferencingCheckSpec"
     ] = UNSET
     daily_row_count_change: Union[Unset, "TableRowCountChangeCheckSpec"] = UNSET
-    daily_row_count_change_1_day: Union[
-        Unset, "TableRowCountChange1DayCheckSpec"
-    ] = UNSET
-    daily_row_count_change_7_days: Union[
-        Unset, "TableRowCountChange7DaysCheckSpec"
-    ] = UNSET
+    daily_row_count_change_1_day: Union[Unset, "TableRowCountChange1DayCheckSpec"] = (
+        UNSET
+    )
+    daily_row_count_change_7_days: Union[Unset, "TableRowCountChange7DaysCheckSpec"] = (
+        UNSET
+    )
     daily_row_count_change_30_days: Union[
         Unset, "TableRowCountChange30DaysCheckSpec"
     ] = UNSET
@@ -109,9 +109,9 @@ class TableVolumeDailyMonitoringChecksSpec:
         if daily_row_count_change_7_days is not UNSET:
             field_dict["daily_row_count_change_7_days"] = daily_row_count_change_7_days
         if daily_row_count_change_30_days is not UNSET:
-            field_dict[
-                "daily_row_count_change_30_days"
-            ] = daily_row_count_change_30_days
+            field_dict["daily_row_count_change_30_days"] = (
+                daily_row_count_change_30_days
+            )
 
         return field_dict
 

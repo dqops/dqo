@@ -24,6 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.testutils.ValueConverter;
 import com.dqops.trino.BaseTrinoIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
@@ -35,6 +36,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -52,6 +56,25 @@ public class TrinoColumnTextTextMinLengthSensorParametersSpecIntegrationTest ext
 		this.sut = new ColumnTextTextMinLengthSensorParametersSpec();
 		this.checkSpec = new ColumnTextMinLengthCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.trino);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "string_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(null, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -130,6 +153,25 @@ public class TrinoColumnTextTextMinLengthSensorParametersSpecIntegrationTest ext
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(3L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsDataSamples() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "length_string", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(30, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        List<String> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> String.valueOf(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains("abcd"));
     }
 
 }

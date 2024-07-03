@@ -34,6 +34,12 @@ class TableComparisonModel:
         reference_connection (Union[Unset, str]): Reference connection name - the connection name to the data source
             that has the reference data to compare to.
         reference_table (Union[Unset, PhysicalTableName]):
+        compared_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
+            that retrieves the data from the compared table. This expression must be a SQL expression that will be added to
+            the WHERE clause when querying the compared table.
+        reference_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
+            that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression
+            that will be added to the WHERE clause when querying the reference table.
         grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
             the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
             table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -71,9 +77,11 @@ class TableComparisonModel:
     compared_table: Union[Unset, "PhysicalTableName"] = UNSET
     reference_connection: Union[Unset, str] = UNSET
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
-    grouping_columns: Union[
-        Unset, List["TableComparisonGroupingColumnPairModel"]
-    ] = UNSET
+    compared_table_filter: Union[Unset, str] = UNSET
+    reference_table_filter: Union[Unset, str] = UNSET
+    grouping_columns: Union[Unset, List["TableComparisonGroupingColumnPairModel"]] = (
+        UNSET
+    )
     default_compare_thresholds: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_row_count: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_column_count: Union[Unset, "CompareThresholdsModel"] = UNSET
@@ -100,6 +108,8 @@ class TableComparisonModel:
         if not isinstance(self.reference_table, Unset):
             reference_table = self.reference_table.to_dict()
 
+        compared_table_filter = self.compared_table_filter
+        reference_table_filter = self.reference_table_filter
         grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.grouping_columns, Unset):
             grouping_columns = []
@@ -149,9 +159,9 @@ class TableComparisonModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if table_comparison_configuration_name is not UNSET:
-            field_dict[
-                "table_comparison_configuration_name"
-            ] = table_comparison_configuration_name
+            field_dict["table_comparison_configuration_name"] = (
+                table_comparison_configuration_name
+            )
         if compared_connection is not UNSET:
             field_dict["compared_connection"] = compared_connection
         if compared_table is not UNSET:
@@ -160,6 +170,10 @@ class TableComparisonModel:
             field_dict["reference_connection"] = reference_connection
         if reference_table is not UNSET:
             field_dict["reference_table"] = reference_table
+        if compared_table_filter is not UNSET:
+            field_dict["compared_table_filter"] = compared_table_filter
+        if reference_table_filter is not UNSET:
+            field_dict["reference_table_filter"] = reference_table_filter
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
         if default_compare_thresholds is not UNSET:
@@ -173,13 +187,13 @@ class TableComparisonModel:
         if columns is not UNSET:
             field_dict["columns"] = columns
         if compare_table_run_checks_job_template is not UNSET:
-            field_dict[
-                "compare_table_run_checks_job_template"
-            ] = compare_table_run_checks_job_template
+            field_dict["compare_table_run_checks_job_template"] = (
+                compare_table_run_checks_job_template
+            )
         if compare_table_clean_data_job_template is not UNSET:
-            field_dict[
-                "compare_table_clean_data_job_template"
-            ] = compare_table_clean_data_job_template
+            field_dict["compare_table_clean_data_job_template"] = (
+                compare_table_clean_data_job_template
+            )
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
         if can_run_compare_checks is not UNSET:
@@ -224,6 +238,10 @@ class TableComparisonModel:
             reference_table = UNSET
         else:
             reference_table = PhysicalTableName.from_dict(_reference_table)
+
+        compared_table_filter = d.pop("compared_table_filter", UNSET)
+
+        reference_table_filter = d.pop("reference_table_filter", UNSET)
 
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)
@@ -306,6 +324,8 @@ class TableComparisonModel:
             compared_table=compared_table,
             reference_connection=reference_connection,
             reference_table=reference_table,
+            compared_table_filter=compared_table_filter,
+            reference_table_filter=reference_table_filter,
             grouping_columns=grouping_columns,
             default_compare_thresholds=default_compare_thresholds,
             compare_row_count=compare_row_count,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Dialog, Tooltip } from '@material-tailwind/react';
 import Button from '../Button';
@@ -22,6 +22,22 @@ const IntegerListField = ({
   disabled
 }: IIntegerListFieldProps) => {
   const [open, setOpen] = useState(false);
+  const [numbers, setNumbers] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (open) {
+      setNumbers(value);
+    }
+  }, [value, open]);
+
+  const handleSave = () => {
+    onChange(numbers);
+    setOpen(false);
+  };
+
+  const handleChange = useCallback((values: number[]) => {
+    setNumbers(values);
+  }, []);
 
   return (
     <div>
@@ -55,7 +71,7 @@ const IntegerListField = ({
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
-          <NumbersView values={value} onChange={onChange} />
+          <NumbersView values={numbers} onChange={handleChange} />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
               color="primary"
@@ -69,7 +85,7 @@ const IntegerListField = ({
               label="Save"
               color="primary"
               className="w-40"
-              onClick={() => setOpen(false)}
+              onClick={handleSave}
             />
           </div>
         </div>

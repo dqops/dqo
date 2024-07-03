@@ -64,9 +64,9 @@ class ColumnDistinctPercentAnomalyStationaryCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[
         Unset, "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
     ] = UNSET

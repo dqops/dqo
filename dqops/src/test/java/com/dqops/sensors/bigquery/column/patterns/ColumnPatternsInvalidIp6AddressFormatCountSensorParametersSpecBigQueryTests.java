@@ -102,13 +102,13 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -135,15 +135,15 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 0
-                            ELSE 1
+                            WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                                THEN 1
+                            ELSE 0
                         END
                     ) AS actual_value,
                     analyzed_table.`date` AS time_period,
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
+                WHERE (%s)
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
 
@@ -166,13 +166,13 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -193,15 +193,15 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -231,14 +231,14 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -264,14 +264,14 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -297,16 +297,16 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -342,9 +342,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
@@ -353,7 +353,7 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -381,16 +381,16 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -418,9 +418,9 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(%s AS STRING), %s)
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
@@ -429,7 +429,7 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

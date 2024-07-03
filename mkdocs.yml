@@ -142,7 +142,7 @@ nav:
       - Managing errors: "working-with-dqo/managing-errors.md"
       - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
-#      - Working with files: "working-with-dqo/working-with-files.md" // todo: finish the page
+      - Working with files: "working-with-dqo/working-with-files.md"
   - Integrations:
       - "integrations/index.md"
       - Airflow:
@@ -170,6 +170,7 @@ nav:
     - connection: 'command-line-interface/connection.md'
     - table: 'command-line-interface/table.md'
     - check: 'command-line-interface/check.md'
+    - collect: 'command-line-interface/collect.md'
     - column: 'command-line-interface/column.md'
     - settings: 'command-line-interface/settings.md'
     - cloud: 'command-line-interface/cloud.md'
@@ -197,6 +198,7 @@ nav:
       - default_table_check_patterns: 'client/models/default_table_check_patterns.md'
       - dictionaries: 'client/models/dictionaries.md'
       - environment: 'client/models/environment.md'
+      - error_samples: 'client/models/error_samples.md'
       - errors: 'client/models/errors.md'
       - incidents: 'client/models/incidents.md'
       - jobs: 'client/models/jobs.md'
@@ -226,6 +228,7 @@ nav:
       - defaults: 'client/operations/defaults.md'
       - dictionaries: 'client/operations/dictionaries.md'
       - environment: 'client/operations/environment.md'
+      - error_samples: 'client/operations/error_samples.md'
       - errors: 'client/operations/errors.md'
       - healthcheck: 'client/operations/healthcheck.md'
       - incidents: 'client/operations/incidents.md'
@@ -275,6 +278,7 @@ nav:
       - timeliness:
         - 'checks/table/timeliness/index.md'
         - data freshness: 'checks/table/timeliness/data-freshness.md'
+        - data freshness anomaly: 'checks/table/timeliness/data-freshness-anomaly.md'
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - reload lag: 'checks/table/timeliness/reload-lag.md'
@@ -546,6 +550,7 @@ nav:
       - incidents: 'reference/parquetfiles/incidents.md'
       - sensor_readouts: 'reference/parquetfiles/sensor_readouts.md'
       - statistics: 'reference/parquetfiles/statistics.md'
+      - error_samples: 'reference/parquetfiles/error_samples.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css

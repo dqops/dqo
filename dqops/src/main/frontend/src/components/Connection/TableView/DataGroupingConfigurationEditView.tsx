@@ -1,16 +1,16 @@
+import { values } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import ActionGroup from './TableActionGroup';
-import DataGroupingConfigurationView from '../DataGroupingConfigurationView';
 import {
   DataGroupingConfigurationListModel,
-  DataGroupingDimensionSpecSourceEnum,
-  DataGroupingConfigurationSpec
+  DataGroupingConfigurationSpec,
+  DataGroupingDimensionSpecSourceEnum
 } from '../../../api';
-import Input from '../../Input';
-import Button from '../../Button';
-import SvgIcon from '../../SvgIcon';
 import { DataGroupingConfigurationsApi } from '../../../services/apiClient';
-import { values } from 'lodash';
+import Button from '../../Button';
+import Input from '../../Input';
+import SvgIcon from '../../SvgIcon';
+import DataGroupingConfigurationView from '../DataGroupingConfigurationView';
+import ActionGroup from './TableActionGroup';
 
 interface IDataGroupingConfigurationEditViewProps {
   onBack: () => void;
@@ -41,7 +41,10 @@ const DataGroupingConfigurationEditView = ({
   const [error, setError] = useState('');
   const [levelErrors, setLevelErrors] = useState<Errors>({});
   useEffect(() => {
-    if (selectedGroupingConfiguration) {
+    if (
+      selectedGroupingConfiguration &&
+      selectedGroupingConfiguration.data_grouping_configuration_name
+    ) {
       DataGroupingConfigurationsApi.getTableGroupingConfiguration(
         connection,
         schema,

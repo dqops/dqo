@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.dqops.data.errorsamples.factory;
 
 import com.dqops.data.normalization.CommonColumnNames;
@@ -24,12 +25,29 @@ import com.dqops.data.normalization.CommonColumnNames;
  *
  * The folder partitioning structure for this table is:
  * *c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/*, for example: *c=myconnection/t=public.analyzedtable/m=2023-01-01/*.
+ * The date used for monthly partitioning is calculated from the *executed_at* column value.
  */
 public class ErrorSamplesColumnNames {
     /**
-     * The check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The check result id (primary key), it is a uuid of the check hash, collected at, sample index and the data grouping id. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
+
+    /**
+     * Column for the time when the error samples were captured. All error samples results started as part of the same error sampling session will share the same time.
+     * The parquet files are time partitioned by this column.
+     */
+    public static final String COLLECTED_AT_COLUMN_NAME = "collected_at";
+
+    /**
+     * String column that says if the result is for a whole table (the "table" value) or for each data group separately (the "data_group" value).
+     */
+    public static final String SCOPE_COLUMN_NAME = "scope";
+
+    /**
+     * Column prefix for the data group dimension level columns: grouping_level_.
+     */
+    public static final String DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_GROUPING_LEVEL_COLUMN_NAME_PREFIX;
 
     /**
      * The data grouping hash, it is a hash of the data grouping level values.
@@ -117,9 +135,19 @@ public class ErrorSamplesColumnNames {
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
     /**
+     * The time gradient (daily, monthly) for monitoring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks. When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
+     */
+    public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
+
+    /**
      * The data quality check category name.
      */
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
+
+    /**
+     * The name of a table comparison configuration used for a data comparison (accuracy) check.
+     */
+    public static final String TABLE_COMPARISON_NAME_COLUMN_NAME = "table_comparison";
 
     /**
      * The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness.
@@ -202,6 +230,12 @@ public class ErrorSamplesColumnNames {
     public static final String SAMPLE_FILTER_COLUMN_NAME = "sample_filter";
 
     /**
+     * Prefix added to the first 5 columns that identify the row. DQOps uses columns that are identifiers, or are part of a unique key to identify collected samples.
+     * The column names from the analyzed table are not stored and must be matched to the list of columns in the monitored table, according to their order in DQOps metadata.
+     */
+    public static final String ROW_ID_COLUMN_NAME_PREFIX = "row_id_";
+
+    /**
      * The timestamp when the row was created at.
      */
     public static final String CREATED_AT_COLUMN_NAME = CommonColumnNames.CREATED_AT_COLUMN_NAME;
@@ -220,4 +254,47 @@ public class ErrorSamplesColumnNames {
      * The login of the user that updated the row.
      */
     public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
+
+    /**
+     * List of column names that should be loaded from the parquet files when we will be only reading, not updating.
+     */
+    public static final String[] COLUMN_NAMES_FOR_READ_ONLY_ACCESS = new String[] {
+            ID_COLUMN_NAME,
+            COLLECTED_AT_COLUMN_NAME,
+
+            RESULT_TYPE_COLUMN_NAME,
+            RESULT_STRING_COLUMN_NAME,
+            RESULT_INTEGER_COLUMN_NAME,
+            RESULT_FLOAT_COLUMN_NAME,
+            RESULT_BOOLEAN_COLUMN_NAME,
+            RESULT_DATE_COLUMN_NAME,
+            RESULT_DATE_TIME_COLUMN_NAME,
+            RESULT_INSTANT_COLUMN_NAME,
+            RESULT_TIME_COLUMN_NAME,
+            SAMPLE_INDEX_COLUMN_NAME,
+
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_DISPLAY_NAME_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+
+            COLUMN_NAME_COLUMN_NAME,
+            DATA_GROUP_NAME_COLUMN_NAME,
+            TABLE_COMPARISON_NAME_COLUMN_NAME,
+
+            DURATION_MS_COLUMN_NAME,
+            EXECUTED_AT_COLUMN_NAME,
+
+            PROVIDER_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME,
+            SENSOR_NAME_COLUMN_NAME,
+
+            ROW_ID_COLUMN_NAME_PREFIX + "1",
+            ROW_ID_COLUMN_NAME_PREFIX + "2",
+            ROW_ID_COLUMN_NAME_PREFIX + "3",
+            ROW_ID_COLUMN_NAME_PREFIX + "4",
+            ROW_ID_COLUMN_NAME_PREFIX + "5",
+    };
 }

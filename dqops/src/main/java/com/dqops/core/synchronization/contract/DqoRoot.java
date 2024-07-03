@@ -42,9 +42,14 @@ public enum DqoRoot {
     data_statistics,
 
     /**
-     * Parquet files with the errors.
+     * Parquet files with the execution errors.
      */
     data_errors,
+
+    /**
+     * Parquet files with the error samples.
+     */
+    data_error_samples,
 
     /**
      * Parquet files with the incidents.
@@ -166,6 +171,9 @@ public enum DqoRoot {
             else if (Objects.equals(folder2, BuiltInFolderNames.ERRORS)) {
                 return data_errors;
             }
+            else if (Objects.equals(folder2, BuiltInFolderNames.ERROR_SAMPLES)) {
+                return data_error_samples;
+            }
             else if (Objects.equals(folder2, BuiltInFolderNames.INCIDENTS)) {
                 return data_incidents;
             }
@@ -182,6 +190,7 @@ public enum DqoRoot {
         if (this == data_sensor_readouts ||
             this == data_check_results ||
             this == data_errors ||
+            this == data_error_samples ||
             this == data_statistics ||
             this == data_incidents) {
             return true;

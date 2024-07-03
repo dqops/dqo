@@ -100,7 +100,7 @@ export default function DefaultCheckPatternsTable({
     onChange(
       sortPatterns(getPreparedPatterns(), elem.key as keyof TPattern, dir)
     ),
-      setDir(dir),
+      setDir(dir === 'asc' ? 'desc' : 'asc'),
       setIndexSortingElement(index);
   };
 
@@ -117,7 +117,7 @@ export default function DefaultCheckPatternsTable({
                     <SvgIcon
                       name="chevron-up"
                       className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'asc')}
+                      onClick={() => sortPreparedPattern(elem, index, 'desc')}
                     />
                   ) : (
                     <div className="w-2 h-2" />
@@ -126,7 +126,7 @@ export default function DefaultCheckPatternsTable({
                     <SvgIcon
                       name="chevron-down"
                       className="w-2 h-2 text-black"
-                      onClick={() => sortPreparedPattern(elem, index, 'desc')}
+                      onClick={() => sortPreparedPattern(elem, index, 'asc')}
                     />
                   ) : (
                     <div className="w-2 h-2" />

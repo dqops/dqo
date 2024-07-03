@@ -18,6 +18,7 @@ package com.dqops.execution.sensors;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.data.errorsamples.factory.ErrorSamplesDataScope;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
@@ -88,6 +89,32 @@ public interface SensorExecutionRunParametersFactory {
                                                                   TimeWindowFilterParameters userTimeWindowFilters,
                                                                   StatisticsDataScope statisticsDataScope,
                                                                   ProviderDialectSettings dialectSettings);
+
+    /**
+     * Creates a sensor parameters object for an error sample. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param dqoHome DQO home.
+     * @param userHome User home used to look up credentials.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param check Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     * @param statisticsDataScope Data scope (whole table or per data stream) for collecting statistics.
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    SensorExecutionRunParameters createErrorSamplerSensorParameters(DqoHome dqoHome,
+                                                                    UserHome userHome,
+                                                                    ConnectionSpec connection,
+                                                                    TableSpec table,
+                                                                    ColumnSpec column,
+                                                                    AbstractCheckSpec<?,?,?,?> check,
+                                                                    CheckDefinitionSpec customCheckDefinition,
+                                                                    TimeWindowFilterParameters userTimeWindowFilters,
+                                                                    ErrorSamplesDataScope statisticsDataScope,
+                                                                    ProviderDialectSettings dialectSettings);
 
     /**
      * Creates an effective time range filter, picking the correct configuration from the table's incremental time window

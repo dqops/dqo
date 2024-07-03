@@ -1,25 +1,11 @@
 {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
 
-{% macro render_date_format(date_format) %}
-    {%- if date_format == 'YYYY-MM-DD'-%}
-        'YYYY-MM-DD'
-    {%- elif date_format == 'MM/DD/YYYY' -%}
-        'MM/DD/YYYY'
-    {%- elif date_format == 'DD/MM/YYYY' -%}
-        'DD/MM/YYYY'
-    {%- elif date_format == 'YYYY/MM/DD'-%}
-        'YYYY/MM/DD'
-    {%- elif date_format == 'Month D, YYYY'-%}
-        'MON DD, YYYY'
-    {%- endif -%}
-{% endmacro -%}
-
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
+                WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                     THEN 1
                 ELSE 0
             END

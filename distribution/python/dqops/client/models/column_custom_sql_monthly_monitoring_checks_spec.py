@@ -67,9 +67,9 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
                 self.monthly_sql_condition_failed_on_column.to_dict()
             )
 
-        monthly_sql_condition_passed_percent_on_column: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_sql_condition_passed_percent_on_column: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_sql_condition_passed_percent_on_column, Unset):
             monthly_sql_condition_passed_percent_on_column = (
                 self.monthly_sql_condition_passed_percent_on_column.to_dict()
@@ -93,21 +93,21 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_sql_condition_failed_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_condition_failed_on_column"
-            ] = monthly_sql_condition_failed_on_column
+            field_dict["monthly_sql_condition_failed_on_column"] = (
+                monthly_sql_condition_failed_on_column
+            )
         if monthly_sql_condition_passed_percent_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_condition_passed_percent_on_column"
-            ] = monthly_sql_condition_passed_percent_on_column
+            field_dict["monthly_sql_condition_passed_percent_on_column"] = (
+                monthly_sql_condition_passed_percent_on_column
+            )
         if monthly_sql_aggregate_expression_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_aggregate_expression_on_column"
-            ] = monthly_sql_aggregate_expression_on_column
+            field_dict["monthly_sql_aggregate_expression_on_column"] = (
+                monthly_sql_aggregate_expression_on_column
+            )
         if monthly_import_custom_result_on_column is not UNSET:
-            field_dict[
-                "monthly_import_custom_result_on_column"
-            ] = monthly_import_custom_result_on_column
+            field_dict["monthly_import_custom_result_on_column"] = (
+                monthly_import_custom_result_on_column
+            )
 
         return field_dict
 

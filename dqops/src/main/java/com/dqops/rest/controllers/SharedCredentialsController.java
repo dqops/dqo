@@ -43,7 +43,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -81,24 +85,26 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SharedCredentialListModel>> getAllSharedCredentials(
+    public Mono<ResponseEntity<Flux<SharedCredentialListModel>>> getAllSharedCredentials(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        List<SharedCredentialWrapper> sharedCredentialWrappers = userHome.getCredentials().toList();
-        List<SharedCredentialListModel> credentialListModelList = sharedCredentialWrappers.stream()
-                .map(wrapper -> new SharedCredentialListModel() {{
-                    setCredentialName(wrapper.getCredentialName());
-                    setType(wrapper.getObject().getByteContent() != null ? CredentialType.binary : CredentialType.text);
-                    setCanAccessCredential(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-                    setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-                }})
-                .collect(Collectors.toList());
+            List<SharedCredentialWrapper> sharedCredentialWrappers = userHome.getCredentials().toList();
+            List<SharedCredentialListModel> credentialListModelList = sharedCredentialWrappers.stream()
+                    .map(wrapper -> new SharedCredentialListModel() {{
+                        setCredentialName(wrapper.getCredentialName());
+                        setType(wrapper.getObject().getByteContent() != null ? CredentialType.binary : CredentialType.text);
+                        setCanAccessCredential(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                        setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                    }})
+                    .collect(Collectors.toList());
 
-        credentialListModelList.sort(Comparator.comparing(model -> model.getCredentialName()));
+            credentialListModelList.sort(Comparator.comparing(model -> model.getCredentialName()));
 
-        return new ResponseEntity<>(Flux.fromStream(credentialListModelList.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(credentialListModelList.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -118,36 +124,38 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<SharedCredentialModel>> getSharedCredential(
+    public Mono<ResponseEntity<Mono<SharedCredentialModel>>> getSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential file name") @PathVariable String credentialName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(credentialName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(credentialName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
 
-        if (sharedCredentialWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (sharedCredentialWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        FileContent credentialFileContent = sharedCredentialWrapper.getObject();
-        SharedCredentialModel sharedCredentialModel = new SharedCredentialModel();
-        sharedCredentialModel.setCredentialName(credentialName);
+            FileContent credentialFileContent = sharedCredentialWrapper.getObject();
+            SharedCredentialModel sharedCredentialModel = new SharedCredentialModel();
+            sharedCredentialModel.setCredentialName(credentialName);
 
-        if (credentialFileContent.getByteContent() != null) {
-            sharedCredentialModel.setType(CredentialType.binary);
-            String base64Credential = new String(Base64.getEncoder().encode(credentialFileContent.getByteContent()));
-            sharedCredentialModel.setBinaryValue(base64Credential);
-        } else {
-            sharedCredentialModel.setType(CredentialType.text);
-            sharedCredentialModel.setTextValue(credentialFileContent.getTextContent());
-        }
+            if (credentialFileContent.getByteContent() != null) {
+                sharedCredentialModel.setType(CredentialType.binary);
+                String base64Credential = new String(Base64.getEncoder().encode(credentialFileContent.getByteContent()));
+                sharedCredentialModel.setBinaryValue(base64Credential);
+            } else {
+                sharedCredentialModel.setType(CredentialType.text);
+                sharedCredentialModel.setTextValue(credentialFileContent.getTextContent());
+            }
 
-        return new ResponseEntity<>(Mono.just(sharedCredentialModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(sharedCredentialModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -167,35 +175,37 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<byte[]>> downloadSharedCredential(
+    public Mono<ResponseEntity<Mono<byte[]>>> downloadSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential file name") @PathVariable String credentialName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(credentialName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(credentialName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
 
-        if (sharedCredentialWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (sharedCredentialWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        FileContent credentialFileContent = sharedCredentialWrapper.getObject();
-        byte[] binaryFileContent = null;
+            FileContent credentialFileContent = sharedCredentialWrapper.getObject();
+            byte[] binaryFileContent = null;
 
-        if (credentialFileContent.getByteContent() != null) {
-            binaryFileContent = credentialFileContent.getByteContent();
-        } else {
-            binaryFileContent = credentialFileContent.getTextContent().getBytes(StandardCharsets.UTF_8);
-        }
+            if (credentialFileContent.getByteContent() != null) {
+                binaryFileContent = credentialFileContent.getByteContent();
+            } else {
+                binaryFileContent = credentialFileContent.getTextContent().getBytes(StandardCharsets.UTF_8);
+            }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentDisposition(ContentDisposition.attachment().filename(credentialName).build());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.attachment().filename(credentialName).build());
 
-        return new ResponseEntity<>(Mono.just(binaryFileContent), headers, HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(binaryFileContent), headers, HttpStatus.OK);
+        }));
     }
 
     /**
@@ -219,50 +229,52 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createSharedCredential(
+    public Mono<ResponseEntity<Mono<Void>>> createSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel) {
-        if (Strings.isNullOrEmpty(sharedCredentialModel.getCredentialName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        SharedCredentialList credentialList = userHome.getCredentials();
-        SharedCredentialWrapper existingSharedCredential = credentialList.getByObjectName(sharedCredentialModel.getCredentialName(), true);
-
-        if (existingSharedCredential != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
-
-        if (sharedCredentialModel.getType() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        SharedCredentialWrapper sharedCredentialWrapper = credentialList.createAndAddNew(sharedCredentialModel.getCredentialName());
-        switch (sharedCredentialModel.getType()) {
-            case binary:
-                if (sharedCredentialModel.getBinaryValue() == null || sharedCredentialModel.getTextValue() != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-                }
-                byte[] base64DecodeValue = Base64.getDecoder().decode(sharedCredentialModel.getBinaryValue());
-                sharedCredentialWrapper.setObject(new FileContent(base64DecodeValue));
-                break;
-
-            case text:
-                if (sharedCredentialModel.getTextValue() == null || sharedCredentialModel.getBinaryValue() != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-                }
-                sharedCredentialWrapper.setObject(new FileContent(sharedCredentialModel.getTextValue()));
-                break;
-
-            default:
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(sharedCredentialModel.getCredentialName())) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            }
 
-        userHomeContext.flush();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            SharedCredentialList credentialList = userHome.getCredentials();
+            SharedCredentialWrapper existingSharedCredential = credentialList.getByObjectName(sharedCredentialModel.getCredentialName(), true);
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+            if (existingSharedCredential != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+            }
+
+            if (sharedCredentialModel.getType() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            SharedCredentialWrapper sharedCredentialWrapper = credentialList.createAndAddNew(sharedCredentialModel.getCredentialName());
+            switch (sharedCredentialModel.getType()) {
+                case binary:
+                    if (sharedCredentialModel.getBinaryValue() == null || sharedCredentialModel.getTextValue() != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+                    }
+                    byte[] base64DecodeValue = Base64.getDecoder().decode(sharedCredentialModel.getBinaryValue());
+                    sharedCredentialWrapper.setObject(new FileContent(base64DecodeValue));
+                    break;
+
+                case text:
+                    if (sharedCredentialModel.getTextValue() == null || sharedCredentialModel.getBinaryValue() != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+                    }
+                    sharedCredentialWrapper.setObject(new FileContent(sharedCredentialModel.getTextValue()));
+                    break;
+
+                default:
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            userHomeContext.flush();
+
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+        }));
     }
 
     /**
@@ -284,55 +296,57 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateSharedCredential(
+    public Mono<ResponseEntity<Mono<Void>>> updateSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Shared credential model") @RequestBody SharedCredentialModel sharedCredentialModel,
             @ApiParam("Credential file name that will be updated") @PathVariable String credentialName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(credentialName) || sharedCredentialModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        if (!Objects.equals(credentialName, sharedCredentialModel.getCredentialName())) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        SharedCredentialList sharedCredentialList = userHome.getCredentials();
-        SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
-
-        if (sharedCredentialWrapper == null || sharedCredentialWrapper.getObject() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
-
-        if (sharedCredentialModel.getType() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        switch (sharedCredentialModel.getType()) {
-            case binary:
-                if (sharedCredentialModel.getBinaryValue() == null || sharedCredentialModel.getTextValue() != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-                }
-                byte[] base64DecodeValue = Base64.getDecoder().decode(sharedCredentialModel.getBinaryValue());
-                sharedCredentialWrapper.setObject(new FileContent(base64DecodeValue));
-                break;
-
-            case text:
-                if (sharedCredentialModel.getTextValue() == null || sharedCredentialModel.getBinaryValue() != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-                }
-                sharedCredentialWrapper.setObject(new FileContent(sharedCredentialModel.getTextValue()));
-                break;
-
-            default:
+            if (Strings.isNullOrEmpty(credentialName) || sharedCredentialModel == null) {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            }
 
-        userHomeContext.flush();
+            if (!Objects.equals(credentialName, sharedCredentialModel.getCredentialName())) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            SharedCredentialList sharedCredentialList = userHome.getCredentials();
+            SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
+
+            if (sharedCredentialWrapper == null || sharedCredentialWrapper.getObject() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
+
+            if (sharedCredentialModel.getType() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            switch (sharedCredentialModel.getType()) {
+                case binary:
+                    if (sharedCredentialModel.getBinaryValue() == null || sharedCredentialModel.getTextValue() != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+                    }
+                    byte[] base64DecodeValue = Base64.getDecoder().decode(sharedCredentialModel.getBinaryValue());
+                    sharedCredentialWrapper.setObject(new FileContent(base64DecodeValue));
+                    break;
+
+                case text:
+                    if (sharedCredentialModel.getTextValue() == null || sharedCredentialModel.getBinaryValue() != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+                    }
+                    sharedCredentialWrapper.setObject(new FileContent(sharedCredentialModel.getTextValue()));
+                    break;
+
+                default:
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            userHomeContext.flush();
+
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -352,27 +366,29 @@ public class SharedCredentialsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteSharedCredential(
+    public Mono<ResponseEntity<Mono<Void>>> deleteSharedCredential(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full shared credential name") @PathVariable String credentialName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(credentialName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(credentialName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        SharedCredentialList sharedCredentialList = userHome.getCredentials();
-        SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
+            SharedCredentialList sharedCredentialList = userHome.getCredentials();
+            SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
 
-        if (sharedCredentialWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (sharedCredentialWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        sharedCredentialWrapper.markForDeletion();
-        userHomeContext.flush();
+            sharedCredentialWrapper.markForDeletion();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 }

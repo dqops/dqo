@@ -32,7 +32,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
 |<span class="no-wrap-code">`data_group`</span>|Data group name|*string*|
 |<span class="no-wrap-code">`duration_ms`</span>|Duration (ms)|*integer*|
-|<span class="no-wrap-code">[`time_gradient`](./errors.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./errors.md#timeperiodgradient)*|
+|<span class="no-wrap-code">[`time_gradient`](./error_samples.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./error_samples.md#timeperiodgradient)*|
 |<span class="no-wrap-code">`time_period`</span>|Time period|*datetime*|
 |<span class="no-wrap-code">`include_in_kpi`</span>|Include in KPI|*boolean*|
 |<span class="no-wrap-code">`include_in_sla`</span>|Include in SLA|*boolean*|
@@ -53,7 +53,7 @@ Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryM
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|executedAt<br/>checkHash<br/>checkCategory<br/>checkName<br/>checkDisplayName<br/>checkType<br/>actualValue<br/>expectedValue<br/>severity<br/>columnName<br/>dataGroup<br/>timeGradient<br/>timePeriod<br/>qualityDimension<br/>sensorName<br/>|
+|string|executedAt<br/>checkHash<br/>checkCategory<br/>checkName<br/>checkDisplayName<br/>checkType<br/>actualValue<br/>expectedValue<br/>severity<br/>columnName<br/>dataGroup<br/>timeGradient<br/>timePeriod<br/>qualityDimension<br/>sensorName<br/>updatedAt<br/>|
 
 ___
 

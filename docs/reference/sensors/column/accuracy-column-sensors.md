@@ -268,10 +268,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         (SELECT
-            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }} * 1.0)
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        AVG({{ lib.render_target_column('analyzed_table')}} * 1.0) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```

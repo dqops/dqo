@@ -33,9 +33,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +80,7 @@ public class LabelsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<LabelModel>> getAllLabelsForConnections(
+    public Mono<ResponseEntity<Flux<LabelModel>>> getAllLabelsForConnections(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
@@ -88,55 +90,57 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        Integer resultsLimit = MAX_RESULTS;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(100);
-            resultsLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
-
-        LabelCountContainer labelsContainer = this.globalLabelsContainer.getConnectionLabels(principal.getDataDomainIdentity().getDataDomainCloud());
-        List<LabelCounter> labelCountersList = null;
-        if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
-            LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
-            if (labelCounter == null) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-            } else {
-                labelCountersList = labelCounter.getNestedLabels();
-                if (labelCountersList == null) {
-                    return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Integer resultsLimit = MAX_RESULTS;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
                 }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(100);
+                resultsLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
             }
-        } else {
-            labelCountersList = labelsContainer.getLabels();
-        }
 
-        SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
-                SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
-
-        List<LabelModel> labelModels = labelCountersList
-                .stream()
-                .filter(labelCounter -> {
-                    if (labelSearchPattern != null) {
-                        return labelSearchPattern.match(labelCounter.getLabel());
+            LabelCountContainer labelsContainer = this.globalLabelsContainer.getConnectionLabels(principal.getDataDomainIdentity().getDataDomainCloud());
+            List<LabelCounter> labelCountersList = null;
+            if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
+                LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
+                if (labelCounter == null) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                } else {
+                    labelCountersList = labelCounter.getNestedLabels();
+                    if (labelCountersList == null) {
+                        return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
                     }
-                    return true;
-                })
-                .limit(resultsLimit)
-                .skip(skip == null ? 0 : skip)
-                .map(LabelModel::fromLabelCounter)
-                .collect(Collectors.toList());
+                }
+            } else {
+                labelCountersList = labelsContainer.getLabels();
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+            SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
+                    SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
+
+            List<LabelModel> labelModels = labelCountersList
+                    .stream()
+                    .filter(labelCounter -> {
+                        if (labelSearchPattern != null) {
+                            return labelSearchPattern.match(labelCounter.getLabel());
+                        }
+                        return true;
+                    })
+                    .limit(resultsLimit)
+                    .skip(skip == null ? 0 : skip)
+                    .map(LabelModel::fromLabelCounter)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -155,7 +159,7 @@ public class LabelsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<LabelModel>> getAllLabelsForTables(
+    public Mono<ResponseEntity<Flux<LabelModel>>> getAllLabelsForTables(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
@@ -165,55 +169,57 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        Integer resultsLimit = MAX_RESULTS;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(100);
-            resultsLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
-
-        LabelCountContainer labelsContainer = this.globalLabelsContainer.getTableLabels(principal.getDataDomainIdentity().getDataDomainCloud());
-        List<LabelCounter> labelCountersList = null;
-        if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
-            LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
-            if (labelCounter == null) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-            } else {
-                labelCountersList = labelCounter.getNestedLabels();
-                if (labelCountersList == null) {
-                    return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Integer resultsLimit = MAX_RESULTS;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
                 }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(100);
+                resultsLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
             }
-        } else {
-            labelCountersList = labelsContainer.getLabels();
-        }
 
-        SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
-                SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
-
-        List<LabelModel> labelModels = labelCountersList
-                .stream()
-                .filter(labelCounter -> {
-                    if (labelSearchPattern != null) {
-                        return labelSearchPattern.match(labelCounter.getLabel());
+            LabelCountContainer labelsContainer = this.globalLabelsContainer.getTableLabels(principal.getDataDomainIdentity().getDataDomainCloud());
+            List<LabelCounter> labelCountersList = null;
+            if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
+                LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
+                if (labelCounter == null) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                } else {
+                    labelCountersList = labelCounter.getNestedLabels();
+                    if (labelCountersList == null) {
+                        return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
                     }
-                    return true;
-                })
-                .limit(resultsLimit)
-                .skip(skip == null ? 0 : skip)
-                .map(LabelModel::fromLabelCounter)
-                .collect(Collectors.toList());
+                }
+            } else {
+                labelCountersList = labelsContainer.getLabels();
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+            SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
+                    SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
+
+            List<LabelModel> labelModels = labelCountersList
+                    .stream()
+                    .filter(labelCounter -> {
+                        if (labelSearchPattern != null) {
+                            return labelSearchPattern.match(labelCounter.getLabel());
+                        }
+                        return true;
+                    })
+                    .limit(resultsLimit)
+                    .skip(skip == null ? 0 : skip)
+                    .map(LabelModel::fromLabelCounter)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -232,7 +238,7 @@ public class LabelsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<LabelModel>> getAllLabelsForColumns(
+    public Mono<ResponseEntity<Flux<LabelModel>>> getAllLabelsForColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
@@ -242,54 +248,56 @@ public class LabelsController {
             @RequestParam(required = false) Optional<String> prefix,
             @ApiParam(name = "filter", value = "Optional table name filter", required = false)
             @RequestParam(required = false) Optional<String> filter) {
-        Integer resultsLimit = MAX_RESULTS;
-        Integer skip = null;
-        if (page.isPresent() || limit.isPresent()) {
-            if (page.isPresent() && page.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-            if (limit.isPresent() && limit.get() < 1) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-            }
-
-            Integer pageValue = page.orElse(1);
-            Integer limitValue = limit.orElse(100);
-            resultsLimit = pageValue * limitValue;
-            skip = (pageValue - 1) * limitValue;
-        }
-
-        LabelCountContainer labelsContainer = this.globalLabelsContainer.getColumnLabels(principal.getDataDomainIdentity().getDataDomainCloud());
-        List<LabelCounter> labelCountersList = null;
-        if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
-            LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
-            if (labelCounter == null) {
-                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-            } else {
-                labelCountersList = labelCounter.getNestedLabels();
-                if (labelCountersList == null) {
-                    return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            Integer resultsLimit = MAX_RESULTS;
+            Integer skip = null;
+            if (page.isPresent() || limit.isPresent()) {
+                if (page.isPresent() && page.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
                 }
+                if (limit.isPresent() && limit.get() < 1) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+                }
+
+                Integer pageValue = page.orElse(1);
+                Integer limitValue = limit.orElse(100);
+                resultsLimit = pageValue * limitValue;
+                skip = (pageValue - 1) * limitValue;
             }
-        } else {
-            labelCountersList = labelsContainer.getLabels();
-        }
 
-        SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
-                SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
-
-        List<LabelModel> labelModels = labelCountersList
-                .stream()
-                .filter(labelCounter -> {
-                    if (labelSearchPattern != null) {
-                        return labelSearchPattern.match(labelCounter.getLabel());
+            LabelCountContainer labelsContainer = this.globalLabelsContainer.getColumnLabels(principal.getDataDomainIdentity().getDataDomainCloud());
+            List<LabelCounter> labelCountersList = null;
+            if (prefix.isPresent() && !Strings.isNullOrEmpty(prefix.get())) {
+                LabelCounter labelCounter = labelsContainer.getLabelCounter(prefix.get());
+                if (labelCounter == null) {
+                    return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+                } else {
+                    labelCountersList = labelCounter.getNestedLabels();
+                    if (labelCountersList == null) {
+                        return new ResponseEntity<>(Flux.empty(), HttpStatus.OK); // OK, but empty
                     }
-                    return true;
-                })
-                .limit(resultsLimit)
-                .skip(skip == null ? 0 : skip)
-                .map(LabelModel::fromLabelCounter)
-                .collect(Collectors.toList());
+                }
+            } else {
+                labelCountersList = labelsContainer.getLabels();
+            }
 
-        return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+            SearchPattern labelSearchPattern = filter.isPresent() && !Strings.isNullOrEmpty(filter.get()) ?
+                    SearchPattern.create(true, filter.get().contains("*") ? filter.get() : "*" + filter.get() + "*") : null;
+
+            List<LabelModel> labelModels = labelCountersList
+                    .stream()
+                    .filter(labelCounter -> {
+                        if (labelSearchPattern != null) {
+                            return labelSearchPattern.match(labelCounter.getLabel());
+                        }
+                        return true;
+                    })
+                    .limit(resultsLimit)
+                    .skip(skip == null ? 0 : skip)
+                    .map(LabelModel::fromLabelCounter)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(Flux.fromStream(labelModels.stream()), HttpStatus.OK); // 200
+        }));
     }
 }

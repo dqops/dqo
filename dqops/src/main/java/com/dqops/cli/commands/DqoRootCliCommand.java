@@ -17,6 +17,7 @@ package com.dqops.cli.commands;
 
 import com.dqops.cli.commands.check.CheckCliCommand;
 import com.dqops.cli.commands.cloud.CloudCliCommand;
+import com.dqops.cli.commands.collect.CollectCliCommand;
 import com.dqops.cli.commands.column.ColumnCliCommand;
 import com.dqops.cli.commands.connection.ConnectionCliCommand;
 import com.dqops.cli.commands.data.DataCliCommand;
@@ -60,6 +61,7 @@ import java.util.List;
             ConnectionCliCommand.class,
             TableCliCommand.class,
             CheckCliCommand.class,
+            CollectCliCommand.class,
             ColumnCliCommand.class,
             SettingsCliCommand.class,
             CloudCliCommand.class,
@@ -443,6 +445,19 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The maximum age (in months) of the basic statistics that are shown on the basic statistics screen. " +
                     "Statistics values captured earlier are still stored, but are not shown in the DQOps UI.", defaultValue = "3")
     private int dqoStatisticsViewedStatisticsAgeMonths;
+
+    @CommandLine.Option(names = {"--dqo.error-sampling.truncated-strings-length"},
+            description = "The maximum length of error samples captured from text columns (varchar, string, text, etc.) that are stored as error samples table. " +
+                    "DQOps truncates longer column values and stores only the first few characters, up to the character count limit defined by this parameter.", defaultValue = "100")
+    private int dqoErrorSamplingTruncatedStringsLength;
+
+    @CommandLine.Option(names = {"--dqo.error-sampling.samples-limit"},
+            description = "The maximum number of error samples (invalid column values) captured for each data grouping when data grouping is configured, or for the whole table when data grouping is not configured.", defaultValue = "50")
+    private int dqoErrorSamplingSamplesLimit;
+
+    @CommandLine.Option(names = {"--dqo.error-sampling.total-samples-limit"},
+            description = "The maximum total number of error sampling results captured from a table when data grouping is enabled on a table, and error samples are captured from multiple data groupings..", defaultValue = "1000")
+    private int dqoErrorSamplingTotalSamplesLimit;
 
     @CommandLine.Option(names = {"--dqo.cache.expire-after-seconds"},
             description = "The time in seconds to expire the cache entries since they were added to the cache.", defaultValue = "86400")

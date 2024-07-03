@@ -114,7 +114,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         synchronized (this.processDictionaryLock) {
             for (int retry = 0; retry < 10; retry++) {
                 if (this.pythonModuleProcesses == null) {
-                    return null; // closing
+                    throw new PythonExecutionException("Python script cannot be called, because Python processes were already closed and the application is shutting down."); // closing
                 }
 
                 availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);

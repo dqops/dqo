@@ -213,6 +213,7 @@ request_body = RunChecksParameters(
 		full_table_name='sample_schema.sample_table',
 		enabled=True
 	),
+	collect_error_samples=False,
 	dummy_execution=False
 )
 
@@ -288,7 +289,6 @@ CollectStatisticsQueueJobResult(
 	),
 	result=CollectStatisticsResult(
 		executed_statistics_collectors=3,
-		total_collectors_executed=0,
 		columns_analyzed=1,
 		columns_successfully_analyzed=0,
 		total_collectors_failed=1,
@@ -342,7 +342,6 @@ CollectStatisticsQueueJobResult(
 	),
 	result=CollectStatisticsResult(
 		executed_statistics_collectors=3,
-		total_collectors_executed=0,
 		columns_analyzed=1,
 		columns_successfully_analyzed=0,
 		total_collectors_failed=1,
@@ -682,6 +681,7 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[Defaults](./operations/defaults.md)|Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.|
 |[Dictionaries](./operations/dictionaries.md)|Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.|
 |[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|
+|[ErrorSamples](./operations/error_samples.md)|Operations that return the error samples collected when data quality checks were executed on data sources from the check editor, and rules failed with an error.|
 |[Errors](./operations/errors.md)|Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.|
 |[Healthcheck](./operations/healthcheck.md)|Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.|
 |[Incidents](./operations/incidents.md)|Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.|

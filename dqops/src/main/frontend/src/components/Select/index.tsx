@@ -55,7 +55,7 @@ const Select = ({
   onClickValue
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
   const selectedOption = useMemo(() => {
     return options.find(
@@ -77,7 +77,7 @@ const Select = ({
   }, []);
 
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx('relative', className)} ref={ref}>
       {label && (
         <div className="flex space-x-1">
           <div

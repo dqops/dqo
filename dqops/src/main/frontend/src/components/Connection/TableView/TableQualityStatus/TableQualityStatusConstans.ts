@@ -11,6 +11,7 @@ export type TFirstLevelCheck = {
   checkType: string;
   category?: string;
   qualityDimension?: string;
+  execution_errors?: number;
 };
 
 export interface ITableParameters {

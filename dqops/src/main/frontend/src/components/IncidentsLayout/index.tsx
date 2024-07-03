@@ -40,22 +40,30 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
     history.push(tab.value);
   };
 
-  const closeTab = (value: string) => {
-    const tabIndex = pageTabs.findIndex((item) => item.url === value);
+  const closeTab = (value: string, _?: boolean, tab?: string) => {
     dispatch(closeFirstLevelTab(value));
+
     if (pageTabs.length === 1) {
       history.push(`/incidents`);
       return;
     }
-    if (tabIndex === 0 && pageTabs.length > 1) {
-      history.push(pageTabs[1]?.url);
-      dispatch(setActiveFirstLevelTab(pageTabs[1]?.url));
-      return;
+
+    if (value === activeTab) {
+      const tabIndex = pageTabs.findIndex((item) => item.url === value);
+      if (tabIndex === 0 && pageTabs.length > 1) {
+        history.push(pageTabs[1].url);
+        return;
+      } else {
+        history.push(pageTabs[tabIndex - 1].url || pageTabs[0].url);
+      }
     }
-    history.push(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url);
-    dispatch(
-      setActiveFirstLevelTab(pageTabs[tabIndex - 1]?.url || pageTabs[0]?.url)
-    );
+
+    if (tab) {
+      history.push(tab);
+      return;
+    } else {
+      //
+    }
   };
 
   const tabOptions = useMemo(() => {
@@ -63,7 +71,8 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
       pageTabs?.map((item) => ({
         value: item.url,
         url: item.url,
-        label: item.label
+        label: item.label,
+        state: { ...item.state }
       })) || []
     );
   }, [pageTabs]);
@@ -98,7 +107,8 @@ const IncidentsLayout = ({ route }: LayoutProps) => {
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
             marginLeft: 320,
-            maxWidth: `calc(100vw - 320px)`
+            maxWidth: `calc(100vw - 320px)`,
+            backgroundColor: '#F9FAFC'
           }}
         >
           <div className="flex-1 h-full flex flex-col ">

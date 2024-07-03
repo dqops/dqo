@@ -16,8 +16,8 @@
 package com.dqops.rest.controllers;
 
 import com.dqops.core.principal.DqoPermissionNames;
-import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.utils.datetime.TimeZoneUtility;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST api controller to return a list of available time zones.
@@ -50,8 +53,10 @@ public class TimezonesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<String>> getAvailableZoneIds(
+    public Mono<ResponseEntity<Flux<String>>> getAvailableZoneIds(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        return new ResponseEntity<>(Flux.fromIterable(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return new ResponseEntity<>(Flux.fromIterable(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
+        }));
     }
 }

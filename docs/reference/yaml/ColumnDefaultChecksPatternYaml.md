@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 The configuration of default data observability checks that are applied on columns that match a search pattern.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -26,25 +19,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDefaultChecksPatternSpec
 The default configuration of column-level data quality checks that are enabled as data observability checks to analyze basic measures and detect anomalies on columns.
  This configuration serves as a data quality policy that defines the data quality checks that are verified on matching columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -61,24 +40,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TargetColumnPatternSpec
 The configuration of a column pattern to match default column checks. Includes also the pattern for the target table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -97,12 +62,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

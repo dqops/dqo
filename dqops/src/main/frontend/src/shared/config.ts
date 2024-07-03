@@ -17,3 +17,7 @@
 export const apiBaseUrl = 'http://localhost:8888';
 
 export const JOB_CHANGES_RETRY_INTERVAL = 10000;
+
+export const TABLES_LIMIT_TREE_PAGING = 50;
+
+export const COLUMNS_LIMIT_TREE_PAGING = 50;

@@ -1,8 +1,9 @@
+import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
 import React from 'react';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
-import clsx from 'clsx';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
-import { Tooltip } from '@material-tailwind/react';
+import TextArea from '../../TextArea';
 
 type SelectDataGroupingForTableProps = {
   title: string;
@@ -24,6 +25,8 @@ type SelectDataGroupingForTableProps = {
   ) => void;
   dqoLimit?: number;
   columnOptions: Option[];
+  onChangeParameters: (data: any) => void;
+  filter?: string;
 };
 interface Option {
   label: string | number;
@@ -41,7 +44,9 @@ export const SelectGroupColumnsTable = ({
   warningMessageList,
   checkIfDistinctCountIsBiggerThanLimit,
   dqoLimit,
-  columnOptions
+  columnOptions,
+  onChangeParameters,
+  filter
 }: SelectDataGroupingForTableProps) => {
   const handleColumnSelectChange = (value: string, index: number) => {
     if (refTable) {
@@ -107,6 +112,21 @@ export const SelectGroupColumnsTable = ({
               </tr>
             );
           })}
+          <tr className="my-2">
+            <TextArea
+              className="w-full my-2 py-2"
+              value={filter}
+              onChange={(e) =>
+                refTable
+                  ? onChangeParameters({
+                      reference_table_filter: e.target.value
+                    })
+                  : onChangeParameters({
+                      compared_table_filter: e.target.value
+                    })
+              }
+            />
+          </tr>
         </tbody>
       </table>
     </SectionWrapper>

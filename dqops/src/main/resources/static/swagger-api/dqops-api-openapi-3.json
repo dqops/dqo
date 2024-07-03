@@ -77,6 +77,10 @@
     "description" : "Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.",
     "extensions" : { }
   }, {
+    "name" : "ErrorSamples",
+    "description" : "Operations that return the error samples collected when data quality checks were executed on data sources from the check editor, and rules failed with an error.",
+    "extensions" : { }
+  }, {
     "name" : "Healthcheck",
     "description" : "Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.",
     "extensions" : { }
@@ -4910,6 +4914,179 @@
       },
       "extensions" : { }
     },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getColumnMonitoringErrorSamples",
+        "description" : "Returns error samples related to a column level monitoring checks at a requested time scale",
+        "operationId" : "getColumnMonitoringErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckTimeScale",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "View of error samples for the monitoring checks at a requested time scale on a column returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Columns" ],
@@ -6239,6 +6416,179 @@
       },
       "extensions" : { }
     },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getColumnPartitionedErrorSamples",
+        "description" : "Returns the error samples related to column level partitioned checks for a requested time scale",
+        "operationId" : "getColumnPartitionedErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckTimeScale",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "View of error samples related to column level partitioned checks for a requested time scale on a column returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Columns" ],
@@ -7381,6 +7731,169 @@
                   "exampleSetFlag" : false,
                   "items" : {
                     "$ref" : "#/components/schemas/ErrorsListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getColumnProfilingErrorSamples",
+        "description" : "Returns the error samples related to a profiling check for all column level data quality profiling checks on a column",
+        "operationId" : "getColumnProfilingErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "columnName",
+          "in" : "path",
+          "description" : "Column name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples related to a check runs for column level data quality profiling checks on a column returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
                     "extensions" : { },
                     "exampleSetFlag" : false
                   },
@@ -9766,6 +10279,167 @@
       },
       "extensions" : { }
     },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTableMonitoringErrorSamples",
+        "description" : "Returns the error samples related to a table level monitoring check a requested time scale",
+        "operationId" : "getTableMonitoringErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckTimeScale",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples related to a monitoring check at a requested time scale on a table returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -11038,6 +11712,167 @@
       },
       "extensions" : { }
     },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTablePartitionedErrorSamples",
+        "description" : "Returns error samples related to a table level partitioned check for a requested time scale",
+        "operationId" : "getTablePartitionedErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "timeScale",
+          "in" : "path",
+          "description" : "Time scale",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CheckTimeScale",
+            "exampleSetFlag" : false
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The error samples related to a partitioned check a requested time scale on a table returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/model" : {
       "get" : {
         "tags" : [ "Tables" ],
@@ -11183,7 +12018,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/MonoObject",
+                  "$ref" : "#/components/schemas/MonoResponseEntityMonoObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -12280,6 +13115,157 @@
                   "exampleSetFlag" : false,
                   "items" : {
                     "$ref" : "#/components/schemas/ErrorsListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errorsamples" : {
+      "get" : {
+        "tags" : [ "ErrorSamples" ],
+        "summary" : "getTableProfilingErrorSamples",
+        "description" : "Returns the error samples related to a check for all table level data quality profiling checks on a table",
+        "operationId" : "getTableProfilingErrorSamples",
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "schemaName",
+          "in" : "path",
+          "description" : "Schema name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableName",
+          "in" : "path",
+          "description" : "Table name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "dataGroup",
+          "in" : "query",
+          "description" : "Data group",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthStart",
+          "in" : "query",
+          "description" : "Month start boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monthEnd",
+          "in" : "query",
+          "description" : "Month end boundary",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Check category name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "tableComparison",
+          "in" : "query",
+          "description" : "Table comparison name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "maxResultsPerCheck",
+          "in" : "query",
+          "description" : "Maximum number of results per check, the default is 100",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Error samples related to the check for table level data quality profiling checks on a table returned",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorSamplesListModel",
                     "extensions" : { },
                     "exampleSetFlag" : false
                   },
@@ -18018,6 +19004,28 @@
           },
           "extensions" : { }
         }, {
+          "name" : "dimension",
+          "in" : "query",
+          "description" : "Optional filter for the data quality dimension name, case sensitive",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional filter for the data quality check category name, case sensitive",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "order",
           "in" : "query",
           "description" : "Optional sort order, the default sort order is by the number of failed data quality checks",
@@ -18825,6 +19833,138 @@
             "extensions" : { }
           }
         },
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/jobs/collecterrorsamples" : {
+      "post" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "collectErrorSamples",
+        "description" : "Starts a new background job that will run selected data quality checks to collect their error samples",
+        "operationId" : "collectErrorSamples",
+        "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "wait",
+          "in" : "query",
+          "description" : "Wait until the error sampling finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)",
+          "schema" : {
+            "type" : "boolean",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "waitTimeout",
+          "in" : "query",
+          "description" : "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Data quality check run configuration (target checks and an optional time range)",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CollectErrorSamplesParameters",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectErrorSamplesResult",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/jobs/collecterrorsamples/{jobId}/wait" : {
+      "get" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "waitForCollectErrorSamplesJob",
+        "description" : "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
+        "operationId" : "waitForCollectErrorSamplesJob",
+        "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "description" : "Job id, it can be a job business key assigned to the job or a job id generated by DQOps",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "waitTimeout",
+          "in" : "query",
+          "description" : "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the 'dqo' cli command documentation).",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Collect error samples job information returned. When the wait timeout has elapsed, the job status could be still queued or running and the result will be missing.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CollectErrorSamplesResult",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
         "extensions" : { }
       },
       "extensions" : { }
@@ -22960,6 +24100,13 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "supports_error_sampling" : {
+            "type" : "boolean",
+            "description" : "The data quality check supports capturing error samples, because an error sampling template is defined.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "supports_grouping" : {
             "type" : "boolean",
             "description" : "The data quality check supports a custom data grouping configuration.",
@@ -23165,6 +24312,10 @@
               "description" : "Threshold (alerting) rules defined for a check.",
               "$ref" : "#/components/schemas/RuleThresholdsModel",
               "originalRef" : "#/components/schemas/RuleThresholdsModel"
+            },
+            "supports_error_sampling" : {
+              "type" : "boolean",
+              "description" : "The data quality check supports capturing error samples, because an error sampling template is defined."
             },
             "supports_grouping" : {
               "type" : "boolean",
@@ -23479,6 +24630,14 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
+          },
+          "updatedAt" : {
+            "type" : "integer",
+            "description" : "The timestamp when the check was recently updated with a new value because it as rerun for the same period and the severity could be changed",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
           }
         },
         "exampleSetFlag" : false,
@@ -23608,6 +24767,11 @@
             "tableComparison" : {
               "type" : "string",
               "description" : "Table comparison name"
+            },
+            "updatedAt" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "The timestamp when the check was recently updated with a new value because it as rerun for the same period and the severity could be changed"
             }
           }
         }
@@ -24424,6 +25588,209 @@
           }
         }
       },
+      "CollectErrorSamplesOnTableParameters" : {
+        "type" : "object",
+        "properties" : {
+          "connection" : {
+            "type" : "string",
+            "description" : "The name of the target connection.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "max_jobs_per_connection" : {
+            "type" : "integer",
+            "description" : "The maximum number of concurrent 'collect error samples on table' jobs that can be run on this connection. Limits the number of concurrent jobs.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "table" : {
+            "$ref" : "#/components/schemas/PhysicalTableName",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "check_search_filters" : {
+            "$ref" : "#/components/schemas/CheckSearchFilters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "time_window_filter" : {
+            "$ref" : "#/components/schemas/TimeWindowFilterParameters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "data_scope" : {
+            "$ref" : "#/components/schemas/ErrorSamplesDataScope",
+            "exampleSetFlag" : false
+          },
+          "dummy_sensor_execution" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "error_sampler_result" : {
+            "$ref" : "#/components/schemas/ErrorSamplerResult",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "connection" : {
+              "type" : "string",
+              "description" : "The name of the target connection."
+            },
+            "max_jobs_per_connection" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The maximum number of concurrent 'collect error samples on table' jobs that can be run on this connection. Limits the number of concurrent jobs."
+            },
+            "table" : {
+              "description" : "The full physical name (schema.table) of the target table.",
+              "$ref" : "#/components/schemas/PhysicalTableName",
+              "originalRef" : "#/components/schemas/PhysicalTableName"
+            },
+            "check_search_filters" : {
+              "description" : "Check search filters that identify data quality checks for which the error samples are collected.",
+              "$ref" : "#/components/schemas/CheckSearchFilters",
+              "originalRef" : "#/components/schemas/CheckSearchFilters"
+            },
+            "time_window_filter" : {
+              "description" : "Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.",
+              "$ref" : "#/components/schemas/TimeWindowFilterParameters",
+              "originalRef" : "#/components/schemas/TimeWindowFilterParameters"
+            },
+            "data_scope" : {
+              "type" : "string",
+              "description" : "The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.",
+              "enum" : [ "table", "data_group" ]
+            },
+            "dummy_sensor_execution" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files)."
+            },
+            "error_sampler_result" : {
+              "description" : "The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.",
+              "$ref" : "#/components/schemas/ErrorSamplerResult",
+              "originalRef" : "#/components/schemas/ErrorSamplerResult"
+            }
+          }
+        }
+      },
+      "CollectErrorSamplesParameters" : {
+        "type" : "object",
+        "properties" : {
+          "check_search_filters" : {
+            "$ref" : "#/components/schemas/CheckSearchFilters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "time_window_filter" : {
+            "$ref" : "#/components/schemas/TimeWindowFilterParameters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "data_scope" : {
+            "$ref" : "#/components/schemas/ErrorSamplesDataScope",
+            "exampleSetFlag" : false
+          },
+          "dummy_sensor_execution" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "error_sampler_result" : {
+            "$ref" : "#/components/schemas/ErrorSamplerResult",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "description" : "Collect error samples job parameters, specifies the target checks that should be executed to collect error samples and an optional time window.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "check_search_filters" : {
+              "description" : "Check search filters that identify the checks for which the error samples should be collected.",
+              "$ref" : "#/components/schemas/CheckSearchFilters",
+              "originalRef" : "#/components/schemas/CheckSearchFilters"
+            },
+            "time_window_filter" : {
+              "description" : "Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.",
+              "$ref" : "#/components/schemas/TimeWindowFilterParameters",
+              "originalRef" : "#/components/schemas/TimeWindowFilterParameters"
+            },
+            "data_scope" : {
+              "type" : "string",
+              "description" : "The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.",
+              "enum" : [ "table", "data_group" ]
+            },
+            "dummy_sensor_execution" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files)."
+            },
+            "error_sampler_result" : {
+              "description" : "The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.",
+              "$ref" : "#/components/schemas/ErrorSamplerResult",
+              "originalRef" : "#/components/schemas/ErrorSamplerResult"
+            }
+          },
+          "description" : "Collect error samples job parameters, specifies the target checks that should be executed to collect error samples and an optional time window."
+        }
+      },
+      "CollectErrorSamplesResult" : {
+        "type" : "object",
+        "properties" : {
+          "jobId" : {
+            "$ref" : "#/components/schemas/DqoQueueJobId",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "result" : {
+            "$ref" : "#/components/schemas/ErrorSamplerResult",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/DqoJobStatus",
+            "exampleSetFlag" : false
+          }
+        },
+        "description" : "Object returned from the operation that queues a \"collect error samples\" job. The result contains the job id that was started and optionally can also contain the result of collecting the error samples  if the operation was started with wait=true parameter to wait for the \"collect error samples\" job to finish.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "jobId" : {
+              "description" : "Job id that identifies a job that was started on the DQOps job queue.",
+              "$ref" : "#/components/schemas/DqoQueueJobId",
+              "originalRef" : "#/components/schemas/DqoQueueJobId"
+            },
+            "result" : {
+              "description" : "Optional result object that is returned only when the wait parameter was true and the \"collect error samples\" job has finished. Contains the summary result of collecting error samples, including the number of error samplers that were executed, and the number of error samples collected. ",
+              "$ref" : "#/components/schemas/ErrorSamplerResult",
+              "originalRef" : "#/components/schemas/ErrorSamplerResult"
+            },
+            "status" : {
+              "type" : "string",
+              "description" : "Job status",
+              "enum" : [ "queued", "running", "waiting", "finished", "failed", "cancel_requested", "cancelled" ]
+            }
+          },
+          "description" : "Object returned from the operation that queues a \"collect error samples\" job. The result contains the job id that was started and optionally can also contain the result of collecting the error samples  if the operation was started with wait=true parameter to wait for the \"collect error samples\" job to finish."
+        }
+      },
       "CollectStatisticsOnTableQueueJobParameters" : {
         "type" : "object",
         "properties" : {
@@ -24616,14 +25983,6 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
-          "total_collectors_executed" : {
-            "type" : "integer",
-            "description" : "The count of executed statistics collectors.",
-            "format" : "int32",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          },
           "columns_analyzed" : {
             "type" : "integer",
             "description" : "The count of columns for which DQOps executed a collector and tried to read the statistics.",
@@ -24667,11 +26026,6 @@
               "type" : "integer",
               "format" : "int32",
               "description" : "The total count of all executed statistics collectors."
-            },
-            "total_collectors_executed" : {
-              "type" : "integer",
-              "format" : "int32",
-              "description" : "The count of executed statistics collectors."
             },
             "columns_analyzed" : {
               "type" : "integer",
@@ -36449,7 +37803,7 @@
           },
           "column_name" : {
             "type" : "string",
-            "description" : "Column names.",
+            "description" : "Column name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -36469,7 +37823,7 @@
           },
           "sql_expression" : {
             "type" : "string",
-            "description" : "SQL expression.",
+            "description" : "SQL expression for a calculated column, or a column that applies additional data transformation to the original column value. The original column value is referenced by a token {column}.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -36489,30 +37843,37 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "id" : {
+            "type" : "boolean",
+            "description" : "Marks columns that are part of a primary or a unique key. DQOps captures their values during error sampling to match invalid values to the rows in which the value was found.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "has_any_configured_checks" : {
             "type" : "boolean",
-            "description" : "True when the column has any checks configured.",
+            "description" : "True when the column has any checks configured (read-only).",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "has_any_configured_profiling_checks" : {
             "type" : "boolean",
-            "description" : "True when the column has any profiling checks configured.",
+            "description" : "True when the column has any profiling checks configured (read-only).",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "has_any_configured_monitoring_checks" : {
             "type" : "boolean",
-            "description" : "True when the column has any monitoring checks configured.",
+            "description" : "True when the column has any monitoring checks configured (read-only).",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "has_any_configured_partition_checks" : {
             "type" : "boolean",
-            "description" : "True when the column has any partition checks configured.",
+            "description" : "True when the column has any partition checks configured (read-only).",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -36603,7 +37964,7 @@
             },
             "column_name" : {
               "type" : "string",
-              "description" : "Column names."
+              "description" : "Column name."
             },
             "labels" : {
               "type" : "array",
@@ -36614,7 +37975,7 @@
             },
             "sql_expression" : {
               "type" : "string",
-              "description" : "SQL expression."
+              "description" : "SQL expression for a calculated column, or a column that applies additional data transformation to the original column value. The original column value is referenced by a token {column}."
             },
             "column_hash" : {
               "type" : "integer",
@@ -36625,21 +37986,25 @@
               "type" : "boolean",
               "description" : "Disables all data quality checks on the column. Data quality checks will not be executed."
             },
+            "id" : {
+              "type" : "boolean",
+              "description" : "Marks columns that are part of a primary or a unique key. DQOps captures their values during error sampling to match invalid values to the rows in which the value was found."
+            },
             "has_any_configured_checks" : {
               "type" : "boolean",
-              "description" : "True when the column has any checks configured."
+              "description" : "True when the column has any checks configured (read-only)."
             },
             "has_any_configured_profiling_checks" : {
               "type" : "boolean",
-              "description" : "True when the column has any profiling checks configured."
+              "description" : "True when the column has any profiling checks configured (read-only)."
             },
             "has_any_configured_monitoring_checks" : {
               "type" : "boolean",
-              "description" : "True when the column has any monitoring checks configured."
+              "description" : "True when the column has any monitoring checks configured (read-only)."
             },
             "has_any_configured_partition_checks" : {
               "type" : "boolean",
-              "description" : "True when the column has any partition checks configured."
+              "description" : "True when the column has any partition checks configured (read-only)."
             },
             "type_snapshot" : {
               "description" : "Column data type that was retrieved when the table metadata was imported.",
@@ -45138,12 +46503,12 @@
             "types" : [ "string" ]
           },
           "max_value" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0",
-            "format" : "int32",
+            "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "number" ]
           }
         },
         "exampleSetFlag" : false,
@@ -45156,8 +46521,8 @@
               "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
             },
             "max_value" : {
-              "type" : "integer",
-              "format" : "int32",
+              "type" : "number",
+              "format" : "double",
               "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0"
             }
           }
@@ -45174,12 +46539,12 @@
             "types" : [ "string" ]
           },
           "max_value" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0",
-            "format" : "int32",
+            "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "number" ]
           }
         },
         "exampleSetFlag" : false,
@@ -45192,8 +46557,8 @@
               "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
             },
             "max_value" : {
-              "type" : "integer",
-              "format" : "int32",
+              "type" : "number",
+              "format" : "double",
               "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0"
             }
           }
@@ -45210,12 +46575,12 @@
             "types" : [ "string" ]
           },
           "min_value" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0",
-            "format" : "int32",
+            "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "number" ]
           }
         },
         "exampleSetFlag" : false,
@@ -45228,8 +46593,8 @@
               "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
             },
             "min_value" : {
-              "type" : "integer",
-              "format" : "int32",
+              "type" : "number",
+              "format" : "double",
               "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0"
             }
           }
@@ -45246,12 +46611,12 @@
             "types" : [ "string" ]
           },
           "min_value" : {
-            "type" : "integer",
+            "type" : "number",
             "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0",
-            "format" : "int32",
+            "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "number" ]
           }
         },
         "exampleSetFlag" : false,
@@ -45264,8 +46629,8 @@
               "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
             },
             "min_value" : {
-              "type" : "integer",
-              "format" : "int32",
+              "type" : "number",
+              "format" : "double",
               "description" : "This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0"
             }
           }
@@ -46925,7 +48290,7 @@
             },
             "date_format" : {
               "type" : "string",
-              "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+              "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
               "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
             }
           }
@@ -46980,7 +48345,7 @@
             },
             "date_format" : {
               "type" : "string",
-              "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+              "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
               "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
             }
           }
@@ -50731,6 +52096,13 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "id" : {
+            "type" : "boolean",
+            "description" : "True when this column is a part of the primary key or a business key that identifies a row. Error sampling captures values of id columns to identify the row where the error sample was found.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "profiling_checks" : {
             "$ref" : "#/components/schemas/ColumnProfilingCheckCategoriesSpec",
             "extensions" : { },
@@ -50794,6 +52166,10 @@
               "description" : "Column data type that was retrieved when the table metadata was imported.",
               "$ref" : "#/components/schemas/ColumnTypeSnapshotSpec",
               "originalRef" : "#/components/schemas/ColumnTypeSnapshotSpec"
+            },
+            "id" : {
+              "type" : "boolean",
+              "description" : "True when this column is a part of the primary key or a business key that identifies a row. Error sampling captures values of id columns to identify the row where the error sample was found."
             },
             "profiling_checks" : {
               "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
@@ -54193,7 +55569,7 @@
             },
             "date_format" : {
               "type" : "string",
-              "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+              "description" : "Expected date format. The sensor will try to parse the column records and cast the data using this format.",
               "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
             }
           }
@@ -63469,6 +64845,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "deleteErrorSamples" : {
+            "type" : "boolean",
+            "description" : "Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "columnNames" : {
             "type" : "array",
             "description" : "The list of column names to delete the data for column level results or errors only for selected columns.",
@@ -63598,6 +64981,10 @@
             "deleteSensorReadouts" : {
               "type" : "boolean",
               "description" : "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts."
+            },
+            "deleteErrorSamples" : {
+              "type" : "boolean",
+              "description" : "Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples."
             },
             "columnNames" : {
               "type" : "array",
@@ -64032,6 +65419,16 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "collectErrorSamplesParameters" : {
+            "$ref" : "#/components/schemas/CollectErrorSamplesParameters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "collectErrorSamplesOnTableParameters" : {
+            "$ref" : "#/components/schemas/CollectErrorSamplesOnTableParameters",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "importSchemaParameters" : {
             "$ref" : "#/components/schemas/ImportSchemaQueueJobParameters",
             "extensions" : { },
@@ -64059,46 +65456,67 @@
           "type" : "object",
           "properties" : {
             "synchronizeRootFolderParameters" : {
+              "description" : "The job parameters for the \"synchronize folder\" queue job.",
               "$ref" : "#/components/schemas/SynchronizeRootFolderDqoQueueJobParameters",
               "originalRef" : "#/components/schemas/SynchronizeRootFolderDqoQueueJobParameters"
             },
             "synchronizeMultipleFoldersParameters" : {
+              "description" : "The job parameters for the \"synchronize multiple folders\" queue job.",
               "$ref" : "#/components/schemas/SynchronizeMultipleFoldersDqoQueueJobParameters",
               "originalRef" : "#/components/schemas/SynchronizeMultipleFoldersDqoQueueJobParameters"
             },
             "runScheduledChecksParameters" : {
+              "description" : "The job parameters for the \"run scheduled checks cron\" queue job.",
               "$ref" : "#/components/schemas/MonitoringScheduleSpec",
               "originalRef" : "#/components/schemas/MonitoringScheduleSpec"
             },
             "runChecksParameters" : {
+              "description" : "The job parameters for the \"run checks\" queue job.",
               "$ref" : "#/components/schemas/RunChecksParameters",
               "originalRef" : "#/components/schemas/RunChecksParameters"
             },
             "runChecksOnTableParameters" : {
+              "description" : "The job parameters for the \"run checks on table\" queue job.",
               "$ref" : "#/components/schemas/RunChecksOnTableParameters",
               "originalRef" : "#/components/schemas/RunChecksOnTableParameters"
             },
             "collectStatisticsParameters" : {
+              "description" : "The job parameters for the \"collect statistics\" queue job.",
               "$ref" : "#/components/schemas/CollectStatisticsQueueJobParameters",
               "originalRef" : "#/components/schemas/CollectStatisticsQueueJobParameters"
             },
             "collectStatisticsOnTableParameters" : {
+              "description" : "The job parameters for the \"collect statistics on table\" queue job.",
               "$ref" : "#/components/schemas/CollectStatisticsOnTableQueueJobParameters",
               "originalRef" : "#/components/schemas/CollectStatisticsOnTableQueueJobParameters"
             },
+            "collectErrorSamplesParameters" : {
+              "description" : "The job parameters for the \"collect error samples\" queue job.",
+              "$ref" : "#/components/schemas/CollectErrorSamplesParameters",
+              "originalRef" : "#/components/schemas/CollectErrorSamplesParameters"
+            },
+            "collectErrorSamplesOnTableParameters" : {
+              "description" : "The job parameters for the \"collect error samples on table\" queue job.",
+              "$ref" : "#/components/schemas/CollectErrorSamplesOnTableParameters",
+              "originalRef" : "#/components/schemas/CollectErrorSamplesOnTableParameters"
+            },
             "importSchemaParameters" : {
+              "description" : "The job parameters for the \"collect schema\" queue job.",
               "$ref" : "#/components/schemas/ImportSchemaQueueJobParameters",
               "originalRef" : "#/components/schemas/ImportSchemaQueueJobParameters"
             },
             "importTableParameters" : {
+              "description" : "The job parameters for the \"collect tables\" queue job.",
               "$ref" : "#/components/schemas/ImportTablesQueueJobParameters",
               "originalRef" : "#/components/schemas/ImportTablesQueueJobParameters"
             },
             "deleteStoredDataParameters" : {
+              "description" : "The job parameters for the \"delete stored data\" queue job.",
               "$ref" : "#/components/schemas/DeleteStoredDataQueueJobParameters",
               "originalRef" : "#/components/schemas/DeleteStoredDataQueueJobParameters"
             },
             "repairStoredDataParameters" : {
+              "description" : "The job parameters for the \"repair stored data\" queue job.",
               "$ref" : "#/components/schemas/RepairStoredDataQueueJobParameters",
               "originalRef" : "#/components/schemas/RepairStoredDataQueueJobParameters"
             }
@@ -64151,7 +65569,7 @@
             },
             "jobType" : {
               "type" : "string",
-              "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
+              "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
             },
             "parameters" : {
               "$ref" : "#/components/schemas/DqoJobEntryParametersModel",
@@ -64888,7 +66306,7 @@
             "storage_type" : {
               "type" : "string",
               "description" : "The storage type.",
-              "enum" : [ "local", "s3", "azure" ]
+              "enum" : [ "local", "s3", "azure", "gcs" ]
             },
             "aws_authentication_mode" : {
               "type" : "string",
@@ -65314,6 +66732,444 @@
             "tableComparison" : {
               "type" : "string",
               "description" : "Table comparison name"
+            }
+          }
+        }
+      },
+      "ErrorSampleEntryModel" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Unique ID of the error sample value",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "result" : {
+            "type" : "object",
+            "properties" : { },
+            "description" : "Error sample (value)",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "description" : "Error sample (value)",
+              "properties" : { }
+            }
+          },
+          "resultDataType" : {
+            "$ref" : "#/components/schemas/ErrorSampleResultDataType",
+            "exampleSetFlag" : false
+          },
+          "collectedAt" : {
+            "type" : "string",
+            "description" : "The local timestamp when the error sample was collected",
+            "format" : "date-time",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sampleIndex" : {
+            "type" : "integer",
+            "description" : "The index of the result that was returned. Identifies a single error sample within a list.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "checkType" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
+          "timeGradient" : {
+            "$ref" : "#/components/schemas/TimePeriodGradient",
+            "exampleSetFlag" : false
+          },
+          "durationMs" : {
+            "type" : "integer",
+            "description" : "Execution duration (ms)",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "executedAt" : {
+            "type" : "integer",
+            "description" : "Executed at",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "rowId1" : {
+            "type" : "string",
+            "description" : "The value of the first column of the unique identifier that identifies a row containing the error sample.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "rowId2" : {
+            "type" : "string",
+            "description" : "The value of the second column of the unique identifier that identifies a row containing the error sample.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "rowId3" : {
+            "type" : "string",
+            "description" : "The value of the third column of the unique identifier that identifies a row containing the error sample.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "rowId4" : {
+            "type" : "string",
+            "description" : "The value of the fourth column of the unique identifier that identifies a row containing the error sample.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "rowId5" : {
+            "type" : "string",
+            "description" : "The value of the fifth column of the unique identifier that identifies a row containing the error sample.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "columnName" : {
+            "type" : "string",
+            "description" : "Column name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "dataGroup" : {
+            "type" : "string",
+            "description" : "Data group",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "provider" : {
+            "type" : "string",
+            "description" : "Provider name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "qualityDimension" : {
+            "type" : "string",
+            "description" : "Data quality dimension",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "sensorName" : {
+            "type" : "string",
+            "description" : "Sensor name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "tableComparison" : {
+            "type" : "string",
+            "description" : "Table comparison name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "description" : "Unique ID of the error sample value"
+            },
+            "result" : {
+              "type" : "object",
+              "description" : "Error sample (value)",
+              "properties" : { }
+            },
+            "resultDataType" : {
+              "type" : "string",
+              "description" : "Error sample result data type",
+              "enum" : [ "null", "boolean", "string", "integer", "float", "date", "datetime", "instant", "time" ]
+            },
+            "collectedAt" : {
+              "type" : "string",
+              "format" : "date-time",
+              "description" : "The local timestamp when the error sample was collected"
+            },
+            "sampleIndex" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The index of the result that was returned. Identifies a single error sample within a list."
+            },
+            "checkType" : {
+              "type" : "string",
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
+            },
+            "timeGradient" : {
+              "type" : "string",
+              "description" : "Time gradient",
+              "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
+            },
+            "durationMs" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "Execution duration (ms)"
+            },
+            "executedAt" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "Executed at"
+            },
+            "rowId1" : {
+              "type" : "string",
+              "description" : "The value of the first column of the unique identifier that identifies a row containing the error sample."
+            },
+            "rowId2" : {
+              "type" : "string",
+              "description" : "The value of the second column of the unique identifier that identifies a row containing the error sample."
+            },
+            "rowId3" : {
+              "type" : "string",
+              "description" : "The value of the third column of the unique identifier that identifies a row containing the error sample."
+            },
+            "rowId4" : {
+              "type" : "string",
+              "description" : "The value of the fourth column of the unique identifier that identifies a row containing the error sample."
+            },
+            "rowId5" : {
+              "type" : "string",
+              "description" : "The value of the fifth column of the unique identifier that identifies a row containing the error sample."
+            },
+            "columnName" : {
+              "type" : "string",
+              "description" : "Column name"
+            },
+            "dataGroup" : {
+              "type" : "string",
+              "description" : "Data group"
+            },
+            "provider" : {
+              "type" : "string",
+              "description" : "Provider name"
+            },
+            "qualityDimension" : {
+              "type" : "string",
+              "description" : "Data quality dimension"
+            },
+            "sensorName" : {
+              "type" : "string",
+              "description" : "Sensor name"
+            },
+            "tableComparison" : {
+              "type" : "string",
+              "description" : "Table comparison name"
+            }
+          }
+        }
+      },
+      "ErrorSamplerResult" : {
+        "type" : "object",
+        "properties" : {
+          "executed_error_samplers" : {
+            "type" : "integer",
+            "description" : "The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. ",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "columns_analyzed" : {
+            "type" : "integer",
+            "description" : "The count of columns for which DQOps executed an error sampler and tried to collect error samples.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "columns_successfully_analyzed" : {
+            "type" : "integer",
+            "description" : "The count of columns for which DQOps managed to obtain error samples.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "total_error_samplers_failed" : {
+            "type" : "integer",
+            "description" : "The count of error samplers that failed to execute.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "total_error_samples_collected" : {
+            "type" : "integer",
+            "description" : "The total number of error samples (values) that were collected.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "description" : "Returns the result with the summary of the error samples collected.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "executed_error_samplers" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. "
+            },
+            "columns_analyzed" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The count of columns for which DQOps executed an error sampler and tried to collect error samples."
+            },
+            "columns_successfully_analyzed" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The count of columns for which DQOps managed to obtain error samples."
+            },
+            "total_error_samplers_failed" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The count of error samplers that failed to execute."
+            },
+            "total_error_samples_collected" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "The total number of error samples (values) that were collected."
+            }
+          },
+          "description" : "Returns the result with the summary of the error samples collected."
+        }
+      },
+      "ErrorSamplesListModel" : {
+        "type" : "object",
+        "properties" : {
+          "checkName" : {
+            "type" : "string",
+            "description" : "Check name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "checkDisplayName" : {
+            "type" : "string",
+            "description" : "Check display name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "checkType" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
+          "checkHash" : {
+            "type" : "integer",
+            "description" : "Check hash",
+            "format" : "int64",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "checkCategory" : {
+            "type" : "string",
+            "description" : "Check category name",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "dataGroupsNames" : {
+            "type" : "array",
+            "description" : "Data groups list",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "dataGroup" : {
+            "type" : "string",
+            "description" : "Selected data group",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "errorSamplesEntries" : {
+            "type" : "array",
+            "description" : "Error samples entries",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ErrorSampleEntryModel",
+              "extensions" : { },
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "checkName" : {
+              "type" : "string",
+              "description" : "Check name"
+            },
+            "checkDisplayName" : {
+              "type" : "string",
+              "description" : "Check display name"
+            },
+            "checkType" : {
+              "type" : "string",
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
+            },
+            "checkHash" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "Check hash"
+            },
+            "checkCategory" : {
+              "type" : "string",
+              "description" : "Check category name"
+            },
+            "dataGroupsNames" : {
+              "type" : "array",
+              "description" : "Data groups list",
+              "items" : {
+                "type" : "string"
+              }
+            },
+            "dataGroup" : {
+              "type" : "string",
+              "description" : "Selected data group"
+            },
+            "errorSamplesEntries" : {
+              "type" : "array",
+              "description" : "Error samples entries",
+              "items" : {
+                "$ref" : "#/components/schemas/ErrorSampleEntryModel",
+                "originalRef" : "#/components/schemas/ErrorSampleEntryModel"
+              }
             }
           }
         }
@@ -67333,7 +69189,7 @@
           "type" : "object"
         }
       },
-      "MonoDqoQueueJobId" : {
+      "MonoResponseEntityMonoDqoQueueJobId" : {
         "type" : "object",
         "exampleSetFlag" : false,
         "types" : [ "object" ],
@@ -67341,7 +69197,7 @@
           "type" : "object"
         }
       },
-      "MonoObject" : {
+      "MonoResponseEntityMonoObject" : {
         "type" : "object",
         "exampleSetFlag" : false,
         "types" : [ "object" ],
@@ -67349,7 +69205,7 @@
           "type" : "object"
         }
       },
-      "MonoVoid" : {
+      "MonoResponseEntityMonoVoid" : {
         "type" : "object",
         "exampleSetFlag" : false,
         "types" : [ "object" ],
@@ -68322,6 +70178,13 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
+          "errorSamplingTemplate" : {
+            "type" : "string",
+            "description" : "Provider specific Jinja2 SQL template for capturing error samples",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "custom" : {
             "type" : "boolean",
             "description" : "Whether the provider sensor is a User Home provider sensor",
@@ -68370,6 +70233,10 @@
             "sqlTemplate" : {
               "type" : "string",
               "description" : "Provider specific Jinja2 SQL template"
+            },
+            "errorSamplingTemplate" : {
+              "type" : "string",
+              "description" : "Provider specific Jinja2 SQL template for capturing error samples"
             },
             "custom" : {
               "type" : "boolean",
@@ -69230,6 +71097,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "collect_error_samples" : {
+            "type" : "boolean",
+            "description" : "Set the value to true to collect error samples for failed data quality checks.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "run_checks_result" : {
             "$ref" : "#/components/schemas/RunChecksResult",
             "extensions" : { },
@@ -69270,6 +71144,10 @@
               "type" : "boolean",
               "description" : "Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered."
             },
+            "collect_error_samples" : {
+              "type" : "boolean",
+              "description" : "Set the value to true to collect error samples for failed data quality checks."
+            },
             "run_checks_result" : {
               "description" : "The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.",
               "$ref" : "#/components/schemas/RunChecksResult",
@@ -69291,6 +71169,13 @@
             "$ref" : "#/components/schemas/TimeWindowFilterParameters",
             "extensions" : { },
             "exampleSetFlag" : false
+          },
+          "collect_error_samples" : {
+            "type" : "boolean",
+            "description" : "Set the value to true to collect error samples for failed data quality checks.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
           },
           "dummy_execution" : {
             "type" : "boolean",
@@ -69320,6 +71205,10 @@
               "description" : "Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.",
               "$ref" : "#/components/schemas/TimeWindowFilterParameters",
               "originalRef" : "#/components/schemas/TimeWindowFilterParameters"
+            },
+            "collect_error_samples" : {
+              "type" : "boolean",
+              "description" : "Set the value to true to collect error samples for failed data quality checks."
             },
             "dummy_execution" : {
               "type" : "boolean",
@@ -71563,7 +73452,7 @@
           "properties" : {
             "folder" : {
               "type" : "string",
-              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
+              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_error_samples", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
             },
             "direction" : {
               "type" : "string",
@@ -72611,6 +74500,20 @@
             "$ref" : "#/components/schemas/CheckTimeScale",
             "exampleSetFlag" : false
           },
+          "compared_table_filter" : {
+            "type" : "string",
+            "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "reference_table_filter" : {
+            "type" : "string",
+            "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "grouping_columns" : {
             "type" : "array",
             "description" : "List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.",
@@ -72682,6 +74585,14 @@
               "type" : "string",
               "description" : "The time scale that this check comparison configuration is applicable. Supported values are 'daily' and 'monthly' for monitoring and partitioned checks or an empty value for profiling checks.",
               "enum" : [ "daily", "monthly" ]
+            },
+            "compared_table_filter" : {
+              "type" : "string",
+              "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table."
+            },
+            "reference_table_filter" : {
+              "type" : "string",
+              "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table."
             },
             "grouping_columns" : {
               "type" : "array",
@@ -73018,6 +74929,20 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "compared_table_filter" : {
+            "type" : "string",
+            "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "reference_table_filter" : {
+            "type" : "string",
+            "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "grouping_columns" : {
             "type" : "array",
             "description" : "List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.",
@@ -73123,6 +75048,14 @@
               "description" : "The schema and table name of the reference table that has the expected data.",
               "$ref" : "#/components/schemas/PhysicalTableName",
               "originalRef" : "#/components/schemas/PhysicalTableName"
+            },
+            "compared_table_filter" : {
+              "type" : "string",
+              "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table."
+            },
+            "reference_table_filter" : {
+              "type" : "string",
+              "description" : "Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table."
             },
             "grouping_columns" : {
               "type" : "array",
@@ -74380,6 +76313,154 @@
                 "$ref" : "#/definitions/TableComparisonDailyPartitionedChecksSpec",
                 "originalRef" : "#/definitions/TableComparisonDailyPartitionedChecksSpec"
               }
+            }
+          }
+        }
+      },
+      "TableDataFreshnessAnomalyCheckSpec" : {
+        "type" : "object",
+        "properties" : {
+          "schedule_override" : {
+            "$ref" : "#/components/schemas/MonitoringScheduleSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "comments" : {
+            "type" : "array",
+            "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/CommentSpec",
+              "extensions" : { },
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          },
+          "disabled" : {
+            "type" : "boolean",
+            "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "exclude_from_kpi" : {
+            "type" : "boolean",
+            "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "include_in_sla" : {
+            "type" : "boolean",
+            "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "quality_dimension" : {
+            "type" : "string",
+            "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "display_name" : {
+            "type" : "string",
+            "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data_grouping" : {
+            "type" : "string",
+            "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "parameters" : {
+            "$ref" : "#/components/schemas/TableTimelinessDataFreshnessSensorParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "warning" : {
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "error" : {
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "fatal" : {
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "schedule_override" : {
+              "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+              "$ref" : "#/components/schemas/MonitoringScheduleSpec",
+              "originalRef" : "#/components/schemas/MonitoringScheduleSpec"
+            },
+            "comments" : {
+              "type" : "array",
+              "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+              "items" : {
+                "$ref" : "#/components/schemas/CommentSpec",
+                "originalRef" : "#/components/schemas/CommentSpec"
+              }
+            },
+            "disabled" : {
+              "type" : "boolean",
+              "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+            },
+            "exclude_from_kpi" : {
+              "type" : "boolean",
+              "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+            },
+            "include_in_sla" : {
+              "type" : "boolean",
+              "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+            },
+            "quality_dimension" : {
+              "type" : "string",
+              "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+            },
+            "display_name" : {
+              "type" : "string",
+              "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+            },
+            "data_grouping" : {
+              "type" : "string",
+              "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+            },
+            "parameters" : {
+              "description" : "Max days since most recent event sensor parameters",
+              "$ref" : "#/components/schemas/TableTimelinessDataFreshnessSensorParametersSpec",
+              "originalRef" : "#/components/schemas/TableTimelinessDataFreshnessSensorParametersSpec"
+            },
+            "warning" : {
+              "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+            },
+            "error" : {
+              "description" : "Default alerting threshold for max days since most recent event that raises a data quality error (alert)",
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+            },
+            "fatal" : {
+              "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -79250,6 +81331,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "daily_data_freshness_anomaly" : {
+            "$ref" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "daily_data_staleness" : {
             "$ref" : "#/components/schemas/TableDataStalenessCheckSpec",
             "extensions" : { },
@@ -79275,17 +81361,22 @@
               }
             },
             "daily_data_freshness" : {
-              "description" : "Daily  calculating the number of days since the most recent event timestamp (freshness)",
+              "description" : "Daily calculating the number of days since the most recent event timestamp (freshness)",
               "$ref" : "#/components/schemas/TableDataFreshnessCheckSpec",
               "originalRef" : "#/components/schemas/TableDataFreshnessCheckSpec"
             },
+            "daily_data_freshness_anomaly" : {
+              "description" : "Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.",
+              "$ref" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec",
+              "originalRef" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec"
+            },
             "daily_data_staleness" : {
-              "description" : "Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
+              "description" : "Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
               "$ref" : "#/components/schemas/TableDataStalenessCheckSpec",
               "originalRef" : "#/components/schemas/TableDataStalenessCheckSpec"
             },
             "daily_data_ingestion_delay" : {
-              "description" : "Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp",
+              "description" : "Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp",
               "$ref" : "#/components/schemas/TableDataIngestionDelayCheckSpec",
               "originalRef" : "#/components/schemas/TableDataIngestionDelayCheckSpec"
             }
@@ -79586,6 +81677,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "profile_data_freshness_anomaly" : {
+            "$ref" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "profile_data_staleness" : {
             "$ref" : "#/components/schemas/TableDataStalenessCheckSpec",
             "extensions" : { },
@@ -79614,6 +81710,11 @@
               "description" : "Calculates the number of days since the most recent event timestamp (freshness)",
               "$ref" : "#/components/schemas/TableDataFreshnessCheckSpec",
               "originalRef" : "#/components/schemas/TableDataFreshnessCheckSpec"
+            },
+            "profile_data_freshness_anomaly" : {
+              "description" : "Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.",
+              "$ref" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec",
+              "originalRef" : "#/components/schemas/TableDataFreshnessAnomalyCheckSpec"
             },
             "profile_data_staleness" : {
               "description" : "Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)",
@@ -80785,7 +82886,7 @@
       "CheckResultSortOrder" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "executedAt", "checkHash", "checkCategory", "checkName", "checkDisplayName", "checkType", "actualValue", "expectedValue", "severity", "columnName", "dataGroup", "timeGradient", "timePeriod", "qualityDimension", "sensorName" ]
+        "enum" : [ "executedAt", "checkHash", "checkCategory", "checkName", "checkDisplayName", "checkType", "actualValue", "expectedValue", "severity", "columnName", "dataGroup", "timeGradient", "timePeriod", "qualityDimension", "sensorName", "updatedAt" ]
       },
       "IncidentStatus" : {
         "type" : "string",
@@ -80837,7 +82938,7 @@
         "exampleSetFlag" : false,
         "enum" : [ "unchanged", "changed", "synchronizing" ]
       },
-      "StatisticsDataScope" : {
+      "ErrorSamplesDataScope" : {
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "table", "data_group" ]
@@ -80846,6 +82947,11 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "queued", "running", "waiting", "finished", "failed", "cancel_requested", "cancelled" ]
+      },
+      "StatisticsDataScope" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "table", "data_group" ]
       },
       "TextBuiltInDateFormats" : {
         "type" : "string",
@@ -80905,7 +83011,7 @@
       "DqoJobType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
+        "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "collect_error_samples", "collect_error_samples_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
       },
       "DuckdbReadMode" : {
         "type" : "string",
@@ -80920,7 +83026,7 @@
       "DuckdbStorageType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "local", "s3", "azure" ]
+        "enum" : [ "local", "s3", "azure", "gcs" ]
       },
       "AwsAuthenticationMode" : {
         "type" : "string",
@@ -80936,6 +83042,11 @@
         "type" : "string",
         "exampleSetFlag" : false,
         "enum" : [ "connection", "table_override", "check_override" ]
+      },
+      "ErrorSampleResultDataType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "null", "boolean", "string", "integer", "float", "date", "datetime", "instant", "time" ]
       },
       "JsonFormatType" : {
         "type" : "string",
@@ -81030,7 +83141,7 @@
       "DqoRoot" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
+        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_error_samples", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
       },
       "ProfilingTimePeriodTruncation" : {
         "type" : "string",

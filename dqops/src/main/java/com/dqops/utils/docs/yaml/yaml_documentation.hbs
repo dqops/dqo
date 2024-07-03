@@ -8,22 +8,7 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 ## {{classSimpleName}}
 {{classDescription}}
 
-{{#if (eq classSimpleName "CommentsListSpec")}}
-{{else}}
-{{#if (eq classSimpleName "LabelSetSpec")}}
-{{else}}
-{{#if (eq classSimpleName "DashboardsFolderListSpec")}}
-{{else}}
-{{#if (eq classSimpleName "ParameterDefinitionsListSpec")}}
-{{else}}
-{{#if (eq classSimpleName "DataStreamMappingSpecMap")}}
-{{else}}
-{{#if (eq classSimpleName "CustomCheckSpecMap")}}
-{{else}}
-{{#if (eq classSimpleName "ColumnSpecMap")}}
-{{else}}
-{{#if (eq classSimpleName "DashboardListSpec")}}
-{{else}}
+{{#if objectFields}}
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -31,13 +16,6 @@ The structure of this object is described below
 {{#each objectFields}}|<span class="no-wrap-code ">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{#if enumValuesByName}}{{#each enumValuesByName}}*{{this.yamlName}}*<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
 {{/each}}
 {{/if}}
-{{/if}}
-{{/if}}
-{{/if}}
-{{/if}}
-{{/if}}
-{{/if}}
-{{/if}}
-___
 
+___
 {{/each}}

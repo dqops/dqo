@@ -173,11 +173,20 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DqoUserProfileModel*](./environment.md#dqouserprofilemodel)|The model that describes the current user and his access rights.|
 
 
+## error_samples
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*ErrorSampleResultDataType*](./error_samples.md#errorsampleresultdatatype)|Enumeration of data types that were detected as the error sample collector result.|
+|[*TimePeriodGradient*](./error_samples.md#timeperiodgradient)|Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).|
+|[*ErrorSampleEntryModel*](./error_samples.md#errorsampleentrymodel)|Detailed error samples captured for a single check. Represent one row in the error_samples table.|
+|[*ErrorSamplesListModel*](./error_samples.md#errorsampleslistmodel)|List of error samples for a single check. Returned in the context of a single data group, with a supplied list of other data groups.|
+
+
 ## errors
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*TimePeriodGradient*](./errors.md#timeperiodgradient)|Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).|
 |[*ErrorEntryModel*](./errors.md#errorentrymodel)|Detailed error statuses for a single check. Represent one row in the errors table.|
 |[*ErrorsListModel*](./errors.md#errorslistmodel)|Error detailed statuses. Returned in the context of a single data group, with a supplied list of other data groups.|
 
@@ -203,8 +212,13 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[*CollectStatisticsResult*](./jobs.md#collectstatisticsresult)||
+|[*TimeWindowFilterParameters*](./jobs.md#timewindowfilterparameters)||
+|[*ErrorSamplesDataScope*](./jobs.md#errorsamplesdatascope)|Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.|
+|[*ErrorSamplerResult*](./jobs.md#errorsamplerresult)||
+|[*CollectErrorSamplesParameters*](./jobs.md#collecterrorsamplesparameters)||
 |[*DqoJobStatus*](./jobs.md#dqojobstatus)|Job status of a job on the queue.|
+|[*CollectErrorSamplesResult*](./jobs.md#collecterrorsamplesresult)||
+|[*CollectStatisticsResult*](./jobs.md#collectstatisticsresult)||
 |[*CollectStatisticsQueueJobResult*](./jobs.md#collectstatisticsqueuejobresult)||
 |[*DeleteStoredDataQueueJobParameters*](./jobs.md#deletestoreddataqueuejobparameters)|Parameters for the &quot;delete stored data* queue job that deletes data from parquet files stored in DQOps user home&#x27;s *.data* directory.|
 |[*DqoRoot*](./jobs.md#dqoroot)|DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud). It is also used as a lock scope.|
@@ -217,7 +231,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SynchronizeRootFolderParameters*](./jobs.md#synchronizerootfolderparameters)|Parameter object for starting a file synchronization job. Identifies the folder and direction that should be synchronized.|
 |[*SynchronizeRootFolderDqoQueueJobParameters*](./jobs.md#synchronizerootfolderdqoqueuejobparameters)|Parameters object for a job that synchronizes one folder with DQOps Cloud.|
 |[*SynchronizeMultipleFoldersDqoQueueJobParameters*](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)|Simple object for starting multiple folder synchronization jobs with the same configuration.|
-|[*TimeWindowFilterParameters*](./jobs.md#timewindowfilterparameters)||
 |[*RunChecksResult*](./jobs.md#runchecksresult)||
 |[*RunChecksParameters*](./jobs.md#runchecksparameters)||
 |[*RunChecksOnTableParameters*](./jobs.md#runchecksontableparameters)||
@@ -226,6 +239,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*StatisticsDataScope*](./jobs.md#statisticsdatascope)|Enumeration of possible statistics scopes. &quot;table&quot; - a whole table was profiled, &quot;data_groupings&quot; - groups of rows were profiled.|
 |[*CollectStatisticsQueueJobParameters*](./jobs.md#collectstatisticsqueuejobparameters)||
 |[*CollectStatisticsOnTableQueueJobParameters*](./jobs.md#collectstatisticsontablequeuejobparameters)||
+|[*CollectErrorSamplesOnTableParameters*](./jobs.md#collecterrorsamplesontableparameters)||
 |[*ImportSchemaQueueJobParameters*](./jobs.md#importschemaqueuejobparameters)|Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.|
 |[*ImportTablesQueueJobParameters*](./jobs.md#importtablesqueuejobparameters)|Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that imports selected tables from the source database.|
 |[*RepairStoredDataQueueJobParameters*](./jobs.md#repairstoreddataqueuejobparameters)|Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job that repairs data stored in user&#x27;s &quot;.data&quot; directory.|

@@ -41,13 +41,13 @@ public class ColumnNumericNumberBelowMinValueCountSensorParametersSpec extends A
     };
 
     @JsonPropertyDescription("This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0")
-    private int minValue = 0;
+    private Double minValue = 0.0;
 
     /**
      * Returns the min value.
      * @return minValue.
      */
-    public int getMinValue() {
+    public Double getMinValue() {
         return minValue;
     }
 
@@ -55,7 +55,7 @@ public class ColumnNumericNumberBelowMinValueCountSensorParametersSpec extends A
      * Sets the min value.
      * @param minValue minvalue.
      */
-    public void setMinValue(int minValue) {
+    public void setMinValue(Double minValue) {
         this.setDirtyIf(!Objects.equals(this.minValue, minValue));
         this.minValue = minValue;
     }

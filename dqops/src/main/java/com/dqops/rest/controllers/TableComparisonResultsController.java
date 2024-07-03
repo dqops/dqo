@@ -18,14 +18,14 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
-import com.dqops.data.checkresults.services.CheckResultsDataService;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.models.TableComparisonResultsModel;
+import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +34,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).
@@ -80,37 +82,39 @@ public class TableComparisonResultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonProfilingResults(
+    public Mono<ResponseEntity<Mono<TableComparisonResultsModel>>> getTableComparisonProfilingResults(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                physicalTableName, true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.profiling, null,
-                tableComparisonConfigurationName, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+            TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                    connectionName, physicalTableName, CheckType.profiling, null,
+                    tableComparisonConfigurationName, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -136,38 +140,40 @@ public class TableComparisonResultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonMonitoringResults(
+    public Mono<ResponseEntity<Mono<TableComparisonResultsModel>>> getTableComparisonMonitoringResults(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                physicalTableName, true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.monitoring, timeScale,
-                tableComparisonConfigurationName, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+            TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                    connectionName, physicalTableName, CheckType.monitoring, timeScale,
+                    tableComparisonConfigurationName, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -193,37 +199,39 @@ public class TableComparisonResultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableComparisonResultsModel>> getTableComparisonPartitionedResults(
+    public Mono<ResponseEntity<Mono<TableComparisonResultsModel>>> getTableComparisonPartitionedResults(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                physicalTableName, true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
-                connectionName, physicalTableName, CheckType.partitioned, timeScale,
-                tableComparisonConfigurationName, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+            TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
+                    connectionName, physicalTableName, CheckType.partitioned, timeScale,
+                    tableComparisonConfigurationName, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
+        }));
     }
 }

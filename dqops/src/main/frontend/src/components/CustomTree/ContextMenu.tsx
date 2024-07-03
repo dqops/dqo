@@ -67,12 +67,14 @@ const ContextMenu = ({
 
   const handleRunChecks = (
     filter?: CheckSearchFilters,
-    value?: TimeWindowFilterParameters
+    value?: TimeWindowFilterParameters,
+    collectErrorSample?: boolean
   ) => {
     // console.log(filter, value);
     runPartitionedChecks({
       check_search_filters: filter,
-      time_window_filter: value
+      time_window_filter: value,
+      collect_error_samples: collectErrorSample
     });
     setOpen(false);
   };
@@ -169,7 +171,7 @@ const ContextMenu = ({
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
-        <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white">
+        <div className="text-gray-700 !absolute right-0 w-5 h-5 rounded-full flex items-center justify-center bg-white">
           <SvgIcon name="options" className="w-5 h-5 text-gray-500" />
         </div>
       </PopoverHandler>
@@ -202,9 +204,10 @@ const ContextMenu = ({
                 }}
                 onClick={(
                   filter: CheckSearchFilters,
-                  timeWindowFilter?: TimeWindowFilterParameters
+                  timeWindowFilter?: TimeWindowFilterParameters,
+                  collectErrorSample?: boolean
                 ) => {
-                  handleRunChecks(filter, timeWindowFilter);
+                  handleRunChecks(filter, timeWindowFilter, collectErrorSample);
                   setOpen(false);
                   setRunChecksDialogOpened(false);
                 }}

@@ -61,4 +61,29 @@ public interface ProviderSensorDefinitionWrapper extends ElementWrapper<Provider
      * @param sqlTemplateLastModified SQL Template last modified timestamp.
      */
     void setSqlTemplateLastModified(Instant sqlTemplateLastModified);
+
+    /**
+     * Returns the error sampling SQL template for the template. A check may not have an SQL template and could be implemented
+     * as a python module instead.
+     * @return Error sampling sql Template.
+     */
+    String getErrorSamplingTemplate();
+
+    /**
+     * Sets an error sampling sql template used by this provider.
+     * @param errorSamplingTemplate Error sampling sql template string.
+     */
+    void setErrorSamplingTemplate(String errorSamplingTemplate);
+
+    /**
+     * Returns the file modification timestamp when the error sampling SQL template was modified for the last time.
+     * @return Last file modification timestamp for the error sampling template.
+     */
+    Instant getErrorSamplingTemplateLastModified();
+
+    /**
+     * Sets the timestamp when the error sampling SQL template was modified for the last time.
+     * @param errorSamplingTemplateLastModified Error sampling SQL template last modified timestamp.
+     */
+    void setErrorSamplingTemplateLastModified(Instant errorSamplingTemplateLastModified);
 }

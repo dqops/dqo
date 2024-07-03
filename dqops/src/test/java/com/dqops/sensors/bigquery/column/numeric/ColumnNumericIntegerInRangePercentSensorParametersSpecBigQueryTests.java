@@ -112,7 +112,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s""";
+            WHERE (%5$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -151,7 +151,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -184,7 +184,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s""";
+            WHERE (%5$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -217,7 +217,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -258,7 +258,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 END AS actual_value,
                 analyzed_table.`date` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -295,7 +295,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 END AS actual_value,
                 analyzed_table.`nulls_ok` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -334,7 +334,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -385,7 +385,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -426,7 +426,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`nulls_ok` AS grouping_level_3
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -469,7 +469,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
@@ -483,4 +483,204 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            SELECT
+                %1$s as actual_value
+            FROM
+                `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE (%5$s)
+                  AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            LIMIT 50""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesButDataGroupingConfigured_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            WITH error_samples AS (
+                SELECT
+                    %1$s AS sample_value,
+                    analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                    analyzed_table.`mix_of_values` AS grouping_level_2,
+                    analyzed_table.`nulls_ok` AS grouping_level_3,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY
+                            analyzed_table.`strings_with_numbers`,
+                            analyzed_table.`mix_of_values`,
+                            analyzed_table.`nulls_ok`
+                        ORDER BY
+                            analyzed_table.`negative` ASC
+                    ) AS sample_index
+                FROM
+                    `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE (%5$s)
+                      AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            )
+            SELECT
+                sample_table.sample_value AS actual_value,
+                sample_table.sample_index AS sample_index,
+                sample_table.grouping_level_1 AS grouping_level_1,
+                sample_table.grouping_level_2 AS grouping_level_2,
+                sample_table.grouping_level_3 AS grouping_level_3
+            FROM error_samples AS sample_table
+            WHERE sample_table.sample_index <= 50
+            LIMIT 1000""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesNoDataStreamButIdColumnPresent_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+        runParameters.getTable().getColumns().get("id").setId(true);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            SELECT
+                %1$s as actual_value,
+                analyzed_table.`id` AS row_id_1
+            FROM
+                `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE (%5$s)
+                  AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            LIMIT 50""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesNoDataStreamButTwoIdColumnPresent_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+        runParameters.getTable().getColumns().get("id").setId(true);
+        runParameters.getTable().getColumns().get("nulls").setId(true);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            SELECT
+                %1$s as actual_value,
+                analyzed_table.`id` AS row_id_1,
+                analyzed_table.`nulls` AS row_id_2
+            FROM
+                `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE (%5$s)
+                  AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            LIMIT 50""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenErrorSamplingForProfilingNoTimeSeriesButDataGroupingConfiguredAndTwoIdColumns_thenRendersCorrectSql() {
+        this.sut.setMinValue(29L);
+        this.sut.setMaxValue(30L);
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
+        runParameters.setTimeSeries(null);
+        runParameters.getTable().getColumns().get("id").setId(true);
+        runParameters.getTable().getColumns().get("nulls").setId(true);
+        runParameters.setDataGroupings(
+                DataGroupingConfigurationSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("nulls_ok")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderErrorSamplingTemplate(runParameters);
+        String target_query = """
+            WITH error_samples AS (
+                SELECT
+                    %1$s AS sample_value,
+                    analyzed_table.`strings_with_numbers` AS grouping_level_1,
+                    analyzed_table.`mix_of_values` AS grouping_level_2,
+                    analyzed_table.`nulls_ok` AS grouping_level_3,
+                    analyzed_table.`id` AS row_id_1,
+                    analyzed_table.`nulls` AS row_id_2,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY
+                            analyzed_table.`strings_with_numbers`,
+                            analyzed_table.`mix_of_values`,
+                            analyzed_table.`nulls_ok`
+                        ORDER BY
+                            analyzed_table.`id` ASC, analyzed_table.`nulls` ASC, analyzed_table.`negative` ASC
+                    ) AS sample_index
+                FROM
+                    `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE (%5$s)
+                      AND (%1$s IS NOT NULL AND NOT (%1$s >= 29 AND %1$s <= 30))
+            )
+            SELECT
+                sample_table.sample_value AS actual_value,
+                sample_table.sample_index AS sample_index,
+                sample_table.grouping_level_1 AS grouping_level_1,
+                sample_table.grouping_level_2 AS grouping_level_2,
+                sample_table.grouping_level_3 AS grouping_level_3,
+                sample_table.row_id_1 AS row_id_1,
+                sample_table.row_id_2 AS row_id_2
+            FROM error_samples AS sample_table
+            WHERE sample_table.sample_index <= 50
+            LIMIT 1000""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
 }

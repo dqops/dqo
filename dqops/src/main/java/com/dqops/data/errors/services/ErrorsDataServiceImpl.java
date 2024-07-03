@@ -26,7 +26,6 @@ import com.dqops.data.errors.models.ErrorsListModel;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactory;
 import com.dqops.data.normalization.CommonTableNormalizationService;
-import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -51,7 +50,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Service that returns data from sensor readouts.
+ * Service that returns data from execution errors.
  */
 @Service
 public class ErrorsDataServiceImpl implements ErrorsDataService {
@@ -233,15 +232,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.textColumn(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TextColumn timeGradientColumn = sourceTable.textColumn(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sourceTable.textColumn(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         Table filteredTable = sourceTable.where(rowSelection);

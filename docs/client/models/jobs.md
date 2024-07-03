@@ -5,7 +5,7 @@ title: DQOps REST API jobs models reference
 The references of all objects used by [jobs](../operations/jobs.md) REST API operations are listed below.
 
 
-## CollectStatisticsResult
+## TimeWindowFilterParameters
 
 
 
@@ -14,12 +14,63 @@ The references of all objects used by [jobs](../operations/jobs.md) REST API ope
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`executed_statistics_collectors`</span>|The total count of all executed statistics collectors.|*integer*|
-|<span class="no-wrap-code">`total_collectors_executed`</span>|The count of executed statistics collectors.|*integer*|
-|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed a collector and tried to read the statistics.|*integer*|
-|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain statistics.|*integer*|
-|<span class="no-wrap-code">`total_collectors_failed`</span>|The count of statistics collectors that failed to execute.|*integer*|
-|<span class="no-wrap-code">`total_collected_results`</span>|The total number of results that were collected.|*integer*|
+|<span class="no-wrap-code">`daily_partitioning_recent_days`</span>|The number of recent days to analyze incrementally by daily partitioned data quality checks.|*integer*|
+|<span class="no-wrap-code">`daily_partitioning_include_today`</span>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.|*boolean*|
+|<span class="no-wrap-code">`monthly_partitioning_recent_months`</span>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.|*integer*|
+|<span class="no-wrap-code">`monthly_partitioning_include_current_month`</span>|Analyze also the current month and later months when running monthly partitioned checks. By default, monthly partitioned checks will not analyze the current month and future months. Setting true will disable filtering the end dates.|*boolean*|
+|<span class="no-wrap-code">`from_date`</span>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.|*date*|
+|<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
+|<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
+|<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
+
+
+___
+
+## ErrorSamplesDataScope
+Enumeration of possible error samples collection scopes. &quot;table&quot; - a whole table is analyzed for error samples, &quot;data_groupings&quot; - error samples are collected for each data grouping.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|table<br/>data_group<br/>|
+
+___
+
+## ErrorSamplerResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`executed_error_samplers`</span>|The total count of all executed error samplers. This count only includes data quality checks that have an error sampling template defined. |*integer*|
+|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed an error sampler and tried to collect error samples.|*integer*|
+|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain error samples.|*integer*|
+|<span class="no-wrap-code">`total_error_samplers_failed`</span>|The count of error samplers that failed to execute.|*integer*|
+|<span class="no-wrap-code">`total_error_samples_collected`</span>|The total number of error samples (values) that were collected.|*integer*|
+
+
+___
+
+## CollectErrorSamplesParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify the checks for which the error samples should be collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`time_window_filter`](#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`data_scope`](#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire table or for each data grouping separately.|*[ErrorSamplesDataScope](#errorsamplesdatascope)*|
+|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error sample collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
+|<span class="no-wrap-code">[`error_sampler_result`](#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers executed, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](#errorsamplerresult)*|
 
 
 ___
@@ -37,6 +88,40 @@ Job status of a job on the queue.
 
 ___
 
+## CollectErrorSamplesResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">[`result`](./jobs.md#errorsamplerresult)</span>|Optional result object that is returned only when the wait parameter was true and the "collect error samples" job has finished. Contains the summary result of collecting error samples, including the number of error samplers that were executed, and the number of error samples collected. |*[ErrorSamplerResult](./jobs.md#errorsamplerresult)*|
+|<span class="no-wrap-code">[`status`](#dqojobstatus)</span>|Job status|*[DqoJobStatus](#dqojobstatus)*|
+
+
+___
+
+## CollectStatisticsResult
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`executed_statistics_collectors`</span>|The total count of all executed statistics collectors.|*integer*|
+|<span class="no-wrap-code">`columns_analyzed`</span>|The count of columns for which DQOps executed a collector and tried to read the statistics.|*integer*|
+|<span class="no-wrap-code">`columns_successfully_analyzed`</span>|The count of columns for which DQOps managed to obtain statistics.|*integer*|
+|<span class="no-wrap-code">`total_collectors_failed`</span>|The count of statistics collectors that failed to execute.|*integer*|
+|<span class="no-wrap-code">`total_collected_results`</span>|The total number of results that were collected.|*integer*|
+
+
+___
+
 ## CollectStatisticsQueueJobResult
 
 
@@ -48,7 +133,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
 |<span class="no-wrap-code">[`result`](#collectstatisticsresult)</span>|Optional result object that is returned only when the wait parameter was true and the "collect statistics" job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |*[CollectStatisticsResult](#collectstatisticsresult)*|
-|<span class="no-wrap-code">[`status`](#dqojobstatus)</span>|Job status|*[DqoJobStatus](#dqojobstatus)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|Job status|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 
 
 ___
@@ -70,6 +155,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`delete_statistics`</span>|Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|*boolean*|
 |<span class="no-wrap-code">`delete_check_results`</span>|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|*boolean*|
 |<span class="no-wrap-code">`delete_sensor_readouts`</span>|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|*boolean*|
+|<span class="no-wrap-code">`delete_error_samples`</span>|Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
 |<span class="no-wrap-code">`column_names`</span>|The list of column names to delete the data for column level results or errors only for selected columns.|*List[string]*|
 |<span class="no-wrap-code">`check_category`</span>|The check category name, for example *volume* or *anomaly*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|*string*|
@@ -96,7 +182,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_error_samples<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>patterns<br/>_indexes<br/>_local_settings<br/>|
 
 ___
 
@@ -173,7 +259,7 @@ Job type that identifies a job by type.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_statistics_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
+|string|run_checks<br/>run_checks_on_table<br/>collect_statistics<br/>collect_statistics_on_table<br/>collect_error_samples<br/>collect_error_samples_on_table<br/>queue_thread_shutdown<br/>synchronize_folder<br/>synchronize_multiple_folders<br/>run_scheduled_checks_cron<br/>import_schema<br/>import_tables<br/>delete_stored_data<br/>repair_stored_data<br/>|
 
 ___
 
@@ -199,9 +285,9 @@ Parameter object for starting a file synchronization job. Identifies the folder 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`folder`](./jobs.md#dqoroot)</span>|:mm|*[DqoRoot](./jobs.md#dqoroot)*|
-|<span class="no-wrap-code">[`direction`](#filesynchronizationdirection)</span>|:mm|*[FileSynchronizationDirection](#filesynchronizationdirection)*|
-|<span class="no-wrap-code">`force_refresh_native_table`</span>|:mm|*boolean*|
+|<span class="no-wrap-code">[`folder`](./jobs.md#dqoroot)</span>||*[DqoRoot](./jobs.md#dqoroot)*|
+|<span class="no-wrap-code">[`direction`](#filesynchronizationdirection)</span>||*[FileSynchronizationDirection](#filesynchronizationdirection)*|
+|<span class="no-wrap-code">`force_refresh_native_table`</span>||*boolean*|
 
 
 ___
@@ -215,7 +301,7 @@ Parameters object for a job that synchronizes one folder with DQOps Cloud.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`synchronization_parameter`](#synchronizerootfolderparameters)</span>|:mm|*[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)*|
+|<span class="no-wrap-code">[`synchronization_parameter`](#synchronizerootfolderparameters)</span>||*[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)*|
 
 
 ___
@@ -250,27 +336,6 @@ Simple object for starting multiple folder synchronization jobs with the same co
 
 ___
 
-## TimeWindowFilterParameters
-
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`daily_partitioning_recent_days`</span>|The number of recent days to analyze incrementally by daily partitioned data quality checks.|*integer*|
-|<span class="no-wrap-code">`daily_partitioning_include_today`</span>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.|*boolean*|
-|<span class="no-wrap-code">`monthly_partitioning_recent_months`</span>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.|*integer*|
-|<span class="no-wrap-code">`monthly_partitioning_include_current_month`</span>|Analyze also the current month and later months when running monthly partitioned checks. By default, monthly partitioned checks will not analyze the current month and future months. Setting true will disable filtering the end dates.|*boolean*|
-|<span class="no-wrap-code">`from_date`</span>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.|*date*|
-|<span class="no-wrap-code">`from_date_time`</span>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|*datetime*|
-|<span class="no-wrap-code">`to_date`</span>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|*date*|
-|<span class="no-wrap-code">`to_date_time`</span>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|*datetime*|
-
-
-___
-
 ## RunChecksResult
 
 
@@ -301,7 +366,8 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
-|<span class="no-wrap-code">[`time_window_filter`](#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
+|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks.|*boolean*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](#runchecksresult)*|
 
@@ -323,6 +389,7 @@ ___
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
+|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](./jobs.md#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](./jobs.md#runchecksresult)*|
 
 
@@ -413,6 +480,27 @@ ___
 
 ___
 
+## CollectErrorSamplesOnTableParameters
+
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'collect error samples on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">[`table`](./common.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./common.md#physicaltablename)*|
+|<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Check search filters that identify data quality checks for which the error samples are collected.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range for partitioned tables that is analyzed to find error samples.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
+|<span class="no-wrap-code">[`data_scope`](./jobs.md#errorsamplesdatascope)</span>|The target scope of collecting error samples. Error samples can be collected for the entire or for each data grouping separately.|*[ErrorSamplesDataScope](./jobs.md#errorsamplesdatascope)*|
+|<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy error samples collection (sensors are executed, but the error samples results are not written to the parquet files).|*boolean*|
+|<span class="no-wrap-code">[`error_sampler_result`](./jobs.md#errorsamplerresult)</span>|The summary of the error sampling collection job after if finished. Returns the number of error samplers that collected samples, columns analyzed, error samples (values) captured.|*[ErrorSamplerResult](./jobs.md#errorsamplerresult)*|
+
+
+___
+
 ## ImportSchemaQueueJobParameters
 Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.
 
@@ -455,12 +543,12 @@ Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`connection_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`schema_table_name`</span>|:mm|*string*|
-|<span class="no-wrap-code">`repair_errors`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_statistics`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_check_results`</span>|:mm|*boolean*|
-|<span class="no-wrap-code">`repair_sensor_readouts`</span>|:mm|*boolean*|
+|<span class="no-wrap-code">`connection_name`</span>||*string*|
+|<span class="no-wrap-code">`schema_table_name`</span>||*string*|
+|<span class="no-wrap-code">`repair_errors`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_statistics`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_check_results`</span>||*boolean*|
+|<span class="no-wrap-code">`repair_sensor_readouts`</span>||*boolean*|
 
 
 ___
@@ -474,17 +562,19 @@ Model object returned to UI that has typed fields for each supported job paramet
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`synchronize_root_folder_parameters`](#synchronizerootfolderdqoqueuejobparameters)</span>|:mm|*[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)*|
-|<span class="no-wrap-code">[`synchronize_multiple_folders_parameters`](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)</span>|:mm|*[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*|
-|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#monitoringschedulespec)</span>|:mm|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
-|<span class="no-wrap-code">[`run_checks_parameters`](./jobs.md#runchecksparameters)</span>|:mm|*[RunChecksParameters](./jobs.md#runchecksparameters)*|
-|<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|:mm|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
-|<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|:mm|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|
-|<span class="no-wrap-code">[`collect_statistics_on_table_parameters`](#collectstatisticsontablequeuejobparameters)</span>|:mm|*[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)*|
-|<span class="no-wrap-code">[`import_schema_parameters`](#importschemaqueuejobparameters)</span>|:mm|*[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)*|
-|<span class="no-wrap-code">[`import_table_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|:mm|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
-|<span class="no-wrap-code">[`delete_stored_data_parameters`](./jobs.md#deletestoreddataqueuejobparameters)</span>|:mm|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
-|<span class="no-wrap-code">[`repair_stored_data_parameters`](#repairstoreddataqueuejobparameters)</span>|:mm|*[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">[`synchronize_root_folder_parameters`](#synchronizerootfolderdqoqueuejobparameters)</span>|The job parameters for the "synchronize folder" queue job.|*[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)*|
+|<span class="no-wrap-code">[`synchronize_multiple_folders_parameters`](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)</span>|The job parameters for the "synchronize multiple folders" queue job.|*[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*|
+|<span class="no-wrap-code">[`run_scheduled_checks_parameters`](./common.md#monitoringschedulespec)</span>|The job parameters for the "run scheduled checks cron" queue job.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
+|<span class="no-wrap-code">[`run_checks_parameters`](./jobs.md#runchecksparameters)</span>|The job parameters for the "run checks" queue job.|*[RunChecksParameters](./jobs.md#runchecksparameters)*|
+|<span class="no-wrap-code">[`run_checks_on_table_parameters`](#runchecksontableparameters)</span>|The job parameters for the "run checks on table" queue job.|*[RunChecksOnTableParameters](#runchecksontableparameters)*|
+|<span class="no-wrap-code">[`collect_statistics_parameters`](#collectstatisticsqueuejobparameters)</span>|The job parameters for the "collect statistics" queue job.|*[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)*|
+|<span class="no-wrap-code">[`collect_statistics_on_table_parameters`](#collectstatisticsontablequeuejobparameters)</span>|The job parameters for the "collect statistics on table" queue job.|*[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)*|
+|<span class="no-wrap-code">[`collect_error_samples_parameters`](./jobs.md#collecterrorsamplesparameters)</span>|The job parameters for the "collect error samples" queue job.|*[CollectErrorSamplesParameters](./jobs.md#collecterrorsamplesparameters)*|
+|<span class="no-wrap-code">[`collect_error_samples_on_table_parameters`](#collecterrorsamplesontableparameters)</span>|The job parameters for the "collect error samples on table" queue job.|*[CollectErrorSamplesOnTableParameters](#collecterrorsamplesontableparameters)*|
+|<span class="no-wrap-code">[`import_schema_parameters`](#importschemaqueuejobparameters)</span>|The job parameters for the "collect schema" queue job.|*[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)*|
+|<span class="no-wrap-code">[`import_table_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|The job parameters for the "collect tables" queue job.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
+|<span class="no-wrap-code">[`delete_stored_data_parameters`](./jobs.md#deletestoreddataqueuejobparameters)</span>|The job parameters for the "delete stored data" queue job.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">[`repair_stored_data_parameters`](#repairstoreddataqueuejobparameters)</span>|The job parameters for the "repair stored data" queue job.|*[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)*|
 
 
 ___
@@ -498,11 +588,11 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|:mm|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`job_type`](#dqojobtype)</span>|:mm|*[DqoJobType](#dqojobtype)*|
-|<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>|:mm|*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
-|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|:mm|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
-|<span class="no-wrap-code">`error_message`</span>|:mm|*string*|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">[`job_type`](#dqojobtype)</span>||*[DqoJobType](#dqojobtype)*|
+|<span class="no-wrap-code">[`parameters`](#dqojobentryparametersmodel)</span>||*[DqoJobEntryParametersModel](#dqojobentryparametersmodel)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
+|<span class="no-wrap-code">`error_message`</span>||*string*|
 
 
 ___
@@ -516,10 +606,10 @@ Describes a change to the job status or the job queue (such as a new job was add
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|:mm|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
-|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|:mm|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">`change_sequence`</span>|:mm|*long*|
-|<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>|:mm|*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
+|<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>||*[DqoJobStatus](./jobs.md#dqojobstatus)*|
+|<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>||*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
+|<span class="no-wrap-code">`change_sequence`</span>||*long*|
+|<span class="no-wrap-code">[`updated_model`](./jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)*|
 
 
 ___
@@ -572,9 +662,9 @@ Job history snapshot model that returns only changes after a given change sequen
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`job_changes`</span>|:mm|*List[[DqoJobChangeModel](#dqojobchangemodel)]*|
-|<span class="no-wrap-code">[`folder_synchronization_status`](#cloudsynchronizationfoldersstatusmodel)</span>|:mm|*[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)*|
-|<span class="no-wrap-code">`last_sequence_number`</span>|:mm|*long*|
+|<span class="no-wrap-code">`job_changes`</span>||*List[[DqoJobChangeModel](#dqojobchangemodel)]*|
+|<span class="no-wrap-code">[`folder_synchronization_status`](#cloudsynchronizationfoldersstatusmodel)</span>||*[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)*|
+|<span class="no-wrap-code">`last_sequence_number`</span>||*long*|
 
 
 ___
@@ -588,9 +678,9 @@ Returns the current snapshot of running jobs.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`jobs`</span>|:mm|*List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]*|
-|<span class="no-wrap-code">[`folder_synchronization_status`](./jobs.md#cloudsynchronizationfoldersstatusmodel)</span>|:mm|*[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)*|
-|<span class="no-wrap-code">`last_sequence_number`</span>|:mm|*long*|
+|<span class="no-wrap-code">`jobs`</span>||*List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]*|
+|<span class="no-wrap-code">[`folder_synchronization_status`](./jobs.md#cloudsynchronizationfoldersstatusmodel)</span>||*[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)*|
+|<span class="no-wrap-code">`last_sequence_number`</span>||*long*|
 
 
 ___

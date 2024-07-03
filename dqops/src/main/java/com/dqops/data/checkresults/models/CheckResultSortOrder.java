@@ -36,7 +36,8 @@ public enum CheckResultSortOrder {
     timeGradient,
     timePeriod,
     qualityDimension,
-    sensorName;
+    sensorName,
+    updatedAt;
 
     public static class CheckResultSortOrderSampleFactory implements SampleValueFactory<CheckResultSortOrder> {
         @Override

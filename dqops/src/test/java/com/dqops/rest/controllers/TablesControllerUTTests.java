@@ -19,14 +19,14 @@ import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.jobqueue.DqoJobQueue;
@@ -36,7 +36,6 @@ import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
-import com.dqops.data.checkresults.statuscache.TableStatusCacheImpl;
 import com.dqops.data.checkresults.statuscache.TableStatusCacheStub;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
@@ -53,21 +52,21 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
-import com.dqops.rules.comparison.*;
-import com.dqops.services.check.CheckFlatConfigurationFactory;
-import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
-import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
-import com.dqops.services.check.mapping.models.CheckContainerModel;
-import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.metadata.TableModel;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import com.dqops.services.check.CheckFlatConfigurationFactory;
+import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.AllChecksModelFactoryImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
+import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
+import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.locking.RestApiLockServiceImpl;
 import com.dqops.services.metadata.TableService;
 import com.dqops.services.metadata.TableServiceImpl;
@@ -133,7 +132,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTables_whenSampleConnectionRequested_thenReturnsListOfTables() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<TableListModel>> responseEntity = this.sut.getTables(
+        Mono<ResponseEntity<Flux<TableListModel>>> responseEntity = this.sut.getTables(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
@@ -143,7 +142,7 @@ public class TablesControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty());
 
-        List<TableListModel> result = responseEntity.getBody().collectList().block();
+        List<TableListModel> result = responseEntity.block().getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
 
@@ -155,13 +154,13 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<TableModel>> responseEntity = this.sut.getTable(
+        Mono<ResponseEntity<Mono<TableModel>>> responseEntity = this.sut.getTable(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
 
-        TableModel result = responseEntity.getBody().block();
+        TableModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(tableSpec.getPhysicalTableName().getTableName(), result.getSpec().getPhysicalTableName().getTableName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
@@ -177,13 +176,13 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<TableListModel>> responseEntity = this.sut.getTableBasic(
+        Mono<ResponseEntity<Mono<TableListModel>>> responseEntity = this.sut.getTableBasic(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        TableListModel result = responseEntity.getBody().block();
+        TableListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(tableSpec.getPhysicalTableName().getTableName(), result.getTarget().getTableName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
@@ -196,13 +195,13 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksModel(
+        Mono<ResponseEntity<Mono<CheckContainerModel>>> responseEntity = this.sut.getTableProfilingChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
 
-        CheckContainerModel result = responseEntity.getBody().block();
+        CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(6, result.getCategories().size());
     }
@@ -228,13 +227,13 @@ public class TablesControllerUTTests extends BaseTest {
         
         this.sampleTable.getTableSpec().setMonitoringChecks(sampleMonitoring);
 
-        ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyMonitoringChecks(
+        Mono<ResponseEntity<Mono<TableDailyMonitoringCheckCategoriesSpec>>> responseEntity = this.sut.getTableDailyMonitoringChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        TableDailyMonitoringCheckCategoriesSpec result = responseEntity.getBody().block();
+        TableDailyMonitoringCheckCategoriesSpec result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
     }
 
@@ -259,13 +258,13 @@ public class TablesControllerUTTests extends BaseTest {
 
         this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
 
-        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTableDailyPartitionedChecks(
+        Mono<ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>>> responseEntity = this.sut.getTableDailyPartitionedChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
-        TableDailyPartitionedCheckCategoriesSpec result = responseEntity.getBody().block();
+        TableDailyPartitionedCheckCategoriesSpec result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
     }
 
@@ -274,13 +273,13 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksModel(
+        Mono<ResponseEntity<Mono<CheckContainerModel>>> responseEntity = this.sut.getTableProfilingChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
 
-        CheckContainerModel result = responseEntity.getBody().block();
+        CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(6, result.getCategories().size());
     }
@@ -290,14 +289,14 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableMonitoringChecksModel_whenTableRequested_thenReturnsMonitoringChecksModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTableMonitoringChecksModel(
+        Mono<ResponseEntity<Mono<CheckContainerModel>>> responseEntity = this.sut.getTableMonitoringChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
-        CheckContainerModel result = responseEntity.getBody().block();
+        CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
@@ -312,14 +311,14 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksModel_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksModel(
+        Mono<ResponseEntity<Mono<CheckContainerModel>>> responseEntity = this.sut.getTablePartitionedChecksModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
-        CheckContainerModel result = responseEntity.getBody().block();
+        CheckContainerModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
@@ -334,13 +333,13 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getTableProfilingChecksBasicModel(
+        Mono<ResponseEntity<Mono<CheckContainerListModel>>> responseEntity = this.sut.getTableProfilingChecksBasicModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
 
-        CheckContainerListModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
@@ -350,14 +349,14 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableMonitoringChecksBasicModel_whenTableRequested_thenReturnsMonitoringChecksBasicModel(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getTableMonitoringChecksBasicModel(
+        Mono<ResponseEntity<Mono<CheckContainerListModel>>> responseEntity = this.sut.getTableMonitoringChecksBasicModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
-        CheckContainerListModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
@@ -371,14 +370,14 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksBasicModel_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<CheckContainerListModel>> responseEntity = this.sut.getTablePartitionedChecksBasicModel(
+        Mono<ResponseEntity<Mono<CheckContainerListModel>>> responseEntity = this.sut.getTablePartitionedChecksBasicModel(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
-        CheckContainerListModel result = responseEntity.getBody().block();
+        CheckContainerListModel result = responseEntity.block().getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
@@ -404,14 +403,14 @@ public class TablesControllerUTTests extends BaseTest {
         TableProfilingCheckCategoriesSpec sampleProfilingCheck = new TableProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setVolume(volumeChecksSpec);
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableProfilingChecks(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTableProfilingChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 sampleProfilingCheck);
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(this.sampleTable.getTableSpec().getProfilingChecks(), sampleProfilingCheck);
     }
@@ -435,14 +434,14 @@ public class TablesControllerUTTests extends BaseTest {
         TableMonitoringCheckCategoriesSpec sampleMonitoring = new TableMonitoringCheckCategoriesSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 sampleMonitoring.getDaily());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
                 this.sampleTable.getTableSpec().getMonitoringChecks().getDaily(),
@@ -468,14 +467,14 @@ public class TablesControllerUTTests extends BaseTest {
         TablePartitionedCheckCategoriesSpec samplePartitionedCheck = new TablePartitionedCheckCategoriesSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
-        ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
+        Mono<ResponseEntity<Mono<Void>>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin(),
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 samplePartitionedCheck.getDaily());
 
-        Object result = responseEntity.getBody().block();
+        Object result = responseEntity.block().getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
                 this.sampleTable.getTableSpec().getPartitionedChecks().getDaily(),

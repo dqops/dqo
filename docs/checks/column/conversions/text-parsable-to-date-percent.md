@@ -137,61 +137,19 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -405,10 +363,18 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -433,10 +399,18 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -908,61 +882,19 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -1184,10 +1116,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1211,10 +1151,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -1799,61 +1747,19 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -2067,10 +1973,18 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2095,10 +2009,18 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -2571,61 +2493,19 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -2847,10 +2727,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2874,10 +2762,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -3462,61 +3358,19 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -3730,10 +3584,18 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3758,10 +3620,18 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -4234,61 +4104,19 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -4510,10 +4338,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4537,10 +4373,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -5135,61 +4979,19 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -5419,10 +5221,18 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5447,10 +5257,18 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -5973,61 +5791,19 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -6257,10 +6033,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -6284,10 +6068,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -6902,61 +6694,19 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -7186,10 +6936,18 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -7214,10 +6972,18 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
@@ -7740,61 +7506,19 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-                {%- if (lib.target_column_data_type == 'STRING') -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT64') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-                {%- else -%}
-                    {{ lib.render_target_column(analyzed_table_to_render) }}
-                {%- endif -%}
-            {% endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
-                                OR SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
-                                OR SAFE.PARSE_DATE('%b %e, %Y', {{render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
+                            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD-MM-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM-DD-YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'DD/MM/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'MM/DD/YYYY') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY/MM/DD') IS NOT NULL
+                                OR SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE FORMAT 'YYYY.MM.DD') IS NOT NULL
+                                OR SAFE.PARSE_DATE('%b %e, %Y', {{lib.render_column_cast_to_string('analyzed_table')}}) IS NOT NULL
                                     THEN 1
                             ELSE 0
                         END
@@ -8024,10 +7748,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    {{ lib.render_target_column('analyzed_table') }},
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE({{lib.render_target_column('analyzed_table')}}, '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -8051,10 +7783,18 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE(
-                                    analyzed_table."target_column",
-                                    (select value from v$nls_parameters where parameter = 'NLS_DATE_FORMAT')
-                                ) IS NOT NULL THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '^((31(\/|-|\.)(0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec)))(\/|-|\.)|((29|30)(\/|-|\.)(0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))(\/|-|\.)))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(29(\/|-|\.)(0?2|(Feb))(\/|-|\.)(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(0?[1-9]|1\d|2[0-8])(\/|-|\.)((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.|[ ])31)(([,]?[ ]?)|(\/|-|\.))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.|[ ])(29|30))(([,]?[ ]?)|(\/|-|\.))))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((0?2|(Feb)(\/|-|\.|[ ])29)(([,]?[ ]?)|(\/|-|\.))(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.|[ ])(0?[1-9]|1\d|2[0-8]))(([,]?[ ]?)|(\/|-|\.))((1[6-9]|[2-9]\d)?\d{2})$')
+                                OR
+                                REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[13578]|1[02]|(Jan|Mar|May|Jul|Aug|Oct|Dec))(\/|-|\.)(31))|((0?[1,3-9]|1[0-2]|(Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\/|-|\.)(29|30))))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^((1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(((0?[1-9]|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(1[0-2]|(Oct|Nov|Dec)))(\/|-|\.)(0?[1-9]|1\d|2[0-8]))$')
+                                OR REGEXP_LIKE(analyzed_table."target_column", '^(((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))(\/|-|\.)((0?2|(Feb)(\/|-|\.)(29)))$')
+                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")

@@ -39,13 +39,13 @@ public enum DuckdbStorageType {
     @JsonProperty("azure")
     azure,
 
+    /**
+     * Uses the Google Cloud Storage.
+     */
+    @JsonProperty("gcs")
+    gcs,
+
     // todo: uncomment when implemented
-//    /**
-//     * Uses the Google Cloud Storage.
-//     */
-//    @JsonProperty("gcs")
-//    gcs,
-//
 //    /**
 //     * Uses the Cloudflare R2.
 //     */

@@ -13,6 +13,7 @@ from ...types import Response
 def _get_kwargs(
     scheduling_group: CheckRunScheduleGroup,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

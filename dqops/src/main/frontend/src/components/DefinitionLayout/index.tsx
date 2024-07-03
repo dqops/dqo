@@ -30,7 +30,7 @@ import { TabOption } from '../PageTabs/tab';
 import LeftView from './LeftView';
 
 interface LayoutProps {
-  route: string
+  route: string;
 }
 
 const DefinitionLayout = ({ route }: LayoutProps) => {
@@ -49,8 +49,8 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
 
   const closeTab = (value: string) => {
     if (pageTabs.length === 1) {
-      dispatch(setActiveFirstLevelTab(undefined))
-      history.push(`/definitions`)
+      dispatch(setActiveFirstLevelTab(undefined));
+      history.push(`/definitions`);
     }
     dispatch(closeFirstLevelTab(value));
   };
@@ -74,7 +74,7 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
   const getComponent = () => {
     switch (route) {
       case ROUTES.PATTERNS.SENSOR_DETAIL:
-        return <SensorDetail/>;
+        return <SensorDetail />;
       case ROUTES.PATTERNS.RULE_DETAIL:
         return <RuleDetail />;
       case ROUTES.PATTERNS.CHECK_DETAIL:
@@ -100,16 +100,16 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
       case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
         return <DataDictionaryItemOverview />;
       case ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS:
-        return <DefaultCheckPatterns />;  
-      case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL: 
-        return <DefaultCheckPatternConfiguration />  
+        return <DefaultCheckPatterns />;
+      case ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL:
+        return <DefaultCheckPatternConfiguration />;
       default:
         return null;
     }
   };
 
   const renderComponent: ReactNode = getComponent();
-  const { sidebarWidth } = useDefinition(); 
+  const { sidebarWidth } = useDefinition();
   return (
     <div className="flex min-h-screen overflow-hidden z-30">
       <Header />
@@ -119,7 +119,8 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
             marginLeft: sidebarWidth,
-            maxWidth: `calc(100vw - ${sidebarWidth}px)`
+            maxWidth: `calc(100vw - ${sidebarWidth}px)`,
+            backgroundColor: '#F9FAFC'
           }}
         >
           <div className="flex-1 h-full flex flex-col">
@@ -130,9 +131,7 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
               onRemoveTab={closeTab}
               limit={7}
             />
-            <div
-              className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-            >
+            <div className=" bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
               {!!activeTab && pageTabs.length !== 0 && <>{renderComponent}</>}
             </div>
           </div>

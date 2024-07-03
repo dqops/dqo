@@ -22,10 +22,7 @@ import {
   getIncidentsIssues,
   setIncidentsFilter
 } from '../../redux/actions/incidents.actions';
-import {
-  addFirstLevelTab,
-  addFirstLevelTab as addSourceFirstLevelTab
-} from '../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
 import { getFirstLevelIncidentsState } from '../../redux/selectors';
 import { IncidentsApi } from '../../services/apiClient';
@@ -34,7 +31,6 @@ import { getDaysString, useDecodedParams } from '../../utils';
 import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
 import { HistogramChart } from './HistogramChart';
 import { IncidentIssueList } from './IncidentIssueList';
-import IncidentNavigation from './IncidentNavigation';
 
 const statusOptions = [
   {
@@ -101,11 +97,7 @@ export const IncidentDetail = () => {
   const [recalibrateDialog, setRecalibrateDialog] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
-  const {
-    issues,
-    isEnd,
-    filters = {}
-  } = useSelector(getFirstLevelIncidentsState);
+  const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
   const { histograms }: { histograms: IncidentIssueHistogramModel } =
     useSelector(getFirstLevelIncidentsState);
@@ -178,13 +170,6 @@ export const IncidentDetail = () => {
     );
   };
 
-  // useEffect(() => {
-  //   onChangeFilter({
-  //     filter: debouncedSearchTerm,
-  //     page: 1
-  //   });
-  // }, [debouncedSearchTerm]);
-
   const getWarnings = (minimumSeverity?: number) => {
     if (!minimumSeverity) return 'No warnings';
     if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
@@ -202,15 +187,17 @@ export const IncidentDetail = () => {
   const goToConfigure = () => {
     const schema = incidentDetail?.schema || '';
     const table = incidentDetail?.table || '';
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema,
+      table,
+      'incident_configuration'
+    );
     dispatch(
-      addSourceFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
-          CheckTypes.SOURCES,
-          connection,
-          schema,
-          table
-        ),
-        value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.TABLE_LEVEL_VALUE(
           CheckTypes.SOURCES,
           connection,
           schema,
@@ -220,14 +207,7 @@ export const IncidentDetail = () => {
         label: 'Incident configuration'
       })
     );
-    history.push(
-      ROUTES.TABLE_INCIDENTS_NOTIFICATION(
-        CheckTypes.SOURCES,
-        connection,
-        schema,
-        table
-      )
-    );
+    history.push(url);
   };
 
   const tableQualityStatusOptions: Array<{
@@ -287,9 +267,7 @@ export const IncidentDetail = () => {
             connection,
             schema,
             table,
-            `table-quality-status${
-              timeScale !== undefined ? '-' + timeScale : ''
-            }`
+            timeScale ?? 'advanced'
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
           state: {},
@@ -302,9 +280,7 @@ export const IncidentDetail = () => {
           connection,
           schema,
           table,
-          `table-quality-status${
-            timeScale !== undefined ? '-' + timeScale : ''
-          }`
+          timeScale ?? 'advanced'
         )
       );
     };
@@ -325,7 +301,6 @@ export const IncidentDetail = () => {
   return (
     <>
       <div className="relative">
-        <IncidentNavigation incident={incidentDetail} />
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
@@ -339,37 +314,43 @@ export const IncidentDetail = () => {
               .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <div className="flex items-center gap-x-2">
               <Tooltip
-                content={'Disable'}
+                content={'Disable data quality checks related to this check to avoid raising a similar incident again.'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="stop" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setDisableDialog(true)}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="stop" className="w-5.5 h-5.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setDisableDialog(true)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip
-                content={'Recalibrate'}
-                className="w-30 h-30 py-4 px-4 bg-gray-800"
-              >
-                <Button
-                  leftIcon={<SvgIcon name="minus" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={() => setRecalibrateDialog(true)}
-                />
-              </Tooltip>
-              <Tooltip
-                content={'Settings'}
+                content={'Recalibrate data quality checks for this incident to decrease the number of data quality issues by around 30%.'}
                 className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
               >
-                <Button
-                  leftIcon={<SvgIcon name="cog" className="w-3.5 h-3.5" />}
-                  className="pr-1.5 py-1.5 pl-1.5 m-0 "
-                  color="primary"
-                  onClick={goToConfigure}
-                />
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="minus" className="w-5.5 h-5.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={() => setRecalibrateDialog(true)}
+                  />
+                </div>
+              </Tooltip>
+              <Tooltip
+                content={'Change incident configuration for the table.'}
+                className="w-52 py-2 px-2 bg-gray-800 delay-700"
+              >
+                <div>
+                  <Button
+                    leftIcon={<SvgIcon name="cog" className="w-5.5 h-5.5" />}
+                    className="pr-1.5 py-1.5 pl-1.5 m-0 "
+                    color="primary"
+                    onClick={goToConfigure}
+                  />
+                </div>
               </Tooltip>
             </div>
           </div>
@@ -379,7 +360,7 @@ export const IncidentDetail = () => {
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter errors: col*"
+              placeholder="Filter issues: col*"
               className="!h-12"
             />
           </div>
@@ -440,12 +421,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.firstSeen).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.firstSeen || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.firstSeen || 0) + ')'}
+                {incidentDetail?.firstSeen &&
+                  Number(
+                    getDaysString(incidentDetail?.firstSeen).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.firstSeen) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
@@ -454,12 +436,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.lastSeen).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.lastSeen || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.lastSeen || 0) + ')'}
+                {incidentDetail?.lastSeen &&
+                  Number(
+                    getDaysString(incidentDetail?.lastSeen || 0).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.lastSeen) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
@@ -468,12 +451,13 @@ export const IncidentDetail = () => {
                 <span className="mr-2">
                   {moment(incidentDetail?.incidentUntil).format('YYYY-MM-DD')}
                 </span>
-                {Number(
-                  getDaysString(incidentDetail?.incidentUntil || 0).match(
-                    /[-]{0,1}\d+/gm
-                  )
-                ) >= 1 &&
-                  '(' + getDaysString(incidentDetail?.incidentUntil || 0) + ')'}
+                {incidentDetail?.incidentUntil &&
+                  Number(
+                    getDaysString(incidentDetail?.incidentUntil).match(
+                      /[-]{0,1}\d+/gm
+                    )
+                  ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.incidentUntil) + ')'}
               </div>
             </div>
           </SectionWrapper>
@@ -491,7 +475,21 @@ export const IncidentDetail = () => {
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Total issues:</div>
+              <div className="flex-[2]">
+                Total issues:
+                <span className='inline-flex'>
+                  <Tooltip
+                    className="max-w-80 py-2 px-2 bg-gray-800"
+                    content={
+                      'The total number of detected issues can be higher than the count of data quality results when the results were deleted, or data quality checks were run again, overwritting previous results.'
+                    }
+                  >
+                    <div>
+                      <SvgIcon name="question_mark" className="w-5 h-5" />
+                    </div>
+                  </Tooltip>
+                </span>
+              </div>
               <div className="flex-[1] text-right font-bold">
                 {incidentDetail?.failedChecksCount}
               </div>
@@ -577,34 +575,49 @@ export const IncidentDetail = () => {
             </div>
           </SectionWrapper>
         </div>
-
-        <HistogramChart onChangeFilter={onChangeFilter} days={filters.days} />
-        <div className="px-4 text-sm">
-          <div
-            className="py-3 mb-5 overflow-auto"
-            style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
-          >
-            <IncidentIssueList
-              incidentDetail={incidentDetail}
-              filters={filters}
-              issues={issues || []}
-              onChangeFilter={onChangeFilter}
-            />
+        {issues?.length === 0 &&
+        Object.keys(histograms?.checks ?? {}).length === 0 &&
+        Object.keys(histograms?.columns ?? {}).length === 0 ? (
+          <div className="text-center text-gray-500 mt-4">
+            No active data quality issues found, the data quality results were
+            deleted, or the checks were executed again with new rule thresholds
+            and passed.
           </div>
-
-          <Pagination
-            page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
-            totalPages={10}
-            isEnd={isEnd}
-            onChange={(page, pageSize) =>
-              onChangeFilter({
-                page,
-                pageSize
-              })
-            }
-          />
-        </div>
+        ) : (
+          <>
+            <HistogramChart
+              onChangeFilter={onChangeFilter}
+              days={filters.days}
+            />
+            <div className="px-4 text-sm mb-4">
+              <div
+                className="py-3 mb-5 overflow-auto"
+                style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
+              >
+                <IncidentIssueList
+                  incidentDetail={incidentDetail}
+                  filters={filters}
+                  issues={issues || []}
+                  onChangeFilter={onChangeFilter}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Pagination
+                  page={filters.page || 1}
+                  pageSize={filters.pageSize || 10}
+                  totalPages={10}
+                  isEnd={(filters.pageSize || 10) > issues?.length}
+                  onChange={(page, pageSize) =>
+                    onChangeFilter({
+                      page,
+                      pageSize
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <AddIssueUrlDialog

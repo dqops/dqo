@@ -132,9 +132,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
     daily_partition_number_above_max_value: Union[
         Unset, "ColumnNumberAboveMaxValueCheckSpec"
     ] = UNSET
-    daily_partition_negative_values: Union[
-        Unset, "ColumnNegativeCountCheckSpec"
-    ] = UNSET
+    daily_partition_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = (
+        UNSET
+    )
     daily_partition_negative_values_percent: Union[
         Unset, "ColumnNegativePercentCheckSpec"
     ] = UNSET
@@ -154,9 +154,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
     daily_partition_max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
     daily_partition_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
     daily_partition_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
-    daily_partition_median_in_range: Union[
-        Unset, "ColumnMedianInRangeCheckSpec"
-    ] = UNSET
+    daily_partition_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = (
+        UNSET
+    )
     daily_partition_percentile_in_range: Union[
         Unset, "ColumnPercentileInRangeCheckSpec"
     ] = UNSET
@@ -233,17 +233,17 @@ class ColumnNumericDailyPartitionedChecksSpec:
                 self.daily_partition_negative_values_percent.to_dict()
             )
 
-        daily_partition_number_below_min_value_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_number_below_min_value_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_number_below_min_value_percent, Unset):
             daily_partition_number_below_min_value_percent = (
                 self.daily_partition_number_below_min_value_percent.to_dict()
             )
 
-        daily_partition_number_above_max_value_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_number_above_max_value_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_number_above_max_value_percent, Unset):
             daily_partition_number_above_max_value_percent = (
                 self.daily_partition_number_above_max_value_percent.to_dict()
@@ -331,9 +331,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
                 self.daily_partition_sample_variance_in_range.to_dict()
             )
 
-        daily_partition_population_variance_in_range: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_population_variance_in_range: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_population_variance_in_range, Unset):
             daily_partition_population_variance_in_range = (
                 self.daily_partition_population_variance_in_range.to_dict()
@@ -369,9 +369,9 @@ class ColumnNumericDailyPartitionedChecksSpec:
                 self.daily_partition_non_negative_values.to_dict()
             )
 
-        daily_partition_non_negative_values_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_non_negative_values_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_non_negative_values_percent, Unset):
             daily_partition_non_negative_values_percent = (
                 self.daily_partition_non_negative_values_percent.to_dict()
@@ -383,37 +383,37 @@ class ColumnNumericDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_number_below_min_value is not UNSET:
-            field_dict[
-                "daily_partition_number_below_min_value"
-            ] = daily_partition_number_below_min_value
+            field_dict["daily_partition_number_below_min_value"] = (
+                daily_partition_number_below_min_value
+            )
         if daily_partition_number_above_max_value is not UNSET:
-            field_dict[
-                "daily_partition_number_above_max_value"
-            ] = daily_partition_number_above_max_value
+            field_dict["daily_partition_number_above_max_value"] = (
+                daily_partition_number_above_max_value
+            )
         if daily_partition_negative_values is not UNSET:
-            field_dict[
-                "daily_partition_negative_values"
-            ] = daily_partition_negative_values
+            field_dict["daily_partition_negative_values"] = (
+                daily_partition_negative_values
+            )
         if daily_partition_negative_values_percent is not UNSET:
-            field_dict[
-                "daily_partition_negative_values_percent"
-            ] = daily_partition_negative_values_percent
+            field_dict["daily_partition_negative_values_percent"] = (
+                daily_partition_negative_values_percent
+            )
         if daily_partition_number_below_min_value_percent is not UNSET:
-            field_dict[
-                "daily_partition_number_below_min_value_percent"
-            ] = daily_partition_number_below_min_value_percent
+            field_dict["daily_partition_number_below_min_value_percent"] = (
+                daily_partition_number_below_min_value_percent
+            )
         if daily_partition_number_above_max_value_percent is not UNSET:
-            field_dict[
-                "daily_partition_number_above_max_value_percent"
-            ] = daily_partition_number_above_max_value_percent
+            field_dict["daily_partition_number_above_max_value_percent"] = (
+                daily_partition_number_above_max_value_percent
+            )
         if daily_partition_number_in_range_percent is not UNSET:
-            field_dict[
-                "daily_partition_number_in_range_percent"
-            ] = daily_partition_number_in_range_percent
+            field_dict["daily_partition_number_in_range_percent"] = (
+                daily_partition_number_in_range_percent
+            )
         if daily_partition_integer_in_range_percent is not UNSET:
-            field_dict[
-                "daily_partition_integer_in_range_percent"
-            ] = daily_partition_integer_in_range_percent
+            field_dict["daily_partition_integer_in_range_percent"] = (
+                daily_partition_integer_in_range_percent
+            )
         if daily_partition_min_in_range is not UNSET:
             field_dict["daily_partition_min_in_range"] = daily_partition_min_in_range
         if daily_partition_max_in_range is not UNSET:
@@ -423,69 +423,69 @@ class ColumnNumericDailyPartitionedChecksSpec:
         if daily_partition_mean_in_range is not UNSET:
             field_dict["daily_partition_mean_in_range"] = daily_partition_mean_in_range
         if daily_partition_median_in_range is not UNSET:
-            field_dict[
-                "daily_partition_median_in_range"
-            ] = daily_partition_median_in_range
+            field_dict["daily_partition_median_in_range"] = (
+                daily_partition_median_in_range
+            )
         if daily_partition_percentile_in_range is not UNSET:
-            field_dict[
-                "daily_partition_percentile_in_range"
-            ] = daily_partition_percentile_in_range
+            field_dict["daily_partition_percentile_in_range"] = (
+                daily_partition_percentile_in_range
+            )
         if daily_partition_percentile_10_in_range is not UNSET:
-            field_dict[
-                "daily_partition_percentile_10_in_range"
-            ] = daily_partition_percentile_10_in_range
+            field_dict["daily_partition_percentile_10_in_range"] = (
+                daily_partition_percentile_10_in_range
+            )
         if daily_partition_percentile_25_in_range is not UNSET:
-            field_dict[
-                "daily_partition_percentile_25_in_range"
-            ] = daily_partition_percentile_25_in_range
+            field_dict["daily_partition_percentile_25_in_range"] = (
+                daily_partition_percentile_25_in_range
+            )
         if daily_partition_percentile_75_in_range is not UNSET:
-            field_dict[
-                "daily_partition_percentile_75_in_range"
-            ] = daily_partition_percentile_75_in_range
+            field_dict["daily_partition_percentile_75_in_range"] = (
+                daily_partition_percentile_75_in_range
+            )
         if daily_partition_percentile_90_in_range is not UNSET:
-            field_dict[
-                "daily_partition_percentile_90_in_range"
-            ] = daily_partition_percentile_90_in_range
+            field_dict["daily_partition_percentile_90_in_range"] = (
+                daily_partition_percentile_90_in_range
+            )
         if daily_partition_sample_stddev_in_range is not UNSET:
-            field_dict[
-                "daily_partition_sample_stddev_in_range"
-            ] = daily_partition_sample_stddev_in_range
+            field_dict["daily_partition_sample_stddev_in_range"] = (
+                daily_partition_sample_stddev_in_range
+            )
         if daily_partition_population_stddev_in_range is not UNSET:
-            field_dict[
-                "daily_partition_population_stddev_in_range"
-            ] = daily_partition_population_stddev_in_range
+            field_dict["daily_partition_population_stddev_in_range"] = (
+                daily_partition_population_stddev_in_range
+            )
         if daily_partition_sample_variance_in_range is not UNSET:
-            field_dict[
-                "daily_partition_sample_variance_in_range"
-            ] = daily_partition_sample_variance_in_range
+            field_dict["daily_partition_sample_variance_in_range"] = (
+                daily_partition_sample_variance_in_range
+            )
         if daily_partition_population_variance_in_range is not UNSET:
-            field_dict[
-                "daily_partition_population_variance_in_range"
-            ] = daily_partition_population_variance_in_range
+            field_dict["daily_partition_population_variance_in_range"] = (
+                daily_partition_population_variance_in_range
+            )
         if daily_partition_invalid_latitude is not UNSET:
-            field_dict[
-                "daily_partition_invalid_latitude"
-            ] = daily_partition_invalid_latitude
+            field_dict["daily_partition_invalid_latitude"] = (
+                daily_partition_invalid_latitude
+            )
         if daily_partition_valid_latitude_percent is not UNSET:
-            field_dict[
-                "daily_partition_valid_latitude_percent"
-            ] = daily_partition_valid_latitude_percent
+            field_dict["daily_partition_valid_latitude_percent"] = (
+                daily_partition_valid_latitude_percent
+            )
         if daily_partition_invalid_longitude is not UNSET:
-            field_dict[
-                "daily_partition_invalid_longitude"
-            ] = daily_partition_invalid_longitude
+            field_dict["daily_partition_invalid_longitude"] = (
+                daily_partition_invalid_longitude
+            )
         if daily_partition_valid_longitude_percent is not UNSET:
-            field_dict[
-                "daily_partition_valid_longitude_percent"
-            ] = daily_partition_valid_longitude_percent
+            field_dict["daily_partition_valid_longitude_percent"] = (
+                daily_partition_valid_longitude_percent
+            )
         if daily_partition_non_negative_values is not UNSET:
-            field_dict[
-                "daily_partition_non_negative_values"
-            ] = daily_partition_non_negative_values
+            field_dict["daily_partition_non_negative_values"] = (
+                daily_partition_non_negative_values
+            )
         if daily_partition_non_negative_values_percent is not UNSET:
-            field_dict[
-                "daily_partition_non_negative_values_percent"
-            ] = daily_partition_non_negative_values_percent
+            field_dict["daily_partition_non_negative_values_percent"] = (
+                daily_partition_non_negative_values_percent
+            )
 
         return field_dict
 

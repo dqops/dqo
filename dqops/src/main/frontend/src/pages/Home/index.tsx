@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -7,13 +7,22 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setHomeFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import ColumnListView from '../ColumnListView/ColumnListView';
+import GlobalIncidents from '../GlobalIncidents';
 import TableListView from '../TableListView/TableListView';
 import StaticHomePage from './StaticHomePage';
 
 const tabs = [
   { label: 'Home', value: '/home' },
   { label: 'Tables', value: '/tables' },
-  { label: 'Columns', value: '/columns' }
+  { label: 'Columns', value: '/columns' },
+  {
+    label: 'Incidents summary',
+    value: '/global-incidents'
+  }
+  // {
+  //   label: 'Incidents grouped by category',
+  //   value: '/global-incidents?groupBy=category'
+  // }
 ];
 const HomePage = () => {
   const { activeTab } = useSelector(
@@ -26,16 +35,37 @@ const HomePage = () => {
     history.push(activeTab);
   };
 
+  useEffect(() => {
+    if (!activeTab) {
+      dispatch(setHomeFirstLevelTab('/home'));
+    } else if (activeTab !== history.location.pathname) {
+      history.push(activeTab);
+    }
+  }, [activeTab]);
+
   return (
-    <div className="min-h-screen">
+    <div style={{ height: 'calc(100vh - 200px)' }}>
       <Header />
-      tabs
-      <div className="w-full mt-12 border-b border-gray-300 px-0">
-        <Tabs tabs={tabs} onChange={onChange} activeTab={activeTab} />
+      <div
+        className="border-b border-gray-300 px-0 top-[64px] fixed r-0 l-0 w-full z-[100]"
+        style={{ backgroundColor: '#F9FAFC', userSelect: 'none' }}
+      >
+        <Tabs
+          tabs={tabs}
+          onChange={onChange}
+          activeTab={activeTab}
+          disableTreeWidth={true}
+        />
       </div>
-      {activeTab === '/home' && <StaticHomePage />}
-      {activeTab === '/tables' && <TableListView />}
-      {activeTab === '/columns' && <ColumnListView />}
+      <div className="mt-24.5">
+        {activeTab === '/home' && <StaticHomePage />}
+        {activeTab === '/tables' && <TableListView />}
+        {activeTab === '/columns' && <ColumnListView />}
+        {activeTab === '/global-incidents' && <GlobalIncidents />}
+        {/* {activeTab === '/global-incidents?groupBy=category' && (
+        <GlobalIncidents groupBy="category" />
+        )} */}
+      </div>
     </div>
   );
 };

@@ -93,7 +93,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
@@ -103,12 +103,12 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -122,7 +122,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
@@ -136,14 +136,14 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -158,7 +158,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
@@ -167,12 +167,12 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -185,7 +185,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
 
@@ -194,14 +194,14 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -219,7 +219,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
@@ -232,13 +232,13 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -253,7 +253,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
@@ -265,13 +265,13 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`nulls_ok` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -286,7 +286,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
@@ -298,7 +298,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -306,7 +306,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -324,7 +324,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
@@ -343,7 +343,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -353,7 +353,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -368,7 +368,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
@@ -382,7 +382,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -390,7 +390,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`nulls_ok` AS grouping_level_3
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -405,7 +405,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setMaxValue(16);
+        this.sut.setMaxValue(16.0);
 
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
@@ -419,7 +419,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
             SELECT
                 SUM(
                     CASE
-                        WHEN %s > 16 THEN 1
+                        WHEN %s > 16.0 THEN 1
                         ELSE 0
                     END
                 ) AS actual_value,
@@ -429,7 +429,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

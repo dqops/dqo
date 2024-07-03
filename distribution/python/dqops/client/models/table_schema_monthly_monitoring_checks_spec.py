@@ -100,9 +100,9 @@ class TableSchemaMonthlyMonitoringChecksSpec:
         if monthly_column_list_changed is not UNSET:
             field_dict["monthly_column_list_changed"] = monthly_column_list_changed
         if monthly_column_list_or_order_changed is not UNSET:
-            field_dict[
-                "monthly_column_list_or_order_changed"
-            ] = monthly_column_list_or_order_changed
+            field_dict["monthly_column_list_or_order_changed"] = (
+                monthly_column_list_or_order_changed
+            )
         if monthly_column_types_changed is not UNSET:
             field_dict["monthly_column_types_changed"] = monthly_column_types_changed
 

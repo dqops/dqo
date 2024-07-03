@@ -31,9 +31,9 @@ class ColumnIntegrityProfilingChecksSpec:
         profile_lookup_key_found_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnIntegrityProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnIntegrityProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_lookup_key_not_found: Union[
         Unset, "ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
     ] = UNSET
@@ -65,9 +65,9 @@ class ColumnIntegrityProfilingChecksSpec:
         if profile_lookup_key_not_found is not UNSET:
             field_dict["profile_lookup_key_not_found"] = profile_lookup_key_not_found
         if profile_lookup_key_found_percent is not UNSET:
-            field_dict[
-                "profile_lookup_key_found_percent"
-            ] = profile_lookup_key_found_percent
+            field_dict["profile_lookup_key_found_percent"] = (
+                profile_lookup_key_found_percent
+            )
 
         return field_dict
 

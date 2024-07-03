@@ -52,7 +52,9 @@ import { ReactComponent as DuckdbSvg } from './svg/duckdb.svg';
 import { ReactComponent as EditSvg } from './svg/edit.svg';
 import { ReactComponent as FacebookSvg } from './svg/facebook.svg';
 import { ReactComponent as FailedSvg } from './svg/failed.svg';
+import { ReactComponent as FilledFunnel } from './svg/filled-funnel.svg';
 import { ReactComponent as FolderSvg } from './svg/folder.svg';
+import { ReactComponent as Funnel } from './svg/funnel.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
@@ -62,6 +64,7 @@ import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
 import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
 import { ReactComponent as JsonSvg } from './svg/json-icon.svg';
+import { ReactComponent as KeySvg } from './svg/key.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
@@ -80,6 +83,7 @@ import { ReactComponent as PlaySvg } from './svg/play.svg';
 import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as ProfilingSvg } from './svg/profiling.svg';
+import { ReactComponent as QuestionmarkSvg } from './svg/question-mark.svg';
 import { ReactComponent as QueueSvg } from './svg/queue.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
 import { ReactComponent as RedshiftSvg } from './svg/redshift.svg';
@@ -235,7 +239,11 @@ const iconsMap: any = {
   incidents: IncidentsSvg,
   monitoring_checks: MonitoringChecksSvg,
   partitioned_checks: PartitionedChecksSvg,
-  minus: MinusSvg
+  minus: MinusSvg,
+  question_mark: QuestionmarkSvg,
+  key: KeySvg,
+  filled_funnel: FilledFunnel,
+  funnel: Funnel
 };
 
 interface SvgIconProps {

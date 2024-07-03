@@ -5,19 +5,6 @@ title: DQOps REST API errors models reference
 The references of all objects used by [errors](../operations/errors.md) REST API operations are listed below.
 
 
-## TimePeriodGradient
-Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|year<br/>quarter<br/>month<br/>week<br/>day<br/>hour<br/>millisecond<br/>|
-
-___
-
 ## ErrorEntryModel
 Detailed error statuses for a single check. Represent one row in the errors table.
 
@@ -33,7 +20,7 @@ Detailed error statuses for a single check. Represent one row in the errors tabl
 |<span class="no-wrap-code">`data_group`</span>|Data group|*string*|
 |<span class="no-wrap-code">[`check_type`](./common.md#checktype)</span>|Check type|*[CheckType](./common.md#checktype)*|
 |<span class="no-wrap-code">`duration_ms`</span>|Duration (ms)|*integer*|
-|<span class="no-wrap-code">[`time_gradient`](#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](#timeperiodgradient)*|
+|<span class="no-wrap-code">[`time_gradient`](./error_samples.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./error_samples.md#timeperiodgradient)*|
 |<span class="no-wrap-code">`time_period`</span>|Time period|*datetime*|
 |<span class="no-wrap-code">`provider`</span>|Provider name|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension|*string*|

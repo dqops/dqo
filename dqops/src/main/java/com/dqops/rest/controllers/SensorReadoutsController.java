@@ -19,16 +19,16 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
+import com.dqops.data.readouts.models.SensorReadoutsListModel;
 import com.dqops.data.readouts.services.SensorReadoutsDataService;
 import com.dqops.data.readouts.services.SensorReadoutsDetailedFilterParameters;
-import com.dqops.data.readouts.models.SensorReadoutsListModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +37,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller over the sensor readouts on tables and columns.
@@ -88,7 +90,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getTableProfilingSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getTableProfilingSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -101,39 +103,41 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    checks, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -161,7 +165,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getTableMonitoringSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getTableMonitoringSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -175,39 +179,41 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec monitoringPartition = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec monitoringPartition = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                monitoringPartition, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    monitoringPartition, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -235,7 +241,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getTablePartitionedSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getTablePartitionedSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -249,39 +255,41 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -309,7 +317,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnProfilingSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getColumnProfilingSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -323,44 +331,46 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    checks, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -389,7 +399,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnMonitoringSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getColumnMonitoringSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -404,44 +414,46 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec monitoringPartition = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec monitoringPartition = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                monitoringPartition, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    monitoringPartition, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -470,7 +482,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<SensorReadoutsListModel>> getColumnPartitionedSensorReadouts(
+    public Mono<ResponseEntity<Flux<SensorReadoutsListModel>>> getColumnPartitionedSensorReadouts(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -485,43 +497,45 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            if (tableSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
-        SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
-        checkName.ifPresent(loadParams::setCheckName);
-        category.ifPresent(loadParams::setCheckCategory);
-        tableComparison.ifPresent(loadParams::setTableComparison);
-        dataGroup.ifPresent(loadParams::setDataGroupName);
-        monthStart.ifPresent(loadParams::setStartMonth);
-        monthEnd.ifPresent(loadParams::setEndMonth);
-        maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
+            AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+            SensorReadoutsDetailedFilterParameters loadParams = new SensorReadoutsDetailedFilterParameters();
+            checkName.ifPresent(loadParams::setCheckName);
+            category.ifPresent(loadParams::setCheckCategory);
+            tableComparison.ifPresent(loadParams::setTableComparison);
+            dataGroup.ifPresent(loadParams::setDataGroupName);
+            monthStart.ifPresent(loadParams::setStartMonth);
+            monthEnd.ifPresent(loadParams::setEndMonth);
+            maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
-        SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
-        return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+            SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
+                    partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
+            return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
+        }));
     }
 }

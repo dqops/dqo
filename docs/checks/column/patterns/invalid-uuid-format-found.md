@@ -139,9 +139,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -157,9 +157,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -173,9 +173,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -191,9 +191,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -207,9 +207,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -225,9 +225,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -241,9 +241,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -259,7 +259,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -268,8 +268,8 @@ spec:
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -283,9 +283,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -307,9 +307,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 FROM (
@@ -327,9 +327,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -345,9 +345,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -361,9 +361,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -386,9 +386,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -406,9 +406,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -424,9 +424,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -440,9 +440,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -458,9 +458,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -474,9 +474,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -492,9 +492,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -508,7 +508,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -526,7 +526,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -542,9 +542,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -567,9 +567,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -634,9 +634,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -651,9 +651,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -670,9 +670,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -687,9 +687,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -706,9 +706,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -723,9 +723,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -742,9 +742,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -759,7 +759,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -768,8 +768,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -786,9 +786,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -809,9 +809,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -837,9 +837,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -854,9 +854,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -873,9 +873,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -897,9 +897,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -925,9 +925,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -942,9 +942,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -961,9 +961,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -978,9 +978,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -997,9 +997,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1014,9 +1014,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1033,7 +1033,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -1050,7 +1050,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -1073,9 +1073,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1097,9 +1097,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -1249,9 +1249,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1267,9 +1267,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1283,9 +1283,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1301,9 +1301,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1317,9 +1317,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1335,9 +1335,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -1351,9 +1351,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1369,7 +1369,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -1378,8 +1378,8 @@ spec:
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1393,9 +1393,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1417,9 +1417,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 FROM (
@@ -1437,9 +1437,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1455,9 +1455,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1471,9 +1471,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1496,9 +1496,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -1516,9 +1516,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1534,9 +1534,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1550,9 +1550,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1568,9 +1568,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1584,9 +1584,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1602,9 +1602,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1618,7 +1618,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -1636,7 +1636,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -1652,9 +1652,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1677,9 +1677,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -1745,9 +1745,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1762,9 +1762,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1781,9 +1781,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1798,9 +1798,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1817,9 +1817,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1834,9 +1834,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1853,9 +1853,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1870,7 +1870,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -1879,8 +1879,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -1897,9 +1897,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1920,9 +1920,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -1948,9 +1948,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1965,9 +1965,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -1984,9 +1984,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2008,9 +2008,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -2036,9 +2036,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2053,9 +2053,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2072,9 +2072,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2089,9 +2089,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2108,9 +2108,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2125,9 +2125,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2144,7 +2144,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -2161,7 +2161,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -2184,9 +2184,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2208,9 +2208,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -2360,9 +2360,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2378,9 +2378,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -2394,9 +2394,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2412,9 +2412,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2428,9 +2428,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2446,9 +2446,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM  AS analyzed_table
@@ -2462,9 +2462,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2480,7 +2480,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -2489,8 +2489,8 @@ spec:
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -2504,9 +2504,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2528,9 +2528,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 FROM (
@@ -2548,9 +2548,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2566,9 +2566,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2582,9 +2582,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2607,9 +2607,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -2627,9 +2627,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2645,9 +2645,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2661,9 +2661,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2679,9 +2679,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2695,9 +2695,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2713,9 +2713,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2729,7 +2729,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -2747,7 +2747,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -2763,9 +2763,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2788,9 +2788,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
             FROM (
@@ -2856,9 +2856,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2873,9 +2873,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2892,9 +2892,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2909,9 +2909,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -2928,9 +2928,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2945,9 +2945,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -2964,9 +2964,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2981,7 +2981,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -2990,8 +2990,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3008,9 +3008,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3031,9 +3031,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -3059,9 +3059,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3076,9 +3076,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3095,9 +3095,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3119,9 +3119,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -3147,9 +3147,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3164,9 +3164,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3183,9 +3183,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3200,9 +3200,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -3219,9 +3219,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3236,9 +3236,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -3255,7 +3255,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -3272,7 +3272,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -3295,9 +3295,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3319,9 +3319,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -3481,9 +3481,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3499,9 +3499,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3519,9 +3519,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3537,9 +3537,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3557,9 +3557,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3575,9 +3575,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3595,9 +3595,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3613,7 +3613,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -3622,8 +3622,8 @@ spec:
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
@@ -3641,9 +3641,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3665,9 +3665,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -3691,9 +3691,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3709,9 +3709,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3729,9 +3729,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3754,9 +3754,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -3780,9 +3780,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3798,9 +3798,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3818,9 +3818,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3836,9 +3836,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -3856,9 +3856,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3874,9 +3874,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -3894,7 +3894,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -3912,7 +3912,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -3934,9 +3934,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3959,9 +3959,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4043,9 +4043,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4060,9 +4060,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4081,9 +4081,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4098,9 +4098,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4119,9 +4119,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4136,9 +4136,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4157,9 +4157,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4174,7 +4174,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -4183,8 +4183,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4203,9 +4203,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4226,9 +4226,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4258,9 +4258,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4275,9 +4275,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4296,9 +4296,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4320,9 +4320,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4352,9 +4352,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4369,9 +4369,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4390,9 +4390,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4407,9 +4407,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -4428,9 +4428,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4445,9 +4445,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -4466,7 +4466,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -4483,7 +4483,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -4506,9 +4506,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4530,9 +4530,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -4696,9 +4696,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4714,9 +4714,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
@@ -4734,9 +4734,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4752,9 +4752,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -4772,9 +4772,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4790,9 +4790,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4810,9 +4810,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4828,7 +4828,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -4837,8 +4837,8 @@ spec:
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
@@ -4856,9 +4856,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4880,9 +4880,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4906,9 +4906,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4924,9 +4924,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -4944,9 +4944,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4969,9 +4969,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -4995,9 +4995,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5013,9 +5013,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -5033,9 +5033,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5051,9 +5051,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
@@ -5071,9 +5071,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5089,9 +5089,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
@@ -5109,7 +5109,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -5127,7 +5127,7 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -5149,9 +5149,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5174,9 +5174,9 @@ spec:
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 time_period,
@@ -5258,9 +5258,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5275,9 +5275,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5296,9 +5296,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5313,9 +5313,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5334,9 +5334,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5351,9 +5351,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5372,9 +5372,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}$') }}
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5389,7 +5389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
+                        WHEN NOT REGEXP_LIKE(analyzed_table.`target_column`, '^[0-9a-fA-F]{8}[ 	
             
             -]?[0-9a-fA-F]{4}[ 	
             
@@ -5398,8 +5398,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             -]?[0-9a-fA-F]{4}[ 	
             
             -]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5418,9 +5418,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5441,9 +5441,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(analyzed_table."target_column", '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -5473,9 +5473,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5490,9 +5490,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5511,9 +5511,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5535,9 +5535,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             
@@ -5567,9 +5567,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN {{ lib.render_target_column('analyzed_table')}} !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5584,9 +5584,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN analyzed_table."target_column" !~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5605,9 +5605,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5622,9 +5622,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table."target_column" REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
@@ -5643,9 +5643,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5660,9 +5660,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT analyzed_table.`target_column` REGEXP '^[0-9a-fA-F]{8}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{4}[\\s-]?[0-9a-fA-F]{12}$'
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
@@ -5681,7 +5681,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -5698,7 +5698,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER,analyzed_table.[target_column]) IS NULL
+                        WHEN TRY_CONVERT(UNIQUEIDENTIFIER, analyzed_table.[target_column]) IS NULL
                             THEN 0
                         ELSE 1
                     END
@@ -5721,9 +5721,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5745,9 +5745,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
-                            THEN 0
-                        ELSE 1
+                        WHEN NOT REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
+                            THEN 1
+                        ELSE 0
                     END
                 ) AS actual_value,
             

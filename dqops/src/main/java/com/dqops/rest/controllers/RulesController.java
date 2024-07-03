@@ -15,8 +15,10 @@
  */
 package com.dqops.rest.controllers;
 
+import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -30,8 +32,6 @@ import com.dqops.rest.models.metadata.RuleFolderModel;
 import com.dqops.rest.models.metadata.RuleListModel;
 import com.dqops.rest.models.metadata.RuleModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import autovalue.shaded.com.google.common.base.Strings;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,11 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -84,13 +88,15 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<RuleListModel>> getAllRules(
+    public Mono<ResponseEntity<Flux<RuleListModel>>> getAllRules(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
-        List<RuleListModel> allRules = ruleFolderModel.getAllRules();
-        allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
+            List<RuleListModel> allRules = ruleFolderModel.getAllRules();
+            allRules.sort(Comparator.comparing(model -> model.getFullRuleName()));
 
-        return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -110,34 +116,36 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<RuleModel>> getRule(
+    public Mono<ResponseEntity<Mono<RuleModel>>> getRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullRuleName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullRuleName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(fullRuleName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(fullRuleName, true);
 
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(fullRuleName, true);
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(fullRuleName, true);
 
-        if (userRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (userRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        RuleDefinitionWrapper effectiveRuleDefinition = Optional.ofNullable(userRuleDefinitionWrapper).orElse(builtinRuleDefinitionWrapper);
+            RuleDefinitionWrapper effectiveRuleDefinition = Optional.ofNullable(userRuleDefinitionWrapper).orElse(builtinRuleDefinitionWrapper);
 
-        boolean isCustom = userRuleDefinitionWrapper != null;
-        boolean isBuiltIn = builtinRuleDefinitionWrapper != null;
-        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        RuleModel ruleModel = new RuleModel(effectiveRuleDefinition, isCustom, isBuiltIn, canEdit);
+            boolean isCustom = userRuleDefinitionWrapper != null;
+            boolean isBuiltIn = builtinRuleDefinitionWrapper != null;
+            boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            RuleModel ruleModel = new RuleModel(effectiveRuleDefinition, isCustom, isBuiltIn, canEdit);
 
-        return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -160,30 +168,32 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createRule(
+    public Mono<ResponseEntity<Mono<Void>>> createRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName,
             @ApiParam("Rule model") @RequestBody RuleModel ruleModel) {
-        if (ruleModel == null || Strings.isNullOrEmpty(fullRuleName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (ruleModel == null || Strings.isNullOrEmpty(fullRuleName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper existingRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
+            RuleDefinitionList userRuleDefinitionList = userHome.getRules();
+            RuleDefinitionWrapper existingRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
 
-        if (existingRuleDefinitionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+            if (existingRuleDefinitionWrapper != null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+            }
 
-        RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
-        ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
-        ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
-        userHomeContext.flush();
+            RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
+            ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
+            ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+        }));
     }
 
     /**
@@ -205,53 +215,55 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateRule(
+    public Mono<ResponseEntity<Mono<Void>>> updateRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Rule model") @RequestBody RuleModel ruleModel,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullRuleName) || ruleModel == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullRuleName) || ruleModel == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
-        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
+            RuleDefinitionList userRuleDefinitionList = userHome.getRules();
+            RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
 
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(fullRuleName, true);
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(fullRuleName, true);
 
-        if (existingUserRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (existingUserRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        if (ruleModel.equalsBuiltInRule(builtinRuleDefinitionWrapper)) {
-            if (existingUserRuleDefinitionWrapper != null) {
-                existingUserRuleDefinitionWrapper.markForDeletion(); // remove customization
+            if (ruleModel.equalsBuiltInRule(builtinRuleDefinitionWrapper)) {
+                if (existingUserRuleDefinitionWrapper != null) {
+                    existingUserRuleDefinitionWrapper.markForDeletion(); // remove customization
+                }
+                else {
+                    // ignore saving
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                }
+            }
+
+            RuleDefinitionSpec newRuleDefinitionSpec = ruleModel.toRuleDefinitionSpec();
+            if (existingUserRuleDefinitionWrapper == null) {
+                RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
+                ruleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
+                ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
             }
             else {
-                // ignore saving
-                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                RuleDefinitionSpec oldRuleDefinitionSpec = existingUserRuleDefinitionWrapper.getSpec(); // loading
+                existingUserRuleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
+                existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
             }
-        }
 
-        RuleDefinitionSpec newRuleDefinitionSpec = ruleModel.toRuleDefinitionSpec();
-        if (existingUserRuleDefinitionWrapper == null) {
-            RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
-            ruleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
-            ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
-        }
-        else {
-            RuleDefinitionSpec oldRuleDefinitionSpec = existingUserRuleDefinitionWrapper.getSpec(); // loading
-            existingUserRuleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
-            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
-        }
+            userHomeContext.flush();
 
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+        }));
     }
 
     /**
@@ -271,28 +283,30 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteRule(
+    public Mono<ResponseEntity<Mono<Void>>> deleteRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(fullRuleName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(fullRuleName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
+            RuleDefinitionList userRuleDefinitionList = userHome.getRules();
+            RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
 
-        if (existingUserRuleDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (existingUserRuleDefinitionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        existingUserRuleDefinitionWrapper.markForDeletion();
-        userHomeContext.flush();
+            existingUserRuleDefinitionWrapper.markForDeletion();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -311,11 +325,13 @@ public class RulesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<RuleFolderModel>> getRuleFolderTree(
+    public Mono<ResponseEntity<Mono<RuleFolderModel>>> getRuleFolderTree(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            RuleFolderModel ruleFolderModel = createRuleTreeModel(principal);
 
-        return new ResponseEntity<>(Mono.just(ruleFolderModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(ruleFolderModel), HttpStatus.OK);
+        }));
     }
 
     /**

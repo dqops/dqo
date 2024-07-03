@@ -33,9 +33,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1pS-wj5AGFdpcnHGjNk9sp6DFA8Po5mZd3x39BPwR07c
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1pS-wj5AGFdpcnHGjNk9sp6DFA8Po5mZd3x39BPwR07c/export?exportFormat=csv" > continuous_days_date_and_string_formats.csv
 
-REM Spreadsheet: https://docs.google.com/spreadsheets/d/1esR1Sun2ck7lV49tZd9b7oyI90dW0HMo-eb7tXqAjy8
-curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1esR1Sun2ck7lV49tZd9b7oyI90dW0HMo-eb7tXqAjy8/export?exportFormat=csv" > continuous_days_different_time_data_types.csv
-
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1B-Nd7tfQjXh55S0b1Ti4-mplFwve_py3iVPrhv0T_ws
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1B-Nd7tfQjXh55S0b1Ti4-mplFwve_py3iVPrhv0T_ws/export?exportFormat=csv" > test_data_values_in_set.csv
 
@@ -91,3 +88,7 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1o1CqrqCum9v16F2Gg2fKLzXuqyWraNDGVoJN1pETvsw
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1o1CqrqCum9v16F2Gg2fKLzXuqyWraNDGVoJN1pETvsw/export?exportFormat=csv" > json_fields_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1qqP-4TxHfykv51xK9bipZr7yzR33snGWrMkGH8y9xlA
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1qqP-4TxHfykv51xK9bipZr7yzR33snGWrMkGH8y9xlA/export?exportFormat=csv" > only_nulls.csv
+

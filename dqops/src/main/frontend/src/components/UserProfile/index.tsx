@@ -146,7 +146,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-auto w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black text-sm">
+      <PopoverContent className="bg-white h-auto w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-[101] text-black text-sm">
         <div className="flex justify-between items-center h-12 ">
           <div className="ml-1 flex items-center justify-center gap-x-2">
             {' '}

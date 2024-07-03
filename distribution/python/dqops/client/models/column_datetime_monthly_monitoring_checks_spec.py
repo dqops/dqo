@@ -41,9 +41,9 @@ class ColumnDatetimeMonthlyMonitoringChecksSpec:
     monthly_date_values_in_future_percent: Union[
         Unset, "ColumnDateValuesInFuturePercentCheckSpec"
     ] = UNSET
-    monthly_date_in_range_percent: Union[
-        Unset, "ColumnDateInRangePercentCheckSpec"
-    ] = UNSET
+    monthly_date_in_range_percent: Union[Unset, "ColumnDateInRangePercentCheckSpec"] = (
+        UNSET
+    )
     monthly_text_match_date_format_percent: Union[
         Unset, "ColumnTextMatchDateFormatPercentCheckSpec"
     ] = UNSET
@@ -76,15 +76,15 @@ class ColumnDatetimeMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_date_values_in_future_percent is not UNSET:
-            field_dict[
-                "monthly_date_values_in_future_percent"
-            ] = monthly_date_values_in_future_percent
+            field_dict["monthly_date_values_in_future_percent"] = (
+                monthly_date_values_in_future_percent
+            )
         if monthly_date_in_range_percent is not UNSET:
             field_dict["monthly_date_in_range_percent"] = monthly_date_in_range_percent
         if monthly_text_match_date_format_percent is not UNSET:
-            field_dict[
-                "monthly_text_match_date_format_percent"
-            ] = monthly_text_match_date_format_percent
+            field_dict["monthly_text_match_date_format_percent"] = (
+                monthly_text_match_date_format_percent
+            )
 
         return field_dict
 

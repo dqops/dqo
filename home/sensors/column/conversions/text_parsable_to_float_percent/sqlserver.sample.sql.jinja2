@@ -1,0 +1,4 @@
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    TRY_CONVERT(FLOAT, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+{%- endcall -%}

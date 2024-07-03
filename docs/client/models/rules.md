@@ -74,7 +74,7 @@ List of parameter definitions - the parameters for custom sensors or custom rule
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[ParameterDefinitionSpec](../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)]*|
+|<span class="no-wrap-code">`self`</span>||*List[[ParameterDefinitionSpec](../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)]*|
 
 
 ___

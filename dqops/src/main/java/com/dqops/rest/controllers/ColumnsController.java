@@ -37,9 +37,9 @@ import com.dqops.data.checkresults.statuscache.CurrentTableStatusKey;
 import com.dqops.data.checkresults.statuscache.TableStatusCache;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
-import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.data.statistics.models.StatisticsResultsForColumnModel;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
+import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.labels.LabelSetSpec;
@@ -50,7 +50,10 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.*;
+import com.dqops.rest.models.metadata.ColumnListModel;
+import com.dqops.rest.models.metadata.ColumnModel;
+import com.dqops.rest.models.metadata.ColumnStatisticsModel;
+import com.dqops.rest.models.metadata.TableColumnsStatisticsModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -75,7 +78,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * REST api controller to manage the list of columns inside a table.
@@ -148,7 +150,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<ColumnListModel>> getColumns(
+    public Mono<ResponseEntity<Flux<ColumnListModel>>> getColumns(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -157,60 +159,62 @@ public class ColumnsController {
             @RequestParam(required = false) Optional<Boolean> dataQualityStatus,
             @ApiParam(name = "checkType", value = "Optional parameter for the check type, when provided, returns the results for data quality dimensions for the data quality checks of that type", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
-        }
-
-        boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-
-        List<ColumnListModel> columnModelsList = tableWrapper.getSpec().getColumns()
-                .entrySet()
-                .stream()
-                .sorted(Comparator.comparing(kv -> kv.getKey()))
-                .map(kv -> ColumnListModel.fromColumnSpecificationForListEntry(
-                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator))
-                .collect(Collectors.toList());
-
-        if (dataQualityStatus.isEmpty() || dataQualityStatus.get()) {
-            columnModelsList.forEach(listModel -> {
-                CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                        listModel.getConnectionName(), listModel.getTable());
-                TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                if (currentTableStatus != null) {
-                    ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
-                    listModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
-                }
-            });
-
-            if (columnModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
-                // the results not loaded yet, we need to wait until the queue is empty
-                CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
-
-                Flux<ColumnListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
-                        .thenMany(Flux.fromIterable(columnModelsList)
-                                .map(columnListModel -> {
-                                    if (columnListModel.getDataQualityStatus() == null) {
-                                        CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
-                                                columnListModel.getConnectionName(), columnListModel.getTable());
-                                        TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
-                                        if (currentTableStatus != null) {
-                                            ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(columnListModel.getColumnName());
-                                            columnListModel.setDataQualityStatus(columnQualityStatusModel != null ?
-                                                    columnQualityStatusModel.shallowCloneWithoutChecks() : null);
-                                        }
-                                    }
-                                    return columnListModel;
-                                }));
-
-                return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+            TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
             }
-        }
 
-        return new ResponseEntity<>(Flux.fromStream(columnModelsList.stream()), HttpStatus.OK); // 200
+            boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+
+            List<ColumnListModel> columnModelsList = tableWrapper.getSpec().getColumns()
+                    .entrySet()
+                    .stream()
+                    .sorted(Comparator.comparing(kv -> kv.getKey()))
+                    .map(kv -> ColumnListModel.fromColumnSpecificationForListEntry(
+                            connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue(), isEditor, isOperator))
+                    .collect(Collectors.toList());
+
+            if (dataQualityStatus.isEmpty() || dataQualityStatus.get()) {
+                columnModelsList.forEach(listModel -> {
+                    CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                            listModel.getConnectionName(), listModel.getTable());
+                    TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                    if (currentTableStatus != null) {
+                        ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(listModel.getColumnName());
+                        listModel.setDataQualityStatus(columnQualityStatusModel != null ? columnQualityStatusModel.shallowCloneWithoutChecks() : new ColumnCurrentDataQualityStatusModel());
+                    }
+                });
+
+                if (columnModelsList.stream().anyMatch(model -> model.getDataQualityStatus() == null)) {
+                    // the results not loaded yet, we need to wait until the queue is empty
+                    CompletableFuture<Boolean> waitForLoadTasksFuture = this.tableStatusCache.getQueueEmptyFuture(TableStatusCache.EMPTY_QUEUE_WAIT_TIMEOUT_MS);
+
+                    Flux<ColumnListModel> resultListFilledWithDelay = Mono.fromFuture(waitForLoadTasksFuture)
+                            .thenMany(Flux.fromIterable(columnModelsList)
+                                    .map(columnListModel -> {
+                                        if (columnListModel.getDataQualityStatus() == null) {
+                                            CurrentTableStatusKey tableStatusKey = new CurrentTableStatusKey(principal.getDataDomainIdentity().getDataDomainCloud(),
+                                                    columnListModel.getConnectionName(), columnListModel.getTable());
+                                            TableCurrentDataQualityStatusModel currentTableStatus = this.tableStatusCache.getCurrentTableStatus(tableStatusKey, checkType.orElse(null));
+                                            if (currentTableStatus != null) {
+                                                ColumnCurrentDataQualityStatusModel columnQualityStatusModel = currentTableStatus.getColumns().get(columnListModel.getColumnName());
+                                                columnListModel.setDataQualityStatus(columnQualityStatusModel != null ?
+                                                        columnQualityStatusModel.shallowCloneWithoutChecks() : null);
+                                            }
+                                        }
+                                        return columnListModel;
+                                    }));
+
+                    return new ResponseEntity<>(resultListFilledWithDelay, HttpStatus.OK); // 200
+                }
+            }
+
+            return new ResponseEntity<>(Flux.fromStream(columnModelsList.stream()), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -234,59 +238,61 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableColumnsStatisticsModel>> getColumnsStatistics(
+    public Mono<ResponseEntity<Mono<TableColumnsStatisticsModel>>> getColumnsStatistics(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                physicalTableName, true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    physicalTableName, true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
-                this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, principal.getDataDomainIdentity());
-        boolean canCollectStatistics = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
+                    this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
+                            CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, principal.getDataDomainIdentity());
+            boolean canCollectStatistics = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
-                .entrySet()
-                .stream()
-                .sorted(Comparator.comparing(kv -> kv.getKey()))
-                .map(kv -> ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
-                        connectionName, tableWrapper.getPhysicalTableName(),
-                        kv.getKey(), // column name
-                        kv.getValue(), // column specification
-                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey()),
-                        canCollectStatistics))
-                .collect(Collectors.toList());
+            List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
+                    .entrySet()
+                    .stream()
+                    .sorted(Comparator.comparing(kv -> kv.getKey()))
+                    .map(kv -> ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
+                            connectionName, tableWrapper.getPhysicalTableName(),
+                            kv.getKey(), // column name
+                            kv.getValue(), // column specification
+                            mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey()),
+                            canCollectStatistics))
+                    .collect(Collectors.toList());
 
-        TableColumnsStatisticsModel resultModel = new TableColumnsStatisticsModel();
-        resultModel.setConnectionName(connectionName);
-        resultModel.setTable(physicalTableName);
-        resultModel.setColumnStatistics(columnModels);
-        resultModel.setCanCollectStatistics(canCollectStatistics);
+            TableColumnsStatisticsModel resultModel = new TableColumnsStatisticsModel();
+            resultModel.setConnectionName(connectionName);
+            resultModel.setTable(physicalTableName);
+            resultModel.setColumnStatistics(columnModels);
+            resultModel.setCanCollectStatistics(canCollectStatistics);
 
-        resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
-        {{
-            setConnection(connectionName);
-            setFullTableName(physicalTableName.toTableSearchFilter());
-//            setTarget(StatisticsCollectorTarget.column);
-            setEnabled(true);
-        }});
+            resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+            {{
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+    //            setTarget(StatisticsCollectorTarget.column);
+                setEnabled(true);
+            }});
 
-        return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -309,36 +315,38 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnModel>> getColumn(
+    public Mono<ResponseEntity<Mono<ColumnModel>>> getColumn(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnModel columnModel = new ColumnModel() {{
-            setConnectionName(connectionName);
-            setTable(tableWrapper.getPhysicalTableName());
-            setColumnName(columnName);
-            setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
-            setSpec(columnSpec);
-            setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
-            setYamlParsingError(tableSpec.getYamlParsingError());
-        }};
+            ColumnModel columnModel = new ColumnModel() {{
+                setConnectionName(connectionName);
+                setTable(tableWrapper.getPhysicalTableName());
+                setColumnName(columnName);
+                setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
+                setSpec(columnSpec);
+                setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+                setYamlParsingError(tableSpec.getYamlParsingError());
+            }};
 
-        return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -361,31 +369,33 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnListModel>> getColumnBasic(
+    public Mono<ResponseEntity<Mono<ColumnListModel>>> getColumnBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnListModel columnListModel = ColumnListModel.fromColumnSpecification(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            ColumnListModel columnListModel = ColumnListModel.fromColumnSpecification(
+                    connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(columnListModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(columnListModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -410,38 +420,40 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnStatisticsModel>> getColumnStatistics(
+    public Mono<ResponseEntity<Mono<ColumnStatisticsModel>>> getColumnStatistics(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
 
-        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        StatisticsResultsForColumnModel mostRecentStatisticsMetricsForColumn =
-                this.statisticsDataService.getMostRecentStatisticsForColumn(
-                        connectionName, tableWrapper.getPhysicalTableName(), columnName,
-                        CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME,
-                        principal.getDataDomainIdentity());
+            StatisticsResultsForColumnModel mostRecentStatisticsMetricsForColumn =
+                    this.statisticsDataService.getMostRecentStatisticsForColumn(
+                            connectionName, tableWrapper.getPhysicalTableName(), columnName,
+                            CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME,
+                            principal.getDataDomainIdentity());
 
-        boolean canRunStatisticsJob = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
+            boolean canRunStatisticsJob = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
-                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
-                mostRecentStatisticsMetricsForColumn, canRunStatisticsJob);
+            ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
+                    connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
+                    mostRecentStatisticsMetricsForColumn, canRunStatisticsJob);
 
-        return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -464,20 +476,22 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<LabelSetSpec>> getColumnLabels(
+    public Mono<ResponseEntity<Mono<LabelSetSpec>>> getColumnLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        LabelSetSpec labels = columnSpec.getLabels();
-        return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+            LabelSetSpec labels = columnSpec.getLabels();
+            return new ResponseEntity<>(Mono.justOrEmpty(labels), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -500,20 +514,22 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CommentsListSpec>> getColumnComments(
+    public Mono<ResponseEntity<Mono<CommentsListSpec>>> getColumnComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        CommentsListSpec comments = columnSpec.getComments();
-        return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+            CommentsListSpec comments = columnSpec.getComments();
+            return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -537,20 +553,22 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnProfilingCheckCategoriesSpec>> getColumnProfilingChecks(
+    public Mono<ResponseEntity<Mono<ColumnProfilingCheckCategoriesSpec>>> getColumnProfilingChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnProfilingCheckCategoriesSpec checks = columnSpec.getProfilingChecks();
-        return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
+            ColumnProfilingCheckCategoriesSpec checks = columnSpec.getProfilingChecks();
+            return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -574,25 +592,27 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnDailyMonitoringCheckCategoriesSpec>> getColumnMonitoringChecksDaily(
+    public Mono<ResponseEntity<Mono<ColumnDailyMonitoringCheckCategoriesSpec>>> getColumnMonitoringChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
-        if (monitoringSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
+            if (monitoringSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = monitoringSpec.getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
+            ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = monitoringSpec.getDaily();
+            return new ResponseEntity<>(Mono.justOrEmpty(dailyMonitoring), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -616,25 +636,27 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnMonthlyMonitoringCheckCategoriesSpec>> getColumnMonitoringChecksMonthly(
+    public Mono<ResponseEntity<Mono<ColumnMonthlyMonitoringCheckCategoriesSpec>>> getColumnMonitoringChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
-        if (monitoringSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
+            if (monitoringSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = monitoringSpec.getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
+            ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = monitoringSpec.getMonthly();
+            return new ResponseEntity<>(Mono.justOrEmpty(monthlyMonitoring), HttpStatus.OK); // 200
+        }));
     }
     
     /**
@@ -658,25 +680,27 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnDailyPartitionedCheckCategoriesSpec>> getColumnPartitionedChecksDaily(
+    public Mono<ResponseEntity<Mono<ColumnDailyPartitionedCheckCategoriesSpec>>> getColumnPartitionedChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+            if (partitionedChecksSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = partitionedChecksSpec.getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
+            ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = partitionedChecksSpec.getDaily();
+            return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -701,25 +725,27 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<ColumnMonthlyPartitionedCheckCategoriesSpec>> getColumnPartitionedChecksMonthly(
+    public Mono<ResponseEntity<Mono<ColumnMonthlyPartitionedCheckCategoriesSpec>>> getColumnPartitionedChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-        if (partitionedChecksSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
-        }
+            ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+            if (partitionedChecksSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+            }
 
-        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = partitionedChecksSpec.getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
+            ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = partitionedChecksSpec.getMonthly();
+            return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
+        }));
     }
 
 
@@ -744,57 +770,59 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -819,58 +847,60 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnMonitoringChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -895,58 +925,60 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksModel(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnPartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
 
@@ -971,41 +1003,43 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getColumnProfilingChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getColumnProfilingChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1030,42 +1064,44 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getColumnMonitoringChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getColumnMonitoringChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1090,42 +1126,44 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerListModel>> getColumnPartitionedChecksBasicModel(
+    public Mono<ResponseEntity<Mono<CheckContainerListModel>>> getColumnPartitionedChecksBasicModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
-        CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
-                checks,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+            CheckContainerListModel checksBasicModel = this.specToModelCheckMappingService.createBasicModel(
+                    checks,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksBasicModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1151,7 +1189,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnProfilingChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1159,53 +1197,55 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1232,7 +1272,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnMonitoringChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnMonitoringChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1241,53 +1281,55 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1314,7 +1356,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksModelFilter(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getColumnPartitionedChecksModelFilter(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1323,53 +1365,55 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
 
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            ConnectionList connections = userHome.getConnections();
+            ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                    new PhysicalTableName(schemaName, tableName), true);
+            if (tableWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            TableSpec tableSpec = tableWrapper.getSpec();
+            ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+            if (columnSpec == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
-                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
-        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+            ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+            this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                    connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
+            AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnection(connectionWrapper.getName());
-            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumn(columnName);
-            setCheckType(checks.getCheckType());
-            setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
-            setEnabled(true);
-        }};
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+                setConnection(connectionWrapper.getName());
+                setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+                setColumn(columnName);
+                setCheckType(checks.getCheckType());
+                setTimeScale(checks.getCheckTimeScale());
+                setCheckCategory(checkCategory);
+                setCheckName(checkName);
+                setEnabled(true);
+            }};
 
-        CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
-                checks,
-                checkSearchFilters,
-                connectionWrapper.getSpec(),
-                tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
-                connectionWrapper.getSpec().getProviderType(),
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            CheckContainerModel checksModel = this.specToModelCheckMappingService.createModel(
+                    checks,
+                    checkSearchFilters,
+                    connectionWrapper.getSpec(),
+                    tableSpec,
+                    new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                    connectionWrapper.getSpec().getProviderType(),
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
 
-        return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(checksModel), HttpStatus.OK); // 200
+        }));
     }
 
     /**
@@ -1394,40 +1438,42 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createColumn(
+    public Mono<ResponseEntity<Mono<Void>>> createColumn(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Column specification") @RequestBody ColumnSpec columnSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-            () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                if (tableWrapper == null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                    }
 
-                TableSpec tableSpec = tableWrapper.getSpec();
-                ColumnSpecMap columns = tableSpec.getColumns();
-                ColumnSpec existingColumnSpec = columns.get(columnName);
-                if (existingColumnSpec != null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
-                }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpecMap columns = tableSpec.getColumns();
+                    ColumnSpec existingColumnSpec = columns.get(columnName);
+                    if (existingColumnSpec != null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
+                    }
 
-                columns.put(columnName, columnSpec);
-                userHomeContext.flush();
+                    columns.put(columnName, columnSpec);
+                    userHomeContext.flush();
 
-                return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
-            });
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+                });
+        }));
     }
 
     /**
@@ -1453,41 +1499,43 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateColumn(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumn(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Column specification") @RequestBody ColumnSpec columnSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-            () -> {
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                if (tableWrapper == null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                () -> {
+                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                    if (tableWrapper == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                    }
 
-                TableSpec tableSpec = tableWrapper.getSpec();
-                ColumnSpecMap columns = tableSpec.getColumns();
-                ColumnSpec existingColumnSpec = columns.get(columnName);
-                if (existingColumnSpec == null) {
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-                }
+                    TableSpec tableSpec = tableWrapper.getSpec();
+                    ColumnSpecMap columns = tableSpec.getColumns();
+                    ColumnSpec existingColumnSpec = columns.get(columnName);
+                    if (existingColumnSpec == null) {
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                    }
 
-                // TODO: validate the columnSpec
-                columns.replace(columnName, columnSpec);
-                userHomeContext.flush();
+                    // TODO: validate the columnSpec
+                    columns.replace(columnName, columnSpec);
+                    userHomeContext.flush();
 
-                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-            });
+                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                });
+        }));
     }
 
     /**
@@ -1513,47 +1561,49 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateColumnBasic(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnBasic(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Basic column information to store") @RequestBody ColumnListModel columnListModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        if (!Objects.equals(connectionName, columnListModel.getConnectionName()) ||
-                !Objects.equals(columnName, columnListModel.getColumnName())) {
-            return new ResponseEntity<>(Mono.empty(),
-                    HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
-        }
+            if (!Objects.equals(connectionName, columnListModel.getConnectionName()) ||
+                    !Objects.equals(columnName, columnListModel.getColumnName())) {
+                return new ResponseEntity<>(Mono.empty(),
+                        HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
+            }
 
-        if (columnListModel.getTable() == null ||
-                !Objects.equals(schemaName, columnListModel.getTable().getSchemaName()) ||
-                !Objects.equals(tableName, columnListModel.getTable().getTableName())) {
-            return new ResponseEntity<>(Mono.empty(),
-                    HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
-        }
+            if (columnListModel.getTable() == null ||
+                    !Objects.equals(schemaName, columnListModel.getTable().getSchemaName()) ||
+                    !Objects.equals(tableName, columnListModel.getTable().getTableName())) {
+                return new ResponseEntity<>(Mono.empty(),
+                        HttpStatus.NOT_ACCEPTABLE); // 406 - wrong values
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    // TODO: validate the columnSpec
-                    columnListModel.copyToColumnSpecification(columnSpec);
-                    userHomeContext.flush();
+                        // TODO: validate the columnSpec
+                        columnListModel.copyToColumnSpecification(columnSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1579,7 +1629,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnLabels(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnLabels(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1587,26 +1637,28 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column")
             @RequestBody LabelSetSpec labelSetSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    columnSpec.setLabels(labelSetSpec);
-                    userHomeContext.flush();
+                        columnSpec.setLabels(labelSetSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1632,7 +1684,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnComments(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnComments(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1640,26 +1692,28 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column")
             @RequestBody CommentsListSpec commentsListSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                        }
 
-                    columnSpec.setComments(commentsListSpec);
-                    userHomeContext.flush();
+                        columnSpec.setComments(commentsListSpec);
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1685,7 +1739,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnProfilingChecks(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnProfilingChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1693,26 +1747,28 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column")
             @RequestBody ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
+                        columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1738,7 +1794,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksDaily(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnMonitoringChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1746,39 +1802,41 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column")
             @RequestBody ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)  ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName)  ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
-                    if (monitoringChecksSpec == null) {
-                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
-                    }
+                        ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                        if (monitoringChecksSpec == null) {
+                            monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                        }
 
-                    if (columnDailyMonitoringSpec != null) {
-                        monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
-                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
-                    } else if (monitoringChecksSpec.getMonthly() == null) {
-                        // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
-                        columnSpec.setMonitoringChecks(null);
-                    } else {
-                        monitoringChecksSpec.setDaily(null);
-                    }
+                        if (columnDailyMonitoringSpec != null) {
+                            monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
+                            columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                        } else if (monitoringChecksSpec.getMonthly() == null) {
+                            // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
+                            columnSpec.setMonitoringChecks(null);
+                        } else {
+                            monitoringChecksSpec.setDaily(null);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1804,7 +1862,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnMonitoringChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1812,39 +1870,41 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column")
             @RequestBody ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
-                    if (monitoringChecksSpec == null) {
-                        monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
-                    }
+                        ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+                        if (monitoringChecksSpec == null) {
+                            monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
+                        }
 
-                    if (columnMonthlyMonitoringSpec != null) {
-                        monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
-                        columnSpec.setMonitoringChecks(monitoringChecksSpec);
-                    } else if (monitoringChecksSpec.getDaily() == null) {
-                        // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
-                        columnSpec.setMonitoringChecks(null);
-                    } else {
-                        monitoringChecksSpec.setMonthly(null);
-                    }
+                        if (columnMonthlyMonitoringSpec != null) {
+                            monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
+                            columnSpec.setMonitoringChecks(monitoringChecksSpec);
+                        } else if (monitoringChecksSpec.getDaily() == null) {
+                            // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
+                            columnSpec.setMonitoringChecks(null);
+                        } else {
+                            monitoringChecksSpec.setMonthly(null);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1870,7 +1930,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksDaily(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnPartitionedChecksDaily(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1878,39 +1938,41 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
             @RequestBody ColumnDailyPartitionedCheckCategoriesSpec columnDailyPartitionedSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-                    if (partitionedChecksSpec == null) {
-                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
-                    }
+                        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                        if (partitionedChecksSpec == null) {
+                            partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                        }
 
-                    if (columnDailyPartitionedSpec != null) {
-                        partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
-                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
-                    } else if (partitionedChecksSpec.getMonthly() == null) {
-                        // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
-                        columnSpec.setPartitionedChecks(null);
-                    } else {
-                        partitionedChecksSpec.setDaily(null);
-                    }
+                        if (columnDailyPartitionedSpec != null) {
+                            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
+                            columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                        } else if (partitionedChecksSpec.getMonthly() == null) {
+                            // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
+                            columnSpec.setPartitionedChecks(null);
+                        } else {
+                            partitionedChecksSpec.setDaily(null);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -1936,7 +1998,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksMonthly(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnPartitionedChecksMonthly(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -1944,39 +2006,41 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
             @RequestBody ColumnMonthlyPartitionedCheckCategoriesSpec columnMonthlyPartitionedSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
-                    if (partitionedChecksSpec == null) {
-                        partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
-                    }
+                        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+                        if (partitionedChecksSpec == null) {
+                            partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                        }
 
-                    if (columnMonthlyPartitionedSpec != null) {
-                        partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
-                        columnSpec.setPartitionedChecks(partitionedChecksSpec);
-                    } else if (partitionedChecksSpec.getMonthly() == null) {
-                        // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
-                        columnSpec.setPartitionedChecks(null);
-                    } else {
-                        partitionedChecksSpec.setMonthly(null);
-                    }
+                        if (columnMonthlyPartitionedSpec != null) {
+                            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
+                            columnSpec.setPartitionedChecks(partitionedChecksSpec);
+                        } else if (partitionedChecksSpec.getMonthly() == null) {
+                            // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
+                            columnSpec.setPartitionedChecks(null);
+                        } else {
+                            partitionedChecksSpec.setMonthly(null);
+                        }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
 
@@ -2003,7 +2067,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnProfilingChecksModel(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnProfilingChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2011,41 +2075,43 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
-
-                    if (checkContainerModel != null) {
-                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
-                        if (!checksToUpdate.isDefault()) {
-                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
-                    } else {
-                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-                    }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+
+                        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
+
+                        if (checkContainerModel != null) {
+                            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                            if (!checksToUpdate.isDefault()) {
+                                columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                            }
+                        } else {
+                            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                        }
+
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2072,7 +2138,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnMonitoringChecksModel(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnMonitoringChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2081,41 +2147,43 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality monitoring configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
-
-                    if (checkContainerModel != null) {
-                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
-                        if (!checksToUpdate.isDefault()) {
-                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
-                    } else {
-                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-                    }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+
+                        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
+
+                        if (checkContainerModel != null) {
+                            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
+                            if (!checksToUpdate.isDefault()) {
+                                columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                            }
+                        } else {
+                            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                        }
+
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2143,7 +2211,7 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> updateColumnPartitionedChecksModel(
+    public Mono<ResponseEntity<Mono<Void>>> updateColumnPartitionedChecksModel(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
@@ -2152,41 +2220,43 @@ public class ColumnsController {
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration")
             @RequestBody CheckContainerModel allChecksModel) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(connectionName) ||
+                    Strings.isNullOrEmpty(schemaName) ||
+                    Strings.isNullOrEmpty(tableName) ||
+                    Strings.isNullOrEmpty(columnName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
 
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    TableSpec tableSpec = tableWrapper.getSpec();
-                    ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-                    if (columnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
-
-                    AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
-
-                    if (allChecksModel != null) {
-                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
-                        if (!checksToUpdate.isDefault()) {
-                            columnSpec.setColumnCheckRootContainer(checksToUpdate);
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
                         }
-                    } else {
-                        // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
-                    }
 
-                    userHomeContext.flush();
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        TableSpec tableSpec = tableWrapper.getSpec();
+                        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+                        if (columnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+
+                        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
+
+                        if (allChecksModel != null) {
+                            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
+                            if (!checksToUpdate.isDefault()) {
+                                columnSpec.setColumnCheckRootContainer(checksToUpdate);
+                            }
+                        } else {
+                            // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
+                        }
+
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -2209,29 +2279,31 @@ public class ColumnsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<DqoQueueJobId>> deleteColumn(
+    public Mono<ResponseEntity<Mono<DqoQueueJobId>>> deleteColumn(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName) {
-        return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
-                    if (tableWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-                    }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            return this.lockService.callSynchronouslyOnTable(connectionName, new PhysicalTableName(schemaName, tableName),
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+                        if (tableWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+                        }
 
-                    ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
-                    if (existingColumnSpec == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-                    }
+                        ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
+                        if (existingColumnSpec == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+                        }
 
-                    PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
-                            connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
-                    return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
-                });
+                        PushJobResult<DeleteStoredDataResult> backgroundJob = this.columnService.deleteColumn(
+                                connectionName, tableWrapper.getPhysicalTableName(), columnName, principal);
+                        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
+                    });
+        }));
     }
 
 

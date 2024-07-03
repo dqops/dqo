@@ -1,0 +1,4 @@
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    1=1
+{%- endcall -%}

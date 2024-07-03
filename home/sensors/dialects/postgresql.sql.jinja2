@@ -24,6 +24,14 @@
     {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
+{%- macro render_referenced_table(foreign_table) -%}
+{%- if foreign_table.find(".") < 0 -%}
+   {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(foreign_table) -}}
+{%- else -%}
+   {{ foreign_table }}
+{%- endif -%}
+{%- endmacro -%}
+
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}
         ({{ calculated_column_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
@@ -312,7 +320,7 @@
                 {%- if not loop.first -%}
                     {{ eol() ~ indentation ~ '      AND ' }}
                 {%- endif -%}
-                {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }}
+                {{ "(" -}} {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }} {{- ")" -}}
             {%- endfor -%}
             {{ render_date_range_filters(eol() ~ indentation ~ '      AND ', table_alias_prefix, indentation ~ '      ') }}
         {%- else -%}
@@ -349,3 +357,120 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
+
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
+        '%YYYY-%MM-%DD'
+    {%- elif date_format == 'MM/DD/YYYY' -%}
+        '%MM/%DD/%YYYY'
+    {%- elif date_format == 'DD/MM/YYYY' -%}
+        '%DD/%MM/%YYYY'
+    {%- elif date_format == 'YYYY/MM/DD'-%}
+        '%YYYY/%MM/%DD'
+    {%- elif date_format == 'Month D, YYYY'-%}
+        '%Month %DD,%YYYY'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_date_format_cast() %}
+    {%- if is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+    {{ render_target_column('analyzed_table') }}
+    {%- elif is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- else -%}
+    CAST({{ render_target_column('analyzed_table') }} AS DATE)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_date_format_regex(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
+    {%- elif date_format == 'DD-MM-YYYY' -%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
+    {%- elif date_format == 'DD.MM.YYYY' -%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
+    {%- elif date_format == 'YYYY-MM-DD' -%}
+        '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+    {%- elif date_format == 'MM/DD/YYYY'-%}
+        '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
+    {%- endif -%}
+{% endmacro -%}
+
+{% macro render_error_sampler(wrap_condition = '', render_null_check = true, override_samples_limit = none) %}
+    {%- if (data_groupings is not none and (data_groupings | length()) > 0)  -%}
+WITH error_samples AS (
+    SELECT
+        {{ render_target_column('analyzed_table') }} AS sample_value
+        {{- render_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '        ') }}
+        {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+            {%- for id_column in error_sampling.id_columns -%}
+                {{ ',' }}
+        {{ render_column(id_column, 'analyzed_table') }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif -%},
+        ROW_NUMBER() OVER (
+            PARTITION BY
+                {%- for attribute in data_groupings -%}
+                    {%- if not loop.first -%}
+                        {{ ',' }}
+                    {%- endif -%}
+                    {%- with data_grouping_level = data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ eol()  }}{{ '                ' }}{{ make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ eol() }}{{ '                ' }}{{ render_column(data_grouping_level.column, 'analyzed_table') }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor %}
+            ORDER BY
+                {% if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+                    {%- for id_column in error_sampling.id_columns -%}
+                        {{- render_column(id_column, 'analyzed_table') }} ASC,{{ ' ' }}
+                    {%- endfor %}
+                {%- endif -%}
+                {{ render_target_column('analyzed_table') }} ASC
+        ) AS sample_index
+    FROM
+        {{ render_target_table() }} AS analyzed_table
+    {% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+    LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+    {% endif %}
+        {{- render_where_clause(extra_filter = (render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~
+             wrap_condition ~ ' (' ~ caller() ~ ')', table_alias_prefix = 'analyzed_table', indentation = '    ') }}
+)
+SELECT
+    sample_table.sample_value AS actual_value,
+    sample_table.sample_index AS sample_index
+    {%- for attribute in data_groupings -%}
+        {{ ',' }}
+    sample_table.grouping_{{ attribute }} AS grouping_{{ attribute }}
+    {%- endfor -%}
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    sample_table.row_id_{{ loop.index }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM error_samples AS sample_table
+WHERE sample_table.sample_index <= {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
+LIMIT {{ error_sampling.total_samples_limit }}
+    {%- else -%}
+SELECT
+    {{ render_target_column('analyzed_table') }} as actual_value
+    {%- if (error_sampling.id_columns is not none and (error_sampling.id_columns | length()) > 0) -%}
+        {%- for id_column in error_sampling.id_columns -%}
+            {{ ',' }}
+    {{ render_column(id_column) }} AS row_id_{{ loop.index }}
+        {%- endfor -%}
+    {%- endif %}
+FROM
+    {{ render_target_table() }} AS analyzed_table
+{% if parameters.foreign_table is not none and (parameters.foreign_table | length() > 0) -%}
+LEFT OUTER JOIN {{ render_referenced_table(parameters.foreign_table) }} AS foreign_table
+ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ quote_identifier(parameters.foreign_column) }}
+{% endif %}
+    {{- render_where_clause((render_target_column('analyzed_table') ~ ' IS NOT NULL AND ' if render_null_check) ~ wrap_condition ~ ' (' ~ caller() ~ ')') }}
+LIMIT {{ override_samples_limit if override_samples_limit is not none else error_sampling.samples_limit }}
+    {%- endif -%}
+{%- endmacro %}

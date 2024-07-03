@@ -21,6 +21,10 @@ import com.dqops.connectors.spark.SparkSourceConnection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
+import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleTableMetadata;
+import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -66,11 +70,19 @@ public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
     }
 
     @Test
-    void listTables_whenDefaultSchemaListed_thenReturnsTables() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default", null, 300, secretValueLookupContext);
+    void listTables_whenUsedTableNameContainsFilter_thenReturnTableThatMatchFilter() {
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                SampleCsvFileNames.nulls_and_uniqueness, ProviderType.spark);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.sut.open(this.secretValueLookupContext);
+        String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
 
-        Assertions.assertTrue(tables.size() == 0);
+        String hashedTableName = sampleTableMetadata.getTableData().getHashedTableName();
+        String tableFilter = hashedTableName.substring(2, hashedTableName.length() - 3);
+
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, tableFilter, 300, secretValueLookupContext);
+
+        Assertions.assertEquals(1, tables.size());
     }
 
 }

@@ -40,22 +40,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -72,22 +62,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -104,22 +84,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -136,22 +106,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -168,22 +128,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -206,22 +156,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -238,22 +178,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                     ELSE 0
                 END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -277,22 +207,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -309,22 +229,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -341,22 +251,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -372,16 +272,6 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
     
     {% macro render_ordering_column_names() %}
         {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
@@ -404,7 +294,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ lib.render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -421,22 +311,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                    WHEN {{ lib.render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ lib.render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
                     ELSE 0
                 END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -485,39 +365,23 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -532,39 +396,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -579,39 +428,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {% else -%}
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -626,39 +460,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -673,39 +492,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -726,39 +530,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {% else -%}
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -774,38 +563,27 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
+    
     {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -827,39 +605,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {% else -%}
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -873,39 +636,25 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
     
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {% else -%}
+                            TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -920,39 +669,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -967,39 +701,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                        {% else -%}
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1014,39 +733,24 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_value_in_future() -%}
-        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                        THEN 1
-                    ELSE 0
-                END
-        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                        THEN 1
-                    ELSE 0
-                END
-        {%- else -%}
-                CASE
-                    WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                        THEN 1
-                    ELSE 0
-                END
-        {%- endif -%}
-    {%- endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
-                {{ render_value_in_future() }}
+                CASE
+                    WHEN
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        {% else -%}
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                        {% endif -%}
+                        THEN 1
+                    ELSE 0
+                END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1083,7 +787,7 @@ The text match date format percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`date_format`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
+|<span class="no-wrap-code">`date_format`</span>|Expected date format. The sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
 
 
 
@@ -1099,27 +803,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                         REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -1137,27 +827,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -1180,7 +856,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
+                    WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format_regex(parameters.date_format) }}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -1198,32 +874,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    {% macro render_regex(column, regex_pattern) %}
-        {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-        {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(CASE
                   WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                       {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                       {{ lib.render_regex(lib.render_target_column('analyzed_table'), lib.render_date_format_regex(parameters.date_format), should_make_text_constant = false ) }}
                      THEN 1
                   ELSE 0
                 END
@@ -1241,26 +897,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-      {%- if date_format == 'DD/MM/YYYY'-%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-      {%- elif date_format == 'DD-MM-YYYY' -%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-      {%- elif date_format == 'DD.MM.YYYY' -%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-      {%- elif date_format == 'YYYY-MM-DD' -%}
-      '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-      {%- elif date_format == 'MM/DD/YYYY'-%}
-        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-      {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(CASE
                   WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                       REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                       REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                      THEN 1
                   ELSE 0
                 END
@@ -1284,27 +926,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-            '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                            CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{lib.render_date_format_regex(parameters.date_format)}} IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1322,27 +950,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-            '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END
@@ -1367,28 +981,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                         {{lib.render_target_column('analyzed_table')}} ~ {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END
@@ -1406,28 +1005,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END
@@ -1445,27 +1029,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{lib.render_date_format_regex(parameters.date_format)}}) IS NOT FALSE
                         THEN 1
                     ELSE 0
                 END
@@ -1483,27 +1053,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
-        {%- endif -%}
-    {% endmacro %}
-    
     SELECT
         CASE
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                         {{ lib.render_target_column('analyzed_table') }} LIKE {{lib.render_date_format_regex(parameters.date_format)}} ESCAPE '~'
                         THEN 1
                     ELSE 0
                 END
@@ -1521,27 +1077,13 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format(date_format) %}
-        {%- if date_format == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-        {%- elif date_format == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-        {%- elif date_format == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-        {%- elif date_format == 'YYYY-MM-DD' -%}
-            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- elif date_format == 'MM/DD/YYYY'-%}
-                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
-                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{lib.render_date_format_regex(parameters.date_format)}})
                         THEN 1
                     ELSE 0
                 END

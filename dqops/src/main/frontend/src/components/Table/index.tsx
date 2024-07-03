@@ -1,7 +1,5 @@
-import React from 'react';
-
 import clsx from 'clsx';
-
+import React from 'react';
 import SvgIcon from '../SvgIcon';
 
 interface Column {
@@ -10,6 +8,7 @@ interface Column {
   className?: string;
   render?: any;
   header?: any;
+  alwaysVisible?: boolean;
 }
 
 export interface TableProps {
@@ -31,23 +30,37 @@ export const Table: React.FC<TableProps> = ({
   loading,
   getRowClass
 }) => {
+  const getValue = (item: any, column: Column) => {
+    const key = Object.keys(item).find((key) => key === column.value);
+    return key !== undefined ? item[key] : undefined;
+  };
+
   return (
     <div className="w-full">
       <table className={className}>
         <thead>
           <tr>
-            {columns.map((column) => (
-              <th
-                key={column.value}
-                className={`text-left px-2 pt-2 pb-2 text-base font-semibold min-w-20 pr-4 ${column.className}`}
-              >
-                {column.header ? (
-                  <>{column.header(column.label)}</>
-                ) : (
-                  <div>{column.label}</div>
-                )}
-              </th>
-            ))}
+            {columns.map((column) => {
+              const itemExist = data.find(
+                (item) => getValue(item, column) !== undefined
+              );
+
+              if (itemExist === undefined && column.alwaysVisible !== true) {
+                return null;
+              }
+              return (
+                <th
+                  key={column.value}
+                  className={`text-left px-2 pt-2 pb-2 text-base font-semibold min-w-20 pr-4 ${column.className}`}
+                >
+                  {column.header ? (
+                    <>{column.header(column.label)}</>
+                  ) : (
+                    <div>{column.label}</div>
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -85,23 +98,36 @@ export const Table: React.FC<TableProps> = ({
                       onClick={() => onClickRow && onClickRow(item)}
                       className="border-b border-gray-150 last:border-b-0"
                     >
-                      {columns.map((column) => (
-                        <td
-                          key={column.value}
-                          className={clsx(
-                            'text-left px-2 py-4',
-                            column.className,
-                            getRowClass ? getRowClass(item) : ''
-                          )}
-                        >
-                          {column.render
-                            ? column.render(item[column.value], item, index)
-                            : column.value === 'timePeriod' ||
-                              column.value === 'executedAt'
-                            ? (item[column.value] as string).replace(/Z/gi, '')
-                            : item[column.value]}
-                        </td>
-                      ))}
+                      {columns.map((column) => {
+                        const headerItemExist = data.find(
+                          (dataItem) => getValue(dataItem, column) !== undefined
+                        );
+
+                        if (!headerItemExist && column.alwaysVisible !== true) {
+                          return null;
+                        }
+
+                        return (
+                          <td
+                            key={column.value}
+                            className={clsx(
+                              'text-left px-2 py-4',
+                              column.className,
+                              getRowClass ? getRowClass(item) : ''
+                            )}
+                          >
+                            {column.render
+                              ? column.render(item[column.value], item, index)
+                              : column.value === 'timePeriod' ||
+                                column.value === 'executedAt'
+                              ? (item[column.value] as string).replace(
+                                  /Z/gi,
+                                  ''
+                                )
+                              : item[column.value]}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </>

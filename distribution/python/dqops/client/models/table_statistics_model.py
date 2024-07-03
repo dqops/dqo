@@ -82,13 +82,13 @@ class TableStatisticsModel:
         if statistics is not UNSET:
             field_dict["statistics"] = statistics
         if collect_table_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_table_statistics_job_template"
-            ] = collect_table_statistics_job_template
+            field_dict["collect_table_statistics_job_template"] = (
+                collect_table_statistics_job_template
+            )
         if collect_table_and_column_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_table_and_column_statistics_job_template"
-            ] = collect_table_and_column_statistics_job_template
+            field_dict["collect_table_and_column_statistics_job_template"] = (
+                collect_table_and_column_statistics_job_template
+            )
         if can_collect_statistics is not UNSET:
             field_dict["can_collect_statistics"] = can_collect_statistics
 

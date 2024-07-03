@@ -17,10 +17,9 @@
 package com.dqops.execution.checks;
 
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
+import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
-import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
-import com.dqops.core.configuration.DqoSensorLimitsConfigurationPropertiesObjectMother;
+import com.dqops.core.configuration.*;
 import com.dqops.core.incidents.IncidentImportQueueServiceStub;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
@@ -29,6 +28,9 @@ import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactoryImpl;
 import com.dqops.data.errors.factory.ErrorsTableFactoryImpl;
 import com.dqops.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import com.dqops.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
+import com.dqops.data.errorsamples.factory.ErrorSamplesTableFactoryImpl;
+import com.dqops.data.errorsamples.normalization.ErrorSamplesNormalizationServiceImpl;
+import com.dqops.data.errorsamples.snapshot.ErrorSamplesSnapshotFactoryImpl;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
 import com.dqops.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
@@ -36,6 +38,7 @@ import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceImpl;
 import com.dqops.data.storage.ParquetPartitionStorageServiceObjectMother;
 import com.dqops.execution.checks.ruleeval.RuleEvaluationServiceImpl;
+import com.dqops.execution.errorsampling.TableErrorSamplerExecutionServiceImpl;
 import com.dqops.execution.rules.DataQualityRuleRunnerImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindService;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
@@ -67,8 +70,9 @@ public class TableCheckExecutionServiceObjectMother {
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         SecretValueProvider secretValueProvider = SecretValueProviderObjectMother.getInstance();
         DqoSensorLimitsConfigurationProperties sensorLimitsConfigurationProperties = DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault();
+        DqoErrorSamplingConfigurationProperties errorSamplingConfigurationProperties = DqoErrorSamplingConfigurationPropertiesObjectMother.getDefault();
         SensorExecutionRunParametersFactoryImpl sensorExecutionRunParametersFactory = new SensorExecutionRunParametersFactoryImpl(
-                secretValueProvider, sensorLimitsConfigurationProperties);
+                secretValueProvider, sensorLimitsConfigurationProperties, errorSamplingConfigurationProperties);
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         DataQualitySensorRunnerImpl dataQualitySensorRunner = new DataQualitySensorRunnerImpl(sensorDefinitionFindService,
                 SensorRunnerFactoryObjectMother.create(), new SqlQueryFragmentsParserImpl());
@@ -93,11 +97,25 @@ public class TableCheckExecutionServiceObjectMother {
         ErrorsSnapshotFactoryImpl errorsSnapshotFactory = new ErrorsSnapshotFactoryImpl(
                 parquetPartitionStorageService, new ErrorsTableFactoryImpl(sensorReadoutsTableFactory));
 
+        ConnectionProviderRegistry connectionProviderRegistry = ConnectionProviderRegistryObjectMother.getInstance();
+        DefaultObservabilityConfigurationServiceImpl defaultObservabilityConfigurationService =
+                new DefaultObservabilityConfigurationServiceImpl(connectionProviderRegistry);
+        UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
+        ErrorSamplesNormalizationServiceImpl errorSamplesNormalizationService =
+                new ErrorSamplesNormalizationServiceImpl(commonNormalizationService, new DqoErrorSamplingConfigurationProperties());
+        ErrorSamplesSnapshotFactoryImpl errorSamplesSnapshotFactory =
+                new ErrorSamplesSnapshotFactoryImpl(parquetPartitionStorageService, new ErrorSamplesTableFactoryImpl());
+
+        TableErrorSamplerExecutionServiceImpl tableErrorSamplerExecutionService = new TableErrorSamplerExecutionServiceImpl(
+                hierarchyNodeTreeSearcher, sensorExecutionRunParametersFactory, dataQualitySensorRunner,
+                connectionProviderRegistry, errorSamplesNormalizationService, errorSamplesSnapshotFactory,
+                sensorLimitsConfigurationProperties, userErrorLogger, defaultObservabilityConfigurationService);
+
         TableCheckExecutionServiceImpl tableCheckExecutionService = new TableCheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
                 sensorExecutionRunParametersFactory,
                 dataQualitySensorRunner,
-                ConnectionProviderRegistryObjectMother.getInstance(),
+                connectionProviderRegistry,
                 sensorReadoutsNormalizationService,
                 ruleEvaluationService,
                 sensorReadoutsSnapshotFactory,
@@ -107,8 +125,10 @@ public class TableCheckExecutionServiceObjectMother {
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
                 sensorLimitsConfigurationProperties,
-                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()),
-                new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()));
+                userErrorLogger,
+                defaultObservabilityConfigurationService,
+                tableErrorSamplerExecutionService,
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
 
         return tableCheckExecutionService;
     }

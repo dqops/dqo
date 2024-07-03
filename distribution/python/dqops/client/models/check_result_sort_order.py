@@ -17,6 +17,7 @@ class CheckResultSortOrder(str, Enum):
     SEVERITY = "severity"
     TIMEGRADIENT = "timeGradient"
     TIMEPERIOD = "timePeriod"
+    UPDATEDAT = "updatedAt"
 
     def __str__(self) -> str:
         return str(self.value)

@@ -1547,7 +1547,7 @@ ___
 
 **Check description**
 
-Daily  calculating the number of days since the most recent event timestamp (freshness)
+Daily calculating the number of days since the most recent event timestamp (freshness)
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

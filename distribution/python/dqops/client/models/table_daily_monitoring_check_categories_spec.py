@@ -59,9 +59,9 @@ class TableDailyMonitoringCheckCategoriesSpec:
     custom_sql: Union[Unset, "TableCustomSqlDailyMonitoringChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityDailyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaDailyMonitoringChecksSpec"] = UNSET
-    comparisons: Union[
-        Unset, "TableDailyMonitoringCheckCategoriesSpecComparisons"
-    ] = UNSET
+    comparisons: Union[Unset, "TableDailyMonitoringCheckCategoriesSpecComparisons"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

@@ -21,6 +21,8 @@ import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationPropertie
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.errorsamples.factory.ErrorSamplesColumnNames;
+import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizationService;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizedResult;
@@ -52,8 +54,12 @@ import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.selection.Selection;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -148,6 +154,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
         StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedStatisticsTable = statisticsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        Table allOldRows = null;
 
         Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
@@ -159,6 +166,12 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
         List<SensorExecutionResult> sensorExecutionResults = this.executeSensors(groupedSensorsCollection, executionContext, progressListener,
                 executionStatistics, dummySensorExecution, jobCancellationToken);
+
+        if (!sensorExecutionResults.isEmpty()) {
+            LocalDate currentMonth = collectionSessionStartAt.toLocalDate();
+            statisticsSnapshot.ensureMonthsAreLoaded(currentMonth, currentMonth);
+            allOldRows = statisticsSnapshot.getAllData();
+        }
 
         for (SensorExecutionResult sensorExecutionResult : sensorExecutionResults) {
             jobCancellationToken.throwIfCancelled();
@@ -189,6 +202,23 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                 StatisticsResultsNormalizedResult normalizedStatisticsResults = this.statisticsResultsNormalizationService.normalizeResults(
                         sensorExecutionResult, collectionSessionStartAt, sensorRunParameters);
                 allNormalizedStatisticsTable.append(normalizedStatisticsResults.getTable());
+
+                if (allOldRows != null) {
+                    LongColumn oldResultsCheckHashColumn = allOldRows.longColumn(StatisticsColumnNames.COLLECTOR_HASH_COLUMN_NAME);
+                    TextColumn oldResultsScopeColumn = allOldRows.textColumn(StatisticsColumnNames.SCOPE_COLUMN_NAME);
+                    TextColumn oldResultsIdColumn = allOldRows.textColumn(StatisticsColumnNames.ID_COLUMN_NAME);
+                    AbstractStatisticsCollectorSpec<?> collectorSpec = sensorRunParameters.getProfiler();
+                    long collectorHash = collectorSpec.getHierarchyId().hashCode64();
+                    TextColumn newRowsIdColumn = normalizedStatisticsResults.getIdColumn();
+                    List<String> newIds = newRowsIdColumn.asList();
+                    Selection oldRows = oldResultsCheckHashColumn.isIn(collectorHash)
+                            .and(oldResultsIdColumn.isNotIn(newIds))
+                            .and(oldResultsScopeColumn.isEqualTo(statisticsDataScope.name()));
+                    if (oldRows.size() > 0) {
+                        List<String> oldIdsToRemove = oldResultsIdColumn.where(oldRows).asList();
+                        statisticsSnapshot.getTableDataChanges().getDeletedIds().addAll(oldIdsToRemove);
+                    }
+                }
             }
             catch (DqoQueueJobCancelledException cex) {
                 // ignore

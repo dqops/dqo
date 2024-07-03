@@ -53,9 +53,9 @@ class ColumnNullsDailyMonitoringChecksSpec:
         daily_nulls_percent_change_30_days (Union[Unset, ColumnNullPercentChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnNullsDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnNullsDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     daily_nulls_percent_anomaly: Union[
@@ -140,17 +140,17 @@ class ColumnNullsDailyMonitoringChecksSpec:
         if daily_nulls_percent_change is not UNSET:
             field_dict["daily_nulls_percent_change"] = daily_nulls_percent_change
         if daily_nulls_percent_change_1_day is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_1_day"
-            ] = daily_nulls_percent_change_1_day
+            field_dict["daily_nulls_percent_change_1_day"] = (
+                daily_nulls_percent_change_1_day
+            )
         if daily_nulls_percent_change_7_days is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_7_days"
-            ] = daily_nulls_percent_change_7_days
+            field_dict["daily_nulls_percent_change_7_days"] = (
+                daily_nulls_percent_change_7_days
+            )
         if daily_nulls_percent_change_30_days is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_30_days"
-            ] = daily_nulls_percent_change_30_days
+            field_dict["daily_nulls_percent_change_30_days"] = (
+                daily_nulls_percent_change_30_days
+            )
 
         return field_dict
 

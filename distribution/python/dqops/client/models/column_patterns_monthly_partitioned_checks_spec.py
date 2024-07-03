@@ -121,25 +121,25 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_not_matching_regex_found.to_dict()
             )
 
-        monthly_partition_texts_matching_regex_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_texts_matching_regex_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_texts_matching_regex_percent, Unset):
             monthly_partition_texts_matching_regex_percent = (
                 self.monthly_partition_texts_matching_regex_percent.to_dict()
             )
 
-        monthly_partition_invalid_email_format_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_invalid_email_format_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_invalid_email_format_found, Unset):
             monthly_partition_invalid_email_format_found = (
                 self.monthly_partition_invalid_email_format_found.to_dict()
             )
 
-        monthly_partition_invalid_email_format_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_invalid_email_format_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_invalid_email_format_percent, Unset):
             monthly_partition_invalid_email_format_percent = (
                 self.monthly_partition_invalid_email_format_percent.to_dict()
@@ -175,17 +175,17 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
                 self.monthly_partition_text_matching_name_pattern_percent.to_dict()
             )
 
-        monthly_partition_invalid_uuid_format_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_invalid_uuid_format_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_invalid_uuid_format_found, Unset):
             monthly_partition_invalid_uuid_format_found = (
                 self.monthly_partition_invalid_uuid_format_found.to_dict()
             )
 
-        monthly_partition_valid_uuid_format_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_valid_uuid_format_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_valid_uuid_format_percent, Unset):
             monthly_partition_valid_uuid_format_percent = (
                 self.monthly_partition_valid_uuid_format_percent.to_dict()
@@ -217,49 +217,49 @@ class ColumnPatternsMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_text_not_matching_regex_found is not UNSET:
-            field_dict[
-                "monthly_partition_text_not_matching_regex_found"
-            ] = monthly_partition_text_not_matching_regex_found
+            field_dict["monthly_partition_text_not_matching_regex_found"] = (
+                monthly_partition_text_not_matching_regex_found
+            )
         if monthly_partition_texts_matching_regex_percent is not UNSET:
-            field_dict[
-                "monthly_partition_texts_matching_regex_percent"
-            ] = monthly_partition_texts_matching_regex_percent
+            field_dict["monthly_partition_texts_matching_regex_percent"] = (
+                monthly_partition_texts_matching_regex_percent
+            )
         if monthly_partition_invalid_email_format_found is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_email_format_found"
-            ] = monthly_partition_invalid_email_format_found
+            field_dict["monthly_partition_invalid_email_format_found"] = (
+                monthly_partition_invalid_email_format_found
+            )
         if monthly_partition_invalid_email_format_percent is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_email_format_percent"
-            ] = monthly_partition_invalid_email_format_percent
+            field_dict["monthly_partition_invalid_email_format_percent"] = (
+                monthly_partition_invalid_email_format_percent
+            )
         if monthly_partition_text_not_matching_date_pattern_found is not UNSET:
-            field_dict[
-                "monthly_partition_text_not_matching_date_pattern_found"
-            ] = monthly_partition_text_not_matching_date_pattern_found
+            field_dict["monthly_partition_text_not_matching_date_pattern_found"] = (
+                monthly_partition_text_not_matching_date_pattern_found
+            )
         if monthly_partition_text_matching_date_pattern_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_matching_date_pattern_percent"
-            ] = monthly_partition_text_matching_date_pattern_percent
+            field_dict["monthly_partition_text_matching_date_pattern_percent"] = (
+                monthly_partition_text_matching_date_pattern_percent
+            )
         if monthly_partition_text_matching_name_pattern_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_matching_name_pattern_percent"
-            ] = monthly_partition_text_matching_name_pattern_percent
+            field_dict["monthly_partition_text_matching_name_pattern_percent"] = (
+                monthly_partition_text_matching_name_pattern_percent
+            )
         if monthly_partition_invalid_uuid_format_found is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_uuid_format_found"
-            ] = monthly_partition_invalid_uuid_format_found
+            field_dict["monthly_partition_invalid_uuid_format_found"] = (
+                monthly_partition_invalid_uuid_format_found
+            )
         if monthly_partition_valid_uuid_format_percent is not UNSET:
-            field_dict[
-                "monthly_partition_valid_uuid_format_percent"
-            ] = monthly_partition_valid_uuid_format_percent
+            field_dict["monthly_partition_valid_uuid_format_percent"] = (
+                monthly_partition_valid_uuid_format_percent
+            )
         if monthly_partition_invalid_ip4_address_format_found is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_ip4_address_format_found"
-            ] = monthly_partition_invalid_ip4_address_format_found
+            field_dict["monthly_partition_invalid_ip4_address_format_found"] = (
+                monthly_partition_invalid_ip4_address_format_found
+            )
         if monthly_partition_invalid_ip6_address_format_found is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_ip6_address_format_found"
-            ] = monthly_partition_invalid_ip6_address_format_found
+            field_dict["monthly_partition_invalid_ip6_address_format_found"] = (
+                monthly_partition_invalid_ip6_address_format_found
+            )
 
         return field_dict
 

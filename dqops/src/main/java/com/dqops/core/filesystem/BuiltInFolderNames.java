@@ -65,9 +65,14 @@ public final class BuiltInFolderNames {
     public static final String STATISTICS = "statistics";
 
     /**
-     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the errors are stored.
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the execution errors are stored.
      */
     public static final String ERRORS = "errors";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the error samples are stored.
+     */
+    public static final String ERROR_SAMPLES = "error_samples";
 
     /**
      * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the incidents are stored.

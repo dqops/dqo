@@ -24,7 +24,7 @@ Deletes stored data that matches specified conditions. Be careful when using thi
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
+$ dqo [dqo options...] data delete [-h] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
@@ -37,7 +37,7 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
 **DQOps shell synopsis**
 
 ```
-dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
+dqo> data delete [-h] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
@@ -64,6 +64,7 @@ All parameters supported by the command are listed below.
 |<div id="data delete-c" class="no-wrap-code">`-c`</div><div id="data delete--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
 |<div id="data delete-ds" class="no-wrap-code">`-ds`</div><div id="data delete--data-group-tag" class="no-wrap-code">`--data-group-tag`</div>|Data group dimension level filter, that filters by tags.| ||
 |<div id="data delete-e" class="no-wrap-code">`-e`</div><div id="data delete--end" class="no-wrap-code">`--end`</div>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
+|<div id="data delete-es" class="no-wrap-code">`-es`</div><div id="data delete--error-samples" class="no-wrap-code">`--error-samples`</div>|Delete the error samples| ||
 |<div id="data delete-er" class="no-wrap-code">`-er`</div><div id="data delete--errors" class="no-wrap-code">`--errors`</div>|Delete the execution errors| ||
 |<div id="data delete-fw" class="no-wrap-code">`-fw`</div><div id="data delete--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="data delete-t" class="no-wrap-code">`-t`</div><div id="data delete--table" class="no-wrap-code">`--table`</div><div id="data delete--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns 'sch*.tab*'| ||

@@ -43,6 +43,9 @@ public class JdbcTypeColumnMapping {
 
             SqlResultSetReader.mapJdbcTypeToColumnType(2000, ColumnType.LONG);
 
+            SqlResultSetReader.mapJdbcTypeToColumnType(-3, ColumnType.STRING);  // Oracle RAW(1000) type
+            SqlResultSetReader.mapJdbcTypeToColumnType(101, ColumnType.DOUBLE);  // Oracle BINARY DOUBLE type
+
             isInitializedJdbc = true;
         }
     }

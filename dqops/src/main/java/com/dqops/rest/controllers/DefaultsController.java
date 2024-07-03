@@ -16,34 +16,20 @@
 
 package com.dqops.rest.controllers;
 
-import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.storage.localfiles.SpecFileNames;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
-import com.dqops.services.check.mapping.models.CheckContainerModel;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST Api controller that manages the default settings.
@@ -93,31 +80,33 @@ public class DefaultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<MonitoringScheduleSpec>> getDefaultSchedule(
+    public Mono<ResponseEntity<Mono<MonitoringScheduleSpec>>> getDefaultSchedule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        MonitoringScheduleSpec defaultMonitoringScheduleSpec = null;
+            UserHome userHome = userHomeContext.getUserHome();
+            MonitoringScheduleSpec defaultMonitoringScheduleSpec = null;
 
-        if (userHome == null
-                || userHome.getDefaultSchedules() == null
-                || userHome.getDefaultSchedules().getSpec() == null
-        ) {
-            defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
-        } else {
-            defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
-                    .getScheduleForCheckSchedulingGroup(schedulingGroup);
-        }
-        
-        if (defaultMonitoringScheduleSpec == null) {
-            defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
-        }
+            if (userHome == null
+                    || userHome.getDefaultSchedules() == null
+                    || userHome.getDefaultSchedules().getSpec() == null
+            ) {
+                defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+            } else {
+                defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
+                        .getScheduleForCheckSchedulingGroup(schedulingGroup);
+            }
 
-        return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
+            if (defaultMonitoringScheduleSpec == null) {
+                defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+            }
+
+            return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -139,35 +128,37 @@ public class DefaultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultSchedules(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultSchedules(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHome userHome = userHomeContext.getUserHome();
 
-        DefaultSchedulesSpec defaultSchedulesSpec = null;
+            DefaultSchedulesSpec defaultSchedulesSpec = null;
 
-        if (userHome == null
-                || userHome.getDefaultSchedules() == null
-                || userHome.getDefaultSchedules().getSpec() == null
-        ) {
-            defaultSchedulesSpec = new DefaultSchedulesSpec();
-        } else {
-            defaultSchedulesSpec = userHome.getDefaultSchedules().getSpec();
-        }
+            if (userHome == null
+                    || userHome.getDefaultSchedules() == null
+                    || userHome.getDefaultSchedules().getSpec() == null
+            ) {
+                defaultSchedulesSpec = new DefaultSchedulesSpec();
+            } else {
+                defaultSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+            }
 
-        if (newMonitoringScheduleSpec.isPresent()) {
-            defaultSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
-        }
+            if (newMonitoringScheduleSpec.isPresent()) {
+                defaultSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+            }
 
-        userHomeContext.flush();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
     /**
@@ -186,25 +177,27 @@ public class DefaultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<IncidentWebhookNotificationsSpec>> getDefaultWebhooks(
+    public Mono<ResponseEntity<Mono<IncidentWebhookNotificationsSpec>>> getDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        IncidentWebhookNotificationsSpec defaultNotificationWebhooks = null;
+            UserHome userHome = userHomeContext.getUserHome();
+            IncidentWebhookNotificationsSpec defaultNotificationWebhooks = null;
 
-        if (userHome == null
-                || userHome.getDefaultNotificationWebhook() == null
-                || userHome.getDefaultNotificationWebhook().getSpec() == null
-        ) {
-            defaultNotificationWebhooks = new IncidentWebhookNotificationsSpec();
-        } else {
-            defaultNotificationWebhooks = userHome.getDefaultNotificationWebhook().getSpec();
-        }
+            if (userHome == null
+                    || userHome.getDefaultNotificationWebhook() == null
+                    || userHome.getDefaultNotificationWebhook().getSpec() == null
+            ) {
+                defaultNotificationWebhooks = new IncidentWebhookNotificationsSpec();
+            } else {
+                defaultNotificationWebhooks = userHome.getDefaultNotificationWebhook().getSpec();
+            }
 
-        return new ResponseEntity<>(Mono.just(defaultNotificationWebhooks), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(defaultNotificationWebhooks), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -226,23 +219,25 @@ public class DefaultsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultWebhooks(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
             @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
+            UserHome userHome = userHomeContext.getUserHome();
 
-        if (newIncidentWebhookNotificationsSpec.isPresent()) {
-            userHome.getDefaultNotificationWebhook().setSpec(newIncidentWebhookNotificationsSpec.get());
-        }
+            if (newIncidentWebhookNotificationsSpec.isPresent()) {
+                userHome.getDefaultNotificationWebhook().setSpec(newIncidentWebhookNotificationsSpec.get());
+            }
 
-        userHomeContext.flush();
+            userHomeContext.flush();
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        }));
     }
 
 }

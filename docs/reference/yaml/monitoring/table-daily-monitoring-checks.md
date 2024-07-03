@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of table level daily monitoring. Contains categories of daily monitoring.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -31,24 +24,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableVolumeDailyMonitoringChecksSpec
 Container of table level daily monitoring for volume data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -65,55 +44,28 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableTimelinessDailyMonitoringChecksSpec
 Container of table level daily monitoring for timeliness data quality checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`daily_data_freshness`](../../../checks/table/timeliness/data-freshness.md)</span>|Daily  calculating the number of days since the most recent event timestamp (freshness)|*[TableDataFreshnessCheckSpec](../../../checks/table/timeliness/data-freshness.md)*| | | |
-|<span class="no-wrap-code ">[`daily_data_staleness`](../../../checks/table/timeliness/data-staleness.md)</span>|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|*[TableDataStalenessCheckSpec](../../../checks/table/timeliness/data-staleness.md)*| | | |
-|<span class="no-wrap-code ">[`daily_data_ingestion_delay`](../../../checks/table/timeliness/data-ingestion-delay.md)</span>|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|*[TableDataIngestionDelayCheckSpec](../../../checks/table/timeliness/data-ingestion-delay.md)*| | | |
+|<span class="no-wrap-code ">[`daily_data_freshness`](../../../checks/table/timeliness/data-freshness.md)</span>|Daily calculating the number of days since the most recent event timestamp (freshness)|*[TableDataFreshnessCheckSpec](../../../checks/table/timeliness/data-freshness.md)*| | | |
+|<span class="no-wrap-code ">[`daily_data_freshness_anomaly`](../../../checks/table/timeliness/data-freshness-anomaly.md)</span>|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|*[TableDataFreshnessAnomalyCheckSpec](../../../checks/table/timeliness/data-freshness-anomaly.md)*| | | |
+|<span class="no-wrap-code ">[`daily_data_staleness`](../../../checks/table/timeliness/data-staleness.md)</span>|Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|*[TableDataStalenessCheckSpec](../../../checks/table/timeliness/data-staleness.md)*| | | |
+|<span class="no-wrap-code ">[`daily_data_ingestion_delay`](../../../checks/table/timeliness/data-ingestion-delay.md)</span>|Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|*[TableDataIngestionDelayCheckSpec](../../../checks/table/timeliness/data-ingestion-delay.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
-
-
-
-
-
-
 
 
 
 ___
 
-
 ## TableAccuracyDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are verifying the accuracy of the table, comparing it with another reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -125,24 +77,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableCustomSqlDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -157,24 +95,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableAvailabilityDailyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -186,24 +110,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableSchemaDailyMonitoringChecksSpec
 Container of built-in preconfigured volume data quality checks on a table level that are executed as a daily monitoring (checkpoint) checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -219,26 +129,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains the daily monitoring comparison checks for each configured reference table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -249,25 +145,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonDailyMonitoringChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the daily monitoring comparison checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -280,12 +162,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

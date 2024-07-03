@@ -43,4 +43,18 @@ public interface JinjaTemplateRenderService {
                           SensorDefinitionFindResult sensorFindResult,
                           JinjaTemplateRenderParameters templateRenderParameters,
                           SensorExecutionProgressListener progressListener);
+
+    /**
+     * Render an error sampling template for a sensor definition that was found in the user home or dqo home. This method prefers to use disk based template loading.
+     *
+     * @param executionContext    Check execution context with paths to the user home and dqo home.
+     * @param sensorFindResult         Sensor definition (template) find result.
+     * @param templateRenderParameters Template rendering parameters that are passed to the jinja2 template file and are usable in the template code.
+     * @param progressListener         Progress listener that receives information about rendered templates.
+     * @return Rendered SQL template for error sampling.
+     */
+    String renderErrorSamplingTemplate(ExecutionContext executionContext,
+                                       SensorDefinitionFindResult sensorFindResult,
+                                       JinjaTemplateRenderParameters templateRenderParameters,
+                                       SensorExecutionProgressListener progressListener);
 }

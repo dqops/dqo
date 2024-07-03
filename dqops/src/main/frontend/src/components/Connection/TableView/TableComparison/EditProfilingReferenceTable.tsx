@@ -20,6 +20,7 @@ import {
 } from '../../../../services/apiClient';
 import { TParameters } from '../../../../shared/constants';
 import { CheckTypes } from '../../../../shared/routes';
+import { useDecodedParams } from '../../../../utils';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import Loader from '../../../Loader';
 import { Option } from '../../../Select';
@@ -34,7 +35,6 @@ import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import { onUpdate, validate404Status } from './TableComparisonUtils';
 import TableLevelResults from './TableLevelResults';
 import TableRow from './TableLevelRowResults';
-import { useDecodedParams } from '../../../../utils';
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
@@ -518,7 +518,9 @@ export const EditProfilingReferenceTable = ({
               refConnection: res.data?.reference_connection ?? '',
               refSchema: res.data?.reference_table?.schema_name ?? '',
               refTable: res.data?.reference_table?.table_name ?? '',
-              dataGroupingArray: res.data.grouping_columns ?? []
+              dataGroupingArray: res.data.grouping_columns ?? [],
+              reference_table_filter: res.data?.reference_table_filter ?? '',
+              compared_table_filter: res.data?.compared_table_filter ?? ''
             });
           }
         } catch (error) {
@@ -605,9 +607,7 @@ export const EditProfilingReferenceTable = ({
                     Table-level comparison
                   </th>
                   <th></th>
-                  <th className="text-center py-1.5">
-                    Row count
-                  </th>
+                  <th className="text-center py-1.5">Row count</th>
                   <th className="text-center py-1.5 whitespace-nowrap">
                     {reference.supports_compare_column_count === true
                       ? 'Column count'
@@ -631,63 +631,60 @@ export const EditProfilingReferenceTable = ({
                 checkTypes={checkTypes}
               />
               {tableLevelComparisonExtended && (
-              <tr>
-                <th></th>
-                <th></th>
-                <th>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th>
                     <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
                       {showRowCount ? (
                         <SeverityInputBlock
-                        onChange={onChangeCompareRowCount}
-                        reference={reference}
-                        onUpdateChecksUI={onUpdateChecksUI}
-                        checksUI={checksUI}
-                        type="row"
+                          onChange={onChangeCompareRowCount}
+                          reference={reference}
+                          onUpdateChecksUI={onUpdateChecksUI}
+                          checksUI={checksUI}
+                          type="row"
                         />
-                        ) : (
-                          <div className="h-39"></div>
-                          )}
+                      ) : (
+                        <div className="h-39"></div>
+                      )}
                       {rowKey ? (
                         <TableLevelResults
-                        tableComparisonResults={tableComparisonResults}
-                        type={rowKey}
+                          tableComparisonResults={tableComparisonResults}
+                          type={rowKey}
                         />
-                        ) : null}
+                      ) : null}
                     </div>
-                </th>              
-                <th>
-                  {reference?.supports_compare_column_count === true ? (
-                    <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
-                      {showColumnCount ? (
-                        <SeverityInputBlock
-                        onChange={onChangeCompareColumnCount}
-                        reference={reference}
-                        onUpdateChecksUI={onUpdateChecksUI}
-                        checksUI={checksUI}
-                        type="column"
-                        />
+                  </th>
+                  <th>
+                    {reference?.supports_compare_column_count === true ? (
+                      <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
+                        {showColumnCount ? (
+                          <SeverityInputBlock
+                            onChange={onChangeCompareColumnCount}
+                            reference={reference}
+                            onUpdateChecksUI={onUpdateChecksUI}
+                            checksUI={checksUI}
+                            type="column"
+                          />
                         ) : (
                           <div className="h-39"></div>
-                          )}
-                      {columnKey ? (
-                        <TableLevelResults
-                        tableComparisonResults={tableComparisonResults}
-                        type={columnKey}
-                        />
+                        )}
+                        {columnKey ? (
+                          <TableLevelResults
+                            tableComparisonResults={tableComparisonResults}
+                            type={columnKey}
+                          />
                         ) : null}
-                    </div>
-                  ) : null}
-                </th>
-              </tr>
-                )}
+                      </div>
+                    ) : null}
+                  </th>
+                </tr>
+              )}
               <tr>
                 <th className="text-left pr-4 py-1.5">Compared column</th>
                 <th className="text-left px-4 py-1.5"></th>
                 {checkNames.map((x, index) => (
-                  <th
-                    className="text-center px-4 py-1.5 pr-1 w-25"
-                    key={index}
-                  >
+                  <th className="text-center px-4 py-1.5 pr-1 w-25" key={index}>
                     {x}
                   </th>
                 ))}

@@ -30,45 +30,46 @@
 /* Your own custom utilities */
 
 body {
-    background-color: #F9FAFC;
+  background-color: #ffffff;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 ::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
+  width: 9px;
+  height: 9px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #E1E5E9;
-    border-radius: 10px;
+  background: #e1e5e9;
+  border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #9CA3AF;
-    border-radius: 10px;
+  background: #9ca3af;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #ACB3BF;
+  background: #acb3bf;
 }
 
-.react-datepicker__day--selected, .react-datepicker__day--selected:hover {
-    @apply bg-teal-500;
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:hover {
+  @apply bg-teal-500;
 }
 
 body {
-    color: #2F2F2F;
+  color: #2f2f2f;
 }
 
-input[type="radio"]::before {
-    opacity: 0 !important;
+input[type='radio']::before {
+  opacity: 0 !important;
 }

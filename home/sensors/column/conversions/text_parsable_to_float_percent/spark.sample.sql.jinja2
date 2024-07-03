@@ -1,0 +1,4 @@
+{% import '/dialects/spark.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler() -%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT) IS NULL
+{%- endcall -%}

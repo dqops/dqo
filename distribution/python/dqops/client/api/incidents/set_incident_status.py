@@ -17,6 +17,7 @@ def _get_kwargs(
     *,
     status: IncidentStatus,
 ) -> Dict[str, Any]:
+
     pass
 
     params: Dict[str, Any] = {}

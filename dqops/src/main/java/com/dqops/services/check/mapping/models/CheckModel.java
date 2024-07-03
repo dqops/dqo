@@ -102,12 +102,17 @@ public class CheckModel implements Cloneable {
     @JsonIgnore
     private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
 
-
     /**
      * Threshold (alerting) rules defined for a check.
      */
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private RuleThresholdsModel rule;
+
+    /**
+     * The data quality check supports capturing error samples, because an error sampling template is defined.
+     */
+    @JsonPropertyDescription("The data quality check supports capturing error samples, because an error sampling template is defined.")
+    private boolean supportsErrorSampling;
 
     /**
      * The data quality check supports a custom data stream mapping configuration.

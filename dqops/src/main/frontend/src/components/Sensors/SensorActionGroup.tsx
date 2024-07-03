@@ -1,10 +1,10 @@
-import Button from '../Button';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getFirstLevelSensorState } from '../../redux/selectors';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { updateSensor } from '../../redux/actions/definition.actions';
 import { IRootState } from '../../redux/reducers';
+import { getFirstLevelSensorState } from '../../redux/selectors';
+import Button from '../Button';
 
 type SensorActionGroupProps = {
   onSave: () => void;
@@ -62,9 +62,8 @@ export const SensorActionGroup = ({
         label="Save"
         className="w-40 !h-10"
         disabled={
-          !(
-            isUpdatedSensorDetail || userProfile.can_manage_definitions !== true
-          )
+          (!isUpdatedSensorDetail && !copied) ||
+          userProfile.can_manage_definitions !== true
         }
         onClick={handleSave}
         loading={isUpdating}

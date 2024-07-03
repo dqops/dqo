@@ -137,6 +137,289 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 ___
+## collect_error_samples
+Starts a new background job that will run selected data quality checks to collect their error samples
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_error_samples.py) to see the source code on GitHub.
+
+
+**POST**
+```
+http://localhost:8888/api/jobs/collecterrorsamples
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`collect_error_samples_result`](../models/jobs.md#collecterrorsamplesresult)</span>||*[CollectErrorSamplesResult](../models/jobs.md#collecterrorsamplesresult)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the error sampling finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
+
+
+
+
+**Request body**
+
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|-----------------|
+|Data quality check run configuration (target checks and an optional time range)|*[CollectErrorSamplesParameters](../models/jobs.md#collecterrorsamplesparameters)*| |
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl -X POST http://localhost:8888/api/jobs/collecterrorsamples^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"data_scope\":\"table\",\"dummy_sensor_execution\":false}"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "executed_error_samplers" : 3,
+		    "columns_analyzed" : 1,
+		    "columns_successfully_analyzed" : 0,
+		    "total_error_samplers_failed" : 1,
+		    "total_error_samples_collected" : 2
+		  },
+		  "status" : "finished"
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_error_samples
+	from dqops.client.models import CollectErrorSamplesParameters, \
+	                                ErrorSamplesDataScope
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CollectErrorSamplesParameters(
+		data_scope=ErrorSamplesDataScope.TABLE,
+		dummy_sensor_execution=False
+	)
+	
+	call_result = collect_error_samples.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_error_samples
+	from dqops.client.models import CollectErrorSamplesParameters, \
+	                                ErrorSamplesDataScope
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CollectErrorSamplesParameters(
+		data_scope=ErrorSamplesDataScope.TABLE,
+		dummy_sensor_execution=False
+	)
+	
+	call_result = await collect_error_samples.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_error_samples
+	from dqops.client.models import CollectErrorSamplesParameters, \
+	                                ErrorSamplesDataScope
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CollectErrorSamplesParameters(
+		data_scope=ErrorSamplesDataScope.TABLE,
+		dummy_sensor_execution=False
+	)
+	
+	call_result = collect_error_samples.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_error_samples
+	from dqops.client.models import CollectErrorSamplesParameters, \
+	                                ErrorSamplesDataScope
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CollectErrorSamplesParameters(
+		data_scope=ErrorSamplesDataScope.TABLE,
+		dummy_sensor_execution=False
+	)
+	
+	call_result = await collect_error_samples.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+
+___
 ## collect_statistics_on_data_groups
 Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping
 
@@ -204,7 +487,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		  },
 		  "result" : {
 		    "executed_statistics_collectors" : 3,
-		    "total_collectors_executed" : 0,
 		    "columns_analyzed" : 1,
 		    "columns_successfully_analyzed" : 0,
 		    "total_collectors_failed" : 1,
@@ -257,7 +539,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -311,7 +592,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -368,7 +648,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -425,7 +704,6 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -508,7 +786,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		  },
 		  "result" : {
 		    "executed_statistics_collectors" : 3,
-		    "total_collectors_executed" : 0,
 		    "columns_analyzed" : 1,
 		    "columns_successfully_analyzed" : 0,
 		    "total_collectors_failed" : 1,
@@ -561,7 +838,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -615,7 +891,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -672,7 +947,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -729,7 +1003,6 @@ http://localhost:8888/api/jobs/collectstatistics/table
 			),
 			result=CollectStatisticsResult(
 				executed_statistics_collectors=3,
-				total_collectors_executed=0,
 				columns_analyzed=1,
 				columns_successfully_analyzed=0,
 				total_collectors_failed=1,
@@ -796,7 +1069,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"deleteErrorSamples\":true,\"columnNames\":[\"sample_column\"]}"
 	
     ```
 
@@ -836,6 +1109,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
+		delete_error_samples=True,
 		column_names=[
 			'sample_column'
 		]
@@ -884,6 +1158,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
+		delete_error_samples=True,
 		column_names=[
 			'sample_column'
 		]
@@ -935,6 +1210,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
+		delete_error_samples=True,
 		column_names=[
 			'sample_column'
 		]
@@ -986,6 +1262,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
+		delete_error_samples=True,
 		column_names=[
 			'sample_column'
 		]
@@ -2349,7 +2626,7 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"collect_error_samples\":false}"
 	
     ```
 
@@ -2400,6 +2677,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2457,6 +2735,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2517,6 +2796,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2577,6 +2857,7 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
+		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -3221,6 +3502,254 @@ http://localhost:8888/api/jobs/synchronize
     
         ```
         SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
+        ```
+    
+    
+    
+
+
+
+___
+## wait_for_collect_error_samples_job
+Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_collect_error_samples_job.py) to see the source code on GitHub.
+
+
+**GET**
+```
+http://localhost:8888/api/jobs/collecterrorsamples/{jobId}/wait
+```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`collect_error_samples_result`](../models/jobs.md#collecterrorsamplesresult)</span>||*[CollectErrorSamplesResult](../models/jobs.md#collecterrorsamplesresult)*|
+
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`job_id`</span>|Job id, it can be a job business key assigned to the job or a job id generated by DQOps|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but it can be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl http://localhost:8888/api/jobs/collecterrorsamples/123123124324324/wait^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+    
+        ```
+        {
+		  "jobId" : {
+		    "jobId" : 123456789,
+		    "createdAt" : "2007-10-11T13:42:00Z"
+		  },
+		  "result" : {
+		    "executed_error_samplers" : 3,
+		    "columns_analyzed" : 1,
+		    "columns_successfully_analyzed" : 0,
+		    "total_error_samplers_failed" : 1,
+		    "total_error_samples_collected" : 2
+		  },
+		  "status" : "finished"
+		}
+        ```
+    
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_collect_error_samples_job
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = wait_for_collect_error_samples_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_collect_error_samples_job
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await wait_for_collect_error_samples_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_collect_error_samples_job
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = wait_for_collect_error_samples_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
+        ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_collect_error_samples_job
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await wait_for_collect_error_samples_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ??? example "Expand to see the returned result"
+    
+        ```
+        CollectErrorSamplesResult(
+			job_id=DqoQueueJobId(
+				job_id=123456789,
+				created_at='2007-10-11T13:42:00Z'
+			),
+			result=ErrorSamplerResult(
+				executed_error_samplers=3,
+				columns_analyzed=1,
+				columns_successfully_analyzed=0,
+				total_error_samplers_failed=1,
+				total_error_samples_collected=2
+			),
+			status=DqoJobStatus.FINISHED
+		)
         ```
     
     

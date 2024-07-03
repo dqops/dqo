@@ -132,9 +132,9 @@ class ColumnPatternsProfilingChecksSpec:
                 self.profile_invalid_email_format_percent.to_dict()
             )
 
-        profile_text_not_matching_date_pattern_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        profile_text_not_matching_date_pattern_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.profile_text_not_matching_date_pattern_found, Unset):
             profile_text_not_matching_date_pattern_found = (
                 self.profile_text_not_matching_date_pattern_found.to_dict()
@@ -182,49 +182,49 @@ class ColumnPatternsProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_text_not_matching_regex_found is not UNSET:
-            field_dict[
-                "profile_text_not_matching_regex_found"
-            ] = profile_text_not_matching_regex_found
+            field_dict["profile_text_not_matching_regex_found"] = (
+                profile_text_not_matching_regex_found
+            )
         if profile_texts_matching_regex_percent is not UNSET:
-            field_dict[
-                "profile_texts_matching_regex_percent"
-            ] = profile_texts_matching_regex_percent
+            field_dict["profile_texts_matching_regex_percent"] = (
+                profile_texts_matching_regex_percent
+            )
         if profile_invalid_email_format_found is not UNSET:
-            field_dict[
-                "profile_invalid_email_format_found"
-            ] = profile_invalid_email_format_found
+            field_dict["profile_invalid_email_format_found"] = (
+                profile_invalid_email_format_found
+            )
         if profile_invalid_email_format_percent is not UNSET:
-            field_dict[
-                "profile_invalid_email_format_percent"
-            ] = profile_invalid_email_format_percent
+            field_dict["profile_invalid_email_format_percent"] = (
+                profile_invalid_email_format_percent
+            )
         if profile_text_not_matching_date_pattern_found is not UNSET:
-            field_dict[
-                "profile_text_not_matching_date_pattern_found"
-            ] = profile_text_not_matching_date_pattern_found
+            field_dict["profile_text_not_matching_date_pattern_found"] = (
+                profile_text_not_matching_date_pattern_found
+            )
         if profile_text_matching_date_pattern_percent is not UNSET:
-            field_dict[
-                "profile_text_matching_date_pattern_percent"
-            ] = profile_text_matching_date_pattern_percent
+            field_dict["profile_text_matching_date_pattern_percent"] = (
+                profile_text_matching_date_pattern_percent
+            )
         if profile_text_matching_name_pattern_percent is not UNSET:
-            field_dict[
-                "profile_text_matching_name_pattern_percent"
-            ] = profile_text_matching_name_pattern_percent
+            field_dict["profile_text_matching_name_pattern_percent"] = (
+                profile_text_matching_name_pattern_percent
+            )
         if profile_invalid_uuid_format_found is not UNSET:
-            field_dict[
-                "profile_invalid_uuid_format_found"
-            ] = profile_invalid_uuid_format_found
+            field_dict["profile_invalid_uuid_format_found"] = (
+                profile_invalid_uuid_format_found
+            )
         if profile_valid_uuid_format_percent is not UNSET:
-            field_dict[
-                "profile_valid_uuid_format_percent"
-            ] = profile_valid_uuid_format_percent
+            field_dict["profile_valid_uuid_format_percent"] = (
+                profile_valid_uuid_format_percent
+            )
         if profile_invalid_ip4_address_format_found is not UNSET:
-            field_dict[
-                "profile_invalid_ip4_address_format_found"
-            ] = profile_invalid_ip4_address_format_found
+            field_dict["profile_invalid_ip4_address_format_found"] = (
+                profile_invalid_ip4_address_format_found
+            )
         if profile_invalid_ip6_address_format_found is not UNSET:
-            field_dict[
-                "profile_invalid_ip6_address_format_found"
-            ] = profile_invalid_ip6_address_format_found
+            field_dict["profile_invalid_ip6_address_format_found"] = (
+                profile_invalid_ip6_address_format_found
+            )
 
         return field_dict
 

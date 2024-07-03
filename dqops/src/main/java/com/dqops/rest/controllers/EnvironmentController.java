@@ -20,11 +20,11 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.signature.SignedObject;
 import com.dqops.rest.models.platform.DqoSettingsModel;
 import com.dqops.rest.models.platform.DqoUserProfileModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.StreamSupport;
 
 /**
@@ -91,35 +92,37 @@ public class EnvironmentController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoSettingsModel>> getDqoSettings(
+    public Mono<ResponseEntity<Mono<DqoSettingsModel>>> getDqoSettings(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
-        final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            final DqoSettingsModel dqoSettingsModel = new DqoSettingsModel();
+            final MutablePropertySources sources = ((AbstractEnvironment) this.springEnvironment).getPropertySources();
 
-        StreamSupport.stream(sources.spliterator(), false)
-                .filter(ps -> ps instanceof EnumerablePropertySource)
-                .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
-                .flatMap(Arrays::stream)
-                .distinct()
-                .filter(propertyName -> !(propertyName.toLowerCase(Locale.ROOT).contains("credentials") ||
-                        propertyName.toLowerCase(Locale.ROOT).contains("password") ||
-                        propertyName.toLowerCase(Locale.ROOT).contains("key") ||
-                        propertyName.toLowerCase(Locale.ROOT).contains("token")))
-                .filter(propertyName -> propertyName.startsWith("dqo.") ||
-                        propertyName.startsWith("logging.") ||
-                        propertyName.startsWith("server.") ||
-                        propertyName.startsWith("spring."))
-                .sorted()
-                .forEach(propertyName -> {
-                    try {
-                        dqoSettingsModel.getProperties().put(propertyName, this.springEnvironment.getProperty(propertyName));
-                    }
-                    catch (Exception ex) {
-                        // ignore, probably unresolved environment variables
-                    }
-                });
+            StreamSupport.stream(sources.spliterator(), false)
+                    .filter(ps -> ps instanceof EnumerablePropertySource)
+                    .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
+                    .flatMap(Arrays::stream)
+                    .distinct()
+                    .filter(propertyName -> !(propertyName.toLowerCase(Locale.ROOT).contains("credentials") ||
+                            propertyName.toLowerCase(Locale.ROOT).contains("password") ||
+                            propertyName.toLowerCase(Locale.ROOT).contains("key") ||
+                            propertyName.toLowerCase(Locale.ROOT).contains("token")))
+                    .filter(propertyName -> propertyName.startsWith("dqo.") ||
+                            propertyName.startsWith("logging.") ||
+                            propertyName.startsWith("server.") ||
+                            propertyName.startsWith("spring."))
+                    .sorted()
+                    .forEach(propertyName -> {
+                        try {
+                            dqoSettingsModel.getProperties().put(propertyName, this.springEnvironment.getProperty(propertyName));
+                        }
+                        catch (Exception ex) {
+                            // ignore, probably unresolved environment variables
+                        }
+                    });
 
-        return new ResponseEntity<>(Mono.just(dqoSettingsModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(dqoSettingsModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -138,16 +141,18 @@ public class EnvironmentController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile(
+    public Mono<ResponseEntity<Mono<DqoUserProfileModel>>> getUserProfile(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
-        if (apiKey == null) {
-            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
-            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
-        }
+            return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
+            if (apiKey == null) {
+                DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+                return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+            }
 
-        DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
-        return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);
+            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
+            }));
     }
 
     /**
@@ -167,10 +172,12 @@ public class EnvironmentController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<String>> issueApiKey(
+    public Mono<ResponseEntity<Mono<String>>> issueApiKey(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
+                return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            SignedObject<DqoUserTokenPayload> signedLocalApiKey = this.instanceCloudLoginService.issueApiKey(principal);
 
-        return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(signedLocalApiKey.getSignedHex()), HttpStatus.OK);
+        }));
     }
 }

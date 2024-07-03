@@ -125,7 +125,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 ) AS actual_value,
                 MAX(3) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -149,7 +149,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 0 AS actual_value,
                 MAX(0) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
@@ -183,7 +183,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -214,7 +214,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 ) AS actual_value,
                 MAX(3) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            WHERE (%s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -245,7 +245,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -284,7 +284,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                     MAX(3) AS expected_value,
                     analyzed_table.`length_string` AS grouping_level_1
                 FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
+                WHERE (%s)
                 GROUP BY grouping_level_1
                 ORDER BY grouping_level_1""";
 
@@ -319,7 +319,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 MAX(3) AS expected_value,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -356,7 +356,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -405,7 +405,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -444,7 +444,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -485,7 +485,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            WHERE (%s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

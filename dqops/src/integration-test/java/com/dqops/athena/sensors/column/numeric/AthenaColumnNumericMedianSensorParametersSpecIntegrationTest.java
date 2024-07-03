@@ -45,10 +45,11 @@ public class AthenaColumnNumericMedianSensorParametersSpecIntegrationTest extend
     private UserHomeContext userHomeContext;
     private ColumnMedianInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private ConnectionSpec connectionSpec;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = AthenaConnectionSpecObjectMother.create();
+        this.connectionSpec = AthenaConnectionSpecObjectMother.create();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

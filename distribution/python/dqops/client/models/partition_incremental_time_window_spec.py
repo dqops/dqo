@@ -46,21 +46,21 @@ class PartitionIncrementalTimeWindowSpec:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if daily_partitioning_recent_days is not UNSET:
-            field_dict[
-                "daily_partitioning_recent_days"
-            ] = daily_partitioning_recent_days
+            field_dict["daily_partitioning_recent_days"] = (
+                daily_partitioning_recent_days
+            )
         if daily_partitioning_include_today is not UNSET:
-            field_dict[
-                "daily_partitioning_include_today"
-            ] = daily_partitioning_include_today
+            field_dict["daily_partitioning_include_today"] = (
+                daily_partitioning_include_today
+            )
         if monthly_partitioning_recent_months is not UNSET:
-            field_dict[
-                "monthly_partitioning_recent_months"
-            ] = monthly_partitioning_recent_months
+            field_dict["monthly_partitioning_recent_months"] = (
+                monthly_partitioning_recent_months
+            )
         if monthly_partitioning_include_current_month is not UNSET:
-            field_dict[
-                "monthly_partitioning_include_current_month"
-            ] = monthly_partitioning_include_current_month
+            field_dict["monthly_partitioning_include_current_month"] = (
+                monthly_partitioning_include_current_month
+            )
 
         return field_dict
 

@@ -19,9 +19,11 @@ import { CheckTypes } from '../../shared/routes';
 import { urlencodeEncoder, useDecodedParams } from '../../utils';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 import DatePicker from '../DatePicker';
 import Input from '../Input';
 import SelectInput from '../SelectInput';
+import SvgIcon from '../SvgIcon';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -31,50 +33,62 @@ type DeleteOnlyDataDialogProps = {
   nameOfCol?: string;
   nodeId?: string;
 };
+
+type TParams = DeleteStoredDataQueueJobParameters & { schema?: string } & {
+  table?: string;
+};
 const DeleteStoredDataExtendedPopUp = ({
   open,
   onClose,
   onDelete,
   nodeId
 }: DeleteOnlyDataDialogProps) => {
+  const hierarchiArray = nodeId?.split('.');
+
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState('all');
   const [allSensors, setAllSensors] = useState<SensorListModel[]>([]);
-  const [params, setParams] = useState<DeleteStoredDataQueueJobParameters>({
+  const [params, setParams] = useState<TParams>({
+    connection: urlencodeEncoder(hierarchiArray?.[0]),
+    schema: urlencodeEncoder(hierarchiArray?.[1]),
+    table: urlencodeEncoder(hierarchiArray?.[2]),
+    columnNames: urlencodeEncoder(hierarchiArray?.[4])
+      ? [urlencodeEncoder(hierarchiArray?.[4])]
+      : [],
     deleteErrors: true,
     deleteStatistics: true,
     deleteCheckResults: true,
     deleteSensorReadouts: true,
+    deleteErrorSamples: true,
     checkType: checkTypes === 'sources' ? undefined : checkTypes
   });
+
   const [allChecks, setAllChecks] = useState<CheckDefinitionFolderModel>();
-  const [filteredStatistics, setFilteredStatistics] = useState<
-    'all' | 'part' | ''
-  >('all');
-  const [filteredChecks, setFilteredChecks] = useState<'all' | 'part' | ''>(
-    'all'
-  );
-  const [filteredSensors, setFilteredSensors] = useState<'all' | 'part' | ''>(
-    'all'
-  );
+  const [basicStatisticsFiltersOpen, setBasicStatisticsFiltersOpen] =
+    useState(true);
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
+    const { schema, table, ...restParams } = params;
+    const newParams: DeleteStoredDataQueueJobParameters = {
+      ...restParams,
+      fullTableName: (schema || table) ? `${schema}.${table}` : undefined
+    };
     if (mode === 'part') {
       onDelete({
-        ...params,
+        ...newParams,
         dateStart: toUTCString(startDate),
         dateEnd: toUTCString(endDate)
       });
     } else {
-      onDelete({ ...params });
+      onDelete({ ...newParams });
     }
   };
 
-  const onChangeParams = (obj: Partial<DeleteStoredDataQueueJobParameters>) => {
+  const onChangeParams = (obj: Partial<TParams>) => {
     setParams({
       ...params,
       ...obj
@@ -82,7 +96,6 @@ const DeleteStoredDataExtendedPopUp = ({
   };
 
   const isDisabled = useMemo(() => mode === 'all', [mode]);
-  const hierarchiArray = nodeId?.split('.');
 
   const fetchData = useCallback(async () => {
     try {
@@ -152,25 +165,47 @@ const DeleteStoredDataExtendedPopUp = ({
   };
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-300 p-4">
-      <DialogHeader className="font-bold text-center justify-center">
+    <Dialog open={open} handler={onClose} className="min-w-300 p-4 pb-0">
+      <DialogHeader className="font-bold text-center justify-center !py-0.5">
         Delete data quality results
       </DialogHeader>
       <DialogBody className="text-sm">
         <div className="flex flex-col">
-          <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
-            {hierarchiArray?.[0] && (
-              <div> {'Connection: ' + urlencodeEncoder(hierarchiArray?.[0])} </div>
-            )}
-            {hierarchiArray?.[1] && (
-              <div> {'Schema: ' + urlencodeEncoder(hierarchiArray?.[1])} </div>
-            )}
-            {hierarchiArray?.[2] && (
-              <div> {'Table: ' + urlencodeEncoder(hierarchiArray?.[2])} </div>
-            )}
-            {hierarchiArray?.[4] && (
-              <div> {'Column: ' + urlencodeEncoder(hierarchiArray?.[4])} </div>
-            )}
+          <div className="flex justify-between border-b pb-4 border-gray-300 text-black">
+            <div>
+              {' '}
+              <Input
+                label="Connection"
+                onChange={(e) => onChangeParams({ connection: e.target.value })}
+                value={params.connection}
+              />{' '}
+            </div>
+            <div>
+              {' '}
+              <Input
+                label="Schema"
+                onChange={(e) => onChangeParams({ schema: e.target.value })}
+                value={params.schema}
+              />{' '}
+            </div>
+            <div>
+              {' '}
+              <Input
+                label="Table"
+                onChange={(e) => onChangeParams({ table: e.target.value })}
+                value={params.table}
+              />{' '}
+            </div>
+            <div>
+              {' '}
+              <Input
+                label="Column"
+                onChange={(e) =>
+                  onChangeParams({ columnNames: [e.target.value] })
+                }
+                value={params.columnNames?.[0]}
+              />{' '}
+            </div>
           </div>
           <div>
             <Radio
@@ -195,7 +230,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 color="teal"
               />
               <div className="mt-2">
-                <p>For the time range:</p>
+                <p>For the time range</p>
                 <div className="flex space-x-6 items-center">
                   <DatePicker
                     showIcon
@@ -267,69 +302,82 @@ const DeleteStoredDataExtendedPopUp = ({
         <div className="flex w-full gap-4 px-4 my-4 text-gray-700 ml-7">
           <div className="flex flex-col space-y-5 w-1/4">
             <Checkbox
-              checked={params.deleteStatistics && filteredStatistics === 'all'}
+              checked={params.deleteStatistics}
               onChange={(deleteStatistics) => {
-                onChangeParams({ deleteStatistics }),
-                  setFilteredStatistics(
-                    filteredStatistics === 'all' ? '' : 'all'
-                  );
+                onChangeParams({ deleteStatistics });
               }}
-              label="All basic statistics results"
+              label="Basic statistics results"
               checkClassName="bg-teal-500"
             />
-            <Checkbox
-              checked={params.deleteStatistics && filteredStatistics === 'part'}
-              onChange={(deleteStatistics) => {
-                onChangeParams({ deleteStatistics }),
-                  setFilteredStatistics(
-                    filteredStatistics === 'part' ? '' : 'part'
-                  );
-              }}
-              label="Filtered basic statistics results"
-              checkClassName="bg-teal-500"
-            />
-            <Input
-              label="Collector Category"
-              value={params.collectorCategory}
-              onChange={(e) =>
-                onChangeParams({ collectorCategory: e.target.value })
-              }
-              disabled={filteredStatistics !== 'part'}
-            />
-            <Input
-              label="Collector Name"
-              value={params.collectorName}
-              onChange={(e) =>
-                onChangeParams({ collectorName: e.target.value })
-              }
-              disabled={filteredStatistics !== 'part'}
-            />
-            <Input
-              label="Collector Target"
-              value={params.collectorTarget}
-              onChange={(e) =>
-                onChangeParams({ collectorTarget: e.target.value })
-              }
-              disabled={filteredStatistics !== 'part'}
-            />
+            {basicStatisticsFiltersOpen ? (
+              <SectionWrapper
+                svgIcon={true}
+                title={'Basic statistics filters'}
+                onClick={() => setBasicStatisticsFiltersOpen(false)}
+                className="flex flex-col gap-y-2"
+                titleClassName={
+                  params.deleteStatistics
+                    ? '!font-normal '
+                    : '!font-normal  !text-gray-150'
+                }
+              >
+                <Input
+                  label="Collector Category"
+                  value={params.collectorCategory}
+                  onChange={(e) =>
+                    onChangeParams({ collectorCategory: e.target.value })
+                  }
+                  className={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                  labelClassName={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                />
+                <Input
+                  label="Collector Name"
+                  value={params.collectorName}
+                  onChange={(e) =>
+                    onChangeParams({ collectorName: e.target.value })
+                  }
+                  className={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                  labelClassName={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                />
+                <Input
+                  label="Collector Target"
+                  value={params.collectorTarget}
+                  onChange={(e) =>
+                    onChangeParams({ collectorTarget: e.target.value })
+                  }
+                  className={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                  labelClassName={
+                    params.deleteStatistics ? 'text-black' : 'text-gray-150'
+                  }
+                />
+              </SectionWrapper>
+            ) : (
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={() => setBasicStatisticsFiltersOpen(true)}
+              >
+                <SvgIcon name="chevron-down" className="w-5 h-5" />
+                <span>Basic statistics filters</span>
+              </div>
+            )}
           </div>
           <div className="flex flex-col space-y-5 w-1/4">
             <Checkbox
-              checked={params.deleteCheckResults && filteredChecks === 'all'}
-              onChange={(deleteCheckResults) => {
-                onChangeParams({ deleteCheckResults }),
-                  setFilteredChecks(filteredChecks === 'all' ? '' : 'all');
-              }}
-              label="All check results"
-              checkClassName="bg-teal-500"
-            />
-            <Checkbox
-              checked={params.deleteCheckResults && filteredChecks === 'part'}
-              onChange={(deleteCheckResults) => {
-                onChangeParams({ deleteCheckResults }),
-                  setFilteredChecks(filteredChecks === 'part' ? '' : 'part');
-              }}
-              label="Filtered check results"
+              checked={params.deleteCheckResults}
+              onChange={(deleteCheckResults) =>
+                onChangeParams({ deleteCheckResults })
+              }
+              label="Check results"
               checkClassName="bg-teal-500"
             />
             <SelectInput
@@ -341,16 +389,13 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: item,
                 value: item
               }))}
-              value={
-                filteredChecks === 'part' ? params.checkCategory : undefined
-              }
+              value={params.checkCategory}
               onChange={(value) =>
                 onChangeParams({
                   checkCategory: String(value).length !== 0 ? value : undefined,
                   checkName: undefined
                 })
               }
-              disabled={filteredChecks !== 'part'}
             />
             <SelectInput
               label="Check name"
@@ -361,34 +406,21 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: item.check_name,
                 value: item.check_name
               }))}
-              value={filteredChecks === 'part' ? params.checkName : undefined}
+              value={params.checkName}
               onChange={(value) =>
                 onChangeParams({
                   checkName: String(value).length !== 0 ? value : undefined
                 })
               }
-              disabled={filteredChecks !== 'part'}
             />
           </div>
           <div className="flex flex-col space-y-5 w-1/4">
             <Checkbox
-              checked={params.deleteSensorReadouts && filteredSensors === 'all'}
+              checked={params.deleteSensorReadouts}
               onChange={(deleteSensorReadouts) => {
-                onChangeParams({ deleteSensorReadouts }),
-                  setFilteredSensors(filteredSensors === 'all' ? '' : 'all');
+                onChangeParams({ deleteSensorReadouts });
               }}
-              label="All sensor readouts"
-              checkClassName="bg-teal-500"
-            />
-            <Checkbox
-              checked={
-                params.deleteSensorReadouts && filteredSensors === 'part'
-              }
-              onChange={(deleteSensorReadouts) => {
-                onChangeParams({ deleteSensorReadouts }),
-                  setFilteredSensors(filteredSensors === 'part' ? '' : 'part');
-              }}
-              label="Filtered sensor readout"
+              label="Sensor readouts"
               checkClassName="bg-teal-500"
             />
             <SelectInput
@@ -397,26 +429,35 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: x.full_sensor_name,
                 value: x.full_sensor_name ?? ''
               }))}
-              value={filteredSensors === 'part' ? params.sensorName : undefined}
+              value={params.sensorName}
               onChange={(value) =>
                 onChangeParams({
                   sensorName: String(value).length !== 0 ? value : undefined
                 })
               }
-              disabled={filteredSensors !== 'part'}
             />
           </div>
-          <div className="w-1/4 flex items-start">
-            <Checkbox
-              checked={params.deleteErrors}
-              onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
-              label="All execution errors"
-              checkClassName="bg-teal-500"
-            />
+          <div className="w-1/4 flex flex-col items-start">
+            <div>
+              <Checkbox
+                checked={params.deleteErrors}
+                onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
+                label="Execution errors"
+                checkClassName="bg-teal-500"
+              />
+            </div>
+            <div>
+              <Checkbox
+                checked={params.deleteErrorSamples}
+                onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
+                label="Error samples"
+                checkClassName="bg-teal-500"
+              />
+            </div>
           </div>
         </div>
       </DialogBody>
-      <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
+      <DialogFooter className="flex gap-6 items-center absolute bottom-6 right-5">
         <Button
           color="primary"
           variant="outlined"

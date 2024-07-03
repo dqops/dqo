@@ -84,6 +84,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -138,6 +139,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -195,6 +197,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -252,6 +255,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -611,6 +615,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				id=False,
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(
 					nulls=ColumnNullsProfilingChecksSpec(
 						profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -672,6 +677,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				id=False,
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(
 					nulls=ColumnNullsProfilingChecksSpec(
 						profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -736,6 +742,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				id=False,
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(
 					nulls=ColumnNullsProfilingChecksSpec(
 						profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -800,6 +807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 					nullable=False,
 					length=256
 				),
+				id=False,
 				profiling_checks=ColumnProfilingCheckCategoriesSpec(
 					nulls=ColumnNullsProfilingChecksSpec(
 						profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -932,6 +940,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			column_name='sample_column',
 			disabled=False,
+			id=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -986,6 +995,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			column_name='sample_column',
 			disabled=False,
+			id=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -1043,6 +1053,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			column_name='sample_column',
 			disabled=False,
+			id=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -1100,6 +1111,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			),
 			column_name='sample_column',
 			disabled=False,
+			id=False,
 			has_any_configured_checks=True,
 			has_any_configured_profiling_checks=True,
 			has_any_configured_monitoring_checks=False,
@@ -2328,6 +2340,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -2389,6 +2402,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2455,6 +2469,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2524,6 +2539,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2593,6 +2609,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2683,6 +2700,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -2746,6 +2764,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2814,6 +2833,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2885,6 +2905,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -2956,6 +2977,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -3951,6 +3973,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -4012,6 +4035,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4078,6 +4102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4147,6 +4172,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4216,6 +4242,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4306,6 +4333,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -4369,6 +4397,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4437,6 +4466,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4508,6 +4538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -4579,6 +4610,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -5564,6 +5596,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -5623,6 +5656,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -5687,6 +5721,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -5754,6 +5789,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -5821,6 +5857,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -5910,6 +5947,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "sensor_parameters" : [ ],
 		      "sensor_name" : "sample_target/sample_category/sample_sensor",
 		      "quality_dimension" : "sample_quality_dimension",
+		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
@@ -5971,6 +6009,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -6037,6 +6076,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -6106,6 +6146,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -6175,6 +6216,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							],
 							sensor_name='sample_target/sample_category/sample_sensor',
 							quality_dimension='sample_quality_dimension',
+							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
@@ -6836,6 +6878,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -6858,6 +6901,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -6880,6 +6924,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -6936,6 +6981,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -6958,6 +7004,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -6980,6 +7027,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7039,6 +7087,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7061,6 +7110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7083,6 +7133,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7142,6 +7193,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7164,6 +7216,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -7186,6 +7239,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				),
 				column_name='sample_column',
 				disabled=False,
+				id=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -8156,6 +8210,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -8210,6 +8265,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -8267,6 +8323,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -8324,6 +8381,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nullable=False,
 			length=256
 		),
+		id=False,
 		profiling_checks=ColumnProfilingCheckCategoriesSpec(
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
@@ -8428,6 +8486,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		column_name='sample_column',
 		disabled=False,
+		id=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -8479,6 +8538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		column_name='sample_column',
 		disabled=False,
+		id=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -8533,6 +8593,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		column_name='sample_column',
 		disabled=False,
+		id=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -8587,6 +8648,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		column_name='sample_column',
 		disabled=False,
+		id=False,
 		has_any_configured_checks=True,
 		has_any_configured_profiling_checks=True,
 		has_any_configured_monitoring_checks=False,
@@ -9320,7 +9382,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -9357,6 +9419,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -9421,6 +9484,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -9488,6 +9552,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -9555,6 +9620,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10109,7 +10175,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -10146,6 +10212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10210,6 +10277,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10277,6 +10345,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10344,6 +10413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10897,7 +10967,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -10933,6 +11003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -10995,6 +11066,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -11060,6 +11132,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
@@ -11125,6 +11198,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						],
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
+						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,

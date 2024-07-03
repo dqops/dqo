@@ -103,13 +103,13 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s""";
+            WHERE (%5$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -137,15 +137,15 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -169,13 +169,13 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s""";
+            WHERE (%5$s)""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -197,15 +197,15 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -236,14 +236,14 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -270,14 +270,14 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -304,8 +304,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -313,7 +313,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -350,8 +350,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -361,7 +361,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -390,8 +390,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -399,7 +399,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3""";
 
@@ -428,8 +428,8 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s < 0 THEN 0
-                            ELSE 1
+                            WHEN %1$s >= 0 THEN 1
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -439,7 +439,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s
+            WHERE (%5$s)
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

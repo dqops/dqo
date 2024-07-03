@@ -22,16 +22,17 @@ type PaginationProps = {
   page: number;
   pageSize: number;
   onChange: (page: number, pageSize: number) => void;
-  totalPages: number;
+  totalPages?: number;
   isEnd?: boolean;
+  selectMenuClassName?: string;
 };
 
 export const Pagination = ({
   page,
   pageSize,
-  totalPages,
   onChange,
-  isEnd
+  isEnd,
+  selectMenuClassName
 }: PaginationProps) => {
   const onChangePageSize = (value: number) => {
     onChange(1, value);
@@ -47,20 +48,18 @@ export const Pagination = ({
     }
   };
   const onNext = () => {
-    if (page < totalPages) {
-      onChangePage(page + 1);
-    }
+    onChangePage(page + 1);
   };
 
   return (
     <div className="flex items-center gap-4 justify-between text-sm">
       <div className="flex items-center gap-4">
-        <span>Rows per page:</span>
+        <span>Rows per page</span>
         <Select
           options={pageSizeOptions}
           value={pageSize}
           onChange={onChangePageSize}
-          menuClassName="top-[-120px]"
+          menuClassName={'top-[-120px]'}
         />
       </div>
       <div className="flex items-center gap-2">
@@ -86,7 +85,7 @@ export const Pagination = ({
           className="w-10 h-10 !shadow-none"
           color="teal"
           onClick={onNext}
-          disabled={page === totalPages || isEnd}
+          disabled={isEnd}
         >
           <SvgIcon name="chevron-right" className="w-4 text-white" />
         </IconButton>

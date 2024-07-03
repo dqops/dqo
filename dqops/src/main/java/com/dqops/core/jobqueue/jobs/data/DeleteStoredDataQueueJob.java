@@ -26,6 +26,8 @@ import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
+import com.dqops.data.errorsamples.models.ErrorsSamplesFragmentFilter;
+import com.dqops.data.errorsamples.services.ErrorSamplesDeleteService;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
@@ -43,21 +45,24 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult> {
-    private ErrorsDeleteService errorsDeleteService;
-    private StatisticsDeleteService statisticsDeleteService;
-    private CheckResultsDeleteService checkResultsDeleteService;
-    private SensorReadoutsDeleteService sensorReadoutsDeleteService;
+    private final ErrorsDeleteService errorsDeleteService;
+    private final StatisticsDeleteService statisticsDeleteService;
+    private final CheckResultsDeleteService checkResultsDeleteService;
+    private final SensorReadoutsDeleteService sensorReadoutsDeleteService;
+    private final ErrorSamplesDeleteService errorSamplesDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
     public DeleteStoredDataQueueJob(ErrorsDeleteService errorsDeleteService,
                                     StatisticsDeleteService statisticsDeleteService,
                                     CheckResultsDeleteService checkResultsDeleteService,
-                                    SensorReadoutsDeleteService sensorReadoutsDeleteService) {
+                                    SensorReadoutsDeleteService sensorReadoutsDeleteService,
+                                    ErrorSamplesDeleteService errorSamplesDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
         this.statisticsDeleteService = statisticsDeleteService;
         this.checkResultsDeleteService = checkResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
+        this.errorSamplesDeleteService = errorSamplesDeleteService;
     }
 
     /**
@@ -153,6 +158,24 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }};
     }
 
+    protected ErrorsSamplesFragmentFilter getErrorsSamplesFragmentFilter(){
+        return new ErrorsSamplesFragmentFilter() {{
+            setTableSearchFilters(new TableSearchFilters() {{
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
+            }});
+            setDateStart(deletionParameters.getDateStart());
+            setDateEnd(deletionParameters.getDateEnd());
+            setColumnNames(deletionParameters.getColumnNames());
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType());
+            setSensorName(deletionParameters.getSensorName());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTableComparisonName(deletionParameters.getTableComparisonName());
+        }};
+    }
+
     /**
      * Job internal implementation method that should be implemented by derived jobs.
      *
@@ -185,6 +208,10 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         if (this.deletionParameters.isDeleteSensorReadouts()) {
             DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter(), userIdentity);
             result.concat(sensorReadoutsResult);
+        }
+        if (this.deletionParameters.isDeleteErrorSamples()){
+            DeleteStoredDataResult errorSamplesResult = this.errorSamplesDeleteService.deleteSelectedErrorSamplesFragment(this.getErrorsSamplesFragmentFilter(), userIdentity);
+            result.concat(errorSamplesResult);
         }
 
         return result;

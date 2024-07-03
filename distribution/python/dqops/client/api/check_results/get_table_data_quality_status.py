@@ -30,6 +30,7 @@ def _get_kwargs(
     table_comparison: Union[Unset, None, str] = UNSET,
     quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
+
     pass
 
     params: Dict[str, Any] = {}

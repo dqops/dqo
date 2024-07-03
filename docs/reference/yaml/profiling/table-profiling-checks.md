@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of table level checks that are activated on a table level.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -32,24 +25,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableVolumeProfilingChecksSpec
 Container of built-in preconfigured volume data quality checks on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -66,51 +45,17 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CustomCategoryCheckSpecMap
 Dictionary of custom checks indexed by a check name that are configured on a category.
 
 
 
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-
-
-
-
-
-
-
-
-
 ___
-
 
 ## TableTimelinessProfilingChecksSpec
 Container of timeliness data quality checks on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -118,30 +63,17 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`profile_data_freshness`](../../../checks/table/timeliness/data-freshness.md)</span>|Calculates the number of days since the most recent event timestamp (freshness)|*[TableDataFreshnessCheckSpec](../../../checks/table/timeliness/data-freshness.md)*| | | |
+|<span class="no-wrap-code ">[`profile_data_freshness_anomaly`](../../../checks/table/timeliness/data-freshness-anomaly.md)</span>|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|*[TableDataFreshnessAnomalyCheckSpec](../../../checks/table/timeliness/data-freshness-anomaly.md)*| | | |
 |<span class="no-wrap-code ">[`profile_data_staleness`](../../../checks/table/timeliness/data-staleness.md)</span>|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|*[TableDataStalenessCheckSpec](../../../checks/table/timeliness/data-staleness.md)*| | | |
 |<span class="no-wrap-code ">[`profile_data_ingestion_delay`](../../../checks/table/timeliness/data-ingestion-delay.md)</span>|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|*[TableDataIngestionDelayCheckSpec](../../../checks/table/timeliness/data-ingestion-delay.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](./table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](./table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableAccuracyProfilingChecksSpec
 Container of built-in preconfigured accuracy data quality checks on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -153,24 +85,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableCustomSqlProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -185,24 +103,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableAvailabilityProfilingChecksSpec
 Container of built-in preconfigured table availability data quality checks on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -214,24 +118,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableSchemaProfilingChecksSpec
 Container of built-in preconfigured volume data quality checks on a table level.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -247,25 +137,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonProfilingChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -276,24 +152,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## TableComparisonProfilingChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -306,43 +168,25 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CustomCheckSpecMap
 Dictionary of custom checks indexed by a check name.
 
 
+The structure of this object is described below
 
-
-
-
-
-
-
-
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*Dict[string, [CustomCheckSpec](./table-profiling-checks.md#customcheckspec)]*| | | |
 
 
 
 ___
 
-
 ## CustomCheckSpec
 Custom check specification. This check is usable only when there is a matching custom check definition that identifies
  the sensor definition and the rule definition.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -366,24 +210,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CustomSensorParametersSpec
 Custom sensor parameters for custom checks.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -394,51 +224,17 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CustomRuleParametersSpec
 Custom data quality rule.
 
 
 
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-
-
-
-
-
-
-
-
-
 ___
-
 
 ## MonitoringScheduleSpec
 Monitoring job schedule specification.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -450,32 +246,24 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## CommentsListSpec
 List of comments.
 
 
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[[CommentSpec](./table-profiling-checks.md#commentspec)]*| | | |
+
+
 
 ___
 
-
 ## CommentSpec
 Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -488,12 +276,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

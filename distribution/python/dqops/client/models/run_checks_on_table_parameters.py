@@ -32,6 +32,8 @@ class RunChecksOnTableParameters:
             dummy_execution (Union[Unset, bool]): Set the value to true when the data quality checks should be executed in a
                 dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will
                 be rendered.
+            collect_error_samples (Union[Unset, bool]): Set the value to true to collect error samples for failed data
+                quality checks.
             run_checks_result (Union[Unset, RunChecksResult]): Returns the result (highest data quality check severity and
                 the finished checks count) for the checks that were recently executed.
     """
@@ -42,6 +44,7 @@ class RunChecksOnTableParameters:
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     time_window_filter: Union[Unset, "TimeWindowFilterParameters"] = UNSET
     dummy_execution: Union[Unset, bool] = UNSET
+    collect_error_samples: Union[Unset, bool] = UNSET
     run_checks_result: Union[Unset, "RunChecksResult"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -61,6 +64,7 @@ class RunChecksOnTableParameters:
             time_window_filter = self.time_window_filter.to_dict()
 
         dummy_execution = self.dummy_execution
+        collect_error_samples = self.collect_error_samples
         run_checks_result: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_result, Unset):
             run_checks_result = self.run_checks_result.to_dict()
@@ -80,6 +84,8 @@ class RunChecksOnTableParameters:
             field_dict["time_window_filter"] = time_window_filter
         if dummy_execution is not UNSET:
             field_dict["dummy_execution"] = dummy_execution
+        if collect_error_samples is not UNSET:
+            field_dict["collect_error_samples"] = collect_error_samples
         if run_checks_result is not UNSET:
             field_dict["run_checks_result"] = run_checks_result
 
@@ -122,6 +128,8 @@ class RunChecksOnTableParameters:
 
         dummy_execution = d.pop("dummy_execution", UNSET)
 
+        collect_error_samples = d.pop("collect_error_samples", UNSET)
+
         _run_checks_result = d.pop("run_checks_result", UNSET)
         run_checks_result: Union[Unset, RunChecksResult]
         if isinstance(_run_checks_result, Unset):
@@ -136,6 +144,7 @@ class RunChecksOnTableParameters:
             check_search_filters=check_search_filters,
             time_window_filter=time_window_filter,
             dummy_execution=dummy_execution,
+            collect_error_samples=collect_error_samples,
             run_checks_result=run_checks_result,
         )
 

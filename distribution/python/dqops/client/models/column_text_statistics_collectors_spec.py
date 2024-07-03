@@ -33,15 +33,15 @@ class ColumnTextStatisticsCollectorsSpec:
         text_datatype_detect (Union[Unset, ColumnTextTextDatatypeDetectStatisticsCollectorSpec]):
     """
 
-    text_max_length: Union[
-        Unset, "ColumnTextTextMaxLengthStatisticsCollectorSpec"
-    ] = UNSET
+    text_max_length: Union[Unset, "ColumnTextTextMaxLengthStatisticsCollectorSpec"] = (
+        UNSET
+    )
     text_mean_length: Union[
         Unset, "ColumnTextTextMeanLengthStatisticsCollectorSpec"
     ] = UNSET
-    text_min_length: Union[
-        Unset, "ColumnTextTextMinLengthStatisticsCollectorSpec"
-    ] = UNSET
+    text_min_length: Union[Unset, "ColumnTextTextMinLengthStatisticsCollectorSpec"] = (
+        UNSET
+    )
     text_datatype_detect: Union[
         Unset, "ColumnTextTextDatatypeDetectStatisticsCollectorSpec"
     ] = UNSET

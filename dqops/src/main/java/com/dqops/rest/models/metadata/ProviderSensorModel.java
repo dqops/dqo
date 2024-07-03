@@ -54,6 +54,13 @@ public class ProviderSensorModel {
     private String sqlTemplate;
 
     /**
+     * Provider specific Jinja2 SQL template for capturing error samples.
+     */
+    @JsonPropertyDescription("Provider specific Jinja2 SQL template for capturing error samples")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String errorSamplingTemplate;
+
+    /**
      * Whether the provider sensor is a User Home provider sensor
      */
     @JsonPropertyDescription("Whether the provider sensor is a User Home provider sensor")
@@ -84,12 +91,14 @@ public class ProviderSensorModel {
     public ProviderSensorModel(ProviderType providerType,
                                ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
                                String sqlTemplate,
+                               String errorSamplingTemplate,
                                boolean custom,
                                boolean builtIn,
                                boolean canEdit) {
         this.providerType = providerType;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplate = sqlTemplate;
+        this.errorSamplingTemplate = errorSamplingTemplate;
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
@@ -107,11 +116,15 @@ public class ProviderSensorModel {
             return false;
         }
 
-        if (!Objects.equals(providerSensorDefinitionWrapper.getSqlTemplate(), sqlTemplate)) {
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSqlTemplate(), this.sqlTemplate)) {
             return false;
         }
 
-        if (!Objects.equals(providerSensorDefinitionWrapper.getSpec(), providerSensorDefinitionSpec)) {
+        if (!Objects.equals(providerSensorDefinitionWrapper.getErrorSamplingTemplate(), this.errorSamplingTemplate)) {
+            return false;
+        }
+
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSpec(), this.providerSensorDefinitionSpec)) {
             return false;
         }
 

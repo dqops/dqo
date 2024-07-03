@@ -37,6 +37,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @SpringBootTest
 public class TrinoColumnNumericPopulationVarianceSensorParametersSpecIntegrationTest extends BaseTrinoIntegrationTest {
@@ -53,6 +56,25 @@ public class TrinoColumnNumericPopulationVarianceSensorParametersSpecIntegration
 		this.sut = new ColumnNumericPopulationVarianceSensorParametersSpec();
 		this.checkSpec = new ColumnPopulationVarianceInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullData_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.trino);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(null, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -118,5 +140,24 @@ public class TrinoColumnNumericPopulationVarianceSensorParametersSpecIntegration
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(11416.0896, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
+    }
+
+    @Test
+    void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsDataSamples() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
+                sampleTableMetadata, "negative", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.columnCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        List<Double> sampleValues = List.of(resultTable.column("actual_value").asObjectArray())
+                .stream().map(val -> ValueConverter.toDouble(val))
+                .collect(Collectors.toList());
+
+        Assertions.assertTrue(sampleValues.contains(91.0));
     }
 }

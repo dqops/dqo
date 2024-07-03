@@ -62,7 +62,7 @@ const initialState: ISourceState = {
     tabs: []
   },
   home: {
-    activeTab: window.location.pathname === '/home' ? '/home' : '/tables'
+    activeTab: '/home'
   }
 };
 
@@ -117,7 +117,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       const existing = state[action.checkType]?.tabs.find(
         (item) => item.value === action.data.value
       );
-      const { state: actionState, ...data } = action.data;
+      const { ...data } = action.data;
 
       if (existing) {
         return {
@@ -1247,6 +1247,33 @@ const connectionReducer = (state = initialState, action: Action) => {
         sensorErrors: newSensors
       });
     }
+    case SOURCE_ACTION.SET_ERROR_SAMPLES: {
+      const firstState =
+        state[action.checkType]?.tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
+      let key = action.data.checkName;
+      if (String(action.data.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.errorSamples).length > 0 &&
+        action.data?.errorSamples?.[0]?.errorSampleEntries?.[0]?.tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data?.errorSamples?.[0]?.errorSampleEntries?.[0]
+            ?.tableComparison;
+      }
+      const newErrorSamples = {
+        ...(firstState.errorSamples || {}),
+        [key]: action.data.errorSamples
+      };
+      return setActiveTabState(state, action, {
+        errorSamples: newErrorSamples
+      });
+    }
+
     case SOURCE_ACTION.SET_CHECK_FILTERS: {
       const firstState =
         state[action.checkType]?.tabs.find(

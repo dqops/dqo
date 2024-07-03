@@ -15,8 +15,6 @@
  */
 package com.dqops.data.statistics.factory;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Enumeration of possible statistics scopes. "table" - a whole table was profiled, "data_groupings" - groups of rows were profiled.
  */

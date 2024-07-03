@@ -133,6 +133,17 @@ const TableDetails = ({
             <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
+            <td className="px-4 py-2">Is a unique identifier</td>
+            <td className="px-4 py-2">
+              <div className="flex">
+                <Checkbox
+                  onChange={(value) => handleChange({ id: value })}
+                  checked={columnBasic?.id}
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
             <td className="px-4 py-2">Disable data quality checks</td>
             <td className="px-4 py-2">
               <div className="flex">

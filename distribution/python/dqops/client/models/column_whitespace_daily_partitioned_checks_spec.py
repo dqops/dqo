@@ -104,9 +104,9 @@ class ColumnWhitespaceDailyPartitionedChecksSpec:
                 self.daily_partition_whitespace_text_found.to_dict()
             )
 
-        daily_partition_null_placeholder_text_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_null_placeholder_text_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_null_placeholder_text_found, Unset):
             daily_partition_null_placeholder_text_found = (
                 self.daily_partition_null_placeholder_text_found.to_dict()
@@ -124,9 +124,9 @@ class ColumnWhitespaceDailyPartitionedChecksSpec:
                 self.daily_partition_whitespace_text_percent.to_dict()
             )
 
-        daily_partition_null_placeholder_text_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_null_placeholder_text_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_null_placeholder_text_percent, Unset):
             daily_partition_null_placeholder_text_percent = (
                 self.daily_partition_null_placeholder_text_percent.to_dict()
@@ -158,37 +158,37 @@ class ColumnWhitespaceDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_empty_text_found is not UNSET:
-            field_dict[
-                "daily_partition_empty_text_found"
-            ] = daily_partition_empty_text_found
+            field_dict["daily_partition_empty_text_found"] = (
+                daily_partition_empty_text_found
+            )
         if daily_partition_whitespace_text_found is not UNSET:
-            field_dict[
-                "daily_partition_whitespace_text_found"
-            ] = daily_partition_whitespace_text_found
+            field_dict["daily_partition_whitespace_text_found"] = (
+                daily_partition_whitespace_text_found
+            )
         if daily_partition_null_placeholder_text_found is not UNSET:
-            field_dict[
-                "daily_partition_null_placeholder_text_found"
-            ] = daily_partition_null_placeholder_text_found
+            field_dict["daily_partition_null_placeholder_text_found"] = (
+                daily_partition_null_placeholder_text_found
+            )
         if daily_partition_empty_text_percent is not UNSET:
-            field_dict[
-                "daily_partition_empty_text_percent"
-            ] = daily_partition_empty_text_percent
+            field_dict["daily_partition_empty_text_percent"] = (
+                daily_partition_empty_text_percent
+            )
         if daily_partition_whitespace_text_percent is not UNSET:
-            field_dict[
-                "daily_partition_whitespace_text_percent"
-            ] = daily_partition_whitespace_text_percent
+            field_dict["daily_partition_whitespace_text_percent"] = (
+                daily_partition_whitespace_text_percent
+            )
         if daily_partition_null_placeholder_text_percent is not UNSET:
-            field_dict[
-                "daily_partition_null_placeholder_text_percent"
-            ] = daily_partition_null_placeholder_text_percent
+            field_dict["daily_partition_null_placeholder_text_percent"] = (
+                daily_partition_null_placeholder_text_percent
+            )
         if daily_partition_text_surrounded_by_whitespace_found is not UNSET:
-            field_dict[
-                "daily_partition_text_surrounded_by_whitespace_found"
-            ] = daily_partition_text_surrounded_by_whitespace_found
+            field_dict["daily_partition_text_surrounded_by_whitespace_found"] = (
+                daily_partition_text_surrounded_by_whitespace_found
+            )
         if daily_partition_text_surrounded_by_whitespace_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_surrounded_by_whitespace_percent"
-            ] = daily_partition_text_surrounded_by_whitespace_percent
+            field_dict["daily_partition_text_surrounded_by_whitespace_percent"] = (
+                daily_partition_text_surrounded_by_whitespace_percent
+            )
 
         return field_dict
 

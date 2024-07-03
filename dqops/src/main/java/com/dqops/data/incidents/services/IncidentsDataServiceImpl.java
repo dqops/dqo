@@ -165,7 +165,20 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                         continue; // skipping
                     }
 
+                    if (!Strings.isNullOrEmpty(filterParameters.getCategory())) {
+                        if (!Objects.equals(checkCategoryColumn.get(rowIndex), filterParameters.getCategory())) {
+                            continue;
+                        }
+                    }
+
+                    if (!Strings.isNullOrEmpty(filterParameters.getDimension())) {
+                        if (!Objects.equals(qualityDimensionColumn.get(rowIndex), filterParameters.getDimension())) {
+                            continue;
+                        }
+                    }
+
                     IncidentModel incidentModel = new IncidentModel();
+
                     incidentModel.setIncidentId(incidentIdColumn.get(rowIndex));
                     incidentModel.setYear(partitionYear);
                     incidentModel.setMonth(partitionMonth);
@@ -293,7 +306,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinimumSeverity(),
+                0, // load all incidents, they will be filtered by the incident hash anyway, so that updated check results for fixed issues are also returned
                 filterParameters,
                 userDomainIdentity);
 
@@ -328,7 +341,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinimumSeverity(),
+                0, // load all incidents, they will be filtered by the incident hash anyway, so that updated check results for fixed issues are also returned
                 filterParameters,
                 userDomainIdentity);
 

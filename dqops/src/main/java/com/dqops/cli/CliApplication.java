@@ -15,9 +15,8 @@
  */
 package com.dqops.cli;
 
+import com.dqops.data.storage.parquet.HadoopConfigurationProviderImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -128,6 +127,8 @@ public class CliApplication {
 	 */
 	public static void main(String[] args) {
 		try {
+			new HadoopConfigurationProviderImpl().getHadoopConfiguration(); // trigger loading a static configuration
+
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
 			boolean silentDisabledAsArgument = Arrays.stream(args)

@@ -31,7 +31,8 @@ import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.*;
+import com.dqops.rest.models.metadata.DefaultTableChecksPatternListModel;
+import com.dqops.rest.models.metadata.DefaultTableChecksPatternModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -49,6 +50,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -103,20 +105,22 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DefaultTableChecksPatternListModel>> getAllDefaultTableChecksPatterns(
+    public Mono<ResponseEntity<Flux<DefaultTableChecksPatternListModel>>> getAllDefaultTableChecksPatterns(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        List<TableDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
-        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+            List<TableDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
+            boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
-        List<DefaultTableChecksPatternListModel> models = patternWrappersList.stream()
-                .map(pw -> DefaultTableChecksPatternListModel.fromPatternSpecification(pw.getSpec(), canEdit))
-                .collect(Collectors.toList());
-        models.sort(Comparator.comparing(model -> model.getPatternName()));
+            List<DefaultTableChecksPatternListModel> models = patternWrappersList.stream()
+                    .map(pw -> DefaultTableChecksPatternListModel.fromPatternSpecification(pw.getSpec(), canEdit))
+                    .collect(Collectors.toList());
+            models.sort(Comparator.comparing(model -> model.getPatternName()));
 
-        return new ResponseEntity<>(Flux.fromStream(models.stream()), HttpStatus.OK);
+            return new ResponseEntity<>(Flux.fromStream(models.stream()), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -136,28 +140,30 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DefaultTableChecksPatternListModel>> getDefaultTableChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<DefaultTableChecksPatternListModel>>> getDefaultTableChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Table pattern name") @PathVariable String patternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
+                    userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        DefaultTableChecksPatternListModel patternModel =
-                DefaultTableChecksPatternListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
+            boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            DefaultTableChecksPatternListModel patternModel =
+                    DefaultTableChecksPatternListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
 
-        return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -177,32 +183,34 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DefaultTableChecksPatternModel>> getDefaultTableChecksPattern(
+    public Mono<ResponseEntity<Mono<DefaultTableChecksPatternModel>>> getDefaultTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Table pattern name") @PathVariable String patternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
+                    userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+            }
 
-        boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        DefaultTableChecksPatternModel patternModel = new DefaultTableChecksPatternModel() {{
-            setPatternName(patternName);
-            setPatternSpec(defaultChecksPatternWrapper.getSpec());
-            setCanEdit(canEdit);
-            setYamlParsingError(defaultChecksPatternWrapper.getSpec().getYamlParsingError());
-        }};
+            boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
+            DefaultTableChecksPatternModel patternModel = new DefaultTableChecksPatternModel() {{
+                setPatternName(patternName);
+                setPatternSpec(defaultChecksPatternWrapper.getSpec());
+                setCanEdit(canEdit);
+                setYamlParsingError(defaultChecksPatternWrapper.getSpec().getYamlParsingError());
+            }};
 
-        return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -225,10 +233,11 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createDefaultTableChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<Void>>> createDefaultTableChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Default checks pattern model with only the target filters") @RequestBody DefaultTableChecksPatternListModel patternModel) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
         if (patternModel == null || Strings.isNullOrEmpty(patternName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -257,6 +266,7 @@ public class DefaultTableCheckPatternsController {
 
                     return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
                 });
+        }));
     }
 
     /**
@@ -279,32 +289,34 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createDefaultTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> createDefaultTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternModel patternModel) {
-        if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPatternSpec() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPatternSpec() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-                    if (existingDefaultChecksPatternWrapper != null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-                    }
+                        if (existingDefaultChecksPatternWrapper != null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+                        }
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                    defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-                    userHomeContext.flush();
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                        defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                    });
+        }));
     }
 
     /**
@@ -326,42 +338,44 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultTableChecksPatternTarget(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultTableChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternListModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getTargetTable() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getTargetTable() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
-                    TableDefaultChecksPatternSpec targetPatternSpec;
+                        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        TableDefaultChecksPatternSpec targetPatternSpec;
 
-                    if (existingDefaultChecksPatternWrapper == null) {
-                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        targetPatternSpec = new TableDefaultChecksPatternSpec() {{
-                            setTarget(patternModel.getTargetTable());
-                            setPriority(patternModel.getPriority());
-                        }};
-                        defaultChecksPatternWrapper.setSpec(targetPatternSpec);
-                    } else {
-                        targetPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-                        targetPatternSpec.setTarget(patternModel.getTargetTable());
-                        targetPatternSpec.setPriority(patternModel.getPriority());
-                    }
-                    targetPatternSpec.setDisabled(patternModel.isDisabled());
-                    targetPatternSpec.setDescription(patternModel.getDescription());
-                    userHomeContext.flush();
+                        if (existingDefaultChecksPatternWrapper == null) {
+                            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                            targetPatternSpec = new TableDefaultChecksPatternSpec() {{
+                                setTarget(patternModel.getTargetTable());
+                                setPriority(patternModel.getPriority());
+                            }};
+                            defaultChecksPatternWrapper.setSpec(targetPatternSpec);
+                        } else {
+                            targetPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                            targetPatternSpec.setTarget(patternModel.getTargetTable());
+                            targetPatternSpec.setPriority(patternModel.getPriority());
+                        }
+                        targetPatternSpec.setDisabled(patternModel.isDisabled());
+                        targetPatternSpec.setDescription(patternModel.getDescription());
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                    });
+        }));
     }
 
     /**
@@ -383,34 +397,36 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPatternSpec() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPatternSpec() == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-                    if (existingDefaultChecksPatternWrapper == null) {
-                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-                        defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-                    } else {
-                        TableDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-                        existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
-                    }
-                    userHomeContext.flush();
+                        if (existingDefaultChecksPatternWrapper == null) {
+                            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+                            defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                        } else {
+                            TableDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+                            existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
+                        }
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+                    });
+        }));
     }
 
     /**
@@ -430,31 +446,33 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteDefaultTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> deleteDefaultTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
 
-        if (Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+            if (Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-                    TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+                        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
-                    if (existingDefaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (existingDefaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    existingDefaultChecksPatternWrapper.markForDeletion();
-                    userHomeContext.flush();
+                        existingDefaultChecksPatternWrapper.markForDeletion();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -475,29 +493,31 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultProfilingTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                    .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+            TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
-        CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                null, null, null, executionContext, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
+                    null, null, null, executionContext, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -518,29 +538,31 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringDailyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultMonitoringDailyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                    .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
+            TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
 
-        CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                null, null, null, executionContext, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
+                    null, null, null, executionContext, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -561,29 +583,31 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringMonthlyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultMonitoringMonthlyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                    .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
+            TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
 
-        CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                null, null, null, executionContext, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
+                    null, null, null, executionContext, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -604,29 +628,31 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedDailyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultPartitionedDailyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                    .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
+            TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
 
-        CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                null, null, null, executionContext, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
+                    null, null, null, executionContext, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -647,29 +673,31 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedMonthlyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<CheckContainerModel>>> getDefaultPartitionedMonthlyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
-        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+            ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
+            UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
-        UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                .getByObjectName(patternName, true);
+            UserHome userHome = userHomeContext.getUserHome();
+            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                    .getByObjectName(patternName, true);
 
-        if (defaultChecksPatternWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
+            if (defaultChecksPatternWrapper == null) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
+            TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+            AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
 
-        CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                null, null, null, executionContext, null,
-                principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
+                    null, null, null, executionContext, null,
+                    principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
-        return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
+        }));
     }
 
     /**
@@ -692,38 +720,40 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultProfilingTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultProfilingTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+                        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                            .getByObjectName(patternName, true);
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                                .getByObjectName(patternName, true);
 
-                    if (defaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (defaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, true);
-                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, true);
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -746,38 +776,40 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultMonitoringDailyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultMonitoringDailyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+                        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                            .getByObjectName(patternName, true);
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                                .getByObjectName(patternName, true);
 
-                    if (defaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (defaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -800,38 +832,40 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultMonitoringMonthlyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultMonitoringMonthlyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+                        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                            .getByObjectName(patternName, true);
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                                .getByObjectName(patternName, true);
 
-                    if (defaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (defaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -854,38 +888,40 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultPartitionedDailyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultPartitionedDailyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily partitioned checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+                        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                            .getByObjectName(patternName, true);
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                                .getByObjectName(patternName, true);
 
-                    if (defaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (defaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 
     /**
@@ -908,37 +944,39 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultPartitionedMonthlyTableChecksPattern(
+    public Mono<ResponseEntity<Mono<Void>>> updateDefaultPartitionedMonthlyTableChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly partitioned checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
-        }
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (checkContainerModel == null || Strings.isNullOrEmpty(patternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return this.lockService.callSynchronouslyOnCheckPattern(patternName,
-                () -> {
-                    UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
-                    ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
-                    UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-                    UserHome userHome = userHomeContext.getUserHome();
+            return this.lockService.callSynchronouslyOnCheckPattern(patternName,
+                    () -> {
+                        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+                        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
+                        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+                        UserHome userHome = userHomeContext.getUserHome();
 
-                    TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
-                            .getByObjectName(patternName, true);
+                        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                                .getByObjectName(patternName, true);
 
-                    if (defaultChecksPatternWrapper == null) {
-                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-                    }
+                        if (defaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
 
-                    TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-                    AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                    this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-                    defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+                        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+                        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
+                        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
+                        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
 
-                    userHomeContext.flush();
+                        userHomeContext.flush();
 
-                    return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-                });
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+                    });
+        }));
     }
 }

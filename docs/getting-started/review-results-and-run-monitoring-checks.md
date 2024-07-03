@@ -16,7 +16,7 @@ Once new tables are imported, DQOps automatically activates default profiling an
 Basic statistics provides you with summary information about your tables and columns. This information is
 valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
 
-In the previous step we have collected basic statistics for imported tables and column using the Advisor. 
+In the previous step we have collected basic statistics for imported tables and columns using the Advisor. 
 
 To review the results: 
 
@@ -39,7 +39,7 @@ To review the results:
 [**Basic data statistics**](../working-with-dqo/collecting-basic-data-statistics.md). Profiling checks are also useful for
 exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
-In the previous step we have run profiling checks for imported tables and column using the Advisor. Now, let's review the results.
+In the previous step we have run profiling checks for imported tables and columns using the Advisor. Now, let's review the results.
 
 ### Review Profiling Table quality status
 

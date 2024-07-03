@@ -1,0 +1,4 @@
+{% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    LENGTH( {{ lib.render_target_column('analyzed_table') }}::VARCHAR ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}}
+{%- endcall -%}

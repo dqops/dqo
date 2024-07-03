@@ -15,13 +15,10 @@
  */
 package com.dqops.checks;
 
-import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
-import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;

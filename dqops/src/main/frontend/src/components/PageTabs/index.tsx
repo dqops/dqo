@@ -7,7 +7,7 @@ export interface IPageTabsProps {
   className?: string;
   activeTab?: string;
   onChange?: any;
-  onRemoveTab: (value: string) => void;
+  onRemoveTab: (value: string, limit?: boolean, activeTab?: string) => void;
   limit?: number;
 }
 
@@ -17,7 +17,7 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  limit = 7,
+  limit = 7
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab);
@@ -25,12 +25,14 @@ const PageTabs = ({
 
   useMemo(() => {
     if (tabs.length > limit) {
-      onRemoveTab(tabs[0].value);
+      onRemoveTab(tabs[0].value, true, activeTab);
     }
   }, [tabs, limit, onRemoveTab]);
 
   return (
-    <div className={`flex space-x-4 overflow-x-auto min-h-10 max-h-10 ${className}`}>
+    <div
+      className={`flex space-x-4 overflow-x-auto min-h-10 max-h-10 ${className}`}
+    >
       <div className="flex">
         {tabs.map((tab) => (
           <Tab

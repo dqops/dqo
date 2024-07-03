@@ -106,12 +106,12 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                 DateTimeColumn sortedTimePeriodColumn,
-                                 long checkHash,
-                                 long tableHash,
-                                 long columnHash,
-                                 int rowCount);
+    TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                           DateTimeColumn sortedTimePeriodColumn,
+                                           long checkHash,
+                                           long tableHash,
+                                           long columnHash,
+                                           int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes for the error table.
@@ -139,17 +139,39 @@ public interface CommonTableNormalizationService {
      * @param sortedDataGroupingHashColumn Data grouping hashes column.
      * @param sortedTimePeriodColumn     Time period column.
      * @param sampleIndexColumn          Optional sample index column.
+     * @param collectorHash              Collector hash value.
+     * @param tableHash                  Table hash value.
+     * @param columnHash                 Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount                   Row count.
+     * @return ID column, filled with values.
+     */
+    TextColumn createStatisticsRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                           InstantColumn sortedTimePeriodColumn,
+                                           IntColumn sampleIndexColumn,
+                                           long collectorHash,
+                                           long tableHash,
+                                           long columnHash,
+                                           int rowCount);
+
+    /**
+     * Creates and fills the "id" column by combining hashes.
+     * Also when a hash was already seen, assigns a new index to it
+     * and updates the <code>sampleIndexColumn</code> with the next available index.
+     *
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
+     * @param sortedTimePeriodColumn     Time period column.
+     * @param sampleIndexColumn          Optional sample index column.
      * @param checkHash                  Check hash value.
      * @param tableHash                  Table hash value.
      * @param columnHash                 Column hash value (or 0L when the check is not on a column level).
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
-                                 InstantColumn sortedTimePeriodColumn,
-                                 IntColumn sampleIndexColumn,
-                                 long checkHash,
-                                 long tableHash,
-                                 long columnHash,
-                                 int rowCount);
+    TextColumn createErrorSampleRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                            DateTimeColumn sortedTimePeriodColumn,
+                                            IntColumn sampleIndexColumn,
+                                            long checkHash,
+                                            long tableHash,
+                                            long columnHash,
+                                            int rowCount);
 }

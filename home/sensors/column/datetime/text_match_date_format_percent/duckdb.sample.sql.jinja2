@@ -1,0 +1,4 @@
+{% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+    REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format_regex(parameters.date_format) }}) IS TRUE
+{%- endcall -%}

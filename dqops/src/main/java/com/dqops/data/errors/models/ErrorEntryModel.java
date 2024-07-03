@@ -16,7 +16,12 @@
 package com.dqops.data.errors.models;
 
 import com.dqops.checks.CheckType;
+import com.dqops.data.statistics.factory.StatisticsResultDataType;
+import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +30,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Detailed error statuses for a single check. Represent one row in the errors table.
@@ -73,4 +79,21 @@ public class ErrorEntryModel {
 
     @JsonPropertyDescription("Table comparison name")
     String tableComparison;
+
+    public static class ErrorEntryModelSampleFactory implements SampleValueFactory<ErrorEntryModel> {
+        @Override
+        public ErrorEntryModel createSample() {
+            return new ErrorEntryModel() {{
+                setCheckType(CheckType.monitoring);
+                setProvider("spark");
+                setDurationMs(123);
+                setExecutedAt(LocalDateTime.of(2023, 10, 11, 18, 0, 0).toInstant(ZoneOffset.UTC));
+                setErrorSource("sensor");
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+                setTimeGradient(TimePeriodGradient.day);
+                setTimePeriod(LocalDateTime.of(2023, 10, 11, 0, 0, 0));
+                setErrorMessage("SQL query failed at 3:10. Unknown or unexpected token 'WHERE'.");
+            }};
+        }
+    }
 }

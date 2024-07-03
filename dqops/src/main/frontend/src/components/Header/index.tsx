@@ -12,14 +12,14 @@ import {
 } from '../../redux/actions/job.actions';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
-import {
-  COLUMN_LEVEL_TABS,
-  CONNECTION_LEVEL_TABS,
-  PageTab,
-  TABLE_LEVEL_TABS
-} from '../../shared/constants';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import {
+  getFirstLevelColumnTab,
+  getFirstLevelConnectionTab,
+  getFirstLevelTableTab,
+  useDecodedParams
+} from '../../utils';
 import HelpMenu from '../HelpMenu';
 import Logo from '../Logo';
 import NotificationMenu from '../NotificationMenu';
@@ -60,19 +60,16 @@ const Header = () => {
   const [isWindowSmall, setIsWindowSmall] = useState(window.innerWidth < 1600);
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { isAdvisorOpen, job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job
   );
-
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
     let value = '';
 
     if (match.path === ROUTES.PATTERNS.CONNECTION) {
-      let newTab = CONNECTION_LEVEL_TABS[newCheckTypes].find(
-        (item: PageTab) => item.value === tab
-      )?.value;
-      newTab = newTab ? newTab : CONNECTION_LEVEL_TABS[newCheckTypes][0].value;
+      const newTab = getFirstLevelConnectionTab(newCheckTypes);
 
       url = ROUTES.CONNECTION_DETAIL(newCheckTypes, connection, newTab);
       value = ROUTES.CONNECTION_LEVEL_VALUE(newCheckTypes, connection);
@@ -85,10 +82,7 @@ const Header = () => {
       );
       value = ROUTES.SCHEMA_LEVEL_VALUE(newCheckTypes, connection, schema);
     } else if (match.path === ROUTES.PATTERNS.TABLE) {
-      let newTab = TABLE_LEVEL_TABS[newCheckTypes].find(
-        (item: PageTab) => item.value === tab
-      )?.value;
-      newTab = newTab ? newTab : TABLE_LEVEL_TABS[newCheckTypes][0].value;
+      const newTab = getFirstLevelTableTab(newCheckTypes);
 
       url = ROUTES.TABLE_LEVEL_PAGE(
         newCheckTypes,
@@ -125,10 +119,7 @@ const Header = () => {
         table
       );
     } else if (match.path === ROUTES.PATTERNS.COLUMN) {
-      let newTab = COLUMN_LEVEL_TABS[newCheckTypes].find(
-        (item: PageTab) => item.value === tab
-      )?.value;
-      newTab = newTab ? newTab : COLUMN_LEVEL_TABS[newCheckTypes][0].value;
+      const newTab = getFirstLevelColumnTab(newCheckTypes);
 
       url = ROUTES.COLUMN_LEVEL_PAGE(
         newCheckTypes,
@@ -146,11 +137,13 @@ const Header = () => {
         column
       );
     }
-
     if (!url) {
       url = `/` + newCheckTypes;
       history.push(url);
     } else {
+      if (value === firstLevelActiveTab) {
+        return;
+      }
       dispatch(
         addFirstLevelTab(newCheckTypes, {
           url,
@@ -160,7 +153,6 @@ const Header = () => {
         })
       );
     }
-
     if (url !== location.pathname) {
       history.push(url);
     }

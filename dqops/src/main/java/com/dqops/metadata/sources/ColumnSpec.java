@@ -78,6 +78,10 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
+    @JsonPropertyDescription("True when this column is a part of the primary key or a business key that identifies a row. Error sampling captures values of id columns to identify the row where the error sample was found.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean id;
+
     @JsonPropertyDescription("Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -170,6 +174,23 @@ public class ColumnSpec extends AbstractSpec {
 		this.setDirtyIf(!Objects.equals(this.typeSnapshot, typeSnapshot));
         this.typeSnapshot = typeSnapshot;
 		propagateHierarchyIdToField(typeSnapshot, "type_snapshot");
+    }
+
+    /**
+     * Returns true when this column is a part of the business or primary key of the row. The values of ID columns are captured for error samples.
+     * @return True when the value is an ID column.
+     */
+    public boolean isId() {
+        return id;
+    }
+
+    /**
+     * Sets a flag to identify columns that are part of the identifier (primary or business key).
+     * @param id Is an ID column.
+     */
+    public void setId(boolean id) {
+        this.setDirtyIf(this.id != id);
+        this.id = id;
     }
 
     /**

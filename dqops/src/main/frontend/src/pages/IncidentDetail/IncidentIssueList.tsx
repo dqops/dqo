@@ -1,23 +1,32 @@
-import { CheckResultEntryModel, CheckResultEntryModelTimeGradientEnum, IncidentModel } from "../../api";
-import React, { useState } from "react";
-import SvgIcon from "../../components/SvgIcon";
-import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
-import { SortableColumn } from "../IncidentConnection/SortableColumn";
-import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
-import moment from "moment";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { addFirstLevelTab } from "../../redux/actions/source.actions";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  CheckResultEntryModel,
+  CheckResultEntryModelTimeGradientEnum,
+  IncidentModel
+} from '../../api';
+import SvgIcon from '../../components/SvgIcon';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { SortableColumn } from '../IncidentConnection/SortableColumn';
+import IncidentCheckDetails from './IncidentCheckDetail';
 
 type IncidentIssueRowProps = {
   issue: CheckResultEntryModel;
   incidentDetail?: IncidentModel;
-}
+  issues: CheckResultEntryModel[];
+};
 
-export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProps) => {
+export const IncidentIssueRow = ({
+  issue,
+  incidentDetail,
+  issues
+}: IncidentIssueRowProps) => {
   const [open, setOpen] = useState(false);
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const getIssueSeverityLevel = (value?: number) => {
@@ -40,7 +49,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
     }
 
     return name;
-  }
+  };
 
   const getSeverityClass = (row: CheckResultEntryModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
@@ -55,119 +64,222 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
   };
 
   const toggleCheckDetails = () => {
-    setOpen(prev => !prev);
+    setOpen((prev) => !prev);
   };
 
   const navigate = () => {
-    const {
-      connection = '',
-      schema = '',
-      table = '',
-    } = incidentDetail || {};
+    const { connection = '', schema = '', table = '' } = incidentDetail || {};
     const {
       checkType = CheckTypes.PROFILING,
       columnName,
       timeGradient
-    } = issue
+    } = issue;
 
     let url, value, label;
     if (columnName && columnName.length > 0) {
-      url = ROUTES.COLUMN_LEVEL_PAGE(checkType, connection , schema, table, columnName, checkType === CheckTypes.PROFILING ? 'advanced' 
-      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
-      value = ROUTES.COLUMN_LEVEL_VALUE(checkType, connection, schema, table, columnName);
+      url = ROUTES.COLUMN_LEVEL_PAGE(
+        checkType,
+        connection,
+        schema,
+        table,
+        columnName,
+        checkType === CheckTypes.PROFILING
+          ? 'advanced'
+          : timeGradient === CheckResultEntryModelTimeGradientEnum.month
+          ? 'monthly'
+          : 'daily'
+      );
+      value = ROUTES.COLUMN_LEVEL_VALUE(
+        checkType,
+        connection,
+        schema,
+        table,
+        columnName
+      );
       label = columnName;
     } else {
-      url = ROUTES.TABLE_LEVEL_PAGE(checkType, connection, schema, table, checkType === CheckTypes.PROFILING ? 'advanced' 
-      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
+      url = ROUTES.TABLE_LEVEL_PAGE(
+        checkType,
+        connection,
+        schema,
+        table,
+        checkType === CheckTypes.PROFILING
+          ? 'advanced'
+          : timeGradient === CheckResultEntryModelTimeGradientEnum.month
+          ? 'monthly'
+          : 'daily'
+      );
       value = ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table);
       label = table;
     }
-  
+
     const tabData = {
       url,
       value,
       state: {},
-      label,
-    };  
+      label
+    };
     dispatch(addFirstLevelTab(checkType as CheckTypes, tabData));
     history.push(url);
   };
-
+  const doesColumnHaveValues = (columnKey: keyof CheckResultEntryModel) => {
+    return issues.some(
+      (issue) =>
+        issue[columnKey] !== undefined &&
+        issue[columnKey] !== null &&
+        issue[columnKey] !== ''
+    );
+  };
   return (
     <>
       <tr className={getSeverityClass(issue)}>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <div className="flex space-x-1 items-center">
-            {!open ? (
-              <SvgIcon className="w-5" name="chevron-right" onClick={toggleCheckDetails} />
-            ) : (
-              <SvgIcon className="w-4" name="chevron-down" onClick={toggleCheckDetails} />
+          {!open ? (
+            <SvgIcon
+              className="w-5"
+              name="chevron-right"
+              onClick={toggleCheckDetails}
+            />
+          ) : (
+            <SvgIcon
+              className="w-4"
+              name="chevron-down"
+              onClick={toggleCheckDetails}
+            />
+          )}
+        </td>
+        {doesColumnHaveValues('columnName') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {issue.columnName}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('checkName') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            <a
+              className="text-blue-700 underline cursor-pointer"
+              onClick={navigate}
+            >
+              {issue.checkName}
+            </a>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('executedAt') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {formatDateTime(
+              moment(issue.executedAt).format('YYYY-MM-DD HH:mm:ss.SSS')
             )}
-            <span>{issue.columnName}</span>
-          </div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <a className="text-blue-700 underline cursor-pointer" onClick={navigate}>
-            {issue.checkName}
-          </a>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {moment(issue.executedAt).format("YYYY-MM-DD HH:mm:ss.SSS")}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.timeGradient}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {moment(issue.timePeriod).format("YYYY-MM-DD HH:mm:ss.SSS")}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.actualValue === 'number' ? issue.actualValue : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.expectedValue === 'number' ? issue.expectedValue : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataGroup}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {getIssueSeverityLevel(issue.severity)}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.warningLowerBound === 'number' ? issue.warningLowerBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.warningUpperBound === 'number' ? issue.warningUpperBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.errorLowerBound === 'number' ? issue.errorLowerBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.errorUpperBound === 'number' ? issue.errorUpperBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.fatalLowerBound === 'number' ? issue.fatalLowerBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          <div>{typeof issue.fatalUpperBound === 'number' ? issue.fatalUpperBound : ''}</div>
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.includeInKpi}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.includeInSla}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.durationMs}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-          <span>{issue.id}</span>
-        </td>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('timeGradient') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {issue.timeGradient}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('timePeriod') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            {formatDateTime(
+              moment(issue.timePeriod).format('YYYY-MM-DD HH:mm:ss.SSS')
+            )}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('actualValue') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.actualValue === 'number' ? issue.actualValue : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('expectedValue') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.expectedValue === 'number'
+                ? issue.expectedValue
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('dataGroup') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            {issue.dataGroup}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('severity') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            {getIssueSeverityLevel(issue.severity)}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('warningLowerBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.warningLowerBound === 'number'
+                ? issue.warningLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('warningUpperBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.warningUpperBound === 'number'
+                ? issue.warningUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('errorLowerBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.errorLowerBound === 'number'
+                ? issue.errorLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('errorUpperBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.errorUpperBound === 'number'
+                ? issue.errorUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('fatalLowerBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.fatalLowerBound === 'number'
+                ? issue.fatalLowerBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('fatalUpperBound') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            <div>
+              {typeof issue.fatalUpperBound === 'number'
+                ? issue.fatalUpperBound
+                : ''}
+            </div>
+          </td>
+        ) : null}
+        {doesColumnHaveValues('durationMs') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+            {issue.durationMs}
+          </td>
+        ) : null}
+        {doesColumnHaveValues('id') ? (
+          <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            <span>{issue.id}</span>
+          </td>
+        ) : null}
       </tr>
       {open && (
         <tr>
           <td colSpan={12}>
-            <CheckDetails
-              checkTypes={(issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+            <IncidentCheckDetails
+              checkTypes={
+                (issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes
+              }
               connection={incidentDetail?.connection ?? ''}
               schema={incidentDetail?.schema ?? ''}
               table={incidentDetail?.table ?? ''}
@@ -192,141 +304,260 @@ type IncidentIssueListProps = {
   incidentDetail?: IncidentModel;
 };
 
-export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDetail }: IncidentIssueListProps) => {
+export const IncidentIssueList = ({
+  issues,
+  filters,
+  onChangeFilter,
+  incidentDetail
+}: IncidentIssueListProps) => {
   const handleSortChange = (orderBy: string, direction?: 'asc' | 'desc') => {
     onChangeFilter({
       order: orderBy as any,
-      ...filters?.order !== orderBy ? {
-        direction: 'asc',
-        page: 1 }: { direction }
-    })
+      ...(filters?.order !== orderBy
+        ? {
+            direction: 'asc',
+            page: 1
+          }
+        : { direction })
+    });
+  };
+
+  // Helper function to check if any issues have a value for a given column
+  const doesColumnHaveValues = (columnKey: keyof CheckResultEntryModel) => {
+    return issues.some(
+      (issue) =>
+        issue[columnKey] !== undefined &&
+        issue[columnKey] !== null &&
+        issue[columnKey] !== ''
+    );
   };
 
   return (
     <div>
       <table className="mt-4 w-full">
         <thead>
-        <tr>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            <SortableColumn
-              className="justify-end"
-              label="Column Name"
-              order="columnName"
-              direction={filters?.order === 'columnName' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            <SortableColumn
-              className="justify-end"
-              label="Check Name"
-              order="checkName"
-              direction={filters?.order === 'checkName' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            <SortableColumn
-              className="justify-end"
-              label="Executed At"
-              order="executedAt"
-              direction={filters?.order === 'executedAt' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            <SortableColumn
-              className="justify-end"
-              label="Time Scale"
-              order="timeGradient"
-              direction={filters?.order === 'timeGradient' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            <SortableColumn
-              className="justify-end"
-              label="Time Period"
-              order="timePeriod"
-              direction={filters?.order === 'timePeriod' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <SortableColumn
-              className="justify-end"
-              label="Actual Value"
-              order="actualValue"
-              direction={filters?.order === 'actualValue' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <SortableColumn
-              className="justify-end"
-              label="Expected Value"
-              order="expectedValue"
-              direction={filters?.order === 'expectedValue' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            <SortableColumn
-              className="justify-end"
-              label="Data Group"
-              order="dataGroup"
-              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <SortableColumn
-              className="justify-end"
-              label="Issue Severity Level"
-              order="severity"
-              direction={filters?.order === 'severity' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Warning<br/>Lower Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Warning<br/>Upper Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Error<br/>Lower Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Error<br/>Upper Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Fatal<br/>Lower Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            <span>Fatal<br/>Upper Threshold</span>
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Include In KPI
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            Include In SLA (Data Contract)
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            Duration Ms
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Id
-          </th>
-        </tr>
+          <tr>
+            <th></th>
+            {doesColumnHaveValues('columnName') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Column Name"
+                  order="columnName"
+                  direction={
+                    filters?.order === 'columnName'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('checkName') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Check Name"
+                  order="checkName"
+                  direction={
+                    filters?.order === 'checkName'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('executedAt') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Executed At"
+                  order="executedAt"
+                  direction={
+                    filters?.order === 'executedAt'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('timeGradient') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Time Scale"
+                  order="timeGradient"
+                  direction={
+                    filters?.order === 'timeGradient'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('timePeriod') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                <SortableColumn
+                  className="justify-start"
+                  label="Time Period"
+                  order="timePeriod"
+                  direction={
+                    filters?.order === 'timePeriod'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('actualValue') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-end"
+                  label="Actual Value"
+                  order="actualValue"
+                  direction={
+                    filters?.order === 'actualValue'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('expectedValue') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-end"
+                  label="Expected Value"
+                  order="expectedValue"
+                  direction={
+                    filters?.order === 'expectedValue'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('dataGroup') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+                <SortableColumn
+                  className="justify-start"
+                  label="Data Group"
+                  order="dataGroup"
+                  direction={
+                    filters?.order === 'dataGroup'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('severity') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <SortableColumn
+                  className="justify-start"
+                  label="Issue Severity Level"
+                  order="severity"
+                  direction={
+                    filters?.order === 'severity'
+                      ? filters.direction
+                      : undefined
+                  }
+                  onChange={handleSortChange}
+                />
+              </th>
+            )}
+            {doesColumnHaveValues('warningLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Warning
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('warningUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Warning
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('errorLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Error
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('errorUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Error
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('fatalLowerBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Fatal
+                  <br />
+                  Lower Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('fatalUpperBound') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+                <span>
+                  Fatal
+                  <br />
+                  Upper Threshold
+                </span>
+              </th>
+            )}
+            {doesColumnHaveValues('durationMs') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+                Duration Ms
+              </th>
+            )}
+            {doesColumnHaveValues('id') && (
+              <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+                Id
+              </th>
+            )}
+          </tr>
         </thead>
         <tbody>
-        {issues.map((issue) => (
-          <IncidentIssueRow key={issue.id} issue={issue} incidentDetail={incidentDetail} />
-        ))}
+          {issues.map((issue) => (
+            <IncidentIssueRow
+              key={issue.id}
+              issue={issue}
+              incidentDetail={incidentDetail}
+              issues={issues}
+            />
+          ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 };
 
+function formatDateTime(dateTime: string): string {
+  if (dateTime.endsWith('00:00:00.000')) {
+    return dateTime.split(' ')[0];
+  }
+
+  return dateTime;
+}

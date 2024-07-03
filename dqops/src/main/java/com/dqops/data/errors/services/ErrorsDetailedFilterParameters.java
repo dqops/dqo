@@ -25,7 +25,7 @@ import java.time.LocalDate;
 
 
 /**
- * The parameters for retrieving the errors model.
+ * The parameters for retrieving the execution errors model.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)

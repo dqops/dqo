@@ -24,10 +24,16 @@ import {
   SchemaApiClient,
   TableApiClient
 } from '../services/apiClient';
+import { TABLES_LIMIT_TREE_PAGING } from '../shared/config';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { CheckTypes, ROUTES } from '../shared/routes';
-import { urlencodeDecoder, urlencodeEncoder } from '../utils';
+import {
+  getFirstLevelColumnTab,
+  getFirstLevelTableTab,
+  urlencodeDecoder,
+  urlencodeEncoder
+} from '../utils';
 import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
@@ -78,6 +84,8 @@ function TreeProvider(props: any) {
   const [openNodes, setOpenNodes] = useState<CustomTreeNode[]>([]);
   const [tabMaps, setTabMaps] = useState<Record<string, ITab[]>>({}); // `blue box tab level`
   const [subTabMap, setSubTabMap] = useState<{ [key: string]: string }>({}); // sub tab under `blue box tab level`
+  const [tablesLoading, setTablesLoading] = useState('');
+  const [columnsLoading, setColumnsLoading] = useState('');
   const tabs = useMemo(() => tabMaps[checkTypes] ?? [], [tabMaps, checkTypes]);
   const setTabs = useCallback(
     (_tabMaps: ITab[]) => {
@@ -102,6 +110,9 @@ function TreeProvider(props: any) {
   const dispatch = useActionDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
   const [objectNotFound, setObjectNotFound] = useState(false);
+  const [loadedTables, setLoadedTables] = useState<{ [key: string]: boolean }>(
+    {}
+  );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -206,7 +217,11 @@ function TreeProvider(props: any) {
     getConnections();
   }, []);
 
-  const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {
+  const resetTreeData = (
+    node: CustomTreeNode,
+    items: CustomTreeNode[],
+    loading?: boolean
+  ) => {
     setOpenNodes((prev) => [
       ...prev.filter(
         (item) => item.id.toString().indexOf(node.id.toString()) !== 0
@@ -221,7 +236,7 @@ function TreeProvider(props: any) {
           item.parentId !== node.id
       )
       .map((item) =>
-        item.id === node.id ? { ...item, open: !item.open } : item
+        item.id === node.id ? { ...item, open: loading ?? !item.open } : item
       );
     setTreeData([...newTreeData, ...items]);
   };
@@ -277,9 +292,15 @@ function TreeProvider(props: any) {
     node: CustomTreeNode,
     reset = true
   ): Promise<CustomTreeNode[]> => {
+    const oldLoadedTables = { ...loadedTables };
+    oldLoadedTables[node?.id ?? ''] = false;
+    setLoadedTables(oldLoadedTables);
     const res: AxiosResponse<TableListModel[]> = await TableApiClient.getTables(
       node.parentId?.toString() || '',
-      node.label
+      node.label,
+      undefined,
+      1,
+      TABLES_LIMIT_TREE_PAGING
     );
     const items = res.data.map((table) => ({
       id: `${node.id}.${urlencodeDecoder(table.target?.table_name ?? '')}`,
@@ -1145,13 +1166,14 @@ function TreeProvider(props: any) {
         node.label,
         defaultConnectionTab
       );
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.CONNECTION_LEVEL_VALUE(checkType, node.label);
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: ROUTES.CONNECTION_LEVEL_VALUE(checkType, node.label),
+          value,
           state: {},
           label: node.label
         })
@@ -1165,8 +1187,12 @@ function TreeProvider(props: any) {
         node.label,
         'tables'
       );
-
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.SCHEMA_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        node.label
+      );
+      if (firstLevelActiveTab === value) {
         return;
       }
 
@@ -1194,17 +1220,7 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      let tab = subTabMap[node.id];
-      if (
-        checkType === CheckTypes.MONITORING ||
-        checkType === CheckTypes.PARTITIONED
-      ) {
-        tab = tab || 'table-quality-status-daily';
-      } else if (checkType === CheckTypes.PROFILING) {
-        tab = tab || 'statistics';
-      } else {
-        tab = tab || 'detail';
-      }
+      const tab = subTabMap[node.id] || getFirstLevelTableTab(checkType);
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
         checkType,
@@ -1214,19 +1230,21 @@ function TreeProvider(props: any) {
         tab
       );
 
-      if (firstLevelActiveTab === url) {
+      const value = ROUTES.TABLE_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        node.label
+      );
+
+      if (firstLevelActiveTab === value) {
         return;
       }
 
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: ROUTES.TABLE_LEVEL_VALUE(
-            checkType,
-            connectionNode?.label ?? '',
-            schemaNode?.label ?? '',
-            node.label
-          ),
+          value,
           state: {},
           label: node.label
         })
@@ -1327,7 +1345,7 @@ function TreeProvider(props: any) {
         );
       }
 
-      if (firstLevelActiveTab === url) {
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
@@ -1437,7 +1455,7 @@ function TreeProvider(props: any) {
         );
       }
 
-      if (url === firstLevelActiveTab) {
+      if (value === firstLevelActiveTab) {
         return;
       }
 
@@ -1641,25 +1659,25 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      if (firstLevelActiveTab === location.pathname) {
+      const value = ROUTES.TABLE_COLUMNS_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? ''
+      );
+
+      if (firstLevelActiveTab === value) {
         return;
       }
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: url,
+          value,
           state: {},
           label: node.label
         })
       );
-      history.push(
-        ROUTES.TABLE_COLUMNS(
-          checkType,
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? ''
-        )
-      );
+      history.push(url);
     } else if (node.level === TREE_LEVEL.TABLE_INCIDENTS) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -1696,17 +1714,7 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      let tab = subTabMap[node.id];
-      if (
-        checkType === CheckTypes.MONITORING ||
-        checkType === CheckTypes.PARTITIONED
-      ) {
-        tab = tab || 'daily';
-      } else if (checkType === CheckTypes.PROFILING) {
-        tab = tab || 'statistics';
-      } else {
-        tab = tab || 'detail';
-      }
+      const tab = subTabMap[node.id] || getFirstLevelColumnTab(checkType);
 
       const url = ROUTES.COLUMN_LEVEL_PAGE(
         checkType,
@@ -1716,32 +1724,26 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
-      if (url === firstLevelActiveTab) {
+      const value = ROUTES.COLUMN_LEVEL_VALUE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        node.label
+      );
+      if (value === firstLevelActiveTab) {
         return;
       }
 
       dispatch(
         addFirstLevelTab(checkType, {
           url,
-          value: `/${checkType}/connection/${
-            connectionNode?.label ?? ''
-          }/schema/${schemaNode?.label ?? ''}/table/${
-            tableNode?.label ?? ''
-          }/columns/${node.label}`,
+          value,
           state: {},
           label: node.label
         })
       );
-      history.push(
-        ROUTES.COLUMN_LEVEL_PAGE(
-          checkType,
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? '',
-          node.label,
-          tab
-        )
-      );
+      history.push(url);
     } else {
       history.push('/checks');
     }
@@ -1833,6 +1835,176 @@ function TreeProvider(props: any) {
     return Promise.reject(error);
   });
 
+  const loadMoreTables = async (
+    data: any[],
+    parentData: any,
+    search: string
+  ): Promise<CustomTreeNode[]> => {
+    setTablesLoading(data[0].parentId);
+    const tables = [...data];
+    const connection = data[0].parentId.split('.')[0];
+    const schema = data[0].parentId.split('.')[1];
+    const parentNode = parentData[connection].find(
+      (item: any) => item.id === data[0].parentId
+    );
+    const addPrefix = (str: string) => {
+      return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
+    };
+    const page = Math.max(tables.length / TABLES_LIMIT_TREE_PAGING) + 1;
+    const res: AxiosResponse<TableListModel[]> = await TableApiClient.getTables(
+      connection,
+      schema,
+      undefined,
+      page,
+      TABLES_LIMIT_TREE_PAGING,
+      search && addPrefix(search)
+    );
+    const items = res.data.map((table) => ({
+      id: `${parentNode.id}.${urlencodeDecoder(
+        table.target?.table_name ?? ''
+      )}`,
+      label: table.target?.table_name || '',
+      level: TREE_LEVEL.TABLE,
+      parentId: parentNode.id,
+      items: [],
+      tooltip: `${parentNode.id?.toString() || ''}.${data[0].label}.${
+        table.target?.table_name
+      }`,
+      hasCheck:
+        !!table?.[
+          checkTypesToHasConfiguredCheckKey[
+            checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
+          ] as keyof TableListModel
+        ],
+      run_checks_job_template: table[
+        checkTypesToJobTemplateKey[
+          checkTypes as keyof typeof checkTypesToJobTemplateKey
+        ] as keyof TableListModel
+      ] as CheckSearchFilters,
+      collect_statistics_job_template: table.collect_statistics_job_template,
+      data_clean_job_template: table.data_clean_job_template,
+      open: false,
+      configured: table.partitioning_configuration_missing,
+      parsingYamlError: table.yaml_parsing_error
+    }));
+    if (items.length === 0) {
+      const oldLoadedTables = { ...loadedTables };
+      oldLoadedTables[parentNode.id] = true;
+      setLoadedTables(oldLoadedTables);
+    }
+    const newItems = [...tables, ...items];
+    resetTreeData(parentNode, newItems, true);
+    setTablesLoading('');
+    return items;
+  };
+
+  const searchTable = async (data: any[], parentData: any, search: string) => {
+    const addPrefix = (str: string) => {
+      return str.includes('*') || str.length === 0 ? str : '*' + str + '*';
+    };
+    const connection = data[0].parentId.split('.')[0];
+    const schema = data[0].parentId.split('.')[1];
+    const parentNode = parentData[connection].find(
+      (item: any) => item.id === data[0].parentId
+    );
+
+    const res: AxiosResponse<TableListModel[]> = await TableApiClient.getTables(
+      connection,
+      schema,
+      undefined,
+      1,
+      TABLES_LIMIT_TREE_PAGING,
+      addPrefix(search)
+    );
+    const items = res.data.map((table) => ({
+      id: `${parentNode.id}.${urlencodeDecoder(
+        table.target?.table_name ?? ''
+      )}`,
+      label: table.target?.table_name || '',
+      level: TREE_LEVEL.TABLE,
+      parentId: parentNode.id,
+      items: [],
+      tooltip: `${parentNode.id?.toString() || ''}.${data[0].label}.${
+        table.target?.table_name
+      }`,
+      hasCheck:
+        !!table?.[
+          checkTypesToHasConfiguredCheckKey[
+            checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
+          ] as keyof TableListModel
+        ],
+      run_checks_job_template: table[
+        checkTypesToJobTemplateKey[
+          checkTypes as keyof typeof checkTypesToJobTemplateKey
+        ] as keyof TableListModel
+      ] as CheckSearchFilters,
+      collect_statistics_job_template: table.collect_statistics_job_template,
+      data_clean_job_template: table.data_clean_job_template,
+      open: false,
+      configured: table.partitioning_configuration_missing,
+      parsingYamlError: table.yaml_parsing_error
+    }));
+    if (items.length === 0) {
+      const oldLoadedTables = { ...loadedTables };
+      oldLoadedTables[parentNode.id] = true;
+      setLoadedTables(oldLoadedTables);
+    } else {
+      const oldLoadedTables = { ...loadedTables };
+      oldLoadedTables[parentNode.id] = false;
+      setLoadedTables(oldLoadedTables);
+    }
+    resetTreeData(parentNode, items, true);
+    setTablesLoading('');
+  };
+
+  const searchColumn = async (data: any[], parentData: any, search: string) => {
+    const parentId = data[0].parentId;
+    const tableParentId = String(parentId).replace('.columns', '');
+    const parentNode = parentData[tableParentId].find(
+      (item: any) => item.id === parentId
+    );
+    const table = data[0].parentId.split('.')[2];
+    const connection = data[0].parentId.split('.')[0];
+    const schema = data[0].parentId.split('.')[1];
+
+    const res: AxiosResponse<ColumnListModel[]> =
+      await ColumnApiClient.getColumns(connection, schema, table);
+    const items = res.data.map((column) => ({
+      id: `${parentNode.id}.${urlencodeDecoder(column.column_name ?? '')}`,
+      label: column.column_name || '',
+      level: TREE_LEVEL.COLUMN,
+      parentId: parentNode.id,
+      items: [],
+      tooltip: `${connection}.${schema}.${table}.${column.column_name}`,
+      hasCheck:
+        !!column?.[
+          checkTypesToHasConfiguredCheckKey[
+            checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey
+          ] as keyof ColumnListModel
+        ],
+      run_checks_job_template: column[
+        checkTypesToJobTemplateKey[
+          checkTypes as keyof typeof checkTypesToJobTemplateKey
+        ] as keyof ColumnListModel
+      ] as CheckSearchFilters,
+      collect_statistics_job_template: column.collect_statistics_job_template,
+      data_clean_job_template: column.data_clean_job_template,
+      open: false,
+      configured:
+        column.has_any_configured_checks ||
+        column.has_any_configured_partition_checks ||
+        column.has_any_configured_profiling_checks ||
+        column.has_any_configured_monitoring_checks
+    }));
+
+    const newItems = items.filter((item) =>
+      item.label.toLowerCase().includes(search.toLowerCase())
+    );
+
+    resetTreeData(parentNode, newItems, true);
+    setColumnsLoading('');
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -1872,7 +2044,13 @@ function TreeProvider(props: any) {
         runPartitionedChecks,
         objectNotFound,
         setObjectNotFound,
-        reimportTableMetadata
+        reimportTableMetadata,
+        loadMoreTables,
+        tablesLoading,
+        searchTable,
+        loadedTables,
+        columnsLoading,
+        searchColumn
       }}
       {...props}
     />

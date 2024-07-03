@@ -53,18 +53,18 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         Unset, "ColumnComparisonMonthlyPartitionedChecksSpecCustomChecks"
     ] = UNSET
     reference_column: Union[Unset, str] = UNSET
-    monthly_partition_sum_match: Union[
-        Unset, "ColumnComparisonSumMatchCheckSpec"
-    ] = UNSET
-    monthly_partition_min_match: Union[
-        Unset, "ColumnComparisonMinMatchCheckSpec"
-    ] = UNSET
-    monthly_partition_max_match: Union[
-        Unset, "ColumnComparisonMaxMatchCheckSpec"
-    ] = UNSET
-    monthly_partition_mean_match: Union[
-        Unset, "ColumnComparisonMeanMatchCheckSpec"
-    ] = UNSET
+    monthly_partition_sum_match: Union[Unset, "ColumnComparisonSumMatchCheckSpec"] = (
+        UNSET
+    )
+    monthly_partition_min_match: Union[Unset, "ColumnComparisonMinMatchCheckSpec"] = (
+        UNSET
+    )
+    monthly_partition_max_match: Union[Unset, "ColumnComparisonMaxMatchCheckSpec"] = (
+        UNSET
+    )
+    monthly_partition_mean_match: Union[Unset, "ColumnComparisonMeanMatchCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_not_null_count_match: Union[
         Unset, "ColumnComparisonNotNullCountMatchCheckSpec"
     ] = UNSET
@@ -123,13 +123,13 @@ class ColumnComparisonMonthlyPartitionedChecksSpec:
         if monthly_partition_mean_match is not UNSET:
             field_dict["monthly_partition_mean_match"] = monthly_partition_mean_match
         if monthly_partition_not_null_count_match is not UNSET:
-            field_dict[
-                "monthly_partition_not_null_count_match"
-            ] = monthly_partition_not_null_count_match
+            field_dict["monthly_partition_not_null_count_match"] = (
+                monthly_partition_not_null_count_match
+            )
         if monthly_partition_null_count_match is not UNSET:
-            field_dict[
-                "monthly_partition_null_count_match"
-            ] = monthly_partition_null_count_match
+            field_dict["monthly_partition_null_count_match"] = (
+                monthly_partition_null_count_match
+            )
 
         return field_dict
 

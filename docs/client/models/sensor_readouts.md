@@ -23,7 +23,7 @@ Detailed results for a single sensor. Represent one row in the sensor readouts t
 |<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
 |<span class="no-wrap-code">`data_group`</span>|Data group|*string*|
 |<span class="no-wrap-code">`duration_ms`</span>|Duration (ms)|*integer*|
-|<span class="no-wrap-code">[`time_gradient`](./errors.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./errors.md#timeperiodgradient)*|
+|<span class="no-wrap-code">[`time_gradient`](./error_samples.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./error_samples.md#timeperiodgradient)*|
 |<span class="no-wrap-code">`time_period`</span>|Time period|*datetime*|
 |<span class="no-wrap-code">`provider`</span>|Provider name|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension|*string*|

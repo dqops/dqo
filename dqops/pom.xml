@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.4.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.5.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,7 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
-		<duckdb.version>0.10.3</duckdb.version>
+		<duckdb.version>1.0.0</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -237,9 +237,14 @@
 			<version>${tablesaw.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-json</artifactId>
+			<version>0.43.1</version>
+		</dependency>
+		<dependency>
 			<groupId>net.tlabs-data</groupId>
 			<artifactId>tablesaw_${tablesaw.version}-parquet</artifactId>
-			<version>0.10.1</version>
+			<version>0.11.0</version>
 			<!-- Exclusions used to limit some useless hadoop dependencies that take the space, following the documentation at: https://github.com/tlabs-data/tablesaw-parquet/blob/master/docs/hadoop_dependency.md -->
 			<exclusions>
 				<exclusion>

@@ -15,10 +15,10 @@
  */
 package com.dqops.databricks.sensors.column.accuracy;
 
-import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -55,6 +55,56 @@ public class DatabricksColumnAccuracyTotalNotNullCountMatchPercentSensorParamete
         this.sut = new ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_onNullDataInPrimaryTable_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.databricks);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
+
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(nullTableMetadata);
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, sampleTableMetadataReferenced);
+        this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
+        this.sut.setReferencedColumn("result");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                nullTableMetadata, "int_nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(20L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(1).get(0));
+    }
+
+    @Test
+    void runSensor_onNullDataInForeignTable_thenReturnsValues() {
+        String csvFileName = SampleCsvFileNames.only_nulls;
+        SampleTableMetadata nullTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
+                csvFileName, ProviderType.databricks);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(nullTableMetadata);
+
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, nullTableMetadata);
+
+        this.sut.setReferencedTable(nullTableMetadata.getTableData().getHashedTableName());
+        this.sut.setReferencedColumn("int_nulls");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "result", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(20L, resultTable.column(1).get(0));
     }
 
     @Test

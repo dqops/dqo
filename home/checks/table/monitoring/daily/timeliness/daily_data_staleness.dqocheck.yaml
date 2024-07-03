@@ -4,5 +4,5 @@ kind: check
 spec:
   sensor_name: table/timeliness/data_staleness
   rule_name: comparison/max_days
-  help_text: Daily  calculating the time difference in days between the current date
+  help_text: Daily calculating the time difference in days between the current date
     and the most recent data ingestion timestamp (staleness)

@@ -8,8 +8,7 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
   addSelectedConnection,
-  getConnections,
-  setActiveFirstLevelTab
+  getConnections
 } from '../../redux/actions/incidents.actions';
 import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
@@ -18,9 +17,8 @@ import SvgIcon from '../SvgIcon';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections, activeTab, selectedConnections, tabs } = useSelector(
-    (state: IRootState) => state.incidents
-  );
+  const { connections, activeTab, selectedConnections, tabs, loading } =
+    useSelector((state: IRootState) => state.incidents);
   const selectedConnection =
     activeTab && activeTab.length > 0 && activeTab !== '/incidents/new-tab'
       ? activeTab?.split('/')[2]
@@ -41,6 +39,7 @@ const IncidentsTree = () => {
     if (activeTab === url) {
       return;
     }
+
     dispatch(
       addFirstLevelTab({
         url,
@@ -50,7 +49,7 @@ const IncidentsTree = () => {
             openIncidents: true,
             acknowledgedIncidents: true,
             page: 1,
-            pageSize: 50
+            pageSize: 10
           }
         },
         label: connection?.connection ?? ''
@@ -59,28 +58,61 @@ const IncidentsTree = () => {
     history.push(url);
   };
 
+  const openCategoryTab = () => {
+    const category = getLastValueFromURL(window.location.href, 'category');
+    const dimension = getLastValueFromURL(window.location.href, 'dimension');
+
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.INCIDENT_CONNECTION(
+          category ? `*?category=${category}` : `*?dimension=${dimension}`
+        ),
+        value: ROUTES.INCIDENT_CONNECTION_VALUE(
+          category ? `*?category=${category}` : `*?dimension=${dimension}`
+        ),
+        state: {},
+        label: category || dimension
+      })
+    );
+    history.push(
+      ROUTES.INCIDENT_CONNECTION(
+        category ? `*?category=${category}` : `*?dimension=${dimension}`
+      )
+    );
+  };
+
   const openCorrectTabFromUrl = () => {
-    // if (
-    //   window.location.pathname === '/incidents' ||
-    //   window.location.pathname === '/incidents/'
-    // ) {
+    const path = window.location.pathname.split('/');
+    if (
+      window.location.pathname === '/incidents' ||
+      window.location.pathname === '/incidents/'
+    ) {
+      if (activeTab && tabs.length > 0) {
+        history.push(activeTab);
+      }
+      return;
+    }
+    // if (path.length < 3) {
     //   return;
     // }
-
-    const path = window.location.pathname.split('/');
     const connection = path[2];
     const selectedConnection = connections.find(
       (x) => x.connection === connection
     );
+
     if (selectedConnection && !path[3]) {
       openFirstLevelTab(selectedConnection);
+    } else if (path[2] === '*') {
+      openCategoryTab();
     } else if (path[3]) {
-//      console.log(selectedConnection, path);
       const connection = path[2] || '';
       const year = Number(path[3]);
       const month = Number(path[4]);
       const incidentId = path[5] || '';
-
+      const state = tabs.find(
+        (x) =>
+          x.url === ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId)
+      )?.state;
       dispatch(
         addFirstLevelTab({
           url: ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId),
@@ -90,34 +122,17 @@ const IncidentsTree = () => {
             month,
             incidentId
           ),
-          state: {},
+          state: state || {},
           label: incidentId
         })
       );
-
       history.push(ROUTES.INCIDENT_DETAIL(connection, year, month, incidentId));
-    }
-    if (
-      activeTab &&
-      activeTab !== window.location.pathname &&
-      (window.location.pathname === '/incidents/' ||
-        window.location.pathname === '/incidents')
-    ) {
-      dispatch(setActiveFirstLevelTab(activeTab));
-      history.push(activeTab);
+      return;
     }
   };
-
   useEffect(() => {
     openCorrectTabFromUrl();
   }, [window.location.pathname, connections]);
-
-  // useEffect(() => {
-  //   if (activeTab) {
-  //     dispatch(setActiveFirstLevelTab(activeTab));
-  //     history.push(activeTab);
-  //   }
-  // }, [activeTab]);
 
   const openConnection = (connection: IncidentsPerConnectionModel) => {
     dispatch(
@@ -140,11 +155,15 @@ const IncidentsTree = () => {
       new Date(localStorageDate ?? '').getTime()
     );
   };
-
   return (
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 bg-white">
       <Button
         className="w-full mb-4"
+        leftIcon={
+          loading && (
+            <SvgIcon name="sync" className="w-4 h-4 mr-3 animate-spin" />
+          )
+        }
         label="Refresh"
         variant="outlined"
         color="primary"
@@ -180,3 +199,15 @@ const IncidentsTree = () => {
 };
 
 export default IncidentsTree;
+
+function getLastValueFromURL(url: string, param: string): string | undefined {
+  const regex = new RegExp(`[?&]${param}=([^&]*)`);
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    const values = match[1].split(',');
+    return values[values.length - 1];
+  }
+
+  return undefined;
+}

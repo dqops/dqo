@@ -254,7 +254,7 @@ const TableDetailBody = ({
         <td className="px-4 py-2">Filter</td>
         <td className="px-4 py-2">
           <textarea
-            className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
+            className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular text-sm h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded !min-h-10"
             value={filter}
             onChange={(e) => handleChange({ filter: e.target.value })}
           ></textarea>

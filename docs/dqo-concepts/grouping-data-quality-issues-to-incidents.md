@@ -54,9 +54,9 @@ The following statuses are used in the data quality incident workflow.
 
 
 ## Grouping issues into incidents
-The **data quality issue** grouping is configured on a connection level a shown on the *Incidents and Notifications* screen below.
+The **data quality incident** grouping level is configured on a connection level as shown on the *Incidents and Notifications* screen below.
 
-![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings.png){ loading=lazy; width="1200px" }
+![Incidents And Notifications tab](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-and-notifications-settings2.png){ loading=lazy; width="1200px" }
 
 The following grouping levels are supported:
 
@@ -65,6 +65,8 @@ The following grouping levels are supported:
 - **Table, data quality dimension and check category**
 - Table, data quality dimension, check category and check type
 - Table, data quality dimension, check category and check name
+
+You can also adjust the grouping level for **data quality incidents** at the table level in the **Incident configuration** tab.
 
 By default, DQOps groups issues by the table where the issue was identified, the [data quality dimension](data-quality-dimensions.md),
 and a data quality check category that mostly groups the check by the type of column or a way how the check is implemented.
@@ -95,8 +97,8 @@ graph LR
   IS3[<strong>public.dim_customer</strong><br/>dimension: Completeness<br/>category: nulls<br/>column: city<br/>check: daily_null_percent]:::issue --> |New incident created| IN2(<strong>public.dim_customer</strong><br/>dimension: Completeness<br/>category: nulls):::incident;
   IS4[<strong>public.dim_customer</strong><br/>dimension: Completeness<br/>category: nulls<br/>column: city<br/>check: daily_null_count]:::issue --> |Attach| IN2;
   IS5[<strong>public.dim_product</strong><br/>dimension: Completeness<br/>category: nulls<br/>column: type<br/>check: daily_null_percent]:::issue --> |New incident created| IN3(<strong>public.dim_product</strong><br/>dimension: Completeness<br/>category: nulls):::incident;
-  classDef issue fill:#f96;
-  classDef incident fill:#c88;
+  classDef issue fill:#FCEFEF;
+  classDef incident fill:#F86A62;
 ```
 
 
@@ -112,7 +114,7 @@ but the support team decided that they will not be resolved.
 The list of incidents is shown in the *Incidents* section of the [DQOps user interface](dqops-user-interface-overview.md).
 The incident review begins on the incident list screen shown below.
 
-![Data quality incident list screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen.png){ loading=lazy; width="1200px" }
+![Data quality incident list screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen5.png){ loading=lazy; width="1200px" }
 
 The incidents are grouped by the data source. The user can search for incidents by all the fields shown on the incident list screen,
 including the affected table name, the parent schema of the table, and the columns used for incident grouping: data quality dimension,
@@ -128,10 +130,82 @@ When a single incident is clicked, DQOps shows the incident detail screen. The u
 to the clipboard and send to another DQOps user, who can review the issue. Also, the link is shown
 in the [Slack incident notifications](../integrations/slack/configuring-slack-notifications.md).
 
-![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen.png){ loading=lazy; width="1200px" }
+![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen3.png){ loading=lazy; width="1200px" }
 
-The incident management screens are described on the 
+The incident management screens are described in details on the 
 [working with incidents and notifications](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) page.
+
+### **Disable check for the incident**
+
+To manage incidents, you have the option to disable the check responsible for the incident. Disabling a check can be
+useful when you are actively working to resolve the underlying issue.
+
+To disable a check, click on the "Disable check" button in the top right corner of the Incident details screen.
+Once confirmed, the check will be temporarily stopped from executing.
+
+![Disabling check](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-button.png){ loading=lazy; width="1200px" }
+
+You can verify that the check has been disabled by navigating to the check editor screen.
+
+![Disabling check verification on Check editor](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/disabling-check-verification.png){ loading=lazy; width="1200px" }
+
+
+### **Recalibrate check for the incident**
+
+DQOps offers a one-click option to automatically reduce the number of data quality issues identified by a check.
+This can be helpful in situations where the check might be overly sensitive.
+
+Clicking the Recalibrate button will decrease the check's thresholds by 30%. For more significant adjustments, you can click
+the Recalibrate button multiple times. Each click will further reduce the check's thresholds by an additional 30%.
+
+![Recalibrate-check-button](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/recalibrate-check-button.png){ loading=lazy; width="1200px" }
+
+The following example YAML files illustrate the `daily_partition_row_count` check configuration before and after recalibration. Notice that the `min_count` rule has been reduced from 1000, to 700.
+
+
+=== "Check configuration before recalibration"
+
+    ``` { .yaml .annotate linenums="1" hl_lines="17" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: created_date
+        ingestion_timestamp_column: close_date
+        partition_by_column: created_date
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      partitioned_checks:
+        daily:
+          volume:
+            daily_partition_row_count:
+              error:
+                min_count: 1000
+    ```
+
+=== "Check configuration after recalibration"
+
+    ``` { .yaml .annotate linenums="1" hl_lines="17" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: created_date
+        ingestion_timestamp_column: close_date
+        partition_by_column: created_date
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      partitioned_checks:
+        daily:
+          volume:
+            daily_partition_row_count:
+              error:
+                min_count: 700
+    ```
 
 
 ## Incident notifications
@@ -150,4 +224,3 @@ use formatted messages that are shown on the Slack channels as shown below.
   in the *Working with DQOps* section.
 - Learn how to configure [data quality incident notifications with Slack](../integrations/slack/configuring-slack-notifications.md)
 - Learn how a generic integration using [webhooks](../integrations/webhooks/index.md) is used for incident notifications.
-

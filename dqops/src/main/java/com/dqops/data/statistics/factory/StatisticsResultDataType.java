@@ -55,8 +55,8 @@ public enum StatisticsResultDataType {
     }
 
     /**
-     * Returns the profiler name.
-     * @return Profiler name.
+     * Returns the statistics type name.
+     * @return Statistics type name.
      */
     public String getName() {
         return name;

@@ -131,9 +131,9 @@ class ColumnNumericProfilingChecksSpec:
         Unset, "ColumnNumberAboveMaxValueCheckSpec"
     ] = UNSET
     profile_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
-    profile_negative_values_percent: Union[
-        Unset, "ColumnNegativePercentCheckSpec"
-    ] = UNSET
+    profile_negative_values_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = (
+        UNSET
+    )
     profile_number_below_min_value_percent: Union[
         Unset, "ColumnNumberBelowMinValuePercentCheckSpec"
     ] = UNSET
@@ -151,9 +151,9 @@ class ColumnNumericProfilingChecksSpec:
     profile_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
     profile_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
     profile_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
-    profile_percentile_in_range: Union[
-        Unset, "ColumnPercentileInRangeCheckSpec"
-    ] = UNSET
+    profile_percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = (
+        UNSET
+    )
     profile_percentile_10_in_range: Union[
         Unset, "ColumnPercentile10InRangeCheckSpec"
     ] = UNSET
@@ -178,15 +178,15 @@ class ColumnNumericProfilingChecksSpec:
     profile_population_variance_in_range: Union[
         Unset, "ColumnPopulationVarianceInRangeCheckSpec"
     ] = UNSET
-    profile_invalid_latitude: Union[
-        Unset, "ColumnInvalidLatitudeCountCheckSpec"
-    ] = UNSET
+    profile_invalid_latitude: Union[Unset, "ColumnInvalidLatitudeCountCheckSpec"] = (
+        UNSET
+    )
     profile_valid_latitude_percent: Union[
         Unset, "ColumnValidLatitudePercentCheckSpec"
     ] = UNSET
-    profile_invalid_longitude: Union[
-        Unset, "ColumnInvalidLongitudeCountCheckSpec"
-    ] = UNSET
+    profile_invalid_longitude: Union[Unset, "ColumnInvalidLongitudeCountCheckSpec"] = (
+        UNSET
+    )
     profile_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
     ] = UNSET
@@ -355,35 +355,35 @@ class ColumnNumericProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_number_below_min_value is not UNSET:
-            field_dict[
-                "profile_number_below_min_value"
-            ] = profile_number_below_min_value
+            field_dict["profile_number_below_min_value"] = (
+                profile_number_below_min_value
+            )
         if profile_number_above_max_value is not UNSET:
-            field_dict[
-                "profile_number_above_max_value"
-            ] = profile_number_above_max_value
+            field_dict["profile_number_above_max_value"] = (
+                profile_number_above_max_value
+            )
         if profile_negative_values is not UNSET:
             field_dict["profile_negative_values"] = profile_negative_values
         if profile_negative_values_percent is not UNSET:
-            field_dict[
-                "profile_negative_values_percent"
-            ] = profile_negative_values_percent
+            field_dict["profile_negative_values_percent"] = (
+                profile_negative_values_percent
+            )
         if profile_number_below_min_value_percent is not UNSET:
-            field_dict[
-                "profile_number_below_min_value_percent"
-            ] = profile_number_below_min_value_percent
+            field_dict["profile_number_below_min_value_percent"] = (
+                profile_number_below_min_value_percent
+            )
         if profile_number_above_max_value_percent is not UNSET:
-            field_dict[
-                "profile_number_above_max_value_percent"
-            ] = profile_number_above_max_value_percent
+            field_dict["profile_number_above_max_value_percent"] = (
+                profile_number_above_max_value_percent
+            )
         if profile_number_in_range_percent is not UNSET:
-            field_dict[
-                "profile_number_in_range_percent"
-            ] = profile_number_in_range_percent
+            field_dict["profile_number_in_range_percent"] = (
+                profile_number_in_range_percent
+            )
         if profile_integer_in_range_percent is not UNSET:
-            field_dict[
-                "profile_integer_in_range_percent"
-            ] = profile_integer_in_range_percent
+            field_dict["profile_integer_in_range_percent"] = (
+                profile_integer_in_range_percent
+            )
         if profile_min_in_range is not UNSET:
             field_dict["profile_min_in_range"] = profile_min_in_range
         if profile_max_in_range is not UNSET:
@@ -397,55 +397,55 @@ class ColumnNumericProfilingChecksSpec:
         if profile_percentile_in_range is not UNSET:
             field_dict["profile_percentile_in_range"] = profile_percentile_in_range
         if profile_percentile_10_in_range is not UNSET:
-            field_dict[
-                "profile_percentile_10_in_range"
-            ] = profile_percentile_10_in_range
+            field_dict["profile_percentile_10_in_range"] = (
+                profile_percentile_10_in_range
+            )
         if profile_percentile_25_in_range is not UNSET:
-            field_dict[
-                "profile_percentile_25_in_range"
-            ] = profile_percentile_25_in_range
+            field_dict["profile_percentile_25_in_range"] = (
+                profile_percentile_25_in_range
+            )
         if profile_percentile_75_in_range is not UNSET:
-            field_dict[
-                "profile_percentile_75_in_range"
-            ] = profile_percentile_75_in_range
+            field_dict["profile_percentile_75_in_range"] = (
+                profile_percentile_75_in_range
+            )
         if profile_percentile_90_in_range is not UNSET:
-            field_dict[
-                "profile_percentile_90_in_range"
-            ] = profile_percentile_90_in_range
+            field_dict["profile_percentile_90_in_range"] = (
+                profile_percentile_90_in_range
+            )
         if profile_sample_stddev_in_range is not UNSET:
-            field_dict[
-                "profile_sample_stddev_in_range"
-            ] = profile_sample_stddev_in_range
+            field_dict["profile_sample_stddev_in_range"] = (
+                profile_sample_stddev_in_range
+            )
         if profile_population_stddev_in_range is not UNSET:
-            field_dict[
-                "profile_population_stddev_in_range"
-            ] = profile_population_stddev_in_range
+            field_dict["profile_population_stddev_in_range"] = (
+                profile_population_stddev_in_range
+            )
         if profile_sample_variance_in_range is not UNSET:
-            field_dict[
-                "profile_sample_variance_in_range"
-            ] = profile_sample_variance_in_range
+            field_dict["profile_sample_variance_in_range"] = (
+                profile_sample_variance_in_range
+            )
         if profile_population_variance_in_range is not UNSET:
-            field_dict[
-                "profile_population_variance_in_range"
-            ] = profile_population_variance_in_range
+            field_dict["profile_population_variance_in_range"] = (
+                profile_population_variance_in_range
+            )
         if profile_invalid_latitude is not UNSET:
             field_dict["profile_invalid_latitude"] = profile_invalid_latitude
         if profile_valid_latitude_percent is not UNSET:
-            field_dict[
-                "profile_valid_latitude_percent"
-            ] = profile_valid_latitude_percent
+            field_dict["profile_valid_latitude_percent"] = (
+                profile_valid_latitude_percent
+            )
         if profile_invalid_longitude is not UNSET:
             field_dict["profile_invalid_longitude"] = profile_invalid_longitude
         if profile_valid_longitude_percent is not UNSET:
-            field_dict[
-                "profile_valid_longitude_percent"
-            ] = profile_valid_longitude_percent
+            field_dict["profile_valid_longitude_percent"] = (
+                profile_valid_longitude_percent
+            )
         if profile_non_negative_values is not UNSET:
             field_dict["profile_non_negative_values"] = profile_non_negative_values
         if profile_non_negative_values_percent is not UNSET:
-            field_dict[
-                "profile_non_negative_values_percent"
-            ] = profile_non_negative_values_percent
+            field_dict["profile_non_negative_values_percent"] = (
+                profile_non_negative_values_percent
+            )
 
         return field_dict
 

@@ -38,9 +38,9 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
     ] = UNSET
     monthly_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     monthly_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
-    monthly_partition_not_nulls_count: Union[
-        Unset, "ColumnNotNullsCountCheckSpec"
-    ] = UNSET
+    monthly_partition_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
@@ -81,17 +81,17 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
         if monthly_partition_nulls_count is not UNSET:
             field_dict["monthly_partition_nulls_count"] = monthly_partition_nulls_count
         if monthly_partition_nulls_percent is not UNSET:
-            field_dict[
-                "monthly_partition_nulls_percent"
-            ] = monthly_partition_nulls_percent
+            field_dict["monthly_partition_nulls_percent"] = (
+                monthly_partition_nulls_percent
+            )
         if monthly_partition_not_nulls_count is not UNSET:
-            field_dict[
-                "monthly_partition_not_nulls_count"
-            ] = monthly_partition_not_nulls_count
+            field_dict["monthly_partition_not_nulls_count"] = (
+                monthly_partition_not_nulls_count
+            )
         if monthly_partition_not_nulls_percent is not UNSET:
-            field_dict[
-                "monthly_partition_not_nulls_percent"
-            ] = monthly_partition_not_nulls_percent
+            field_dict["monthly_partition_not_nulls_percent"] = (
+                monthly_partition_not_nulls_percent
+            )
 
         return field_dict
 

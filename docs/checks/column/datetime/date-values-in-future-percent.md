@@ -136,39 +136,23 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -201,39 +185,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -251,7 +220,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -266,39 +236,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -316,7 +271,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -331,39 +287,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -381,7 +322,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -396,39 +338,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -452,7 +379,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -471,39 +399,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -521,7 +434,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -537,38 +451,27 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -593,7 +496,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -612,39 +516,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -662,7 +551,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -676,39 +566,25 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -726,7 +602,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -741,39 +618,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -791,7 +653,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -806,39 +669,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -856,7 +704,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -871,39 +720,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -928,7 +762,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -994,39 +829,23 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1061,39 +880,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1110,7 +914,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -1128,39 +933,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1177,7 +967,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1195,39 +986,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1244,7 +1020,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -1262,39 +1039,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1317,7 +1079,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1344,39 +1107,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1393,7 +1141,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1412,38 +1161,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1467,7 +1205,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1494,39 +1233,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1543,7 +1267,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1560,39 +1285,25 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1609,7 +1320,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1627,39 +1339,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1676,7 +1373,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -1694,39 +1392,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1743,7 +1426,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -1765,39 +1449,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1821,7 +1490,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -1972,39 +1642,23 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2037,39 +1691,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2087,7 +1726,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2102,39 +1742,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2152,7 +1777,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2167,39 +1793,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2217,7 +1828,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2232,39 +1844,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2288,7 +1885,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2307,39 +1905,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2357,7 +1940,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2373,38 +1957,27 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2429,7 +2002,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2448,39 +2022,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2498,7 +2057,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2512,39 +2072,25 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2562,7 +2108,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2577,39 +2124,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2627,7 +2159,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2642,39 +2175,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2692,7 +2210,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -2707,39 +2226,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2764,7 +2268,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -2831,39 +2336,23 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2898,39 +2387,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2947,7 +2421,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -2965,39 +2440,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3014,7 +2474,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3032,39 +2493,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3081,7 +2527,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -3099,39 +2546,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3154,7 +2586,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3181,39 +2614,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3230,7 +2648,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3249,38 +2668,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3304,7 +2712,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3331,39 +2740,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3380,7 +2774,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3397,39 +2792,25 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3446,7 +2827,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3464,39 +2846,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3513,7 +2880,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -3531,39 +2899,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3580,7 +2933,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -3602,39 +2956,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3658,7 +2997,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -3809,39 +3149,23 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3874,39 +3198,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3924,7 +3233,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -3939,39 +3249,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3989,7 +3284,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4004,39 +3300,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4054,7 +3335,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4069,39 +3351,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4125,7 +3392,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4144,39 +3412,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4194,7 +3447,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4210,38 +3464,27 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4266,7 +3509,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4285,39 +3529,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4335,7 +3564,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4349,39 +3579,25 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4399,7 +3615,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4414,39 +3631,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4464,7 +3666,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4479,39 +3682,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4529,7 +3717,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -4544,39 +3733,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4601,7 +3775,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4668,39 +3843,23 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4735,39 +3894,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4784,7 +3928,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4802,39 +3947,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4851,7 +3981,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -4869,39 +4000,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4918,7 +4034,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -4936,39 +4053,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4991,7 +4093,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5018,39 +4121,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5067,7 +4155,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5086,38 +4175,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5141,7 +4219,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5168,39 +4247,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5217,7 +4281,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5234,39 +4299,25 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5283,7 +4334,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5301,39 +4353,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5350,7 +4387,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -5368,39 +4406,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5417,7 +4440,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -5439,39 +4463,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5495,7 +4504,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5656,39 +4666,23 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5725,39 +4719,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5775,7 +4754,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -5794,39 +4774,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5844,7 +4809,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -5863,39 +4829,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5913,7 +4864,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -5932,39 +4884,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5988,7 +4925,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6013,39 +4951,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6063,7 +4986,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6083,38 +5007,27 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -6139,7 +5052,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6164,39 +5078,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6214,7 +5113,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6232,39 +5132,25 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6282,7 +5168,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6301,39 +5188,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6351,7 +5223,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -6370,39 +5243,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6420,7 +5278,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -6441,39 +5300,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -6498,7 +5342,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6581,39 +5426,23 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6650,39 +5479,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6699,7 +5513,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -6719,39 +5534,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6768,7 +5568,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6788,39 +5589,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6837,7 +5623,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -6857,39 +5644,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -6912,7 +5684,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -6943,39 +5716,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -6992,7 +5750,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7013,38 +5772,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -7068,7 +5816,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7099,39 +5848,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7148,7 +5882,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7167,39 +5902,25 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7216,7 +5937,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7236,39 +5958,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7285,7 +5992,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -7305,39 +6013,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7354,7 +6047,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -7376,39 +6070,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -7432,7 +6111,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7597,39 +6277,23 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7666,39 +6330,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7716,7 +6365,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -7735,39 +6385,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7785,7 +6420,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7804,39 +6440,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -7854,7 +6475,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -7873,39 +6495,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -7929,7 +6536,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -7954,39 +6562,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8004,7 +6597,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8024,38 +6618,27 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -8080,7 +6663,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8105,39 +6689,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8155,7 +6724,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8173,39 +6743,25 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8223,7 +6779,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8242,39 +6799,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8292,7 +6834,8 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -8311,39 +6854,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8361,7 +6889,8 @@ spec:
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -8382,39 +6911,24 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -8439,7 +6953,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8522,39 +7037,23 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8591,39 +7090,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8640,7 +7124,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -8660,39 +7145,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8709,7 +7179,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8729,39 +7200,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8778,7 +7234,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -8798,39 +7255,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -8853,7 +7295,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8884,39 +7327,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -8933,7 +7361,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -8954,38 +7383,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
             {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
+            
             {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -9009,7 +7427,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -9040,39 +7459,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -9089,7 +7493,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                            WHEN
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -9108,39 +7513,25 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Snowflake"
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
             
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                {% else -%}
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -9157,7 +7548,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END
@@ -9177,39 +7569,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -9226,7 +7603,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
@@ -9246,39 +7624,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -9295,7 +7658,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                            WHEN
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -9317,39 +7681,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_value_in_future() -%}
-                {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- else -%}
-                        CASE
-                            WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-                                THEN 1
-                            ELSE 0
-                        END
-                {%- endif -%}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
-                        {{ render_value_in_future() }}
+                        CASE
+                            WHEN
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                {% else -%}
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                {% endif -%}
+                                THEN 1
+                            ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -9373,7 +7722,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            WHEN
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
                                 THEN 1
                             ELSE 0
                         END

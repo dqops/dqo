@@ -119,10 +119,19 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String AZURE_SERVICE_PRINCIPAL_CLIENT_SECRET = "${sm://azure-service-principal-client-secret}";
 
-
     /**
      * Property to retrieve the Azure Storage Account name
      */
     public static final String AZURE_STORAGE_ACCOUNT_NAME = "${sm://azure-storage-account-name}";
+
+    /**
+     * Property to retrieve the Interoperability access key for dqo-ai-testing gcp bucket
+     */
+    public static final String GCS_DQO_AI_TESTING_INTEROPERABILITY_ACCESS_KEY = "${sm://gcs-dqo-ai-testing-interoperability-access-key}";
+
+    /**
+     * Property to retrieve the Interoperability secret for dqo-ai-testing gcp bucket
+     */
+    public static final String GCS_DQO_AI_TESTING_INTEROPERABILITY_SECRET = "${sm://gcs-dqo-ai-testing-interoperability-secret}";
 
 }

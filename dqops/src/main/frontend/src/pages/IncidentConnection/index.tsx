@@ -18,6 +18,7 @@ import StatusSelect from './StatusSelect';
 import { IconButton, Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
 import { IncidentModel, IncidentModelStatusEnum } from '../../api';
+import Loader from '../../components/Loader';
 import { Pagination } from '../../components/Pagination';
 import Select from '../../components/Select';
 import { Table } from '../../components/Table';
@@ -75,7 +76,9 @@ export const IncidentConnection = () => {
     isEnd,
     filters = {}
   } = useSelector(getFirstLevelIncidentsState);
-  const { activeTab } = useSelector((state: IRootState) => state.incidents);
+  const { activeTab, loading } = useSelector(
+    (state: IRootState) => state.incidents
+  );
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState('');
@@ -188,7 +191,7 @@ export const IncidentConnection = () => {
         return (
           <div className="flex items-center">
             <Select
-              className="!text-sm"
+              className="!text-sm w-50"
               value={value}
               options={statusOptions}
               onChange={(status) => onChangeIncidentStatus(row, status)}
@@ -200,7 +203,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end text-sm"
+          className="justify-end text-sm w-25"
           label="Total issues"
           order="failedChecksCount"
           direction={
@@ -212,8 +215,23 @@ export const IncidentConnection = () => {
         />
       ),
       label: 'Total issues',
-      className: 'text-right text-sm py-2 px-4',
-      value: 'failedChecksCount'
+      className: 'text-sm py-2 px-4 w-25',
+      value: 'failedChecksCount',
+      render: (value: number) => (
+        <div className="text-sm flex items-center justify-end gap-x-1">
+          <div>{value}</div>
+          <Tooltip
+            className="max-w-80 py-2 px-2 bg-gray-800"
+            content={
+              'The total number of detected issues can be higher than the count of data quality results when the results were deleted, or data quality checks were run again, overwritting previous results.'
+            }
+          >
+            <div>
+              <SvgIcon name="question_mark" className="w-5 h-5" />
+            </div>
+          </Tooltip>
+        </div>
+      )
     },
     {
       label: 'Schema',
@@ -234,7 +252,7 @@ export const IncidentConnection = () => {
       ),
       label: 'Table',
       className:
-        'text-left text-sm py-2 px-4 max-w-40 min-w-35 whitespace-normal break-all',
+        'text-left text-sm py-2 px-4 max-w-65 min-w-60 whitespace-normal break-all',
       value: 'table',
       render: (value: string) => {
         return <div className="cursor-pointer text-sm text-start">{value}</div>;
@@ -257,6 +275,7 @@ export const IncidentConnection = () => {
       label: 'Data quality issue grouping',
       className: 'text-left py-2 px-4',
       value: 'checkName',
+      alwaysVisible: true,
       render: (value: string, row: IncidentModel) => {
         const values = [
           row.qualityDimension,
@@ -323,6 +342,7 @@ export const IncidentConnection = () => {
       label: 'Issue Link',
       className: 'text-center issueUrl py-2 px-4 text-sm',
       value: 'issueUrl',
+      alwaysVisible: true,
       render: (value: string, row: IncidentModel) => {
         return (
           <div className="flex justify-center">
@@ -368,16 +388,20 @@ export const IncidentConnection = () => {
       }
     }
   ];
+  const category = getLastValueFromURL(window.location.href, 'category');
+  const dimension = getLastValueFromURL(window.location.href, 'dimension');
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
       dispatch(
         getIncidentsByConnection({
-          connection
+          connection,
+          dimension,
+          category
         })
       );
     }
-  }, [connection, activeTab]);
+  }, [activeTab]);
 
   useEffect(() => {
     onChangeFilter({
@@ -399,6 +423,8 @@ export const IncidentConnection = () => {
       getIncidentsByConnection({
         ...(filters || {}),
         ...obj,
+        category: category,
+        dimension: dimension,
         connection
       })
     );
@@ -429,7 +455,12 @@ export const IncidentConnection = () => {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              Data quality incidents on {connection || ''}
+              Data quality incidents{' '}
+              {category || dimension
+                ? `for ${
+                    category ? `${category} category` : `${dimension} dimension`
+                  }`
+                : `on ${connection}` || ''}
             </div>
           </div>
           <div className="flex items-center">
@@ -469,24 +500,31 @@ export const IncidentConnection = () => {
           </div>
         </div>
         <div className="p-4">
-          <Table
-            columns={columns}
-            data={incidents || []}
-            className="w-full mb-8"
-          />
-
-          <Pagination
-            page={filters.page || 1}
-            pageSize={filters.pageSize || 50}
-            isEnd={isEnd}
-            totalPages={10}
-            onChange={(page, pageSize) =>
-              onChangeFilter({
-                page,
-                pageSize
-              })
-            }
-          />
+          {loading ? (
+            <div className="ml-4 flex items-start justify-start">
+              <Loader className="w-8 h-8" isFull={false} />
+            </div>
+          ) : (
+            <Table
+              columns={columns}
+              data={incidents || []}
+              className="w-full mb-8"
+            />
+          )}
+          <div className="flex justify-end">
+            <Pagination
+              page={filters.page || 1}
+              pageSize={filters.pageSize || 10}
+              isEnd={(filters.pageSize || 10) > incidents?.length}
+              totalPages={10}
+              onChange={(page, pageSize) =>
+                onChangeFilter({
+                  page,
+                  pageSize
+                })
+              }
+            />
+          </div>
         </div>
       </div>
 
@@ -501,3 +539,15 @@ export const IncidentConnection = () => {
 };
 
 export default IncidentConnection;
+
+function getLastValueFromURL(url: string, param: string): string | undefined {
+  const regex = new RegExp(`[?&]${param}=([^&]*)`);
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    const values = match[1].split(',');
+    return values[values.length - 1];
+  }
+
+  return undefined;
+}

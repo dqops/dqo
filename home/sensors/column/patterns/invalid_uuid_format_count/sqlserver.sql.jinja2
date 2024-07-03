@@ -2,7 +2,7 @@
 SELECT
     SUM(
         CASE
-            WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NULL
+            WHEN TRY_CONVERT(UNIQUEIDENTIFIER, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                 THEN 0
             ELSE 1
         END

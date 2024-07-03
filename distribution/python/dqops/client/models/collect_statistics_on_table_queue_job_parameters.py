@@ -76,9 +76,9 @@ class CollectStatisticsOnTableQueueJobParameters:
         if table is not UNSET:
             field_dict["table"] = table
         if statistics_collector_search_filters is not UNSET:
-            field_dict[
-                "statistics_collector_search_filters"
-            ] = statistics_collector_search_filters
+            field_dict["statistics_collector_search_filters"] = (
+                statistics_collector_search_filters
+            )
         if data_scope is not UNSET:
             field_dict["data_scope"] = data_scope
         if dummy_sensor_execution is not UNSET:

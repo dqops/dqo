@@ -12,6 +12,7 @@ import {
   getCheckErrors,
   getCheckReadouts,
   getCheckResults,
+  getErrorSamples,
   setCheckFilters
 } from '../../../redux/actions/source.actions';
 import { IRootState } from '../../../redux/reducers';
@@ -27,22 +28,9 @@ import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import CheckErrorsTab from './CheckErrorsTab';
 import CheckResultsTab from './CheckResultsTab';
+import ErrorSamplesTab from './ErrorSamplesTab';
 import SensorReadoutsTab from './SensorReadoutsTab';
 
-const tabs = [
-  {
-    label: 'Check results',
-    value: 'check_results'
-  },
-  {
-    label: 'Sensor readouts',
-    value: 'sensor_readouts'
-  },
-  {
-    label: 'Execution errors',
-    value: 'execution_errors'
-  }
-];
 interface IRefetchResultsProps {
   fetchCheckResults: () => void;
 }
@@ -79,7 +67,8 @@ const CheckDetails = ({
   defaultFilters,
   category,
   comparisonName,
-  onChangeRefreshCheckObject
+  onChangeRefreshCheckObject,
+  check
 }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -88,13 +77,13 @@ const CheckDetails = ({
     sensorReadouts: readoutsData,
     sensorErrors: errorsData,
     checkFilters: filtersData,
+    errorSamples: errorSamplesData,
     currentJobId
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
   const currentJob = currentJobId
     ? job_dictionary_state[currentJobId]
     : undefined;
@@ -111,6 +100,9 @@ const CheckDetails = ({
     : [];
   const sensorErrors = errorsData
     ? errorsData[checkNameWithComparisonName ?? ''] || []
+    : [];
+  const errorSamples = errorSamplesData
+    ? errorSamplesData[checkNameWithComparisonName ?? ''] || []
     : [];
   const filters =
     filtersData && filtersData[checkNameWithComparisonName ?? '']
@@ -240,6 +232,40 @@ const CheckDetails = ({
     ]
   );
 
+  const fetchErrorSamples = useCallback(
+    (month: string, dataGrouping?: string) => {
+      const { startDate, endDate } = calculateDateRange(month);
+
+      dispatch(
+        getErrorSamples(checkTypes, firstLevelActiveTab, {
+          connection,
+          schema,
+          table,
+          column,
+          dataGrouping,
+          startDate,
+          endDate,
+          runCheckType,
+          timeScale,
+          checkName: checkName ?? '',
+          category,
+          comparisonName
+        })
+      );
+    },
+    [
+      checkName,
+      timeScale,
+      runCheckType,
+      connection,
+      schema,
+      table,
+      column,
+      category,
+      comparisonName
+    ]
+  );
+
   useEffect(() => {
     if (
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
@@ -287,6 +313,7 @@ const CheckDetails = ({
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
     fetchCheckReadouts(month, name);
+    fetchErrorSamples(month, name);
   };
 
   useEffect(() => {
@@ -305,9 +332,30 @@ const CheckDetails = ({
       fetchCheckReadouts(filters.month, filters.dataGroup);
     } else if (activeTab === 'execution_errors') {
       fetchCheckErrors(filters.month, filters.dataGroup);
+    } else if (activeTab === 'error_sampling') {
+      fetchErrorSamples(filters.month, filters.dataGroup);
     }
   }, [activeTab]);
 
+  const tabs = [
+    {
+      label: 'Check results',
+      value: 'check_results'
+    },
+    {
+      label: 'Sensor readouts',
+      value: 'sensor_readouts'
+    },
+    {
+      label: 'Execution errors',
+      value: 'execution_errors'
+    },
+    {
+      label: 'Error sampling',
+      value: 'error_sampling',
+      isDisabled: check?.supports_error_sampling !== true
+    }
+  ];
   return (
     <div
       className="my-4"
@@ -363,6 +411,15 @@ const CheckDetails = ({
           {activeTab === 'execution_errors' && (
             <CheckErrorsTab
               errors={sensorErrors || []}
+              dataGroup={filters.dataGroup}
+              month={filters.month}
+              onChangeMonth={onChangeMonth}
+              onChangeDataGroup={onChangeDataGroup}
+            />
+          )}
+          {activeTab === 'error_sampling' && (
+            <ErrorSamplesTab
+              errorSamples={errorSamples || []}
               dataGroup={filters.dataGroup}
               month={filters.month}
               onChangeMonth={onChangeMonth}

@@ -128,8 +128,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             COUNT(*) AS total_values
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE id < 5
-                              AND %1$s IS NOT NULL
+                        WHERE (id < 5)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY top_value
                         ORDER BY total_values DESC
                     ) AS top_col_values
@@ -191,8 +191,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY time_period, time_period_utc, top_value
                         ORDER BY time_period, time_period_utc, total_values DESC
                     ) AS top_col_values
@@ -244,8 +244,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             COUNT(*) AS total_values
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY top_value
                         ORDER BY total_values DESC
                     ) AS top_col_values
@@ -301,8 +301,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
                         GROUP BY time_period, time_period_utc, top_value
@@ -363,8 +363,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             analyzed_table.`result` AS grouping_level_1
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE id < 5
-                              AND %1$s IS NOT NULL
+                        WHERE (id < 5)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY grouping_level_1, top_value
                         ORDER BY grouping_level_1, total_values DESC
                     ) AS top_col_values
@@ -421,8 +421,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             analyzed_table.`result` AS grouping_level_1
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE id < 5
-                              AND %1$s IS NOT NULL
+                        WHERE (id < 5)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY grouping_level_1, top_value
                         ORDER BY grouping_level_1, total_values DESC
                     ) AS top_col_values
@@ -485,8 +485,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE id < 5
-                              AND %1$s IS NOT NULL
+                        WHERE (id < 5)
+                              AND (%1$s IS NOT NULL)
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
                         GROUP BY grouping_level_1, time_period, time_period_utc, top_value
@@ -564,8 +564,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, top_value
                         ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, total_values DESC
                     ) AS top_col_values
@@ -628,8 +628,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             analyzed_table.`result` AS grouping_level_3
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                         GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, top_value
                         ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, total_values DESC
                     ) AS top_col_values
@@ -698,8 +698,8 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
                             TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM
                             `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                        WHERE %5$s
-                              AND %1$s IS NOT NULL
+                        WHERE (%5$s)
+                              AND (%1$s IS NOT NULL)
                               AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                               AND analyzed_table.`date` < CURRENT_DATE()
                         GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc, top_value

@@ -224,8 +224,11 @@ const CheckListItem = ({
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { time_window_filter: timeWindowFilter }
-        : {})
+        ? { 
+            time_window_filter: timeWindowFilter, 
+            collect_error_samples: true
+          }
+        : { collect_error_samples: true })
     });
     dispatch(
       setCurrentJobId(

@@ -14,10 +14,10 @@ The DQOps web interface is divided into three main areas.
 2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
 3. The [main workspace](#main-workspace) changes according to your selection in the navigation bar and the tree view.
 
-## **Home screen**
+## Home screen
 
 The DQOps home screen provides a quick guide on how to start data quality monitoring. Here, you can also access summaries
-that provide a centralized view of the data quality or all your monitored tables and columns. 
+that provide a centralized view of the data quality or all your monitored tables and columns, as well as summary of the incidents.
 These summaries are created based on the results of previously executed monitoring and partition data quality checks. 
 The results form profiling data quality are not included in the calculation.
 
@@ -73,6 +73,31 @@ The table summary screen displays the following information for each table:
     ![Table summary - deta quality dimension results details](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-summary-tooltip.png){ loading=lazy; width="500px" }
 
 - **Action buttons** - Click on these buttons ![Table summary - action buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-and-column-summary-action-buttons.png) to link to Data Source, Profiling, Monitoring Checks, or Partition Checks section screens.
+
+### **Incidents summary**
+
+The **Incidents summary** provides an overview of all incidents created in DQOps, which are groupings of similar data quality issues. 
+To learn more about Incidents refer to the [Data quality incident management, grouping and notifications section](grouping-data-quality-issues-to-incidents.md)
+
+To access **Incidents summary** click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
+
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary.png){ loading=lazy; width="1200px" }
+
+
+The **Incidents summary** screen allows you to view incidents grouped by either check category or data quality dimension. 
+You can switch between these groupings using the radio buttons provided.
+The **Refresh** button located at the top right of the screen, allows you to refresh the displayed incident data.
+
+The summary screen displays incidents in a table format with the following columns:
+
+- **Connection** - The name of the connection where the incident was detected.
+- **Schema** - The schema name within the connection where the incident occurred.
+- **Table** - The name of the table where the incident was detected.
+- **Quality dimension** or **Check category** (depending on chosen grouping) - This column will display either the data quality dimension associated with the incident (e.g., Completeness, Validity, Consistency) or the check category that triggered the incident (e.g., anomaly, datetime, nulls, uniqueness).
+- **First seen** - The date the incident was first detected.
+- **Last seen** - The date the incident was last detected.
+
+Each table has a **Show more** button. Clicking this button will navigate you to the dedicated Incidents screen for a more detailed view.
 
 ## Navigation bar
 
@@ -190,14 +215,6 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 ### **Main workspace tabs**
 
 Below we explain the main tabs of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
-
-The top section of workspace at the table and column level, contains quick links that allow you to switch between different sections 
-while keeping the same level in the tree. The quick links section is hidden by default and can be expanded by clicking on the **<** arrow.
-For instance, if you are in the monitoring section on a table and click the 
-**Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
-same when you are on the column level.
-
-Below the quick links are tabs that vary in different sections.
 
 In the **Profiling** section you can access:
 

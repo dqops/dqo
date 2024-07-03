@@ -113,7 +113,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -149,7 +149,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -224,7 +224,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -300,7 +300,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -336,7 +336,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -405,7 +405,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -520,7 +520,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -559,7 +559,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -601,7 +601,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -643,7 +643,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            0
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -685,7 +685,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-            MAX(NULL)
+        MAX(0)
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -732,7 +732,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -774,7 +774,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -819,7 +819,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -861,7 +861,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -903,7 +903,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
             COUNT(DISTINCT
                 CASE
@@ -945,7 +945,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_else() -%}
         {%- if parameters.expected_values|length == 0 -%}
-            NULL
+        0
         {%- else -%}
         COUNT_BIG(DISTINCT
             CASE
@@ -987,7 +987,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL
+        0
         {%- else -%}
         COUNT(DISTINCT
             CASE
@@ -1225,7 +1225,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
+        MAX(1 + NULL) AS actual_value,
         MAX(0) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1421,7 +1421,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
+        MAX(1 + NULL) AS actual_value,
         MAX(0) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1734,7 +1734,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
+        MAX(1 + NULL) AS actual_value,
         MAX(0) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2027,7 +2027,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
+        MAX(1 + NULL) AS actual_value,
         MAX(0) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2236,7 +2236,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
-        NULL AS actual_value,
+        MAX(1 + NULL) AS actual_value,
         MAX(0) AS expected_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2370,28 +2370,29 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
+        {{ values_list|join(', ') -}}
     {% endmacro %}
     
-    {%- macro render_else() -%}
-        {%- if parameters.expected_values|length == 0 -%}
-            MAX(0.0)
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        MAX(0.0)
         {%- else -%}
-              100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                    THEN 1
-                  ELSE 0
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                        THEN 1
+                    ELSE 0
                 END
-              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-            ELSE {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2486,25 +2487,26 @@ The templates used to generate the SQL query for each data source supported by D
         {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro render_else() -%}
-        {%- if parameters.expected_values|length == 0 -%}
-            MAX(0.0)
+    {%- macro actual_value() -%}
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        MAX(0.0)
         {%- else -%}
-              100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                    THEN 1
-                  ELSE 0
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                        THEN 1
+                    ELSE 0
                 END
               ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-            ELSE {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2563,25 +2565,26 @@ The templates used to generate the SQL query for each data source supported by D
         {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro render_else() -%}
-        {%- if parameters.expected_values|length == 0 -%}
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
             MAX(0.0)
-        {%- else -%}
-              100.0 * SUM(
+            {%- else -%}
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                    THEN 1
-                  ELSE 0
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                        THEN 1
+                    ELSE 0
                 END
-              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-            ELSE {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2598,25 +2601,26 @@ The templates used to generate the SQL query for each data source supported by D
         {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro render_else() -%}
-        {%- if parameters.expected_values|length == 0 -%}
-            MAX(0.0)
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        MAX(0.0)
         {%- else -%}
-              100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                    THEN 1
-                  ELSE 0
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                        THEN 1
+                    ELSE 0
                 END
-              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-            ELSE {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2669,25 +2673,26 @@ The templates used to generate the SQL query for each data source supported by D
         {{values_list|join(', ')}}
     {% endmacro %}
     
-    {%- macro render_else() -%}
-        {%- if parameters.expected_values|length == 0 -%}
-            MAX(0.0)
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        MAX(0.0)
         {%- else -%}
-              100.0 * SUM(
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
-                    THEN 1
-                  ELSE 0
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                        THEN 1
+                    ELSE 0
                 END
-              ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        CASE
-            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-            ELSE {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3619,54 +3624,12 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-        {%- if (lib.target_column_data_type == 'STRING') -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'INT64') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'INT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'DATE') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'TIME') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
-        {%- else -%}
-            {{ lib.render_target_column(analyzed_table_to_render) }}
-        {%- endif -%}
-    {% endmacro -%}
-    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -3707,14 +3670,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN UPPER({{ lib.render_target_column('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

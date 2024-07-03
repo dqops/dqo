@@ -9,13 +9,6 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 Container of column level, preconfigured profiling checks.
 
 
-
-
-
-
-
-
-
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -42,24 +35,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNullsProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for nulls.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -79,24 +58,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnUniquenessProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for negative values.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -121,24 +86,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAcceptedValuesProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for accepted values.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -156,24 +107,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnTextProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking text values.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -192,24 +129,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnWhitespaceProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for whitespace and blank values in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -228,24 +151,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnConversionsProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that verify if text values can be converted to a target data type.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -260,24 +169,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPatternsProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for values matching patterns (regular expressions) in text columns.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -299,24 +194,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnPiiProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for Personal Identifiable Information (PII).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -332,24 +213,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnNumericProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level for numeric values.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -388,24 +255,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAnomalyProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -433,24 +286,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatetimeProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for datetime.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -464,24 +303,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnBoolProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for booleans.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -494,24 +319,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnIntegrityProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for integrity.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -524,24 +335,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnAccuracyProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for accuracy.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -557,24 +354,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnCustomSqlProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -589,24 +372,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnDatatypeProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking for datatype.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -619,24 +388,10 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnSchemaProfilingChecksSpec
 Container of built-in preconfigured data quality checks on a column level that are checking the column schema.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -649,26 +404,12 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonProfilingChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
  must match a name of a table comparison that is defined on the parent table.
  Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -679,25 +420,11 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 
 ## ColumnComparisonProfilingChecksSpec
 Container of built-in preconfigured column level comparison checks that compare min/max/sum/mean/nulls measures
  between the column in the tested (parent) table and a matching reference column in the reference table (the source of truth).
-
-
-
-
-
-
-
 
 
 The structure of this object is described below
@@ -715,12 +442,5 @@ The structure of this object is described below
 
 
 
-
-
-
-
-
-
 ___
-
 

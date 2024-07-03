@@ -250,7 +250,7 @@ List of comments.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[CommentSpec](./common.md#commentspec)]*|
+|<span class="no-wrap-code">`self`</span>||*List[[CommentSpec](./common.md#commentspec)]*|
 
 
 ___
@@ -331,6 +331,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`sensor_name`</span>|Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension used for tagging the results of this data quality checks.|*string*|
 |<span class="no-wrap-code">[`rule`](#rulethresholdsmodel)</span>|Threshold (alerting) rules defined for a check.|*[RuleThresholdsModel](#rulethresholdsmodel)*|
+|<span class="no-wrap-code">`supports_error_sampling`</span>|The data quality check supports capturing error samples, because an error sampling template is defined.|*boolean*|
 |<span class="no-wrap-code">`supports_grouping`</span>|The data quality check supports a custom data grouping configuration.|*boolean*|
 |<span class="no-wrap-code">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*|
 |<span class="no-wrap-code">`default_check`</span>|This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.|*boolean*|
@@ -563,14 +564,15 @@ Column list model that returns the basic fields from a column specification, exc
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">[`table`](#physicaltablename)</span>|Physical table name including the schema and table names.|*[PhysicalTableName](#physicaltablename)*|
-|<span class="no-wrap-code">`column_name`</span>|Column names.|*string*|
-|<span class="no-wrap-code">`sql_expression`</span>|SQL expression.|*string*|
+|<span class="no-wrap-code">`column_name`</span>|Column name.|*string*|
+|<span class="no-wrap-code">`sql_expression`</span>|SQL expression for a calculated column, or a column that applies additional data transformation to the original column value. The original column value is referenced by a token {column}.|*string*|
 |<span class="no-wrap-code">`column_hash`</span>|Column hash that identifies the column using a unique hash code.|*long*|
 |<span class="no-wrap-code">`disabled`</span>|Disables all data quality checks on the column. Data quality checks will not be executed.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the column has any checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the column has any profiling checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the column has any monitoring checks configured.|*boolean*|
-|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the column has any partition checks configured.|*boolean*|
+|<span class="no-wrap-code">`id`</span>|Marks columns that are part of a primary or a unique key. DQOps captures their values during error sampling to match invalid values to the rows in which the value was found.|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_checks`</span>|True when the column has any checks configured (read-only).|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_profiling_checks`</span>|True when the column has any profiling checks configured (read-only).|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_monitoring_checks`</span>|True when the column has any monitoring checks configured (read-only).|*boolean*|
+|<span class="no-wrap-code">`has_any_configured_partition_checks`</span>|True when the column has any partition checks configured (read-only).|*boolean*|
 |<span class="no-wrap-code">[`type_snapshot`](../../reference/yaml/TableYaml.md#columntypesnapshotspec)</span>|Column data type that was retrieved when the table metadata was imported.|*[ColumnTypeSnapshotSpec](../../reference/yaml/TableYaml.md#columntypesnapshotspec)*|
 |<span class="no-wrap-code">[`data_quality_status`](#columncurrentdataqualitystatusmodel)</span>|The current data quality status for the column, grouped by data quality dimensions. DQOps may return a null value when the results were not yet loaded into the cache. In that case, the client should wait a few seconds and retry a call to get the most recent data quality status of the column.|*[ColumnCurrentDataQualityStatusModel](#columncurrentdataqualitystatusmodel)*|
 |<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this column.|*[CheckSearchFilters](./common.md#checksearchfilters)*|

@@ -87,6 +87,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.userDomainIdentityFactory = userDomainIdentityFactory;
         this.emitFailureHandlerPublisher = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                 this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+        this.queueEmptyFuture = new CompletableFuture<>();
+        this.queueEmptyFuture.complete(0);
     }
 
     /**
@@ -179,7 +181,8 @@ public class TableStatusCacheImpl implements TableStatusCache {
                     .thenApply(result -> true);
 
             if (waitTimeoutMilliseconds != null) {
-                booleanCompletableFuture = booleanCompletableFuture.completeOnTimeout(false, waitTimeoutMilliseconds, TimeUnit.MILLISECONDS);
+                CompletableFuture<Boolean> timeoutFuture = new CompletableFuture<Boolean>().completeOnTimeout(false, waitTimeoutMilliseconds, TimeUnit.MILLISECONDS);
+                booleanCompletableFuture = (CompletableFuture<Boolean>)(CompletableFuture<?>)CompletableFuture.anyOf(booleanCompletableFuture, timeoutFuture);
             }
 
             return booleanCompletableFuture;

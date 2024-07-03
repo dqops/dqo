@@ -65,9 +65,9 @@ class ColumnIntegrityDailyMonitoringChecksSpec:
         if daily_lookup_key_not_found is not UNSET:
             field_dict["daily_lookup_key_not_found"] = daily_lookup_key_not_found
         if daily_lookup_key_found_percent is not UNSET:
-            field_dict[
-                "daily_lookup_key_found_percent"
-            ] = daily_lookup_key_found_percent
+            field_dict["daily_lookup_key_found_percent"] = (
+                daily_lookup_key_found_percent
+            )
 
         return field_dict
 

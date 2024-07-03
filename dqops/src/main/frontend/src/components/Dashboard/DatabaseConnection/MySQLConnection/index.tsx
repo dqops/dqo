@@ -121,6 +121,7 @@ const MySQLConnection = ({
         }}
         onClickValue={setSelectedInput}
         selectedMenu={selectedInput}
+        menuClassName="!top-14"
       />
 
       {mysql?.mysql_engine_type ===
@@ -158,6 +159,7 @@ const MySQLConnection = ({
             }
             onClickValue={setSelectedInput}
             selectedMenu={selectedInput}
+            menuClassName="!top-14"
           />
           <FieldTypeInput
             data={sharedCredentials}
@@ -225,6 +227,7 @@ const MySQLConnection = ({
           onChange={(value) => handleChange({ sslmode: value })}
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
+          menuClassName="!top-14"
         />
       )}
 

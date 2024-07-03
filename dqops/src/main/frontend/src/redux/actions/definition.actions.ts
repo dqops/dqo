@@ -20,15 +20,13 @@ import { AxiosResponse } from 'axios';
 import {
   CheckDefinitionFolderModel,
   CheckDefinitionModel,
-  DataGroupingConfigurationSpec,
   RuleFolderModel,
   RuleModel,
   SensorFolderModel,
   SensorModel
 } from '../../api';
 import { ChecksApi, RulesApi, SensorsApi } from '../../services/apiClient';
-import { } from '../../utils';
-import { JOB_ACTION } from '../types';
+import {} from '../../utils';
 import { DEFINITION_ACTION } from '../types/definition.types';
 
 export const getSensorFolderTreeRequest = () => ({
@@ -71,7 +69,6 @@ export const openSensorFolderTree = (key: string) => ({
   key
 });
 
-
 export const addFirstLevelTab = (data: any) => ({
   type: DEFINITION_ACTION.ADD_FIRST_LEVEL_TAB,
   data
@@ -105,7 +102,7 @@ export const getSensor = (sensorName: string) => async (dispatch: Dispatch) => {
   dispatch(getSensorRequest());
   try {
     const res: AxiosResponse<SensorModel> = await SensorsApi.getSensor(
-       (sensorName)
+      sensorName
     );
     dispatch(getSensorSuccess(res.data));
   } catch (err) {
@@ -129,7 +126,7 @@ export const getRuleFailed = (error: unknown) => ({
 export const getRule = (ruleName: string) => async (dispatch: Dispatch) => {
   dispatch(getRuleRequest());
   try {
-    const res: AxiosResponse<RuleModel> = await RulesApi.getRule( (ruleName));
+    const res: AxiosResponse<RuleModel> = await RulesApi.getRule(ruleName);
     dispatch(getRuleSuccess(res.data));
   } catch (err) {
     dispatch(getRuleFailed(err));
@@ -165,7 +162,7 @@ export const updateSensor =
     dispatch(updateSensorRequest());
     try {
       const res: AxiosResponse<SensorModel> = await SensorsApi.updateSensor(
-         (sensorName),
+        sensorName,
         body
       );
       dispatch(updateSensorSuccess(res.data));
@@ -190,11 +187,10 @@ export const createSensorFailed = (error: unknown) => ({
 
 export const createSensor =
   (sensorName: string, body: SensorModel) => async (dispatch: any) => {
-    
     dispatch(createSensorRequest());
     try {
       const res: AxiosResponse<SensorModel> = await SensorsApi.createSensor(
-         (sensorName),
+        sensorName,
         body
       );
       dispatch(createSensorSuccess(res.data));
@@ -223,7 +219,7 @@ export const updateRule =
     dispatch(updateRuleRequest());
     try {
       const res: AxiosResponse<SensorModel> = await RulesApi.updateRule(
-         (ruleName),
+        ruleName,
         body
       );
       dispatch(updateRuleSuccess(res.data));
@@ -251,7 +247,7 @@ export const createRule =
     dispatch(createRuleRequest());
     try {
       const res: AxiosResponse<SensorModel> = await RulesApi.createRule(
-         (ruleName),
+        ruleName,
         body
       );
       dispatch(createRuleSuccess(res.data));
@@ -345,7 +341,7 @@ export const getCheck = (checkName: string) => async (dispatch: Dispatch) => {
   dispatch(getCheckRequest());
   try {
     const res: AxiosResponse<CheckDefinitionModel> = await ChecksApi.getCheck(
-       (checkName)
+      checkName
     );
     dispatch(getCheckSuccess(res.data));
   } catch (err) {
@@ -361,9 +357,9 @@ export const createCheck =
       const checkName = fullCheckName.split('/');
       const newObject = Object.assign(
         {},
-        { ...body, check_name:  (checkName[checkName.length - 1]), custom: true }
+        { ...body, check_name: checkName[checkName.length - 1], custom: true }
       );
-      await ChecksApi.createCheck( (fullCheckName), newObject);
+      await ChecksApi.createCheck(fullCheckName, newObject);
     } catch (err) {
       console.error(err);
     }
@@ -377,9 +373,9 @@ export const updateCheck =
       const checkName = fullCheckName.split('/');
       const newObject = Object.assign(
         {},
-        { ...body, check_name:  (checkName[checkName.length - 1]), custom: true }
+        { ...body, check_name: checkName[checkName.length - 1], custom: true }
       );
-      await ChecksApi.updateCheck( (fullCheckName), newObject);
+      await ChecksApi.updateCheck(fullCheckName, newObject);
     } catch (err) {
       console.error(err);
     }
@@ -389,7 +385,7 @@ export const deleteCheck =
   (fullCheckName: string) => async (dispatch: Dispatch) => {
     dispatch(deleteCheckRequest());
     try {
-      await ChecksApi.deleteCheck( (fullCheckName));
+      await ChecksApi.deleteCheck(fullCheckName);
     } catch (err) {
       console.error(err);
     }
@@ -435,11 +431,15 @@ export const refreshRuleFolderTree = (refreshRulesTreeIndicator: boolean) => ({
   refreshRulesTreeIndicator
 });
 
-export const refreshSensorsFolderTree = (refreshSensorsTreeIndicator: boolean) => ({
+export const refreshSensorsFolderTree = (
+  refreshSensorsTreeIndicator: boolean
+) => ({
   type: DEFINITION_ACTION.REFRESH_SENSORS_TREE_INDICATOR,
   refreshSensorsTreeIndicator
 });
-export const refreshChecksFolderTree = (refreshChecksTreeIndicator: boolean) => ({
+export const refreshChecksFolderTree = (
+  refreshChecksTreeIndicator: boolean
+) => ({
   type: DEFINITION_ACTION.REFRESH_CHECKS_TREE_INDICATOR,
   refreshChecksTreeIndicator
 });
@@ -448,16 +448,6 @@ export const updateRuleFolderTree = (data: RuleFolderModel) => ({
   type: DEFINITION_ACTION.UPDATE_RULE_FOLDER_TREE,
   data
 });
-export const setCreatedDataStream = (
-  bool: boolean,
-  dataGrouping: string,
-  spec: DataGroupingConfigurationSpec
-) => ({
-  type: JOB_ACTION.SET_CREATED_DATA_STREAM,
-  bool,
-  dataGrouping,
-  spec
-});
 
 export const toggleFirstLevelFolder = (
   data: Array<{ category: string; isOpen: boolean }>
@@ -465,4 +455,3 @@ export const toggleFirstLevelFolder = (
   type: DEFINITION_ACTION.TOGGLE_FIRST_LEVEL_FOLDER,
   data
 });
-

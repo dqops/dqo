@@ -39,7 +39,7 @@ class DqopsCollectStatisticsOperator(BaseOperator):
     def __init__(
         self,
         *,
-        connection: (Union[Unset, str]) = UNSET,
+        connection: Union[Unset, str] = UNSET,
         full_table_name: Union[Unset, str] = UNSET,
         enabled: Union[Unset, bool] = UNSET,
         labels: Union[Unset, List[str]] = UNSET,

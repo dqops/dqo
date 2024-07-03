@@ -155,6 +155,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return dataStatistics;
             case data_incidents:
                 return dataIncidents;
+            case data_error_samples:
             case _indexes:
             case _local_settings:
                 return null;
@@ -209,6 +210,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case data_incidents:
                 this.dataIncidents = newStatus;
                 return;
+            case data_error_samples: // TODO: not synchronized yet
             case _indexes:
             case _local_settings:
                 return;

@@ -44,9 +44,9 @@ class DataGroupingConfigurationTrimmedModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if data_grouping_configuration_name is not UNSET:
-            field_dict[
-                "data_grouping_configuration_name"
-            ] = data_grouping_configuration_name
+            field_dict["data_grouping_configuration_name"] = (
+                data_grouping_configuration_name
+            )
         if spec is not UNSET:
             field_dict["spec"] = spec
         if can_edit is not UNSET:

@@ -168,8 +168,8 @@ function ColumnList({
           </SectionWrapper>
         </div>
 
-        <div className="">
-          <table className="">
+        <div>
+          <table>
             <thead>
               <tr className="mb-2">
                 {headerItems.map(
@@ -205,20 +205,18 @@ function ColumnList({
             )}
           </table>
           <div className="px-3 my-5 flex justify-end z-[100]">
-            {columns.length >= 10 && (
-              <Pagination
-                page={filters.page || 1}
-                pageSize={filters.pageSize || 50}
-                isEnd={isEnd}
-                totalPages={10}
-                onChange={(page, pageSize) =>
-                  onChangeFilters({
-                    page,
-                    pageSize
-                  })
-                }
-              />
-            )}
+            <Pagination
+              page={filters.page || 1}
+              pageSize={filters.pageSize || 50}
+              isEnd={isEnd}
+              totalPages={10}
+              onChange={(page, pageSize) =>
+                onChangeFilters({
+                  page,
+                  pageSize
+                })
+              }
+            />
           </div>
         </div>
       </div>

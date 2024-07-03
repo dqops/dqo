@@ -432,6 +432,8 @@ http://localhost:8888/api/incidents/{connectionName}
 |<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
 |<span class="no-wrap-code">`limit`</span>|Page size, the default is 50 rows|*long*| |
 |<span class="no-wrap-code">`filter`</span>|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|*string*| |
+|<span class="no-wrap-code">`dimension`</span>|Optional filter for the data quality dimension name, case sensitive|*string*| |
+|<span class="no-wrap-code">`category`</span>|Optional filter for the data quality check category name, case sensitive|*string*| |
 |<span class="no-wrap-code">[`order`](../models/incidents.md#incidentsortorder)</span>|Optional sort order, the default sort order is by the number of failed data quality checks|*[IncidentSortOrder](../models/incidents.md#incidentsortorder)*| |
 |<span class="no-wrap-code">[`direction`](../models/incidents.md#sortdirection)</span>|Optional sort direction, the default sort direction is ascending|*[SortDirection](../models/incidents.md#sortdirection)*| |
 

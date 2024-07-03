@@ -33,6 +33,12 @@ class TableComparisonConfigurationModel:
             reference_table (Union[Unset, PhysicalTableName]):
             check_type (Union[Unset, CheckType]):
             time_scale (Union[Unset, CheckTimeScale]):
+            compared_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
+                that retrieves the data from the compared table. This expression must be a SQL expression that will be added to
+                the WHERE clause when querying the compared table.
+            reference_table_filter (Union[Unset, str]): Optional custom SQL filter expression that is added to the SQL query
+                that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression
+                that will be added to the WHERE clause when querying the reference table.
             grouping_columns (Union[Unset, List['TableComparisonGroupingColumnPairModel']]): List of column pairs from both
                 the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared
                 table and the reference table (the source of truth). The columns are used in the next of the table comparison to
@@ -52,9 +58,11 @@ class TableComparisonConfigurationModel:
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
     check_type: Union[Unset, CheckType] = UNSET
     time_scale: Union[Unset, CheckTimeScale] = UNSET
-    grouping_columns: Union[
-        Unset, List["TableComparisonGroupingColumnPairModel"]
-    ] = UNSET
+    compared_table_filter: Union[Unset, str] = UNSET
+    reference_table_filter: Union[Unset, str] = UNSET
+    grouping_columns: Union[Unset, List["TableComparisonGroupingColumnPairModel"]] = (
+        UNSET
+    )
     can_edit: Union[Unset, bool] = UNSET
     can_run_compare_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
@@ -80,6 +88,8 @@ class TableComparisonConfigurationModel:
         if not isinstance(self.time_scale, Unset):
             time_scale = self.time_scale.value
 
+        compared_table_filter = self.compared_table_filter
+        reference_table_filter = self.reference_table_filter
         grouping_columns: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.grouping_columns, Unset):
             grouping_columns = []
@@ -96,9 +106,9 @@ class TableComparisonConfigurationModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if table_comparison_configuration_name is not UNSET:
-            field_dict[
-                "table_comparison_configuration_name"
-            ] = table_comparison_configuration_name
+            field_dict["table_comparison_configuration_name"] = (
+                table_comparison_configuration_name
+            )
         if compared_connection is not UNSET:
             field_dict["compared_connection"] = compared_connection
         if compared_table is not UNSET:
@@ -111,6 +121,10 @@ class TableComparisonConfigurationModel:
             field_dict["check_type"] = check_type
         if time_scale is not UNSET:
             field_dict["time_scale"] = time_scale
+        if compared_table_filter is not UNSET:
+            field_dict["compared_table_filter"] = compared_table_filter
+        if reference_table_filter is not UNSET:
+            field_dict["reference_table_filter"] = reference_table_filter
         if grouping_columns is not UNSET:
             field_dict["grouping_columns"] = grouping_columns
         if can_edit is not UNSET:
@@ -166,6 +180,10 @@ class TableComparisonConfigurationModel:
         else:
             time_scale = CheckTimeScale(_time_scale)
 
+        compared_table_filter = d.pop("compared_table_filter", UNSET)
+
+        reference_table_filter = d.pop("reference_table_filter", UNSET)
+
         grouping_columns = []
         _grouping_columns = d.pop("grouping_columns", UNSET)
         for grouping_columns_item_data in _grouping_columns or []:
@@ -189,6 +207,8 @@ class TableComparisonConfigurationModel:
             reference_table=reference_table,
             check_type=check_type,
             time_scale=time_scale,
+            compared_table_filter=compared_table_filter,
+            reference_table_filter=reference_table_filter,
             grouping_columns=grouping_columns,
             can_edit=can_edit,
             can_run_compare_checks=can_run_compare_checks,

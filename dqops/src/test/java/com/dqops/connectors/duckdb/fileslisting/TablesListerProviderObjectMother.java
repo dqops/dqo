@@ -1,6 +1,6 @@
 package com.dqops.connectors.duckdb.fileslisting;
 
-import com.dqops.connectors.duckdb.DuckdbConnectionProvider;
+import com.dqops.connectors.duckdb.fileslisting.TablesListerProvider;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 

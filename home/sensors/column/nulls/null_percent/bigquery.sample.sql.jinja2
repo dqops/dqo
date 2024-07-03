@@ -1,0 +1,4 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{%- call lib.render_error_sampler(render_null_check = false) -%}
+    {{ lib.render_target_column('analyzed_table') }} IS NULL
+{%- endcall -%}
