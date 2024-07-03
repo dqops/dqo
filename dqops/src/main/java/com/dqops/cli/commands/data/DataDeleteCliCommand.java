@@ -93,6 +93,9 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Delete the sensor readouts")
     private boolean deleteSensorReadouts = false;
 
+    @CommandLine.Option(names = {"-es", "--error-samples"}, description = "Delete the error samples")
+    private boolean deleteErrorSamples = false;
+
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
             converter = StringToLocalDateCliConverterMonthStart.class)
     private LocalDate begin;
@@ -179,18 +182,11 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
                 this.end
         );
 
-        if (!(this.deleteErrors || this.deleteStatistics || this.deleteSensorReadouts || this.deleteCheckResults)) {
-            deleteStoredDataJobParameters.setDeleteErrors(true);
-            deleteStoredDataJobParameters.setDeleteStatistics(true);
-            deleteStoredDataJobParameters.setDeleteCheckResults(true);
-            deleteStoredDataJobParameters.setDeleteSensorReadouts(true);
-        }
-        else {
-            deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-            deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
-            deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
-            deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
-        }
+        deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
+        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
+        deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
+        deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
+        deleteStoredDataJobParameters.setDeleteErrorSamples(this.deleteErrorSamples);
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
             deleteStoredDataJobParameters.setCheckCategory(this.checkCategory);
