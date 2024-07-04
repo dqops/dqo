@@ -104,7 +104,9 @@ const TableColumns = ({
             null_percent: Number(renderValue(nullPercent?.result)),
             unique_value: Number(renderValue(uniqueCount?.result)),
             null_count: Number(renderValue(nullCount?.result)),
-            detectedDatatypeVar: Number(renderValue(detectedDatatype?.result)),
+            detectedDatatypeVar: Number(
+              renderValue(detectedDatatype?.result) ?? 0
+            ),
             nameOfCol: column.column_name,
             minimalValue: renderValue(minimalValue?.result),
             maximumValue: renderValue(maximumValue?.result),
