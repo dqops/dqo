@@ -129,14 +129,18 @@ const Select = ({
               {selectedOption ? (
                 <>
                   {selectedOption.icon || ''}
-                  {(prefix ? prefix + ' ' : '') + selectedOption.label}
-                  {truncateText && '...'}
+                  <span
+                    className={
+                      truncateText ? 'overflow-hidden text-ellipsis' : ''
+                    }
+                  >
+                    {(prefix ? prefix + ' ' : '') + selectedOption.label}
+                  </span>
                 </>
               ) : (
                 placeholder
               )}
             </div>
-            {truncateText && <div>...</div>}
             {disableIcon === true ? (
               <></>
             ) : (
