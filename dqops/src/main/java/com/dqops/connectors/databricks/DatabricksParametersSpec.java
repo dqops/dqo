@@ -59,6 +59,10 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.")
     private String accessToken;
 
+    @CommandLine.Option(names = {"--databricks-initialization-sql"}, description = "Custom SQL that is executed after connecting to Databricks.")
+    @JsonPropertyDescription("Custom SQL that is executed after connecting to Databricks.")
+    private String initializationSql;
+
     @CommandLine.Option(names = {"-D"}, description = "Databricks additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -182,6 +186,23 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     public void setAccessToken(String accessToken) {
         setDirtyIf(!Objects.equals(this.accessToken, accessToken));
         this.accessToken = accessToken;
+    }
+
+    /**
+     * Returns an initialization SQL that is executed after opening the connection.
+     * @return
+     */
+    public String getInitializationSql() {
+        return initializationSql;
+    }
+
+    /**
+     * Sets an SQL query that is executed after opening a connection.
+     * @param initializationSql Initialization sql.
+     */
+    public void setInitializationSql(String initializationSql) {
+        this.setDirtyIf(!Objects.equals(this.initializationSql, initializationSql));
+        this.initializationSql = initializationSql;
     }
 
     /**

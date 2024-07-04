@@ -134,4 +134,19 @@ public class DevelopmentCredentialsSecretNames {
      */
     public static final String GCS_DQO_AI_TESTING_INTEROPERABILITY_SECRET = "${sm://gcs-dqo-ai-testing-interoperability-secret}";
 
+    /**
+     * Property to retrieve the Azure Databricks host
+     */
+    public static final String AZURE_DATABRICKS_HOST = "${sm://azure-databricks-host}";
+
+    /**
+     * Property to retrieve the Azure Databricks http path
+     */
+    public static final String AZURE_DATABRICKS_HTTP_PATH = "${sm://azure-databricks-http-path}";
+
+    /**
+     * Property to retrieve the Azure Databricks access token
+     */
+    public static final String AZURE_DATABRICKS_ACCESS_TOKEN = "${sm://azure-databricks-access-token}";
+
 }

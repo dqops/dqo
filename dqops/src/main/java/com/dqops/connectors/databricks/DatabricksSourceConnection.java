@@ -61,12 +61,33 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     */
+    @Override
+    public void open(SecretValueLookupContext secretValueLookupContext) {
+        super.open(secretValueLookupContext);
+
+        DatabricksParametersSpec databricksParametersSpec = this.getConnectionSpec().getDatabricks();
+        if (!Strings.isNullOrEmpty(databricksParametersSpec.getInitializationSql())) {
+            this.executeCommand(databricksParametersSpec.getInitializationSql(), JobCancellationToken.createDummyJobCancellationToken());
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+
+        try {
+            Class.forName("com.databricks.client.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         DatabricksParametersSpec databricksParametersSpec = connectionSpec.getDatabricks();
