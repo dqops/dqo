@@ -28,6 +28,8 @@ import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.services.ErrorsDeleteService;
 import com.dqops.data.errorsamples.models.ErrorsSamplesFragmentFilter;
 import com.dqops.data.errorsamples.services.ErrorSamplesDeleteService;
+import com.dqops.data.incidents.models.IncidentsFragmentFilter;
+import com.dqops.data.incidents.services.IncidentsDeleteService;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 import com.dqops.data.readouts.services.SensorReadoutsDeleteService;
@@ -50,6 +52,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     private final CheckResultsDeleteService checkResultsDeleteService;
     private final SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private final ErrorSamplesDeleteService errorSamplesDeleteService;
+    private final IncidentsDeleteService incidentsDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
@@ -57,12 +60,14 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
                                     StatisticsDeleteService statisticsDeleteService,
                                     CheckResultsDeleteService checkResultsDeleteService,
                                     SensorReadoutsDeleteService sensorReadoutsDeleteService,
-                                    ErrorSamplesDeleteService errorSamplesDeleteService) {
+                                    ErrorSamplesDeleteService errorSamplesDeleteService,
+                                    IncidentsDeleteService incidentsDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
         this.statisticsDeleteService = statisticsDeleteService;
         this.checkResultsDeleteService = checkResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
         this.errorSamplesDeleteService = errorSamplesDeleteService;
+        this.incidentsDeleteService = incidentsDeleteService;
     }
 
     /**
@@ -176,6 +181,25 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }};
     }
 
+    protected IncidentsFragmentFilter getIncidentsFragmentFilter() {
+        return new IncidentsFragmentFilter() {{
+            setTableSearchFilters(new TableSearchFilters() {{
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
+            }});
+            setDateStart(deletionParameters.getDateStart());
+            setDateEnd(deletionParameters.getDateEnd());
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType());
+            setColumnNames(deletionParameters.getColumnNames());
+            setDataStreamName(deletionParameters.getDataGroupTag());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setStatusName(deletionParameters.getIncidentStatusName());
+//            setTableName();
+        }};
+    }
+
     /**
      * Job internal implementation method that should be implemented by derived jobs.
      *
@@ -212,6 +236,10 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         if (this.deletionParameters.isDeleteErrorSamples()){
             DeleteStoredDataResult errorSamplesResult = this.errorSamplesDeleteService.deleteSelectedErrorSamplesFragment(this.getErrorsSamplesFragmentFilter(), userIdentity);
             result.concat(errorSamplesResult);
+        }
+        if (this.deletionParameters.isDeleteIncidents()){
+            DeleteStoredDataResult incidentsResult = this.incidentsDeleteService.deleteSelectedIncidentsFragment(this.getIncidentsFragmentFilter(), userIdentity);
+            result.concat(incidentsResult);
         }
 
         return result;

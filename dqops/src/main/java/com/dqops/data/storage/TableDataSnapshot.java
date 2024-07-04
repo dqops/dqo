@@ -16,8 +16,8 @@
 package com.dqops.data.storage;
 
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
@@ -515,9 +515,23 @@ public class TableDataSnapshot {
 
             Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
 
+            Column<?> datePartitioningColumnOriginal = monthlyPartitionTable.column(storageSettings.getTimePeriodColumnName());
+            DateTimeColumn timePeriodColumn = null;
+            if (datePartitioningColumnOriginal instanceof DateTimeColumn) {
+                timePeriodColumn = (DateTimeColumn) datePartitioningColumnOriginal;
+            }
+            else if (datePartitioningColumnOriginal instanceof InstantColumn) {
+                timePeriodColumn = ((InstantColumn)datePartitioningColumnOriginal).asLocalDateTimeColumn(ZoneOffset.UTC);
+            }
+            else if (datePartitioningColumnOriginal instanceof DateColumn) {
+                timePeriodColumn = ((DateColumn)datePartitioningColumnOriginal).atTime(LocalTime.MIDNIGHT);
+            }
+            else {
+                throw new DqoRuntimeException("Time partitioning column " + storageSettings.getTimePeriodColumnName() + " is not a date/datetime/instant column.");
+            }
+
             // Filter by date.
-            toDelete = toDelete.and(
-                    monthlyPartitionTable.dateTimeColumn(this.storageSettings.getTimePeriodColumnName()).date()
+            toDelete = toDelete.and(timePeriodColumn.date()
                             .isBetweenIncluding(startDate, endDate));
 
             // Filter by string columns' conditions.

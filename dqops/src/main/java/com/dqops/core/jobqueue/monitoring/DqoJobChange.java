@@ -98,7 +98,7 @@ public class DqoJobChange {
     }
 
     /**
-     * Returns the error message when teh job has failed.
+     * Returns the error message when the job has failed.
      * @return Error message for a failed job.
      */
     public String getErrorMessage() {
