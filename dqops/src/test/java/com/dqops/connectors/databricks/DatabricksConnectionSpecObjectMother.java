@@ -16,6 +16,7 @@
 package com.dqops.connectors.databricks;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -51,11 +52,11 @@ public class DatabricksConnectionSpecObjectMother {
 
 			setDatabricks(new DatabricksParametersSpec()
             {{
-                setHost(secretValueProvider.expandValue("${DATABRICKS_HOST}", secretValueLookupContext));
+                setHost(DevelopmentCredentialsSecretNames.AZURE_DATABRICKS_HOST);
                 setPort(String.valueOf(DATABRICKS_PORT));
                 setProperties(Map.of(
-                        "HttpPath", secretValueProvider.expandValue("${DATABRICKS_HTTP_PATH}", secretValueLookupContext),
-                        "PWD", secretValueProvider.expandValue("${DATABRICKS_ACCESS_TOKEN}", secretValueLookupContext)
+                        "HttpPath", DevelopmentCredentialsSecretNames.AZURE_DATABRICKS_HTTP_PATH,
+                        "PWD", DevelopmentCredentialsSecretNames.AZURE_DATABRICKS_ACCESS_TOKEN
                 ));
             }});
         }};
