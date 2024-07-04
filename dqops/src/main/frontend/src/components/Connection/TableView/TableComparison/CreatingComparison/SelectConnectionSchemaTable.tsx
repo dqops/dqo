@@ -1,13 +1,13 @@
+import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import SectionWrapper from '../../../../Dashboard/SectionWrapper';
-import { TParameters } from '../../../../../shared/constants';
-import Select, { Option } from '../../../../Select';
 import {
   ConnectionApiClient,
   SchemaApiClient,
   TableApiClient
 } from '../../../../../services/apiClient';
-import clsx from 'clsx';
+import { TParameters } from '../../../../../shared/constants';
+import SectionWrapper from '../../../../Dashboard/SectionWrapper';
+import Select, { Option } from '../../../../Select';
 
 type TSelectConnectionSchemaTable = {
   editConfigurationParameters: TParameters;
@@ -153,6 +153,8 @@ export default function SelectConnectionSchemaTable({
               refTable: selectedOption
             })
           }
+          triggerClassName="text-ellipsis"
+          truncateText
         />
       </div>
     </SectionWrapper>

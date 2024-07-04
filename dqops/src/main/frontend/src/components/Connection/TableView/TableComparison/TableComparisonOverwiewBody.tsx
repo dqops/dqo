@@ -89,7 +89,7 @@ export default function TableComparisonOverwiewBody({
           <td
             key={jIndex}
             className={clsx(
-              'text-center py-1.5 relative !max-w-30 !w-30',
+              'text-center px-0 py-4 pr-[11px] relative !w-30 !max-w-30 !h-10 !max-h-10',
               calculateColor(
                 item.compared_column_name ?? '',
                 itemData.key,
@@ -99,42 +99,44 @@ export default function TableComparisonOverwiewBody({
               )
             )}
           >
-            <Checkbox
-              checked={
-                !!item[itemData.prop as keyof ColumnComparisonModel] &&
-                !(
+            <div className="flex justify-center items-center h-full">
+              <Checkbox
+                checked={
+                  !!item[itemData.prop as keyof ColumnComparisonModel] &&
+                  !(
+                    item.reference_column_name === undefined ||
+                    item.reference_column_name.length === 0 ||
+                    !columnOptions.find(
+                      (x) => x.label === item.reference_column_name
+                    )
+                  )
+                }
+                onChange={(checked) => {
+                  onChangeColumn(
+                    {
+                      [itemData.prop as keyof ColumnComparisonModel]: checked
+                        ? reference?.default_compare_thresholds
+                        : undefined
+                    },
+                    index
+                  );
+                }}
+                isDisabled={
                   item.reference_column_name === undefined ||
                   item.reference_column_name.length === 0 ||
                   !columnOptions.find(
                     (x) => x.label === item.reference_column_name
                   )
-                )
-              }
-              onChange={(checked) => {
-                onChangeColumn(
-                  {
-                    [itemData.prop as keyof ColumnComparisonModel]: checked
-                      ? reference?.default_compare_thresholds
-                      : undefined
-                  },
-                  index
-                );
-              }}
-              isDisabled={
-                item.reference_column_name === undefined ||
-                item.reference_column_name.length === 0 ||
-                !columnOptions.find(
-                  (x) => x.label === item.reference_column_name
-                )
-              }
-              disabled={
-                item.reference_column_name === undefined ||
-                item.reference_column_name.length === 0 ||
-                !columnOptions.find(
-                  (x) => x.label === item.reference_column_name
-                )
-              }
-            />
+                }
+                disabled={
+                  item.reference_column_name === undefined ||
+                  item.reference_column_name.length === 0 ||
+                  !columnOptions.find(
+                    (x) => x.label === item.reference_column_name
+                  )
+                }
+              />
+            </div>
             {calculateColor(
               item.compared_column_name ?? '',
               itemData.key,

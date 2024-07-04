@@ -32,6 +32,7 @@ export interface SelectProps {
   disableIcon?: boolean;
   selectedMenu?: string | number;
   onClickValue?: (value: string | number) => void;
+  truncateText?: boolean; // New prop
 }
 
 const Select = ({
@@ -52,7 +53,8 @@ const Select = ({
   empty,
   disableIcon,
   selectedMenu = label,
-  onClickValue
+  onClickValue,
+  truncateText = false // Default to false
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -118,14 +120,27 @@ const Select = ({
                 : {}
             }
           >
-            {selectedOption ? (
-              <div className="flex items-center gap-2">
-                {selectedOption.icon || ''}
-                {(prefix ? prefix + ' ' : '') + selectedOption.label}
-              </div>
-            ) : (
-              placeholder
-            )}
+            <div
+              className={clsx(
+                truncateText ? 'truncate max-w-full' : '', // Apply truncation classes
+                'flex items-center gap-2'
+              )}
+            >
+              {selectedOption ? (
+                <>
+                  {selectedOption.icon || ''}
+                  <span
+                    className={
+                      truncateText ? 'overflow-hidden text-ellipsis' : ''
+                    }
+                  >
+                    {(prefix ? prefix + ' ' : '') + selectedOption.label}
+                  </span>
+                </>
+              ) : (
+                placeholder
+              )}
+            </div>
             {disableIcon === true ? (
               <></>
             ) : (
