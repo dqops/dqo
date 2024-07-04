@@ -336,8 +336,6 @@ function TreeProvider(props: any) {
   };
 
   const refreshTableNode = async (node: CustomTreeNode, reset = true) => {
-    const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
     const items = [
       {
         id: `${node.id}.columns`,
@@ -345,7 +343,7 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMNS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} columns`,
+        tooltip: `${node.tooltip} columns`,
         open: false
       }
     ];
@@ -356,7 +354,7 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`,
+        tooltip: `${node.tooltip} checks`,
         open: false
       });
     }
@@ -368,7 +366,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily monitoring`,
+          tooltip: `${node.tooltip} daily monitoring`,
           open: false
         },
         {
@@ -377,7 +375,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly monitoring`,
+          tooltip: `${node.tooltip} monthly monitoring`,
           open: false
         }
       );
@@ -390,7 +388,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} day period checks`,
+          tooltip: `${node.tooltip} day period checks`,
           open: false
         },
         {
@@ -399,7 +397,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} month period checks`,
+          tooltip: `${node.tooltip} month period checks`,
           open: false
         }
       );
