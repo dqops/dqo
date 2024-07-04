@@ -1,4 +1,7 @@
-import { DimensionCurrentDataQualityStatusModel, TableColumnsStatisticsModel } from '../../api';
+import {
+  DimensionCurrentDataQualityStatusModel,
+  TableColumnsStatisticsModel
+} from '../../api';
 import { MyData } from './TableColumnsConstans';
 
 export const renderValue = (value: any) => {
@@ -94,89 +97,45 @@ export const getSortedArrayByMinimalValue = (
   sortDirection: 'asc' | 'desc'
 ) => {
   const sortedArray = [...dataArray];
-  const BoolArray = [];
-  const StringArray = [];
-  const NumberArray = [];
 
-  for (let i = 0; i < sortedArray.length; i++) {
-    const object = sortedArray[i];
-    const minimalValue = object[typ];
+  const getType = (value: any): string => {
+    if (value === undefined || value === null) return 'null';
+    if (typeof value === 'boolean' || value === 'Yes' || value === 'No')
+      return 'boolean';
+    if (typeof value === 'string' && isNaN(Number(value))) return 'string';
+    if (!isNaN(Number(value))) return 'number';
+    return 'string';
+  };
 
-    if (
-      String(minimalValue)?.charAt(0) === '0' &&
-      String(minimalValue)?.length !== 1 &&
-      String(minimalValue)?.charAt(1) !== '.'
-    ) {
-      StringArray.push(object);
-    } else if (minimalValue === 'Yes' || minimalValue === 'No') {
-      BoolArray.push(object);
-    } else if (minimalValue === undefined) {
-      StringArray.push(object);
-    } else if (
-      typeof minimalValue === 'string' &&
-      isNaN(Number(minimalValue))
-    ) {
-      StringArray.push(object);
-    } else if (
-      typeof minimalValue === 'string' &&
-      !isNaN(Number(minimalValue))
-    ) {
-      NumberArray.push(object);
+  const sortFunction = (a: MyData, b: MyData): number => {
+    const typeA = getType(a[typ]);
+    const typeB = getType(b[typ]);
+    const valueA = a[typ];
+    const valueB = b[typ];
+
+    if (typeA !== typeB) {
+      const order = ['null', 'boolean', 'string', 'number'];
+      return order.indexOf(typeA) - order.indexOf(typeB);
     }
-  }
-  BoolArray.sort((a, b) => {
-    const nullsCountA = String(a[typ]);
-    const nullsCountB = String(b[typ]);
 
-    if (nullsCountA && nullsCountB) {
+    if (typeA === 'boolean' || typeA === 'string') {
       return sortDirection === 'asc'
-        ? nullsCountA.localeCompare(nullsCountB)
-        : nullsCountB.localeCompare(nullsCountA);
-    } else if (nullsCountA) {
-      return sortDirection === 'asc' ? -1 : 1;
-    } else if (nullsCountB) {
-      return sortDirection === 'asc' ? 1 : -1;
-    } else {
-      return 0;
+        ? String(valueA).localeCompare(String(valueB))
+        : String(valueB).localeCompare(String(valueA));
     }
-  });
 
-  StringArray.sort((a, b) => {
-    const nullsCountA = String(a[typ]);
-    const nullsCountB = String(b[typ]);
-
-    if (nullsCountA && nullsCountB) {
+    if (typeA === 'number') {
       return sortDirection === 'asc'
-        ? nullsCountA.localeCompare(nullsCountB)
-        : nullsCountB.localeCompare(nullsCountA);
-    } else if (nullsCountA) {
-      return sortDirection === 'asc' ? -1 : 1;
-    } else if (nullsCountB) {
-      return sortDirection === 'asc' ? 1 : -1;
-    } else {
-      return 0;
+        ? parseFloat(String(valueA)) - parseFloat(String(valueB))
+        : parseFloat(String(valueB)) - parseFloat(String(valueA));
     }
-  });
 
-  NumberArray.sort((a, b) => {
-    const nullsPercentA = String(a[typ]);
-    const nullsPercentB = String(b[typ]);
+    return 0;
+  };
 
-    if (nullsPercentA && nullsPercentB) {
-      return sortDirection === 'asc'
-        ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
-        : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
-    } else if (nullsPercentA) {
-      return sortDirection === 'asc' ? -1 : 1;
-    } else if (nullsPercentB) {
-      return sortDirection === 'asc' ? 1 : -1;
-    } else {
-      return 0;
-    }
-  });
+  sortedArray.sort(sortFunction);
 
-  const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
-  return sortedResult.length > 0 ? sortedResult : dataArray;
+  return sortedArray;
 };
 
 export const getSortedData = <T extends { [key: string]: any }>(
@@ -207,30 +166,37 @@ function countDimensions(dimensions: any[] | undefined): number {
   return dimensions ? dimensions.length : 0;
 }
 
-const getSeverityLevel = (severity: any) : number => {
+const getSeverityLevel = (severity: any): number => {
   switch (severity) {
-    case 'fatal' : 
+    case 'fatal':
       return 3;
-    case 'error': 
+    case 'error':
       return 2;
-    case 'warning': 
+    case 'warning':
       return 1;
     case 'valid':
-      return 0;        
+      return 0;
   }
   return 4;
-} 
+};
 
-
-function getHighestSeverity(dimensions:  ({
-  [key: string]: DimensionCurrentDataQualityStatusModel;
-} | undefined)[] | undefined | undefined): number {
+function getHighestSeverity(
+  dimensions:
+    | (
+        | {
+            [key: string]: DimensionCurrentDataQualityStatusModel;
+          }
+        | undefined
+      )[]
+    | undefined
+    | undefined
+): number {
   if (!dimensions || dimensions.length === 0) return -1;
   let highestSeverity = -1;
   let counter = 0;
-  Object.values(dimensions).forEach(dimension => {
+  Object.values(dimensions).forEach((dimension) => {
     if (getSeverityLevel(dimension?.current_severity) === highestSeverity) {
-      counter ++;
+      counter++;
     }
     if (getSeverityLevel(dimension?.current_severity) > highestSeverity) {
       highestSeverity = getSeverityLevel(dimension?.current_severity);
@@ -239,19 +205,26 @@ function getHighestSeverity(dimensions:  ({
   });
   return highestSeverity * 100 + counter;
 }
-function sortByDimenstion(dataArray: MyData[], direction: 'asc' | 'desc'): MyData[] {
+function sortByDimenstion(
+  dataArray: MyData[],
+  direction: 'asc' | 'desc'
+): MyData[] {
   const array = dataArray.sort((a, b) => {
     const aDimensionCount = countDimensions(a.dimentions);
     const bDimensionCount = countDimensions(b.dimentions);
 
     if (aDimensionCount !== bDimensionCount) {
-      return direction === 'desc' ? aDimensionCount - bDimensionCount : bDimensionCount - aDimensionCount;
+      return direction === 'desc'
+        ? aDimensionCount - bDimensionCount
+        : bDimensionCount - aDimensionCount;
     }
 
     const aHighestSeverity = getHighestSeverity(a.dimentions);
     const bHighestSeverity = getHighestSeverity(b.dimentions);
 
-    return direction === 'desc' ? aHighestSeverity - bHighestSeverity : bHighestSeverity - aHighestSeverity;
+    return direction === 'desc'
+      ? aHighestSeverity - bHighestSeverity
+      : bHighestSeverity - aHighestSeverity;
   });
   return array;
 }
@@ -262,8 +235,8 @@ export const handleSorting = (
   sortDirection: 'asc' | 'desc',
   setSortDirection: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>,
   setSortedArray: any
-  ) => {
-    switch (param) {
+) => {
+  switch (param) {
     case 'Column name':
       setSortedArray(
         getSortedArrayAlphabetictly('nameOfCol', dataArray, sortDirection)
@@ -284,14 +257,10 @@ export const handleSorting = (
       );
       break;
     case 'Labels':
-        setSortedArray(
-          getSortedArrayAlphabetictly(
-            'labels',
-            dataArray,
-            sortDirection
-          )
-        );
-        break;  
+      setSortedArray(
+        getSortedArrayAlphabetictly('labels', dataArray, sortDirection)
+      );
+      break;
     case 'Length':
       setSortedArray(getSortedData<MyData>('length', dataArray, sortDirection));
       break;
@@ -323,10 +292,8 @@ export const handleSorting = (
         getSortedData<MyData>('unique_value', dataArray, sortDirection)
       );
       break;
-    case 'Dimensions':   
-      setSortedArray(
-        sortByDimenstion(dataArray, sortDirection)
-      );
+    case 'Dimensions':
+      setSortedArray(sortByDimenstion(dataArray, sortDirection));
   }
   setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
 };
