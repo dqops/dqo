@@ -58,6 +58,7 @@ public class DatabricksConnectionSpecObjectMother {
                         "HttpPath", DevelopmentCredentialsSecretNames.AZURE_DATABRICKS_HTTP_PATH,
                         "PWD", DevelopmentCredentialsSecretNames.AZURE_DATABRICKS_ACCESS_TOKEN
                 ));
+                setInitializationSql("SET ANSI_MODE=FALSE");
             }});
         }};
         return connectionSpec;
