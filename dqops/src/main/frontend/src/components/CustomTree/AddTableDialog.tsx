@@ -82,9 +82,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             connectionName: urlencodeDecoder(args[0]),
             schemaName: urlencodeDecoder(args[1]),
             tableNames: [name]
-          }).then((res) => 
-          dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
-        )
+          }).then((res) =>
+            dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
+          )
         );
         refreshNode(node);
         dispatch(
@@ -100,7 +100,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
               CheckTypes.SOURCES,
               args[0],
               args[1],
-              name,
+              name
             ),
             state: {},
             label: name
@@ -116,26 +116,21 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           )
         );
       } else {
-        await TableApiClient.createTable(
-          connection,
-          schema,
-          name,
-          {
-            file_format:
-              connectionModel.provider_type ===
-              ConnectionSpecProviderTypeEnum.duckdb
-                ? {
-                    [fileFormatType as keyof FileFormatSpec]: configuration,
-                    file_paths: paths.filter((x) => x)
-                  }
-                : undefined
-          }
-        ).then(() =>
+        await TableApiClient.createTable(connection, schema, name, {
+          file_format:
+            connectionModel.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb
+              ? {
+                  [fileFormatType as keyof FileFormatSpec]: configuration,
+                  file_paths: paths.filter((x) => x)
+                }
+              : undefined
+        }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: connection,
             schemaName: schema,
             tableNames: [name]
-          }).then((res) => 
+          }).then((res) =>
             dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0))
           )
         );
@@ -179,7 +174,15 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     const getConnectionBasic = async () => {
       await ConnectionApiClient.getConnectionBasic(
         urlencodeDecoder(args[0])
-      ).then((res) => setConnectionModel(res.data));
+      ).then((res) => {
+        setConnectionModel(res.data);
+        if ('duckdb' in res.data) {
+          setFileFormatType(
+            res.data.duckdb
+              ?.files_format_type as DuckdbParametersSpecFilesFormatTypeEnum
+          );
+        }
+      });
     };
     if (node) {
       getConnectionBasic();
@@ -204,6 +207,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     setPaths(['']);
   };
 
+  console.log(connectionModel);
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-4 pb-2 px-8">
