@@ -256,6 +256,7 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.httpPath = secretValueProvider.expandValue(cloned.httpPath, lookupContext);
         cloned.accessToken = secretValueProvider.expandValue(cloned.accessToken, lookupContext);
+        cloned.initializationSql = secretValueProvider.expandValue(cloned.initializationSql, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
