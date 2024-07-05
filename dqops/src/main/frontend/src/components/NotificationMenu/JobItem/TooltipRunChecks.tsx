@@ -1,11 +1,11 @@
-import React from 'react';
-import { CheckResultsOverviewDataModelStatusesEnum } from '../../../api';
-import { TJobDictionary } from '../../../shared/constants';
 import {
   Popover,
   PopoverContent,
   PopoverHandler
 } from '@material-tailwind/react';
+import React from 'react';
+import { CheckResultsOverviewDataModelStatusesEnum } from '../../../api';
+import { TJobDictionary } from '../../../shared/constants';
 
 export default function TooltipRunChecks({
   job,
@@ -49,7 +49,7 @@ export default function TooltipRunChecks({
           }}
         />
       </PopoverHandler>
-      <PopoverContent className="min-w-60 max-w-60 px-3 absolute right-0 z-50 text-black">
+      <PopoverContent className="min-w-60 max-w-60 px-3 absolute right-0 z-[102] text-black ">
         <div className="flex gap-x-2">
           <div className="font-light">Highest severity:</div>
           <div
