@@ -296,6 +296,7 @@ const ConnectionDetail = () => {
             duckdb={connectionBasic?.duckdb}
             onChange={(duckdb) => onChange({ duckdb })}
             sharedCredentials={sharedCredentials}
+            freezeFileType
           />
         )}
       </div>

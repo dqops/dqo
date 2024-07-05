@@ -76,9 +76,9 @@ export default function FileFormatConfiguration({
         title="Import configuration"
         className="text-sm text-black"
       >
-        {!freezeFileType && (
-          <div className="flex items-center gap-x-5 text-sm">
-            <div>File format</div>
+        <div className="flex items-center gap-x-5 text-sm">
+          <div>File format</div>
+          {!freezeFileType ? (
             <Select
               options={sourceFilesTypeOptions}
               onChange={(value) => {
@@ -93,8 +93,10 @@ export default function FileFormatConfiguration({
               }
               className="text-sm"
             />
-          </div>
-        )}
+          ) : (
+            <div className="font-bold">{fileFormatType}</div>
+          )}
+        </div>
         {/* {freezeFileType && <div>{fileFormatType}</div>} */}
         {children}
         <div>{renderConfiguration()}</div>

@@ -200,7 +200,7 @@ const TableDetails = () => {
           configuration={tableBasic?.file_format?.[fileFormatType]}
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
-          freezeFileType={false}
+          freezeFileType
         >
           <FilePath
             paths={tableBasic?.file_format?.file_paths as any[]}
