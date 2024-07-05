@@ -287,6 +287,12 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
                 for (Row colRow : tableResult) {
                     String columnName = colRow.getString("col_name");
+
+                    // DESCRIBE command executed on hive_metastore returns comments in returned table
+                    if(columnName.startsWith("# ")){
+                        continue;
+                    }
+
                     String dataType = colRow.getString("data_type");
                     boolean isNullable = true; //  todo: the following statement returns this information, but it has to be parsed: SHOW TABLE EXTENDED like 'table_name_here'
 
