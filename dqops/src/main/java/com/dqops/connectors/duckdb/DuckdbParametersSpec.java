@@ -516,19 +516,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         if (filesFormatType.equals(DuckdbFilesFormatType.csv) && getCsv() != null) {
             CsvFileFormatSpec formatSpec = getCsv();
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
-                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+                String compressionExtension = formatSpec.getCompression().getCompressionExtension();
+                return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
             }
         }
         if (filesFormatType.equals(DuckdbFilesFormatType.json) && getJson() != null) {
             JsonFileFormatSpec formatSpec = getJson();
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
-                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+                String compressionExtension = formatSpec.getCompression().getCompressionExtension();
+                return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
             }
         }
         if (filesFormatType.equals(DuckdbFilesFormatType.parquet) && getParquet() != null) {
             ParquetFileFormatSpec formatSpec = getParquet();
             if (formatSpec.getCompression() != null && (formatSpec.getNoCompressionExtension() == null || !formatSpec.getNoCompressionExtension())) {
-                return fileTypeExtension + formatSpec.getCompression().getCompressionExtension();
+                String compressionExtension = formatSpec.getCompression().getCompressionExtension();
+                return fileTypeExtension + (compressionExtension == null ? "" : compressionExtension);
             }
         }
         return fileTypeExtension;
