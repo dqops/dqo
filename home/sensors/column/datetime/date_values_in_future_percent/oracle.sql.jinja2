@@ -7,13 +7,13 @@ SELECT
             CASE
                 WHEN
                     {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                     {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                     {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                     {% else -%}
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                     {% endif -%}
                     THEN 1
                 ELSE 0
