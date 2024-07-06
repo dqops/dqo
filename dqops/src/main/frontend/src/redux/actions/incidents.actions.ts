@@ -263,3 +263,8 @@ export const addSelectedConnection = (data: { [key: string]: string }) => ({
   type: INCIDENTS_ACTION.ADD_SELECTED_CONNECTION,
   data
 });
+
+export const setIncidentsHistogram = (data: IncidentIssueHistogramModel) => ({
+  type: INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM,
+  data
+});
