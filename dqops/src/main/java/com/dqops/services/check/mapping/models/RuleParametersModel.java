@@ -36,6 +36,9 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "RuleParametersModel", description = "Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).")
 public class RuleParametersModel implements Cloneable {
+    /**
+     * Full rule name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality rule."
+     */
     @JsonPropertyDescription("Full rule name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality rule.")
     private String ruleName;
 
@@ -45,12 +48,21 @@ public class RuleParametersModel implements Cloneable {
     @JsonIgnore
     private AbstractRuleParametersSpec ruleParametersSpec;
 
+    /**
+     * List of fields for editing the rule parameters like thresholds.
+     */
     @JsonPropertyDescription("List of fields for editing the rule parameters like thresholds.")
     private List<FieldModel> ruleParameters;
 
+    /**
+     * Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.
+     */
     @JsonPropertyDescription("Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.")
     private boolean disabled;
 
+    /**
+     * Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).
+     */
     @JsonPropertyDescription("Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).")
     private boolean configured;
 
