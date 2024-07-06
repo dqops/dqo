@@ -235,6 +235,11 @@ const incidentsReducer = (state = initialState, action: any) => {
         loading: true
       });
     }
+    case INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM: {
+      return setActiveTabState(state, action, {
+        histograms: action.data
+      });
+    }
     case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS: {
       return setActiveTabState(state, action, {
         histograms: action.data,
