@@ -33454,6 +33454,10 @@
           "type" : "string",
           "description" : "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable."
         },
+        "initialization_sql" : {
+          "type" : "string",
+          "description" : "Custom SQL that is executed after connecting to Databricks."
+        },
         "properties" : {
           "type" : "object",
           "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
