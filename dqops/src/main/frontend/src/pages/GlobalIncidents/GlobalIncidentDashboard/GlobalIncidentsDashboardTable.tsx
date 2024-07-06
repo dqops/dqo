@@ -79,7 +79,7 @@ export default function GlobalIncidentsDashboardTable({
         >
           <div className={tableHeaderClassName + ' col-span-3'}>Connection</div>
           <div className={tableHeaderClassName + ' col-span-4'}>Schema</div>
-          <div className={tableHeaderClassName + ' col-span-10'}>Table</div>
+          <div className={tableHeaderClassName + ' col-span-8'}>Table</div>
           <div className={tableHeaderClassName + ' col-span-3'}>
             {groupBy === 'dimension' ? (
               <p>Check category</p>
@@ -117,7 +117,8 @@ export default function GlobalIncidentsDashboardTable({
               </div>
               <div
                 className={
-                  tableRowClassName + 'underline cursor-pointer col-span-10'
+                  tableRowClassName +
+                  'underline cursor-pointer col-span-8 truncate'
                 }
                 onClick={() => goToIncidents(incident)}
               >
