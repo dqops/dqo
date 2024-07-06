@@ -514,7 +514,7 @@ public class DefaultTableCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, ProviderType.duckdb,
+                    null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -559,7 +559,7 @@ public class DefaultTableCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, ProviderType.duckdb,
+                    null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -604,7 +604,7 @@ public class DefaultTableCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, ProviderType.duckdb,
+                    null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -649,7 +649,7 @@ public class DefaultTableCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, ProviderType.duckdb,
+                    null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -694,7 +694,7 @@ public class DefaultTableCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, ProviderType.duckdb,
+                    null, null, null, executionContext, null,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
