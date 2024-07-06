@@ -19,6 +19,7 @@ import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -512,7 +513,7 @@ public class DefaultColumnCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, null,
+                    null, null, null, executionContext, ProviderType.duckdb,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -557,7 +558,7 @@ public class DefaultColumnCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, null,
+                    null, null, null, executionContext, ProviderType.duckdb,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -602,7 +603,7 @@ public class DefaultColumnCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, null,
+                    null, null, null, executionContext, ProviderType.duckdb,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -647,7 +648,7 @@ public class DefaultColumnCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, null,
+                    null, null, null, executionContext, ProviderType.duckdb,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
@@ -692,7 +693,7 @@ public class DefaultColumnCheckPatternsController {
             AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
 
             CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
-                    null, null, null, executionContext, null,
+                    null, null, null, executionContext, ProviderType.duckdb,
                     principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
 
             return new ResponseEntity<>(Mono.just(checkContainerModel), HttpStatus.OK);
