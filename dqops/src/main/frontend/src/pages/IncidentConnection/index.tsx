@@ -191,13 +191,37 @@ export const IncidentConnection = () => {
         return (
           <div className="flex items-center">
             <Select
-              className="!text-sm w-50"
+              className="!text-xs w-43"
+              triggerClassName="!text-xs"
+              menuClassName="!text-xs"
               value={value}
               options={statusOptions}
               onChange={(status) => onChangeIncidentStatus(row, status)}
             />
           </div>
         );
+      }
+    },
+    {
+      header: () => (
+        <SortableColumn
+          className="text-sm"
+          label="Severity"
+          order="highestSeverity"
+          direction={
+            filters.sortBy === 'highestSeverity'
+              ? filters.sortDirection
+              : undefined
+          }
+          onChange={handleSortChange}
+        />
+      ),
+      label: 'Severity',
+      className:
+        'text-left text-sm py-2 px-4 max-w-27 min-w-27 whitespace-normal break-all',
+      value: 'highestSeverity',
+      render: (value: string) => {
+        return renderIncidentHighestSeveritySquare(Number(value));
       }
     },
     {
@@ -550,4 +574,20 @@ function getLastValueFromURL(url: string, param: string): string | undefined {
   }
 
   return undefined;
+}
+
+function renderIncidentHighestSeveritySquare(severity: number) {
+  const getColor = () => {
+    switch (severity) {
+      case 1:
+        return 'bg-yellow-500';
+      case 2:
+        return 'bg-orange-500';
+      case 3:
+        return 'bg-red-500';
+    }
+    return '';
+  };
+
+  return <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>;
 }
