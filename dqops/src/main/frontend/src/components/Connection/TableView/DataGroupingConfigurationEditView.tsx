@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { values } from 'lodash';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
@@ -40,6 +41,7 @@ const DataGroupingConfigurationEditView = ({
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [levelErrors, setLevelErrors] = useState<Errors>({});
+  const [isValid, setIsValid] = useState(false);
   useEffect(() => {
     if (
       selectedGroupingConfiguration &&
@@ -56,7 +58,6 @@ const DataGroupingConfigurationEditView = ({
     } else {
       setDataGroupingConfiguration({});
     }
-    variable();
   }, [selectedGroupingConfiguration]);
 
   const onUpdate = async () => {
@@ -119,6 +120,11 @@ const DataGroupingConfigurationEditView = ({
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     setIsUpdated(true);
+    if (checkValidity(dataGroupingConfiguration) && e.target.value.length > 0) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
   };
 
   const onChangeDataGroupingConfiguration = (
@@ -126,6 +132,11 @@ const DataGroupingConfigurationEditView = ({
   ) => {
     if (name || selectedGroupingConfiguration) {
       setIsUpdated(true);
+    }
+    if (checkValidity(spec) && name.length > 0) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
     }
     setDataGroupingConfiguration(spec);
   };
@@ -136,11 +147,11 @@ const DataGroupingConfigurationEditView = ({
       [`level_${idx}`]: ''
     });
   };
-  const [good, setGood] = useState(true);
-  const variable = () => {
-    let isGood = true;
 
-    values(dataGroupingConfiguration).forEach((dataGroupingLevel) => {
+  const checkValidity = (spec: DataGroupingConfigurationSpec | undefined) => {
+    let isValid = true;
+
+    values(spec).forEach((dataGroupingLevel) => {
       const isTagEmpty =
         dataGroupingLevel?.source === DataGroupingDimensionSpecSourceEnum.tag &&
         (!dataGroupingLevel.tag || dataGroupingLevel.tag.length === 0);
@@ -151,24 +162,19 @@ const DataGroupingConfigurationEditView = ({
         (!dataGroupingLevel.column || dataGroupingLevel.column.length === 0);
 
       if (isTagEmpty || isColumnEmpty) {
-        isGood = false;
+        isValid = false;
       }
     });
-
-    setGood(isGood);
+    return isValid;
   };
-
-  useEffect(() => {
-    variable();
-  }, [dataGroupingConfiguration]);
 
   return (
     <div className="px-4 text-sm">
       <ActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated ? true : false}
+        isUpdated={isUpdated}
         isUpdating={isUpdating}
-        isDisabled={good === true ? false : true}
+        isDisabled={isValid ? false : true}
       />
       <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
         {selectedGroupingConfiguration ? (
@@ -178,7 +184,14 @@ const DataGroupingConfigurationEditView = ({
         ) : (
           <div className="flex space-x-4 items-center">
             <div>Data grouping configuration name</div>
-            <Input className="w-80" value={name} onChange={onChangeName} />
+            <Input
+              className={clsx(
+                'w-80',
+                name.length > 0 ? '' : 'border border-red-500'
+              )}
+              value={name}
+              onChange={onChangeName}
+            />
           </div>
         )}
         <Button
