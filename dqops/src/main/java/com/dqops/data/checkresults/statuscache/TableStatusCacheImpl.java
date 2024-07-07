@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
 
@@ -280,7 +281,10 @@ public class TableStatusCacheImpl implements TableStatusCache {
                 .publishOn(Schedulers.parallel());
         this.subscription = requestLoadFlux.parallel()
                 .flatMap(list -> Flux.fromIterable(list))
-                .doOnNext(tableKey -> onRequestLoadTableStatus(tableKey))
+                .flatMap(tableKey -> {
+                    onRequestLoadTableStatus(tableKey);
+                    return Mono.empty();
+                })
                 .subscribe();
     }
 
