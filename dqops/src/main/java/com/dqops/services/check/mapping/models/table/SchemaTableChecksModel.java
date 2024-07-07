@@ -35,15 +35,27 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "SchemaTableChecksModel", description = "Model containing information related to table checks on a schema level.")
 public class SchemaTableChecksModel {
+    /**
+     * Schema name.
+     */
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored table checks results on this schema.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored table checks results on this schema.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
+    /**
+     * Tables in schema, containing information related to table checks.
+     */
     @JsonPropertyDescription("Tables in schema, containing information related to table checks.")
     private List<TableChecksModel> tableChecksModels = new ArrayList<>();
 }

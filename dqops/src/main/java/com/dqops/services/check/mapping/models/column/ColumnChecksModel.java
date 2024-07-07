@@ -38,15 +38,27 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ColumnChecksModel", description = "Model containing information related to checks on a column.")
 public class ColumnChecksModel {
+    /**
+     * Column name.
+     */
     @JsonPropertyDescription("Column name.")
     private String columnName;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this column.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this column.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
+    /**
+     * Mapping of check type and timescale to check container on this column.
+     */
     @JsonPropertyDescription("Mapping of check type and timescale to check container on this column.")
     private Map<CheckContainerTypeModel, CheckContainerModel> checkContainers = new LinkedHashMap<>();
 }

@@ -47,6 +47,12 @@ public class StatisticsMetricModel {
     private String collector;
 
     /**
+     * Sensor name.
+     */
+    @JsonPropertyDescription("Sensor name")
+    private String sensorName;
+
+    /**
      * The data type that was collected.
      */
     @JsonPropertyDescription("Statistics result data type")
@@ -82,6 +88,7 @@ public class StatisticsMetricModel {
             return new StatisticsMetricModel() {{
                 setCategory(SampleStringsRegistry.getCategoryName());
                 setCollector(SampleStringsRegistry.getCollectorName());
+                setSensorName(SampleStringsRegistry.getSensorName());
                 setResultDataType(StatisticsResultDataType.INTEGER);
                 setResult((int)SampleLongsRegistry.getSequenceNumber() % 10_000);
                 setCollectedAt(LocalDateTime.of(2007, 10, 11, 18, 0, 0));

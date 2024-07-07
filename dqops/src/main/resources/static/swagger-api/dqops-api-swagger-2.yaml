@@ -35224,6 +35224,9 @@ definitions:
       collector:
         type: "string"
         description: "Statistics (metric) name"
+      sensorName:
+        type: "string"
+        description: "Sensor name"
       resultDataType:
         type: "string"
         description: "Statistics result data type"

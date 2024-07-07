@@ -34,13 +34,19 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "BulkCheckDeactivateParameters", description = "Parameter object for deactivating all checks that fit the filters.")
 public class BulkCheckDeactivateParameters {
+    /**
+     * Filters addressing basic tree search parameters. These filters takes precedence over other selectors.
+     */
     @JsonPropertyDescription("Filters addressing basic tree search parameters. These filters takes precedence over other selectors.")
     @NotNull
-    CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+    private CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
 
+    /**
+     * List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.
+     */
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    Map<String, List<String>> selectedTablesToColumns = null;
+    private Map<String, List<String>> selectedTablesToColumns = null;
 
     public static class BulkCheckDisableParametersSampleFactory implements SampleValueFactory<BulkCheckDeactivateParameters> {
         @Override

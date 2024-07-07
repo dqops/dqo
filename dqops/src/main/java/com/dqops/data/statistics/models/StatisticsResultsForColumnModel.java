@@ -69,7 +69,7 @@ public class StatisticsResultsForColumnModel {
      * Collection (list) of statistics that were collected for the column.
      */
     @JsonPropertyDescription("List of statistics metrics")
-    private Collection<StatisticsMetricModel> metrics = new ArrayList<>();
+    private List<StatisticsMetricModel> metrics = new ArrayList<>();
 
     /**
      * Collect statistics job template that can be used to collect the statistics again for the column.

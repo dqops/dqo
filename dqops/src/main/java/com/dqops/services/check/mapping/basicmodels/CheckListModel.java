@@ -33,6 +33,9 @@ import org.jetbrains.annotations.NotNull;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckListModel", description = "Simplistic model that returns a single data quality check, its name and \"configured\" flag")
 public class CheckListModel implements Comparable<CheckListModel> {
+    /**
+     * Check category.
+     */
     @JsonPropertyDescription("Check category.")
     private String checkCategory;
 
@@ -42,9 +45,15 @@ public class CheckListModel implements Comparable<CheckListModel> {
     @JsonPropertyDescription("Data quality check name that is used in YAML.")
     private String checkName;
 
+    /**
+     * Help text that describes the data quality check.
+     */
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
 
+    /**
+     * True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.
+     */
     @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
     private boolean configured;
 
