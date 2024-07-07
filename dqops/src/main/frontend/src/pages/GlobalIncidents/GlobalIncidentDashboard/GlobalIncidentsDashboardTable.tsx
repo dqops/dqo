@@ -77,9 +77,10 @@ export default function GlobalIncidentsDashboardTable({
           className="grid grid-cols-24 font-bold border-b border-gray-300"
           style={{ minWidth: tableMinWidth }}
         >
+          <div className={tableHeaderClassName + ' col-span-2'}>Severity</div>
           <div className={tableHeaderClassName + ' col-span-3'}>Connection</div>
           <div className={tableHeaderClassName + ' col-span-4'}>Schema</div>
-          <div className={tableHeaderClassName + ' col-span-8'}>Table</div>
+          <div className={tableHeaderClassName + ' col-span-7'}>Table</div>
           <div className={tableHeaderClassName + ' col-span-3'}>
             {groupBy === 'dimension' ? (
               <p>Check category</p>
@@ -97,6 +98,16 @@ export default function GlobalIncidentsDashboardTable({
               key={incident.incidentId}
               className="py-1.5 border-b border-gray-300 grid grid-cols-24"
             >
+              <div
+                className={
+                  tableRowClassName + ' flex items-center gap-x-2 col-span-2'
+                }
+              >
+                {renderIncidentHighestSeveritySquare(
+                  incident.highestSeverity ?? 3
+                )}
+                {incident.failedChecksCount}
+              </div>
               <div className={tableRowClassName + 'col-span-3'}>
                 <Tooltip
                   content={incident.connection}
@@ -118,7 +129,7 @@ export default function GlobalIncidentsDashboardTable({
               <div
                 className={
                   tableRowClassName +
-                  'underline cursor-pointer col-span-8 truncate'
+                  'underline cursor-pointer col-span-7 truncate'
                 }
                 onClick={() => goToIncidents(incident)}
               >
@@ -145,4 +156,19 @@ export default function GlobalIncidentsDashboardTable({
       </div>
     </div>
   );
+}
+function renderIncidentHighestSeveritySquare(severity: number) {
+  const getColor = () => {
+    switch (severity) {
+      case 1:
+        return 'bg-yellow-500';
+      case 2:
+        return 'bg-orange-500';
+      case 3:
+        return 'bg-red-500';
+    }
+    return '';
+  };
+
+  return <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>;
 }
