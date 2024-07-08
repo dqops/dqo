@@ -71,14 +71,7 @@ const TableDetails = ({
         columnName
       )
     );
-  }, [
-    checkTypes,
-    firstLevelActiveTab,
-    connectionName,
-    schemaName,
-    columnName,
-    tableName
-  ]);
+  }, [checkTypes, connectionName, schemaName, columnName, tableName]);
 
   const onUpdate = async () => {
     if (!columnBasic) {

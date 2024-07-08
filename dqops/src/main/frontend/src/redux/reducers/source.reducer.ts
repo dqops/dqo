@@ -207,15 +207,16 @@ const connectionReducer = (state = initialState, action: Action) => {
         (item) => item.value === action.data
       );
       let activeTab = state[action.checkType].activeTab;
-
       if (state[action.checkType].activeTab === action.data) {
         if (index > 0) {
           activeTab = state[action.checkType]?.tabs[index - 1].value;
         } else if (index < state[action.checkType]?.tabs.length - 1) {
           activeTab = state[action.checkType]?.tabs[index + 1].value;
         }
+        if (index === 0 && state[action.checkType]?.tabs.length === 1) {
+          activeTab = undefined;
+        }
       }
-
       return {
         ...state,
         [action.checkType]: {
