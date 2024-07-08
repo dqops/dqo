@@ -39,7 +39,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
         }
     };
 
-    @JsonPropertyDescription("Maximum accepted number of days from now that are not treat as future days. Eg. setting the value as 1.0 means that tomorrow is excluded from future dates. If value is not defined by user then default value is 0.0.")
+    @JsonPropertyDescription("Maximum accepted number of days from now that are not treated as days from future. If value is not defined by user then default value is 0.0.")
     private Double maxFutureDays = 0.0;
 
     /**
