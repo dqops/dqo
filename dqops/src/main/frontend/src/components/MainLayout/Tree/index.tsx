@@ -2,7 +2,7 @@ import { Tooltip } from '@material-tailwind/react';
 import { AxiosResponse } from 'axios';
 import clsx from 'clsx';
 import { groupBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { ConnectionModel } from '../../../api';
@@ -19,10 +19,6 @@ import { CustomTreeNode } from '../../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { urlencodeDecoder, useDecodedParams } from '../../../utils';
 import { findTreeNode } from '../../../utils/tree';
-import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
-import AddTableDialog from '../../CustomTree/AddTableDialog';
-import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import ContextMenu from '../../CustomTree/ContextMenu';
 import Input from '../../Input';
 import Loader from '../../Loader';
@@ -30,7 +26,6 @@ import SvgIcon from '../../SvgIcon';
 
 const Tree = () => {
   const {
-    removeNode,
     loadingNodes,
     changeActiveTab,
     setActiveTab,
@@ -47,14 +42,10 @@ const Tree = () => {
     searchColumn
   } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
+
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const match = useRouteMatch();
   const [flag, setFlag] = useState(false);
-  const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
-  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
-  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
   const [search, setSearch] = useState<Record<string, string>>({});
   const [funnel, setFunnel] = useState<Record<string, boolean>>({});
 
@@ -302,41 +293,6 @@ const Tree = () => {
     return 'column';
   };
 
-  const openConfirm = (node: CustomTreeNode) => {
-    setSelectedNode(node);
-    setIsOpen(true);
-  };
-
-  const openAddColumnDialog = (node: CustomTreeNode) => {
-    setSelectedNode(node);
-    setAddColumnDialogOpen(true);
-  };
-
-  const closeAddColumnDialog = () => {
-    setAddColumnDialogOpen(false);
-    setSelectedNode(undefined);
-  };
-
-  const openAddTableDialog = (node: CustomTreeNode) => {
-    setSelectedNode(node);
-    setAddTableDialogOpen(true);
-  };
-
-  const closeAddTableDialog = () => {
-    setAddTableDialogOpen(false);
-    setSelectedNode(undefined);
-  };
-
-  const openAddSchemaDialog = (node: CustomTreeNode) => {
-    setSelectedNode(node);
-    setAddSchemaDialogOpen(true);
-  };
-
-  const closeAddSchemaDialog = () => {
-    setAddSchemaDialogOpen(false);
-    setSelectedNode(undefined);
-  };
-
   const renderIcon = (node: CustomTreeNode) => {
     if (
       node.level === TREE_LEVEL.TABLE_INCIDENTS ||
@@ -490,13 +446,7 @@ const Tree = () => {
                     ? renderErrorMessageToolTip(node)
                     : null}
                 </div>
-                <ContextMenu
-                  node={node}
-                  openConfirm={openConfirm}
-                  openAddColumnDialog={openAddColumnDialog}
-                  openAddTableDialog={openAddTableDialog}
-                  openAddSchemaDialog={openAddSchemaDialog}
-                />
+                <ContextMenu node={node} />
               </div>
             </Tooltip>
           </div>
@@ -589,52 +539,10 @@ const Tree = () => {
     );
   };
 
-  const message = useMemo(() => {
-    if (selectedNode?.level === TREE_LEVEL.DATABASE) {
-      return `Are you sure want to remove connection ${selectedNode?.label}?`;
-    }
-
-    if (selectedNode?.level === TREE_LEVEL.SCHEMA) {
-      return `Are you sure want to remove schema ${selectedNode?.label}?`;
-    }
-
-    if (selectedNode?.level === TREE_LEVEL.TABLE) {
-      return `Are you sure want to remove table ${selectedNode?.label}?`;
-    }
-
-    if (selectedNode?.level === TREE_LEVEL.COLUMN) {
-      return `Are you sure want to remove column ${selectedNode?.label}?`;
-    }
-
-    return '';
-  }, [selectedNode]);
-
   return (
     <div className={clsx('pl-2', checkTypes === 'sources' ? 'mt-4' : 'mt-0')}>
       <div className="hidden">{flag}</div>
       <div>{renderTree('null', 0)}</div>
-      <ConfirmDialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        message={message}
-        onConfirm={() => removeNode(selectedNode)}
-      />
-
-      <AddColumnDialog
-        open={addColumnDialogOpen}
-        onClose={closeAddColumnDialog}
-        node={selectedNode}
-      />
-      <AddTableDialog
-        open={addTableDialogOpen}
-        onClose={closeAddTableDialog}
-        node={selectedNode}
-      />
-      <AddSchemaDialog
-        open={addSchemaDialogOpen}
-        onClose={closeAddSchemaDialog}
-        node={selectedNode}
-      />
     </div>
   );
 };
