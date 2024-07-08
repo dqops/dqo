@@ -199,14 +199,12 @@ const ConnectionLayout = ({ route }: ConnectionLayoutProps) => {
         open={objectNotFound}
         onConfirm={() =>
           new Promise(() => {
-            dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)),
-              setObjectNotFound(false);
+            setObjectNotFound(false), closeTab(firstLevelActiveTab);
           })
         }
         isCancelExcluded={true}
         onClose={() => {
-          dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)),
-            setObjectNotFound(false);
+          setObjectNotFound(false), closeTab(firstLevelActiveTab);
         }}
         message="The definition of this object was deleted in the DQOps user home. The tab will be closed."
       />

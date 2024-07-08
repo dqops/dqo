@@ -81,6 +81,7 @@ const TableDetails = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   useEffect(() => {
+    console.log(checkTypes, firstLevelActiveTab, connection, schema, table);
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
@@ -90,7 +91,7 @@ const TableDetails = () => {
       );
     };
     getConnectionBasic();
-  }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
+  }, [checkTypes, connection, schema, table]);
 
   const handleChange = (obj: any) => {
     dispatch(
