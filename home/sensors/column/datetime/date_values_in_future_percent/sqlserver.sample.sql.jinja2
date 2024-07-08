@@ -1,12 +1,12 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
-    {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-    {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > GETDATE()
-    {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
-    {%- endif -%}
+    {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
+    {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
+    {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
+    {% else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
+    {% endif -%}
 {%- endcall -%}
