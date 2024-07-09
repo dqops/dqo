@@ -4,14 +4,12 @@ title: How to activate data observability for Azure
 
 # How to activate data observability for Azure
 
-This guide shows how to connect DQOps to Azure. The example will use the Azure Blob Storage for storing data. 
+This guide shows how to activate data observability by connecting DQOps to Azure. The example will use the Azure Blob Storage for storing data. 
 
 # Prerequisites
 
-Make sure you have created a Storage Container in a Storage Account.
-
-Data should be available in stored files under the Storage Container.
-
+- Data in CSV, JSON or Parquet format (compressed files allowed), located in a Storage Container in your Storage Account.
+- [DQOps installation](https://dqops.com/docs/getting-started/installation/)
 
 # Add connection to Azure using the user interface
 
@@ -21,11 +19,11 @@ To navigate to the Azure connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
-   ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
 2. Select the DuckDB connection.
 
-   ![Selecting DuckDB connection type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-duckdb.png){ loading=lazy; width="1200px" }
+    ![Selecting DuckDB connection type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-duckdb.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
@@ -45,7 +43,7 @@ To complete the configuration you need to set the **Azure authentication mode** 
 
 # Choose the Azure authentication mode
 
-Establishing the connection to the storage requires permissions. 
+DQOps requires permissions to establish the connection to the Azure storage.
 
 You can choose from a variety of authentication methods that will allow to connect to your data:
 
@@ -54,11 +52,12 @@ You can choose from a variety of authentication methods that will allow to conne
 - Service Principal
 - Default Credential
 
+Below you can find how to get credentials for each of the authentication methods.
 
 ## Connection String
 
 The connection string is created on the Storage Account level. 
-It allows to access all files in each of Storage Containers created in the Storage Account.
+It allows access to all files in each of the Storage Containers created in the Storage Account.
 
 You can find the connection string in the Storage Account details. 
 Open the Storage Account menu section in Azure Portal. Select the **Security + networking**, then **Access keys**.
@@ -68,20 +67,21 @@ Open the Storage Account menu section in Azure Portal. Select the **Security + n
 
 ## Credential Chain 
 
-The credential chain use environment variables and account stored locally used for applications running locally.
+The credential chain uses environment variables and accounts stored locally used for applications running locally.
 That is why it will work on local DQOps instance only.
 
-You can sign in interactively to Azure with use of Azure CLI command: az login
+You can sign in interactively to Azure with use of Azure CLI command: **az login**
 
 After you succeed with the command restart the DQOps process allowing it to load the fresh account credentials.
 
 
 ## Service Principal 
 
-The service principal is an impersonalized identity used specifically for a service with a proper permission.
-This is a recommended authentication method.
+This is the recommended authentication method.
 
-This method needs to create a service account, generate secret and add role assignment to the container.
+The service principal is an impersonalized identity used specifically for a service with a proper permission.
+
+This method needs to create a service account, generate a secret and add role assignment to the container.
 
 To use this method you need to create a service account in Azure.
 Open **Enterprise applications** and click the **New application**.
@@ -96,14 +96,12 @@ Fill the name with your service account and create it.
 
 ![Create your own application](https://dqops.com/docs/images/data-sources/azure/on-right-create-your-own-application.png){ loading=lazy; width="1200px" }
 
-
 Now the service account is ready but it does not have any credentials available to be used.
 
 To create credentials open the **App registrations** in Azure Entra ID. 
 Select **All applications**, then select the name of the service account.
 
 ![App registration](https://dqops.com/docs/images/data-sources/azure/app-registrations.png){ loading=lazy; width="1200px" }
-
 
 Then navigate to **Certificates & secrets** and click the **New client secret**
 
@@ -144,7 +142,7 @@ To add a connection in DQOps with use of Service Principal authentication mode y
 
 The **Client Secret** you saved.
 
-Tenant ID and Client ID are available in App registrations Overview section of the Azure Entra ID.
+Tenant ID and Client ID are available in the App registrations Overview section of the Azure Entra ID.
 
 ![App registration](https://dqops.com/docs/images/data-sources/azure/credentials.png){ loading=lazy; width="1200px" }
 
@@ -156,7 +154,7 @@ With DQOps, you can configure credentials to access Azure Blob Storage directly 
 Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
 This folder also contains the default credentials files for Azure Blob Storage (**Azure_default_credentials**).
 
-``` { .asc .annotate hl_lines="4-5" }
+``` { .asc .annotate hl_lines="4" }
 $DQO_USER_HOME
 ├───...
 └───.credentials       
@@ -176,7 +174,7 @@ To set the credential file for Azure in DQOps, follow steps:
 
 4. In the text area, edit the tenant_id, client_id, client_secret and account_name, replacing the placeholder text.
 
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-azure-shared-credential2.png)
+![Edit connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-azure-shared-credential2.png)
 
 5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
 
@@ -213,9 +211,9 @@ my-container
         └───...     
 ```
 
-1.  Connect to a specific file (eg. annual_report_2022.csv by setting prefix to **/my_container/clients_data/reports**)
-2.  Connect to all files in path (eg. whole market_specification folder by setting prefix to **/my_container/clients_data**)
-3.  Connect to partitioned data (eg. sales folder with partitioning by date and market - set prefix to **/my_container/clients_data** and select **Hive partitioning** checkbox from Additional format options)
+1.  Connect to a specific file - e.g. annual_report_2022.csv by setting prefix to **/my_container/clients_data/reports**. A selection of the file is available after saving the new connection configuration.
+2.  Connect to all files in path - e.g. whole market_specification folder by setting prefix to **/my_container/clients_data**. A selection of the folder is available after saving the new connection configuration.
+3.  Connect to partitioned data - e.g. sales folder with partitioning by date and market - set prefix to **/my_container/clients_data** and select **Hive partitioning** checkbox from Additional format options. A selection of the **sales** folder is available after saving the new connection configuration.
 
 You can connect to a specific file, eg. annual_report_2022.csv (set prefix to **/usr/share/clients_data/reports**),
 all files in path, eg. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
@@ -224,9 +222,9 @@ or hive style partitioned data, eg. sales folder with partitioning by date and m
 The path is a directory containing files. You cannot use a full file path. 
 The prefix cannot contain the name of a file.
 
-Selecting files or directories are available **after Saving the new connection**.
+A selection of files or directories is available **after Saving the new connection**.
 
-### Import metadata using the user interface
+# Import metadata using the user interface
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
 Now we can import files.
