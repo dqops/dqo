@@ -35,11 +35,14 @@ After navigating to the Azure connection settings, you will need to fill in its 
 
 Fill the **Connection name** any name you want.
 
-To work with files located in Azure, change the **Files location** to **Azure Blob Storage**.
+Change the **Files location** to **Azure Blob Storage**, to work with files located in Azure.
 
-Select the **File Format** suitable to your files located in Azure.
+Select the **File Format** suitable to your files located in Azure. You can choose from CSV, JSON or Parquet file format.
 
-To complete the configuration you need to set the **Azure authentication mode** and **Path** described below.
+To complete the configuration you need to set the:
+
+- **Azure authentication mode**
+- **Path**
 
 
 ## Choose the Azure authentication mode
@@ -182,9 +185,8 @@ To set the credential file for Azure in DQOps, follow steps:
 
 ## Set the Path
 
-### **Data structure**
-
-Let assume the files placed in Azure Storage Account named **mystorageaccount**, in this structure:
+Let assume you have directories with unstructured files, dataset divided into multiple files with the same structure - e.g. same header or partitioned data.
+All mentioned cases are supported but differs in the configuration. 
 
 ``` { .asc .annotate }
 my-container
@@ -217,8 +219,8 @@ my-container
 3.  Connect to partitioned data - e.g. sales folder with partitioning by date and market - set prefix to **/my_container/clients_data** and select **Hive partitioning** checkbox from Additional format options. A selection of the **sales** folder is available after saving the new connection configuration.
 
 You can connect to a specific file, eg. annual_report_2022.csv (set prefix to **/usr/share/clients_data/reports**),
-all files in path, eg. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
-or hive style partitioned data, eg. sales folder with partitioning by date and market - set prefix to **/usr/share/clients_data** and select **Hive partitioning** checkbox from Additional format options.
+all files with the same structure in path, eg. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
+or hive style partitioned data, eg. sales folder with partitioning by date and market - (set prefix to **/usr/share/clients_data** and select **Hive partitioning** checkbox from Additional format options).
 
 The path is a directory containing files. You cannot use a full file path. 
 The prefix cannot contain the name of a file.
@@ -232,11 +234,11 @@ Now we can import files.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
-   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
 2. Select the tables (folders with files of previously selected file format or just the files) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-csv.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-csv.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
@@ -250,7 +252,7 @@ or modify the schedule for newly imported tables.
 
 The form of the adding a new connection page provides additional fields not mentioned before.
 
-| CSV connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
+| File connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
 |---------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                                  |
 | Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                               |
@@ -269,9 +271,9 @@ The form of the adding a new connection page provides additional fields not ment
 
 The next configuration depends on the file format. You can choose from the three of them:
 
-- [CSV](../csv.md)
-- [JSON](../json.md)
-- [Parquet](../parquet.md)
+- CSV
+- JSON
+- Parquet
 
 
 ### Additional CSV format options
@@ -416,7 +418,7 @@ If the job completes successfully, the created table will be imported and ready 
 
 # Add connection using DQOps Shell
 
-The following examples use parquet file format. To connect to csv or json, put the expected file format in 
+The following examples use parquet file format. To connect to csv or json, put the expected file format instead of "parquet" in the example commands. 
 
 To add a connection run the following command in DQOps Shell.
 
@@ -522,7 +524,7 @@ YAML file format.
 
 ## Next steps
 
-- Learn about more advanced importing when [working with files](../working-with-dqo/working-with-files.md)
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
+- Learn about more advanced importing when [working with files](../../working-with-dqo/working-with-files.md)
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../../examples/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../../integrations/webhooks/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
