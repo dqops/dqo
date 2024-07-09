@@ -1,8 +1,8 @@
 ---
-title: How to activate data observability for Google
+title: How to activate data observability for GCP
 ---
 
-# How to activate data observability for Google
+# How to activate data observability for Google (GCP)
 
 This guide shows how to activate data observability for Google by connecting DQOps. 
 The example will use the Google Cloud Storage for storing data. 
