@@ -14,33 +14,7 @@ import SvgIcon from '../../SvgIcon';
 
 const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const [open, setOpen] = useState(false);
-  const renderValue = (value: any) => {
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-    if (typeof value === 'object') {
-      return value.toString();
-    }
-    return value;
-  };
 
-  const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
-      return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
-      return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.queued) {
-      return <SvgIcon name="queue" className="w-4 h-4 text-gray-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.failed) {
-      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
-      return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
-    }
-  };
   const cancelJob = async (jobId: number) => {
     await JobApiClient.cancelJob(jobId.toString());
   };
@@ -72,7 +46,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             )}
             <div className="group relative">
               <div className="flex items-center gap-x-2">
-                {renderStatus()}
+                {renderStatus(job)}
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </div>
             </div>
@@ -130,7 +104,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-2 capitalize align-top">Table name contains</td>
+                  <td className="px-2 capitalize align-top">
+                    Table name contains
+                  </td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNameContains}
                   </td>
@@ -169,7 +145,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 </tr>
                 <tr>
                   <td className="px-2">Full table name</td>
-                  <td className="px-2">
+                  <td className="px-2 truncate break-all max-w-76">
                     {job?.parameters?.runChecksOnTableParameters.table
                       ?.schema_name +
                       '.' +
@@ -230,3 +206,31 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
 };
 
 export default JobChild;
+
+const renderValue = (value: any) => {
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (typeof value === 'object') {
+    return value.toString();
+  }
+  return value;
+};
+
+const renderStatus = (job: DqoJobHistoryEntryModel) => {
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
+    return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
+    return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.queued) {
+    return <SvgIcon name="queue" className="w-4 h-4 text-gray-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.failed) {
+    return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
+    return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
+  }
+};

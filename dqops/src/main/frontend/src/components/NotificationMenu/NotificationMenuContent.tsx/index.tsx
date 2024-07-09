@@ -10,9 +10,8 @@ import ErrorItem from '../ErrorItem';
 import JobItem from '../JobItem';
 
 export default function NotificationMenuContent() {
-  const { jobList, isCronScheduled, userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { jobList, isCronScheduled, userProfile, notificationCount } =
+    useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
 
   const scheduleCron = (bool: boolean) => {
@@ -45,17 +44,10 @@ export default function NotificationMenuContent() {
     }
   };
 
-  const notificationCount = () => {
-    let values = 0;
-    Object.values(jobList).forEach((x) => x.forEach(() => values++));
-
-    return Object.keys(jobList).length + values;
-  };
-
   return (
     <>
       <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-lg flex flex-col gap-y-2 px-4 relative">
-        <div>Notifications ({notificationCount()})</div>
+        <div>Notifications: {notificationCount}</div>
         <div className="flex items-center gap-x-3 text-sm">
           <div className="whitespace-no-wrap">Jobs scheduler </div>
           <div
