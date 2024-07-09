@@ -247,6 +247,7 @@ Type of storage [local]:
  [ 1] local (default)
  [ 2] s3
  [ 3] azure
+ [ 4] gcs
 Please enter one of the [] values: 
 Type of source files for DuckDB:
  [ 1] csv
