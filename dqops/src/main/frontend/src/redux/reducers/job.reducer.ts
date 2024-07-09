@@ -50,6 +50,8 @@ export interface IJobsState {
   userProfile: DqoUserProfileModel;
   jobList: TJobList;
   isErrorModalOpen: boolean;
+  notificationCount: number;
+  newNotification: boolean;
 }
 
 const initialState: IJobsState = {
@@ -70,7 +72,9 @@ const initialState: IJobsState = {
   isLicenseFree: false,
   userProfile: {},
   jobList: {},
-  isErrorModalOpen: false
+  isErrorModalOpen: false,
+  notificationCount: 0,
+  newNotification: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -83,33 +87,48 @@ const schemaReducer = (state = initialState, action: any) => {
     case JOB_ACTION.GET_JOBS_SUCCESS: {
       const job_dictionary_state: Record<string, TJobDictionary> = {};
       const jobList: TJobList = {};
+      const nowDate = moment();
+
+      let synchronizeMultipleFoldersCounter = 0;
+      let notificationCount = 0;
       action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
         const jobIdKey = String(
           item.jobId?.parentJobId?.jobId || item.jobId?.jobId || ''
         );
-
         if (
-          item.jobId?.parentJobId?.jobId === undefined &&
-          !job_dictionary_state[jobIdKey]
+          nowDate.diff(item.statusChangedAt, 'minutes') <= 30 ||
+          ['running', 'queued', 'waiting'].includes(item.status as string)
         ) {
-          job_dictionary_state[jobIdKey] = { ...item, childs: [] };
-        } else {
-          if (!job_dictionary_state[jobIdKey]) {
-            job_dictionary_state[jobIdKey] = { childs: [] };
+          if (
+            item.jobType ===
+            DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders
+          ) {
+            synchronizeMultipleFoldersCounter++;
+            if (synchronizeMultipleFoldersCounter > 1) return;
           }
+          if (
+            item.jobId?.parentJobId?.jobId === undefined &&
+            !job_dictionary_state[jobIdKey]
+          ) {
+            job_dictionary_state[jobIdKey] = { ...item, childs: [] };
+          } else {
+            if (!job_dictionary_state[jobIdKey]) {
+              job_dictionary_state[jobIdKey] = { childs: [] };
+            }
 
-          const currentState = { ...job_dictionary_state[jobIdKey] };
+            const currentState = { ...job_dictionary_state[jobIdKey] };
 
-          job_dictionary_state[jobIdKey] = {
-            ...currentState,
-            childs: [...currentState.childs, item]
-          };
+            job_dictionary_state[jobIdKey] = {
+              ...currentState,
+              childs: [...currentState.childs, item]
+            };
 
-          if (!jobList[jobIdKey]) {
-            jobList[jobIdKey] = [];
+            if (!jobList[jobIdKey]) {
+              jobList[jobIdKey] = [];
+            }
+            notificationCount++;
+            jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
           }
-
-          jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
         }
       });
 
@@ -118,6 +137,7 @@ const schemaReducer = (state = initialState, action: any) => {
         loading: false,
         job_dictionary_state,
         jobList,
+        notificationCount,
         lastSequenceNumber: action.data.lastSequenceNumber,
         error: null
       };
@@ -139,181 +159,83 @@ const schemaReducer = (state = initialState, action: any) => {
       };
     case JOB_ACTION.GET_JOBS_CHANGES_SUCCESS: {
       const jobChanges: DqoJobChangeModel[] = action.data.jobChanges || [];
-      const not_filtered_job_dictionary_state = Object.assign(
-        {},
-        state.job_dictionary_state
-      );
-      const notFilteredList = Object.assign({}, state.jobList);
-
-      const filterObject = <T extends Record<string, TJobDictionary>>(
-        obj: T,
-        list: Record<string, string[]>
-      ) => {
-        const filteredObject: Record<string, TJobDictionary> = Object.assign(
-          {},
-          obj
-        );
-        const filteredList: Record<string, string[]> = Object.assign({}, list);
-        const nowDate = moment();
-
-        //todo : use 2 pointers technique instead of 2 separate loops
-        //todo : manage deleting data from jobList if deleting from dictionary
-
-        const typeOccurrences: Record<string, number> = {};
-        const reversedKeys = Object.keys(filteredObject).reverse();
-
-        for (const key of reversedKeys) {
-          if (
-            filteredObject[key]?.jobType ===
-            DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders
-          ) {
-            typeOccurrences[
-              DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders
-            ] =
-              (typeOccurrences[
-                DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders
-              ] || 0) + 1;
-            if (
-              typeOccurrences[
-                DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders
-              ] > 1
-            ) {
-              delete filteredObject[key];
-              delete filteredList[key];
-            }
-          }
-        }
-        for (const key in obj) {
-          if (
-            nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
-            obj[key].status !== 'running' &&
-            obj[key].status !== 'queued' &&
-            obj[key].status !== 'waiting'
-          ) {
-            delete filteredObject[key];
-            delete filteredList[key];
-          } else {
-            break;
-          }
-        }
-        return { filteredObject, filteredList };
+      const job_dictionary_state = {
+        ...state.job_dictionary_state
       };
+      const jobList = { ...state.jobList };
+      let notificationCount = state.notificationCount;
+      const parentChildMap = new Map();
 
-      jobChanges?.forEach((jobChange: DqoJobChangeModel) => {
+      jobChanges.forEach((jobChange: DqoJobChangeModel) => {
         if (!jobChange.jobId?.jobId) return;
 
-        //new parent (list)
-        if (
-          jobChange.jobId.parentJobId?.jobId === undefined &&
-          !notFilteredList[jobChange.jobId?.jobId]
-        ) {
-          notFilteredList[jobChange.jobId?.jobId] = [];
-        }
-        if (
-          jobChange.jobId.parentJobId?.jobId &&
-          !notFilteredList[jobChange.jobId.parentJobId?.jobId]
-        ) {
-          notFilteredList[jobChange.jobId.parentJobId?.jobId] = [];
+        const parentId = jobChange.jobId.parentJobId?.jobId;
+        const jobId = jobChange.jobId.jobId;
+
+        // New parent (list)
+        if (!parentId && !jobList[jobId]) {
+          jobList[jobId] = [];
+        } else if (parentId && !jobList[parentId]) {
+          jobList[parentId] = [];
         }
 
-        //new parent (dictionary)
-        else if (
-          !not_filtered_job_dictionary_state[jobChange.jobId?.jobId] &&
-          jobChange.jobId.parentJobId?.jobId === undefined
-        ) {
-          const newJobState = Object.assign({}, jobChange);
-          if (jobChange.updatedModel) {
-            Object.assign(newJobState, jobChange.updatedModel);
-            delete newJobState.updatedModel;
-          }
-          not_filtered_job_dictionary_state[jobChange.jobId?.jobId] = {
-            ...jobChange.updatedModel,
-            childs: []
-          };
+        // New parent (dictionary)
+        if (!parentId && !job_dictionary_state[jobId]) {
+          const newJobState = { ...jobChange.updatedModel, childs: [] };
+          job_dictionary_state[jobId] = newJobState;
+          notificationCount++;
         }
 
-        //new child
-        else if (
-          jobChange.jobId.parentJobId?.jobId &&
-          !not_filtered_job_dictionary_state[
-            jobChange.jobId?.parentJobId?.jobId
-          ]?.childs.find((x) => x.jobId?.jobId === jobChange?.jobId?.jobId) &&
-          jobChange.jobId?.jobId
-        ) {
-          not_filtered_job_dictionary_state[
-            jobChange.jobId.parentJobId?.jobId
-          ].childs = [
-            ...not_filtered_job_dictionary_state[
-              jobChange.jobId.parentJobId?.jobId
-            ].childs,
-            jobChange.updatedModel ?? {}
-          ];
-
-          notFilteredList[jobChange.jobId?.parentJobId?.jobId].push(
-            String(jobChange.jobId?.jobId)
-          );
+        // New child
+        if (parentId && jobId && !parentChildMap.has(parentId)) {
+          notificationCount++;
+          parentChildMap.set(parentId, new Map());
         }
 
-        // updated existing parent
-        if (not_filtered_job_dictionary_state[jobChange.jobId?.jobId]) {
-          let newJobState = Object.assign(
-            {},
-            not_filtered_job_dictionary_state[jobChange.jobId?.jobId]
-          );
-          if (jobChange.status) {
-            newJobState.status = jobChange.status;
-          }
-          if (jobChange.statusChangedAt) {
+        const parentChilds = parentChildMap.get(parentId);
+        if (parentId && jobId && !parentChilds.has(jobId)) {
+          const childState = jobChange.updatedModel ?? {};
+          job_dictionary_state[parentId].childs.push(childState);
+          jobList[parentId].push(String(jobId));
+          parentChilds.set(jobId, childState);
+        }
+
+        // Updated existing parent
+        if (job_dictionary_state[jobId]) {
+          let newJobState = { ...job_dictionary_state[jobId] };
+          if (jobChange.status) newJobState.status = jobChange.status;
+          if (jobChange.statusChangedAt)
             newJobState.statusChangedAt = jobChange.statusChangedAt;
-          }
-          if (jobChange.updatedModel) {
+          if (jobChange.updatedModel)
             newJobState = { ...newJobState, ...jobChange.updatedModel };
-          }
-          not_filtered_job_dictionary_state[jobChange.jobId?.jobId] = {
-            ...newJobState
-          };
+          job_dictionary_state[jobId] = newJobState;
         }
 
-        //updated existing child
-        else if (
-          jobChange.jobId?.parentJobId?.jobId &&
-          jobChange?.jobId?.jobId &&
-          //todo: make Record<Record to avoid finding child with .find arr func instead index it dict[parentId][childId]
-          not_filtered_job_dictionary_state[
-            jobChange.jobId?.parentJobId?.jobId
-          ]?.childs?.find((x) => x.jobId?.jobId === jobChange?.jobId?.jobId)
-        ) {
-          let childState = not_filtered_job_dictionary_state[
-            jobChange.jobId?.parentJobId?.jobId
-          ].childs.find(
-            (x) => x.jobId?.jobId === jobChange?.jobId?.jobId ?? {}
-          );
-          if (childState) {
-            if (jobChange.status) {
-              childState.status = jobChange.status;
-            }
-            if (jobChange.statusChangedAt) {
-              childState.statusChangedAt = jobChange.statusChangedAt;
-            }
-            if (jobChange.updatedModel) {
-              childState = { ...childState, ...jobChange.updatedModel };
-            }
-          }
+        // Updated existing child
+        if (parentId && jobId && parentChilds.has(jobId)) {
+          let childState = parentChilds.get(jobId);
+          if (jobChange.status) childState.status = jobChange.status;
+          if (jobChange.statusChangedAt)
+            childState.statusChangedAt = jobChange.statusChangedAt;
+          if (jobChange.updatedModel)
+            childState = { ...childState, ...jobChange.updatedModel };
+          parentChilds.set(jobId, childState);
         }
       });
-      const { filteredObject: job_dictionary_state, filteredList: jobList } =
-        filterObject(not_filtered_job_dictionary_state, notFilteredList);
 
       return {
         ...state,
         loading: false,
         lastSequenceNumber: action.data.lastSequenceNumber,
+        newNotification: true,
         job_dictionary_state,
         jobList,
+        notificationCount,
         folderSynchronizationStatus: action.data.folderSynchronizationStatus,
         error: null
       };
     }
+
     case JOB_ACTION.GET_JOBS_CHANGES_ERROR:
       return {
         ...state,
@@ -405,6 +327,18 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isErrorModalOpen: action.isErrorModalOpen
+      };
+    }
+    case JOB_ACTION.SET_NOTIFICATION_COUNT: {
+      return {
+        ...state,
+        notificationCount: action.notificationCount
+      };
+    }
+    case JOB_ACTION.SET_NEW_NOTIFIACTION: {
+      return {
+        ...state,
+        newNotification: action.newNotification
       };
     }
     default:

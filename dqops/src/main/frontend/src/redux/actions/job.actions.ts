@@ -16,8 +16,6 @@
 
 import { Dispatch } from 'redux';
 
-import { JobApiClient } from '../../services/apiClient';
-import { JOB_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   DqoJobQueueIncrementalSnapshotModel,
@@ -25,8 +23,10 @@ import {
   DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
-import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
 import { IError } from '../../contexts/errrorContext';
+import { JobApiClient } from '../../services/apiClient';
+import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
+import { JOB_ACTION } from '../types';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -80,7 +80,7 @@ export const getJobsChanges =
     JobApiClient.getJobChangesSince(sequenceNumber)
       .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
         dispatch(getJobsChangesSuccess(res.data));
-        dispatch(setIsErrorModalOpen(false))
+        dispatch(setIsErrorModalOpen(false));
       })
       .catch((err) => {
         console.error(err);
@@ -135,7 +135,7 @@ export const setLicenseFree = (isLicenseFree: boolean) => ({
   isLicenseFree
 });
 
-export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
+export const setUserProfile = (userProfile: DqoUserProfileModel) => ({
   type: JOB_ACTION.SET_USER_PROFILE,
   userProfile
 });
@@ -148,4 +148,14 @@ export const setError = (error: IError) => ({
 export const setIsErrorModalOpen = (isErrorModalOpen: boolean) => ({
   type: JOB_ACTION.SET_IS_ERROR_MODAL_OPEN,
   isErrorModalOpen
+});
+
+export const setNotificationCount = (notificationCount: number) => ({
+  type: JOB_ACTION.SET_NOTIFICATION_COUNT,
+  notificationCount
+});
+
+export const setNewNotification = (newNotification: boolean) => ({
+  type: JOB_ACTION.SET_NEW_NOTIFIACTION,
+  newNotification
 });
