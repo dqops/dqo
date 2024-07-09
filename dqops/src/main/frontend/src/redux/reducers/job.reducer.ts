@@ -115,19 +115,27 @@ const schemaReducer = (state = initialState, action: any) => {
             if (!job_dictionary_state[jobIdKey]) {
               job_dictionary_state[jobIdKey] = { childs: [] };
             }
+            if (
+              !(
+                job_dictionary_state[jobIdKey].childs.length > 10 &&
+                ['finished', 'canceled', 'failed'].includes(
+                  job_dictionary_state[jobIdKey].status as string
+                )
+              )
+            ) {
+              const currentState = { ...job_dictionary_state[jobIdKey] };
 
-            const currentState = { ...job_dictionary_state[jobIdKey] };
+              job_dictionary_state[jobIdKey] = {
+                ...currentState,
+                childs: [...currentState.childs, item]
+              };
 
-            job_dictionary_state[jobIdKey] = {
-              ...currentState,
-              childs: [...currentState.childs, item]
-            };
-
-            if (!jobList[jobIdKey]) {
-              jobList[jobIdKey] = [];
+              if (!jobList[jobIdKey]) {
+                jobList[jobIdKey] = [];
+              }
+              notificationCount++;
+              jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
             }
-            notificationCount++;
-            jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
           }
         }
       });
