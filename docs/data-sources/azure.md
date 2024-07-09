@@ -10,7 +10,7 @@ The example will use the Azure Blob Storage for storing data.
 # Prerequisites
 
 - Data in CSV, JSON or Parquet format (compressed files allowed), located in a Storage Container in your Storage Account.
-- [DQOps installation](../../getting-started/installation/)
+- [DQOps installation](../getting-started/installation/)
 
 # Add connection to Azure using the user interface
 
@@ -518,13 +518,13 @@ spec:
 
 ### **Reference of all connection parameters**
 Complete documentation of all connection parameters used in the `spec.duckdb` node is
-described in the reference section of the [DuckdbParametersSpec](../../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
+described in the reference section of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML file format.
 
 
 ## Next steps
 
-- Learn about more advanced importing when [working with files](../../working-with-dqo/working-with-files.md)
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../../examples/index.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
+- Learn about more advanced importing when [working with files](../working-with-dqo/working-with-files.md)
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
