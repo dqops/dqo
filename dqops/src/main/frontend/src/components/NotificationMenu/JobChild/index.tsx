@@ -145,7 +145,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 </tr>
                 <tr>
                   <td className="px-2">Full table name</td>
-                  <td className="px-2">
+                  <td className="px-2 truncate break-all max-w-76">
                     {job?.parameters?.runChecksOnTableParameters.table
                       ?.schema_name +
                       '.' +

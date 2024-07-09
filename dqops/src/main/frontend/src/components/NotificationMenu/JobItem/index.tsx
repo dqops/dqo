@@ -265,6 +265,10 @@ const JobItem = ({
 export default JobItem;
 
 const renderStatus = (job: TJobDictionary, hasInvalidApiKeyError?: boolean) => {
+  if (!job || !job?.status) {
+    return null;
+  }
+
   if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
     return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
   }
