@@ -440,51 +440,45 @@ const DeleteStoredDataExtendedPopUp = ({
               }
             />
           </div>
-          <div className="w-1/4 flex flex-col items-start">
-            <div>
-              <Checkbox
-                checked={params.deleteErrors}
-                onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
-                label="Execution errors"
-                checkClassName="bg-teal-500"
-              />
-            </div>
-            <div>
-              <Checkbox
-                checked={params.deleteErrorSamples}
-                onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
-                label="Error samples"
-                checkClassName="bg-teal-500"
-              />
-            </div>
-            <div>
-              <Checkbox
-                checked={params.deleteIncidents}
-                onChange={(deleteIncidents) => onChangeParams({ deleteIncidents })}
-                label="Incidents"
-                checkClassName="bg-teal-500"
-              />
-              <SelectInput
-                label="Incident status"
-                options={[
-                  '',
-                  ...Object.keys(IncidentModelStatusEnum)
-                ]?.map((item: any) => ({
-                  label: item,
-                  value: item
-                }))}
-                value={
-                  params.incidentStatusName !== undefined
-                    ? params.incidentStatusName
-                    : 'All incident types'
-                }
-                onChange={(value) =>
-                  onChangeParams({
-                    incidentStatusName: String(value) !== 'All incident types' ? value : undefined,
-                  })
-                }
-              />
-            </div>
+          <div className="flex flex-col space-y-5 w-1/4 items-start">
+            <Checkbox
+              checked={params.deleteIncidents}
+              onChange={(deleteIncidents) => onChangeParams({ deleteIncidents })}
+              label="Incidents"
+              checkClassName="bg-teal-500"
+            />
+            <SelectInput
+              label="Incident status"
+              options={[
+                'All incident status',
+                ...Object.keys(IncidentModelStatusEnum)
+              ]?.map((item: any) => ({
+                label: item,
+                value: item
+              }))}
+              value={
+                params.incidentStatusName !== undefined
+                  ? params.incidentStatusName
+                  : 'All incident status'
+              }
+              onChange={(value) =>
+                onChangeParams({
+                  incidentStatusName: String(value) !== 'All incident status' ? value : undefined,
+                })
+              }
+            />
+            <Checkbox
+              checked={params.deleteErrors}
+              onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
+              label="Execution errors"
+              checkClassName="bg-teal-500"
+            />
+            <Checkbox
+              checked={params.deleteErrorSamples}
+              onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
+              label="Error samples"
+              checkClassName="bg-teal-500"
+            />
           </div>
         </div>
       </DialogBody>
