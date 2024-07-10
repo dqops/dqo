@@ -11,32 +11,23 @@ import {
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { reduceCounter } from '../../../redux/actions/job.actions';
 import { IRootState } from '../../../redux/reducers';
 import { JobApiClient } from '../../../services/apiClient';
+import { TJobDictionary } from '../../../shared/constants';
 import SvgIcon from '../../SvgIcon';
 import JobChild from '../JobChild';
 import TooltipRunChecks from './TooltipRunChecks';
 
 const JobItem = ({
   jobId,
-  notifnumber,
   canUserCancelJobs
 }: {
   jobId: string;
-  notifnumber?: number;
   canUserCancelJobs?: boolean;
 }) => {
-  const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
-
-  const dispatch = useActionDispatch();
-  const reduceCount = () => {
-    dispatch(reduceCounter(true, sizeOfNot));
-  };
 
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -46,16 +37,6 @@ const JobItem = ({
     return job_dictionary_state[jobId];
   }, [job_dictionary_state[jobId]]);
 
-  const renderValue = (value: any) => {
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-    if (typeof value === 'object') {
-      return value.toString();
-    }
-    return value;
-  };
-
   const cancelJob = async (jobId: number) => {
     await JobApiClient.cancelJob(jobId.toString());
   };
@@ -63,30 +44,6 @@ const JobItem = ({
   const hasInvalidApiKeyError = job?.childs?.some((x) =>
     x.errorMessage?.includes('dqocloud.accesskey')
   );
-
-  const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
-      return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
-      return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.queued) {
-      return <SvgIcon name="queue" className="w-4 h-4 text-gray-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.failed) {
-      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
-      return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
-    }
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
-      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
-    }
-    if (hasInvalidApiKeyError) {
-      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
-    }
-  };
 
   if (!job || !job.jobType) {
     return <></>;
@@ -134,7 +91,7 @@ const JobItem = ({
                     <TooltipRunChecks job={job} open={tooltipOpen} />
                   )}
                 <div className="flex gap-x-2 items-center">
-                  {renderStatus()}
+                  {renderStatus(job, hasInvalidApiKeyError)}
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
@@ -193,7 +150,9 @@ const JobItem = ({
                   <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td className="px-2 capitalize align-top">Table name contains</td>
+                  <td className="px-2 capitalize align-top">
+                    Table name contains
+                  </td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNameContains}
                   </td>
@@ -278,13 +237,10 @@ const JobItem = ({
               <Accordion open={open2} className="min-w-100">
                 <AccordionHeader
                   onClick={() => {
-                    setOpen2(!open2), reduceCount();
+                    setOpen2(!open2);
                   }}
                 >
-                  <div
-                    className=" flex justify-between items-center text-sm w-full text-gray-700"
-                    onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
-                  >
+                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
                     Tasks{' '}
                   </div>
                 </AccordionHeader>
@@ -307,3 +263,41 @@ const JobItem = ({
 };
 
 export default JobItem;
+
+const renderStatus = (job: TJobDictionary, hasInvalidApiKeyError?: boolean) => {
+  if (!job || !job?.status) {
+    return null;
+  }
+
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
+    return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
+    return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.queued) {
+    return <SvgIcon name="queue" className="w-4 h-4 text-gray-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.failed) {
+    return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
+    return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
+  }
+  if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
+    return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+  }
+  if (hasInvalidApiKeyError) {
+    return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+  }
+};
+
+const renderValue = (value: any) => {
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (typeof value === 'object') {
+    return value.toString();
+  }
+  return value;
+};
