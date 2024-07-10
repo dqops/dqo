@@ -85,9 +85,9 @@ This is the recommended authentication method.
 
 The service principal is an impersonalized identity used specifically for a service with a proper permission.
 
-This method needs to create a service account, generate a secret and add role assignment to the container.
+This method requires creating a service account, generating a secret and adding role assignment to the container.
 
-To use this method you need to create a service account in Azure.
+Start with creating a service account in Azure.
 Open **Enterprise applications** and click the **New application**.
 
 ![New enterprise application](https://dqops.com/docs/images/data-sources/azure/new-enterprise-application.png){ loading=lazy; width="1200px" }
