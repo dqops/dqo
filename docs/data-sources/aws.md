@@ -67,11 +67,13 @@ This method needs to create a service account, generate a secret.
 To use this method you need to create a service account in AWS.
 Open **IAM**, navigate to **Users** and click the **Create user** button.
 
-// screen: aws-create-service-account.png
+![Create service account](https://dqops.com/docs/images/data-sources/aws/aws-create-service-account.png){ loading=lazy; width="1200px" }
+
+docs-dqo-ai/docs/images/data-sources/aws
 
 Set the name of the service account.
 
-// screen: aws-create-step-1.png
+![Create service account step 1](https://dqops.com/docs/images/data-sources/aws/aws-create-step-1.png){ loading=lazy; width="1200px" }
 
 In permission options select **Attach policies directly**.
 In search field type **AmazonS3ReadOnlyAccess** and select the policy.
@@ -85,36 +87,34 @@ E.g: "Resource": "arn:aws:s3:::<bucket_name_here>/*"
 
 Abowe allows access all object inside the bucket named <bucket_name_here>.
 
-// screen: aws-create-step-2.png
-
+![Create service account step 2](https://dqops.com/docs/images/data-sources/aws/aws-create-step-2.png){ loading=lazy; width="1200px" }
 Then click the Create user button.
 
-// screen: aws-create-step-3.png
-
+![Create service account step 3](https://dqops.com/docs/images/data-sources/aws/aws-create-step-3.png){ loading=lazy; width="1200px" }
 The service account has been created.
 Now you can generate access key what will be used by DQOps to access files in your bucket. Click on the name of the service account.
 
-// screen: aws-service-account-created.png
+![Created service account](https://dqops.com/docs/images/data-sources/aws/aws-service-account-created.png){ loading=lazy; width="1200px" }
 
 Navigate to **Security credentials** tab, scroll down to **Access keys** section and click on the **Create access key** button.
 
-// screen: create-access-key.png
+![Create access key](https://dqops.com/docs/images/data-sources/aws/create-access-key.png){ loading=lazy; width="1200px" }
 
 Select **Application running outside AWS**
 
-// screen: create-access-key-step-1.png
+![Create access key step 1](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-1.png){ loading=lazy; width="1200px" }
 
 Put the description of your access key.
 
 Click on Create access key.
 
-// screen: create-access-key-step-2.png
+![Create access key step 2](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-2.png){ loading=lazy; width="1200px" }
 
 Click on Show link to present the secret.
 
 Now you have generated Access key for AWS S3. Copy Access key and Secret access key.
 
-// screen: create-access-key-step-3.png
+![Create access key step 3](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-3.png){ loading=lazy; width="1200px" }
 
 ### **Default Credential**
 
