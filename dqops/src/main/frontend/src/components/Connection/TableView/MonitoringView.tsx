@@ -31,19 +31,19 @@ import { useDecodedParams } from '../../../utils';
 
 const initTabs = [
   {
-    label: 'Table quality status (daily checks)',
+    label: 'Table quality status (daily)',
     value: 'table-quality-status-daily'
   },
   {
-    label: 'Daily checks',
+    label: 'Daily checkpoints',
     value: 'daily'
   },
   {
-    label: 'Table quality status (monthly checks)',
+    label: 'Table quality status (monthly checkpoints)',
     value: 'table-quality-status-monthly'
   },
   {
-    label: 'Monthly checks',
+    label: 'Monthly checkpoints',
     value: 'monthly'
   },
   {

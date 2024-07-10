@@ -21374,6 +21374,11 @@
         "filter" : {
           "type" : "string",
           "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        },
+        "max_future_days" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Maximum accepted number of days from now that are not treated as days from future. If value is not defined by user then default value is 0.0."
         }
       }
     },
