@@ -2,7 +2,7 @@
 title: How to activate data observability for GCP
 ---
 
-# How to activate data observability for Google (GCP)
+# How to activate data observability for Google
 
 This guide shows how to activate data observability for Google by connecting DQOps. 
 The example will use the Google Cloud Storage for storing data. 
@@ -10,7 +10,7 @@ The example will use the Google Cloud Storage for storing data.
 # Prerequisites
 
 - Data in CSV, JSON or Parquet format (compressed files allowed), located in a Bucket.
-- [DQOps installation](../getting-started/installation/)
+- [DQOps installation](../getting-started/installation.md)
 
 # Add connection to Google using the user interface
 
@@ -41,23 +41,23 @@ Select the **File Format** suitable to your files located in Google. You can cho
 
 To complete the configuration you need to set the:
 
-- **Google authentication mode**
+- **Credentials**
 - **Path**
 
 
 ## Generate Credentials
 
-DQOps requires permissions to establish the connection to the Google storage.
+DQOps requires permissions to establish the connection to the Google Cloud Storage.
 
-Connection to Google Cloud Storage is performed with use of the Interoperability API.
+Connection to GCS is performed with use of the Interoperability API.
 
-To generate **Access Key** and **Secret**, open a storage in Google.
+To generate **Access Key** and **Secret**, open Cloud Storage in Google.
 
 Go to the settings in the right navigation panel and open the Interoperability tab.
 
 Down on the page you can generate a new key.
 
-// todo: screen of interoperability here
+![Interoperability](https://dqops.com/docs/images/data-sources/google/google-interoperability.png){ loading=lazy; width="1200px" }
 
 ## Set the Path
 
@@ -65,7 +65,7 @@ Let assume you have directories with unstructured files, dataset divided into mu
 All mentioned cases are supported but differs in the configuration. 
 
 ``` { .asc .annotate }
-my-container
+my-bucket
 ├───...
 └───clients_data
     ├───reports
@@ -94,9 +94,9 @@ my-container
 2.  Connect to all files in path - e.g. whole market_specification folder by setting prefix to **/my_container/clients_data**. A selection of the folder is available after saving the new connection configuration.
 3.  Connect to partitioned data - e.g. sales folder with partitioning by date and market - set prefix to **/my_container/clients_data** and select **Hive partitioning** checkbox from Additional format options. A selection of the **sales** folder is available after saving the new connection configuration.
 
-You can connect to a specific file, eg. annual_report_2022.csv (set prefix to **/usr/share/clients_data/reports**),
-all files with the same structure in path, eg. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
-or hive style partitioned data, eg. sales folder with partitioning by date and market - (set prefix to **/usr/share/clients_data** and select **Hive partitioning** checkbox from Additional format options).
+You can connect to a specific file, e.g. annual_report_2022.csv (set prefix to **/usr/share/clients_data/reports**),
+all files with the same structure in path, e.g. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
+or hive style partitioned data, e.g. sales folder with partitioning by date and market - (set prefix to **/usr/share/clients_data** and select **Hive partitioning** checkbox from Additional format options).
 
 The path is a directory containing files. You cannot use a full file path. 
 The prefix cannot contain the name of a file.
@@ -124,7 +124,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png){ loading=lazy; width="1200px" }
 
 
-# Detailes of new connection - all parameters description
+# Details of new connection - all parameters description
 
 The form of the adding a new connection page provides additional fields not mentioned before.
 
@@ -302,11 +302,6 @@ Fill in the data you will be asked for.
 
 Select the **duckdb** provider, which provides support for the Parquet file format.
 
-!!! info "Windows file system"
-
-When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
-You can also use a single slash (/).
-
 
 ```
 Connection name (--name): connection1
@@ -335,7 +330,7 @@ Type of source files for DuckDB:
  [ 2] json
  [ 3] parquet
 Please enter one of the [] values: 3
-Virtual schema names and paths (in a pattern schema=path): files=/usr/share/clients_data
+Virtual schema names and paths (in a pattern schema=path): files=gs://my-bucket/clients_data
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -347,7 +342,7 @@ dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=gcs
 --duckdb-files-format-type=parquet
---duckdb-directories=files=/usr/share/clients_data
+--duckdb-directories=files=gs://my-bucket/clients_data
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -384,7 +379,7 @@ spec:
     read_mode: files
     source_files_type: parquet
     directories:
-      files: /usr/share/clients_data
+      files: gs://my-bucket/clients_data
     storage_type: gcs
 ```
 
