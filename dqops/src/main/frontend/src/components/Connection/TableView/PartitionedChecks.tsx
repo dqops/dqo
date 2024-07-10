@@ -47,11 +47,11 @@ const initTabs = [
     value: 'monthly'
   },
   {
-    label: 'Daily comparisons',
+    label: 'Daily partitions comparisons',
     value: 'daily_comparisons'
   },
   {
-    label: 'Monthly comparisons',
+    label: 'Monthly partitions comparisons',
     value: 'monthly_comparisons'
   }
 ];
