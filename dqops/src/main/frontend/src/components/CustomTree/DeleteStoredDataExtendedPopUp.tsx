@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import {
   CheckDefinitionFolderModel,
   DeleteStoredDataQueueJobParameters,
+  IncidentModelStatusEnum,
   SensorListModel
 } from '../../api';
 import { IRootState } from '../../redux/reducers';
@@ -62,7 +63,9 @@ const DeleteStoredDataExtendedPopUp = ({
     deleteCheckResults: true,
     deleteSensorReadouts: true,
     deleteErrorSamples: true,
-    checkType: checkTypes === 'sources' ? undefined : checkTypes
+    deleteIncidents: true,
+    checkType: checkTypes === 'sources' ? undefined : checkTypes,
+    incidentStatusName: undefined
   });
 
   const [allChecks, setAllChecks] = useState<CheckDefinitionFolderModel>();
@@ -452,6 +455,34 @@ const DeleteStoredDataExtendedPopUp = ({
                 onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
                 label="Error samples"
                 checkClassName="bg-teal-500"
+              />
+            </div>
+            <div>
+              <Checkbox
+                checked={params.deleteIncidents}
+                onChange={(deleteIncidents) => onChangeParams({ deleteIncidents })}
+                label="Incidents"
+                checkClassName="bg-teal-500"
+              />
+              <SelectInput
+                label="Incident status"
+                options={[
+                  '',
+                  ...Object.keys(IncidentModelStatusEnum)
+                ]?.map((item: any) => ({
+                  label: item,
+                  value: item
+                }))}
+                value={
+                  params.incidentStatusName !== undefined
+                    ? params.incidentStatusName
+                    : 'All incident types'
+                }
+                onChange={(value) =>
+                  onChangeParams({
+                    incidentStatusName: String(value) !== 'All incident types' ? value : undefined,
+                  })
+                }
               />
             </div>
           </div>
