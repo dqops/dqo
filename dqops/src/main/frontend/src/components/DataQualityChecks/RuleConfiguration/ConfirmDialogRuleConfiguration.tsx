@@ -19,7 +19,10 @@ const ConfirmDialog = ({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('check-editor-advanced') === 'true') {
+    if (
+      localStorage.getItem('check-editor-advanced') === 'true' &&
+      open === true
+    ) {
       onConfirm();
       onClose();
     }

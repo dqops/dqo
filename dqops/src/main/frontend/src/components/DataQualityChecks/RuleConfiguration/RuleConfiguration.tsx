@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Select from '../../Select';
 import CheckRuleItem from '../CheckRuleItem';
 import ConfirmDialogRuleConfiguration from './ConfirmDialogRuleConfiguration';
@@ -50,6 +50,11 @@ export default function RuleConfiguration({
   if (isAlreadyDeleted) {
     return <></>;
   }
+  useEffect(() => {
+    if (ruleParamenterConfigured) {
+      setConfigurationType('multiple_levels');
+    }
+  }, [ruleParamenterConfigured]);
   console.log(ruleParamenterConfigured);
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
@@ -198,7 +203,8 @@ export default function RuleConfiguration({
         open={open}
         onClose={() => setOpen(false)}
         onConfirm={() => {
-          setConfigurationType('multiple_levels');
+          // setConfigurationType('multiple_levels');
+          onChangeRuleParametersConfigured(true);
           setOpen(false);
         }}
         message="The data check editor will switch to an advanced mode. You will be able to configure different thresholds for warning, error and fatal error severity levels"

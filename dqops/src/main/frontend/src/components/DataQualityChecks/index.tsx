@@ -391,21 +391,21 @@ const DataQualityChecks = ({
     return groupedArray ?? [];
   };
 
-  useEffect(() => {
-    setRuleParametersConfigured(
-      !!checksUI?.categories
-        ?.flatMap((category) => category.checks || [])
-        .flatMap((check) => check || [])
-        .flatMap((check) => check.rule || [])
-        .find((x) => {
-          let count = 0;
-          if (x.warning?.configured) count++;
-          if (x.error?.configured) count++;
-          if (x.fatal?.configured) count++;
-          return count > 1;
-        })
-    );
-  }, [checksUI]);
+  // useEffect(() => {
+  //   setRuleParametersConfigured(
+  //     !!checksUI?.categories
+  //       ?.flatMap((category) => category.checks || [])
+  //       .flatMap((check) => check || [])
+  //       .flatMap((check) => check.rule || [])
+  //       .find((x) => {
+  //         let count = 0;
+  //         if (x.warning?.configured) count++;
+  //         if (x.error?.configured) count++;
+  //         if (x.fatal?.configured) count++;
+  //         return count > 1;
+  //       })
+  //   );
+  // }, [checksUI]);
 
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
