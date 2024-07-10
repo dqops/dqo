@@ -1,12 +1,12 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
 {%- call lib.render_error_sampler() -%}
-    {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
-    {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
-    {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
-    {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
-    {%- endif -%}
+    {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
+    {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
+    {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
+    {% else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
+    {% endif -%}
 {%- endcall -%}

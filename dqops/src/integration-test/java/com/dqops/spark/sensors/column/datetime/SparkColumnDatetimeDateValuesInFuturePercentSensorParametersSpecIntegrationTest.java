@@ -38,9 +38,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.threeten.extra.Days;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +55,7 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
     private UserHomeContext userHomeContext;
     private ColumnDateValuesInFuturePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private Double dataSetLatestDateButTwoDaysEarlierFromNow;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +65,13 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
 		this.sut = new ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec();
 		this.checkSpec = new ColumnDateValuesInFuturePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
+
+        Column<?> column = this.sampleTableMetadata.getTableData().getTable().column("date");
+        List<LocalDate> fileDates = Arrays.stream(column.asObjectArray())
+                .map(o -> LocalDate.parse(String.valueOf(o), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .collect(Collectors.toList());
+        LocalDate maxLocalDate = fileDates.stream().max(LocalDate::compareTo).get();
+        this.dataSetLatestDateButTwoDaysEarlierFromNow = Days.between(maxLocalDate, LocalDate.now()).getAmount() * (-1) - 2.0;
     }
 
     @Test
@@ -82,6 +95,7 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setMaxFutureDays(dataSetLatestDateButTwoDaysEarlierFromNow);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date", this.checkSpec);
 
@@ -90,11 +104,12 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(6.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        this.sut.setMaxFutureDays(dataSetLatestDateButTwoDaysEarlierFromNow);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
 
@@ -103,11 +118,12 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(6.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        this.sut.setMaxFutureDays(dataSetLatestDateButTwoDaysEarlierFromNow);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
 
@@ -116,11 +132,12 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(6.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setMaxFutureDays(dataSetLatestDateButTwoDaysEarlierFromNow);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -134,6 +151,7 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setMaxFutureDays(dataSetLatestDateButTwoDaysEarlierFromNow);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -142,7 +160,7 @@ public class SparkColumnDatetimeDateValuesInFuturePercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(6.666, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.001);
     }
 
     @Test

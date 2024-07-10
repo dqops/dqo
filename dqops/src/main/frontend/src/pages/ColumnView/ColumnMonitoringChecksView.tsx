@@ -27,11 +27,11 @@ import { tab } from '@material-tailwind/react';
 
 const initTabs = [
   {
-    label: 'Daily checks',
+    label: 'Daily checkpoints',
     value: 'daily'
   },
   {
-    label: 'Monthly checks',
+    label: 'Monthly checkpoints',
     value: 'monthly'
   }
 ];
