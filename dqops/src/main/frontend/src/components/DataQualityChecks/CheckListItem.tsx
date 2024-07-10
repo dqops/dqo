@@ -50,6 +50,8 @@ interface ICheckListItemProps {
   isDefaultEditing?: boolean;
   canUserRunChecks?: boolean;
   isAlreadyDeleted?: boolean;
+  ruleParamenterConfigured: boolean;
+  onChangeRuleParametersConfigured: (v: boolean) => void;
 }
 
 interface IRefetchResultsProps {
@@ -69,7 +71,9 @@ const CheckListItem = ({
   comparisonName,
   isDefaultEditing,
   canUserRunChecks,
-  isAlreadyDeleted
+  isAlreadyDeleted,
+  ruleParamenterConfigured,
+  onChangeRuleParametersConfigured
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
@@ -628,6 +632,8 @@ const CheckListItem = ({
           check={check}
           onUpdate={onUpdate}
           handleChange={handleChange}
+          ruleParamenterConfigured={ruleParamenterConfigured}
+          onChangeRuleParametersConfigured={onChangeRuleParametersConfigured}
         />
       </tr>
       {expanded && (

@@ -75,6 +75,19 @@ const DataQualityChecks = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
+  const [ruleParametersConfigured, setRuleParametersConfigured] = useState(
+    !!checksUI?.categories
+      ?.flatMap((category) => category.checks || [])
+      .flatMap((check) => check || [])
+      .flatMap((check) => check.rule || [])
+      .find((x) => {
+        let count = 0;
+        if (x.warning?.configured) count++;
+        if (x.error?.configured) count++;
+        if (x.fatal?.configured) count++;
+        return count > 1;
+      })
+  );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { sidebarWidth } = useTree();
@@ -378,6 +391,22 @@ const DataQualityChecks = ({
     return groupedArray ?? [];
   };
 
+  useEffect(() => {
+    setRuleParametersConfigured(
+      !!checksUI?.categories
+        ?.flatMap((category) => category.checks || [])
+        .flatMap((check) => check || [])
+        .flatMap((check) => check.rule || [])
+        .find((x) => {
+          let count = 0;
+          if (x.warning?.configured) count++;
+          if (x.error?.configured) count++;
+          if (x.fatal?.configured) count++;
+          return count > 1;
+        })
+    );
+  }, [checksUI]);
+
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
   ) => {
@@ -393,23 +422,6 @@ const DataQualityChecks = ({
       }
     }
   };
-  const allRulesHaveMoreThanOneConfigured = checksUI?.categories
-    .flatMap((category) => category.checks || [])
-    .flatMap((check) => check || [])
-    .flatMap((check) => check.rule || []);
-
-  const ruleParametersConfigured = allRulesHaveMoreThanOneConfigured.find(
-    (x) => {
-      let count = 0;
-      if (x.warning?.configured) count++;
-      if (x.error?.configured) count++;
-      if (x.fatal?.configured) count++;
-      return count > 1;
-    }
-  );
-
-  console.log(allRulesHaveMoreThanOneConfigured);
-  console.log(!!ruleParametersConfigured);
 
   return (
     <div
@@ -570,6 +582,8 @@ const DataQualityChecks = ({
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
+              ruleParamenterConfigured={!!ruleParametersConfigured}
+              onChangeRuleParametersConfigured={setRuleParametersConfigured}
             />
           ))}
           {isFiltered !== true &&
@@ -592,6 +606,8 @@ const DataQualityChecks = ({
                 isDefaultEditing={isDefaultEditing}
                 showAdvanced={showAdvanced}
                 isAlreadyDeleted={true}
+                ruleParamenterConfigured={!!ruleParametersConfigured}
+                onChangeRuleParametersConfigured={setRuleParametersConfigured}
               />
             ))}
         </tbody>

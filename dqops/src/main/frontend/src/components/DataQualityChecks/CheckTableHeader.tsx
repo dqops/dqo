@@ -402,7 +402,10 @@ const TableHeader = ({
           </>
         ) : (
           <>
-            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
+            <td
+              className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+              colSpan={2}
+            ></td>
           </>
         )}
       </tr>
@@ -435,16 +438,27 @@ const TableHeader = ({
           </div>
         </td>
         <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
-          Warning threshold
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-        </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
-          Error threshold
-        </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-red-100">
-          Fatal threshold
-        </td>
+        {ruleParamenterConfigured ? (
+          <>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
+              Warning threshold
+              <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+            </td>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
+              Error threshold
+            </td>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-red-100">
+              Fatal threshold
+            </td>
+          </>
+        ) : (
+          <>
+            <td
+              className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400"
+              colSpan={2}
+            ></td>
+          </>
+        )}
       </tr>
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}

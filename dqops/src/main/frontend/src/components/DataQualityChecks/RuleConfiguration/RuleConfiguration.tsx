@@ -11,6 +11,8 @@ type RuleConfigurationProps = {
   onUpdate: () => void;
   changeEnabled: (data: any) => void;
   enabledType: 'error' | 'warning' | 'fatal' | '';
+  ruleParamenterConfigured: boolean;
+  onChangeRuleParametersConfigured: (v: boolean) => void;
 };
 
 type ConfigurationType = 'error' | 'warning' | 'fatal' | '' | 'multiple_levels';
@@ -30,7 +32,9 @@ export default function RuleConfiguration({
   handleChange,
   onUpdate,
   changeEnabled,
-  enabledType
+  enabledType,
+  ruleParamenterConfigured,
+  onChangeRuleParametersConfigured
 }: RuleConfigurationProps) {
   const [configurationType, setConfigurationType] =
     useState<ConfigurationType>('');
@@ -46,6 +50,7 @@ export default function RuleConfiguration({
   if (isAlreadyDeleted) {
     return <></>;
   }
+  console.log(ruleParamenterConfigured);
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
       case '':
@@ -178,14 +183,16 @@ export default function RuleConfiguration({
   };
   return (
     <Fragment>
-      <td>
-        <Select
-          value={configurationType}
-          onChange={onChangeConfigurationType}
-          options={options}
-          label="Issue severity level"
-        />
-      </td>
+      {!ruleParamenterConfigured && (
+        <td>
+          <Select
+            value={configurationType}
+            onChange={onChangeConfigurationType}
+            options={options}
+            label="Issue severity level"
+          />
+        </td>
+      )}
       {renderRuleConfiguration(configurationType)}
       <ConfirmDialogRuleConfiguration
         open={open}
