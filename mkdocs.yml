@@ -49,10 +49,13 @@ nav:
   - Data sources:
       - "data-sources/index.md"
       - Athena: "data-sources/athena.md"
+      - AWS: "data-sources/aws.md"
+      - Azure: "data-sources/azure.md"
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
       - DuckDB: "data-sources/duckdb.md"
+      - Google: "data-sources/google.md"
       - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
