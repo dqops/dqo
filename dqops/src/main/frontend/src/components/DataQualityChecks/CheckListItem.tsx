@@ -24,8 +24,8 @@ import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
 import Switch from '../Switch';
 import CheckDetails from './CheckDetails/CheckDetails';
-import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
+import RuleConfiguration from './RuleConfiguration/RuleConfiguration';
 import SensorParameters from './SensorParameters';
 
 export interface ITab {
@@ -224,8 +224,8 @@ const CheckListItem = ({
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { 
-            time_window_filter: timeWindowFilter, 
+        ? {
+            time_window_filter: timeWindowFilter,
             collect_error_samples: true
           }
         : { collect_error_samples: true })
@@ -620,67 +620,15 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100 relative">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.warning}
-              onChange={(warning) =>
-                handleChange({
-                  rule: {
-                    ...check.rule,
-                    warning
-                  }
-                })
-              }
-              type="warning"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-        </td>
-        <td className="py-2 px-4 bg-orange-100">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.error}
-              onChange={(error) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    error
-                  }
-                })
-              }
-              type="error"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
-        <td className="py-2 px-4 bg-red-100 h-18">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.fatal}
-              onChange={(fatal) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    fatal
-                  }
-                })
-              }
-              type="fatal"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
+        <RuleConfiguration
+          enabledType={enabledType}
+          isDisabled={isDisabled}
+          isAlreadyDeleted={isAlreadyDeleted}
+          changeEnabled={changeEnabled}
+          check={check}
+          onUpdate={onUpdate}
+          handleChange={handleChange}
+        />
       </tr>
       {expanded && (
         <tr className={clsx(' border-b border-gray-100')}>
