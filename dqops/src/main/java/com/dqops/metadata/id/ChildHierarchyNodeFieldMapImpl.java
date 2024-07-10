@@ -109,7 +109,7 @@ public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
     }
 
     /**
-     * Returns an interator over entries in teh field map.
+     * Returns an interator over entries in the field map.
      *
      * @return Iterable of entries.
      */

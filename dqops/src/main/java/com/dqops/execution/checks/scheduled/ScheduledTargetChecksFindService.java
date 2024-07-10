@@ -25,7 +25,7 @@ import com.dqops.metadata.userhome.UserHome;
 public interface ScheduledTargetChecksFindService {
     /**
      * Traverses the user home and finds all checks that should be executed because their schedule
-     * or a schedule of their parent nodes (connection, table, column) matches teh requested schedule.
+     * or a schedule of their parent nodes (connection, table, column) matches the requested schedule.
      *
      * @param userHome User home to find target checks to execute.
      * @param schedule Schedule to match.

@@ -16,9 +16,10 @@
 package com.dqops.data.storage;
 
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
+import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonColumnNames;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -515,9 +516,23 @@ public class TableDataSnapshot {
 
             Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
 
+            Column<?> datePartitioningColumnOriginal = monthlyPartitionTable.column(storageSettings.getTimePeriodColumnName());
+            DateTimeColumn timePeriodColumn = null;
+            if (datePartitioningColumnOriginal instanceof DateTimeColumn) {
+                timePeriodColumn = (DateTimeColumn) datePartitioningColumnOriginal;
+            }
+            else if (datePartitioningColumnOriginal instanceof InstantColumn) {
+                timePeriodColumn = ((InstantColumn)datePartitioningColumnOriginal).asLocalDateTimeColumn(ZoneOffset.UTC);
+            }
+            else if (datePartitioningColumnOriginal instanceof DateColumn) {
+                timePeriodColumn = ((DateColumn)datePartitioningColumnOriginal).atTime(LocalTime.MIDNIGHT);
+            }
+            else {
+                throw new DqoRuntimeException("Time partitioning column " + storageSettings.getTimePeriodColumnName() + " is not a date/datetime/instant column.");
+            }
+
             // Filter by date.
-            toDelete = toDelete.and(
-                    monthlyPartitionTable.dateTimeColumn(this.storageSettings.getTimePeriodColumnName()).date()
+            toDelete = toDelete.and(timePeriodColumn.date()
                             .isBetweenIncluding(startDate, endDate));
 
             // Filter by string columns' conditions.
@@ -529,9 +544,23 @@ public class TableDataSnapshot {
                         continue;
                     }
 
-                    toDelete = toDelete.and(
-                            monthlyPartitionTable.textColumn(colName)
-                                    .isIn(colValues));
+                    if(colName.equals(CommonColumnNames.SCHEMA_NAME_COLUMN_NAME)
+                            || colName.equals(CommonColumnNames.TABLE_NAME_COLUMN_NAME)){
+
+                        for (String colValue : colValues){
+                            SearchPattern searchPattern = SearchPattern.create(true, colValue);
+                            toDelete = toDelete.and(
+                                    monthlyPartitionTable
+                                            .textColumn(colName)
+                                            .eval(searchPattern::match));
+                        }
+
+                    } else {
+                        toDelete = toDelete.and(
+                                monthlyPartitionTable
+                                        .textColumn(colName)
+                                        .isIn(colValues));
+                    }
                 }
             }
             catch (IllegalStateException e) {

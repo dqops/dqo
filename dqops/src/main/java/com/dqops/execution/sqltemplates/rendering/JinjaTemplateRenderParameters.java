@@ -236,7 +236,7 @@ public class JinjaTemplateRenderParameters {
     }
 
     /**
-     * Sets teh effective time window filter for the partitioned checks or when a period of time should be analyzed by any checks.
+     * Sets the effective time window filter for the partitioned checks or when a period of time should be analyzed by any checks.
      * @param effectiveTimeWindowFilter Effective time window filter.
      */
     public void setEffectiveTimeWindowFilter(TimeWindowFilterParameters effectiveTimeWindowFilter) {
