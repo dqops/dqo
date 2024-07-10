@@ -233,7 +233,7 @@ You can find more details on how to [manage access keys for IAM users](https://d
 
 To set the credential file in DQOps, follow these steps:
 
-1. Open the Configuration section.
+1. Open the Configuration in menu.
 2. Select Shared credentials from the tree view on the left.
 3. Click the edit link on the “AWS_default_credentials” file.
 
