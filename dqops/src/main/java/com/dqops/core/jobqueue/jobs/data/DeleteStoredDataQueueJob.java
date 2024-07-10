@@ -196,7 +196,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
             setDataStreamName(deletionParameters.getDataGroupTag());
             setQualityDimension(deletionParameters.getQualityDimension());
             setStatusName(deletionParameters.getIncidentStatusName());
-//            setTableName();
         }};
     }
 

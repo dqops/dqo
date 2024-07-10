@@ -36,10 +36,6 @@ public class IncidentsFragmentFilter extends ParquetDataFragmentFilter {
     private String checkType;
     private String dataStreamName;
     private String qualityDimension;
-    // schema name is not present on the patition level, it can only be filtered inside parquet data
-    private String schemaName;
-    // table name is not present on the patition level, it can only be filtered inside parquet data
-    private String tableName;
     private String statusName;
 
     /**
@@ -64,12 +60,6 @@ public class IncidentsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Strings.isNullOrEmpty(qualityDimension)) {
             result.put(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);
         }
-        if (!Strings.isNullOrEmpty(schemaName)) {
-            result.put(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, schemaName);
-        }
-        if (!Strings.isNullOrEmpty(tableName)) {
-            result.put(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, tableName);
-        }
         if (!Strings.isNullOrEmpty(statusName)) {
             result.put(IncidentsColumnNames.STATUS_COLUMN_NAME, statusName);
         }
@@ -89,8 +79,6 @@ public class IncidentsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Objects.equals(columnNames, that.columnNames)) return false;
         if (!Objects.equals(dataStreamName, that.dataStreamName)) return false;
         if (!Objects.equals(qualityDimension, that.qualityDimension)) return false;
-        if (!Objects.equals(schemaName, that.schemaName)) return false;
-        if (!Objects.equals(tableName, that.tableName)) return false;
         return Objects.equals(statusName, that.statusName);
     }
 
@@ -103,8 +91,6 @@ public class IncidentsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (columnNames != null ? columnNames.hashCode() : 0);
         result = 31 * result + (dataStreamName != null ? dataStreamName.hashCode() : 0);
         result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);
-        result = 31 * result + (schemaName != null ? schemaName.hashCode() : 0);
-        result = 31 * result + (tableName != null ? tableName.hashCode() : 0);
         result = 31 * result + (statusName != null ? statusName.hashCode() : 0);
         return result;
     }

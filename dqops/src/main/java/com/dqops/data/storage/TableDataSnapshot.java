@@ -19,6 +19,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonColumnNames;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -543,9 +544,23 @@ public class TableDataSnapshot {
                         continue;
                     }
 
-                    toDelete = toDelete.and(
-                            monthlyPartitionTable.textColumn(colName)
-                                    .isIn(colValues));
+                    if(colName.equals(CommonColumnNames.SCHEMA_NAME_COLUMN_NAME)
+                            || colName.equals(CommonColumnNames.TABLE_NAME_COLUMN_NAME)){
+
+                        for (String colValue : colValues){
+                            SearchPattern searchPattern = SearchPattern.create(true, colValue);
+                            toDelete = toDelete.and(
+                                    monthlyPartitionTable
+                                            .textColumn(colName)
+                                            .eval(searchPattern::match));
+                        }
+
+                    } else {
+                        toDelete = toDelete.and(
+                                monthlyPartitionTable
+                                        .textColumn(colName)
+                                        .isIn(colValues));
+                    }
                 }
             }
             catch (IllegalStateException e) {

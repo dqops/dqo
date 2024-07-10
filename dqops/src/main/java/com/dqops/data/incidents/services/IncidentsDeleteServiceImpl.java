@@ -16,6 +16,7 @@
 package com.dqops.data.incidents.services;
 
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.models.IncidentsFragmentFilter;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
@@ -59,9 +60,16 @@ public class IncidentsDeleteServiceImpl implements IncidentsDeleteService {
             conditions.put(columnName, wrappedValue);
         }
 
-//        if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-//            conditions.put(IncidentsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
-//        }
+        String fullTableName = filter.getTableSearchFilters().getFullTableName();
+        if(fullTableName != null && fullTableName.contains(".")){
+            String[] split = fullTableName.split("\\.");
+            String schemaName = split[0];
+            String tableName = split[1];
+
+            conditions.put(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, new LinkedHashSet<>(Set.of(schemaName)));
+            conditions.put(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, new LinkedHashSet<>(Set.of(tableName)));
+        }
+
 
         DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
