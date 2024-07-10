@@ -66,7 +66,7 @@ It allows access to all files in each of the Storage Containers created in the S
 You can find the connection string in the Storage Account details. 
 Open the Storage Account menu section in Azure Portal. Select the **Security + networking**, then **Access keys**.
 
-![Connection string](https://dqops.com/docs/images/data-sources/azure/connection-string.png){ loading=lazy; width="1200px" }
+![Connection string](https://dqops.com/docs/images/data-sources/azure/connection-string.png){ loading=lazy; }
 
 
 ### **Credential Chain** 
@@ -90,44 +90,44 @@ This method requires creating a service account, generating a secret and adding 
 Start with creating a service account in Azure.
 Open **Enterprise applications** and click the **New application**.
 
-![New enterprise application](https://dqops.com/docs/images/data-sources/azure/new-enterprise-application.png){ loading=lazy; width="1200px" }
+![New enterprise application](https://dqops.com/docs/images/data-sources/azure/new-enterprise-application.png){ loading=lazy; }
 
 Then **Create your own application**.
 
-![New your own enterprise application](https://dqops.com/docs/images/data-sources/azure/new-enterprise-application-your-own.png){ loading=lazy; width="1200px" }
+![New your own enterprise application](https://dqops.com/docs/images/data-sources/azure/new-enterprise-application-your-own.png){ loading=lazy; }
 
 Fill the name with your service account and create it.
 
-![Create your own application](https://dqops.com/docs/images/data-sources/azure/on-right-create-your-own-application.png){ loading=lazy; width="1200px" }
+![Create your own application](https://dqops.com/docs/images/data-sources/azure/on-right-create-your-own-application.png){ loading=lazy; }
 
 Now the service account is ready but it does not have any credentials available to be used.
 
 To create credentials open the **App registrations** in Azure Entra ID. 
 Select **All applications**, then select the name of the service account.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/app-registrations.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/app-registrations.png){ loading=lazy; }
 
 Then navigate to **Certificates & secrets** and click the **New client secret**
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/create-new-client-secret.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/create-new-client-secret.png){ loading=lazy; }
 
 Then fill the name of a new client secret and create it.
 
 Now the secret is ready. Save the **Value** of the key, which is your **Client Secret**.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/client-secret.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/client-secret.png){ loading=lazy; }
 
 The last thing to be done is to add the permission of your service account to the storage account.
 
 Open the container you will work with and select the **Access Control (IAM)**.
 Click on **Add** and select the **Add role assignment**.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam.png){ loading=lazy; }
 
 In Role tab, search for **Storage Blob Data Reader** and click on the present role below.
 The role adds read permissions to the Storage Container.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam-role.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam-role.png){ loading=lazy; }
 
 In Members tab, click on the **Select members** and type the name of the service account, then click Enter.
 
@@ -135,7 +135,7 @@ The name of the service account will appear when the full name is typed.
 
 Select it and click Select.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam-member.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/add-iam-member.png){ loading=lazy; }
 
 To add a connection in DQOps with use of Service Principal authentication mode you need the following:
 
@@ -148,7 +148,7 @@ The **Client Secret** you saved.
 
 Tenant ID and Client ID are available in the App registrations Overview section of the Azure Entra ID.
 
-![App registration](https://dqops.com/docs/images/data-sources/azure/credentials.png){ loading=lazy; width="1200px" }
+![App registration](https://dqops.com/docs/images/data-sources/azure/credentials.png){ loading=lazy; }
 
 
 ### **Default Credential** 

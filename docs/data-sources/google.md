@@ -57,7 +57,7 @@ Go to the settings in the right navigation panel and open the Interoperability t
 
 Down on the page you can generate a new key.
 
-![Interoperability](https://dqops.com/docs/images/data-sources/google/google-interoperability.png){ loading=lazy; width="1200px" }
+![Interoperability](https://dqops.com/docs/images/data-sources/google/google-interoperability.png){ loading=lazy; }
 
 ## Set the Path
 
