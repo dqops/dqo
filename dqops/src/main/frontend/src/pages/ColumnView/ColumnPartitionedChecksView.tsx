@@ -26,11 +26,11 @@ import ColumnActionGroup from './ColumnActionGroup';
 
 const initTabs = [
   {
-    label: 'Days',
+    label: 'Daily partitions',
     value: 'daily'
   },
   {
-    label: 'Months',
+    label: 'Monthly partitions',
     value: 'monthly'
   }
 ];
