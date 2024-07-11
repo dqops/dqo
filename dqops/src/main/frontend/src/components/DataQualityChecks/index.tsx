@@ -382,7 +382,7 @@ const DataQualityChecks = ({
     return groupedArray ?? [];
   };
   const getRuleParametersConfigured = () => {
-    return !!checksUI?.categories
+    const param = !!checksUI?.categories
       ?.flatMap((category) => category.checks || [])
       .flatMap((check) => check || [])
       .flatMap((check) => check.rule || [])
@@ -393,6 +393,10 @@ const DataQualityChecks = ({
         if (x.fatal?.configured) count++;
         return count > 1;
       });
+    if (ruleParametersConfigured === undefined) {
+      setRuleParametersConfigured(param);
+    }
+    return param;
   };
 
   const getScheduleLevelBasedOnEnum = (
@@ -410,7 +414,7 @@ const DataQualityChecks = ({
       }
     }
   };
-
+  console.log(getRuleParametersConfigured(), ruleParametersConfigured);
   return (
     <div
       className={clsx(className, 'p-1 overflow-y-auto')}
