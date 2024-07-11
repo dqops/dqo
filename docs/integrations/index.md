@@ -18,8 +18,8 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     DQOps provides examples for Azure Data Factory for running data quality checks and the detecting
     the data quality status of any table, before the table is used as a data source.
 
-    The DQOps REST API can be used in a pipeline before or after a data loading job. Calling the DQOps REST API
-    can perform a circuit breaking to stop the pipeline, and prevent loading invalid data
+    The DQOps REST API is executed with use of Web activity a pipeline before or after a data loading job. 
+    Calling the DQOps REST APIcan perform a circuit breaking to stop the pipeline, and prevent loading invalid data
     downstream when fatal severity issues are detected.
 
 

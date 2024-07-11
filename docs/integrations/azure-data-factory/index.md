@@ -9,7 +9,7 @@ Read this guide to learn how to use DQOps API from Azure Data Factory to activat
 You can easily utilize Azure Data Factory to call DQOps API for:
 
 - running data quality checks,
-- collect basic statistics about tables,
+- collect statistics about tables,
 - import the table schema to DQOps,
 - import data quality tables, 
  
@@ -45,9 +45,10 @@ You can copy the generated API Key and use it in Azure Data Factory.
 
 ## Run checks
 
-In Azure Data Factory open Orchestrate to create a new pipeline.
+Run checks job in DQOps executes checks depending on your selection. 
+You can specify to only those checks that are attached to the specific table on a connection, with a specific names for label, quality dimention, type of checks and much more.
 
-Put **Web** activity.
+To create the run checks job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
 
 // screen: add-web-activity.png
 
@@ -63,7 +64,7 @@ Set method as **POST**.
 
 The body of the request contain the filtering configuration that points DQOps which checks should be run.
 
-The below example run all profiling checks that are enabled (turned on) on the table "files.readouts" from the "azure-storage-parquet" connection.
+The below example runs all profiling checks that are enabled (turned on) on the table "files.readouts" from the "azure-storage-parquet" connection.
 It also collects error samples on checks that fail.
 
 ```text
@@ -149,7 +150,7 @@ You can integrate run checks that can disallow to copy new data to the corrupted
 To achieve this you need to base on the returned JSON from DQOps.
 
 The example first calls the DQOps to fetch the status of your data. Then the status is verified. 
-If it succeeded the data is copied. Otherwise the pipeline is marked as failed returning the code of the issue.
+If it succeeded the data is copied. Otherwise, the pipeline is marked as failed returning the code of the issue.
 
 // screen: run-checks-pipeline.png
 
@@ -203,9 +204,86 @@ The details of the error provides you the error code as well.
 
 Instead of Fail activity you can also run another REST API that will inform about data quality issues as fast as is detected.
 
-## Collect basic statistics
+## Collect statistics
 
+Collect statistics job in DQOps provides the summary information about your tables and columns.
+This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
+You can specify to run this job only to the specific table on a connection.
 
+To create the collect statistics job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
+
+// screen: add-web-activity.png
+
+Click on the Web activity and open the **Settings** tab.
+
+Fill the URL with the link that calls collect statistics endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. 
+Calling the collect statistics endpoint without the wait parameter will not allow to see the results of the statistics in Azure Data Factory.
+
+https://&lt;your_DQOps_instance&gt;/api/jobs/collectstatistics/table?wait=true
+
+Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
+
+Set method as **POST**.
+
+The body of the request contain the name of the table on which statistics will be collected.
+
+The below example collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
+
+```text
+{
+    "connection": "azure-storage-parquet",
+    "fullTableName": "files.readouts",
+    "enabled": true
+}
+```
+
+The **Authentication combo box** leave as **None**.
+
+The last thing to fill are **Headers**.
+
+The names **accept** and **Content-Type** should contain value as **applicaiton/json**.
+
+The name **Authorization** contain the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
+
+// screen: activity-settings.png
+
+Save the pipeline by clicking on **Publish all** button.
+
+Now the pipeline can be executed. Navigate to **Add trigger** and select the **Trigger now**
+
+// screen: trigger-now.png
+
+In a moment you should receive a notification about the execution completion of the pipeline.
+
+Click the **view pipeline run** link.
+
+// screen: view-run-pipeline.png
+
+Select the output of the Web activity.
+
+// screen: check-run-details.png
+
+The DQOps API returned data available in the result object of the whole JSON.
+
+```json5 hl_lines="6-12"
+{
+    "jobId": {
+        "jobId": 1720701935000000,
+        "createdAt": "2024-07-11T12:45:35.687507400Z"
+    },
+    "result": {
+        "executed_statistics_collectors": 43,
+        "columns_analyzed": 3,
+        "columns_successfully_analyzed": 3,
+        "total_collectors_failed": 0,
+        "total_collected_results": 140
+    },
+    "status": "finished",
+    // ...
+}
+```
+
+The statistics have been collected.
 
 
 ## Import the table schema to DQOps
