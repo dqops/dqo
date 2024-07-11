@@ -36,8 +36,25 @@ export default function RuleConfiguration({
   ruleParamenterConfigured,
   onChangeRuleParametersConfigured
 }: RuleConfigurationProps) {
-  const [configurationType, setConfigurationType] =
-    useState<ConfigurationType>('');
+  const getConfiguredType = () => {
+    if (ruleParamenterConfigured) {
+      return 'multiple_levels';
+    }
+    if (check?.rule?.warning?.configured) {
+      return 'warning';
+    }
+    if (check?.rule?.error?.configured) {
+      return 'error';
+    }
+    if (check?.rule?.fatal?.configured) {
+      return 'fatal';
+    }
+    return '';
+  };
+
+  const [configurationType, setConfigurationType] = useState<ConfigurationType>(
+    getConfiguredType()
+  );
   const [open, setOpen] = useState(false);
 
   const onChangeConfigurationType = (value: ConfigurationType) => {
@@ -52,10 +69,10 @@ export default function RuleConfiguration({
   }
   useEffect(() => {
     if (ruleParamenterConfigured) {
-      setConfigurationType('multiple_levels');
+      setConfigurationType(getConfiguredType());
     }
   }, [ruleParamenterConfigured]);
-  console.log(ruleParamenterConfigured);
+
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
       case '':
@@ -190,12 +207,16 @@ export default function RuleConfiguration({
     <Fragment>
       {!ruleParamenterConfigured && (
         <td>
-          <Select
-            value={configurationType}
-            onChange={onChangeConfigurationType}
-            options={options}
-            label="Issue severity level"
-          />
+          <div className="flex items-center justify-end">
+            <Select
+              value={configurationType}
+              onChange={onChangeConfigurationType}
+              options={options}
+              label="Issue severity level"
+              className="w-40 mr-2 mb-1 text-sm "
+              menuClassName="!top-14"
+            />
+          </div>
         </td>
       )}
       {renderRuleConfiguration(configurationType)}

@@ -75,19 +75,10 @@ const DataQualityChecks = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
-  const [ruleParametersConfigured, setRuleParametersConfigured] = useState(
-    !!checksUI?.categories
-      ?.flatMap((category) => category.checks || [])
-      .flatMap((check) => check || [])
-      .flatMap((check) => check.rule || [])
-      .find((x) => {
-        let count = 0;
-        if (x.warning?.configured) count++;
-        if (x.error?.configured) count++;
-        if (x.fatal?.configured) count++;
-        return count > 1;
-      })
-  );
+  const [ruleParametersConfigured, setRuleParametersConfigured] = useState<
+    boolean | undefined
+  >();
+
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { sidebarWidth } = useTree();
@@ -390,22 +381,19 @@ const DataQualityChecks = ({
     );
     return groupedArray ?? [];
   };
-
-  // useEffect(() => {
-  //   setRuleParametersConfigured(
-  //     !!checksUI?.categories
-  //       ?.flatMap((category) => category.checks || [])
-  //       .flatMap((check) => check || [])
-  //       .flatMap((check) => check.rule || [])
-  //       .find((x) => {
-  //         let count = 0;
-  //         if (x.warning?.configured) count++;
-  //         if (x.error?.configured) count++;
-  //         if (x.fatal?.configured) count++;
-  //         return count > 1;
-  //       })
-  //   );
-  // }, [checksUI]);
+  const getRuleParametersConfigured = () => {
+    return !!checksUI?.categories
+      ?.flatMap((category) => category.checks || [])
+      .flatMap((check) => check || [])
+      .flatMap((check) => check.rule || [])
+      .find((x) => {
+        let count = 0;
+        if (x.warning?.configured) count++;
+        if (x.error?.configured) count++;
+        if (x.fatal?.configured) count++;
+        return count > 1;
+      });
+  };
 
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
@@ -582,7 +570,11 @@ const DataQualityChecks = ({
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
-              ruleParamenterConfigured={!!ruleParametersConfigured}
+              ruleParamenterConfigured={
+                ruleParametersConfigured === undefined
+                  ? getRuleParametersConfigured()
+                  : ruleParametersConfigured
+              }
               onChangeRuleParametersConfigured={setRuleParametersConfigured}
             />
           ))}

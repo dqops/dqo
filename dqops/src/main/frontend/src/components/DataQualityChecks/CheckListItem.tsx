@@ -349,7 +349,7 @@ const CheckListItem = ({
       }
     }
   }, [enabledType]);
-
+  console.log(ruleParamenterConfigured);
   return (
     <>
       <tr
