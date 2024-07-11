@@ -232,6 +232,7 @@ export default function RuleConfiguration({
         );
     }
   };
+
   return (
     <Fragment>
       {!ruleParamenterConfigured && (
