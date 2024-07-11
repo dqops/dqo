@@ -576,16 +576,17 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>
-                {check.display_name !== ''
-                  ? check.display_name ?? check.check_name
-                  : check.check_name}{' '}
-                {check.friendly_name && (
-                  <span className="text-xxs">({check.friendly_name})</span>
-                )}
+              <p className="text-nowrap">
+                {check.display_name && check.display_name !== ''
+                  ? check.display_name : (check.friendly_name && check.friendly_name !== '' ? check.friendly_name : check.check_name) }
               </p>
               <p className="absolute left-0 top-full text-xxs">
-                {check.quality_dimension}
+                {check.friendly_name ? (
+                  <>
+                  {check.check_name}&nbsp;({check.quality_dimension})
+                  </>
+                ) : check.quality_dimension
+                }
               </p>
             </div>
           </div>

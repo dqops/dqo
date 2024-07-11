@@ -8,3 +8,4 @@ spec:
     \ known minimum value. If the minimum value is constantly changing, detects outliers\
     \ as the biggest change of the minimum value during the last 90 days."
   standard: true
+  default_severity: warning

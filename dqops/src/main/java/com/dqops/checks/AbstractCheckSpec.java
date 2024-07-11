@@ -26,6 +26,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -408,6 +409,15 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonIgnore
     public String getFriendlyName() {
         return null;
+    }
+
+    /**
+     * Returns the default rule severity level that is activated when a check is enabled in the check editor.
+     * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
+     */
+    @JsonIgnore
+    public RuleSeverityLevel getDefaultSeverity() {
+        return RuleSeverityLevel.error;
     }
 
     /**

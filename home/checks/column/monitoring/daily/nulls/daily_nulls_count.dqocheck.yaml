@@ -8,5 +8,6 @@ spec:
     of rows having a null value. Raises a data quality issue when the count of null
     values is above a max_count threshold. Stores the most recent captured value for
     each day when the data quality check was evaluated.
-  friendly_name: incomplete column
+  friendly_name: Maximum accepted count of null values (incomplete column)
   standard: true
+  default_severity: error

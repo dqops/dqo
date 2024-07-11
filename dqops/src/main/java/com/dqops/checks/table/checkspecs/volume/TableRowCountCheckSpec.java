@@ -176,7 +176,7 @@ public class TableRowCountCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "empty or too small table";
+        return "Minimum row count (empty or too small table)";
     }
 
     /**

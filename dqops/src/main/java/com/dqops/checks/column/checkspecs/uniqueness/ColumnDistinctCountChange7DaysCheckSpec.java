@@ -19,11 +19,13 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.rules.change.ChangePercent7DaysRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercent7DaysRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercent7DaysRule50ParametersSpec;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -169,5 +171,16 @@ public class ColumnDistinctCountChange7DaysCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Consistency;
+    }
+
+    /**
+     * Returns the default rule severity level that is activated when a check is enabled in the check editor.
+     *
+     * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
+     */
+    @Override
+    @JsonIgnore
+    public RuleSeverityLevel getDefaultSeverity() {
+        return RuleSeverityLevel.warning;
     }
 }

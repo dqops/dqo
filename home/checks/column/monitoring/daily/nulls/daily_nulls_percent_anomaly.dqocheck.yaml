@@ -8,3 +8,4 @@ spec:
     a data quality issue when the rate of null values increases or decreases too much
     during the last 90 days.
   standard: true
+  default_severity: warning

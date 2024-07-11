@@ -7,3 +7,4 @@ spec:
   help_text: Detects when the volume (row count) changes since the last known row
     count from a previous month exceeds the maximum accepted change percentage.
   standard: true
+  default_severity: warning

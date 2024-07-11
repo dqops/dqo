@@ -6,3 +6,4 @@ spec:
   rule_name: change/change_percent_1_day
   help_text: Verifies that the null percent value in a column changed in a fixed rate
     since last readout from yesterday.
+  default_severity: warning

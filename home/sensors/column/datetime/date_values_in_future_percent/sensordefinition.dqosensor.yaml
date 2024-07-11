@@ -1,4 +1,11 @@
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
-spec: {}
+spec:
+  fields:
+  - field_name: max_future_days
+    display_name: max_future_days
+    help_text: Maximum accepted number of days from now that are not treated as days
+      from future. If value is not defined by user then default value is 0.0.
+    data_type: double
+    default_value: 0.0

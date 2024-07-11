@@ -6,3 +6,4 @@ spec:
   rule_name: change/change_percent
   help_text: Verifies that the distinct count in a monitored column has changed by
     a fixed rate since the last readout.
+  default_severity: warning
