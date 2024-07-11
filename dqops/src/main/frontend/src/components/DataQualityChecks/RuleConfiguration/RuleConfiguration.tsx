@@ -58,31 +58,41 @@ export default function RuleConfiguration({
   const [open, setOpen] = useState(false);
 
   const onChangeConfigurationType = (value: ConfigurationType) => {
+    if (value === configurationType) return;
     if (value === 'multiple_levels') {
       setOpen(true);
     } else {
-      handleChange({
-        rule: {
-          ...check.rule,
-          [configurationType]: {
-            ...check.rule[configurationType],
-            configured: false
-          }
-        }
-      });
-      handleChange({
-        rule: {
-          ...check.rule,
-          [value]: {
-            ...check.rule[configurationType]
-          }
-        }
-      });
+      let updatedRule = { ...check.rule };
 
+      if (value === '') {
+        updatedRule = {
+          warning: { ...check.rule.warning, configured: false },
+          error: { ...check.rule.error, configured: false },
+          fatal: { ...check.rule.fatal, configured: false }
+        };
+      } else {
+        if (configurationType === '') {
+          updatedRule = {
+            ...check.rule,
+            [value]: { ...check.rule[value], configured: true }
+          };
+        } else {
+          updatedRule = {
+            ...check.rule,
+            [value]: { ...check.rule[configurationType], configured: true },
+            [configurationType]: {
+              ...check.rule[configurationType],
+              configured: false
+            }
+          };
+        }
+      }
+
+      handleChange({ rule: updatedRule });
       setConfigurationType(value);
     }
   };
-  console.log(check);
+
   if (isAlreadyDeleted) {
     return <></>;
   }
