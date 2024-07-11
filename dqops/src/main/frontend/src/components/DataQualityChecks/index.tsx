@@ -75,6 +75,10 @@ const DataQualityChecks = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
+  const [ruleParametersConfigured, setRuleParametersConfigured] = useState<
+    boolean | undefined
+  >();
+
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { sidebarWidth } = useTree();
@@ -377,6 +381,23 @@ const DataQualityChecks = ({
     );
     return groupedArray ?? [];
   };
+  const getRuleParametersConfigured = () => {
+    const param = !!checksUI?.categories
+      ?.flatMap((category) => category.checks || [])
+      .flatMap((check) => check || [])
+      .flatMap((check) => check.rule || [])
+      .find((x) => {
+        let count = 0;
+        if (x.warning?.configured) count++;
+        if (x.error?.configured) count++;
+        if (x.fatal?.configured) count++;
+        return count > 1;
+      });
+    if (ruleParametersConfigured === undefined) {
+      setRuleParametersConfigured(param);
+    }
+    return param;
+  };
 
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
@@ -531,6 +552,7 @@ const DataQualityChecks = ({
           showAdvanced={showAdvanced}
           setShowAdvanced={setShowAdvanced}
           isFiltered={isFiltered}
+          ruleParamenterConfigured={!!ruleParametersConfigured}
         />
         <tbody>
           {(checksUI?.categories ?? []).map((category, index) => (
@@ -552,6 +574,12 @@ const DataQualityChecks = ({
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
+              ruleParamenterConfigured={
+                ruleParametersConfigured === undefined
+                  ? getRuleParametersConfigured()
+                  : ruleParametersConfigured
+              }
+              onChangeRuleParametersConfigured={setRuleParametersConfigured}
             />
           ))}
           {isFiltered !== true &&
@@ -574,6 +602,8 @@ const DataQualityChecks = ({
                 isDefaultEditing={isDefaultEditing}
                 showAdvanced={showAdvanced}
                 isAlreadyDeleted={true}
+                ruleParamenterConfigured={!!ruleParametersConfigured}
+                onChangeRuleParametersConfigured={setRuleParametersConfigured}
               />
             ))}
         </tbody>

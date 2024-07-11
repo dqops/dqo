@@ -17,7 +17,11 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../redux/selectors';
-import { ColumnApiClient, JobApiClient, TableApiClient } from '../../services/apiClient';
+import {
+  ColumnApiClient,
+  JobApiClient,
+  TableApiClient
+} from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import Button from '../Button';
@@ -38,7 +42,8 @@ interface TableHeaderProps {
   isDefaultEditing?: boolean;
   showAdvanced?: boolean;
   setShowAdvanced: (showAdvanced: boolean) => void;
-  isFiltered?: boolean
+  isFiltered?: boolean;
+  ruleParamenterConfigured: boolean;
 }
 
 const TableHeader = ({
@@ -52,7 +57,8 @@ const TableHeader = ({
   isDefaultEditing,
   showAdvanced,
   setShowAdvanced,
-  isFiltered
+  isFiltered,
+  ruleParamenterConfigured
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -69,7 +75,7 @@ const TableHeader = ({
     connection: string;
     schema: string;
     table: string;
-    column: string
+    column: string;
   } = useDecodedParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -121,9 +127,9 @@ const TableHeader = ({
         }))
         .filter((item) => item.checks?.length)
     };
-    let url; 
+    let url;
     let value;
-    
+
     if (column) {
       await ColumnApiClient.updateColumnMonitoringChecksModel(
         connection,
@@ -133,7 +139,7 @@ const TableHeader = ({
         timeScale,
         newUI
       );
-  
+
       url = ROUTES.COLUMN_MONITORING(
         CheckTypes.MONITORING,
         connection,
@@ -149,28 +155,27 @@ const TableHeader = ({
         table,
         column
       );
-    }
-    else {
+    } else {
       await TableApiClient.updateTableMonitoringChecksModel(
-      connection,
-      schema,
-      table,
-      timeScale,
-      newUI
+        connection,
+        schema,
+        table,
+        timeScale,
+        newUI
       );
 
-    url = ROUTES.TABLE_MONITORING(
-      CheckTypes.MONITORING,
-      connection,
-      schema,
-      table,
-      timeScale
+      url = ROUTES.TABLE_MONITORING(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table,
+        timeScale
       );
-    value = ROUTES.TABLE_MONITORING_VALUE(
-      CheckTypes.MONITORING,
-      connection,
-      schema,
-      table
+      value = ROUTES.TABLE_MONITORING_VALUE(
+        CheckTypes.MONITORING,
+        connection,
+        schema,
+        table
       );
     }
 
@@ -209,9 +214,9 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    let url; 
+    let url;
     let value;
-    
+
     if (column) {
       await ColumnApiClient.updateColumnPartitionedChecksModel(
         connection,
@@ -221,7 +226,7 @@ const TableHeader = ({
         timeScale,
         newUI
       );
-  
+
       url = ROUTES.COLUMN_PARTITIONED(
         CheckTypes.PARTITIONED,
         connection,
@@ -237,39 +242,36 @@ const TableHeader = ({
         table,
         column
       );
-    }
-    else {
+    } else {
       await TableApiClient.updateTablePartitionedChecksModel(
         connection,
         schema,
         table,
         timeScale,
         newUI
-        );
-        
-    url = ROUTES.TABLE_PARTITIONED(
-      CheckTypes.PARTITIONED,
-      connection,
-      schema,
-      table,
-      timeScale
       );
-    value = ROUTES.TABLE_PARTITIONED_VALUE(
-      CheckTypes.PARTITIONED,
-      connection,
-      schema,
-      table
+
+      url = ROUTES.TABLE_PARTITIONED(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table,
+        timeScale
+      );
+      value = ROUTES.TABLE_PARTITIONED_VALUE(
+        CheckTypes.PARTITIONED,
+        connection,
+        schema,
+        table
       );
     }
 
-      dispatch(
+    dispatch(
       addFirstLevelTab(CheckTypes.PARTITIONED, {
         url,
         value,
         state: {},
-        label: `${
-          timeScale === 'daily' ? 'Daily' : 'Monthly'
-        } partition checks`
+        label: `${timeScale === 'daily' ? 'Daily' : 'Monthly'} partition checks`
       })
     );
     history.push(url);
@@ -284,14 +286,14 @@ const TableHeader = ({
             className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           >
             <div className="flex gap-2 items-center font-normal text-gray-950">
-              {isFiltered !== true ? 
-              <Checkbox
-                label="Show advanced checks"
-                labelPosition="right"
-                checked={showAdvanced}
-                onChange={(value) => setShowAdvanced(value)}
-              /> 
-              : null}
+              {isFiltered !== true ? (
+                <Checkbox
+                  label="Show advanced checks"
+                  labelPosition="right"
+                  checked={showAdvanced}
+                  onChange={(value) => setShowAdvanced(value)}
+                />
+              ) : null}
               {!mode && (
                 <>
                   <Button
@@ -372,29 +374,40 @@ const TableHeader = ({
           <>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
               <div className="flex gap-2 items-center font-normal text-gray-950">
-                {isFiltered !== true ? 
-                <Checkbox
-                  label="Show advanced checks"
-                  labelPosition="right"
-                  checked={showAdvanced}
-                  onChange={(value) => setShowAdvanced(value)}
-                /> 
-                : null}
+                {isFiltered !== true ? (
+                  <Checkbox
+                    label="Show advanced checks"
+                    labelPosition="right"
+                    checked={showAdvanced}
+                    onChange={(value) => setShowAdvanced(value)}
+                  />
+                ) : null}
               </div>
             </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
           </>
         )}
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
-          Passing rule (KPI met)
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-        </td>
-        <td
-          className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
-          colSpan={2}
-        >
-          Failing rule (KPI not met)
-        </td>
+        {ruleParamenterConfigured ? (
+          <>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
+              Passing rule (KPI met)
+              <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+            </td>
+            <td
+              className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+              colSpan={2}
+            >
+              Failing rule (KPI not met)
+            </td>
+          </>
+        ) : (
+          <>
+            <td
+              className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+              colSpan={2}
+            ></td>
+          </>
+        )}
       </tr>
       <tr>
         <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
@@ -425,28 +438,34 @@ const TableHeader = ({
           </div>
         </td>
         <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
-          Warning threshold
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-
-        </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
-          Error threshold
-        </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-red-100">
-          Fatal threshold
-        </td>
+        {ruleParamenterConfigured ? (
+          <>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
+              Warning threshold
+              <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+            </td>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
+              Error threshold
+            </td>
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-red-100">
+              Fatal threshold
+            </td>
+          </>
+        ) : (
+          <>
+            <td
+              className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400"
+              colSpan={2}
+            ></td>
+          </>
+        )}
       </tr>
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData(
-            undefined,
-            false,
-            undefined,
-            {
+          JobApiClient.deleteStoredData(undefined, false, undefined, {
             ...checksUI.data_clean_job_template,
             ...params
           });
