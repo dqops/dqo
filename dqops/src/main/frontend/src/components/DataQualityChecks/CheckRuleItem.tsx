@@ -1,10 +1,10 @@
+import { IconButton } from '@material-tailwind/react';
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
+import { FieldModel, RuleParametersModel } from '../../api';
+import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import FieldControl from './FieldControl';
-import { FieldModel, RuleParametersModel } from '../../api';
-import clsx from 'clsx';
-import { IconButton } from '@material-tailwind/react';
-import Button from '../Button';
 
 interface CheckRuleItemProps {
   parameters?: RuleParametersModel;
@@ -79,6 +79,7 @@ const CheckRuleItem = ({
                 }),
                   changeEnabled && changeEnabled('');
               }}
+              disabled={disabled}
             >
               <SvgIcon name="close" />
             </IconButton>

@@ -61,9 +61,28 @@ export default function RuleConfiguration({
     if (value === 'multiple_levels') {
       setOpen(true);
     } else {
+      handleChange({
+        rule: {
+          ...check.rule,
+          [configurationType]: {
+            ...check.rule[configurationType],
+            configured: false
+          }
+        }
+      });
+      handleChange({
+        rule: {
+          ...check.rule,
+          [value]: {
+            ...check.rule[configurationType]
+          }
+        }
+      });
+
       setConfigurationType(value);
     }
   };
+  console.log(check);
   if (isAlreadyDeleted) {
     return <></>;
   }
@@ -215,6 +234,7 @@ export default function RuleConfiguration({
               label="Issue severity level"
               className="w-40 mr-2 mb-1 text-sm "
               menuClassName="!top-14"
+              disabled={isDisabled}
             />
           </div>
         </td>

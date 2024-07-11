@@ -414,7 +414,7 @@ const DataQualityChecks = ({
       }
     }
   };
-  console.log(getRuleParametersConfigured(), ruleParametersConfigured);
+
   return (
     <div
       className={clsx(className, 'p-1 overflow-y-auto')}
