@@ -55,7 +55,7 @@ const statusOptions = [
   {
     label: 'ACKNOWLEDGED',
     value: IncidentModelStatusEnum.acknowledged,
-    icon: <div className="w-5 h-5 rounded-full bg-black" />
+    icon: <div className="w-5 h-5 rounded-full bg-black ml-0.5" />
   },
   {
     label: 'RESOLVED',
@@ -227,7 +227,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end text-sm w-25"
+          className="justify-end text-sm w-15"
           label="Total issues"
           order="failedChecksCount"
           direction={
@@ -251,7 +251,7 @@ export const IncidentConnection = () => {
             }
           >
             <div>
-              <SvgIcon name="question_mark" className="w-5 h-5" />
+              <SvgIcon name="info" className="w-5 h-5" />
             </div>
           </Tooltip>
         </div>
@@ -589,5 +589,9 @@ function renderIncidentHighestSeveritySquare(severity: number) {
     return '';
   };
 
-  return <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>;
+  return (
+    <div className="flex items-center justify-center">
+      <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>
+    </div>
+  );
 }
