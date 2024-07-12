@@ -11,7 +11,7 @@ You can easily utilize Azure Data Factory to call DQOps API for:
 - running data quality checks,
 - collect statistics about tables,
 - import the table schema to DQOps,
-- import data quality tables, 
+- get table data quality status, 
  
 and dozens of others.
 
@@ -54,7 +54,7 @@ To create the run checks job in DQOps from Azure Data Factory create a new pipel
 
 Click on the Web activity and open the **Settings** tab.
 
-Fill the URL with the link that calls run checks endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. Calling the run checks endpoint without the wait parameter will run checks not allowing to see the results in Azure Data Factory. 
+Fill the **URL** with the link that calls run checks endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. Calling the run checks endpoint without the wait parameter will run checks not allowing to see the results in Azure Data Factory. 
 
 ```
 https://<your_DQOps_instance>/api/jobs/runchecks?wait=true
@@ -62,9 +62,9 @@ https://<your_DQOps_instance>/api/jobs/runchecks?wait=true
 
 Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
-Set method as **POST**.
+Set **Method** as **POST**.
 
-The body of the request contain the filtering configuration that points DQOps which checks should be run.
+The **Body** of the request contain the filtering configuration that points DQOps which checks should be run.
 
 The below example runs all profiling checks that are enabled (turned on) on the table "files.readouts" from the "azure-storage-parquet" connection.
 It also collects error samples on checks that fail.
@@ -83,7 +83,7 @@ It also collects error samples on checks that fail.
 
 The **Authentication combo box** leave as **None**. 
 
-The last thing to fill are **Headers**.
+In **Headers** add three variables.
 
 The names **accept** and **Content-Type** should contain value as **applicaiton/json**.
 
@@ -194,96 +194,170 @@ The details of the error provides you the error code as well.
 
 Instead of Fail activity you can also run another REST API that will inform about data quality issues as fast as is detected.
 
-### Collect statistics
+### Example jobs
 
-Collect statistics job in DQOps provides the summary information about your tables and columns.
-This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
-You can specify to run this job only to the specific table on a connection.
+DQOps REST API provides extensive range of endpoints. You can reach the details through the Swagger API.
 
-To create the collect statistics job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
-
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/add-web-activity.png){ loading=lazy; }
-
-Click on the Web activity and open the **Settings** tab.
-
-Fill the URL with the link that calls collect statistics endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. 
-Calling the collect statistics endpoint without the wait parameter will not allow to see the results of the statistics in Azure Data Factory.
-
-```
-https://<your_DQOps_instance>/api/jobs/collectstatistics/table?wait=true
+```url
+https://**<your_DQOps_instance>**/swagger-ui/#/
 ```
 
 Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
-Set method as **POST**.
+**Here are example jobs.**
 
-The body of the request contain the name of the table on which statistics will be collected.
+=== "Collect statistics"
 
-The below example collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
+    Collect statistics job in DQOps provides the summary information about your tables and columns.
+    This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
+    You can specify to run this job only to the specific table on a connection.
 
-```text
-{
-    "connection": "azure-storage-parquet",
-    "fullTableName": "files.readouts",
-    "enabled": true
-}
-```
+    ```url
+    https://<your_DQOps_instance>/api/jobs/collectstatistics/table?wait=true
+    ```
 
-The **Authentication combo box** leave as **None**.
+    The **Body** of the request contain the name of the table on which statistics will be collected.
+    
+    The below example collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
+    
+    ```json5
+    {
+        "connection": "azure-storage-parquet",
+        "fullTableName": "files.readouts",
+        "enabled": true
+    }
+    ```
 
-The last thing to fill are **Headers**.
+    Example of the returned response.
 
-The names **accept** and **Content-Type** should contain value as **applicaiton/json**.
+    ```json5
+    {
+        "jobId": {
+            "jobId": 1720701935000000,
+            "createdAt": "2024-07-11T12:45:35.687507400Z"
+        },
+        "result": {
+            "executed_statistics_collectors": 43,
+            "columns_analyzed": 3,
+            "columns_successfully_analyzed": 3,
+            "total_collectors_failed": 0,
+            "total_collected_results": 140
+        },
+        "status": "finished",
+        // ...
+    }
+    ```
 
-The name **Authorization** contain the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
+=== "Import table"
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/activity-settings.png){ loading=lazy; }
+    The import table job is used to import the table schema to the existing connection in DQOps.
 
-Save the pipeline by clicking on **Publish all** button.
+    ```url
+    https://<your_DQOps_instance>/api/jobs/importtables/table?wait=true
+    ```
 
-Now the pipeline can be executed. Navigate to **Add trigger** and select the **Trigger now**
+    The **Body** of the request of the below example imports table schema of "files.readouts" table from the "azure-storage-parquet" connection.
+    
+    ```json5
+    {
+        "connectionName": "azure-storage-parquet",
+        "schemaName": "files",
+        "tableNames": [
+            "readouts"
+        ]
+    }
+    ```
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/trigger-now.png){ loading=lazy; }
+    Example of the returned response.
 
-In a moment you should receive a notification about the execution completion of the pipeline.
-
-Click the **view pipeline run** link.
-
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/view-run-pipeline.png){ loading=lazy; }
-
-Select the output of the Web activity.
-
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
-
-The DQOps API returned data available in the JSON object.
-
-```json5 hl_lines="6-12"
-{
-    "jobId": {
+    ```json5
+    {
+      "jobId": {
         "jobId": 1720701935000000,
         "createdAt": "2024-07-11T12:45:35.687507400Z"
-    },
-    "result": {
-        "executed_statistics_collectors": 43,
-        "columns_analyzed": 3,
-        "columns_successfully_analyzed": 3,
-        "total_collectors_failed": 0,
-        "total_collected_results": 140
-    },
-    "status": "finished",
-    // ...
-}
-```
+      }, 
+      "result": {
+        "source_table_specs": [{
+          "incremental_time_window": {
+            "daily_partitioning_recent_days": 7, 
+            "monthly_partitioning_recent_months": 1
+          }, 
+          "columns": {
+            "actual_value": {
+              "type_snapshot": {
+                "column_type": "DOUBLE", 
+                "nullable": "True"
+              }, 
+              "comments": []
+            }, 
+            "check_category": {
+              "type_snapshot": {
+                "column_type": "VARCHAR", 
+                "nullable": "True"
+              }, 
+              "comments": []
+            }, 
+            // ...
+          }, "comments": []
+        }]
+      }, 
+      "status": "finished"
+    }
+    ```
 
-The statistics have been collected.
 
+=== "Get table data quality status"
 
-### Import the table schema to DQOps
+    The table data quality status receive the overall data quality status of a table based on checks run in the DQOps platform.
+    If there are any issues with the table, the operator will inform about the scale of the issue and point towards a specific area of the data quality that needs improvement.
+    
+    It can be used to collect information about the data quality before or after the execution of a significant operation, which might save operational costs and time.
 
+    The URL contain the name of the connection, schema and table.
 
+    Request method: GET
 
+    ```url
+    http://<your_DQOps_instance>/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status
+    ```
 
-### Import data quality tables
+    The below url calls api to receive status for the table files.readouts from the azure-storage-parquet connection.
 
+    ```url
+    http://<your_DQOps_instance>/api/connections/azure-storage-parquet/schemas/files/tables/readouts/status
+    ```
 
+    Example of the returned response.
 
+    ```json5
+    {
+        "connection_name": "azure-storage-parquet",
+        "schema_name": "files",
+        "table_name": "readouts",
+        "current_severity": "valid",
+        "highest_historical_severity": "valid",
+        "last_check_executed_at": "2024-07-10T12:33:11.818Z",
+        "executed_checks": 406,
+        "valid_results": 399,
+        "warnings": 5,
+        "errors": 2,
+        "fatals": 0,
+        "execution_errors": 0,
+        "data_quality_kpi": 100,
+        "checks": {
+            // ...
+        },
+        "columns": {
+            // ...
+        },
+        "dimensions": {
+            // ...
+        }
+    }
+    ```
+
+## Next steps
+
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
