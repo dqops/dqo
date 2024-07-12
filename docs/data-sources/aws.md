@@ -4,19 +4,131 @@ title: How to activate data observability for AWS S3
 
 # How to activate data observability for AWS S3
 
-This guide shows how to activate data observability for AWS by connecting DQOps. 
-The example will use the S3 for storing data. 
+This guide shows how to enable data observability for data stored in a AWS S3 buckets using DQOps. To seamlessly connect to AWS S3 
+buckets, DQOps uses the DuckDB connector.
 
 ## Prerequisites
 
-- Data in CSV, JSON or Parquet format (compressed files allowed), located in a Bucket.
-- [DQOps installation](../getting-started/installation.md)
+- Data in CSV, JSON, or Parquet format (compressed files allowed), stored in an AWS S3 bucket.
+- [Installed DQOps](../getting-started/installation.md).
+- Access permission and credentials to AWS S3.
 
-## Add connection to AWS S3 using the user interface
+### **Generate Credentials**
+
+To connect DQOps to AWS S3, you need to obtain credentials.
+
+DQOps supports two primary authentication methods for connecting to AWS S3:
+
+- IAM
+- Default Credential
+
+Below, you can find how to get credentials for each authentication methods.
+
+### **IAM**
+
+This is the recommended authentication method.  Follow these steps to set up IAM authentication:
+
+1. **Create a Service Account**
+
+    Open the **IAM** console, navigate to **Users**, and click the **Create user** button.
+
+    ![Create service account](https://dqops.com/docs/images/data-sources/aws/aws-create-service-account.png){ loading=lazy; }
+
+    Set the name of the service account.
+
+    ![Create service account step 1](https://dqops.com/docs/images/data-sources/aws/aws-create-step-1.png){ loading=lazy; }
+
+    In permission options, select **Attach policies directly**.
+    In search field, type **AmazonS3ReadOnlyAccess** and select the policy.
+
+    This policy provides read-only access to all available buckets in the project.
+    If you would like to limit access, you need to create a custom policy and select it here.
+    You can achieve this by modifying the value in the Resource field of a permission to specify an S3 path prefix that permission will work with.
+    For example, "Resource": "arn:aws:s3:::&lt;bucket_name_here&gt;/*" 
+    This allows access to all objects inside the bucket named &lt;bucket_name_here&gt;.
+
+    ![Create service account step 2](https://dqops.com/docs/images/data-sources/aws/aws-create-step-2.png){ loading=lazy; }
+
+    To finish creating the service account, click on the **Create user** button.
+
+    ![Create service account step 3](https://dqops.com/docs/images/data-sources/aws/aws-create-step-3.png){ loading=lazy; }
+
+2. **Generate Access Key**
+
+    To Generate Access Key that will be used by DQOps to access files in your bucket, click on the name of the service account.
+
+    ![Created service account](https://dqops.com/docs/images/data-sources/aws/aws-service-account-created.png){ loading=lazy; }
+
+    Navigate to the **Security credentials** tab, scroll down to the **Access keys** section, and click on the **Create access key** button.
+
+    ![Create access key](https://dqops.com/docs/images/data-sources/aws/create-access-key.png){ loading=lazy; }
+
+    Select the **Application running outside AWS**, then **Next**
+
+    ![Create access key step 1](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-1.png){ loading=lazy; }
+
+    Add the description of your access key.
+
+    Click on the **Create access key**.
+
+    ![Create access key step 2](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-2.png){ loading=lazy; }
+
+    Click on the **Show** link to present the secret.
+
+    ![Create access key step 3](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-3.png){ loading=lazy; }
+
+    You have generated an Access key and Secret for AWS S3, which can be used during the creation of the connection in DQOps.
+
+### **Default Credential**
+
+In DQOps, you have the option to set up credentials to access AWS S3 directly through the platform.
+
+Keep in mind that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the `.credentials folder`.
+This folder also contains the default credentials files for AWS S3, namely **AWS_default_config** and **AWS_default_credentials**.
+
+``` { .asc .annotate hl_lines="4-5" }
+$DQO_USER_HOME
+├───...
+└───.credentials                                                            
+    ├───AWS_default_config
+    ├───AWS_default_credentials
+    └─...   
+```
+
+If you want to use AWS authentication, replace the content of the files with your aws_access_key_id, aws_secret_access_key, and region.
+To learn more about [how to manage access keys for IAM users, you can refer to the AWS documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
+
+!!! warning 'AWS system default credentials'
+
+    If you do not replace the content of the files, the system will load default credentials for AWS only.
+
+
+To set the credential file for AWS in DQOps, follow these steps:
+
+1. Navigate to the **Configuration** section.
+2. Select **Shared credentials** from the tree view on the left.
+3. Click the **edit** link on the “AWS_default_credentials” file.
+
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
+
+4. In the text area, replace the placeholder text with your aws_access_key_id and aws_secret_access_key.
+
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
+
+5. Click the **Save** button to save changes.
+
+
+!!! tip "Use the AWS system default credentials after filling in the shared credential"
+
+    If you still want to use default credentials from AWS, 
+    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
+
+
+## Add a connection to AWS S3 using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the AWS S3 connection settings:
+DQOps uses the DuckDB connector to work with AWS S3 buckets. To navigate to the DuckDB connector:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
@@ -29,144 +141,24 @@ To navigate to the AWS S3 connection settings:
 
 ### **Fill in the connection settings**
 
-After navigating to the AWS S3 connection settings, you will need to fill in its details.
+After navigating to the DuckDB connection settings, you will need to fill in its details.
 
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png){ loading=lazy; width="1200px" }
 
-Fill the **Connection name** any name you want.
+1. Enter a unique **Connection name**.
+2. Change the **Files location** to **AWS S3** to work with files located in AWS S3 bucket.
+3. Select the AWS authentication mode (IAM or Default credentials).
+4. If you choose Default credentials, DQOps will use the AWS credentials stored within the platform. If you select IAM, provide the **Access Key ID**, **Secret Access Key**, and **Region**.
+5. Select the appropriate **File Format** matching your data (CSV, JSON or Parquet).
 
-Change the **Files location** to **AWS S3**, to work with files located in AWS S3.
+### **Set the Path for Import configuration**
 
-Select the **File Format** suitable to your files located in AWS S3. You can choose from CSV, JSON or Parquet file format.
+Define the location of your data in AWS S3. Here are some options, illustrated with an example directory structure:
 
-To complete the configuration you need to set the:
+- **Specific file**: Enter the full path to a folder (e.g., **/my-bucket/clients_data/reports**). A selection of the file is available after saving the new connection. You cannot use a full file path.
+- **Folder with similar files**: Provide the path to a directory containing folder with files with the same structure (e.g., **/my-bucket/clients_data**). A selection of the folder is available after saving the new connection configuration.
+- **Hive-partitioned data**: Use the path to the data directory containing the directory with partitioned data and select the **Hive partitioning** checkbox under **Additional format options** (e.g., **/my-bucket/clients_data** with partitioning by date and market in the example). A selection of the **sales** directory is available after saving the new connection configuration.
 
-- **AWS authentication mode**
-- **Path**
-
-
-## Choose the AWS authentication mode
-
-DQOps requires permissions to establish the connection to the AWS S3 storage.
-
-You can choose from a variety of authentication methods that will allow to connect to your data:
-
-- IAM
-- Default Credential
-
-Below you can find how to get credentials for each of the authentication methods.
-
-### **IAM**
-
-This is the recommended authentication method.
-
-The service account is an impersonalized identity used specifically for a service with a proper permission.
-
-This method requires creating a service account and generating a secret.
-
-Start with creating a service account in AWS.
-Open **IAM**, navigate to **Users** and click the **Create user** button.
-
-![Create service account](https://dqops.com/docs/images/data-sources/aws/aws-create-service-account.png){ loading=lazy; }
-
-Set the name of the service account.
-
-![Create service account step 1](https://dqops.com/docs/images/data-sources/aws/aws-create-step-1.png){ loading=lazy; }
-
-In permission options select **Attach policies directly**.
-In search field type **AmazonS3ReadOnlyAccess** and select the policy.
-
-This policy provides read only access to all available buckets in the project.
-If you like to limit access you need to create a custom policy and select it here.
-
-This is achievable by modifying the value the Resource field of a permission to specify an S3 path prefix that permission will work with.
-
-E.g: "Resource": "arn:aws:s3:::&lt;bucket_name_here&gt;/*"
-
-Abowe allows access all object inside the bucket named &lt;bucket_name_here&gt;.
-
-![Create service account step 2](https://dqops.com/docs/images/data-sources/aws/aws-create-step-2.png){ loading=lazy; }
-
-Then click the **Create user** button.
-
-![Create service account step 3](https://dqops.com/docs/images/data-sources/aws/aws-create-step-3.png){ loading=lazy; }
-
-The service account has been created.
-Now you can generate access key what will be used by DQOps to access files in your bucket. Click on the name of the service account.
-
-![Created service account](https://dqops.com/docs/images/data-sources/aws/aws-service-account-created.png){ loading=lazy; }
-
-Navigate to **Security credentials** tab, scroll down to **Access keys** section and click on the **Create access key** button.
-
-![Create access key](https://dqops.com/docs/images/data-sources/aws/create-access-key.png){ loading=lazy; }
-
-Select **Application running outside AWS**, then **Next**
-
-![Create access key step 1](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-1.png){ loading=lazy; }
-
-Put the description of your access key.
-
-Click on **Create access key**.
-
-![Create access key step 2](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-2.png){ loading=lazy; }
-
-Click on **Show** link to present the secret.
-
-You have generated Access key for AWS S3. Copy Access key and Secret access key.
-
-![Create access key step 3](https://dqops.com/docs/images/data-sources/aws/create-access-key-step-3.png){ loading=lazy; }
-
-### **Default Credential**
-
-With DQOps, you can configure credentials to access AWS S3 directly in the platform.
-
-Please note, that any credentials and secrets shared with the DQOps Cloud or DQOps SaaS instances are stored in the .credentials folder.
-This folder also contains the default credentials files for AWS S3 (**AWS_default_config** and **AWS_default_credentials**).
-
-``` { .asc .annotate hl_lines="4-5" }
-$DQO_USER_HOME
-├───...
-└───.credentials                                                            
-    ├───AWS_default_config
-    ├───AWS_default_credentials
-    └─...   
-```
-
-If you wish to use AWS authentication, the content of the files must be replaced with your aws_access_key_id, aws_secret_access_key and region.
-You can find more details on how to [manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in AWS documentation.
-
-!!! warning 'AWS system default credentials'
-
-    If you do not replace the content of the files, the default credentials will be loaded from system for AWS only.
-
-
-To set the credential file for AWS in DQOps, follow steps:
-
-1. Open the Configuration in menu.
-2. Select Shared credentials from the tree view on the left.
-3. Click the edit link on the “AWS_default_credentials” file.
-
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/aws-shared-credentials-ui.png)
-
-4. In the text area, edit the aws_access_key_id and aws_secret_access_key, replacing the placeholder text.
-
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/credentials/edit-aws-shared-credential.png)
-
-5. Click the **Save** button, to save changes, go back to the main **Shared credentials** view.
-
-6. Edit the region in AWS_default_config file and save the file.
-
-
-!!! tip "Use the AWS system default credentials after filling in the shared credential"
-
-    If you still want to use default credentials from AWS, 
-    you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
-
-
-## Set the Path
-
-Let assume you have directories with unstructured files, dataset divided into multiple files with the same structure - e.g. same header or partitioned data.
-All mentioned cases are supported but differs in the configuration. 
 
 ``` { .asc .annotate }
 my-bucket
@@ -194,29 +186,22 @@ my-bucket
         └───...     
 ```
 
-1.  Connect to a specific file - e.g. annual_report_2022.csv by setting prefix to **/my_container/clients_data/reports**. A selection of the file is available after saving the new connection configuration.
-2.  Connect to all files in path - e.g. whole market_specification folder by setting prefix to **/my_container/clients_data**. A selection of the folder is available after saving the new connection configuration.
-3.  Connect to partitioned data - e.g. sales folder with partitioning by date and market - set prefix to **/my_container/clients_data** and select **Hive partitioning** checkbox from Additional format options. A selection of the **sales** folder is available after saving the new connection configuration.
+1.  Connect to a specific file - e.g. annual_report_2022.csv by setting prefix to **/my-bucket/clients_data/reports**. A selection of the file is available after saving the new connection configuration.
+2.  Connect to all files in path - e.g. whole market_specification directory by setting prefix to **/my-bucket/clients_data/**. A selection of the directory is available after saving the new connection configuration.
+3.  Connect to partitioned data - e.g. sales directory with partitioning by date and market - set prefix to **/my-bucket/clients_data** and select **Hive partitioning** checkbox from **Additional format** options. A selection of the **sales** directory is available after saving the new connection configuration.
 
-You can connect to a specific file, e.g. annual_report_2022.csv (set prefix to **/usr/share/clients_data/reports**),
-all files with the same structure in path, e.g. whole market_specification folder (set prefix to **/usr/share/clients_data**) 
-or hive style partitioned data, e.g. sales folder with partitioning by date and market - (set prefix to **/usr/share/clients_data** and select **Hive partitioning** checkbox from Additional format options).
-
-The path is a directory containing files. You cannot use a full file path. 
-The prefix cannot contain the name of a file.
-
-A selection of files or directories is available **after Saving the new connection**.
+Click **Save** to establish the connection. DQOps will display a list of accessible schemas and files based on your path configuration.
 
 ## Import metadata using the user interface
 
-When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
+After creating the connection, it will appear in the tree view on the left, and DQOps will automatically redirect you to the **Import Metadata** screen
 Now we can import files.
 
-1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
+1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the schema name.
 
     ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
-2. Select the tables (folders with files of previously selected file format or just the files) you want to import or import all tables using the buttons in the upper right corner.
+2. Select the specific tables (folders with files or just the files) you want to import or import all tables using the buttons in the top right corner.
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-csv.png){ loading=lazy; width="1200px" }
 
@@ -228,9 +213,9 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png){ loading=lazy; width="1200px" }
 
 
-## Detailed parameters description of new connection
+## Details of new connection - all parameters description
 
-The form of the adding a new connection page provides additional fields not mentioned before.
+The connection setup form includes the following fields:
 
 | File connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                             | 
 |---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -246,21 +231,17 @@ The form of the adding a new connection page provides additional fields not ment
 | JDBC connection property  |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                                                                                |
 
 
-The next configuration depends on the file format. You can choose from the three of them:
-
-- CSV
-- JSON
-- Parquet
+The next configuration depends on the file format. You can choose from three options: **CSV**, **JSON**, or **Parquet**.
 
 
 ### Additional CSV format options
 
-CSV file format properties are detected automatically based on a sample of the file data.
-The default sample size is 20480 rows.
+The properties of the **CSV** file format are automatically identified using a sample of the file data. The default sample size is 20480 rows.
 
-In **case of invalid import** of the data, expand the **Additional CSV format options** panel with file format options by clicking on it in UI.
+If the data import is unsuccessful, you can access additional CSV format options by clicking on the **Additional CSV format options** panel in the user interface.
 
-The following properties can be configured for a very specific CSV format.
+You can configure specific properties for a very specific CSV format. Here are the CSV format options, along with their 
+corresponding property names in the YAML configuration file and their descriptions:
 
 | Additional CSV format options | Property name in YAML configuration file | Description                                                                                                                                                                                   |
 |-------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -285,12 +266,12 @@ The following properties can be configured for a very specific CSV format.
 
 ### Additional JSON format options
 
-JSON file format properties are detected automatically based on a sample of the file data.
-The default sample size is 20480 rows.
+The properties of the **JSON** file format are automatically identified using a sample of the file data. The default sample size is 20480 rows.
 
-In **case of invalid import** of the data, expand the **Additional JSON format options** panel with file format options by clicking on it in UI.
+If the data import is unsuccessful, you can access additional CSV format options by clicking on the **Additional JSON format options** panel in the user interface.
 
-The following properties can be configured for a very specific JSON format.
+You can configure specific properties for a very specific JSON format. Here are the JSON format options, along with their
+corresponding property names in the YAML configuration file and their descriptions:
 
 | Additional JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
 |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -311,9 +292,9 @@ The following properties can be configured for a very specific JSON format.
 
 ### Additional Parquet format options
 
-Click on the **Additional Parquet format options** panel to configure the file format options.
+You can access additional **Parquet** format options by clicking on the **Additional Parquet format options** panel in the user interface.
 
-The Parquet's format properties can be configured with the following settings.
+Here are the Parquet format options, along with their corresponding property names in the YAML configuration file and their descriptions:
 
 | Additional Parquet format options | Property name in YAML configuration file   | Description                                                                                                                                                                                        |
 |-----------------------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -326,13 +307,13 @@ The Parquet's format properties can be configured with the following settings.
 
 ### Working with partitioned files
 
-To work with partitioned files, you need to set the `hive-partition` parameter in CSV format settings.
-The option can be found under the **Additional <used_format> format options** panel.
+To work with partitioned files, you need to set the `hive-partition` parameter in the format settings.
+You can find this option under the **Additional <used_format> format** options panel.
 
-Hive partitioning divides a table into multiple files based on the catalog structure.
-Each catalog level is associated with a column and the catalogs are named in the format of column_name=value.
+Hive partitioning involves dividing a table into multiple files based on the catalog structure. 
+Each catalog level is associated with a column, and the catalogs are named in the format of column_name=value.
 
-The partitions of the data set and types of columns are discovered automatically.
+The partitions of the data set and types of columns are automatically discovered.
 
 
 ### Environment variables in parameters
@@ -351,29 +332,31 @@ For example:
 
 ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
-To remove the property click on the trash icon at the end of the input field.
+To remove the property, click the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
 Click the **Save** connection button when the test is successful otherwise, you can check the details of what went wrong.
 
 
-## Register single file as table
+## Register a single file as a table
 
 After creating a connection, you can register a single table.
 
-To view the schema, expand the connection in the tree view on the left.
+To view the schema, follow these steps:
 
-Then, click on the three dots icon next to the schema name(1.) and select the **Add table** (2.) option.
-This will open the **Add table** popup modal.
+1. Expand the connection in the tree view on the left.
+2. Click on the three dots icon next to the schema name.
+3. Select the **Add table** option. This will open the **Add table** popup modal. 
 
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png){ loading=lazy }
+    ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png){ loading=lazy }
 
-Enter the table name and the path absolute to the file. Save the new table configuration.
+4. Enter the table name and the absolute path to the file.
+5. Save the new table configuration.
 
 !!! tip "Use of the relative path"
 
-    If the schema specifies the folder path, use only the file name with extension instead of an absolute path.
+    If the schema specifies the folder path, use only the file name with an extension instead of an absolute path.
 
 !!! tip "Path in table name"
 
@@ -381,23 +364,25 @@ Enter the table name and the path absolute to the file. Save the new table confi
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png){ loading=lazy }
 
-After saving the new table configuration, the new table will be present under the schema.
-You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
+After saving the new table configuration, the table will appear under the specified schema. 
+To expand the list of columns, click on the **Columns** under the table in the three-view on the left.
 
-You can verify the import tables job in the notification panel on the right corner.
+You can check the status of the table import job in the notification panel located in the top right corner.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png){ loading=lazy }
 
-If the job completes successfully, the created table will be imported and ready to use.
+If the job is successful, the table will be created, imported, and ready to use.
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
 
 ## Add connection using DQOps Shell
 
-The following examples use parquet file format. To connect to csv or json, put the expected file format instead of "parquet" in the example commands. 
+The following examples demonstrate how to import Parquet file format to Google Cloud Storage buckets. DQOps uses the DuckDB
+connector to work with Google Cloud Storage buckets. 
+To import CSV or JSON files, replace `parquet` with the appropriate file format in the example commands.
 
-To add a connection run the following command in DQOps Shell.
+To add a connection, execute the following command in DQOps Shell.
 
 ```
 dqo> connection add
@@ -454,7 +439,7 @@ After adding connection run `table import -c=connection1` to select schemas and 
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
-You can also add the schema and table name as a parameter to import tables in just a single step.
+You can also add the schema and table name as parameters to import tables in just a single step.
 
 ```
 dqo> table import --connection={connection name}
@@ -465,7 +450,7 @@ dqo> table import --connection={connection name}
 
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
-character can be used at the beginning, in the middle or at the end of the name.
+character can be used at the beginning, middle, or end of the name.
 
 
 ## Connections configuration files
@@ -497,6 +482,6 @@ YAML file format.
 ## Next steps
 
 - Learn about more advanced importing when [working with files](../working-with-dqo/working-with-files.md)
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [complete list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.
