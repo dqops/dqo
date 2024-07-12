@@ -46,7 +46,7 @@ You can copy the generated API Key and use it in Azure Data Factory.
 ### Run checks
 
 Run checks job in DQOps executes checks depending on your selection. 
-You can specify to only those checks that are attached to the specific table on a connection, with a specific names for label, quality dimention, type of checks and much more.
+You can specify only those checks that are attached to the specific table on a connection, with specific names for label, quality dimension, type of checks and much more.
 
 To create the run checks job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
 
@@ -64,7 +64,7 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
 Set **Method** as **POST**.
 
-The **Body** of the request contain the filtering configuration that points DQOps which checks should be run.
+The **Body** of the request contains the filtering configuration that points to DQOps which checks should be run.
 
 The below example runs all profiling checks that are enabled (turned on) on the table "files.readouts" from the "azure-storage-parquet" connection.
 It also collects error samples on checks that fail.
@@ -107,7 +107,7 @@ Select the output of the Web activity.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
 
-The DQOps API returned data available in the JSON object.
+The DQOps API returned the JSON object.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/result.png){ loading=lazy; }
 
@@ -142,7 +142,7 @@ You can integrate run checks that can disallow to copy new data to the corrupted
 To achieve this you need to base on the returned JSON from DQOps.
 
 The example first calls the DQOps to fetch the status of your data. Then the status is verified. 
-If it succeeded the data is copied. Otherwise, the pipeline is marked as failed returning the code of the issue.
+If it succeeded the data was copied. Otherwise, the pipeline is marked as failed, returning the code of the issue.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/run-checks-pipeline.png){ loading=lazy; }
 
@@ -155,10 +155,10 @@ and fill the **Expression** field with:
 
 The expression verifies that the highest severity from the returned JSON is "valid".
 
-The valid status means that no issues have been detected. If any will, the status become the severity of the issue.
+The valid status means that no issues have been detected. If any will, the status becomes the severity of the issue.
 You can see there one of the following: warning, error, fatal.
 
-For marking the issue, add the **Fail** activity in False section of the If condition activity.
+For marking the issue, add the **Fail** activity in the False section of the If condition activity.
 
 For making Fail activity more informative, the returned data from DQOps API can be used.
 
@@ -176,8 +176,8 @@ Fill **Fail message** (simply as e.g. "Data quality issue detected") and **Error
 )
 ```
 
-The Error code transcode the severities to the integer numbers marking severities as follows: warning - 1, error - 2, fatal - 3.
-The code 4 stands for another issues such as sensors execution errors or user misconfigurations in DQOps.
+The Error code transcodes the severities to the integer numbers marking severities as follows: warning - 1, error - 2, fatal - 3.
+The code 4 stands for other issues such as sensor execution errors or user misconfigurations in DQOps.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/if-statement-configuration.png){ loading=lazy; }
 
@@ -187,7 +187,7 @@ Otherwise, you will see the failure on the Monitor page with the error message.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/pipeline-status.png){ loading=lazy; }
 
-The details of the error provides you the error code as well.
+The details of the error provides you with the error code as well.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details.png){ loading=lazy; }
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details-json.png){ loading=lazy; }
@@ -196,7 +196,7 @@ Instead of Fail activity you can also run another REST API that will inform abou
 
 ### Example jobs
 
-DQOps REST API provides extensive range of endpoints. You can reach the details through the Swagger API.
+DQOps REST API provides an extensive range of endpoints. You can reach the details through the Swagger API.
 
 ```url
 https://**<your_DQOps_instance>**/swagger-ui/#/
@@ -204,11 +204,10 @@ https://**<your_DQOps_instance>**/swagger-ui/#/
 
 Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
-**Here are example jobs.**
 
 === "Collect statistics"
 
-    Collect statistics job in DQOps provides the summary information about your tables and columns.
+    Collect statistics job in DQOps provides summary information about your tables and columns.
     This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
     You can specify to run this job only to the specific table on a connection.
 
@@ -216,7 +215,7 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
     https://<your_DQOps_instance>/api/jobs/collectstatistics/table?wait=true
     ```
 
-    The **Body** of the request contain the name of the table on which statistics will be collected.
+    The **Body** of the request contains the name of the table on which statistics will be collected.
     
     The below example collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
     
@@ -308,12 +307,12 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
 === "Get table data quality status"
 
-    The table data quality status receive the overall data quality status of a table based on checks run in the DQOps platform.
+    The table data quality status receives the overall data quality status of a table based on checks run in the DQOps platform.
     If there are any issues with the table, the operator will inform about the scale of the issue and point towards a specific area of the data quality that needs improvement.
     
     It can be used to collect information about the data quality before or after the execution of a significant operation, which might save operational costs and time.
 
-    The URL contain the name of the connection, schema and table.
+    The URL contains the name of the connection, schema and table.
 
     Request method: GET
 
