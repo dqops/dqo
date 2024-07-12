@@ -156,6 +156,7 @@ nav:
           - Table status operator: "integrations/airflow/table-status-operator.md"
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
           - Run checks use case: "integrations/airflow/run-checks-use-case.md"
+      - Azure Data Factory: "integrations/azure-data-factory/index.md"
       - Dbt:
           - "integrations/dbt/index.md"
           - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"

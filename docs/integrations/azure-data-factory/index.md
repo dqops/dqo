@@ -50,13 +50,15 @@ You can specify to only those checks that are attached to the specific table on 
 
 To create the run checks job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
 
-// screen: add-web-activity.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/add-web-activity.png){ loading=lazy; }
 
 Click on the Web activity and open the **Settings** tab.
 
 Fill the URL with the link that calls run checks endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. Calling the run checks endpoint without the wait parameter will run checks not allowing to see the results in Azure Data Factory. 
 
-https://&lt;your_DQOps_instance&gt;/api/jobs/runchecks?wait=true
+```
+https://<your_DQOps_instance>/api/jobs/runchecks?wait=true
+```
 
 Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
@@ -87,27 +89,27 @@ The names **accept** and **Content-Type** should contain value as **applicaiton/
 
 The name **Authorization** contain the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
 
-// screen: activity-settings.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/activity-settings.png){ loading=lazy; }
 
 Save the pipeline by clicking on **Publish all** button.
 
 Now the pipeline can be executed. Navigate to **Add trigger** and select the **Trigger now**
 
-// screen: trigger-now.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/trigger-now.png){ loading=lazy; }
 
 In a moment you should receive a notification about the execution completion of the pipeline. 
 
 Click the **view pipeline run** link.
 
-// screen: view-run-pipeline.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/view-run-pipeline.png){ loading=lazy; }
 
 Select the output of the Web activity.
 
-// screen: check-run-details.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
 
-The DQOps API returned data available in the result object of the whole JSON.
+The DQOps API returned data available in the JSON object.
 
-// screen: result.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/result.png){ loading=lazy; }
 
 ```json5 hl_lines="6-14"
 {
@@ -126,16 +128,6 @@ The DQOps API returned data available in the result object of the whole JSON.
 	},
 	"status": "finished",
     // ...
-	"billingReference": {
-		"activityType": "ExternalActivity",
-		"billableDuration": [
-			{
-				"meterType": "AzureIR",
-				"duration": 0.016666666666666666,
-				"unit": "Hours"
-			}
-		]
-	}
 }
 ```
 
@@ -152,7 +144,7 @@ To achieve this you need to base on the returned JSON from DQOps.
 The example first calls the DQOps to fetch the status of your data. Then the status is verified. 
 If it succeeded the data is copied. Otherwise, the pipeline is marked as failed returning the code of the issue.
 
-// screen: run-checks-pipeline.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/run-checks-pipeline.png){ loading=lazy; }
 
 To create this pipeline add the **If condition** activity to the previously configured Web activity (now named as "DQOps run checks") 
 and fill the **Expression** field with:
@@ -185,22 +177,20 @@ Fill **Fail message** (simply as e.g. "Data quality issue detected") and **Error
 ```
 
 The Error code transcode the severities to the integer numbers marking severities as follows: warning - 1, error - 2, fatal - 3.
-The code 4 will be set of another issues such as sensors execution errors or user misconfigurations in DQOps.
+The code 4 stands for another issues such as sensors execution errors or user misconfigurations in DQOps.
 
-// screen: if-statement-configuration.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/if-statement-configuration.png){ loading=lazy; }
 
 If no issues are present, the copy data activity is executed. 
 
-Otherwise you will see the failure on the Monitor page with the error message.
+Otherwise, you will see the failure on the Monitor page with the error message.
 
-// screen: pipeline-status.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/pipeline-status.png){ loading=lazy; }
 
 The details of the error provides you the error code as well.
 
-// screen: error-details.png
-
-// screen: error-details-json.png
-
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details.png){ loading=lazy; }
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details-json.png){ loading=lazy; }
 
 Instead of Fail activity you can also run another REST API that will inform about data quality issues as fast as is detected.
 
@@ -212,14 +202,16 @@ You can specify to run this job only to the specific table on a connection.
 
 To create the collect statistics job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
 
-// screen: add-web-activity.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/add-web-activity.png){ loading=lazy; }
 
 Click on the Web activity and open the **Settings** tab.
 
 Fill the URL with the link that calls collect statistics endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. 
 Calling the collect statistics endpoint without the wait parameter will not allow to see the results of the statistics in Azure Data Factory.
 
-https://&lt;your_DQOps_instance&gt;/api/jobs/collectstatistics/table?wait=true
+```
+https://<your_DQOps_instance>/api/jobs/collectstatistics/table?wait=true
+```
 
 Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
@@ -245,25 +237,25 @@ The names **accept** and **Content-Type** should contain value as **applicaiton/
 
 The name **Authorization** contain the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
 
-// screen: activity-settings.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/activity-settings.png){ loading=lazy; }
 
 Save the pipeline by clicking on **Publish all** button.
 
 Now the pipeline can be executed. Navigate to **Add trigger** and select the **Trigger now**
 
-// screen: trigger-now.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/trigger-now.png){ loading=lazy; }
 
 In a moment you should receive a notification about the execution completion of the pipeline.
 
 Click the **view pipeline run** link.
 
-// screen: view-run-pipeline.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/view-run-pipeline.png){ loading=lazy; }
 
 Select the output of the Web activity.
 
-// screen: check-run-details.png
+![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
 
-The DQOps API returned data available in the result object of the whole JSON.
+The DQOps API returned data available in the JSON object.
 
 ```json5 hl_lines="6-12"
 {
