@@ -4,13 +4,23 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
 - **[Airflow](./airflow/index.md)**
 
     DQOps provides operators for Apache Airflow for running data quality checks and the detecting
-    the data quality status of a any table, before the table is used as a data source.
+    the data quality status of any table, before the table is used as a data source.
 
     The DQOps Airflow operators can be used in a DAG before or after a data loading job. The DQOps operator
     can perform a circuit breaking to stop the pipeline, and prevent loading invalid data
     downstream when fatal severity issues are detected. 
 
     The [DQOps Python package](https://pypi.org/project/dqops/) is available on PyPI.
+
+
+- **[Azure Data Factory](./azure-data-factory/index.md)**
+
+    DQOps provides examples for Azure Data Factory for running data quality checks and the detecting
+    the data quality status of any table, before the table is used as a data source.
+
+    The DQOps REST API is executed with use of Web activity a pipeline before or after a data loading job. 
+    Calling the DQOps REST APIcan perform a circuit breaking to stop the pipeline, and prevent loading invalid data
+    downstream when fatal severity issues are detected.
 
 
 - **[Dbt](./dbt/index.md)**
