@@ -54,21 +54,6 @@ const DatabricksConnection = ({
       />
       <FieldTypeInput
         data={sharedCredentials}
-        label="User name"
-        className="mb-4"
-        value={databricks?.user}
-        onChange={(value) => handleChange({ user: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Password"
-        className="mb-4"
-        maskingType="password"
-        value={databricks?.password}
-        onChange={(value) => handleChange({ password: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
         label="HttpPath"
         className="mb-4"
         value={databricks?.http_path}
