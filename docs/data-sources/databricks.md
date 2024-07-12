@@ -42,9 +42,7 @@ After navigating to the Databricks connection settings, you will need to fill in
 | Parallel jobs limit            |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
 | Host                           | `host`                                   | Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.                                                                                                                                |
 | Port                           | `port`                                   | Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.                                                                                                     |
-| Catalog                        | `catalog`                                | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                           
-| User name                      | `user`                                   | Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.                                                                                                                                |
-| Password                       | `password`                               | Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.                                                                                                                    |
+| Catalog                        | `catalog`                                | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                            |
 | Http Path                      | `http_path`                              | Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.                                                |
 | Access token (optional)        | `access_token`                           | Databricks access token (short time). Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.                                                                                                        |
 | Initialization SQL             | `initialization_sql`                     | Custom SQL that is executed after connecting to Databricks. Allows to set eg. the ANSI_MODE.                                                                                                                                              |
@@ -122,9 +120,8 @@ Please enter one of the [] values: 2
 Databricks host name (--databricks-host) [${DATABRICKS_HOST}]: <databricks_host>.azuredatabricks.net
 Databricks port number (--databricks-port) [${DATABRICKS_PORT}]: 443
 Databricks catalog name (--databricks-catalog) [${DATABRICKS_CATALOG}]: samples
-Databricks user name (--databricks-user) [${DATABRICKS_USER}]: 
-Databricks user password (--databricks-password) [${DATABRICKS_PASSWORD}]: 
 Databricks http path (--databricks-http-path) [${DATABRICKS_HTTP_PATH}]: /sql/1.0/warehouses/<warehouse_id>
+Databricks access token (--databricks-access-token) [${DATABRICKS_ACCESS_TOKEN}]: <access_token>
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```

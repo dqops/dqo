@@ -43,12 +43,12 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.")
     private String catalog;
 
-    @CommandLine.Option(names = {"--databricks-user"}, description = "Databricks user name.")
-    @JsonPropertyDescription("Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--databricks-user"}, description = "(Obsolete) Databricks user name.")
+    @JsonPropertyDescription("(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.")
     private String user;
 
-    @CommandLine.Option(names = {"--databricks-password"}, description = "Databricks database password.")
-    @JsonPropertyDescription("Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--databricks-password"}, description = "(Obsolete) Databricks database password.")
+    @JsonPropertyDescription("(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.")
     private String password;
 
     @CommandLine.Option(names = {"--databricks-http-path"}, description = "Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>")
