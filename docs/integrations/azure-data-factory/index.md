@@ -1,7 +1,7 @@
 ---
-title: How to monitor data observability with Azure Data Factory
+title: How to activate data observability with Azure Data Factory
 ---
-# How to monitor data observability with Azure Data Factory
+# How to activate data observability with Azure Data Factory
 Read this guide to learn how to use DQOps API from Azure Data Factory to activate monitoring.
 
 ## Overview
@@ -26,11 +26,11 @@ You can easily connect to the data source located on [Azure](../../data-sources/
 [DQOps supports all commonly used databases, check out the complete list here](../../data-sources/index.md).
 
 
-# Azure Data Factory integration
+## Azure Data Factory integration
 
 Accessing the DQOps API involves using a personal API key to authenticate requests. 
 
-## Getting the personal API Key
+### Getting the personal API Key
 
 You can easily get your personal, user-unique API Key through the DQOps Web UI.
 
@@ -43,7 +43,7 @@ You can easily get your personal, user-unique API Key through the DQOps Web UI.
 You can copy the generated API Key and use it in Azure Data Factory.
 
 
-## Run checks
+### Run checks
 
 Run checks job in DQOps executes checks depending on your selection. 
 You can specify to only those checks that are attached to the specific table on a connection, with a specific names for label, quality dimention, type of checks and much more.
@@ -135,7 +135,7 @@ You can see running checks resulted with 47 execution warnings. The data has a q
 
 The execution of the run checks API call can be incorporated into existing pipelines to make branches during pipeline execution.
 
-## Integrate run checks action with your pipeline
+### Integrate run checks action with your pipeline
 
 You can integrate run checks that can disallow to copy new data to the corrupted data source.
 
@@ -194,7 +194,7 @@ The details of the error provides you the error code as well.
 
 Instead of Fail activity you can also run another REST API that will inform about data quality issues as fast as is detected.
 
-## Collect statistics
+### Collect statistics
 
 Collect statistics job in DQOps provides the summary information about your tables and columns.
 This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
@@ -278,12 +278,12 @@ The DQOps API returned data available in the JSON object.
 The statistics have been collected.
 
 
-## Import the table schema to DQOps
+### Import the table schema to DQOps
 
 
 
 
-## Import data quality tables
+### Import data quality tables
 
 
 

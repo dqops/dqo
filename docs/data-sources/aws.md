@@ -7,12 +7,12 @@ title: How to activate data observability for AWS S3
 This guide shows how to activate data observability for AWS by connecting DQOps. 
 The example will use the S3 for storing data. 
 
-# Prerequisites
+## Prerequisites
 
 - Data in CSV, JSON or Parquet format (compressed files allowed), located in a Bucket.
 - [DQOps installation](../getting-started/installation.md)
 
-# Add connection to AWS S3 using the user interface
+## Add connection to AWS S3 using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -207,7 +207,7 @@ The prefix cannot contain the name of a file.
 
 A selection of files or directories is available **after Saving the new connection**.
 
-# Import metadata using the user interface
+## Import metadata using the user interface
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
 Now we can import files.
@@ -228,7 +228,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png){ loading=lazy; width="1200px" }
 
 
-# Details of new connection - all parameters description
+## Detailed parameters description of new connection
 
 The form of the adding a new connection page provides additional fields not mentioned before.
 
@@ -358,7 +358,7 @@ After filling in the connection settings, click the **Test Connection** button t
 Click the **Save** connection button when the test is successful otherwise, you can check the details of what went wrong.
 
 
-# Register single file as table
+## Register single file as table
 
 After creating a connection, you can register a single table.
 
@@ -393,7 +393,7 @@ If the job completes successfully, the created table will be imported and ready 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
 
-# Add connection using DQOps Shell
+## Add connection using DQOps Shell
 
 The following examples use parquet file format. To connect to csv or json, put the expected file format instead of "parquet" in the example commands. 
 
