@@ -14,7 +14,6 @@ type GlobalIncidentsDashboardTableProps = {
 
 const tableHeaderClassName = 'py-2 px-2 text-left whitespace-nowrap ';
 const tableRowClassName = 'px-2 truncate ';
-const tableMinWidth = '960px';
 
 export default function GlobalIncidentsDashboardTable({
   group,
@@ -50,9 +49,8 @@ export default function GlobalIncidentsDashboardTable({
 
   return (
     <div
-      className={
-        'border border-gray-150 p-2 rounded-md text-xs screen1900:h-[386px]'
-      }
+      className={'border border-gray-150 p-2 rounded-md text-xs '}
+      style={{ maxWidth: '100%' }}
     >
       <div className="flex items-center justify-between pl-2 pb-2 border-b border-gray-300 mb-2 text-md">
         <div
@@ -73,15 +71,12 @@ export default function GlobalIncidentsDashboardTable({
         </div>
       </div>
       <div className="">
-        <div
-          className="grid grid-cols-24 font-bold border-b border-gray-300"
-          style={{ minWidth: tableMinWidth }}
-        >
+        <div className="grid grid-cols-24 font-bold border-b border-gray-300">
           <div className={tableHeaderClassName + ' col-span-2'}>Severity</div>
           <div className={tableHeaderClassName + ' col-span-3'}>Connection</div>
           <div className={tableHeaderClassName + ' col-span-4'}>Schema</div>
-          <div className={tableHeaderClassName + ' col-span-7'}>Table</div>
-          <div className={tableHeaderClassName + ' col-span-3'}>
+          <div className={tableHeaderClassName + ' col-span-5'}>Table</div>
+          <div className={tableHeaderClassName + ' col-span-4'}>
             {groupBy === 'dimension' ? (
               <p>Check category</p>
             ) : (
@@ -89,10 +84,10 @@ export default function GlobalIncidentsDashboardTable({
             )}
           </div>
 
-          <div className={tableHeaderClassName + 'col-span-2'}>First seen</div>
-          <div className={tableHeaderClassName + 'col-span-2'}>Last seen</div>
+          <div className={tableHeaderClassName + 'col-span-3'}>First seen</div>
+          <div className={tableHeaderClassName + 'col-span-3'}>Last seen</div>
         </div>
-        <div style={{ minWidth: tableMinWidth }}>
+        <div>
           {incidents.map((incident) => (
             <div
               key={incident.incidentId}
@@ -129,7 +124,7 @@ export default function GlobalIncidentsDashboardTable({
               <div
                 className={
                   tableRowClassName +
-                  'underline cursor-pointer col-span-7 truncate'
+                  'underline cursor-pointer col-span-5 truncate'
                 }
                 onClick={() => goToIncidents(incident)}
               >
@@ -137,17 +132,17 @@ export default function GlobalIncidentsDashboardTable({
                   {incident.table}
                 </Tooltip>
               </div>
-              <div className={tableRowClassName + 'col-span-3'}>
+              <div className={tableRowClassName + 'col-span-4'}>
                 {groupBy === 'dimension' ? (
                   <>{incident.checkCategory}</>
                 ) : (
                   <>{incident.qualityDimension}</>
                 )}
               </div>
-              <div className={tableRowClassName + 'col-span-2'}>
+              <div className={tableRowClassName + 'col-span-3'}>
                 {moment(incident.firstSeen).format('YYYY-MM-DD')}
               </div>
-              <div className={tableRowClassName + 'col-span-2'}>
+              <div className={tableRowClassName + 'col-span-3'}>
                 {moment(incident.lastSeen).format('YYYY-MM-DD')}
               </div>
             </div>
