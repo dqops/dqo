@@ -169,54 +169,30 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Table quality status (daily checks)',
-      value: 'table-quality-status-daily'
+      label: 'Table quality status',
+      value: 'table-quality-status'
     },
     {
-      label: 'Daily checks',
-      value: 'daily'
+      label: 'Check editor',
+      value: 'check-editor'
     },
     {
-      label: 'Table quality status (monthly checks)',
-      value: 'table-quality-status-monthly'
-    },
-    {
-      label: 'Monthly checks',
-      value: 'monthly'
-    },
-    {
-      label: 'Daily comparisons',
-      value: 'daily_comparisons'
-    },
-    {
-      label: 'Monthly comparisons',
-      value: 'monthly_comparisons'
+      label: 'Table comparisons',
+      value: 'table-comparisons'
     }
   ],
   [CheckTypes.MONITORING]: [
     {
-      label: 'Table quality status (daily checks)',
-      value: 'table-quality-status-daily'
+      label: 'Table quality status',
+      value: 'table-quality-status'
     },
     {
-      label: 'Daily checks',
-      value: 'daily'
+      label: 'Check editor',
+      value: 'check-editor'
     },
     {
-      label: 'Table quality status (monthly checks)',
-      value: 'table-quality-status-monthly'
-    },
-    {
-      label: 'Monthly checks',
-      value: 'monthly'
-    },
-    {
-      label: 'Daily comparisons',
-      value: 'daily_comparisons'
-    },
-    {
-      label: 'Monthly comparisons',
-      value: 'monthly_comparisons'
+      label: 'Table comparisons',
+      value: 'table-comparisons'
     }
   ]
 };

@@ -22,6 +22,7 @@ import { useDecodedParams } from '../../utils';
 import Button from '../Button';
 import Loader from '../Loader';
 import Select from '../Select';
+import Tabs from '../Tabs';
 import CheckCategoriesView from './CheckCategoriesView';
 import TableHeader from './CheckTableHeader';
 
@@ -34,7 +35,9 @@ interface IDataQualityChecksProps {
   onUpdate: () => void;
   loading?: boolean;
   isDefaultEditing?: boolean;
+  timePartitioned?: 'daily' | 'monthly';
   isFiltered?: boolean;
+  setTimePartitioned?: (value: 'daily' | 'monthly') => void;
 }
 
 const DataQualityChecks = ({
@@ -46,7 +49,9 @@ const DataQualityChecks = ({
   onUpdate,
   loading,
   isDefaultEditing,
-  isFiltered
+  isFiltered,
+  timePartitioned,
+  setTimePartitioned
 }: IDataQualityChecksProps) => {
   const {
     checkTypes,
@@ -54,7 +59,6 @@ const DataQualityChecks = ({
     schema,
     table,
     column,
-    timePartitioned,
     tab
   }: {
     checkTypes: CheckTypes;
@@ -62,9 +66,24 @@ const DataQualityChecks = ({
     schema: string;
     table: string;
     column: string;
-    timePartitioned: 'daily' | 'monthly';
     tab: 'daily' | 'monthly';
   } = useDecodedParams();
+  const tabs = [
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Daily checkpoints'
+          : 'Daily partitioned',
+      value: 'daily'
+    },
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Monthly checkpoints'
+          : 'Monthly partitioned',
+      value: 'monthly'
+    }
+  ];
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [timeWindow, setTimeWindow] = useState(
@@ -417,12 +436,20 @@ const DataQualityChecks = ({
 
   return (
     <div
-      className={clsx(className, 'p-1 overflow-y-auto')}
+      className={clsx(className, ' overflow-y-auto')}
       style={{
         maxWidth: `calc(100vw - ${sidebarWidth + 30}px`,
         minWidth: '100%'
       }}
     >
+      {timePartitioned && (
+        <Tabs
+          tabs={tabs}
+          activeTab={timePartitioned}
+          onChange={setTimePartitioned}
+          className="py-1"
+        />
+      )}
       <div className="flex items-center text-sm my-3 gap-6 ml-4">
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">

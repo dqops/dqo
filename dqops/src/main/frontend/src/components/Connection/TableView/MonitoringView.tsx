@@ -22,37 +22,25 @@ import {
 } from '../../../redux/selectors';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import DataQualityChecks from '../../DataQualityChecks';
 import Tabs from '../../Tabs';
 import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
-import { useDecodedParams } from '../../../utils';
 
 const initTabs = [
   {
-    label: 'Table quality status (daily checkpoints)',
-    value: 'table-quality-status-daily'
+    label: 'Table quality status',
+    value: 'table-quality-status'
   },
   {
-    label: 'Daily checkpoints',
-    value: 'daily'
+    label: 'Check editor',
+    value: 'check-editor'
   },
   {
-    label: 'Table quality status (monthly checkpoints)',
-    value: 'table-quality-status-monthly'
-  },
-  {
-    label: 'Monthly checkpoints',
-    value: 'monthly'
-  },
-  {
-    label: 'Table comparisons (daily checkpoints)',
-    value: 'daily_comparisons'
-  },
-  {
-    label: 'Table comparisons (monthly checkpoints)',
-    value: 'monthly_comparisons'
+    label: 'Table comparisons',
+    value: 'table-comparisons'
   }
 ];
 
@@ -71,7 +59,9 @@ const MonitoringView = () => {
     tab: string;
   } = useDecodedParams();
   const activeTab = getSecondLevelTab(checkTypes, tab);
-
+  const [secondTab, setSecondTab] = useState<'daily' | 'monthly'>('daily');
+  const setTimePartitioned = (value: 'daily' | 'monthly') =>
+    setSecondTab(value);
   const dispatch = useActionDispatch();
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<
@@ -221,7 +211,13 @@ const MonitoringView = () => {
       setActiveFirstLevelUrl(
         checkTypes,
         firstLevelActiveTab,
-        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, activeTab)
+        ROUTES.TABLE_LEVEL_PAGE(
+          checkTypes,
+          connectionName,
+          schemaName,
+          tableName,
+          activeTab
+        )
       )
     );
     history.push(
@@ -237,7 +233,7 @@ const MonitoringView = () => {
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      {(activeTab === 'daily' || activeTab === 'monthly') && (
+      {activeTab === 'check-editor' && (
         <TableActionGroup
           shouldDelete={false}
           onUpdate={onUpdate}
@@ -248,46 +244,47 @@ const MonitoringView = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      {activeTab === 'daily' && (
-        <DataQualityChecks
-          onUpdate={onUpdate}
-          checksUI={dailyMonitoring}
-          onChange={onDailyMonitoringChange}
-          checkResultsOverview={dailyCheckResultsOverview}
-          getCheckOverview={getDailyCheckOverview}
-          loading={loading}
+      {activeTab === 'check-editor' && (
+        <>
+          {secondTab === 'daily' && (
+            <DataQualityChecks
+              onUpdate={onUpdate}
+              checksUI={dailyMonitoring}
+              onChange={onDailyMonitoringChange}
+              checkResultsOverview={dailyCheckResultsOverview}
+              getCheckOverview={getDailyCheckOverview}
+              loading={loading}
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+          {secondTab === 'monthly' && (
+            <DataQualityChecks
+              onUpdate={onUpdate}
+              checksUI={monthlyMonitoring}
+              onChange={onMonthlyMonitoringChange}
+              checkResultsOverview={monthlyCheckResultsOverview}
+              getCheckOverview={getMonthlyCheckOverview}
+              loading={loading}
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+        </>
+      )}
+      {activeTab === 'table-quality-status' && (
+        <TableQualityStatus
+          timePartitioned={secondTab}
+          setTimePartitioned={setTimePartitioned}
         />
       )}
-      {activeTab === 'monthly' && (
-        <DataQualityChecks
-          onUpdate={onUpdate}
-          checksUI={monthlyMonitoring}
-          onChange={onMonthlyMonitoringChange}
-          checkResultsOverview={monthlyCheckResultsOverview}
-          getCheckOverview={getMonthlyCheckOverview}
-          loading={loading}
-        />
-      )}
-      {activeTab === 'table-quality-status-daily' && (
-        <TableQualityStatus timeScale="daily" />
-      )}
-      {activeTab === 'table-quality-status-monthly' && (
-        <TableQualityStatus timeScale="monthly" />
-      )}
-      {activeTab === 'daily_comparisons' && (
+      {activeTab === 'table-comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
-          timePartitioned="daily"
-          checksUI={dailyMonitoring}
+          checksUI={secondTab === 'daily' ? dailyMonitoring : monthlyMonitoring}
           onUpdateChecks={onUpdate}
-        />
-      )}
-      {activeTab === 'monthly_comparisons' && (
-        <TableReferenceComparisons
-          checkTypes={checkTypes}
-          timePartitioned="monthly"
-          checksUI={monthlyMonitoring}
-          onUpdateChecks={onUpdate}
+          timePartitioned={secondTab}
+          setTimePartitioned={setTimePartitioned}
         />
       )}
     </div>
