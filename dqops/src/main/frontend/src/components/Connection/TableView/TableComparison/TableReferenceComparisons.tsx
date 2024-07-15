@@ -9,22 +9,41 @@ import { IRootState } from '../../../../redux/reducers';
 import { TableComparisonsApi } from '../../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
+import Tabs from '../../../Tabs';
 import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
-  timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
   onUpdateChecks: () => void;
+  timePartitioned?: 'daily' | 'monthly';
+  setTimePartitioned?: (value: 'daily' | 'monthly') => void;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
-  timePartitioned,
   checksUI,
-  onUpdateChecks
+  onUpdateChecks,
+  timePartitioned,
+  setTimePartitioned
 }: TableReferenceComparisonsProps) => {
+  const tabs = [
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Daily checkpoints'
+          : 'Daily partitioned',
+      value: 'daily'
+    },
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Monthly checkpoints'
+          : 'Monthly partitioned',
+      value: 'monthly'
+    }
+  ];
   const {
     connection,
     schema,
@@ -202,6 +221,19 @@ export const TableReferenceComparisons = ({
 
   return (
     <>
+      {timePartitioned &&
+        userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' && (
+          <div className="border-b border-gray-300">
+            <Tabs
+              tabs={tabs}
+              activeTab={timePartitioned}
+              onChange={setTimePartitioned}
+              className="pt-2"
+            />
+          </div>
+        )}
       {isEditing ? (
         <EditProfilingReferenceTable
           checkTypes={checkTypes}
