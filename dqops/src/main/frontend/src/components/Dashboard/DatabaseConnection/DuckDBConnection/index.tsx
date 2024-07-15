@@ -183,6 +183,7 @@ const DuckdbConnection = ({
           }}
           onClickValue={setSelectedInput}
           selectedMenu={selectedInput}
+          menuClassName="!top-14"
         />
 
         {copiedDatabase?.aws_authentication_mode ===
