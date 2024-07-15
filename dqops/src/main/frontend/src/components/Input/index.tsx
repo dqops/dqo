@@ -25,6 +25,7 @@ export interface IInputProps {
   defaultValue?: string;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   labelClassName?: string;
+  containerClassName?: string;
 }
 
 const Input = ({
@@ -44,9 +45,10 @@ const Input = ({
   disabled,
   defaultValue,
   onKeyDown,
-  labelClassName
+  labelClassName,
+  containerClassName
 }: IInputProps) => (
-  <div>
+  <div className={containerClassName}>
     <div className="flex space-x-1">
       {label && (
         <label
