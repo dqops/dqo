@@ -124,6 +124,7 @@ export default function RuleConfiguration({
               onUpdate={onUpdate}
               changeEnabled={changeEnabled}
               configuredType={enabledType}
+              isSimpleMode={true}
             />
             <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
           </td>
@@ -146,6 +147,7 @@ export default function RuleConfiguration({
               onUpdate={onUpdate}
               changeEnabled={changeEnabled}
               configuredType={enabledType}
+              isSimpleMode={true}
             />
           </td>
         );
@@ -167,6 +169,7 @@ export default function RuleConfiguration({
               onUpdate={onUpdate}
               changeEnabled={changeEnabled}
               configuredType={enabledType}
+              isSimpleMode={true}
             />
           </td>
         );
@@ -242,7 +245,7 @@ export default function RuleConfiguration({
               value={configurationType}
               onChange={onChangeConfigurationType}
               options={options}
-              className="w-40 mr-2 mb-1 text-sm "
+              className="w-40 mr-2 my-1 text-sm "
               menuClassName="!top-14"
               disabled={isDisabled}
             />
