@@ -54,6 +54,12 @@ public class TopIncidentsModel {
     @JsonPropertyDescription("Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).")
     private Map<String, List<IncidentModel>> topIncidents = new LinkedHashMap<>();
 
+    // todo
+    private IncidentSeverityLevelCountsModel openIncidentSeverityLevelCounts;
+
+    // todo
+    private IncidentSeverityLevelCountsModel acknowledgedIncidentSeverityLevelCounts;
+
     /**
      * Sample factory for an incident model.
      */
