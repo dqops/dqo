@@ -1,6 +1,8 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
+import { IRootState } from '../../../../redux/reducers';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
@@ -11,8 +13,6 @@ import CurrentTableStatus from './CurrentTableStatus';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import TotalChecksExecuted from './TotalChecksExecuted';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../../redux/reducers';
 
 export default function TableQualityStatus({
   timePartitioned,
@@ -143,6 +143,8 @@ export default function TableQualityStatus({
   return (
     <div className="text-sm">
       {timePartitioned &&
+        userProfile &&
+        userProfile.license_type &&
         userProfile.license_type?.toLowerCase() !== 'free' && (
           <Tabs
             tabs={tabs}

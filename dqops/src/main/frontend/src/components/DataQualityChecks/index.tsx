@@ -446,6 +446,8 @@ const DataQualityChecks = ({
       }}
     >
       {timePartitioned &&
+        userProfile &&
+        userProfile.license_type &&
         userProfile.license_type?.toLowerCase() !== 'free' && (
           <Tabs
             tabs={tabs}
