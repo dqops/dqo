@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import ScheduleTab from './ScheduleTab';
+import React, { useState } from 'react';
+import { CheckModel } from '../../api';
 import CommentsView from '../Connection/CommentsView';
-import SensorParametersSettings from './SensorParametersSettings';
+import IconButton from '../IconButton';
+import SvgIcon from '../SvgIcon';
 import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
-import SvgIcon from '../SvgIcon';
-import IconButton from '../IconButton';
-import {  CheckModel } from '../../api';
 import CheckSettingsTab from './CheckSettingsTab';
+import ScheduleTab from './ScheduleTab';
+import SensorParametersSettings from './SensorParametersSettings';
 
 interface ICheckSettingsProps {
   check?: CheckModel;
@@ -16,7 +16,7 @@ interface ICheckSettingsProps {
   tabs: ITab[];
   onClose: () => void;
   onChange: (check: CheckModel) => void;
-  isDefaultEditing?: boolean
+  isDefaultEditing?: boolean;
 }
 
 const CheckSettings = ({
@@ -30,7 +30,6 @@ const CheckSettings = ({
 }: ICheckSettingsProps) => {
   const [text, setText] = useState('');
 
-
   const handleChange = (obj: any) => {
     onChange({
       ...check,
@@ -40,18 +39,23 @@ const CheckSettings = ({
 
   return (
     <div className="my-4">
-      <div className="bg-white px-4 py-6 border border-gray-200 relative">
+      <div className="bg-white py-4 border border-gray-200 relative">
         <IconButton
-          className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+          className="absolute right-4 top-1 bg-gray-50 hover:bg-gray-100 text-gray-700"
           onClick={onClose}
         >
           <SvgIcon name="close" />
         </IconButton>
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-        <div className="pt-5">
+        <div className="border-b border-gray-100">
+          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
+        <div className="pt-5 px-4">
           {activeTab === 'check-settings' && (
-            <CheckSettingsTab check={check} onChange={onChange} 
-            isDefaultEditing={isDefaultEditing} />
+            <CheckSettingsTab
+              check={check}
+              onChange={onChange}
+              isDefaultEditing={isDefaultEditing}
+            />
           )}
           {activeTab === 'schedule' && (
             <ScheduleTab
