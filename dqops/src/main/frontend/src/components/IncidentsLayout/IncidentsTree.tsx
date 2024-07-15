@@ -57,28 +57,16 @@ const IncidentsTree = () => {
     );
     history.push(url);
   };
-
   const openCategoryTab = () => {
-    const category = getLastValueFromURL(window.location.href, 'category');
-    const dimension = getLastValueFromURL(window.location.href, 'dimension');
-
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.INCIDENT_CONNECTION(
-          category ? `*?category=${category}` : `*?dimension=${dimension}`
-        ),
-        value: ROUTES.INCIDENT_CONNECTION_VALUE(
-          category ? `*?category=${category}` : `*?dimension=${dimension}`
-        ),
+        url: window.location.pathname + window.location.search,
+        value: window.location.pathname + window.location.search,
         state: {},
-        label: category || dimension
+        label: Object.values(getParamsFromURL(window.location.search)).join(' ')
       })
     );
-    history.push(
-      ROUTES.INCIDENT_CONNECTION(
-        category ? `*?category=${category}` : `*?dimension=${dimension}`
-      )
-    );
+    history.push(window.location.pathname + window.location.search);
   };
 
   const openCorrectTabFromUrl = () => {
@@ -210,4 +198,22 @@ function getLastValueFromURL(url: string, param: string): string | undefined {
   }
 
   return undefined;
+}
+
+function getParamsFromURL(url: string): Record<string, string | undefined> {
+  const params: Record<string, string | undefined> = {};
+  const queryString = url.split('?')[1];
+
+  if (queryString) {
+    const pairs = queryString.split('&');
+
+    for (const pair of pairs) {
+      const [key, value] = pair.split('=');
+      if (key && value) {
+        params[key] = value;
+      }
+    }
+  }
+
+  return params;
 }
