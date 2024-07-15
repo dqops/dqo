@@ -231,7 +231,8 @@ const ColumnMonitoringChecksView = () => {
       />
       {userProfile &&
         userProfile.license_type &&
-        userProfile.license_type?.toLowerCase() !== 'free' && (
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
           <div className="border-b border-gray-300">
             <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
           </div>
