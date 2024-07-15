@@ -33455,11 +33455,11 @@
         },
         "user" : {
           "type" : "string",
-          "description" : "Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable."
+          "description" : "(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable."
         },
         "password" : {
           "type" : "string",
-          "description" : "Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable."
+          "description" : "(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable."
         },
         "http_path" : {
           "type" : "string",
