@@ -242,7 +242,6 @@ export default function RuleConfiguration({
               value={configurationType}
               onChange={onChangeConfigurationType}
               options={options}
-              label="Issue severity level"
               className="w-40 mr-2 mb-1 text-sm "
               menuClassName="!top-14"
               disabled={isDisabled}
