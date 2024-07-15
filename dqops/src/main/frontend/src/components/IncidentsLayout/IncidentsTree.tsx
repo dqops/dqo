@@ -58,14 +58,26 @@ const IncidentsTree = () => {
     history.push(url);
   };
   const openCategoryTab = () => {
+    const params = getParamsFromURL(window.location.search);
+    const label = Object.entries(params).map(([key, value]) => {
+      if (key === 'severity') {
+        return (
+          String(value).replace(/\b\w/g, (c) => c.toUpperCase()) +
+          ' severity incidents'
+        );
+      }
+      return value;
+    });
+
     dispatch(
       addFirstLevelTab({
         url: window.location.pathname + window.location.search,
         value: window.location.pathname + window.location.search,
         state: {},
-        label: Object.values(getParamsFromURL(window.location.search)).join(' ')
+        label: label.join(' / ')
       })
     );
+
     history.push(window.location.pathname + window.location.search);
   };
 

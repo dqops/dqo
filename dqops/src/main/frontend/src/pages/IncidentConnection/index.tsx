@@ -413,9 +413,7 @@ export const IncidentConnection = () => {
     }
   ];
   const params = getParamsFromURL(history.location.search);
-  // const connection = window.location.pathname.split('/')[2];
 
-  console.log(params, connection);
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
       dispatch(
@@ -557,18 +555,6 @@ export const IncidentConnection = () => {
 };
 
 export default IncidentConnection;
-
-function getLastValueFromURL(url: string, param: string): string | undefined {
-  const regex = new RegExp(`[?&]${param}=([^&]*)`);
-  const match = url.match(regex);
-
-  if (match && match[1]) {
-    const values = match[1].split(',');
-    return values[values.length - 1];
-  }
-
-  return undefined;
-}
 
 function renderIncidentHighestSeveritySquare(severity: number) {
   const getColor = () => {
