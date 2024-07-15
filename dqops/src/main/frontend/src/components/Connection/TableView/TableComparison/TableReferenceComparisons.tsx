@@ -221,14 +221,15 @@ export const TableReferenceComparisons = ({
 
   return (
     <>
-      {timePartitioned && (
-        <Tabs
-          tabs={tabs}
-          activeTab={timePartitioned}
-          onChange={setTimePartitioned}
-          className="py-1"
-        />
-      )}
+      {timePartitioned &&
+        userProfile.license_type?.toLowerCase() !== 'free' && (
+          <Tabs
+            tabs={tabs}
+            activeTab={timePartitioned}
+            onChange={setTimePartitioned}
+            className="py-1"
+          />
+        )}
       {isEditing ? (
         <EditProfilingReferenceTable
           checkTypes={checkTypes}

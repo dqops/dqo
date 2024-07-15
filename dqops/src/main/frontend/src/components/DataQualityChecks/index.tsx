@@ -15,6 +15,7 @@ import {
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
@@ -68,6 +69,8 @@ const DataQualityChecks = ({
     column: string;
     tab: 'daily' | 'monthly';
   } = useDecodedParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job);
+
   const tabs = [
     {
       label:
@@ -442,14 +445,15 @@ const DataQualityChecks = ({
         minWidth: '100%'
       }}
     >
-      {timePartitioned && (
-        <Tabs
-          tabs={tabs}
-          activeTab={timePartitioned}
-          onChange={setTimePartitioned}
-          className="py-1"
-        />
-      )}
+      {timePartitioned &&
+        userProfile.license_type?.toLowerCase() !== 'free' && (
+          <Tabs
+            tabs={tabs}
+            activeTab={timePartitioned}
+            onChange={setTimePartitioned}
+            className="py-1"
+          />
+        )}
       <div className="flex items-center text-sm my-3 gap-6 ml-4">
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">

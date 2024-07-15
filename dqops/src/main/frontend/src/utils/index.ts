@@ -265,9 +265,9 @@ export const getFirstLevelTableTab = (checkType: CheckTypes) => {
     case CheckTypes.PROFILING:
       return 'statistics';
     case CheckTypes.PARTITIONED:
-      return 'table-quality-status-daily';
+      return 'table-quality-status';
     case CheckTypes.MONITORING:
-      return 'table-quality-status-daily';
+      return 'table-quality-status';
   }
 };
 

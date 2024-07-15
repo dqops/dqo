@@ -15,6 +15,7 @@ import {
   updateTableDailyMonitoringChecks,
   updateTableMonthlyMonitoringChecks
 } from '../../../redux/actions/table.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
@@ -71,7 +72,7 @@ const MonitoringView = () => {
     useState<CheckResultsOverviewDataModel[]>([]);
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
+  const { userProfile } = useSelector((state: IRootState) => state.job);
   const {
     dailyMonitoring,
     monthlyMonitoring,

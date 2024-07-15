@@ -11,6 +11,8 @@ import CurrentTableStatus from './CurrentTableStatus';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import TotalChecksExecuted from './TotalChecksExecuted';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../redux/reducers';
 
 export default function TableQualityStatus({
   timePartitioned,
@@ -46,6 +48,8 @@ export default function TableQualityStatus({
       value: 'monthly'
     }
   ];
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const [tableDataQualityStatus, setTableDataQualityStatus] =
     useState<TableCurrentDataQualityStatusModel>({});
   const [firstLevelChecks, setFirstLevelChecks] = useState<
@@ -138,14 +142,15 @@ export default function TableQualityStatus({
 
   return (
     <div className="text-sm">
-      {timePartitioned && (
-        <Tabs
-          tabs={tabs}
-          activeTab={timePartitioned}
-          onChange={setTimePartitioned}
-          className="py-1"
-        />
-      )}
+      {timePartitioned &&
+        userProfile.license_type?.toLowerCase() !== 'free' && (
+          <Tabs
+            tabs={tabs}
+            activeTab={timePartitioned}
+            onChange={setTimePartitioned}
+            className="py-1"
+          />
+        )}
       <div className="flex justify-between items-center p-4 ">
         <div className="flex pb-6 gap-x-5 items-center">
           <div className="text-sm pl-1">Group checks by: </div>
