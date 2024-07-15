@@ -146,12 +146,14 @@ export default function TableQualityStatus({
         userProfile &&
         userProfile.license_type &&
         userProfile.license_type?.toLowerCase() !== 'free' && (
-          <Tabs
-            tabs={tabs}
-            activeTab={timePartitioned}
-            onChange={setTimePartitioned}
-            className="py-1"
-          />
+          <div className="border-b border-gray-300">
+            <Tabs
+              tabs={tabs}
+              activeTab={timePartitioned}
+              onChange={setTimePartitioned}
+              className="pt-2"
+            />
+          </div>
         )}
       <div className="flex justify-between items-center p-4 ">
         <div className="flex pb-6 gap-x-5 items-center">

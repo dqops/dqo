@@ -225,12 +225,14 @@ export const TableReferenceComparisons = ({
         userProfile &&
         userProfile.license_type &&
         userProfile.license_type?.toLowerCase() !== 'free' && (
-          <Tabs
-            tabs={tabs}
-            activeTab={timePartitioned}
-            onChange={setTimePartitioned}
-            className="py-1"
-          />
+          <div className="border-b border-gray-300">
+            <Tabs
+              tabs={tabs}
+              activeTab={timePartitioned}
+              onChange={setTimePartitioned}
+              className="pt-2"
+            />
+          </div>
         )}
       {isEditing ? (
         <EditProfilingReferenceTable
