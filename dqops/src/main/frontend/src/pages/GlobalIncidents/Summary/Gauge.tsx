@@ -36,11 +36,14 @@ export default function Gauge({
 
   return (
     <SectionWrapper 
-      className={"border-gray-300 bg-white back border-2 my-4 mx-4 lg:mx-10 xl:mx-14 2xl:mx-4 screen1900:mx-14 screen3000:mx-34 " + colorClassName}
+      className={"flex justify-center border-2 my-4 mx-4 lg:mx-10 xl:mx-14 2xl:mx-4 screen1900:mx-14 screen3000:mx-34 " + colorClassName}
       title={title}
       // titleIcon={<div className={"w-4 h-4 border " + colorClassName}></div>}
     >
-      <div onClick={() => goToIncidents(severity, status)}>
+      <div 
+        className="w-[150px]"
+        onClick={() => goToIncidents(severity, status)}
+      >
         <div className="text-center pt-1 pb-3 text-2xl ">
           {incidentCounts?.currentMonthCount && incidentCounts?.previousMonthCount && incidentCounts?.currentMonthCount + incidentCounts?.previousMonthCount}
         </div>
