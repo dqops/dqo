@@ -164,7 +164,7 @@ public class ColumnNullsCountCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "incomplete column";
+        return "Maximum accepted count of null values (incomplete column)";
     }
 
     /**

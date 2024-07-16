@@ -24,8 +24,8 @@ import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
 import Switch from '../Switch';
 import CheckDetails from './CheckDetails/CheckDetails';
-import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
+import RuleConfiguration from './RuleConfiguration/RuleConfiguration';
 import SensorParameters from './SensorParameters';
 
 export interface ITab {
@@ -50,6 +50,8 @@ interface ICheckListItemProps {
   isDefaultEditing?: boolean;
   canUserRunChecks?: boolean;
   isAlreadyDeleted?: boolean;
+  ruleParamenterConfigured: boolean;
+  onChangeRuleParametersConfigured: (v: boolean) => void;
 }
 
 interface IRefetchResultsProps {
@@ -69,7 +71,9 @@ const CheckListItem = ({
   comparisonName,
   isDefaultEditing,
   canUserRunChecks,
-  isAlreadyDeleted
+  isAlreadyDeleted,
+  ruleParamenterConfigured,
+  onChangeRuleParametersConfigured
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
@@ -224,8 +228,8 @@ const CheckListItem = ({
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { 
-            time_window_filter: timeWindowFilter, 
+        ? {
+            time_window_filter: timeWindowFilter,
             collect_error_samples: true
           }
         : { collect_error_samples: true })
@@ -572,16 +576,17 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>
-                {check.display_name !== ''
-                  ? check.display_name ?? check.check_name
-                  : check.check_name}{' '}
-                {check.friendly_name && (
-                  <span className="text-xxs">({check.friendly_name})</span>
-                )}
+              <p className="text-nowrap">
+                {check.display_name && check.display_name !== ''
+                  ? check.display_name : (check.friendly_name && check.friendly_name !== '' ? check.friendly_name : check.check_name) }
               </p>
               <p className="absolute left-0 top-full text-xxs">
-                {check.quality_dimension}
+                {check.friendly_name ? (
+                  <>
+                  {check.check_name}&nbsp;({check.quality_dimension})
+                  </>
+                ) : check.quality_dimension
+                }
               </p>
             </div>
           </div>
@@ -620,67 +625,17 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100 relative">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.warning}
-              onChange={(warning) =>
-                handleChange({
-                  rule: {
-                    ...check.rule,
-                    warning
-                  }
-                })
-              }
-              type="warning"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-        </td>
-        <td className="py-2 px-4 bg-orange-100">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.error}
-              onChange={(error) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    error
-                  }
-                })
-              }
-              type="error"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
-        <td className="py-2 px-4 bg-red-100 h-18">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.fatal}
-              onChange={(fatal) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    fatal
-                  }
-                })
-              }
-              type="fatal"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
+        <RuleConfiguration
+          enabledType={enabledType}
+          isDisabled={isDisabled}
+          isAlreadyDeleted={isAlreadyDeleted}
+          changeEnabled={changeEnabled}
+          check={check}
+          onUpdate={onUpdate}
+          handleChange={handleChange}
+          ruleParamenterConfigured={ruleParamenterConfigured}
+          onChangeRuleParametersConfigured={onChangeRuleParametersConfigured}
+        />
       </tr>
       {expanded && (
         <tr className={clsx(' border-b border-gray-100')}>

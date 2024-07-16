@@ -1,6 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CheckDefinitionModel } from '../../api';
+import {
+  CheckDefinitionModel,
+  CheckDefinitionModelDefaultSeverityEnum
+} from '../../api';
 import Button from '../../components/Button';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import Input from '../../components/Input';
@@ -54,6 +57,9 @@ export const SensorDetail = () => {
   const [standard, setStandard] = useState(
     activeCheckDetail?.standard ?? false
   );
+  const [defaultSeverity, setDefaultSeverity] = useState<
+    CheckDefinitionModelDefaultSeverityEnum | undefined
+  >(activeCheckDetail?.default_severity);
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -73,6 +79,12 @@ export const SensorDetail = () => {
 
   const onChangeStandard = (value: boolean) => {
     setStandard(value);
+  };
+
+  const onChangeDefaultSeverity = (
+    value: CheckDefinitionModelDefaultSeverityEnum | undefined
+  ) => {
+    setDefaultSeverity(value);
   };
 
   useEffect(() => {
@@ -100,6 +112,7 @@ export const SensorDetail = () => {
       setFriendlyName('');
       setStandard(false);
       setcheckName('');
+      setDefaultSeverity(undefined);
     } else {
       setSelectedRule(activeCheckDetail.rule_name ?? '');
       setSelectedSensor(activeCheckDetail.sensor_name ?? '');
@@ -111,6 +124,7 @@ export const SensorDetail = () => {
           String(activeCheckDetail.check_name).split('/').length - 1
         ] + '_copy'
       );
+      setDefaultSeverity(activeCheckDetail.default_severity);
     }
   }, [activeTab, activeCheckDetail]);
 
@@ -128,7 +142,8 @@ export const SensorDetail = () => {
               rule_name: selectedRule,
               help_text: helpText,
               friendly_name: friendlyName,
-              standard: standard
+              standard: standard,
+              default_severity: defaultSeverity
             }
           )
         );
@@ -139,7 +154,8 @@ export const SensorDetail = () => {
             rule_name: selectedRule,
             help_text: helpText,
             friendly_name: friendlyName,
-            standard: standard
+            standard: standard,
+            default_severity: defaultSeverity
           })
         );
       }
@@ -163,7 +179,8 @@ export const SensorDetail = () => {
             rule_name: selectedRule,
             help_text: helpText,
             friendly_name: friendlyName,
-            standard: standard
+            standard: standard,
+            default_severity: defaultSeverity
           }
         )
       );
@@ -229,7 +246,8 @@ export const SensorDetail = () => {
           checkName: checkName,
           helpText: helpText,
           friendlyName: friendlyName,
-          standard: standard
+          standard: standard,
+          defaultSeverity: defaultSeverity
         },
         label: checkName
       })
@@ -364,6 +382,8 @@ export const SensorDetail = () => {
           standard={standard}
           onChangeStandard={onChangeStandard}
           canEditDefinitions={userProfile.can_manage_definitions}
+          defaultSeverity={defaultSeverity}
+          onChangeDefaultSeverity={onChangeDefaultSeverity}
         />
         {/* )} */}
       </div>

@@ -21,6 +21,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
@@ -134,6 +135,12 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean defaultCheck;
+
+    /**
+     * The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.
+     */
+    @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
+    private RuleSeverityLevel defaultSeverity;
 
     /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
@@ -345,6 +352,7 @@ public class CheckModel implements Cloneable {
                 setHelpText(SampleStringsRegistry.getHelpText());
                 setSensorName(SampleStringsRegistry.getFullSensorName());
                 setQualityDimension(SampleStringsRegistry.getQualityDimension());
+                setDefaultSeverity(RuleSeverityLevel.error);
             }};
             checkModel.applySampleValues();
             return checkModel;

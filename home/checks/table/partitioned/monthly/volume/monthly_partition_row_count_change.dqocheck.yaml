@@ -8,3 +8,4 @@ spec:
     monthly partition and the previous partition exceeds the maximum accepted change
     percentage.
   standard: true
+  default_severity: warning

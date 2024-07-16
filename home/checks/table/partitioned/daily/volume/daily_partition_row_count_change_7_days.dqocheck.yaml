@@ -8,3 +8,4 @@ spec:
     volume (row count) since seven days ago is below the maximum accepted percentage.
     Verifying a volume change since a value a week ago overcomes the effect of weekly
     seasonability.
+  default_severity: warning

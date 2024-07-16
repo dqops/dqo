@@ -277,14 +277,14 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.loadTableStatusRequestSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<List<CurrentTableStatusKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
-                .buffer(Duration.ofMillis(TableStatusCache.BATCH_COLLECTION_TIMEOUT_MS))  // wait 50 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes
-                .publishOn(Schedulers.parallel());
-        this.subscription = requestLoadFlux.parallel()
-                .flatMap(list -> Flux.fromIterable(list))
+                .buffer(Duration.ofMillis(TableStatusCache.BATCH_COLLECTION_TIMEOUT_MS));  // wait 50 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes
+        int concurrency = Runtime.getRuntime().availableProcessors();
+        this.subscription = requestLoadFlux.subscribeOn(Schedulers.boundedElastic())
+                .flatMap(list -> Flux.fromIterable(list)) // single thread forwarder
                 .flatMap(tableKey -> {
                     onRequestLoadTableStatus(tableKey);
                     return Mono.empty();
-                })
+                }, concurrency, concurrency * 2)
                 .subscribe();
     }
 

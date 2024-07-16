@@ -242,6 +242,7 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
         checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
+        checkSpec.setDisplayName(Strings.isNullOrEmpty(checkModel.getDisplayName()) ? null : checkModel.getDisplayName());
         if (checkSpec.getDefaultDataQualityDimension() != null &&
                 Objects.equals(checkModel.getQualityDimension(), checkSpec.getDefaultDataQualityDimension().name())) {
             checkSpec.setQualityDimension(null);

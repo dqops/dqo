@@ -8,3 +8,4 @@ spec:
     It uses time series anomaly detection to find the biggest volume changes during
     the last 90 days.
   standard: true
+  default_severity: warning

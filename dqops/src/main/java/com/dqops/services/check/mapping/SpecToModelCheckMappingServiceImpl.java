@@ -684,6 +684,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setDisplayName(checkSpec.getDisplayName());
         checkModel.setFriendlyName(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getFriendlyName() : checkSpec.getFriendlyName());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
+        checkModel.setDefaultSeverity(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getDefaultSeverity() : checkSpec.getDefaultSeverity());
         checkModel.setDefaultCheck(checkSpec.isDefaultCheck());
 
         if (runChecksCategoryTemplate != null) {

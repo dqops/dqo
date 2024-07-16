@@ -14,6 +14,7 @@ import {
   updateColumnMonthlyMonitoringChecks
 } from '../../redux/actions/column.actions';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState,
@@ -23,7 +24,6 @@ import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import ColumnActionGroup from './ColumnActionGroup';
-import { tab } from '@material-tailwind/react';
 
 const initTabs = [
   {
@@ -37,6 +37,8 @@ const initTabs = [
 ];
 
 const ColumnMonitoringChecksView = () => {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const {
     connection,
     schema,
@@ -227,9 +229,14 @@ const ColumnMonitoringChecksView = () => {
         isUpdated={isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring}
         isUpdating={isUpdating}
       />
-      <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-      </div>
+      {userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
+          <div className="border-b border-gray-300">
+            <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+          </div>
+        )}
       <div>
         {tab === 'daily' && (
           <DataQualityChecks

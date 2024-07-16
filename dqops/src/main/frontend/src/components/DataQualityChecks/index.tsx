@@ -15,6 +15,7 @@ import {
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
@@ -22,6 +23,7 @@ import { useDecodedParams } from '../../utils';
 import Button from '../Button';
 import Loader from '../Loader';
 import Select from '../Select';
+import Tabs from '../Tabs';
 import CheckCategoriesView from './CheckCategoriesView';
 import TableHeader from './CheckTableHeader';
 
@@ -34,7 +36,9 @@ interface IDataQualityChecksProps {
   onUpdate: () => void;
   loading?: boolean;
   isDefaultEditing?: boolean;
+  timePartitioned?: 'daily' | 'monthly';
   isFiltered?: boolean;
+  setTimePartitioned?: (value: 'daily' | 'monthly') => void;
 }
 
 const DataQualityChecks = ({
@@ -46,7 +50,9 @@ const DataQualityChecks = ({
   onUpdate,
   loading,
   isDefaultEditing,
-  isFiltered
+  isFiltered,
+  timePartitioned,
+  setTimePartitioned
 }: IDataQualityChecksProps) => {
   const {
     checkTypes,
@@ -54,7 +60,6 @@ const DataQualityChecks = ({
     schema,
     table,
     column,
-    timePartitioned,
     tab
   }: {
     checkTypes: CheckTypes;
@@ -62,9 +67,26 @@ const DataQualityChecks = ({
     schema: string;
     table: string;
     column: string;
-    timePartitioned: 'daily' | 'monthly';
     tab: 'daily' | 'monthly';
   } = useDecodedParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job);
+
+  const tabs = [
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Daily checkpoints'
+          : 'Daily partitioned',
+      value: 'daily'
+    },
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Monthly checkpoints'
+          : 'Monthly partitioned',
+      value: 'monthly'
+    }
+  ];
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [timeWindow, setTimeWindow] = useState(
@@ -75,6 +97,10 @@ const DataQualityChecks = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
+  const [ruleParametersConfigured, setRuleParametersConfigured] = useState<
+    boolean | undefined
+  >();
+
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { sidebarWidth } = useTree();
@@ -377,6 +403,23 @@ const DataQualityChecks = ({
     );
     return groupedArray ?? [];
   };
+  const getRuleParametersConfigured = () => {
+    const param = !!checksUI?.categories
+      ?.flatMap((category) => category.checks || [])
+      .flatMap((check) => check || [])
+      .flatMap((check) => check.rule || [])
+      .find((x) => {
+        let count = 0;
+        if (x.warning?.configured) count++;
+        if (x.error?.configured) count++;
+        if (x.fatal?.configured) count++;
+        return count > 1;
+      });
+    if (ruleParametersConfigured === undefined) {
+      setRuleParametersConfigured(param);
+    }
+    return param;
+  };
 
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
@@ -396,12 +439,26 @@ const DataQualityChecks = ({
 
   return (
     <div
-      className={clsx(className, 'p-1 overflow-y-auto')}
+      className={clsx(className, ' overflow-y-auto')}
       style={{
         maxWidth: `calc(100vw - ${sidebarWidth + 30}px`,
         minWidth: '100%'
       }}
     >
+      {timePartitioned &&
+        userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
+          <div className="border-b border-gray-300">
+            <Tabs
+              tabs={tabs}
+              activeTab={timePartitioned}
+              onChange={setTimePartitioned}
+              className="pt-2"
+            />
+          </div>
+        )}
       <div className="flex items-center text-sm my-3 gap-6 ml-4">
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">
@@ -531,6 +588,7 @@ const DataQualityChecks = ({
           showAdvanced={showAdvanced}
           setShowAdvanced={setShowAdvanced}
           isFiltered={isFiltered}
+          ruleParamenterConfigured={!!ruleParametersConfigured}
         />
         <tbody>
           {(checksUI?.categories ?? []).map((category, index) => (
@@ -552,6 +610,12 @@ const DataQualityChecks = ({
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
+              ruleParamenterConfigured={
+                ruleParametersConfigured === undefined
+                  ? getRuleParametersConfigured()
+                  : ruleParametersConfigured
+              }
+              onChangeRuleParametersConfigured={setRuleParametersConfigured}
             />
           ))}
           {isFiltered !== true &&
@@ -574,6 +638,8 @@ const DataQualityChecks = ({
                 isDefaultEditing={isDefaultEditing}
                 showAdvanced={showAdvanced}
                 isAlreadyDeleted={true}
+                ruleParamenterConfigured={!!ruleParametersConfigured}
+                onChangeRuleParametersConfigured={setRuleParametersConfigured}
               />
             ))}
         </tbody>

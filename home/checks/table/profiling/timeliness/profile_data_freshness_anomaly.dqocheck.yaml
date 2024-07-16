@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the number of days since the most recent event timestamp
     (freshness) changes in a rate within a percentile boundary during the last 90
     days.
+  default_severity: warning

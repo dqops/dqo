@@ -20,6 +20,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -75,6 +76,9 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean standard;
+
+    @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
+    private RuleSeverityLevel defaultSeverity = RuleSeverityLevel.error;
 
     @JsonIgnore
     private String yamlParsingError;
@@ -182,6 +186,23 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     public void setStandard(boolean standard) {
         this.setDirtyIf(this.standard != standard);
         this.standard = standard;
+    }
+
+    /**
+     * Returns the default severity level of a rule that is activated when a check is enabled.
+     * @return Default everity level.
+     */
+    public RuleSeverityLevel getDefaultSeverity() {
+        return this.defaultSeverity;
+    }
+
+    /**
+     * Sets the default severity level to pick the rule that is enabled when a check is turned on.
+     * @param defaultSeverity Default severity level.
+     */
+    public void setDefaultSeverity(RuleSeverityLevel defaultSeverity) {
+        this.setDirtyIf(!Objects.equals(this.defaultSeverity, defaultSeverity));
+        this.defaultSeverity = defaultSeverity;
     }
 
     /**

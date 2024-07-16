@@ -7,11 +7,11 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { DataGroupingConfigurationsApi } from '../../services/apiClient';
-import { CheckTypes, ROUTES } from "../../shared/routes";
+import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
-import Button from "../Button";
+import Button from '../Button';
 import Checkbox from '../Checkbox';
-import Input from "../Input";
+import Input from '../Input';
 import Select from '../Select';
 import TextArea from '../TextArea';
 
@@ -21,10 +21,20 @@ interface ICheckSettingsTabProps {
   isDefaultEditing?: boolean;
 }
 
-const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsTabProps) => {
-  const { connection, schema, table }: { connection: string; schema: string; table: string;} = useDecodedParams();
-  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<DataGroupingConfigurationListModel[]>([]);
-  const history = useHistory()
+const CheckSettingsTab = ({
+  check,
+  onChange,
+  isDefaultEditing
+}: ICheckSettingsTabProps) => {
+  const {
+    connection,
+    schema,
+    table
+  }: { connection: string; schema: string; table: string } = useDecodedParams();
+  const [dataGroupingConfigurations, setDataGroupingConfigurations] = useState<
+    DataGroupingConfigurationListModel[]
+  >([]);
+  const history = useHistory();
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -88,7 +98,22 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
         )}
       >
         <table className="w-full text-sm">
-          <tbody>
+          <tbody className="">
+            <tr className="">
+              <td className="px-4 py-2 w-60">Display name</td>
+              <td className="px-4 py-2 ">
+                <div className="flex w-full">
+                  <Input
+                    value={check?.display_name}
+                    onChange={(e) =>
+                      onChange({ ...check, display_name: e.target.value })
+                    }
+                    containerClassName="w-full"
+                    className="!min-w-full"
+                  />
+                </div>
+              </td>
+            </tr>
             <tr>
               <td className="px-4 py-2 w-60">Disable data quality check</td>
               <td className="px-4 py-2">

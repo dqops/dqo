@@ -8,3 +8,4 @@ spec:
     measurements made during the last 90 days. Calculates the mean (average) of each
     daily partition and detect anomalies between daily partitions.
   standard: true
+  default_severity: warning

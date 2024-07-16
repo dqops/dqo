@@ -8,3 +8,4 @@ spec:
     much from the average daily partition size. It uses time series anomaly detection
     to find the outliers in the partition volume during the last 90 days.
   standard: true
+  default_severity: warning

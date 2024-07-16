@@ -9,3 +9,4 @@ spec:
     \ as the biggest change of the minimum value during the last 90 days. Finds the\
     \ minimum value of each daily partition and detect anomalies between daily partitions."
   standard: true
+  default_severity: warning

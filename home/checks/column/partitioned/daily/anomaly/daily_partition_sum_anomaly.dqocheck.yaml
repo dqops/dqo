@@ -8,3 +8,4 @@ spec:
     made during the last 90 days. Calculates the sum of each daily partition and detect
     anomalies between daily partitions.
   standard: true
+  default_severity: warning

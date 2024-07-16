@@ -165,7 +165,7 @@ public class ColumnNotNullsCountCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "empty column";
+        return "Minimum count of non-null values (find empty column)";
     }
 
     /**

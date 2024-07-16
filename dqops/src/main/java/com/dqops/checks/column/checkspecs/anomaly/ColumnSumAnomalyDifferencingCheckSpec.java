@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec;
@@ -183,5 +184,16 @@ public class ColumnSumAnomalyDifferencingCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Consistency;
+    }
+
+    /**
+     * Returns the default rule severity level that is activated when a check is enabled in the check editor.
+     *
+     * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
+     */
+    @Override
+    @JsonIgnore
+    public RuleSeverityLevel getDefaultSeverity() {
+        return RuleSeverityLevel.warning;
     }
 }

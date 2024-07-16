@@ -179,11 +179,7 @@ export default function TableQualityStatusCategory({
           </td>
         ))}
       </tr>
-      <tr
-        key="row_table_level_checks_blank"
-        className="border-b border-b-gray-150"
-        style={{ margin: 0 }}
-      >
+      <tr key="row_table_level_checks_blank" style={{ margin: 0 }}>
         <td
           key="cell_table_level_checks_blank"
           className="font-bold px-4"
@@ -240,6 +236,12 @@ export default function TableQualityStatusCategory({
             )}
           </td>
         ))}
+      </tr>
+      <tr
+        className="bg-white border-b border-gray-100"
+        style={{ height: '1px' }}
+      >
+        <td colSpan={Object.keys(firstLevelChecks).length + 1}></td>
       </tr>
     </React.Fragment>
   );

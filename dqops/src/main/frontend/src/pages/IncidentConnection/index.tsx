@@ -55,7 +55,7 @@ const statusOptions = [
   {
     label: 'ACKNOWLEDGED',
     value: IncidentModelStatusEnum.acknowledged,
-    icon: <div className="w-5 h-5 rounded-full bg-black" />
+    icon: <div className="w-5 h-5 rounded-full bg-black ml-0.5" />
   },
   {
     label: 'RESOLVED',
@@ -227,7 +227,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end text-sm w-25"
+          className="justify-end text-sm w-15"
           label="Total issues"
           order="failedChecksCount"
           direction={
@@ -251,7 +251,7 @@ export const IncidentConnection = () => {
             }
           >
             <div>
-              <SvgIcon name="question_mark" className="w-5 h-5" />
+              <SvgIcon name="info" className="w-5 h-5" />
             </div>
           </Tooltip>
         </div>
@@ -412,16 +412,14 @@ export const IncidentConnection = () => {
       }
     }
   ];
-  const category = getLastValueFromURL(window.location.href, 'category');
-  const dimension = getLastValueFromURL(window.location.href, 'dimension');
+  const params = getParamsFromURL(history.location.search);
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
       dispatch(
         getIncidentsByConnection({
           connection,
-          dimension,
-          category
+          ...params
         })
       );
     }
@@ -447,8 +445,7 @@ export const IncidentConnection = () => {
       getIncidentsByConnection({
         ...(filters || {}),
         ...obj,
-        category: category,
-        dimension: dimension,
+        ...params,
         connection
       })
     );
@@ -479,12 +476,7 @@ export const IncidentConnection = () => {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              Data quality incidents{' '}
-              {category || dimension
-                ? `for ${
-                    category ? `${category} category` : `${dimension} dimension`
-                  }`
-                : `on ${connection}` || ''}
+              Data quality incidents {`on ${connection}` || ''}
             </div>
           </div>
           <div className="flex items-center">
@@ -564,18 +556,6 @@ export const IncidentConnection = () => {
 
 export default IncidentConnection;
 
-function getLastValueFromURL(url: string, param: string): string | undefined {
-  const regex = new RegExp(`[?&]${param}=([^&]*)`);
-  const match = url.match(regex);
-
-  if (match && match[1]) {
-    const values = match[1].split(',');
-    return values[values.length - 1];
-  }
-
-  return undefined;
-}
-
 function renderIncidentHighestSeveritySquare(severity: number) {
   const getColor = () => {
     switch (severity) {
@@ -589,5 +569,27 @@ function renderIncidentHighestSeveritySquare(severity: number) {
     return '';
   };
 
-  return <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>;
+  return (
+    <div className="flex items-center justify-center">
+      <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>
+    </div>
+  );
+}
+
+function getParamsFromURL(url: string): Record<string, string | undefined> {
+  const params: Record<string, string | undefined> = {};
+  const queryString = url.split('?')[1];
+
+  if (queryString) {
+    const pairs = queryString.split('&');
+
+    for (const pair of pairs) {
+      const [key, value] = pair.split('=');
+      if (key && value) {
+        params[key] = value;
+      }
+    }
+  }
+
+  return params;
 }

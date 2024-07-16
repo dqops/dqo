@@ -14,10 +14,10 @@ import {
   updateColumnMonthlyPartitionedChecks
 } from '../../redux/actions/column.actions';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { IRootState } from '../../redux/reducers';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState,
-  getSecondLevelTab
+  getFirstLevelState
 } from '../../redux/selectors';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
@@ -56,7 +56,7 @@ const ColumnPartitionedChecksView = () => {
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const activeTab = getSecondLevelTab(checkTypes, tab);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const {
     dailyPartitionedChecks,
@@ -133,7 +133,8 @@ const ColumnPartitionedChecksView = () => {
         )
       );
     } else {
-      if (!monthlyPartitionedChecks || !isUpdatedMonthlyPartitionedChecks) return;
+      if (!monthlyPartitionedChecks || !isUpdatedMonthlyPartitionedChecks)
+        return;
 
       await dispatch(
         updateColumnMonthlyPartitionedChecks(
@@ -230,9 +231,14 @@ const ColumnPartitionedChecksView = () => {
         }
         isUpdating={isUpdating}
       />
-      <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-      </div>
+      {userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
+          <div className="border-b border-gray-300">
+            <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+          </div>
+        )}
       <div>
         {tab === 'daily' && (
           <DataQualityChecks

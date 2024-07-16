@@ -17,7 +17,7 @@ Additional configuration is required **only when using remote storage** (AWS S3,
 When using remote cloud storage, make sure your account has access to the remote directory containing CSV, JSON, or Parquet files. 
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
-## Add connection to the files using the user interface
+## Add a connection to the files using the user interface
 
 ### **Navigate to the connection settings**
 

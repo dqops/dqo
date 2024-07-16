@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the distinct count in a monitored column is within a two-tailed
     percentile from measurements made during the last 90 days.
   standard: true
+  default_severity: warning

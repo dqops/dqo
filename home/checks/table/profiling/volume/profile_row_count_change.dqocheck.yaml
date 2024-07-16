@@ -7,3 +7,4 @@ spec:
   help_text: Detects when the volume's (row count) change since the last known row
     count exceeds the maximum accepted change percentage.
   standard: true
+  default_severity: warning

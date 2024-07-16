@@ -15290,6 +15290,15 @@ definitions:
           \ the data quality checks editor screen. Non-standard data quality checks\
           \ (when the value is false) are advanced checks that are shown when the\
           \ user decides to expand the list of checks."
+      default_severity:
+        type: "string"
+        description: "The severity level (warning, error, fatal) for the default rule\
+          \ that is activated in the data quality check editor when the check is enabled."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
       custom:
         type: "boolean"
         description: "This check has is a custom check or was customized by the user."
@@ -15378,6 +15387,15 @@ definitions:
         description: "This is a check that was applied on-the-fly, because it is configured\
           \ as a default data observability check and can be run, but it is not configured\
           \ in the table YAML."
+      default_severity:
+        type: "string"
+        description: "The severity level (warning, error, fatal) for the default rule\
+          \ that is activated in the data quality check editor when the check is enabled."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
       data_grouping_override:
         description: "Data grouping configuration for this check. When a data grouping\
           \ configuration is assigned at a check level, it overrides the data grouping\
@@ -31988,11 +32006,11 @@ definitions:
           \ configuration with a custom environment variable."
       user:
         type: "string"
-        description: "Databricks user name. Supports also a ${DATABRICKS_USER} configuration\
-          \ with a custom environment variable."
+        description: "(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER}\
+          \ configuration with a custom environment variable."
       password:
         type: "string"
-        description: "Databricks database password. Supports also a ${DATABRICKS_PASSWORD}\
+        description: "(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD}\
           \ configuration with a custom environment variable."
       http_path:
         type: "string"

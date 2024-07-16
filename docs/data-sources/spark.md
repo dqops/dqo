@@ -12,7 +12,7 @@ Apache Spark is an open-source unified analytics engine for large-scale data pro
 
 You need a Spark Thrift Server to be running that provides a connection through JDBC to data in Spark.
 
-## Add Spark connection using the user interface
+## Add a Spark connection using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -57,7 +57,7 @@ For example:
 
 ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
-To remove the property click on the trash icon at the end of the input field.
+To remove the property, click the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
@@ -86,7 +86,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 
-## Add Spark connection using DQOps Shell
+## Add a Spark connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -135,7 +135,7 @@ After adding connection run `table import -c=connection1` to select schemas and 
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
-You can also add the schema and table name as a parameter to import tables in just a single step.
+You can also add the schema and table name as parameters to import tables in just a single step.
 
 ```
 dqo> table import --connection={connection name}
@@ -145,7 +145,7 @@ dqo> table import --connection={connection name}
 
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
-character can be used at the beginning, in the middle or at the end of the name.
+character can be used at the beginning, middle, or end of the name.
 
 ## Connections configuration files
 
@@ -178,6 +178,6 @@ YAML file format.
 
 ## Next steps
 
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [complete list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

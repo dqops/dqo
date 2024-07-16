@@ -9,5 +9,6 @@ spec:
     \ rules verifies a minimum row count of one row, which ensures that the table\
     \ is not empty. Stores the most recent captured row count value for each month\
     \ when the row count was evaluated."
-  friendly_name: empty or too small table
+  friendly_name: Minimum row count (empty or too small table)
   standard: true
+  default_severity: error

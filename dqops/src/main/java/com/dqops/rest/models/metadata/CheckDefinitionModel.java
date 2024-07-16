@@ -17,6 +17,7 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -74,6 +75,12 @@ public class CheckDefinitionModel {
     private boolean standard;
 
     /**
+     * The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.
+     */
+    @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
+    private RuleSeverityLevel defaultSeverity = RuleSeverityLevel.error;
+
+    /**
      * True when the check is a custom check or is customized by the user.
      */
     @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
@@ -122,6 +129,7 @@ public class CheckDefinitionModel {
         this.friendlyName = checkDefinitionSpec.getFriendlyName();
         this.yamlParsingError = checkDefinitionSpec.getYamlParsingError();
         this.standard = checkDefinitionSpec.isStandard();
+        this.defaultSeverity = checkDefinitionSpec.getDefaultSeverity();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
@@ -153,6 +161,10 @@ public class CheckDefinitionModel {
             return false;
         }
 
+        if (!Objects.equals(checkDefinitionWrapper.getSpec().getDefaultSeverity(), this.defaultSeverity)) {
+            return false;
+        }
+
         if (checkDefinitionWrapper.getSpec().isStandard() != this.standard) {
             return false;
         }
@@ -171,6 +183,7 @@ public class CheckDefinitionModel {
         checkDefinitionSpec.setHelpText(this.helpText);
         checkDefinitionSpec.setFriendlyName(this.friendlyName);
         checkDefinitionSpec.setStandard(this.standard);
+        checkDefinitionSpec.setDefaultSeverity(this.defaultSeverity);
 
         return checkDefinitionSpec;
     }
@@ -183,6 +196,7 @@ public class CheckDefinitionModel {
                 setSensorName(SampleStringsRegistry.getFullSensorName());
                 setRuleName(SampleStringsRegistry.getFullRuleName());
                 setHelpText(SampleStringsRegistry.getHelpText());
+                setDefaultSeverity(RuleSeverityLevel.error);
                 setStandard(false);
                 setCustom(true);
                 setBuiltIn(false);

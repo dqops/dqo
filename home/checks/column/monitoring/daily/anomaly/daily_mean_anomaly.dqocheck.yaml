@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the mean value in a column changes in a rate within a percentile
     boundary during the last 90 days.
   standard: true
+  default_severity: warning

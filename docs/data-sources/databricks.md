@@ -15,7 +15,7 @@ To add Databricks data source connection to DQOps you need a Databricks SQL Ware
 It is also recommended to use an access token to connect an instance, so a permission to generate access token or a 
 possession of a previously generated token is necessary.
 
-## Add Databricks connection using the user interface
+## Add a Databricks connection using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -42,9 +42,7 @@ After navigating to the Databricks connection settings, you will need to fill in
 | Parallel jobs limit            |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                              |
 | Host                           | `host`                                   | Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.                                                                                                                                |
 | Port                           | `port`                                   | Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.                                                                                                     |
-| Catalog                        | `catalog`                                | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                           
-| User name                      | `user`                                   | Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.                                                                                                                                |
-| Password                       | `password`                               | Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.                                                                                                                    |
+| Catalog                        | `catalog`                                | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                            |
 | Http Path                      | `http_path`                              | Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.                                                |
 | Access token (optional)        | `access_token`                           | Databricks access token (short time). Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.                                                                                                        |
 | Initialization SQL             | `initialization_sql`                     | Custom SQL that is executed after connecting to Databricks. Allows to set eg. the ANSI_MODE.                                                                                                                                              |
@@ -64,7 +62,7 @@ For example:
 
 ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
-To remove the property click on the trash icon at the end of the input field.
+To remove the property, click the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
@@ -93,7 +91,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png){ loading=lazy; width="1200px" }
 
 
-## Add Databricks connection using DQOps Shell
+## Add a Databricks connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -122,9 +120,8 @@ Please enter one of the [] values: 2
 Databricks host name (--databricks-host) [${DATABRICKS_HOST}]: <databricks_host>.azuredatabricks.net
 Databricks port number (--databricks-port) [${DATABRICKS_PORT}]: 443
 Databricks catalog name (--databricks-catalog) [${DATABRICKS_CATALOG}]: samples
-Databricks user name (--databricks-user) [${DATABRICKS_USER}]: 
-Databricks user password (--databricks-password) [${DATABRICKS_PASSWORD}]: 
 Databricks http path (--databricks-http-path) [${DATABRICKS_HTTP_PATH}]: /sql/1.0/warehouses/<warehouse_id>
+Databricks access token (--databricks-access-token) [${DATABRICKS_ACCESS_TOKEN}]: <access_token>
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -145,7 +142,7 @@ After adding connection run `table import -c=connection1` to select schemas and 
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
-You can also add the schema and table name as a parameter to import tables in just a single step.
+You can also add the schema and table name as parameters to import tables in just a single step.
 
 ```
 dqo> table import --connection={connection name}
@@ -155,7 +152,7 @@ dqo> table import --connection={connection name}
 
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
-character can be used at the beginning, in the middle or at the end of the name.
+character can be used at the beginning, middle, or end of the name.
 
 ## Connections configuration files
 
@@ -328,6 +325,6 @@ The Catalog should be filled with **hive_metastore** to access the catalog with 
 
 ## Next steps
 
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [complete list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

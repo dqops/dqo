@@ -61,14 +61,12 @@ public class HealthcheckController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class),
             @ApiResponse(code = 503, message = "DQOps instance is not healthy or is still starting", response = String.class)
     })
-    public Mono<ResponseEntity<Mono<String>>> isHealthy() {
-        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
-            boolean isHealthy = this.jobQueue.isStarted() && this.parentJobQueue.isStarted();
-            if (isHealthy) {
-                return new ResponseEntity<>(Mono.just("OK"), HttpStatus.OK);
-            }
+    public ResponseEntity<Mono<String>> isHealthy() {
+        boolean isHealthy = this.jobQueue.isStarted() && this.parentJobQueue.isStarted();
+        if (isHealthy) {
+            return new ResponseEntity<>(Mono.just("OK"), HttpStatus.OK);
+        }
 
-            return new ResponseEntity<>(Mono.just("UNAVAILABLE"), HttpStatus.SERVICE_UNAVAILABLE); // 503
-        }));
+        return new ResponseEntity<>(Mono.just("UNAVAILABLE"), HttpStatus.SERVICE_UNAVAILABLE); // 503
     }
 }

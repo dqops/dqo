@@ -1,5 +1,5 @@
-import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import React from 'react';
 import Button from '../Button';
 
 interface ConfirmDialogProps {
