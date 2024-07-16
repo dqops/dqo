@@ -127,7 +127,7 @@ export default function TableQualityStatusColumnCategory({
     <React.Fragment key={`column_${customKey}`}>
       <tr
         key={`column_row_${customKey}`}
-        style={{ paddingTop: 0, paddingBottom: 0.5, margin: 0 }}
+        style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
       >
         <td
           key={`column_cell_${customKey}`}
@@ -152,7 +152,7 @@ export default function TableQualityStatusColumnCategory({
             onClick={() => {
               toggleExtendedChecks(customKey, firstLevelChecksKey);
             }}
-            style={{ paddingTop: 0.5, paddingBottom: 0, margin: 0 }}
+            style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
           >
             {' '}
             {getColor(
