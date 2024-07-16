@@ -33283,6 +33283,34 @@ definitions:
           $ref: "#/definitions/TableSpec"
     description: "Result object returned from the \"import tables\" job. Contains\
       \ the original table schemas and column schemas of imported tables."
+  IncidentCountsModel:
+    type: "object"
+    properties:
+      countFromLast24h:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the last 24h from now."
+      countFromLast7days:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the last 7 days, the number of 7 *\
+          \ 24 hours from now."
+      currentMonthCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the complete current month."
+      currentMonthDate:
+        type: "string"
+        format: "date"
+        description: "The first day of the current month date."
+      previousMonthCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the complete previous month."
+      previousMonthDate:
+        type: "string"
+        format: "date"
+        description: "The first day of the previous month date."
   IncidentDailyIssuesCount:
     type: "object"
     properties:
@@ -33454,6 +33482,18 @@ definitions:
         - "acknowledged"
         - "resolved"
         - "muted"
+  IncidentSeverityLevelCountsModel:
+    type: "object"
+    properties:
+      warningCounts:
+        description: "Counts for the warning severity level."
+        $ref: "#/definitions/IncidentCountsModel"
+      errorCounts:
+        description: "Counts for the error severity level."
+        $ref: "#/definitions/IncidentCountsModel"
+      fatalCounts:
+        description: "Counts for the fatal severity level."
+        $ref: "#/definitions/IncidentCountsModel"
   IncidentWebhookNotificationsSpec:
     type: "object"
     properties:
@@ -39217,6 +39257,14 @@ definitions:
           type: "array"
           items:
             $ref: "#/definitions/IncidentModel"
+      openIncidentSeverityLevelCounts:
+        description: "Incident severity level count container for the incident with\
+          \ open status."
+        $ref: "#/definitions/IncidentSeverityLevelCountsModel"
+      acknowledgedIncidentSeverityLevelCounts:
+        description: "Incident severity level count container for the incident with\
+          \ acknowledged status."
+        $ref: "#/definitions/IncidentSeverityLevelCountsModel"
   TrinoParametersSpec:
     type: "object"
     properties:
