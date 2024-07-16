@@ -25,6 +25,7 @@ export interface IncidentFilter {
   acknowledgedIncidents?: boolean;
   resolvedIncidents?: boolean;
   mutedIncidents?: boolean;
+  severity?: number;
   page?: number;
   pageSize?: number;
   optionalFilter?: string;

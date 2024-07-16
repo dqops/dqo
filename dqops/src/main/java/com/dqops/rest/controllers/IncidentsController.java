@@ -335,7 +335,7 @@ public class IncidentsController {
                 @RequestParam(required = false) Optional<Boolean> resolved,
             @ApiParam(name = "muted", value = "Returns muted incidents, when the parameter is missing, the default value is false", required = false)
                 @RequestParam(required = false) Optional<Boolean> muted,
-            @ApiParam(name = "muted", value = "Returns incidents with given severity level", required = false)
+            @ApiParam(name = "severity", value = "Returns incidents with given severity level", required = false)
                 @RequestParam(required = false) Optional<Integer> severity,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
                 @RequestParam(required = false) Optional<Integer> page,
