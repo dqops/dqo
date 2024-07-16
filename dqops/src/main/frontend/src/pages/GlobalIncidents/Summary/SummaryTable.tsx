@@ -11,19 +11,17 @@ export default function Summary({
 }) {
 
   return (
-    <div className="flex flex-wrap m-2 mt-3 p-2 grid md:grid-cols-1 2xl:grid-cols-2">
+    <div className="flex flex-wrap mt-4 ml-2 p-1 grid grid-cols-1 lg:grid-cols-2">
       <IncidentSeverityLevelCounts 
         incidentSeverityLevelCounts={incidents.openIncidentSeverityLevelCounts} 
         title="Open incidents"
         icon={<SvgIcon name="info-filled" className="text-red-900 w-6 h-6" />}
-        classNameValue=""
         incidentStatus="open"
       />
       <IncidentSeverityLevelCounts 
         incidentSeverityLevelCounts={incidents.acknowledgedIncidentSeverityLevelCounts} 
         title="Acknowledged incidents"
         icon={<div className="w-5 h-5 rounded-full bg-black" />}
-        classNameValue=""
         incidentStatus="acknowledged"
       />
     </div>

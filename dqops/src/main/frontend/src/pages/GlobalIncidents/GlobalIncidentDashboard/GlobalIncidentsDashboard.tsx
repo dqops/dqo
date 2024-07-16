@@ -12,7 +12,7 @@ export default function GlobalIncidentsDashboard({
   const groups = incidents.topIncidents || {};
 
   return (
-    <div className="flex flex-wrap pt-4 grid lg:grid-cols-1 screen1900:grid-cols-2">
+    <div className="flex flex-wrap pt-2 grid lg:grid-cols-1 screen1900:grid-cols-2">
       {Object.entries(groups)
         .filter(([, value]) => value.length !== 0)
         .sort(([, valueA], [, valueB]) => {

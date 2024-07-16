@@ -8,19 +8,17 @@ export default function IncidentSeverityLevelCounts({
   incidentSeverityLevelCounts,
   title,
   icon,
-  classNameValue,
   incidentStatus
 }: {
   incidentSeverityLevelCounts: IncidentSeverityLevelCountsModel | undefined,
   title: string,
   icon: React.ReactNode
-  classNameValue: string,
   incidentStatus: string
 }) {
 
   return (
     <SectionWrapper 
-      className={"flex items-center m-4 grid grid-cols-3 " + classNameValue}
+      className={"flex items-center grid grid-cols-3 "}
       title={title}
       titleIcon={icon}
     >

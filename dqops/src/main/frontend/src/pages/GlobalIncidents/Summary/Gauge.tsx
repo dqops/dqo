@@ -2,7 +2,6 @@ import React from "react";
 import { IncidentCountsModel, IncidentSeverityLevelCountsModel, TopIncidentsModel } from "../../../api";
 import SectionWrapper from "../../../components/Dashboard/SectionWrapper";
 import moment from 'moment';
-import Button from "../../../components/Button";
 import { ROUTES } from "../../../shared/routes";
 import { useHistory } from 'react-router-dom';
 
@@ -35,19 +34,18 @@ export default function Gauge({
   };
 
   return (
-    <SectionWrapper 
-      className={"flex justify-center border-2 my-4 mx-4 lg:mx-10 xl:mx-14 2xl:mx-4 screen1900:mx-14 screen3000:mx-34 " + colorClassName}
-      title={title}
-      // titleIcon={<div className={"w-4 h-4 border " + colorClassName}></div>}
-    >
-      <div 
-        className="w-[150px]"
+    <div className={"flex flex-col justify-center mx-1 lg:mx-4 lg:my-2 pb-2 cursor-pointer border-2 " + colorClassName}>
+      <div
+        className="w-full min-w-[110px] max-w-[160px] mx-auto"
         onClick={() => goToIncidents(severity, status)}
       >
-        <div className="text-center pt-1 pb-3 text-2xl ">
+        <div className="text-center pt-1 text-2xl w-full">
           {incidentCounts?.currentMonthCount && incidentCounts?.previousMonthCount && incidentCounts?.currentMonthCount + incidentCounts?.previousMonthCount}
         </div>
-        <div className="flex justify-between text-xs px-5">
+        <div className="text-center pb-3 text-2xl text-xs">
+          {title}
+        </div>
+        <div className="flex justify-between text-xs px-1">
           <div className="">
             Last 24h
           </div>
@@ -57,7 +55,7 @@ export default function Gauge({
               {incidentCounts?.countFromLast24h}
           </div>
         </div>
-        <div className="flex justify-between text-xs px-5">
+        <div className="flex justify-between text-xs px-1">
           <div className="">
             Last 7 days
           </div>
@@ -67,7 +65,7 @@ export default function Gauge({
               {incidentCounts?.countFromLast7days}
           </div>
         </div>
-        <div className="flex justify-between text-xs px-5">
+        <div className="flex justify-between text-xs px-1">
           <div className="">
             {incidentCounts?.currentMonthDate && getMonthName(incidentCounts?.currentMonthDate)}
           </div>
@@ -77,7 +75,7 @@ export default function Gauge({
               {incidentCounts?.currentMonthCount}
           </div>
         </div>
-        <div className="flex justify-between text-xs px-5">
+        <div className="flex justify-between text-xs px-1">
           <div className="">
             {incidentCounts?.previousMonthDate && getMonthName(incidentCounts?.previousMonthDate)}
           </div>
@@ -88,7 +86,7 @@ export default function Gauge({
           </div>
         </div>
       </div>
-    </SectionWrapper>
+    </div>
   );
 
 }
