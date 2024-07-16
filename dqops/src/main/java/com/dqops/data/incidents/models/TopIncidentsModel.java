@@ -55,6 +55,18 @@ public class TopIncidentsModel {
     private Map<String, List<IncidentModel>> topIncidents = new LinkedHashMap<>();
 
     /**
+     * Incident severity level count container for the incident with open status.
+     */
+    @JsonPropertyDescription("Incident severity level count container for the incident with open status.")
+    private IncidentSeverityLevelCountsModel openIncidentSeverityLevelCounts;
+
+    /**
+     * Incident severity level count container for the incident with acknowledged status.
+     */
+    @JsonPropertyDescription("Incident severity level count container for the incident with acknowledged status.")
+    private IncidentSeverityLevelCountsModel acknowledgedIncidentSeverityLevelCounts;
+
+    /**
      * Sample factory for an incident model.
      */
     public static class TopIncidentsModelSampleFactory implements SampleValueFactory<TopIncidentsModel> {
@@ -64,6 +76,7 @@ public class TopIncidentsModel {
                 setGrouping(TopIncidentGrouping.dimension);
                 setStatus(IncidentStatus.open);
                 getTopIncidents().put("Completeness", List.of(new IncidentModel.IncidentModelSampleFactory().createSample()));
+                setOpenIncidentSeverityLevelCounts(new IncidentSeverityLevelCountsModel.IncidentSeverityLevelCountsModelSampleFactory().createSample());
             }};
         }
     }

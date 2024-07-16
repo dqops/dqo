@@ -6,6 +6,7 @@ import GlobalIncidentsDashboard from './GlobalIncidentDashboard/GlobalIncidentsD
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import clsx from 'clsx';
+import SummaryTable from './Summary/SummaryTable';
 
 export default function index() {
   const [incidents, setIncidents] = useState<TopIncidentsModel>({});
@@ -57,6 +58,7 @@ export default function index() {
           }
         />
       </div>
+      <SummaryTable incidents={incidents} />
       <GlobalIncidentsDashboard
         incidents={incidents}
         groupBy={groupingField}

@@ -121,7 +121,8 @@ module.exports = withMT({
       },
       screens: {
         screen2000: '2000px',
-        screen1900: '1900px'
+        screen1900: '1900px',
+        screen3000: '3000px'
       },
       gridTemplateColumns: {
         24: 'repeat(24, minmax(0, 1fr))' // 24 column grid
