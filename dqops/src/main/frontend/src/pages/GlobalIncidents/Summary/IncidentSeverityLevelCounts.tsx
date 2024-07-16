@@ -28,21 +28,21 @@ export default function IncidentSeverityLevelCounts({
         incidentCounts={incidentSeverityLevelCounts?.warningCounts}
         colorClassName="border-yellow-500"
         title="Warnings"
-        severity="warning"
+        severity={1}
         status={incidentStatus}
       />
       <Gauge 
         incidentCounts={incidentSeverityLevelCounts?.errorCounts} 
         colorClassName="border-orange-500"
         title="Errors"
-        severity="error"
+        severity={2}
         status={incidentStatus}
       />
       <Gauge 
         incidentCounts={incidentSeverityLevelCounts?.fatalCounts}
         colorClassName="border-red-500"
         title="Fatal errors"
-        severity="fatal"
+        severity={3}
         status={incidentStatus}
       />
     </SectionWrapper>

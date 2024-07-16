@@ -16,7 +16,7 @@ export default function Gauge({
   incidentCounts: IncidentCountsModel | undefined,
   colorClassName: string,
   title: string,
-  severity: string,
+  severity: number,
   status: string
 }) {
   const history = useHistory();
@@ -26,10 +26,10 @@ export default function Gauge({
     return formattedDate;
   }
 
-  const goToIncidents = (severity: string, status: string) => {
+  const goToIncidents = (severity: number, status: string) => {
     history.push(
       ROUTES.INCIDENT_CONNECTION(
-        `*?severity=${severity}&status=${status}`
+        `*?severity=${severity}&${status}=true`
       )
     );
   };
