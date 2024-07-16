@@ -8,19 +8,17 @@ export default function IncidentSeverityLevelCounts({
   incidentSeverityLevelCounts,
   title,
   icon,
-  classNameValue,
   incidentStatus
 }: {
   incidentSeverityLevelCounts: IncidentSeverityLevelCountsModel | undefined,
   title: string,
   icon: React.ReactNode
-  classNameValue: string,
   incidentStatus: string
 }) {
 
   return (
     <SectionWrapper 
-      className={"flex items-center m-4 grid grid-cols-3 " + classNameValue}
+      className={"flex items-center grid grid-cols-3 "}
       title={title}
       titleIcon={icon}
     >
@@ -28,21 +26,21 @@ export default function IncidentSeverityLevelCounts({
         incidentCounts={incidentSeverityLevelCounts?.warningCounts}
         colorClassName="border-yellow-500"
         title="Warnings"
-        severity="warning"
+        severity={1}
         status={incidentStatus}
       />
       <Gauge 
         incidentCounts={incidentSeverityLevelCounts?.errorCounts} 
         colorClassName="border-orange-500"
         title="Errors"
-        severity="error"
+        severity={2}
         status={incidentStatus}
       />
       <Gauge 
         incidentCounts={incidentSeverityLevelCounts?.fatalCounts}
         colorClassName="border-red-500"
         title="Fatal errors"
-        severity="fatal"
+        severity={3}
         status={incidentStatus}
       />
     </SectionWrapper>
