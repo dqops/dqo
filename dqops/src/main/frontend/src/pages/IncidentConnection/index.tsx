@@ -46,6 +46,28 @@ const options = [
   }
 ];
 
+const severityOptions = [
+  {
+    label: '',
+    value: undefined
+  },
+  {
+    label: 'Warning',
+    value: 1,
+    icon: renderIncidentHighestSeveritySquare(1)
+  },
+  {
+    label: 'Error',
+    value: 2,
+    icon: renderIncidentHighestSeveritySquare(2)
+  },
+  {
+    label: 'Fatal',
+    value: 3,
+    icon: renderIncidentHighestSeveritySquare(3)
+  }
+];
+
 const statusOptions = [
   {
     label: 'OPEN',
@@ -443,9 +465,10 @@ export const IncidentConnection = () => {
     );
     dispatch(
       getIncidentsByConnection({
+        ...params,
         ...(filters || {}),
         ...obj,
-        ...params,
+
         connection
       })
     );
@@ -480,6 +503,17 @@ export const IncidentConnection = () => {
             </div>
           </div>
           <div className="flex items-center">
+            <Select
+              options={severityOptions}
+              className="mr-8 w-40"
+              value={
+                filters.severity === undefined
+                  ? 'Select severity'
+                  : filters.severity
+              }
+              onChange={(val) => onChangeFilter({ severity: val })}
+              placeholder="Select severity"
+            />
             <div className="mr-20">
               <StatusSelect onChangeFilter={onChangeFilter} />
             </div>
