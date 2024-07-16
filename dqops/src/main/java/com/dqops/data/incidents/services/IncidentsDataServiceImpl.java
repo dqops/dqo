@@ -160,7 +160,13 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     String status = statusColumn.get(rowIndex);
                     IncidentStatus incidentStatus = IncidentStatus.valueOf(status);
 
+                    int highestSeverity = highestSeverityColumn.get(rowIndex);
+
                     if (!filterParameters.isIncidentStatusEnabled(incidentStatus)) {
+                        continue; // skipping
+                    }
+
+                    if (filterParameters.getSeverity() != null && filterParameters.getSeverity() != highestSeverity) {
                         continue; // skipping
                     }
 
@@ -210,7 +216,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     if (!issueUrlColumn.isMissing(rowIndex)) {
                         incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
                     }
-                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    incidentModel.setHighestSeverity(highestSeverity);
                     if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
                         incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
                     }
@@ -582,7 +588,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     if (!issueUrlColumn.isMissing(rowIndex)) {
                         incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
                     }
-                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    incidentModel.setHighestSeverity(highestSeverity);
                     if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
                         incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
                     }

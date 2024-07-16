@@ -51,7 +51,7 @@ public class IncidentSeverityLevelCountsModel {
 
     /**
      * Processes the incident of a given severity that occurred on the specific time to verify the incrementation of inner counts.
-     * @param highestSeverity The highest severity value that.
+     * @param highestSeverity The highest severity value to be count.
      * @param occurrenceTime The time of occurrence of the incident.
      */
     public void processAddCount(int highestSeverity, Instant occurrenceTime){
