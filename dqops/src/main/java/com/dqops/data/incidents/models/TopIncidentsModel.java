@@ -54,10 +54,16 @@ public class TopIncidentsModel {
     @JsonPropertyDescription("Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).")
     private Map<String, List<IncidentModel>> topIncidents = new LinkedHashMap<>();
 
-    // todo
+    /**
+     * Incident severity level count container for the incident with open status.
+     */
+    @JsonPropertyDescription("Incident severity level count container for the incident with open status.")
     private IncidentSeverityLevelCountsModel openIncidentSeverityLevelCounts;
 
-    // todo
+    /**
+     * Incident severity level count container for the incident with acknowledged status.
+     */
+    @JsonPropertyDescription("Incident severity level count container for the incident with acknowledged status.")
     private IncidentSeverityLevelCountsModel acknowledgedIncidentSeverityLevelCounts;
 
     /**
@@ -70,6 +76,7 @@ public class TopIncidentsModel {
                 setGrouping(TopIncidentGrouping.dimension);
                 setStatus(IncidentStatus.open);
                 getTopIncidents().put("Completeness", List.of(new IncidentModel.IncidentModelSampleFactory().createSample()));
+                setOpenIncidentSeverityLevelCounts(new IncidentSeverityLevelCountsModel.IncidentSeverityLevelCountsModelSampleFactory().createSample());
             }};
         }
     }

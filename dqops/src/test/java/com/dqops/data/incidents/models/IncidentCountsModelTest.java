@@ -28,7 +28,7 @@ class IncidentCountsModelTest extends BaseTest {
 
         Instant momentAgo = Instant.now().minusSeconds(1);
 
-        incidentCountsModel.verifyAddition(momentAgo);
+        incidentCountsModel.processCountIncrementation(momentAgo);
 
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
@@ -43,7 +43,7 @@ class IncidentCountsModelTest extends BaseTest {
 
         Instant toDaysAgo = Instant.now().minusSeconds(2 * 24 * 60 * 60);
 
-        incidentCountsModel.verifyAddition(toDaysAgo);
+        incidentCountsModel.processCountIncrementation(toDaysAgo);
 
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
@@ -58,7 +58,7 @@ class IncidentCountsModelTest extends BaseTest {
 
         Instant lastMonth = LocalDateTime.now().minusMonths(1).atZone(defaultTimeZoneProvider.getDefaultTimeZoneId()).toInstant();
 
-        incidentCountsModel.verifyAddition(lastMonth);
+        incidentCountsModel.processCountIncrementation(lastMonth);
 
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
@@ -72,7 +72,7 @@ class IncidentCountsModelTest extends BaseTest {
 
         Instant twoAndHalfMonthsAgo = Instant.now().minusSeconds(45 * 24 * 60 * 60);
 
-        incidentCountsModel.verifyAddition(twoAndHalfMonthsAgo);
+        incidentCountsModel.processCountIncrementation(twoAndHalfMonthsAgo);
 
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
