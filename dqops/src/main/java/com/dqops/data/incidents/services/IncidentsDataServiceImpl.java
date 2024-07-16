@@ -36,6 +36,7 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.rest.models.common.SortDirection;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -427,6 +428,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param incidentStatus     Incident status to filter by.
      * @param limitPerGroup      The maximum number of incidents per group to return.
      * @param daysToScan         The number of days back to scan.
+     * @param severityFilter     Incident severity to filter by.
      * @param userDomainIdentity Calling user identity with the data domain.
      * @return Summary of the most recent incidents.
      */
@@ -435,6 +437,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                                               IncidentStatus incidentStatus,
                                               int limitPerGroup,
                                               int daysToScan,
+                                              RuleSeverityLevel severityFilter,
                                               UserDomainIdentity userDomainIdentity) {
         TopIncidentsModel result = new TopIncidentsModel();
         result.setGrouping(incidentGrouping);
@@ -501,7 +504,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     IncidentStatus status = IncidentStatus.valueOf(statusText);
 
                     Instant firstSeen = firstSeenColumn.get(rowIndex);
-                    int highestSeverity = highestSeverityColumn.get(rowIndex);
+                    RuleSeverityLevel highestSeverity = RuleSeverityLevel.fromSeverityLevel(highestSeverityColumn.get(rowIndex));
 
                     if(status == IncidentStatus.open){
                         result.getOpenIncidentSeverityLevelCounts().processAddCount(highestSeverity, firstSeen);
@@ -511,6 +514,10 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     }
 
                     if (status != incidentStatus) {
+                        continue;
+                    }
+
+                    if (severityFilter != null && severityFilter != highestSeverity) {
                         continue;
                     }
 

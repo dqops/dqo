@@ -1,5 +1,6 @@
 package com.dqops.data.incidents.models;
 
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -51,18 +52,21 @@ public class IncidentSeverityLevelCountsModel {
 
     /**
      * Processes the incident of a given severity that occurred on the specific time to verify the incrementation of inner counts.
-     * @param highestSeverity The highest severity value that.
+     * @param highestSeverity The highest severity value to be count.
      * @param occurrenceTime The time of occurrence of the incident.
      */
-    public void processAddCount(int highestSeverity, Instant occurrenceTime){
+    public void processAddCount(RuleSeverityLevel highestSeverity, Instant occurrenceTime){
+        if(highestSeverity == null){
+            return;
+        }
         switch(highestSeverity){
-            case 1:
+            case warning:
                 warningCounts.processCountIncrementation(occurrenceTime);
                 break;
-            case 2:
+            case error:
                 errorCounts.processCountIncrementation(occurrenceTime);
                 break;
-            case 3:
+            case fatal:
                 fatalCounts.processCountIncrementation(occurrenceTime);
                 break;
         }

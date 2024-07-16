@@ -23,6 +23,7 @@ import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
 import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.models.*;
+import com.dqops.rules.RuleSeverityLevel;
 
 import java.util.Collection;
 
@@ -65,12 +66,14 @@ public interface IncidentsDataService {
      * @param limitPerGroup The maximum number of incidents per group to return.
      * @param daysToScan The number of days to scan.
      * @param userDomainIdentity Calling user identity with the data domain.
+     * @param severityFilter     Incident severity to filter by.
      * @return Summary of the most recent incidents.
      */
     TopIncidentsModel findTopIncidents(TopIncidentGrouping incidentGrouping,
                                        IncidentStatus incidentStatus,
                                        int limitPerGroup,
                                        int daysToScan,
+                                       RuleSeverityLevel severityFilter,
                                        UserDomainIdentity userDomainIdentity);
 
     /**

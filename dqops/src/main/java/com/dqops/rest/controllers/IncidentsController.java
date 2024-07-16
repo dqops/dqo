@@ -34,6 +34,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rest.models.platform.SpringErrorPayload;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.services.check.calibration.CheckCalibrationService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -433,14 +434,17 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<TopIncidentGrouping> groupBy,
             @ApiParam(name = "limit", value = "The result limit for each group. When this parameter is missing, returns the default limit of " + TOP_INCIDENTS_LIMIT_PER_GROUP, required = false)
             @RequestParam(required = false) Optional<Integer> limit,
-            @ApiParam(name = "limit", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
-            @RequestParam(required = false) Optional<Integer> days) {
+            @ApiParam(name = "days", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
+            @ApiParam(name = "severity", value = "Optional filter indicating the rule severity of the incidents.", required = false)
+            @RequestParam(required = false) Optional<RuleSeverityLevel> severity) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
                     groupBy.orElse(TopIncidentGrouping.category),
                     status.orElse(IncidentStatus.open),
                     limit.orElse(TOP_INCIDENTS_LIMIT_PER_GROUP),
                     days.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsDays()),
+                    severity.orElse(null),
                     principal.getDataDomainIdentity());
             return new ResponseEntity<>(Mono.just(topIncidentsModel), HttpStatus.OK);
         }));
