@@ -58,10 +58,13 @@ public class IncidentSeverityLevelCountsModel {
         switch(highestSeverity){
             case 1:
                 warningCounts.processCountIncrementation(occurrenceTime);
+                break;
             case 2:
                 errorCounts.processCountIncrementation(occurrenceTime);
+                break;
             case 3:
                 fatalCounts.processCountIncrementation(occurrenceTime);
+                break;
         }
     }
 
