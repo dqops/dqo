@@ -281,134 +281,20 @@ const TableHeader = ({
     <thead>
       {ruleParamenterConfigured && (
         <tr>
-          {checkTypes === CheckTypes.PROFILING ? (
-            <td
-              colSpan={2}
-              className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
-            >
-              <div className="flex gap-2 items-center font-normal text-gray-950">
-                {isFiltered !== true ? (
-                  <Checkbox
-                    label="Show advanced checks"
-                    labelPosition="right"
-                    checked={showAdvanced}
-                    onChange={(value) => setShowAdvanced(value)}
-                  />
-                ) : null}
-                {!mode && (
-                  <>
-                    <Button
-                      color="primary"
-                      label="Set up monitoring checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      variant="outlined"
-                      onClick={() => onChangeMode('monitoring')}
-                    />
-                    <Button
-                      color="primary"
-                      label="Set up partition checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      variant="outlined"
-                      onClick={() => onChangeMode('partitioned')}
-                    />
-                  </>
-                )}
-                {mode === 'monitoring' && (
-                  <>
-                    <div className="text-sm">Copy selected checks to:</div>
-                    <Button
-                      color="primary"
-                      label="Daily monitoring checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      onClick={() => copyMonitoringCheck('daily')}
-                    />
-                    <Button
-                      color="primary"
-                      label="Monthly monitoring checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      onClick={() => copyMonitoringCheck('monthly')}
-                    />
-                    <Button
-                      color="primary"
-                      label="Cancel"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      variant="outlined"
-                      onClick={() => setMode(undefined)}
-                    />
-                  </>
-                )}
-                {mode === 'partitioned' && (
-                  <>
-                    <div className="text-sm">Copy selected checks to:</div>
-                    <Button
-                      color="primary"
-                      label="Daily partition checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      onClick={() => copyPartitionCheck('daily')}
-                    />
-                    <Button
-                      color="primary"
-                      label="Monthly partition checks"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      onClick={() => copyPartitionCheck('monthly')}
-                    />
-                    <Button
-                      color="primary"
-                      label="Cancel"
-                      textSize="sm"
-                      className="font-medium px-1 py-1"
-                      variant="outlined"
-                      onClick={() => setMode(undefined)}
-                    />
-                  </>
-                )}
-              </div>
-            </td>
-          ) : (
-            <>
-              <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-                <div className="flex gap-2 items-center font-normal text-gray-950">
-                  {isFiltered !== true ? (
-                    <Checkbox
-                      label="Show advanced checks"
-                      labelPosition="right"
-                      checked={showAdvanced}
-                      onChange={(value) => setShowAdvanced(value)}
-                    />
-                  ) : null}
-                </div>
-              </td>
-              <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
-            </>
-          )}
-          {ruleParamenterConfigured ? (
-            <>
-              <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
-                Passing rule (KPI met)
-                <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-              </td>
-              <td
-                className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
-                colSpan={2}
-              >
-                Failing rule (KPI not met)
-              </td>
-            </>
-          ) : (
-            <>
-              <td
-                className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
-                colSpan={2}
-              ></td>
-            </>
-          )}
+          <td
+            className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+            colSpan={2}
+          ></td>
+          <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
+            Passing rule (KPI met)
+            <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+          </td>
+          <td
+            className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
+            colSpan={2}
+          >
+            Failing rule (KPI not met)
+          </td>
         </tr>
       )}
       <tr>
@@ -439,7 +325,93 @@ const TableHeader = ({
             )}
           </div>
         </td>
-        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></td>
+        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+          <div className="flex gap-2 items-center font-normal text-gray-950 justify-end">
+            {isFiltered !== true ? (
+              <Checkbox
+                label="Show advanced checks"
+                labelPosition="right"
+                checked={showAdvanced}
+                onChange={(value) => setShowAdvanced(value)}
+              />
+            ) : null}
+            {!mode && (
+              <>
+                <Button
+                  color="primary"
+                  label="Set up monitoring checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  variant="outlined"
+                  onClick={() => onChangeMode('monitoring')}
+                />
+                <Button
+                  color="primary"
+                  label="Set up partition checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  variant="outlined"
+                  onClick={() => onChangeMode('partitioned')}
+                />
+              </>
+            )}
+            {mode === 'monitoring' && (
+              <>
+                <div className="text-sm">Copy selected checks to:</div>
+                <Button
+                  color="primary"
+                  label="Daily monitoring checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  onClick={() => copyMonitoringCheck('daily')}
+                />
+                <Button
+                  color="primary"
+                  label="Monthly monitoring checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  onClick={() => copyMonitoringCheck('monthly')}
+                />
+                <Button
+                  color="primary"
+                  label="Cancel"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  variant="outlined"
+                  onClick={() => setMode(undefined)}
+                />
+              </>
+            )}
+            {mode === 'partitioned' && (
+              <>
+                <div className="text-sm">Copy selected checks to:</div>
+                <Button
+                  color="primary"
+                  label="Daily partition checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  onClick={() => copyPartitionCheck('daily')}
+                />
+                <Button
+                  color="primary"
+                  label="Monthly partition checks"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  onClick={() => copyPartitionCheck('monthly')}
+                />
+                <Button
+                  color="primary"
+                  label="Cancel"
+                  textSize="sm"
+                  className="font-medium px-1 py-1"
+                  variant="outlined"
+                  onClick={() => setMode(undefined)}
+                />
+              </>
+            )}
+          </div>
+        </td>
+
         {ruleParamenterConfigured ? (
           <>
             <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
@@ -461,95 +433,10 @@ const TableHeader = ({
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
               Rule thresholds
             </td>
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+              <div className="w-38 h-full bg-gray-400"></div>
+            </td>
           </>
-        )}
-        {!ruleParamenterConfigured && (
-          <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-            <div className="flex gap-2 items-center font-normal text-gray-950 justify-end">
-              {isFiltered !== true ? (
-                <Checkbox
-                  label="Show advanced checks"
-                  labelPosition="right"
-                  checked={showAdvanced}
-                  onChange={(value) => setShowAdvanced(value)}
-                />
-              ) : null}
-              {!mode && (
-                <>
-                  <Button
-                    color="primary"
-                    label="Set up monitoring checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    variant="outlined"
-                    onClick={() => onChangeMode('monitoring')}
-                  />
-                  <Button
-                    color="primary"
-                    label="Set up partition checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    variant="outlined"
-                    onClick={() => onChangeMode('partitioned')}
-                  />
-                </>
-              )}
-              {mode === 'monitoring' && (
-                <>
-                  <div className="text-sm">Copy selected checks to:</div>
-                  <Button
-                    color="primary"
-                    label="Daily monitoring checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    onClick={() => copyMonitoringCheck('daily')}
-                  />
-                  <Button
-                    color="primary"
-                    label="Monthly monitoring checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    onClick={() => copyMonitoringCheck('monthly')}
-                  />
-                  <Button
-                    color="primary"
-                    label="Cancel"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    variant="outlined"
-                    onClick={() => setMode(undefined)}
-                  />
-                </>
-              )}
-              {mode === 'partitioned' && (
-                <>
-                  <div className="text-sm">Copy selected checks to:</div>
-                  <Button
-                    color="primary"
-                    label="Daily partition checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    onClick={() => copyPartitionCheck('daily')}
-                  />
-                  <Button
-                    color="primary"
-                    label="Monthly partition checks"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    onClick={() => copyPartitionCheck('monthly')}
-                  />
-                  <Button
-                    color="primary"
-                    label="Cancel"
-                    textSize="sm"
-                    className="font-medium px-1 py-1"
-                    variant="outlined"
-                    onClick={() => setMode(undefined)}
-                  />
-                </>
-              )}
-            </div>
-          </td>
         )}
       </tr>
       <DeleteOnlyDataDialog
