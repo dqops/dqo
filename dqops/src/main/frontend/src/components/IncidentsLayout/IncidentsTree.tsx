@@ -14,6 +14,7 @@ import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
+import { getParamsFromURL, getSeverity } from '../../utils';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
@@ -25,8 +26,8 @@ const IncidentsTree = () => {
       : '';
   const history = useHistory();
   const filters = {
-    openIncidents: true,
-    acknowledgedIncidents: true,
+    open: true,
+    acknowledged: true,
     page: 1,
     pageSize: 10
   };
@@ -61,7 +62,7 @@ const IncidentsTree = () => {
     const params = getParamsFromURL(window.location.search);
     const label = Object.entries(params).map(([key, value]) => {
       if (key === 'severity') {
-        return getSeverity(value) + ' severity incidents';
+        return getSeverity(String(value)) + ' severity incidents';
       }
       return value;
     });
@@ -201,50 +202,3 @@ const IncidentsTree = () => {
 };
 
 export default IncidentsTree;
-
-function getParamsFromURL(url: string): Record<string, string | undefined> {
-  const params: Record<string, string | undefined> = {};
-  const queryString = url.split('?')[1];
-
-  if (queryString) {
-    const pairs = queryString.split('&');
-
-    for (const pair of pairs) {
-      const [key, value] = pair.split('=');
-      if (key && value) {
-        if (key === 'severity') {
-          switch (value) {
-            case 'warning':
-              params[key] = '1';
-              break;
-            case 'error':
-              params[key] = '2';
-              break;
-            case 'fatal':
-              params[key] = '3';
-              break;
-            default:
-              params[key] = value;
-          }
-        } else {
-          params[key] = value;
-        }
-      }
-    }
-  }
-
-  return params;
-}
-
-const getSeverity = (severity: string | undefined) => {
-  switch (severity) {
-    case '1':
-      return 'warning';
-    case '2':
-      return 'error';
-    case '3':
-      return 'fatal';
-    default:
-      return severity;
-  }
-};

@@ -804,3 +804,57 @@ export const getIncidentsErrorSamples = async ({
     console.error('Error fetching errors:', error);
   }
 };
+
+export function getParamsFromURL(
+  url: string
+): Record<string, string | boolean | undefined> {
+  const params: Record<string, string | boolean | undefined> = {};
+  const queryString = url.split('?')[1];
+
+  if (queryString) {
+    const pairs = queryString.split('&');
+
+    for (const pair of pairs) {
+      const [key, value] = pair.split('=');
+
+      if (key) {
+        if (key === 'severity') {
+          switch (value) {
+            case 'warning':
+              params[key] = '1';
+              break;
+            case 'error':
+              params[key] = '2';
+              break;
+            case 'fatal':
+              params[key] = '3';
+              break;
+            default:
+              params[key] = value;
+          }
+        } else if (value === 'true') {
+          params[key] = true;
+        } else if (value === 'false') {
+          params[key] = false;
+        } else {
+          params[key] = value;
+        }
+      }
+    }
+  }
+
+  return params;
+}
+
+export const getSeverity = (severity: string | undefined) => {
+  switch (severity) {
+    case '1':
+      return 'warning';
+    case '2':
+      return 'error';
+    case '3':
+      return 'fatal';
+    default:
+      return severity;
+  }
+};

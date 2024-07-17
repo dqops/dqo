@@ -27,7 +27,12 @@ import { IRootState } from '../../redux/reducers';
 import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
 import { IncidentsApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDaysString, useDecodedParams } from '../../utils';
+import {
+  getDaysString,
+  getParamsFromURL,
+  getSeverity,
+  useDecodedParams
+} from '../../utils';
 import AddIssueUrlDialog from './AddIssueUrlDialog';
 import { SortableColumn } from './SortableColumn';
 
@@ -451,8 +456,8 @@ export const IncidentConnection = () => {
     onChangeFilter({
       optionalFilter: debouncedSearchTerm,
       page: 1,
-      openIncidents: true,
-      acknowledgedIncidents: true,
+      open: true,
+      acknowledged: true,
       ...params
     });
   }, [debouncedSearchTerm]);
@@ -460,15 +465,15 @@ export const IncidentConnection = () => {
   const onChangeFilter = (obj: Partial<IncidentFilter>) => {
     dispatch(
       setIncidentsFilter({
-        ...params,
         ...(filters || {}),
+        ...params,
         ...obj
       })
     );
     dispatch(
       getIncidentsByConnection({
-        ...params,
         ...(filters || {}),
+        ...params,
         ...obj,
 
         connection
@@ -502,7 +507,7 @@ export const IncidentConnection = () => {
             <div className="text-lg font-semibold truncate">
               Data quality incidents{' '}
               {params.severity
-                ? `at ${getSeverity(params.severity)} severity level`
+                ? `at ${getSeverity(String(params.severity))} severity level`
                 : `on ${connection}` || ''}
             </div>
           </div>
@@ -617,50 +622,3 @@ function renderIncidentHighestSeveritySquare(severity: number) {
     </div>
   );
 }
-
-function getParamsFromURL(url: string): Record<string, string | undefined> {
-  const params: Record<string, string | undefined> = {};
-  const queryString = url.split('?')[1];
-
-  if (queryString) {
-    const pairs = queryString.split('&');
-
-    for (const pair of pairs) {
-      const [key, value] = pair.split('=');
-      if (key && value) {
-        if (key === 'severity') {
-          switch (value) {
-            case 'warning':
-              params[key] = '1';
-              break;
-            case 'error':
-              params[key] = '2';
-              break;
-            case 'fatal':
-              params[key] = '3';
-              break;
-            default:
-              params[key] = value;
-          }
-        } else {
-          params[key] = value;
-        }
-      }
-    }
-  }
-
-  return params;
-}
-
-const getSeverity = (severity: string | undefined) => {
-  switch (severity) {
-    case '1':
-      return 'a warning';
-    case '2':
-      return 'an error';
-    case '3':
-      return 'a fatal';
-    default:
-      return severity;
-  }
-};
