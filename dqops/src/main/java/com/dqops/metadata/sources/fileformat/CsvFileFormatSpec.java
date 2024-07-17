@@ -1,6 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.connectors.duckdb.DuckdbCompressionTypeOption;
+import com.dqops.connectors.duckdb.config.DuckdbCompressionTypeOption;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;

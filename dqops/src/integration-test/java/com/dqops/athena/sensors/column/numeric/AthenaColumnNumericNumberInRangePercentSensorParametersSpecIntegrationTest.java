@@ -18,8 +18,6 @@ package com.dqops.athena.sensors.column.numeric;
 import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNumberInRangePercentCheckSpec;
-import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;

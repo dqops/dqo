@@ -1,6 +1,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.BaseTest;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.junit.jupiter.api.Assertions;

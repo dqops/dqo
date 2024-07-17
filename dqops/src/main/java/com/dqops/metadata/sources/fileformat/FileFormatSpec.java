@@ -1,8 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;

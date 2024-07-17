@@ -17,6 +17,8 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.duckdb.config.DuckdbReadMode;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.*;
 import com.dqops.connectors.duckdb.schema.DuckDBDataTypeParser;
 import com.dqops.connectors.duckdb.schema.DuckDBField;

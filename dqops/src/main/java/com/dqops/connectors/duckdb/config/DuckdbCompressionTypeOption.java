@@ -1,4 +1,4 @@
-package com.dqops.connectors.duckdb;
+package com.dqops.connectors.duckdb.config;
 
 import com.dqops.metadata.sources.fileformat.CompressionType;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -4,7 +4,7 @@ import com.dqops.BaseTest;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbSourceConnection;
 import com.dqops.connectors.duckdb.DuckdbSourceConnectionObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;

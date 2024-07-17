@@ -18,7 +18,7 @@ package com.dqops.duckdb.sensors.column.numeric;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.numeric.ColumnValidLatitudePercentCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;

@@ -16,6 +16,9 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbReadMode;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.storage.aws.AwsAuthenticationMode;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.core.secrets.SecretValueLookupContext;
