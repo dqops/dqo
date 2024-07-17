@@ -1,5 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 

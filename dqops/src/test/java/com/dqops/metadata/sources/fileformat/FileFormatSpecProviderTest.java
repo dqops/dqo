@@ -6,6 +6,7 @@ import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 import org.junit.jupiter.api.Assertions;

@@ -7,7 +7,7 @@ import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.metadata.sources.fileformat.CompressionType;
-import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
