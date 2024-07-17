@@ -269,7 +269,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         return Arrays.asList(
                 "httpfs",
                 "aws",
-                "azure"
+                "azure",
+                "iceberg"
         );
     }
 
