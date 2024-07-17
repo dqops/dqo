@@ -14,6 +14,7 @@ import { IRootState } from '../../redux/reducers';
 import { ROUTES } from '../../shared/routes';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
+import { getParamsFromURL, getSeverity } from '../../utils';
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
@@ -24,7 +25,12 @@ const IncidentsTree = () => {
       ? activeTab?.split('/')[2]
       : '';
   const history = useHistory();
-
+  const filters = {
+    open: true,
+    acknowledged: true,
+    page: 1,
+    pageSize: 10
+  };
   useEffect(() => {
     dispatch(getConnections());
   }, []);
@@ -45,12 +51,7 @@ const IncidentsTree = () => {
         url,
         value: ROUTES.INCIDENT_CONNECTION_VALUE(connection?.connection ?? ''),
         state: {
-          filters: {
-            openIncidents: true,
-            acknowledgedIncidents: true,
-            page: 1,
-            pageSize: 10
-          }
+          filters
         },
         label: connection?.connection ?? ''
       })
@@ -61,10 +62,7 @@ const IncidentsTree = () => {
     const params = getParamsFromURL(window.location.search);
     const label = Object.entries(params).map(([key, value]) => {
       if (key === 'severity') {
-        return (
-          String(value).replace(/\b\w/g, (c) => c.toUpperCase()) +
-          ' severity incidents'
-        );
+        return getSeverity(String(value)) + ' severity incidents';
       }
       return value;
     });
@@ -73,7 +71,12 @@ const IncidentsTree = () => {
       addFirstLevelTab({
         url: window.location.pathname + window.location.search,
         value: window.location.pathname + window.location.search,
-        state: {},
+        state: {
+          filters: {
+            ...filters,
+            ...params
+          }
+        },
         label: label.join(' / ')
       })
     );
@@ -199,33 +202,3 @@ const IncidentsTree = () => {
 };
 
 export default IncidentsTree;
-
-function getLastValueFromURL(url: string, param: string): string | undefined {
-  const regex = new RegExp(`[?&]${param}=([^&]*)`);
-  const match = url.match(regex);
-
-  if (match && match[1]) {
-    const values = match[1].split(',');
-    return values[values.length - 1];
-  }
-
-  return undefined;
-}
-
-function getParamsFromURL(url: string): Record<string, string | undefined> {
-  const params: Record<string, string | undefined> = {};
-  const queryString = url.split('?')[1];
-
-  if (queryString) {
-    const pairs = queryString.split('&');
-
-    for (const pair of pairs) {
-      const [key, value] = pair.split('=');
-      if (key && value) {
-        params[key] = value;
-      }
-    }
-  }
-
-  return params;
-}

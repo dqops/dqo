@@ -21,10 +21,10 @@ import { Action, INestTab } from './source.reducer';
 export interface IncidentFilter {
   connection: string;
   numberOfMonth?: number;
-  openIncidents?: boolean;
-  acknowledgedIncidents?: boolean;
-  resolvedIncidents?: boolean;
-  mutedIncidents?: boolean;
+  open?: boolean;
+  acknowledged?: boolean;
+  resolved?: boolean;
+  muted?: boolean;
   severity?: number;
   page?: number;
   pageSize?: number;
