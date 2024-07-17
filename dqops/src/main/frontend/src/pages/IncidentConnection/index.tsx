@@ -452,13 +452,16 @@ export const IncidentConnection = () => {
       optionalFilter: debouncedSearchTerm,
       page: 1,
       openIncidents: true,
-      acknowledgedIncidents: true
+      acknowledgedIncidents: true,
+      ...params
     });
   }, [debouncedSearchTerm]);
 
   const onChangeFilter = (obj: Partial<IncidentFilter>) => {
+    console.log(filters, obj);
     dispatch(
       setIncidentsFilter({
+        ...params,
         ...(filters || {}),
         ...obj
       })
@@ -473,7 +476,7 @@ export const IncidentConnection = () => {
       })
     );
   };
-
+  console.log(filters);
   const goToConfigure = () => {
     dispatch(
       addSourceFirstLevelTab(CheckTypes.SOURCES, {
@@ -499,7 +502,10 @@ export const IncidentConnection = () => {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
-              Data quality incidents {`on ${connection}` || ''}
+              Data quality incidents{' '}
+              {params.severity
+                ? `at ${getSeverity(params.severity)} severity level`
+                : `on ${connection}` || ''}
             </div>
           </div>
           <div className="flex items-center">
@@ -556,7 +562,11 @@ export const IncidentConnection = () => {
             </div>
           ) : (
             <Table
-              columns={columns}
+              columns={
+                filters.severity
+                  ? columns.filter((x) => x.value !== 'highestSeverity')
+                  : columns
+              }
               data={incidents || []}
               className="w-full mb-8"
             />
@@ -620,10 +630,39 @@ function getParamsFromURL(url: string): Record<string, string | undefined> {
     for (const pair of pairs) {
       const [key, value] = pair.split('=');
       if (key && value) {
-        params[key] = value;
+        if (key === 'severity') {
+          switch (value) {
+            case 'warning':
+              params[key] = '1';
+              break;
+            case 'error':
+              params[key] = '2';
+              break;
+            case 'fatal':
+              params[key] = '3';
+              break;
+            default:
+              params[key] = value;
+          }
+        } else {
+          params[key] = value;
+        }
       }
     }
   }
 
   return params;
 }
+
+const getSeverity = (severity: string | undefined) => {
+  switch (severity) {
+    case '1':
+      return 'a warning';
+    case '2':
+      return 'an error';
+    case '3':
+      return 'a fatal';
+    default:
+      return severity;
+  }
+};
