@@ -1,44 +1,43 @@
 ---
-title: How to activate data observability for JSON files
+title: How to activate data observability for CSV files
 ---
-# How to activate data observability for JSON files
-Read this guide to learn how to configure DQOps to use JSON files from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to activate data observability for Iceberg table
+Read this guide to learn how to configure DQOps to use Iceberg table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-DQOps supports monitoring of data quality in JSON files, which can be stored locally or remotely in cloud storage.
-When importing a JSON file, you can select either a single file or an entire directory containing multiple files.
-DQOps will create a table from the JSON file, which will allow you to profile it and monitor its data quality.
+DQOps supports monitoring of data quality in Iceberg tables, which can be stored locally or remotely in cloud storage. 
+DQOps will create a table from the Iceberg files, which will allow you to profile it and monitor its data quality.
 
 ## Prerequisite credentials
 
 Additional configuration is required **only when using remote storage** (AWS S3, Azure Blob Storage or Google Cloud Storage).
 
-When using remote cloud storage, make sure your account has access to the remote directory containing JSON files.
+When using remote cloud storage, make sure your account has access to the remote directory containing Iceberg table. 
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
-## Add a connection to JSON files using the user interface
+## Add a connection to Iceberg tables using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the JSON connection settings:
+To navigate to the Iceberg connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
-2. Select the JSON file connection option.
+2. Select the Iceberg table connection option.
 
-    ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-json.png){ loading=lazy; width="1200px" }
+    ![Selecting Iceberg database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-iceberg.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the JSON connection settings, you will need to fill in its details.
+After navigating to the Iceberg connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-json.png){ loading=lazy; width="1200px" }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-iceberg.png){ loading=lazy; width="1200px" }
 
-| JSON connection settings  | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
+| Iceberg connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
 |---------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                                  |
 | Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                               |
@@ -60,73 +59,41 @@ After navigating to the JSON connection settings, you will need to fill in its d
 | Path                      | `directories`                            | The path prefix to the parent directory with data. The path must be absolute. The virtual schema name is a value of the directories mapping.                                                                                                                                                                               |
 | JDBC connection property  |                                          | Optional setting. DQOps supports using the JDBC driver to access DuckDB.                                                                                                                                                                                                                                                   |     
 
-
 ### Setting the path to data import
 
-To import files, you need to set the path first. 
+To import files, you need to set the path first.
 The path can lead to files located either locally or remotely.
 
-The following example shows a folder structure with JSON files.
+The following example shows a folder structure with Iceberg table.
 
 ``` { .asc .annotate }
 /usr/share
-    ├───...
-    └───clients_data(1)
-        ├───annual_report_2022.csv
-        ├───annual_report_2023.parquet
-        ├───market_dictionary.json
-        └───sales(2)
-            ├───dec_2023.json
-            ├───jan_2024.json
-            ├───feb_2024.json
-            └───...
+    ├───another_iceberg_table
+    └───iceberg_table_example
+        ├───data
+        │   ├───...
+        │   ├───... // .parquet files
+        │   └───...
+        └───metadata
+            ├───...
+            ├───... // manifest lists, manifest files
+            ├───...
+            ├───v2.metadata.json
+            └───version-hint.text  
 ```
 
-1.  Setting the path prefix to the **/usr/share/clients_data** allows to load its children: market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales). The rest of files are omitted since they do not match the json file format. The path has to be absolute.
-2.  Setting the path prefix to the **/usr/share/clients_data/sales** allows to load a single file from the sales folder.
+To load the Iceberg table in DQOps path prefix must be set to the table's parent folder: **/usr/share**. 
+The selection of the specific Iceberg table is done on the next step of importing the table metadata.
 
-If you want to load the market_dictionary.json or the sales folder with all files appearing directly in it (without subfolders of sales), set the path prefix to the /usr/share/clients_data.
-The rest of files are omitted since they do not match the json file format.
-The path has to be absolute.
+### Additional CSV format options
 
-To load a single file from the sales folder, the path prefix must be set to the file’s parent folder: /usr/share/clients_data/sales
+The allow moved paths option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.
 
+The following property can be configured.
 
-### Working with partitioned files
-
-To work with partitioned files, you need to set the `hive-partition` parameter in JSON format settings.
-The option can be found under the **Additional JSON format options** panel.
-
-Hive partitioning divides a table into multiple files based on the catalog structure.
-Each catalog level is associated with a column and the catalogs are named in the format of column_name=value.
-
-The partitions of the data set and types of columns are discovered automatically.
-
-
-### Additional JSON format options
-
-JSON file format properties are detected automatically based on a sample of the file data.
-The default sample size is 20480 rows.
-
-In **case of invalid import** of the data, expand the **Additional JSON format options** panel with file format options by clicking on it in UI.
-
-The following properties can be configured for a very specific JSON format.
-
-| Additional JSON format options | Property name in YAML configuration file | Description                                                                                                                                                                                     |
-|--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Compression                    | `compression`                            | The compression type for the file. By default, this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are none, gzip, zstd. | 
-| Date format                    | `dateformat`                             | Specifies the date format used when parsing dates.                                                                                                                                              | 
-| Json Format                    | `format`                                 | Json format. Can be one of \['auto', 'unstructured', 'newline_delimited', 'array'\].                                                                                                            | 
-| Maximum depth                  | `maximum_depth`                          | Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types.                                                                       | 
-| Maximum object size            | `maximum_object_size`                    | The maximum size of a JSON object (in bytes).                                                                                                                                                   | 
-| Records                        | `records`                                | Can be one of ['auto', 'true', 'false'].                                                                                                                                                        | 
-| Sample size                    | `sample_size`                            | The number of sample rows for automatic parameter detection.                                                                                                                                    | 
-| Timestamp format               | `timestampformat`                        | Specifies the date format used when parsing timestamps.                                                                                                                                         | 
-| Convert strings to integers    | `convert_strings_to_integers`            | Specifies whether strings representing integer values should be converted to a numerical type.                                                                                                  | 
-| Filename                       | `filename`                               | Specifies whether an additional file name column should be included in the result.                                                                                                              | 
-| Hive partitioning              | `hive_partitioning`                      | Specifies whether to interpret the path as a hive-partitioned path.                                                                                                                             | 
-| Ignore errors                  | `ignore_errors`                          | An option to ignore any parsing errors encountered - and instead ignore rows with errors.                                                                                                       | 
-| Auto detect                    | `auto_detect`                            | (Not available in UI) Whether to auto-detect detect the names of the keys and data types of the values automatically.                                                                           | 
+| Additional Iceberg format options | Property name in YAML configuration file | Description                                                                                                      |
+|-----------------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| Allow moved paths                 | `allow_moved_paths`                      | The option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.  | 
 
 
 ### Environment variables in parameters
@@ -136,7 +103,7 @@ change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the var
 
 For example:
 
-![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg)
+![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-envvar.jpg){ loading=lazy; width="1200px" }
 
 To add optional JDBC connection properties, just type the **JDBC connection property** and the **Value**. The value
 can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
@@ -155,59 +122,24 @@ Click the **Save** connection button when the test is successful otherwise, you 
 ### Import metadata using the user interface
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
-Now we can import JSON files.
+Now we can import Iceberg table.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
-   ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
+    ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
-2. Select the tables (folders with JSON files or just the files) you want to import or import all tables using the buttons in the upper right corner.
+2. Select the tables (folders with Iceberg table) you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-json.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-csv.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-json.png){ loading=lazy; width="1200px" }
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png){ loading=lazy; width="1200px" }
 
-
-### Register single file as table
-
-After creating a connection, you can register a single table.
-
-To view the schema, expand the connection in the tree view on the left.
-
-Then, click on the three dots icon next to the schema name(1.) and select the **Add table** (2.) option.
-This will open the **Add table** popup modal.
-
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-1.png){ loading=lazy }
-
-Enter the table name and the path absolute to the file. Save the new table configuration.
-
-!!! tip "Use of the relative path"
-
-    If the schema specifies the folder path, use only the file name with an extension instead of an absolute path.
-
-!!! tip "Path in table name"
-
-    If you use the absolute file path, you only need to fill in the table name.
-
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-2.png){ loading=lazy; width="1200px" }
-
-After saving the new table configuration, the new table will be present under the schema.
-You can view the list of columns by clicking on "Columns" under the table in the three view on the left.
-
-You can verify the import tables job in the notification panel on the right corner.
-
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-3.png){ loading=lazy; width="1200px" }
-
-If the job completes successfully, the created table will be imported and ready to use.
-
-![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
-
-## Add a JSON connection using DQOps Shell
+## Add an Iceberg connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -217,12 +149,12 @@ dqo> connection add
 
 Fill in the data you will be asked for. 
 
-Select the **duckdb** provider, which provides support for the JSON file format.
+Select the **duckdb** provider, which provides support for the Iceberg table format.
 
 !!! info "Windows file system"
 
-   When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
-   You can also use a single slash (/).
+    When using the Windows file system remember to put a double backslash (\\) in the path on the CLI prompt.
+    You can also use a single slash (/).
 
 
 ```
@@ -251,8 +183,9 @@ Type of source files for DuckDB:
  [ 1] csv
  [ 2] json
  [ 3] parquet
-Please enter one of the [] values: 2
-Virtual schema names and paths (in a pattern schema=path): files=/usr/share/clients_data
+ [ 4] iceberg
+Please enter one of the [] values: 4
+Virtual schema names and paths (in a pattern schema=path): files=/usr/share
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -263,8 +196,8 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-files-format-type=json
---duckdb-directories=files=/usr/share/clients_data
+--duckdb-files-format-type=iceberg
+--duckdb-directories=files=/usr/share
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -279,9 +212,8 @@ dqo> table import --connection={connection name}
 --table={file or folder}
 ```
 
-
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
-any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
+any number of characters. For example, use pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, middle, or end of the name.
 
 
@@ -290,7 +222,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the JSON data source connection.
+Below is a sample YAML file showing an example configuration of the CSV data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
@@ -299,9 +231,11 @@ spec:
   provider_type: duckdb
   duckdb:
     read_mode: in_memory
-    source_files_type: json
+    source_files_type: iceberg
+    iceberg:
+      allow_moved_paths: true
     directories:
-      files: /usr/share/clients_data
+      files: /usr/share
     storage_type: local
 ```
 
@@ -362,6 +296,7 @@ To set the credential file for AWS in DQOps, follow steps:
     you must manually delete the .credentials/AWS_default_config and .credentials/AWS_default_credentials files from the DQOps credentials.
 
     Remember that system default credentials are supported only for AWS.
+
 
 ## Next steps
 

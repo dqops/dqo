@@ -299,7 +299,7 @@ kind: source
 spec:
   provider_type: duckdb
   duckdb:
-    read_mode: files
+    read_mode: in_memory
     source_files_type: csv
     directories:
       files: /usr/share/clients_data

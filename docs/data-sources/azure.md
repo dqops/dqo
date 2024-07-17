@@ -497,7 +497,7 @@ kind: source
 spec:
   provider_type: duckdb
   duckdb:
-    read_mode: files
+    read_mode: in_memory
     source_files_type: parquet
     directories:
       files: az://my-container/clients_data
