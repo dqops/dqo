@@ -12237,6 +12237,12 @@ paths:
           \ default value is false"
         required: false
         type: "boolean"
+      - name: "severity"
+        in: "query"
+        description: "Returns incidents with given severity level"
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "page"
         in: "query"
         description: "Page number, the first page is 1"
@@ -14388,7 +14394,7 @@ paths:
         required: false
         type: "integer"
         format: "int32"
-      - name: "limit"
+      - name: "days"
         in: "query"
         description: "Optional filter to configure a time window before now to scan\
           \ for incidents based on the incident's first seen attribute."
