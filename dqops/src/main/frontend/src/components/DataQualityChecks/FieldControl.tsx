@@ -197,10 +197,9 @@ const FieldControl = ({
           tooltipText={tooltip}
           triggerClassName={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30 ',
-
             className ? className : '!min-w-30 !max-w-30'
           )}
-          menuClassName="top-12.5"
+          menuClassName="!top-13"
           className="text-sm"
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}

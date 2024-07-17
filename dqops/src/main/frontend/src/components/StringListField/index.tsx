@@ -44,7 +44,7 @@ const StringListField = ({
     <div>
       <div className="flex space-x-1">
         {label && (
-          <label className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1 pb-2">
+          <label className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1">
             <span>{label}</span>
             {!!tooltipText && (
               <Tooltip
