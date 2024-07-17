@@ -69,6 +69,7 @@ import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.userhome.UserHome;
@@ -794,6 +795,15 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ParquetFileFormatSpec parquetFileFormatSpec, P parameter);
+
+    /**
+     * Accepts an iceberg file format specification.
+     *
+     * @param icebergFileFormatSpec Iceberg file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(IcebergFileFormatSpec icebergFileFormatSpec, P parameter);
 
     /**
      * Accepts a file path list specification.

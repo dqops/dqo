@@ -26,8 +26,9 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
-import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
@@ -96,6 +97,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
+
+    @JsonPropertyDescription("Iceberg file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IcebergFileFormatSpec iceberg;
 
     @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -265,6 +271,24 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.parquet, parquet));
         this.parquet = parquet;
         propagateHierarchyIdToField(parquet, "parquet");
+    }
+
+    /**
+     * Returns the iceberg file format specification.
+     * @return Iceberg file format specification.
+     */
+    public IcebergFileFormatSpec getIceberg() {
+        return iceberg;
+    }
+
+    /**
+     * Sets the iceberg file format specification.
+     * @param iceberg Iceberg file format specification.
+     */
+    public void setIceberg(IcebergFileFormatSpec iceberg) {
+        setDirtyIf(!Objects.equals(this.iceberg, iceberg));
+        this.iceberg = iceberg;
+        propagateHierarchyIdToField(iceberg, "iceberg");
     }
 
     /**
@@ -553,6 +577,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
+            case iceberg: return this.getIceberg() != null;
             default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
     }

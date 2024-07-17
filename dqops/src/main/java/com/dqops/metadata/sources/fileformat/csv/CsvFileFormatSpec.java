@@ -1,4 +1,4 @@
-package com.dqops.metadata.sources.fileformat;
+package com.dqops.metadata.sources.fileformat.csv;
 
 import com.dqops.connectors.duckdb.config.DuckdbCompressionTypeOption;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -8,7 +8,8 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.sources.fileformat.csv.NewLineCharacterType;
+import com.dqops.metadata.sources.fileformat.CompressionType;
+import com.dqops.metadata.sources.fileformat.TableOptionsFormatter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

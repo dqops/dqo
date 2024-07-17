@@ -542,7 +542,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         return tableSpec;
     }
 
-
     /**
      * Retrieves a table result depending on the source files type.
      * @param fileFormatSpec A file format specification with paths and format configuration.

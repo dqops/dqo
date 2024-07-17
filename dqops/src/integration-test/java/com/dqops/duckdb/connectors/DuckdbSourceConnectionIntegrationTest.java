@@ -204,6 +204,32 @@ class DuckdbSourceConnectionIntegrationTest extends BaseTest {
     }
 
     @Test
+    void retrieveTableMetadata_fromConnectionSpecWithIcebergFormat_readColumnTypes() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.iceberg);
+        this.sut.setConnectionSpec(spec);
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForIcebergFormat(SampleIcebergDirectoryNames.folder_path);
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
+
+        List<String> tableNames = List.of(
+                SampleIcebergDirectoryNames.lineitem_iceberg_dataset.substring(SampleIcebergDirectoryNames.folder_path.length()));
+
+        this.sut.open(secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300,
+                tableNames, null, secretValueLookupContext);
+
+        ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
+        ColumnSpec idColumn = firstTableColumns.get("l_orderkey");
+        Assertions.assertEquals("INTEGER", idColumn.getTypeSnapshot().getColumnType());
+        Assertions.assertTrue(idColumn.getTypeSnapshot().getNullable());
+
+        ColumnSpec dateColumn = firstTableColumns.get("l_linestatus");
+        Assertions.assertEquals("VARCHAR", dateColumn.getTypeSnapshot().getColumnType());
+
+        ColumnSpec valueColumn = firstTableColumns.get("l_shipdate");
+        Assertions.assertEquals("DATE", valueColumn.getTypeSnapshot().getColumnType());
+    }
+
+    @Test
     void listSchemas_whenSchemaIsAvailable_returnsListWithTheSchema() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         this.sut.setConnectionSpec(spec);

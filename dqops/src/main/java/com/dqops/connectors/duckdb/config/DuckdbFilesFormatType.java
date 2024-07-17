@@ -13,5 +13,8 @@ public enum DuckdbFilesFormatType {
     json,
 
     @JsonProperty("parquet")
-    parquet
+    parquet,
+
+    @JsonProperty("iceberg")
+    iceberg
 }
