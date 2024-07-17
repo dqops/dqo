@@ -138,6 +138,9 @@ const CreateConnection = () => {
           case 'Parquet':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.parquet;
             break;
+          case 'Iceberg':
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.iceberg;
+            break;
         }
         copiedDatabase.duckdb = {
           directories: { files: '' },

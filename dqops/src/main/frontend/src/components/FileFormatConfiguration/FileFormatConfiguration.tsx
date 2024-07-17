@@ -6,6 +6,7 @@ import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguratio
 import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
 import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
 import { TConfiguration } from './TConfiguration';
+import IcebergFormatConfiguration from './FormatsConfiguration/IcebergFormatConfiguration';
 
 type TFileFormatConfigurationProps = {
   fileFormatType: DuckdbParametersSpecFilesFormatTypeEnum;
@@ -29,6 +30,10 @@ const sourceFilesTypeOptions = [
   {
     label: 'Parquet',
     value: DuckdbParametersSpecFilesFormatTypeEnum.parquet
+  },
+  {
+    label: 'Iceberg',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.iceberg
   }
 ];
 
@@ -67,6 +72,14 @@ export default function FileFormatConfiguration({
           />
         );
       }
+      // case DuckdbParametersSpecFilesFormatTypeEnum.iceberg: {
+      //   return (
+      //     <IcebergFormatConfiguration
+      //       configuration={configuration}
+      //       onChangeConfiguration={onChangeConfiguration}
+      //     />
+      //   );
+      // }
     }
   };
 
