@@ -246,7 +246,7 @@ export default function RuleConfiguration({
               onChange={onChangeConfigurationType}
               options={options}
               className="w-40 mr-2 my-1 text-sm "
-              menuClassName="!top-14"
+              menuClassName="!top-9"
               disabled={isDisabled}
             />
           </div>
