@@ -508,6 +508,10 @@ export const IncidentConnection = () => {
               Data quality incidents{' '}
               {params.severity
                 ? `at ${getSeverity(String(params.severity))} severity level`
+                : params.category
+                ? `on ${params.category} category`
+                : params.dimension
+                ? `on ${params.dimension} dimension`
                 : `on ${connection}` || ''}
             </div>
           </div>
