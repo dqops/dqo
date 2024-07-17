@@ -458,7 +458,6 @@ export const IncidentConnection = () => {
   }, [debouncedSearchTerm]);
 
   const onChangeFilter = (obj: Partial<IncidentFilter>) => {
-    console.log(filters, obj);
     dispatch(
       setIncidentsFilter({
         ...params,
@@ -476,7 +475,6 @@ export const IncidentConnection = () => {
       })
     );
   };
-  console.log(filters);
   const goToConfigure = () => {
     dispatch(
       addSourceFirstLevelTab(CheckTypes.SOURCES, {
