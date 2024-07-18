@@ -1,7 +1,5 @@
 package com.dqops.metadata.sources.fileformat.iceberg;
 
-import com.dqops.core.secrets.SecretValueLookupContext;
-import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -34,7 +32,7 @@ public class IcebergFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("The option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Boolean allowMovedPaths;
+    private Boolean allowMovedPaths = true;
 
     /**
      * Formats the table options to be used in SQL query. The set (non null) options are added only.
