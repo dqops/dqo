@@ -173,8 +173,8 @@ title: What is DQOps Data Quality Operations Center
 &nbsp; &nbsp; &nbsp; [![Parquet](https://dqops.com/docs/images/connections/parquet-icon2.png){ class=glightbox-ignored-image }](data-sources/parquet.md)
 
 ### Table formats
-[![Delta Lake](https://dqops.com/docs/images/connections/deltalake.png){ class=glightbox-ignored-image }](data-sources/deltalake.md)
-&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
+[![Delta Lake](https://dqops.com/docs/images/connections/delta-lake2.png){ class=glightbox-ignored-image }](data-sources/deltalake.md)
+&nbsp; &nbsp; &nbsp; [![Iceberg](https://dqops.com/docs/images/connections/iceberg2.png){ class=glightbox-ignored-image }](data-sources/iceberg.md)
 
 
 ## Getting started
