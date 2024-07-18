@@ -8,6 +8,7 @@
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
 {% set target_column_is_nested = table.columns[column_name].type_snapshot.nested | default(none, true) -%}
 {% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
+{% set files_format_type = connection.duckdb.files_format_type -%}
 
 {% macro quote_identifier(name) -%}
     {%- if name == column_name and target_column_is_nested is not none and target_column_is_nested is true -%}
@@ -26,7 +27,11 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-   {{ table_from_files }}
+    {%- if files_format_type == 'iceberg' -%}
+        (SELECT * FROM {{ table_from_files }})
+    {%- else -%}
+        {{ table_from_files }}
+    {%- endif -%}
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
