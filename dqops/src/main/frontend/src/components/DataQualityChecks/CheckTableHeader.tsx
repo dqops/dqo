@@ -287,7 +287,7 @@ const TableHeader = ({
           ></td>
           <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
             Passing rule (KPI met)
-            <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+            <div className="w-4 bg-white absolute h-full right-0 top-0"></div>
           </td>
           <td
             className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
@@ -298,7 +298,7 @@ const TableHeader = ({
         </tr>
       )}
       <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+        <th className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
           <div className="flex space-x-1 items-center">
             <span className="mr-1">Data quality check</span>
             {(!job ||
@@ -324,8 +324,8 @@ const TableHeader = ({
               />
             )}
           </div>
-        </td>
-        <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+        </th>
+        <th className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 flex">
           <div className="flex gap-2 items-center font-normal text-gray-950 justify-end">
             {isFiltered !== true ? (
               <Checkbox
@@ -410,13 +410,13 @@ const TableHeader = ({
               </>
             )}
           </div>
-        </td>
+        </th>
 
         {ruleParamenterConfigured ? (
           <>
             <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
               Warning threshold
-              <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+              <div className="w-4 bg-white absolute h-full right-0 top-0"></div>
             </td>
             <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
               Error threshold
@@ -431,7 +431,9 @@ const TableHeader = ({
               Issue severity level
             </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
-              Rule thresholds
+              <div className="flex items-center justify-center">
+                Rule thresholds
+              </div>
             </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
               <div className="w-38 h-full bg-gray-400"></div>

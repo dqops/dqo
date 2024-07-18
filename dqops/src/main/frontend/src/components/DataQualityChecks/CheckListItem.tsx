@@ -357,10 +357,10 @@ const CheckListItem = ({
           expanded || showDetails ? '' : ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
           check?.disabled ? 'line-through' : '',
-          'h-20'
+          'h-18'
         )}
       >
-        <td className="py-2 pl-4 pr-4 min-w-130 max-w-130">
+        <td className="pl-4 pr-4 min-w-130 max-w-130 h-full ">
           <div className="flex space-x-1 items-center">
             {isAlreadyDeleted !== true &&
               (mode ? (
@@ -596,11 +596,11 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <div className="flex justify-center items-center mt-6 gap-x-6">
+        <div className="flex w-full items-center gap-x-6">
           {check.comments ? (
             <SvgIcon
               name="comment"
-              className="w-4 h-4 "
+              className="w-4 h-4 mt-7"
               onClick={() => openCheckSettings('comments')}
             />
           ) : null}
@@ -610,14 +610,14 @@ const CheckListItem = ({
               content={check.configuration_requirements_errors?.map((x) => x)}
               className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
             >
-              <div>
-                <SvgIcon name="warning" className="w-5 h-5" />
+              <div className="flex items-center h-full">
+                <SvgIcon name="warning" className="w-5 h-5 mt-7" />
               </div>
             </Tooltip>
           ) : null}
         </div>
-        <td className="flex items-end justify-end">
-          <div className="text-gray-700 text-sm w-full ">
+        <td className="h-full flex items-center justify-end mr-5">
+          <div className="text-gray-700 text-sm mt-1.5">
             <SensorParameters
               parameters={check.sensor_parameters || []}
               onChange={(parameters: FieldModel[]) =>
