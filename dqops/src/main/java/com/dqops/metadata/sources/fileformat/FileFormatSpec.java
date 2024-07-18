@@ -1,8 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -11,6 +11,9 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +42,7 @@ public class FileFormatSpec extends AbstractSpec {
             put("csv", o -> o.csv);
             put("json", o -> o.json);
             put("parquet", o -> o.parquet);
+            put("iceberg", o -> o.iceberg);
         }
     };
 
@@ -56,6 +60,11 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
+
+    @JsonPropertyDescription("Iceberg file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IcebergFileFormatSpec iceberg;
 
     @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -117,6 +126,24 @@ public class FileFormatSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the iceberg file format specification.
+     * @return Iceberg file format specification.
+     */
+    public IcebergFileFormatSpec getIceberg() {
+        return iceberg;
+    }
+
+    /**
+     * Sets the iceberg file format specification.
+     * @param iceberg Iceberg file format specification.
+     */
+    public void setIceberg(IcebergFileFormatSpec iceberg) {
+        setDirtyIf(!Objects.equals(this.iceberg, iceberg));
+        this.iceberg = iceberg;
+        propagateHierarchyIdToField(iceberg, "iceberg");
+    }
+
+    /**
      * Returns the list of paths to files with data that are used as a source.
      * @return List with file paths.
      */
@@ -170,6 +197,7 @@ public class FileFormatSpec extends AbstractSpec {
             case csv: return csv.buildSourceTableOptionsString(filePathList, tableSpec);
             case json: return json.buildSourceTableOptionsString(filePathList, tableSpec);
             case parquet: return parquet.buildSourceTableOptionsString(filePathList, tableSpec);
+            case iceberg: return iceberg.buildSourceTableOptionsString(filePathList, tableSpec);
             default: throw new RuntimeException("Cant create table options string for the given files: " + filePathList);
         }
     }
@@ -184,6 +212,7 @@ public class FileFormatSpec extends AbstractSpec {
             case csv: return this.getCsv() != null;
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
+            case iceberg: return this.getIceberg() != null;
             default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
     }

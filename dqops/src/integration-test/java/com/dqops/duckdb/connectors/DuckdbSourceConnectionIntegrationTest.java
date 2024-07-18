@@ -4,7 +4,7 @@ import com.dqops.BaseTest;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbSourceConnection;
 import com.dqops.connectors.duckdb.DuckdbSourceConnectionObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -201,6 +201,32 @@ class DuckdbSourceConnectionIntegrationTest extends BaseTest {
 
         ColumnSpec valueColumn = firstTableColumns.get("value:STRING");
         Assertions.assertEquals("VARCHAR", valueColumn.getTypeSnapshot().getColumnType());
+    }
+
+    @Test
+    void retrieveTableMetadata_fromConnectionSpecWithIcebergFormat_readColumnTypes() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.iceberg);
+        this.sut.setConnectionSpec(spec);
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForIcebergFormat(SampleIcebergDirectoryNames.folder_path);
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
+
+        List<String> tableNames = List.of(
+                SampleIcebergDirectoryNames.lineitem_iceberg_dataset.substring(SampleIcebergDirectoryNames.folder_path.length()));
+
+        this.sut.open(secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300,
+                tableNames, null, secretValueLookupContext);
+
+        ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
+        ColumnSpec idColumn = firstTableColumns.get("l_orderkey");
+        Assertions.assertEquals("INTEGER", idColumn.getTypeSnapshot().getColumnType());
+        Assertions.assertTrue(idColumn.getTypeSnapshot().getNullable());
+
+        ColumnSpec dateColumn = firstTableColumns.get("l_linestatus");
+        Assertions.assertEquals("VARCHAR", dateColumn.getTypeSnapshot().getColumnType());
+
+        ColumnSpec valueColumn = firstTableColumns.get("l_shipdate");
+        Assertions.assertEquals("DATE", valueColumn.getTypeSnapshot().getColumnType());
     }
 
     @Test

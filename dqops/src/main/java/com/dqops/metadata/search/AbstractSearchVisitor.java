@@ -18,30 +18,29 @@ package com.dqops.metadata.search;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
+import com.dqops.metadata.comments.CommentSpec;
+import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
-import com.dqops.metadata.defaultchecks.column.*;
+import com.dqops.metadata.dashboards.*;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
-import com.dqops.metadata.dictionaries.DictionaryListImpl;
-import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
-import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
-import com.dqops.metadata.comments.CommentSpec;
-import com.dqops.metadata.comments.CommentsListSpec;
-import com.dqops.metadata.dashboards.*;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapperImpl;
@@ -49,27 +48,35 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.*;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.dqohome.DqoHomeImpl;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.fileindices.FileIndexListImpl;
 import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
-import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
-import com.dqops.metadata.labels.LabelSetSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
-import com.dqops.metadata.sources.fileformat.*;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -1039,6 +1046,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(ParquetFileFormatSpec parquetFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an iceberg file format specification.
+     *
+     * @param icebergFileFormatSpec Iceberg file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IcebergFileFormatSpec icebergFileFormatSpec, T parameter){
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

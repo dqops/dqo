@@ -1,4 +1,4 @@
-package com.dqops.connectors.duckdb;
+package com.dqops.connectors.duckdb.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,5 +13,8 @@ public enum DuckdbFilesFormatType {
     json,
 
     @JsonProperty("parquet")
-    parquet
+    parquet,
+
+    @JsonProperty("iceberg")
+    iceberg
 }

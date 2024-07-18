@@ -369,6 +369,12 @@ export const databaseOptions: IDatabaseOption[] = [
   },
   {
     type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Iceberg',
+    iconName: 'iceberg',
+    displayName: 'Iceberg'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'JSON',
     iconName: 'json',
     displayName: 'JSON'

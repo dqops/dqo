@@ -1,11 +1,14 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.aws.AwsConstants;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureConstants;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -47,6 +50,7 @@ public class FileFormatSpecProvider {
                 case csv: fileFormatCloned.setCsv(duckdbParametersSpec.getCsv().deepClone()); break;
                 case json: fileFormatCloned.setJson(duckdbParametersSpec.getJson().deepClone()); break;
                 case parquet: fileFormatCloned.setParquet(duckdbParametersSpec.getParquet().deepClone()); break;
+                case iceberg: fileFormatCloned.setIceberg(duckdbParametersSpec.getIceberg().deepClone()); break;
             }
             return fileFormatCloned;
         }
@@ -79,6 +83,12 @@ public class FileFormatSpecProvider {
                 : createAbsoluteFilePathFrom(pathPrefix, tableName, storageType);
 
         DuckdbFilesFormatType filesType = duckdb.getFilesFormatType();
+
+        if(filesType == DuckdbFilesFormatType.iceberg){
+            filePathListSpec.add(filePath);
+            return filePathListSpec;
+        }
+
         boolean isSetHivePartitioning = duckdb.isSetHivePartitioning()
                 || (tableSpec.getFileFormat() != null && tableSpec.getFileFormat().isSetHivePartitioning(filesType));
 
@@ -134,6 +144,7 @@ public class FileFormatSpecProvider {
             case csv: fileFormatSpec.setCsv(new CsvFileFormatSpec()); break;
             case json: fileFormatSpec.setJson(new JsonFileFormatSpec()); break;
             case parquet: fileFormatSpec.setParquet(new ParquetFileFormatSpec()); break;
+            case iceberg: fileFormatSpec.setIceberg(new IcebergFileFormatSpec()); break;
             default: throw new RuntimeException("Can't fill default file format for files type: " + duckdbFilesFormatType);
         }
     }

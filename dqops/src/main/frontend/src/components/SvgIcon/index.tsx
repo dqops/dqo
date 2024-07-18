@@ -60,6 +60,7 @@ import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
+import { ReactComponent as IcebergSvg } from './svg/iceberg-logo.svg';
 import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
 import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
@@ -243,7 +244,8 @@ const iconsMap: any = {
   question_mark: QuestionmarkSvg,
   key: KeySvg,
   filled_funnel: FilledFunnel,
-  funnel: Funnel
+  funnel: Funnel,
+  iceberg: IcebergSvg
 };
 
 interface SvgIconProps {

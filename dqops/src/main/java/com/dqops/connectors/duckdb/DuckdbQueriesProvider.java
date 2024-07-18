@@ -1,5 +1,6 @@
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.azure.AzureStoragePath;
 import com.dqops.connectors.storage.azure.AzureAuthenticationMode;
 import com.dqops.metadata.sources.ConnectionSpec;
