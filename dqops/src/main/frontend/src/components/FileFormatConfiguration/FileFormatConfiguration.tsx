@@ -40,6 +40,10 @@ const sourceFilesTypeOptions = [
   {
     label: 'Iceberg',
     value: DuckdbParametersSpecFilesFormatTypeEnum.iceberg
+  },
+  {
+    label: 'Delta Lake',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.delta_lake
   }
 ];
 

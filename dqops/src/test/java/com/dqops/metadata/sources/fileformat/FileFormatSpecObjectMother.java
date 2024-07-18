@@ -1,6 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
@@ -81,7 +82,7 @@ public class FileFormatSpecObjectMother {
     }
 
     /**
-     * Creates a FileFormatSpec for an iceberg format.
+     * Creates a FileFormatSpec for Iceberg table format.
      * @param icebergMetadataDirectory Iceberg metadata directory
      * @return FileFormatSpec.
      */
@@ -90,6 +91,20 @@ public class FileFormatSpecObjectMother {
             setIceberg(new IcebergFileFormatSpec());
             setFilePaths(new FilePathListSpec(){{
                 add(SampleDataFilesProvider.getFile(icebergMetadataDirectory).toString());
+            }});
+        }};
+    }
+
+    /**
+     * Creates a FileFormatSpec for Delta Lake table format.
+     * @param deltaLakeDirectory Delta Lake metadata directory
+     * @return FileFormatSpec.
+     */
+    public static FileFormatSpec createForDeltaLakeFormat(String deltaLakeDirectory) {
+        return new FileFormatSpec() {{
+            setDeltaLake(new DeltaLakeFileFormatSpec());
+            setFilePaths(new FilePathListSpec(){{
+                add(SampleDataFilesProvider.getFile(deltaLakeDirectory).toString());
             }});
         }};
     }

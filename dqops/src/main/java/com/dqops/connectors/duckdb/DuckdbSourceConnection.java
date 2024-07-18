@@ -270,7 +270,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 "httpfs",
                 "aws",
                 "azure",
-                "iceberg"
+                "iceberg",
+                "delta"
         );
     }
 

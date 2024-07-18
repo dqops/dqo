@@ -16,5 +16,8 @@ public enum DuckdbFilesFormatType {
     parquet,
 
     @JsonProperty("iceberg")
-    iceberg
+    iceberg,
+
+    @JsonProperty("delta_lake")
+    delta_lake
 }

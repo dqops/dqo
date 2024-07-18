@@ -119,9 +119,19 @@ DQOps supports the following data sources.
     <p>Databricks</p>
   </a>
 
+  <a href="deltalake/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/delta-lake-logo.svg">
+    <p>Delta Lake</p>
+  </a>
+
   <a href="duckdb/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/duckdb.svg">
     <p>DuckDB</p>
+  </a>
+
+  <a href="iceberg/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/iceberg-logo.svg">
+    <p>Iceberg</p>
   </a>
 
   <a href="json/" class="four-divs-element">

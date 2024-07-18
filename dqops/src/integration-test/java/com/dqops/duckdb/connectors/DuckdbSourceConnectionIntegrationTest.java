@@ -230,6 +230,27 @@ class DuckdbSourceConnectionIntegrationTest extends BaseTest {
     }
 
     @Test
+    void retrieveTableMetadata_fromConnectionSpecWithDeltaLakeFormat_readColumnTypes() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.delta_lake);
+        this.sut.setConnectionSpec(spec);
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForIcebergFormat(SampleDeltaLakeDirectoryNames.folder_path);
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
+
+        List<String> tableNames = List.of(
+                SampleDeltaLakeDirectoryNames.people_countries.substring(SampleDeltaLakeDirectoryNames.folder_path.length()));
+
+        this.sut.open(secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, null, 300,
+                tableNames, null, secretValueLookupContext);
+
+        ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
+        ColumnSpec idColumn = firstTableColumns.get("first_name");
+        Assertions.assertEquals("VARCHAR", idColumn.getTypeSnapshot().getColumnType());
+        Assertions.assertTrue(idColumn.getTypeSnapshot().getNullable());
+
+    }
+
+    @Test
     void listSchemas_whenSchemaIsAvailable_returnsListWithTheSchema() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbFilesFormatType.csv);
         this.sut.setConnectionSpec(spec);
