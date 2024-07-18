@@ -123,7 +123,7 @@ or modify the schedule for newly imported tables.
 
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-deltalake.png){ loading=lazy; width="1200px" }
 
-## Add an Delta Lake connection using DQOps Shell
+## Add a Delta Lake connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -168,7 +168,7 @@ Type of source files for DuckDB:
  [ 2] json
  [ 3] parquet
  [ 4] iceberg
- [ 5] deltalake
+ [ 5] delta_lake
 Please enter one of the [] values: 5
 Virtual schema names and paths (in a pattern schema=path): files=/usr/share
 Connection connection1 was successfully added.
@@ -181,7 +181,7 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-files-format-type=deltalake
+--duckdb-files-format-type=delta_lake
 --duckdb-directories=files=/usr/share
 ```
 
@@ -216,7 +216,7 @@ spec:
   provider_type: duckdb
   duckdb:
     read_mode: in_memory
-    source_files_type: deltalake
+    source_files_type: delta_lake
     directories:
       files: /usr/share
     storage_type: local
