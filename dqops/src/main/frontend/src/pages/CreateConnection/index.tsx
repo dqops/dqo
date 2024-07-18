@@ -4,13 +4,13 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
+  DuckdbParametersSpecAwsAuthenticationModeEnum,
   DuckdbParametersSpecFilesFormatTypeEnum,
   DuckdbParametersSpecStorageTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
-  TrinoParametersSpecTrinoEngineTypeEnum,
-  DuckdbParametersSpecAwsAuthenticationModeEnum,
-  TrinoParametersSpecAwsAuthenticationModeEnum
+  TrinoParametersSpecAwsAuthenticationModeEnum,
+  TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../api';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
@@ -49,33 +49,33 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.postgresql: {
-        copiedDatabase.postgresql = { port: '5432',
-        properties: { '': '' } };
+        copiedDatabase.postgresql = { port: '5432', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift = { 
+        copiedDatabase.redshift = {
           port: '5439',
-          redshift_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
-          properties: { '': '' } 
+          redshift_authentication_mode:
+            TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
+          properties: { '': '' }
         };
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
-        copiedDatabase.sqlserver = { port: '1433',
-        properties: { '': '' } };
+        copiedDatabase.sqlserver = { port: '1433', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.presto: {
-        copiedDatabase.presto = { port: '8080',
-        properties: { '': '' } };
+        copiedDatabase.presto = { port: '8080', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.trino: {
         copiedDatabase.trino = {
           port: '8080',
-          trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
-          aws_authentication_mode: TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
+          trino_engine_type:
+            nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
+          aws_authentication_mode:
+            TrinoParametersSpecAwsAuthenticationModeEnum.default_credentials,
           catalog:
             (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum) ===
             TrinoParametersSpecTrinoEngineTypeEnum.athena
@@ -111,18 +111,15 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {
-        copiedDatabase.oracle = { port: '1521',
-        properties: { '': '' } };
+        copiedDatabase.oracle = { port: '1521', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.spark: {
-        copiedDatabase.spark = { port: '10000',
-        properties: { '': '' } };
+        copiedDatabase.spark = { port: '10000', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.databricks: {
-        copiedDatabase.databricks = { port: '443',
-        properties: { '': '' } };
+        copiedDatabase.databricks = { port: '443', properties: { '': '' } };
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
@@ -141,12 +138,16 @@ const CreateConnection = () => {
           case 'Iceberg':
             fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.iceberg;
             break;
+          case 'Delta Lake':
+            fileFormat = DuckdbParametersSpecFilesFormatTypeEnum.delta_lake;
+            break;
         }
         copiedDatabase.duckdb = {
           directories: { files: '' },
           files_format_type: fileFormat,
           storage_type: DuckdbParametersSpecStorageTypeEnum.local,
-          aws_authentication_mode: DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials,
+          aws_authentication_mode:
+            DuckdbParametersSpecAwsAuthenticationModeEnum.default_credentials,
           properties: { '': '' }
         };
       }
