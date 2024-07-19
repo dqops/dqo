@@ -74,6 +74,7 @@ import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -1050,14 +1051,26 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts an iceberg file format specification.
+     * Accepts an iceberg table format specification.
      *
-     * @param icebergFileFormatSpec Iceberg file format specification.
+     * @param icebergFileFormatSpec Iceberg table format specification.
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
     @Override
     public TreeNodeTraversalResult accept(IcebergFileFormatSpec icebergFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a Delta Lake table format specification.
+     *
+     * @param deltaLakeFileFormatSpec Delta Lake table format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DeltaLakeFileFormatSpec deltaLakeFileFormatSpec, T parameter){
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

@@ -363,6 +363,12 @@ export const databaseOptions: IDatabaseOption[] = [
   },
   {
     type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Delta Lake',
+    iconName: 'deltalake',
+    displayName: 'Delta Lake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
     name: 'DuckDB',
     iconName: 'duckdb',
     displayName: 'DuckDB'

@@ -1,43 +1,43 @@
 ---
-title: How to activate data observability for Iceberg files
+title: How to activate data observability for CSV files
 ---
-# How to activate data observability for Iceberg table
-Read this guide to learn how to configure DQOps to use Iceberg table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+# How to activate data observability for Delta Lake table
+Read this guide to learn how to configure DQOps to use Delta Lake table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-DQOps supports monitoring of data quality in Iceberg tables, which can be stored locally or remotely in cloud storage. 
-DQOps will create a table from the Iceberg files, which will allow you to profile it and monitor its data quality.
+DQOps supports monitoring of data quality in Delta Lake tables, which can be stored locally or remotely in cloud storage. 
+DQOps will create a table from the Delta Lake files, which will allow you to profile it and monitor its data quality.
 
 ## Prerequisite credentials
 
 Additional configuration is required **only when using remote storage** (AWS S3, Azure Blob Storage or Google Cloud Storage).
 
-When using remote cloud storage, make sure your account has access to the remote directory containing Iceberg table. 
+When using remote cloud storage, make sure your account has access to the remote directory containing Delta Lake table. 
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
-## Add a connection to Iceberg tables using the user interface
+## Add a connection to Delta Lake tables using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the Iceberg connection settings:
+To navigate to the Delta Lake connection settings:
 
 1. Go to the Data Sources section and click the **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png){ loading=lazy; width="1200px" }
 
-2. Select the Iceberg table connection option.
+2. Select the Delta Lake table connection option.
 
-    ![Selecting Iceberg database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-iceberg.png){ loading=lazy; width="1200px" }
+    ![Selecting Delta Lake database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-deltalake.png){ loading=lazy; width="1200px" }
 
 
 ### **Fill in the connection settings**
 
-After navigating to the Iceberg connection settings, you will need to fill in its details.
+After navigating to the Delta Lake connection settings, you will need to fill in its details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-iceberg.png){ loading=lazy; width="1200px" }
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-deltalake.png){ loading=lazy; width="1200px" }
 
-| Iceberg connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
+| Delta Lake connection settings   | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                                                                | 
 |---------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                                                                  |
 | Parallel jobs limit       |                                          | A limit on the number of jobs that can run simultaneously. Leave empty to disable the limit.                                                                                                                                                                                                                               |
@@ -64,37 +64,21 @@ After navigating to the Iceberg connection settings, you will need to fill in it
 To import files, you need to set the path first.
 The path can lead to files located either locally or remotely.
 
-The following example shows a folder structure with Iceberg table.
+The following example shows a folder structure with Delta Lake table.
 
 ``` { .asc .annotate }
 /usr/share
-    ├───another_iceberg_table
-    └───iceberg_table_example
-        ├───data
-        │   ├───...
-        │   ├───... // .parquet files
-        │   └───...
-        └───metadata
-            ├───...
-            ├───... // manifest lists, manifest files
-            ├───...
-            ├───v2.metadata.json
-            └───version-hint.text  
+    ├───another_deltalake_table
+    └───deltalake_table_example
+        ├───_delta_log
+        │   └───... // commit files
+        ├───country=US
+        ├───country=CA
+        └───... // another country partitions
 ```
 
-To load the Iceberg table in DQOps path prefix must be set to the table's parent folder: **/usr/share**. 
-The selection of the specific Iceberg table is done on the next step of importing the table metadata.
-
-### Additional Iceberg format options
-
-The allow moved paths option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.
-
-The following property can be configured.
-
-| Additional Iceberg format options | Property name in YAML configuration file | Description                                                                                                      |
-|-----------------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| Allow moved paths                 | `allow_moved_paths`                      | The option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.  | 
-
+To load the Delta Lake table in DQOps path prefix must be set to the table's parent folder: **/usr/share**. 
+The selection of the specific Delta Lake table is done on the next step of importing the table metadata.
 
 ### Environment variables in parameters
 
@@ -122,24 +106,24 @@ Click the **Save** connection button when the test is successful otherwise, you 
 ### Import metadata using the user interface
 
 When you add a new connection, it will appear in the tree view on the left, and you will be redirected to the Import Metadata screen.
-Now we can import Iceberg table.
+Now we can import Delta Lake table.
 
 1. Import the selected virtual schemas by clicking on the **Import Tables** button next to the source schema name from which you want to import tables.
 
     ![Importing schemas](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-schemas.png){ loading=lazy; width="1200px" }
 
-2. Select the tables (folders with Iceberg table) you want to import or import all tables using the buttons in the upper right corner.
+2. Select the tables (folders with Delta Lake table) you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-iceberg.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-deltalake.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-iceberg.png){ loading=lazy; width="1200px" }
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-deltalake.png){ loading=lazy; width="1200px" }
 
-## Add an Iceberg connection using DQOps Shell
+## Add a Delta Lake connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -149,7 +133,7 @@ dqo> connection add
 
 Fill in the data you will be asked for. 
 
-Select the **duckdb** provider, which provides support for the Iceberg table format.
+Select the **duckdb** provider, which provides support for the Delta Lake table format.
 
 !!! info "Windows file system"
 
@@ -184,7 +168,8 @@ Type of source files for DuckDB:
  [ 2] json
  [ 3] parquet
  [ 4] iceberg
-Please enter one of the [] values: 4
+ [ 5] delta_lake
+Please enter one of the [] values: 5
 Virtual schema names and paths (in a pattern schema=path): files=/usr/share
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
@@ -196,7 +181,7 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
---duckdb-files-format-type=iceberg
+--duckdb-files-format-type=delta_lake
 --duckdb-directories=files=/usr/share
 ```
 
@@ -222,7 +207,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the Iceberg data source connection.
+Below is a sample YAML file showing an example configuration of the CSV data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
@@ -231,9 +216,7 @@ spec:
   provider_type: duckdb
   duckdb:
     read_mode: in_memory
-    source_files_type: iceberg
-    iceberg:
-      allow_moved_paths: true
+    source_files_type: delta_lake
     directories:
       files: /usr/share
     storage_type: local
