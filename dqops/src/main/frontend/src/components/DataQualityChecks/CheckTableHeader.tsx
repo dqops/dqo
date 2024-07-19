@@ -335,7 +335,7 @@ const TableHeader = ({
                 onChange={(value) => setShowAdvanced(value)}
               />
             ) : null}
-            {!mode && (
+            {/* {!mode && (
               <>
                 <Button
                   color="primary"
@@ -354,7 +354,7 @@ const TableHeader = ({
                   onClick={() => onChangeMode('partitioned')}
                 />
               </>
-            )}
+            )} */}
             {mode === 'monitoring' && (
               <>
                 <div className="text-sm">Copy selected checks to:</div>

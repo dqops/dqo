@@ -71,10 +71,10 @@ const CheckRuleItem = ({
           : 'text-left text-gray-700 h-13 flex items-center justify-center'
       }
     >
-      <div className="flex space-x-2 items-end justify-center">
+      <div className="flex space-x-2 justify-center">
         {parameters?.configured === true ? (
           <div className="flex items-center gap-x-2">
-            {!isSimpleMode && (
+            {!isSimpleMode ? (
               <IconButton
                 className={clsx(
                   classesMap[type],
@@ -92,9 +92,11 @@ const CheckRuleItem = ({
               >
                 <SvgIcon name="close" />
               </IconButton>
+            ) : (
+              <div></div>
             )}
             {parameters.rule_parameters?.length === 0 && (
-              <div className="font-bold">Enabled </div>
+              <div className="font-bold">Enabled</div>
             )}
           </div>
         ) : (
