@@ -71,14 +71,15 @@ const CheckRuleItem = ({
           : 'text-left text-gray-700 h-13 flex items-center justify-center'
       }
     >
-      <div className="flex items-end justify-center">
+      <div className="flex justify-center">
         {parameters?.configured === true ? (
           <div className="flex items-center">
             {!isSimpleMode && (
               <IconButton
                 className={clsx(
                   classesMap[type],
-                  'rounded-full w-6 h-6 my-1 !shadow-none mr-2'
+                  'rounded-full w-6 h-6 my-1 !shadow-none mr-2',
+                  parameters.rule_parameters?.length !== 0 && 'mt-6'
                 )}
                 ripple={false}
                 onClick={() => {
@@ -94,7 +95,7 @@ const CheckRuleItem = ({
               </IconButton>
             )}
             {parameters.rule_parameters?.length === 0 && (
-              <div className="font-bold">Enabled </div>
+              <div className="font-bold">Enabled</div>
             )}
           </div>
         ) : (
