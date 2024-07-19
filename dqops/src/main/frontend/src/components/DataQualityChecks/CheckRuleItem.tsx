@@ -71,14 +71,15 @@ const CheckRuleItem = ({
           : 'text-left text-gray-700 h-13 flex items-center justify-center'
       }
     >
-      <div className="flex space-x-2 justify-center">
+      <div className="flex justify-center">
         {parameters?.configured === true ? (
-          <div className="flex items-center gap-x-2">
-            {!isSimpleMode ? (
+          <div className="flex items-center">
+            {!isSimpleMode && (
               <IconButton
                 className={clsx(
                   classesMap[type],
-                  'rounded-full w-6 h-6 my-1 !shadow-none'
+                  'rounded-full w-6 h-6 my-1 !shadow-none mr-2',
+                  parameters.rule_parameters?.length !== 0 && 'mt-6'
                 )}
                 ripple={false}
                 onClick={() => {
@@ -92,8 +93,6 @@ const CheckRuleItem = ({
               >
                 <SvgIcon name="close" />
               </IconButton>
-            ) : (
-              <div></div>
             )}
             {parameters.rule_parameters?.length === 0 && (
               <div className="font-bold">Enabled</div>
@@ -120,7 +119,7 @@ const CheckRuleItem = ({
         )}
         {parameters?.configured &&
           parameters?.rule_parameters?.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="ml-0">
               <FieldControl
                 field={item}
                 onChange={(field: FieldModel) =>
