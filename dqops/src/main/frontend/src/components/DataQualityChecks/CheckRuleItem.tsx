@@ -71,14 +71,14 @@ const CheckRuleItem = ({
           : 'text-left text-gray-700 h-13 flex items-center justify-center'
       }
     >
-      <div className="flex space-x-2 items-end justify-center">
+      <div className="flex items-end justify-center">
         {parameters?.configured === true ? (
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center">
             {!isSimpleMode && (
               <IconButton
                 className={clsx(
                   classesMap[type],
-                  'rounded-full w-6 h-6 my-1 !shadow-none'
+                  'rounded-full w-6 h-6 my-1 !shadow-none mr-2'
                 )}
                 ripple={false}
                 onClick={() => {
@@ -118,7 +118,7 @@ const CheckRuleItem = ({
         )}
         {parameters?.configured &&
           parameters?.rule_parameters?.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="ml-0">
               <FieldControl
                 field={item}
                 onChange={(field: FieldModel) =>
