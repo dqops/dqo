@@ -66,6 +66,7 @@ import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
@@ -875,4 +876,13 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TargetTablePatternSpec targetTablePatternSpec, P parameter);
+
+    /**
+     * Accept an SMTP server configuration.
+     * @param smtpServerConfigurationSpec SMTP server configuration specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SmtpServerConfigurationSpec smtpServerConfigurationSpec, P parameter);
+
 }

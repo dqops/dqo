@@ -69,6 +69,7 @@ import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
@@ -1156,4 +1157,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     public TreeNodeTraversalResult accept(TargetTablePatternSpec targetTablePatternSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
+
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param smtpServerConfigurationSpec SMTP server configuration spec
+     * @param parameter                   Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SmtpServerConfigurationSpec smtpServerConfigurationSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
 }
