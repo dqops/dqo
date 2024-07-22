@@ -9,4 +9,6 @@ spec:
     \ and compares it the last known column count that was captured when this data\
     \ quality check was executed the last time. Stores the most recent column count\
     \ for each day when the data quality check was evaluated."
+  friendly_name: Detect change of column count
   standard: true
+  default_severity: error

@@ -450,7 +450,7 @@
 		<dependency>
 			<groupId>com.azure</groupId>
 			<artifactId>azure-identity</artifactId>
-			<version>1.8.2</version>
+			<version>1.12.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.nimbusds</groupId> <!-- Direct import added on July 6th, 2024 when the artifact was removed from MavenCentral in the version that was referenced by some other libraries. It should be upgraded when this package returns to maven central. -->

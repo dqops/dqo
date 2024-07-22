@@ -9,3 +9,6 @@ spec:
     \ a data quality issue when their rate exceeds a *max_percent* parameter value.\
     \ Stores the most recent captured value for each day when the data quality check\
     \ was evaluated."
+  friendly_name: "Maximum percentage of null placeholder values (i.e., None, n/a,\
+    \ null)"
+  default_severity: error

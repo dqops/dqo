@@ -9,4 +9,6 @@ spec:
     \ uses a safe_cast when possible, otherwise the text is verified using a regular\
     \ expression. Analyzes every daily partition and creates a separate data quality\
     \ check result with the time period value that identifies the daily partition."
+  friendly_name: Minimum percentage of rows containing a text parsable to date
   standard: true
+  default_severity: error

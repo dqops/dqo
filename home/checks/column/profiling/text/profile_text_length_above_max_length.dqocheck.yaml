@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/max_count
   help_text: The check counts the number of text values in the column that is above
     the length defined by the user as a parameter.
+  friendly_name: Find text values longer than the maximum accepted length
+  default_severity: error

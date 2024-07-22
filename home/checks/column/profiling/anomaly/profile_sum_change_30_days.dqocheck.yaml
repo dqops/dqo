@@ -6,4 +6,5 @@ spec:
   rule_name: change/change_percent_30_days
   help_text: Verifies that the sum in a column changed in a fixed rate since the last
     readout from last month.
+  friendly_name: Maximum relative change in the sum of numeric values vs 30 days ago
   default_severity: warning

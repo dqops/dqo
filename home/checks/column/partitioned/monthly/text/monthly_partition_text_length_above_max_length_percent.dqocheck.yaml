@@ -8,3 +8,6 @@ spec:
     above the length defined by the user as a parameter. Analyzes every monthly partition
     and creates a separate data quality check result with the time period value that
     identifies the monthly partition.
+  friendly_name: Measure the percentage of rows containing text values longer than
+    the maximum accepted length
+  default_severity: error

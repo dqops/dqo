@@ -20,9 +20,9 @@ The **table availability** data quality check has the following variants for eac
 
 Verifies availability of a table in a monitored database using a simple query.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_table_availability`</span>|Table availability|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -581,9 +581,9 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_table_availability`</span>|Table availability|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1143,9 +1143,9 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_table_availability`</span>|Table availability|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Availability](../../../dqo-concepts/data-quality-dimensions.md#data-availability)|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 

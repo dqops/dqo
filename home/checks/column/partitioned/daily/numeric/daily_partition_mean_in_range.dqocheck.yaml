@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the average (mean) of all values in a column is not outside
     the expected range. Stores a separate data quality check result for each daily
     partition.
+  friendly_name: Mean (average) of numeric values is in the range
+  default_severity: error

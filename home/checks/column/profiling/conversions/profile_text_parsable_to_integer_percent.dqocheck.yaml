@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage text values that are parsable to an integer
     value in a column does not fall below the minimum accepted percentage
+  friendly_name: Minimum percentage of rows containing a text parsable to integer
   standard: true
+  default_severity: error

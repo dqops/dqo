@@ -7,4 +7,7 @@ spec:
   help_text: "Verifies that the column count of the tested (parent) table matches\
     \ the column count of the reference table. Only one comparison result is returned,\
     \ without data grouping."
+  friendly_name: Maximum percentage of difference between column count of compared
+    tables
   standard: true
+  default_severity: error

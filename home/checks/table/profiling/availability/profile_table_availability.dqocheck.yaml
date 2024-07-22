@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/max_failures
   help_text: Verifies availability of a table in a monitored database using a simple
     query.
+  friendly_name: Table availability
   standard: true
+  default_severity: error

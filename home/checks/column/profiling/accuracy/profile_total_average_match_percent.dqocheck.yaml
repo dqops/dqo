@@ -7,4 +7,7 @@ spec:
   help_text: Verifies that the percentage of difference in total average of a column
     in a table and total average of a column of another table does not exceed the
     set number.
+  friendly_name: The maximum difference in percent between the average value of this
+    column and the reference column
   standard: true
+  default_severity: error

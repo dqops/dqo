@@ -18,9 +18,9 @@ The **sum change** data quality check has the following variants for each
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_sum_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sum_change`</span>|Maximum relative change in the sum of numeric values since the last known value|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -823,9 +823,9 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_sum_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sum_change`</span>|Maximum relative change in the sum of numeric values since the last known value|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
@@ -1630,9 +1630,9 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_sum_change`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sum_change`</span>|Maximum relative change in the sum of numeric values since the last known value|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 

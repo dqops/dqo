@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/between_floats
   help_text: Verifies that the minimum value in a column is not outside the expected
     range. Stores a separate data quality check result for each daily partition.
+  friendly_name: Minimum numeric value is in the range
+  default_severity: error

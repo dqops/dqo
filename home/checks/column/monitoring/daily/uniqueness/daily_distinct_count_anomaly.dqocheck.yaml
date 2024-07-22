@@ -6,5 +6,7 @@ spec:
   rule_name: percentile/anomaly_differencing_percentile_moving_average
   help_text: Verifies that the distinct count in a monitored column is within a two-tailed
     percentile from measurements made during the last 90 days.
+  friendly_name: Abnormal change in the number of distinct values. Measured as a percentile
+    of anomalous measures.
   standard: true
   default_severity: warning

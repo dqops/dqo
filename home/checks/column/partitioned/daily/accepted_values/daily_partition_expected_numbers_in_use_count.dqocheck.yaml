@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the expected numeric values were found in the column. Raises
     a data quality issue when too many expected values were not found (were missing).
     Stores a separate data quality check result for each daily partition.
+  friendly_name: Maximum number of expected numeric values that are not in use
+  default_severity: error

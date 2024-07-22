@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of texts matching the date format regular
     expression in a column does not fall below the minimum accepted percentage.
+  friendly_name: Minimum percentage of rows containing texts matching an expected
+    date pattern
+  default_severity: error

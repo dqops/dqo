@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/max_days
   help_text: Monthly monitoring calculating the number of days since the most recent
     event timestamp (freshness)
+  friendly_name: Data freshness (Maximum age of the most recent row)
   standard: true
+  default_severity: error

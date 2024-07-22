@@ -8,3 +8,5 @@ spec:
     \ (expression). Reference the current table by using tokens, for example: `{alias}.col_price\
     \ > {alias}.col_tax`. Stores a separate data quality check result for each daily\
     \ partition."
+  friendly_name: Minimum percentage of rows that passed SQL condition
+  default_severity: error
