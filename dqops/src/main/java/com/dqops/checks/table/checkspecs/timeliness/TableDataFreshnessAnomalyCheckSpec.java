@@ -168,7 +168,7 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
     @Override
     @JsonIgnore
     public boolean isStandard() {
-        return false;
+        return true;
     }
 
     /**

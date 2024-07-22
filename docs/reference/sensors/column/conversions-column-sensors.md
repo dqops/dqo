@@ -768,7 +768,7 @@ The templates used to generate the SQL query for each data source supported by D
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{ lib.render_data_grouping_projections('analyzed_table') }}

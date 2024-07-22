@@ -34,6 +34,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`help_text`</span>|Help text that describes the data quality check.|*string*| | | |
 |<span class="no-wrap-code ">`friendly_name`</span>|An alternative check&#x27;s name that is shown on the check editor.|*string*| | | |
 |<span class="no-wrap-code ">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*| | | |
+|<span class="no-wrap-code ">`default_severity`</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*enum*|*valid*<br/>*warning*<br/>*error*<br/>*fatal*<br/>| | |
 
 
 

@@ -429,6 +429,7 @@ http://localhost:8888/api/incidents/{connectionName}
 |<span class="no-wrap-code">`acknowledged`</span>|Returns acknowledged incidents, when the parameter is missing, the default value is true|*boolean*| |
 |<span class="no-wrap-code">`resolved`</span>|Returns resolved incidents, when the parameter is missing, the default value is false|*boolean*| |
 |<span class="no-wrap-code">`muted`</span>|Returns muted incidents, when the parameter is missing, the default value is false|*boolean*| |
+|<span class="no-wrap-code">`severity`</span>|Returns incidents with given severity level|*long*| |
 |<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
 |<span class="no-wrap-code">`limit`</span>|Page size, the default is 50 rows|*long*| |
 |<span class="no-wrap-code">`filter`</span>|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|*string*| |
@@ -839,7 +840,7 @@ http://localhost:8888/api/topincidents
 |<span class="no-wrap-code">[`status`](../models/incidents.md#incidentstatus)</span>|Incident status to group. When this parameter is missing, the &#x27;open&#x27; (new) incidents are grouped by default.|*[IncidentStatus](../models/incidents.md#incidentstatus)*| |
 |<span class="no-wrap-code">[`group_by`](../models/incidents.md#topincidentgrouping)</span>|Incident grouping key. When this parameter is missing, returns incidents grouped by the data quality check category.|*[TopIncidentGrouping](../models/incidents.md#topincidentgrouping)*| |
 |<span class="no-wrap-code">`limit`</span>|The result limit for each group. When this parameter is missing, returns the default limit of 10|*long*| |
-|<span class="no-wrap-code">`limit`</span>|Optional filter to configure a time window before now to scan for incidents based on the incident&#x27;s first seen attribute.|*long*| |
+|<span class="no-wrap-code">`days`</span>|Optional filter to configure a time window before now to scan for incidents based on the incident&#x27;s first seen attribute.|*long*| |
 
 
 
@@ -881,6 +882,16 @@ http://localhost:8888/api/topincidents
 		      "failedChecksCount" : 5,
 		      "status" : "open"
 		    } ]
+		  },
+		  "openIncidentSeverityLevelCounts" : {
+		    "warningCounts" : {
+		      "countFromLast24h" : 3,
+		      "countFromLast7days" : 22,
+		      "currentMonthCount" : 129,
+		      "currentMonthDate" : "2024-02-01",
+		      "previousMonthCount" : 165,
+		      "previousMonthDate" : "2024-01-01"
+		    }
 		  }
 		}
         ```
@@ -932,7 +943,17 @@ http://localhost:8888/api/topincidents
 						status=IncidentStatus.OPEN
 					)
 				]
-			}
+			},
+			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
+				warning_counts=IncidentCountsModel(
+					count_from_last24h=3,
+					count_from_last7days=22,
+					current_month_count=129,
+					current_month_date=Some date/time value: [2024-02-01],
+					previous_month_count=165,
+					previous_month_date=Some date/time value: [2024-01-01]
+				)
+			)
 		)
         ```
     
@@ -984,7 +1005,17 @@ http://localhost:8888/api/topincidents
 						status=IncidentStatus.OPEN
 					)
 				]
-			}
+			},
+			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
+				warning_counts=IncidentCountsModel(
+					count_from_last24h=3,
+					count_from_last7days=22,
+					current_month_count=129,
+					current_month_date=Some date/time value: [2024-02-01],
+					previous_month_count=165,
+					previous_month_date=Some date/time value: [2024-01-01]
+				)
+			)
 		)
         ```
     
@@ -1039,7 +1070,17 @@ http://localhost:8888/api/topincidents
 						status=IncidentStatus.OPEN
 					)
 				]
-			}
+			},
+			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
+				warning_counts=IncidentCountsModel(
+					count_from_last24h=3,
+					count_from_last7days=22,
+					current_month_count=129,
+					current_month_date=Some date/time value: [2024-02-01],
+					previous_month_count=165,
+					previous_month_date=Some date/time value: [2024-01-01]
+				)
+			)
 		)
         ```
     
@@ -1094,7 +1135,17 @@ http://localhost:8888/api/topincidents
 						status=IncidentStatus.OPEN
 					)
 				]
-			}
+			},
+			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
+				warning_counts=IncidentCountsModel(
+					count_from_last24h=3,
+					count_from_last7days=22,
+					current_month_count=129,
+					current_month_date=Some date/time value: [2024-02-01],
+					previous_month_count=165,
+					previous_month_date=Some date/time value: [2024-01-01]
+				)
+			)
 		)
         ```
     
@@ -1723,7 +1774,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 		  "includeInSla" : true,
 		  "provider" : "BigQuery",
 		  "qualityDimension" : "sample_quality_dimension",
-		  "sensorName" : "sample_target/sample_category/sample_sensor"
+		  "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		}, {
 		  "id" : "3854372",
 		  "checkHash" : 0,
@@ -1750,7 +1801,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 		  "includeInSla" : true,
 		  "provider" : "BigQuery",
 		  "qualityDimension" : "sample_quality_dimension",
-		  "sensorName" : "sample_target/sample_category/sample_sensor"
+		  "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		}, {
 		  "id" : "3854372",
 		  "checkHash" : 0,
@@ -1777,7 +1828,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 		  "includeInSla" : true,
 		  "provider" : "BigQuery",
 		  "qualityDimension" : "sample_quality_dimension",
-		  "sensorName" : "sample_target/sample_category/sample_sensor"
+		  "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		} ]
         ```
     
@@ -1839,7 +1890,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -1867,7 +1918,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -1895,7 +1946,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			)
 		]
         ```
@@ -1959,7 +2010,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -1987,7 +2038,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -2015,7 +2066,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			)
 		]
         ```
@@ -2082,7 +2133,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -2110,7 +2161,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -2138,7 +2189,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			)
 		]
         ```
@@ -2205,7 +2256,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -2233,7 +2284,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			),
 			CheckResultEntryModel(
 				id='3854372',
@@ -2261,7 +2312,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 				include_in_sla=True,
 				provider='BigQuery',
 				quality_dimension='sample_quality_dimension',
-				sensor_name='sample_target/sample_category/sample_sensor'
+				sensor_name='sample_target/sample_category/table/volume/row_count'
 			)
 		]
         ```

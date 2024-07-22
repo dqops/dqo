@@ -34,8 +34,8 @@ This check calculates the most recent rows value and the current time and detect
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#profile-data-freshness-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#daily-data-freshness-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
+|[<span class="no-wrap-code">`profile_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#profile-data-freshness-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#daily-data-freshness-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
 
 
 

@@ -4,6 +4,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.check_target_model import CheckTargetModel
+from ..models.rule_severity_level import RuleSeverityLevel
 from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
 
@@ -49,6 +50,7 @@ class CheckModel:
             shown when the user decides to expand the list of checks.
         default_check (Union[Unset, bool]): This is a check that was applied on-the-fly, because it is configured as a
             default data observability check and can be run, but it is not configured in the table YAML.
+        default_severity (Union[Unset, RuleSeverityLevel]):
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
@@ -99,6 +101,7 @@ class CheckModel:
     supports_grouping: Union[Unset, bool] = UNSET
     standard: Union[Unset, bool] = UNSET
     default_check: Union[Unset, bool] = UNSET
+    default_severity: Union[Unset, RuleSeverityLevel] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
@@ -144,6 +147,10 @@ class CheckModel:
         supports_grouping = self.supports_grouping
         standard = self.standard
         default_check = self.default_check
+        default_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.default_severity, Unset):
+            default_severity = self.default_severity.value
+
         data_grouping_override: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.data_grouping_override, Unset):
             data_grouping_override = self.data_grouping_override.to_dict()
@@ -230,6 +237,8 @@ class CheckModel:
             field_dict["standard"] = standard
         if default_check is not UNSET:
             field_dict["default_check"] = default_check
+        if default_severity is not UNSET:
+            field_dict["default_severity"] = default_severity
         if data_grouping_override is not UNSET:
             field_dict["data_grouping_override"] = data_grouping_override
         if schedule_override is not UNSET:
@@ -325,6 +334,13 @@ class CheckModel:
         standard = d.pop("standard", UNSET)
 
         default_check = d.pop("default_check", UNSET)
+
+        _default_severity = d.pop("default_severity", UNSET)
+        default_severity: Union[Unset, RuleSeverityLevel]
+        if isinstance(_default_severity, Unset):
+            default_severity = UNSET
+        else:
+            default_severity = RuleSeverityLevel(_default_severity)
 
         _data_grouping_override = d.pop("data_grouping_override", UNSET)
         data_grouping_override: Union[Unset, DataGroupingConfigurationSpec]
@@ -434,6 +450,7 @@ class CheckModel:
             supports_grouping=supports_grouping,
             standard=standard,
             default_check=default_check,
+            default_severity=default_severity,
             data_grouping_override=data_grouping_override,
             schedule_override=schedule_override,
             effective_schedule=effective_schedule,

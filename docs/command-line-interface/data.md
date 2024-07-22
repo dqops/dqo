@@ -24,26 +24,26 @@ Deletes stored data that matches specified conditions. Be careful when using thi
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] data delete [-h] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
+$ dqo [dqo options...] data delete [-hi] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
-             [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
-             [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
-             [-stt=<statisticsTarget>] [-t=<table>] [-tc=<tableComparison>]
-             [-tg=<timeGradient>]
+             [-is=<incidentsStatus>] [-of=<outputFormat>]
+             [-qd=<qualityDimension>] [-s=<sensor>] [-sc=<statisticsCollector>]
+             [-stc=<statisticsCategory>] [-stt=<statisticsTarget>] [-t=<table>]
+             [-tc=<tableComparison>] [-tg=<timeGradient>]
 
 ```
 
 **DQOps shell synopsis**
 
 ```
-dqo> data delete [-h] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
+dqo> data delete [-hi] [-cr] [-er] [-es] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataGroupTag>] [-e=<end>]
-             [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
-             [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
-             [-stt=<statisticsTarget>] [-t=<table>] [-tc=<tableComparison>]
-             [-tg=<timeGradient>]
+             [-is=<incidentsStatus>] [-of=<outputFormat>]
+             [-qd=<qualityDimension>] [-s=<sensor>] [-sc=<statisticsCollector>]
+             [-stc=<statisticsCategory>] [-stt=<statisticsTarget>] [-t=<table>]
+             [-tc=<tableComparison>] [-tg=<timeGradient>]
 
 ```
 
@@ -70,6 +70,8 @@ All parameters supported by the command are listed below.
 |<div id="data delete-t" class="no-wrap-code">`-t`</div><div id="data delete--table" class="no-wrap-code">`--table`</div><div id="data delete--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns 'sch*.tab*'| ||
 |<div id="data delete--headless" class="no-wrap-code">`--headless`</div><div id="data delete-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="data delete-h" class="no-wrap-code">`-h`</div><div id="data delete--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="data delete-i" class="no-wrap-code">`-i`</div><div id="data delete--incidents" class="no-wrap-code">`--incidents`</div>|Delete the incidents| ||
+|<div id="data delete-is" class="no-wrap-code">`-is`</div><div id="data delete--incidents-status" class="no-wrap-code">`--incidents-status`</div>|Incidents status name (open, acknowledged, resolved or muted).| ||
 |<div id="data delete-of" class="no-wrap-code">`-of`</div><div id="data delete--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 |<div id="data delete-qd" class="no-wrap-code">`-qd`</div><div id="data delete--quality-dimension" class="no-wrap-code">`--quality-dimension`</div>|Data quality dimension| ||
 |<div id="data delete-s" class="no-wrap-code">`-s`</div><div id="data delete--sensor" class="no-wrap-code">`--sensor`</div>|Data quality sensor name (sensor definition or sensor name)| ||

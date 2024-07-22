@@ -21,6 +21,7 @@ class StatisticsMetricModel:
     Attributes:
         category (Union[Unset, str]): Statistics category
         collector (Union[Unset, str]): Statistics (metric) name
+        sensor_name (Union[Unset, str]): Sensor name
         result_data_type (Union[Unset, StatisticsResultDataType]):
         result (Union[Unset, StatisticsMetricModelResult]): Statistics result for the metric
         collected_at (Union[Unset, datetime.datetime]): The local timestamp when the metric was collected
@@ -32,6 +33,7 @@ class StatisticsMetricModel:
 
     category: Union[Unset, str] = UNSET
     collector: Union[Unset, str] = UNSET
+    sensor_name: Union[Unset, str] = UNSET
     result_data_type: Union[Unset, StatisticsResultDataType] = UNSET
     result: Union[Unset, "StatisticsMetricModelResult"] = UNSET
     collected_at: Union[Unset, datetime.datetime] = UNSET
@@ -42,6 +44,7 @@ class StatisticsMetricModel:
     def to_dict(self) -> Dict[str, Any]:
         category = self.category
         collector = self.collector
+        sensor_name = self.sensor_name
         result_data_type: Union[Unset, str] = UNSET
         if not isinstance(self.result_data_type, Unset):
             result_data_type = self.result_data_type.value
@@ -64,6 +67,8 @@ class StatisticsMetricModel:
             field_dict["category"] = category
         if collector is not UNSET:
             field_dict["collector"] = collector
+        if sensor_name is not UNSET:
+            field_dict["sensorName"] = sensor_name
         if result_data_type is not UNSET:
             field_dict["resultDataType"] = result_data_type
         if result is not UNSET:
@@ -85,6 +90,8 @@ class StatisticsMetricModel:
         category = d.pop("category", UNSET)
 
         collector = d.pop("collector", UNSET)
+
+        sensor_name = d.pop("sensorName", UNSET)
 
         _result_data_type = d.pop("resultDataType", UNSET)
         result_data_type: Union[Unset, StatisticsResultDataType]
@@ -114,6 +121,7 @@ class StatisticsMetricModel:
         statistics_metric_model = cls(
             category=category,
             collector=collector,
+            sensor_name=sensor_name,
             result_data_type=result_data_type,
             result=result,
             collected_at=collected_at,

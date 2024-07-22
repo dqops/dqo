@@ -172,7 +172,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -189,7 +189,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 
@@ -640,7 +640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -656,7 +656,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 ,
@@ -1230,7 +1230,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -1247,7 +1247,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 
@@ -1699,7 +1699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -1715,7 +1715,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 ,
@@ -2289,7 +2289,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -2306,7 +2306,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 
@@ -2758,7 +2758,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -2774,7 +2774,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 ,
@@ -3362,7 +3362,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -3379,7 +3379,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 
@@ -3901,7 +3901,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -3917,7 +3917,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 ,
@@ -4531,7 +4531,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -4548,7 +4548,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 
@@ -5070,7 +5070,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT)
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{ lib.render_data_grouping_projections('analyzed_table') }}
@@ -5086,7 +5086,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        CAST(analyzed_table.`target_column` AS FLOAT)
+                        TRY_CAST(analyzed_table.`target_column` AS FLOAT)
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value
                 ,
