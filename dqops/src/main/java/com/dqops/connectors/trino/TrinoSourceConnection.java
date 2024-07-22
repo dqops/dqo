@@ -57,8 +57,9 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
-    private final static Object initializeLock = new Object();
-    private static boolean athenaInitialized = false;
+    private final static Object driverRegisterLock = new Object();
+    private static boolean athenaDriverRegistered = false;
+    private static boolean trinoDriverRegistered = false;
 
     /**
      * Injection constructor for the trino connection.
@@ -73,6 +74,40 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     * Athena JDBC Driver has missing java.sql.Driver in META-INF/services jar path, which makes it not possible to automatically registered.
+     */
+    private static void registerDriver(TrinoEngineType trinoEngineType){
+        if(trinoEngineType.equals(TrinoEngineType.trino)){
+            if(trinoDriverRegistered){
+                return;
+            }
+            try {
+                synchronized (driverRegisterLock){
+                    Class.forName("io.trino.jdbc.TrinoDriver");
+                    trinoDriverRegistered = true;
+                }
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if(trinoEngineType.equals(TrinoEngineType.athena)){
+            if(athenaDriverRegistered){
+                return;
+            }
+            try {
+                synchronized (driverRegisterLock){
+                    Class.forName("com.amazon.athena.jdbc.AthenaDriver");
+                    athenaDriverRegistered = true;
+                }
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
@@ -80,7 +115,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         TrinoParametersSpec trinoSpec = this.getConnectionSpec().getTrino();
-        switch (trinoSpec.getTrinoEngineType()){
+        TrinoEngineType trinoEngineType = trinoSpec.getTrinoEngineType();
+
+        registerDriver(trinoEngineType);
+
+        switch (trinoEngineType){
             case trino: return makeHikariConfigForTrino(trinoSpec, secretValueLookupContext);
             case athena: return makeHikariConfigForAthena(trinoSpec, secretValueLookupContext);
             default: throw new RuntimeException("Cannot create hikari config. Unsupported enum: " + trinoSpec.getTrinoEngineType());
@@ -133,8 +172,6 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     private HikariConfig makeHikariConfigForAthena(TrinoParametersSpec trinoSpec, SecretValueLookupContext secretValueLookupContext){
-        initializeAthenaDriver();
-
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl("jdbc:athena://");
 
@@ -211,24 +248,6 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         return hikariConfig;
-    }
-
-    /**
-     * Athena JDBC Driver has missing java.sql.Driver in META-INF/services jar path.
-     * It cannot be automatically registered, so the method does it manually.
-     */
-    private static void initializeAthenaDriver(){
-        if(athenaInitialized){
-            return;
-        }
-        try {
-            synchronized (initializeLock){
-                Class.forName("com.amazon.athena.jdbc.AthenaDriver");
-                TrinoSourceConnection.athenaInitialized = true;
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**

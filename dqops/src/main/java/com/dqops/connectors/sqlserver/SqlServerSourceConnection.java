@@ -16,7 +16,6 @@
 package com.dqops.connectors.sqlserver;
 
 import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -33,7 +32,6 @@ import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -44,6 +42,9 @@ import java.util.stream.Collectors;
 @Component("sqlserver-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean driverRegistered = false;
 
     /**
      * Injection constructor for the MS SQL Server connection.
@@ -58,6 +59,23 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(){
+        if(driverRegistered){
+            return;
+        }
+        try {
+            synchronized (driverRegisterLock){
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                driverRegistered = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      *
@@ -65,6 +83,8 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        registerDriver();
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         SqlServerParametersSpec sqlserverSpec = connectionSpec.getSqlserver();

@@ -15,7 +15,8 @@
  */
 package com.dqops.connectors.mysql;
 
-import com.dqops.connectors.*;
+import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
@@ -23,7 +24,6 @@ import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +47,11 @@ import java.util.stream.Collectors;
 @Component("mysql-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean mysqlDriverRegistered = false;
+    private static boolean singleStoreDbDriverRegistered = false;
+
     /**
      * Injection constructor for the MySQL connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -115,6 +120,40 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(MysqlEngineType mysqlEngineType){
+        if(mysqlEngineType.equals(MysqlEngineType.mysql)){
+            if(mysqlDriverRegistered){
+                return;
+            }
+            try {
+                synchronized (driverRegisterLock){
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    mysqlDriverRegistered = true;
+                }
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if(mysqlEngineType.equals(MysqlEngineType.singlestoredb)){
+            if(singleStoreDbDriverRegistered){
+                return;
+            }
+            try {
+                synchronized (driverRegisterLock){
+                    Class.forName("com.singlestore.jdbc.Driver");
+                    singleStoreDbDriverRegistered = true;
+                }
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
@@ -122,6 +161,8 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
+
+        registerDriver(mysqlParametersSpec.getMysqlEngineType());
 
         if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
             return SingleStoreDbSourceConnection.createHikariConfig(

@@ -45,6 +45,10 @@ import java.util.stream.Collectors;
 @Component("spark-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SparkSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean driverRegistered = false;
+
     /**
      * Injection constructor for the spark connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -58,12 +62,31 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(){
+        if(driverRegistered){
+            return;
+        }
+        try {
+            synchronized (driverRegisterLock){
+                Class.forName("org.apache.hive.jdbc.HiveDriver");
+                driverRegistered = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        registerDriver();
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         SparkParametersSpec sparkParametersSpec = connectionSpec.getSpark();
