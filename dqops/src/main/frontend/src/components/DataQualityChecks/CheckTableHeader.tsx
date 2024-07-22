@@ -299,42 +299,46 @@ const TableHeader = ({
       )}
       <tr>
         <th className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          <div className="flex space-x-1 items-center">
-            <span className="mr-1">Data quality check</span>
-            {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
-              isDefaultEditing !== true && (
-                <CategoryMenu
-                  onRunChecks={onRunChecks}
-                  onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+          <div className="flex items-center ">
+            <div className="flex space-x-1 items-center w-45">
+              <span className="mr-1">Data quality check</span>
+              {(!job ||
+                job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
+                job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
+                isDefaultEditing !== true && (
+                  <CategoryMenu
+                    onRunChecks={onRunChecks}
+                    onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+                  />
+                )}
+              {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
+                <SvgIcon
+                  name="hourglass"
+                  className="text-gray-700 h-5 cursor-pointer"
                 />
               )}
-            {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
-            )}
-            {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
-            )}
+              {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
+                job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
+                <SvgIcon
+                  name="hourglass"
+                  className="text-gray-700 h-5 cursor-pointer"
+                />
+              )}
+            </div>
+            <div className=" flex items-center justify-start font-normal">
+              {isFiltered !== true ? (
+                <Checkbox
+                  label="Show advanced checks"
+                  labelPosition="right"
+                  checked={showAdvanced}
+                  onChange={(value) => setShowAdvanced(value)}
+                />
+              ) : null}
+            </div>
           </div>
         </th>
-        <th className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
-          <div className="flex gap-2 items-center font-normal text-gray-950 justify-end">
-            {isFiltered !== true ? (
-              <Checkbox
-                label="Show advanced checks"
-                labelPosition="right"
-                checked={showAdvanced}
-                onChange={(value) => setShowAdvanced(value)}
-              />
-            ) : null}
+        <th className="text-start whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+          <div className="flex gap-2 items-center font-normal text-gray-950 justify-start">
             {/* {!mode && (
               <>
                 <Button
