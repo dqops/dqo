@@ -7,4 +7,6 @@ spec:
   help_text: "Detects dates in the future in date, datetime and timestamp columns.\
     \ Measures a percentage of dates in the future. Raises a data quality issue when\
     \ too many future dates are found."
+  friendly_name: Maximum percentage of rows containing dates in future
   standard: true
+  default_severity: error

@@ -39,6 +39,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
 
@@ -338,8 +339,13 @@ public class LabelsIndexerImpl implements LabelsIndexer {
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
                 .buffer(Duration.ofMillis(50))  // wait 50 millis, maybe multiple file system updates are made, we want to merge all file changes
                 .publishOn(Schedulers.parallel());
+        int concurrency = Runtime.getRuntime().availableProcessors();
         this.subscription = requestLoadFlux
-                .doOnNext((List<LabelRefreshKey> targetKeys) -> onRequestLoadLabelsForObjects(targetKeys))
+                .flatMap((List<LabelRefreshKey> targetKeys) -> Mono.just(targetKeys)) // single thread forwarder
+                .flatMap((List<LabelRefreshKey> targetKeys) -> {
+                    onRequestLoadLabelsForObjects(targetKeys);
+                    return Mono.empty();
+                }, concurrency, concurrency * 2)
                 .subscribe();
     }
 

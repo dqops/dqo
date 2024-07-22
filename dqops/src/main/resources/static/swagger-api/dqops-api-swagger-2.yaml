@@ -12237,6 +12237,12 @@ paths:
           \ default value is false"
         required: false
         type: "boolean"
+      - name: "severity"
+        in: "query"
+        description: "Returns incidents with given severity level"
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "page"
         in: "query"
         description: "Page number, the first page is 1"
@@ -14388,7 +14394,7 @@ paths:
         required: false
         type: "integer"
         format: "int32"
-      - name: "limit"
+      - name: "days"
         in: "query"
         description: "Optional filter to configure a time window before now to scan\
           \ for incidents based on the incident's first seen attribute."
@@ -15290,6 +15296,15 @@ definitions:
           \ the data quality checks editor screen. Non-standard data quality checks\
           \ (when the value is false) are advanced checks that are shown when the\
           \ user decides to expand the list of checks."
+      default_severity:
+        type: "string"
+        description: "The severity level (warning, error, fatal) for the default rule\
+          \ that is activated in the data quality check editor when the check is enabled."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
       custom:
         type: "boolean"
         description: "This check has is a custom check or was customized by the user."
@@ -15378,6 +15393,15 @@ definitions:
         description: "This is a check that was applied on-the-fly, because it is configured\
           \ as a default data observability check and can be run, but it is not configured\
           \ in the table YAML."
+      default_severity:
+        type: "string"
+        description: "The severity level (warning, error, fatal) for the default rule\
+          \ that is activated in the data quality check editor when the check is enabled."
+        enum:
+        - "valid"
+        - "warning"
+        - "error"
+        - "fatal"
       data_grouping_override:
         description: "Data grouping configuration for this check. When a data grouping\
           \ configuration is assigned at a check level, it overrides the data grouping\
@@ -19104,6 +19128,12 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+      max_future_days:
+        type: "number"
+        format: "double"
+        description: "Maximum accepted number of days from now that are not treated\
+          \ as days from future. If value is not defined by user then default value\
+          \ is 0.0."
   ColumnDatetimeMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -31982,11 +32012,11 @@ definitions:
           \ configuration with a custom environment variable."
       user:
         type: "string"
-        description: "Databricks user name. Supports also a ${DATABRICKS_USER} configuration\
-          \ with a custom environment variable."
+        description: "(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER}\
+          \ configuration with a custom environment variable."
       password:
         type: "string"
-        description: "Databricks database password. Supports also a ${DATABRICKS_PASSWORD}\
+        description: "(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD}\
           \ configuration with a custom environment variable."
       http_path:
         type: "string"
@@ -31997,6 +32027,9 @@ definitions:
         type: "string"
         description: "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN}\
           \ configuration with a custom environment variable."
+      initialization_sql:
+        type: "string"
+        description: "Custom SQL that is executed after connecting to Databricks."
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -32172,6 +32205,11 @@ definitions:
         description: "Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md)\
           \ table. Because the default value is *false*, this parameter must be set\
           \ to *true* to delete the error samples."
+      deleteIncidents:
+        type: "boolean"
+        description: "Delete the data from the [incidents](../../reference/parquetfiles/incidents.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the error samples."
       columnNames:
         type: "array"
         description: "The list of column names to delete the data for column level\
@@ -32225,6 +32263,10 @@ definitions:
         type: "string"
         description: "The type of the target object for which the basic statistics\
           \ are deleted. Supported values are *table* and *column*."
+      incidentStatusName:
+        type: "string"
+        description: "The incidents status name when only incidents are deleted, for\
+          \ example *muted*."
   DeleteStoredDataQueueJobResult:
     type: "object"
     properties:
@@ -32262,6 +32304,8 @@ definitions:
           \ the rows were deleted."
         additionalProperties:
           $ref: "#/definitions/DataDeleteResultPartition"
+  DeltaLakeFileFormatSpec:
+    type: "object"
   DetectedDatatypeEqualsRuleParametersSpec:
     type: "object"
     properties:
@@ -32675,6 +32719,8 @@ definitions:
         - "csv"
         - "json"
         - "parquet"
+        - "iceberg"
+        - "delta_lake"
       database:
         type: "string"
         description: "DuckDB database name for in-memory read mode. The value can\
@@ -32694,6 +32740,12 @@ definitions:
       parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
+      iceberg:
+        description: "Iceberg file format specification."
+        $ref: "#/definitions/IcebergFileFormatSpec"
+      delta_lake:
+        description: "Delta Lake file format specification."
+        $ref: "#/definitions/DeltaLakeFileFormatSpec"
       directories:
         type: "object"
         description: "Virtual schema name to directory mappings. The path must be\
@@ -33161,6 +33213,12 @@ definitions:
       parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
+      iceberg:
+        description: "Iceberg file format specification."
+        $ref: "#/definitions/IcebergFileFormatSpec"
+      delta_lake:
+        description: "Delta Lake file format specification."
+        $ref: "#/definitions/DeltaLakeFileFormatSpec"
       file_paths:
         type: "array"
         description: "The list of paths to files with data that are used as a source."
@@ -33173,6 +33231,13 @@ definitions:
         type: "array"
         items:
           type: "object"
+  IcebergFileFormatSpec:
+    type: "object"
+    properties:
+      allow_moved_paths:
+        type: "boolean"
+        description: "The option ensures that some path resolution is performed, which\
+          \ allows scanning Iceberg tables that are moved."
   ImportSchemaQueueJobParameters:
     type: "object"
     properties:
@@ -33247,6 +33312,34 @@ definitions:
           $ref: "#/definitions/TableSpec"
     description: "Result object returned from the \"import tables\" job. Contains\
       \ the original table schemas and column schemas of imported tables."
+  IncidentCountsModel:
+    type: "object"
+    properties:
+      countFromLast24h:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the last 24h from now."
+      countFromLast7days:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the last 7 days, the number of 7 *\
+          \ 24 hours from now."
+      currentMonthCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the complete current month."
+      currentMonthDate:
+        type: "string"
+        format: "date"
+        description: "The first day of the current month date."
+      previousMonthCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents from the complete previous month."
+      previousMonthDate:
+        type: "string"
+        format: "date"
+        description: "The first day of the previous month date."
   IncidentDailyIssuesCount:
     type: "object"
     properties:
@@ -33418,6 +33511,18 @@ definitions:
         - "acknowledged"
         - "resolved"
         - "muted"
+  IncidentSeverityLevelCountsModel:
+    type: "object"
+    properties:
+      warningCounts:
+        description: "Counts for the warning severity level."
+        $ref: "#/definitions/IncidentCountsModel"
+      errorCounts:
+        description: "Counts for the error severity level."
+        $ref: "#/definitions/IncidentCountsModel"
+      fatalCounts:
+        description: "Counts for the fatal severity level."
+        $ref: "#/definitions/IncidentCountsModel"
   IncidentWebhookNotificationsSpec:
     type: "object"
     properties:
@@ -35221,6 +35326,9 @@ definitions:
       collector:
         type: "string"
         description: "Statistics (metric) name"
+      sensorName:
+        type: "string"
+        description: "Sensor name"
       resultDataType:
         type: "string"
         description: "Statistics result data type"
@@ -39178,6 +39286,14 @@ definitions:
           type: "array"
           items:
             $ref: "#/definitions/IncidentModel"
+      openIncidentSeverityLevelCounts:
+        description: "Incident severity level count container for the incident with\
+          \ open status."
+        $ref: "#/definitions/IncidentSeverityLevelCountsModel"
+      acknowledgedIncidentSeverityLevelCounts:
+        description: "Incident severity level count container for the incident with\
+          \ acknowledged status."
+        $ref: "#/definitions/IncidentSeverityLevelCountsModel"
   TrinoParametersSpec:
     type: "object"
     properties:

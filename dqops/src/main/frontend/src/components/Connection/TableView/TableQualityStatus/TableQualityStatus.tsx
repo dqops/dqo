@@ -1,21 +1,26 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
+import { IRootState } from '../../../../redux/reducers';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
 import DatePicker from '../../../DatePicker';
 import RadioButton from '../../../RadioButton';
+import Tabs from '../../../Tabs';
 import CurrentTableStatus from './CurrentTableStatus';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import TotalChecksExecuted from './TotalChecksExecuted';
 
-interface IProps {
-  timeScale?: 'daily' | 'monthly';
-}
-
-export default function TableQualityStatus({ timeScale }: IProps) {
+export default function TableQualityStatus({
+  timePartitioned,
+  setTimePartitioned
+}: {
+  timePartitioned?: 'daily' | 'monthly';
+  setTimePartitioned?: (value: 'daily' | 'monthly') => void;
+}) {
   const {
     checkTypes,
     connection,
@@ -27,6 +32,24 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     schema: string;
     table: string;
   } = useDecodedParams();
+  const tabs = [
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Daily checkpoints'
+          : 'Daily partitioned',
+      value: 'daily'
+    },
+    {
+      label:
+        checkTypes === CheckTypes.MONITORING
+          ? 'Monthly checkpoints'
+          : 'Monthly partitioned',
+      value: 'monthly'
+    }
+  ];
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const [tableDataQualityStatus, setTableDataQualityStatus] =
     useState<TableCurrentDataQualityStatusModel>({});
   const [firstLevelChecks, setFirstLevelChecks] = useState<
@@ -53,13 +76,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
       checkTypes === CheckTypes.PROFILING,
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,
-      timeScale
+      timePartitioned
     ).then((res) => setTableDataQualityStatus(res.data));
   };
 
   useEffect(() => {
     getTableDataQualityStatus(month, since);
-  }, [connection, schema, table, month, since, checkTypes, timeScale]);
+  }, [connection, schema, table, month, since, checkTypes, timePartitioned]);
 
   const onChangeFirstLevelChecks = () => {
     const data: Record<string, TFirstLevelCheck[]> = {};
@@ -118,8 +141,22 @@ export default function TableQualityStatus({ timeScale }: IProps) {
   }, [categoryDimension, tableDataQualityStatus, severityType]);
 
   return (
-    <div className="p-4 text-sm">
-      <div className="flex justify-between items-center">
+    <div className="text-sm">
+      {timePartitioned &&
+        userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
+          <div className="border-b border-gray-300">
+            <Tabs
+              tabs={tabs}
+              activeTab={timePartitioned}
+              onChange={setTimePartitioned}
+              className="pt-2"
+            />
+          </div>
+        )}
+      <div className="flex justify-between items-center p-4 ">
         <div className="flex pb-6 gap-x-5 items-center">
           <div className="text-sm pl-1">Group checks by: </div>
           <RadioButton
@@ -185,7 +222,6 @@ export default function TableQualityStatus({ timeScale }: IProps) {
           </div>
         </div>
       </div>
-
       <div className="flex gap-x-5">
         <CurrentTableStatus tableDataQualityStatus={tableDataQualityStatus} />
         <TotalChecksExecuted tableDataQualityStatus={tableDataQualityStatus} />
@@ -196,7 +232,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
           categoryDimension={categoryDimension}
           severityType={severityType}
           tableDataQualityStatus={tableDataQualityStatus}
-          timeScale={timeScale}
+          timeScale={timePartitioned}
         />
       ) : (
         <div className="mt-5">No data quality check results</div>

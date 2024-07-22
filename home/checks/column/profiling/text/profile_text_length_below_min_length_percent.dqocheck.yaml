@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/max_percent
   help_text: The check measures the percentage of text values in the column that is
     below the length defined by the user as a parameter.
+  friendly_name: Measure the percentage of rows containing text values shorter than
+    the minimum accepted length
+  default_severity: error

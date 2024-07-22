@@ -7,4 +7,6 @@ spec:
   help_text: Verifies that the number of distinct values stays within an accepted
     range. Stores the most recent captured value for each day when the data quality
     check was evaluated.
+  friendly_name: Verify that the count of distinct values is in the expected range
   standard: true
+  default_severity: error

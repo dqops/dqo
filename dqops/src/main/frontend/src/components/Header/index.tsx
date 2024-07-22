@@ -57,7 +57,8 @@ const Header = () => {
   const { activeTab: homeActiveTab } = useSelector(
     (state: IRootState) => state.source['home']
   );
-  const [isWindowSmall, setIsWindowSmall] = useState(window.innerWidth < 1600);
+  const [isWindowSmall, setIsWindowSmall] = useState(window.innerWidth < 1250);
+  const [isTextWrapped, setIsTextWrapped] = useState(window.innerWidth < 1475);
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -182,7 +183,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsWindowSmall(window.innerWidth < 1600);
+      setIsWindowSmall(window.innerWidth < 1250);
+      setIsTextWrapped(window.innerWidth < 1475);
     };
 
     window.addEventListener('resize', handleResize);
@@ -193,13 +195,13 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
+    <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-2">
       {isAdvisorOpen && (
         <div className="fixed top-0 left-0 z-50 right-0">
           <HeaderBanner onClose={onCloseAdvisor} />
         </div>
       )}
-      <div className="flex space-x-2">
+      <div className="flex space-x-1">
         <div
           className="w-30 flex justify-center items-center"
           onClick={() => history.push(homeActiveTab ?? '/home')}
@@ -218,14 +220,17 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center leading-1',
                 location.pathname.startsWith(`/${CheckTypes.SOURCES}`)
                   ? 'font-bold'
-                  : ''
+                  : '',
+                isTextWrapped && !isWindowSmall && 'w-24'
               )}
               onClick={onClick(CheckTypes.SOURCES)}
             >
-              <SvgIcon name="data_sources" className="w-4.5 h-4.5 mr-2" />
+              <div className="!w-4.5 !h-4.5 mr-2">
+                <SvgIcon name="data_sources" className="w-4.5 h-4.5" />
+              </div>
               {!isWindowSmall && <div>Data Sources</div>}
             </div>
           </Tooltip>
@@ -237,14 +242,14 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center',
                 location.pathname.startsWith(`/${CheckTypes.PROFILING}`)
                   ? 'font-bold'
                   : ''
               )}
               onClick={onClick(CheckTypes.PROFILING)}
             >
-              <SvgIcon name="profiling" className="w-4.5 h-4.5 mr-2" />
+              <SvgIcon name="profiling" className="!w-4.5 !h-4.5 mr-2" />
               {!isWindowSmall && <div>Profiling</div>}
             </div>
           </Tooltip>
@@ -254,14 +259,17 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center leading-1',
                 location.pathname.startsWith(`/${CheckTypes.MONITORING}`)
                   ? 'font-bold'
-                  : ''
+                  : '',
+                isTextWrapped && !isWindowSmall && 'w-28'
               )}
               onClick={onClick(CheckTypes.MONITORING)}
             >
-              <SvgIcon name="monitoring_checks" className="w-4.5 h-4.5 mr-2" />
+              <div className="!w-4.5 !h-4.5 mr-2">
+                <SvgIcon name="monitoring_checks" className="!w-4.5 !h-4.5" />
+              </div>
               {!isWindowSmall && <div>Monitoring Checks</div>}
             </div>
           </Tooltip>
@@ -273,14 +281,17 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center leading-1',
                 location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
                   ? 'font-bold'
-                  : ''
+                  : '',
+                isTextWrapped && !isWindowSmall && 'w-24'
               )}
               onClick={onClick(CheckTypes.PARTITIONED)}
             >
-              <SvgIcon name="partitioned_checks" className="w-4.5 h-4.5 mr-2" />
+              <div className="!w-4.5 !h-4.5 mr-2">
+                <SvgIcon name="partitioned_checks" className="!w-4.5 !h-4.5" />
+              </div>
               {!isWindowSmall && <div>Partition Checks</div>}
             </div>
           </Tooltip>
@@ -290,12 +301,15 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
-                location.pathname === '/dashboards' ? 'font-bold' : ''
+                'px-2 cursor-pointer flex items-center leading-1',
+                location.pathname === '/dashboards' ? 'font-bold' : '',
+                isTextWrapped && !isWindowSmall && 'w-34'
               )}
               onClick={() => history.push('/dashboards')}
             >
-              <SvgIcon name="dashboards" className="w-4 h-4 mr-1.5" />
+              <div className="!w-4.5 !h-4.5 mr-1.5">
+                <SvgIcon name="dashboards" className="!w-4.5 !h-4.5" />
+              </div>
               {!isWindowSmall && <div>Data Quality Dashboards</div>}
             </div>
           </Tooltip>
@@ -307,7 +321,7 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center',
                 location.pathname.startsWith('/incidents') ? 'font-bold' : ''
               )}
               onClick={() => history.push('/incidents')}
@@ -322,7 +336,7 @@ const Header = () => {
           >
             <div
               className={clsx(
-                'px-4 cursor-pointer flex items-center',
+                'px-2 cursor-pointer flex items-center',
                 location.pathname.startsWith('/definitions') ? 'font-bold' : ''
               )}
               onClick={() =>

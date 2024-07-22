@@ -48,6 +48,7 @@ const TableColumns = ({
     [key: string]: ColumnCurrentDataQualityStatusModel;
   }>({});
   const [columns, setColumns] = useState<ColumnListModel[]>([]);
+  const [dataArray, setDataArray] = useState<MyData[]>([]);
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -55,6 +56,7 @@ const TableColumns = ({
   };
 
   const removeColumn = async () => {
+    console.log(selectedColumn);
     if (selectedColumn?.column_name) {
       await ColumnApiClient.deleteColumn(
         connectionName,
@@ -63,8 +65,13 @@ const TableColumns = ({
         selectedColumn?.column_name
       );
     }
+    setDataArray(
+      dataArray.filter((x) => x.columnHash !== selectedColumn?.column_hash)
+    );
+    setSortedArray(
+      sortedArray?.filter((x) => x.columnHash !== selectedColumn?.column_hash)
+    );
   };
-  const [dataArray, setDataArray] = useState<MyData[]>([]);
 
   useEffect(() => {
     if (statistics?.column_statistics) {
@@ -97,23 +104,24 @@ const TableColumns = ({
             null_percent: Number(renderValue(nullPercent?.result)),
             unique_value: Number(renderValue(uniqueCount?.result)),
             null_count: Number(renderValue(nullCount?.result)),
-            detectedDatatypeVar: Number(detectedDatatype?.result),
+            detectedDatatypeVar: Number(
+              renderValue(detectedDatatype?.result) ?? 0
+            ),
             nameOfCol: column.column_name,
             minimalValue: renderValue(minimalValue?.result),
             maximumValue: renderValue(maximumValue?.result),
             length: renderValue(length),
             scale: renderValue(scale),
             importedDatatype: type,
-            columnHash: hash ?? 0, // Provide a default value of 0 when column.column_hash is undefined
+            columnHash: hash ?? 0,
             isColumnSelected: false,
             dimentions: rewriteDimensions(status)[column.column_name ?? ''],
             labels: getLabelsOverview(
               columns.find((col) => col.column_name === column.column_name)
                 ?.labels ?? []
             ),
-            id: (columns ?? [])?.find(
-              (col) => col.column_name === column.column_name
-            )?.id
+            id: columns.find((col) => col.column_name === column.column_name)
+              ?.id
           };
         }
       );
@@ -122,11 +130,45 @@ const TableColumns = ({
     }
   }, [statistics, status, columns]);
 
+  useEffect(() => {
+    const fetchStatusAndColumns = async () => {
+      try {
+        const tableDataQualityStatus =
+          await CheckResultApi.getTableDataQualityStatus(
+            connectionName,
+            schemaName,
+            tableName,
+            undefined,
+            undefined,
+            checkTypes === CheckTypes.PROFILING,
+            checkTypes === CheckTypes.MONITORING ||
+              checkTypes === CheckTypes.SOURCES,
+            checkTypes === CheckTypes.PARTITIONED ||
+              checkTypes === CheckTypes.SOURCES
+          );
+        setStatus(tableDataQualityStatus.data.columns ?? {});
+
+        const columnList = await ColumnApiClient.getColumns(
+          connectionName,
+          schemaName,
+          tableName,
+          true,
+          checkTypes == CheckTypes.SOURCES ? undefined : checkTypes
+        );
+        setColumns(columnList.data);
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
+
+    fetchStatusAndColumns();
+  }, [checkTypes, connectionName, schemaName, tableName]);
+
   const rewriteData = (hashValue: number) => {
     const columnToDelete = statistics?.column_statistics?.find(
       (x) => x.column_hash === hashValue
     );
-
+    console.log('columnToDelete', columnToDelete);
     if (columnToDelete) {
       Promise.resolve()
         .then(() => onRemoveColumn(columnToDelete))

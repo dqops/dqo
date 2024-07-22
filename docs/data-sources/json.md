@@ -17,7 +17,7 @@ Additional configuration is required **only when using remote storage** (AWS S3,
 When using remote cloud storage, make sure your account has access to the remote directory containing JSON files.
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
-## Add connection to JSON files using the user interface
+## Add a connection to JSON files using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -145,7 +145,7 @@ For example:
 
 ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties2.png){ loading=lazy; width="1200px" }
 
-To remove the property click on the trash icon at the end of the input field.
+To remove the property, click the trash icon at the end of the input field.
 
 After filling in the connection settings, click the **Test Connection** button to test the connection.
 
@@ -188,7 +188,7 @@ Enter the table name and the path absolute to the file. Save the new table confi
 
 !!! tip "Use of the relative path"
 
-    If the schema specifies the folder path, use only the file name with extension instead of an absolute path.
+    If the schema specifies the folder path, use only the file name with an extension instead of an absolute path.
 
 !!! tip "Path in table name"
 
@@ -207,7 +207,7 @@ If the job completes successfully, the created table will be imported and ready 
 
 ![Register table](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/register-single-table-4.png){ loading=lazy; width="1200px" }
 
-## Add JSON connection using DQOps Shell
+## Add a JSON connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -245,6 +245,7 @@ Type of storage [local]:
  [ 1] local (default)
  [ 2] s3
  [ 3] azure
+ [ 4] gcs
 Please enter one of the [] values: 
 Type of source files for DuckDB:
  [ 1] csv
@@ -270,7 +271,7 @@ After adding connection run `table import -c=connection1` to select schemas and 
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
-You can also add the schema and table name as a parameter to import tables in just a single step.
+You can also add the schema and table name as parameters to import tables in just a single step.
 
 ```
 dqo> table import --connection={connection name}
@@ -281,7 +282,7 @@ dqo> table import --connection={connection name}
 
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
-character can be used at the beginning, in the middle or at the end of the name.
+character can be used at the beginning, middle, or end of the name.
 
 
 ## Connections configuration files
@@ -297,7 +298,7 @@ kind: source
 spec:
   provider_type: duckdb
   duckdb:
-    read_mode: files
+    read_mode: in_memory
     source_files_type: json
     directories:
       files: /usr/share/clients_data
@@ -340,7 +341,7 @@ If you wish to use Azure authentication, you need service principal credentials 
 
 To set the credential file for AWS in DQOps, follow steps:
 
-1. Open the Configuration section.
+1. Open the Configuration in menu.
 2. Select Shared credentials from the tree view on the left.
 3. Click the edit link on the “AWS_default_credentials” file.
 
@@ -365,6 +366,6 @@ To set the credential file for AWS in DQOps, follow steps:
 ## Next steps
 
 - Learn about more advanced importing when [working with files](../working-with-dqo/working-with-files.md)
-- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).
+- We have provided a variety of use cases that use openly available datasets from [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [complete list of use cases here](../examples/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../integrations/webhooks/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you calculate separate data quality KPI scores for different groups of rows.

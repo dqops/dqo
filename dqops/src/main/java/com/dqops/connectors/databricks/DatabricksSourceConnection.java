@@ -48,6 +48,10 @@ import java.util.stream.Collectors;
 @Component("databricks-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean driverRegistered = false;
+
     /**
      * Injection constructor for the databricks connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -61,12 +65,46 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     */
+    @Override
+    public void open(SecretValueLookupContext secretValueLookupContext) {
+        super.open(secretValueLookupContext);
+
+        DatabricksParametersSpec databricksParametersSpec = this.getConnectionSpec().getDatabricks();
+        if (!Strings.isNullOrEmpty(databricksParametersSpec.getInitializationSql())) {
+            this.executeCommand(databricksParametersSpec.getInitializationSql(), JobCancellationToken.createDummyJobCancellationToken());
+        }
+    }
+
+
+    /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(){
+        if(driverRegistered){
+            return;
+        }
+        try {
+            synchronized (driverRegisterLock){
+                Class.forName("com.databricks.client.jdbc.Driver");
+                driverRegistered = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        registerDriver();
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         DatabricksParametersSpec databricksParametersSpec = connectionSpec.getDatabricks();
@@ -266,6 +304,12 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
                 for (Row colRow : tableResult) {
                     String columnName = colRow.getString("col_name");
+
+                    // DESCRIBE command executed on hive_metastore returns comments in returned table
+                    if(columnName.startsWith("# ")){
+                        continue;
+                    }
+
                     String dataType = colRow.getString("data_type");
                     boolean isNullable = true; //  todo: the following statement returns this information, but it has to be parsed: SHOW TABLE EXTENDED like 'table_name_here'
 

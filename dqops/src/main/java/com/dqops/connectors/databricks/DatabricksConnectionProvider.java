@@ -137,21 +137,7 @@ public class DatabricksConnectionProvider extends AbstractSqlConnectionProvider 
             databricksSpec.setCatalog(terminalReader.prompt("Databricks catalog name (--databricks-catalog)", "${DATABRICKS_CATALOG}", false));
         }
 
-        if (Strings.isNullOrEmpty(databricksSpec.getUser())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--databricks-user");
-            }
 
-            databricksSpec.setUser(terminalReader.prompt("Databricks user name (--databricks-user)", "${DATABRICKS_USER}", true));
-        }
-
-        if (Strings.isNullOrEmpty(databricksSpec.getPassword())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--databricks-password");
-            }
-
-            databricksSpec.setPassword(terminalReader.prompt("Databricks user password (--databricks-password)", "${DATABRICKS_PASSWORD}", true));
-        }
 
         if (Strings.isNullOrEmpty(databricksSpec.getHttpPath())) {
             if (isHeadless) {
@@ -159,6 +145,14 @@ public class DatabricksConnectionProvider extends AbstractSqlConnectionProvider 
             }
 
             databricksSpec.setHttpPath(terminalReader.prompt("Databricks http path (--databricks-http-path)", "${DATABRICKS_HTTP_PATH}", true));
+        }
+
+        if (Strings.isNullOrEmpty(databricksSpec.getAccessToken())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--databricks-access-token");
+            }
+
+            databricksSpec.setAccessToken(terminalReader.prompt("Databricks access token (--databricks-access-token)", "${DATABRICKS_ACCESS_TOKEN}", true));
         }
     }
 

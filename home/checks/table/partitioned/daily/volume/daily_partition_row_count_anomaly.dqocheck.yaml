@@ -7,4 +7,6 @@ spec:
   help_text: Detects outstanding partitions whose volume (the row count) differs too
     much from the average daily partition size. It uses time series anomaly detection
     to find the outliers in the partition volume during the last 90 days.
+  friendly_name: Abnormal change in row count since the last known value
   standard: true
+  default_severity: warning

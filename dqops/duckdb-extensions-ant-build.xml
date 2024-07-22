@@ -38,6 +38,20 @@
         <gunzip src="${local_temp_path}/azure.duckdb_extension.gz"
                 dest="${local_platform_path}/azure.duckdb_extension" />
 
+        <get src="${remote_platform_path}/iceberg.duckdb_extension.gz"
+             dest="${local_temp_path}/iceberg.duckdb_extension.gz"
+             verbose="true"
+             usetimestamp="true"/>
+        <gunzip src="${local_temp_path}/iceberg.duckdb_extension.gz"
+                dest="${local_platform_path}/iceberg.duckdb_extension" />
+
+        <get src="${remote_platform_path}/delta.duckdb_extension.gz"
+             dest="${local_temp_path}/delta.duckdb_extension.gz"
+             verbose="true"
+             usetimestamp="true"/>
+        <gunzip src="${local_temp_path}/delta.duckdb_extension.gz"
+                dest="${local_platform_path}/delta.duckdb_extension" />
+
         <!-- IMPORTANT! Remember to add the extension in DuckdbSourceConnection -->
 
     </target>

@@ -1,6 +1,6 @@
 package com.dqops.execution.sqltemplates.rendering;
 
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;

@@ -60,7 +60,7 @@ public interface ChildHierarchyNodeFieldMap {
     void propagateHierarchyIdToChildrenExcept(HierarchyNode node, HierarchyId newHierarchyId, String ignoredChild);
 
     /**
-     * Returns an interator over entries in teh field map.
+     * Returns an interator over entries in the field map.
      * @return Iteratable of entries.
      */
     Iterable<ChildFieldEntry> getChildEntries();

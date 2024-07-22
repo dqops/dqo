@@ -9,4 +9,7 @@ spec:
     \ as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes\
     \ every monthly partition and creates a separate data quality check result with\
     \ the time period value that identifies the monthly partition."
+  friendly_name: Minimum percentage of rows containing a text parsable to a boolean
+    value
   standard: true
+  default_severity: error

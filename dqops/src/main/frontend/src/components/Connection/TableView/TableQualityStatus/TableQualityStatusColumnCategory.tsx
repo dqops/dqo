@@ -102,7 +102,6 @@ export default function TableQualityStatusColumnCategory({
     categoryDimension: string
   ) => {
     const array = [...extendedChecks];
-    // console.log(extendedChecks, checkType, categoryDimension)
     if (
       array.find(
         (item) =>
@@ -128,7 +127,7 @@ export default function TableQualityStatusColumnCategory({
     <React.Fragment key={`column_${customKey}`}>
       <tr
         key={`column_row_${customKey}`}
-        style={{ paddingTop: 0, paddingBottom: 0.5, margin: 0 }}
+        style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
       >
         <td
           key={`column_cell_${customKey}`}
@@ -153,7 +152,7 @@ export default function TableQualityStatusColumnCategory({
             onClick={() => {
               toggleExtendedChecks(customKey, firstLevelChecksKey);
             }}
-            style={{ paddingTop: 0.5, paddingBottom: 0, margin: 0 }}
+            style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
           >
             {' '}
             {getColor(
@@ -282,7 +281,7 @@ export default function TableQualityStatusColumnCategory({
         <td
           key={`column_cell_blank_${customKey}`}
           style={{ paddingTop: 0, paddingBottom: 0, margin: 0 }}
-          className="font-bold px-4 "
+          className="font-bold px-4"
         ></td>
         {Object.keys(firstLevelChecks).map((check) => (
           <td
@@ -338,6 +337,13 @@ export default function TableQualityStatusColumnCategory({
             ) : null}
           </td>
         ))}
+      </tr>
+      <tr
+        key={`separator_${customKey}`}
+        className="bg-white"
+        style={{ height: '1px' }}
+      >
+        <td colSpan={Object.keys(firstLevelChecks).length + 1}></td>
       </tr>
     </React.Fragment>
   );

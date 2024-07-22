@@ -8,3 +8,5 @@ spec:
     on any side and measures their percentage. This check raises a data quality issue
     when their percentage exceeds the *max_percent* parameter value. Stores the most
     recent captured value for each month when the data quality check was evaluated.
+  friendly_name: Maximum percentage of text surrounded by whitespace characters
+  default_severity: error

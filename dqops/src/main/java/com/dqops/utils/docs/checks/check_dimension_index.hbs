@@ -1,6 +1,6 @@
 The following table lists data quality checks that detect {{qualityDimensionLowercase}} issues on {{target}}s.
 
-| Data quality check name | Check category | Description | Standard check |
-|-------------------------|----------------|-------------|----------------|
-{{#each checkGroups}}|[*{{replace primaryCheckName " " "_"}}*](../checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|[{{category}}](../categories-of-data-quality-checks/{{categoryPageName}})|{{single-line checkSpecClassJavaDoc}}|{{checkmark standard}}|
+| Data quality check name | Friendly name | Check category | Description | Standard check |
+|-------------------------|---------------|----------------|-------------|----------------|
+{{#each checkGroups}}|[*{{replace primaryCheckName " " "_"}}*](../checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|{{friendlyName}}|[{{category}}](../categories-of-data-quality-checks/{{categoryPageName}})|{{single-line checkSpecClassJavaDoc}}|{{checkmark standard}}|
 {{/each}}

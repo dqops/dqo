@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule50ParametersSpec;
@@ -175,6 +176,17 @@ public class TableRowCountChangeCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Maximum relative change in the row count since the last known value";
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.
@@ -182,5 +194,16 @@ public class TableRowCountChangeCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Consistency;
+    }
+
+    /**
+     * Returns the default rule severity level that is activated when a check is enabled in the check editor.
+     *
+     * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
+     */
+    @Override
+    @JsonIgnore
+    public RuleSeverityLevel getDefaultSeverity() {
+        return RuleSeverityLevel.warning;
     }
 }

@@ -2,11 +2,11 @@
 title: How to activate data observability for DuckDB
 ---
 # How to activate data observability for DuckDB
-Read this guide to learn how to configure DQOps to use CSV, JSON, or Parquet files from the UI, command-line interface, or directly in YAML files, and activate monitoring.
+Read this guide to learn how to configure DQOps to use CSV, JSON, or Parquet files, or table formats such as Iceberg or Delta Lake, from the UI, command-line interface, or directly in YAML files, and activate monitoring.
 
 ## Overview
 
-DQOps supports monitoring of data quality in CSV, JSON, or Parquet files, which can be stored locally or remotely in cloud storage. 
+DQOps supports monitoring of data quality in CSV, JSON, or Parquet files, or table formats such as Iceberg or Delta Lake, which can be stored locally or remotely in cloud storage. 
 When importing files, you can select either a single file or an entire directory containing multiple files. 
 DQOps will create a table from the files, which will allow you to profile it and monitor its data quality.
 
@@ -14,10 +14,10 @@ DQOps will create a table from the files, which will allow you to profile it and
 
 Additional configuration is required **only when using remote storage** (AWS S3, Azure Blob Storage or Google Cloud Storage).
 
-When using remote cloud storage, make sure your account has access to the remote directory containing CSV, JSON, or Parquet files. 
+When using remote cloud storage, make sure your account has access to the remote directory containing CSV, JSON, or Parquet files, or table formats such as Iceberg or Delta Lake.
 The permissions granted should allow you to list the files and directories, as well as read the contents of the files.
 
-## Add connection to the files using the user interface
+## Add a connection to the files using the user interface
 
 ### **Navigate to the connection settings**
 
@@ -65,3 +65,5 @@ Click the link for a detailed description of the next steps to add the connectio
 - [CSV](./csv.md#Setting-the-path-to-data)
 - [JSON](./json.md#Setting-the-path-to-data)
 - [Parquet](./parquet.md#Setting-the-path-to-data)
+- [Iceberg](./iceberg.md#Setting-the-path-to-data)
+- [Delta Lake](./deltalake.md#Setting-the-path-to-data)

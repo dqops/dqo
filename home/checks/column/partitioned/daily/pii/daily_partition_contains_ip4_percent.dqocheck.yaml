@@ -8,3 +8,5 @@ spec:
     rows that contains IP4 address values in a column does not fall below the minimum
     accepted percentage. Stores a separate data quality check result for each daily
     partition.
+  friendly_name: Detect IP4 addresses inside text columns
+  default_severity: error

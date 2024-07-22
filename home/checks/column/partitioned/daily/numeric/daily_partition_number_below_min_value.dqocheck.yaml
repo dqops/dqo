@@ -7,4 +7,6 @@ spec:
   help_text: The check counts the number of values in the column that are below the
     value defined by the user as a parameter. Stores a separate data quality check
     result for each daily partition.
+  friendly_name: Find invalid numeric values below an expected minimum value
   standard: true
+  default_severity: error

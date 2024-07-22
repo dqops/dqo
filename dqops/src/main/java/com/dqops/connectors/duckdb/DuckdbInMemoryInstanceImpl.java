@@ -17,6 +17,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.config.DuckdbReadMode;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.duckdb.DuckDBConnection;

@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.accuracy.ColumnAccuracyTotalMinMatchPercentSensorParametersSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ public class DatabricksColumnAccuracyTotalMinMatchPercentSensorParametersSpecInt
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
         Assertions.assertEquals(null, resultTable.column(1).get(0));
     }
 
@@ -103,7 +104,7 @@ public class DatabricksColumnAccuracyTotalMinMatchPercentSensorParametersSpecInt
         Assertions.assertEquals("expected_value", resultTable.column(0).name());
         Assertions.assertEquals("actual_value", resultTable.column(1).name());
         Assertions.assertEquals(null, resultTable.column(0).get(0));
-        Assertions.assertEquals(0L, resultTable.column(1).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(1).get(0)));
     }
 
     @Test

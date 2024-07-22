@@ -8,5 +8,6 @@ spec:
     of rows having a null value. Raises a data quality issue when the count of null
     values is above a max_count threshold. Stores a separate data quality check result
     for each daily partition.
-  friendly_name: incomplete column
+  friendly_name: Maximum count of rows containing null values (incomplete column)
   standard: true
+  default_severity: error

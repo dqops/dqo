@@ -7,6 +7,8 @@ import {
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import { JobApiClient } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
@@ -20,6 +22,7 @@ type HeaderBannerProps = {
 };
 
 export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
+  const dispatch = useActionDispatch();
   const [openPopover, setOpenPopover] = useState(true);
   const {
     connection
@@ -53,13 +56,24 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
 
   const configureScheduling = () => {
     setScheduleConfigured(true);
-    history.push(
-      ROUTES.CONNECTION_DETAIL(
-        CheckTypes.SOURCES,
-        advisorObject.connectionName ?? connection,
-        'schedule'
-      )
+    const url = ROUTES.CONNECTION_DETAIL(
+      CheckTypes.SOURCES,
+      advisorObject.connectionName ?? connection,
+      'schedule'
     );
+    const value = ROUTES.CONNECTION_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      advisorObject.connectionName ?? connection
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: {},
+        label: advisorObject.connectionName ?? connection
+      })
+    );
+    history.push(url);
   };
 
   return (

@@ -7,5 +7,6 @@ spec:
   help_text: Detects empty columns that contain only null values. Counts the number
     of rows that have non-null values. Raises a data quality issue when the count
     of non-null values is below min_count.
-  friendly_name: empty column
+  friendly_name: Minimum count of rows containing non-null values (find empty column)
   standard: true
+  default_severity: error

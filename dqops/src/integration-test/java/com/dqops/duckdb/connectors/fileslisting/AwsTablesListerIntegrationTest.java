@@ -2,9 +2,9 @@ package com.dqops.duckdb.connectors.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.SourceTableModel;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.connectors.duckdb.fileslisting.TablesListerProviderObjectMother;
 import com.dqops.connectors.duckdb.fileslisting.aws.AwsTablesLister;
 import com.dqops.core.secrets.DevelopmentCredentialsSecretNames;

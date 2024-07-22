@@ -8,4 +8,6 @@ spec:
     value in a column does not fall below the minimum accepted percentage. Analyzes
     every daily partition and creates a separate data quality check result with the
     time period value that identifies the daily partition.
+  friendly_name: Minimum percentage of rows containing a text parsable to integer
   standard: true
+  default_severity: error

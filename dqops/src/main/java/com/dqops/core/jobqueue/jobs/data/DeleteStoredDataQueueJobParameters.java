@@ -65,6 +65,10 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             "Because the default value is *false*, this parameter must be set to *true* to delete the error samples.")
     private boolean deleteErrorSamples = false;
 
+    @JsonPropertyDescription("Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. " +
+            "Because the default value is *false*, this parameter must be set to *true* to delete the error samples.")
+    private boolean deleteIncidents = false;
+
     @JsonPropertyDescription("The list of column names to delete the data for column level results or errors only for selected columns.")
     private List<String> columnNames;
 
@@ -101,6 +105,9 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
     @JsonPropertyDescription("The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*.")
     private String collectorTarget;
+
+    @JsonPropertyDescription("The incidents status name when only incidents are deleted, for example *muted*.")
+    private String incidentStatusName;
 
     public DeleteStoredDataQueueJobParameters() {
     }
@@ -150,6 +157,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             setDeleteStatistics(deleteStatistics);
             setDeleteSensorReadouts(true);
             setDeleteErrorSamples(true);
+            setDeleteIncidents(true);
         }};
     }
 

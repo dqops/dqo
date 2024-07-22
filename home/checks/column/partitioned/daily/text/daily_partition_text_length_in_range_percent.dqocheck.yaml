@@ -8,3 +8,6 @@ spec:
     the range provided by the user in the column. Analyzes every daily partition and
     creates a separate data quality check result with the time period value that identifies
     the daily partition.
+  friendly_name: Measure the percentage of rows containing text values in the expected
+    range
+  default_severity: error

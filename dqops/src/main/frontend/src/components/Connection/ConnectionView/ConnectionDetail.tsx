@@ -76,7 +76,7 @@ const ConnectionDetail = () => {
 
   useEffect(() => {
     dispatch(getConnectionBasic(checkTypes, activeTab, connection));
-  }, [checkTypes, activeTab, connection]);
+  }, [checkTypes, connection]);
 
   const onChange = (obj: any) => {
     dispatch(
@@ -296,6 +296,7 @@ const ConnectionDetail = () => {
             duckdb={connectionBasic?.duckdb}
             onChange={(duckdb) => onChange({ duckdb })}
             sharedCredentials={sharedCredentials}
+            freezeFileType
           />
         )}
       </div>

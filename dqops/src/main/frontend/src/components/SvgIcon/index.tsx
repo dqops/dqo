@@ -45,6 +45,8 @@ import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
 import { ReactComponent as DefinitionsRulesSvg } from './svg/definitions-rules.svg';
 import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-sensors.svg';
 import { ReactComponent as DeleteSvg } from './svg/delete.svg';
+import { ReactComponent as DeltaLakeSvg } from './svg/delta-lake-logo.svg';
+import { ReactComponent as DeltaLakeBigSvg } from './svg/delta-lake-logo-big.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
@@ -60,6 +62,8 @@ import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
+import { ReactComponent as IcebergSvg } from './svg/iceberg-logo.svg';
+import { ReactComponent as IcebergBigSvg } from './svg/iceberg-logo-big.svg';
 import { ReactComponent as IncidentsSvg } from './svg/incidents.svg';
 import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
@@ -243,7 +247,11 @@ const iconsMap: any = {
   question_mark: QuestionmarkSvg,
   key: KeySvg,
   filled_funnel: FilledFunnel,
-  funnel: Funnel
+  funnel: Funnel,
+  iceberg: IcebergSvg,
+  'iceberg-big': IcebergBigSvg,
+  deltalake: DeltaLakeSvg,
+  'deltalake-big': DeltaLakeBigSvg,
 };
 
 interface SvgIconProps {

@@ -18,9 +18,9 @@ The **date values in future percent** data quality check has the following varia
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>|Maximum percentage of rows containing dates in future|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -102,7 +102,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-15"
+```yaml hl_lines="7-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -112,6 +112,8 @@ spec:
       profiling_checks:
         datetime:
           profile_date_values_in_future_percent:
+            parameters:
+              max_future_days: 0.0
             warning:
               max_percent: 0.0
             error:
@@ -142,13 +144,13 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -170,7 +172,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -192,13 +194,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -221,7 +223,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -243,13 +245,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -272,7 +274,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -294,13 +296,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -323,7 +325,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -345,13 +347,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -380,7 +382,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -406,13 +408,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -435,7 +437,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -461,13 +463,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -497,7 +499,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -522,14 +524,14 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -552,7 +554,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -574,13 +576,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -603,7 +605,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -625,13 +627,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -654,7 +656,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -676,13 +678,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -705,7 +707,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -727,13 +729,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -763,7 +765,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -784,7 +786,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 27-32"
+    ```yaml hl_lines="5-13 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -803,6 +805,8 @@ Expand the *Configure with data grouping* section to see additional examples for
           profiling_checks:
             datetime:
               profile_date_values_in_future_percent:
+                parameters:
+                  max_future_days: 0.0
                 warning:
                   max_percent: 0.0
                 error:
@@ -835,13 +839,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -862,7 +866,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -887,13 +891,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -915,7 +919,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -940,13 +944,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -968,7 +972,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -993,13 +997,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1021,7 +1025,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -1046,13 +1050,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1080,7 +1084,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -1114,13 +1118,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1142,7 +1146,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -1171,13 +1175,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1206,7 +1210,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -1239,14 +1243,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1268,7 +1272,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -1293,13 +1297,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1321,7 +1325,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -1346,13 +1350,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1374,7 +1378,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -1399,13 +1403,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1427,7 +1431,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -1456,13 +1460,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1491,7 +1495,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -1523,9 +1527,9 @@ ___
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>|Maximum percentage of rows containing dates in future|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1607,7 +1611,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-16"
+```yaml hl_lines="7-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1618,6 +1622,8 @@ spec:
         daily:
           datetime:
             daily_date_values_in_future_percent:
+              parameters:
+                max_future_days: 0.0
               warning:
                 max_percent: 0.0
               error:
@@ -1648,13 +1654,13 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1676,7 +1682,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -1698,13 +1704,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1727,7 +1733,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -1749,13 +1755,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1778,7 +1784,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -1800,13 +1806,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1829,7 +1835,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -1851,13 +1857,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1886,7 +1892,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -1912,13 +1918,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -1941,7 +1947,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -1967,13 +1973,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2003,7 +2009,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -2028,14 +2034,14 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2058,7 +2064,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -2080,13 +2086,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2109,7 +2115,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -2131,13 +2137,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2160,7 +2166,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -2182,13 +2188,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2211,7 +2217,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -2233,13 +2239,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2269,7 +2275,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -2290,7 +2296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 28-33"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2310,6 +2316,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               datetime:
                 daily_date_values_in_future_percent:
+                  parameters:
+                    max_future_days: 0.0
                   warning:
                     max_percent: 0.0
                   error:
@@ -2342,13 +2350,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2369,7 +2377,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -2394,13 +2402,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2422,7 +2430,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -2447,13 +2455,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2475,7 +2483,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -2500,13 +2508,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2528,7 +2536,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -2553,13 +2561,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2587,7 +2595,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -2621,13 +2629,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2649,7 +2657,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -2678,13 +2686,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2713,7 +2721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -2746,14 +2754,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2775,7 +2783,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -2800,13 +2808,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2828,7 +2836,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -2853,13 +2861,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2881,7 +2889,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -2906,13 +2914,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2934,7 +2942,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -2963,13 +2971,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -2998,7 +3006,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -3030,9 +3038,9 @@ ___
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>|Maximum percentage of rows containing dates in future|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3114,7 +3122,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-16"
+```yaml hl_lines="7-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3125,6 +3133,8 @@ spec:
         monthly:
           datetime:
             monthly_date_values_in_future_percent:
+              parameters:
+                max_future_days: 0.0
               warning:
                 max_percent: 0.0
               error:
@@ -3155,13 +3165,13 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3183,7 +3193,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -3205,13 +3215,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3234,7 +3244,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -3256,13 +3266,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3285,7 +3295,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -3307,13 +3317,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3336,7 +3346,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -3358,13 +3368,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3393,7 +3403,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -3419,13 +3429,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3448,7 +3458,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -3474,13 +3484,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3510,7 +3520,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -3535,14 +3545,14 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3565,7 +3575,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -3587,13 +3597,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3616,7 +3626,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -3638,13 +3648,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3667,7 +3677,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -3689,13 +3699,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3718,7 +3728,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -3740,13 +3750,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3776,7 +3786,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -3797,7 +3807,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 28-33"
+    ```yaml hl_lines="5-13 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3817,6 +3827,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               datetime:
                 monthly_date_values_in_future_percent:
+                  parameters:
+                    max_future_days: 0.0
                   warning:
                     max_percent: 0.0
                   error:
@@ -3849,13 +3861,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3876,7 +3888,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -3901,13 +3913,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3929,7 +3941,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -3954,13 +3966,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -3982,7 +3994,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -4007,13 +4019,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4035,7 +4047,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -4060,13 +4072,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4094,7 +4106,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -4128,13 +4140,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4156,7 +4168,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -4185,13 +4197,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4220,7 +4232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -4253,14 +4265,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4282,7 +4294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -4307,13 +4319,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4335,7 +4347,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -4360,13 +4372,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4388,7 +4400,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -4413,13 +4425,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4441,7 +4453,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -4470,13 +4482,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4505,7 +4517,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -4537,9 +4549,9 @@ ___
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>|Maximum percentage of rows containing dates in future|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4621,7 +4633,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-21"
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4637,6 +4649,8 @@ spec:
         daily:
           datetime:
             daily_partition_date_values_in_future_percent:
+              parameters:
+                max_future_days: 0.0
               warning:
                 max_percent: 0.0
               error:
@@ -4672,13 +4686,13 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4700,7 +4714,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -4726,13 +4740,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4755,7 +4769,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -4781,13 +4795,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4810,7 +4824,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -4836,13 +4850,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4865,7 +4879,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -4891,13 +4905,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4926,7 +4940,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -4958,13 +4972,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -4987,7 +5001,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -5017,13 +5031,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5053,7 +5067,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -5084,14 +5098,14 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5114,7 +5128,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -5140,13 +5154,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5169,7 +5183,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -5195,13 +5209,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5224,7 +5238,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -5250,13 +5264,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5279,7 +5293,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -5307,13 +5321,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5343,7 +5357,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -5370,7 +5384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-4 38-43"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5395,6 +5409,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               datetime:
                 daily_partition_date_values_in_future_percent:
+                  parameters:
+                    max_future_days: 0.0
                   warning:
                     max_percent: 0.0
                   error:
@@ -5432,13 +5448,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5459,7 +5475,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -5486,13 +5502,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5514,7 +5530,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -5541,13 +5557,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5569,7 +5585,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -5596,13 +5612,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5624,7 +5640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -5651,13 +5667,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5685,7 +5701,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -5723,13 +5739,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5751,7 +5767,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -5782,13 +5798,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5817,7 +5833,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -5854,14 +5870,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5883,7 +5899,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -5910,13 +5926,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5938,7 +5954,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -5965,13 +5981,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -5993,7 +6009,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -6020,13 +6036,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6048,7 +6064,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -6077,13 +6093,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6112,7 +6128,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -6148,9 +6164,9 @@ ___
 
 Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>|Maximum percentage of rows containing dates in future|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -6232,7 +6248,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-21"
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6248,6 +6264,8 @@ spec:
         monthly:
           datetime:
             monthly_partition_date_values_in_future_percent:
+              parameters:
+                max_future_days: 0.0
               warning:
                 max_percent: 0.0
               error:
@@ -6283,13 +6301,13 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6311,7 +6329,7 @@ spec:
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -6337,13 +6355,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6366,7 +6384,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -6392,13 +6410,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6421,7 +6439,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -6447,13 +6465,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6476,7 +6494,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -6502,13 +6520,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6537,7 +6555,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -6569,13 +6587,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6598,7 +6616,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -6628,13 +6646,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6664,7 +6682,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -6695,14 +6713,14 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6725,7 +6743,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -6751,13 +6769,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6780,7 +6798,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -6806,13 +6824,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6835,7 +6853,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -6861,13 +6879,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6890,7 +6908,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -6918,13 +6936,13 @@ spec:
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -6954,7 +6972,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -6981,7 +6999,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-4 38-43"
+    ```yaml hl_lines="10-4 40-45"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7006,6 +7024,8 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               datetime:
                 monthly_partition_date_values_in_future_percent:
+                  parameters:
+                    max_future_days: 0.0
                   warning:
                     max_percent: 0.0
                   error:
@@ -7043,13 +7063,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% else -%}
-                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7070,7 +7090,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -7097,13 +7117,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7125,7 +7145,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -7152,13 +7172,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7180,7 +7200,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL (0.0 * 86400) SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -7207,13 +7227,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7235,7 +7255,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS DATETIME) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL (0.0 * 86400) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -7262,13 +7282,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7296,7 +7316,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( (0.0 * 86400) AS INTEGER), 'second' )
                                 THEN 1
                             ELSE 0
                         END
@@ -7334,13 +7354,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7362,7 +7382,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -7393,13 +7413,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7428,7 +7448,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -7465,14 +7485,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% else -%}
-                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                                    ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7494,7 +7514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                                (analyzed_table."target_column")::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => (0.0 * 86400)::int)
                                 THEN 1
                             ELSE 0
                         END
@@ -7521,13 +7541,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% else -%}
-                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                                    TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7549,7 +7569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > CURRENT_TIMESTAMP
+                                TRY_TO_TIMESTAMP(analyzed_table."target_column") > TIMESTAMPADD(SECOND, CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END
@@ -7576,13 +7596,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% else -%}
-                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7604,7 +7624,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL 0 SECOND
                                 THEN 1
                             ELSE 0
                         END
@@ -7631,13 +7651,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7659,7 +7679,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > SYSDATETIME()
+                                TRY_CAST(analyzed_table.[target_column] AS DATETIME) > DATEADD(SECOND, CAST(0.0 * 86400 AS INT), SYSDATETIME())
                                 THEN 1
                             ELSE 0
                         END
@@ -7688,13 +7708,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN
                                 {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                                 {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                                    {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                                    {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                                 {% else -%}
-                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 {% endif -%}
                                 THEN 1
                             ELSE 0
@@ -7723,7 +7743,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN
-                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP
+                                TRY_CAST(analyzed_table."target_column" AS TIMESTAMP) > DATE_ADD('SECOND', CAST(0.0 * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                                 THEN 1
                             ELSE 0
                         END

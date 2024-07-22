@@ -5,4 +5,6 @@ spec:
   sensor_name: table/timeliness/data_freshness
   rule_name: comparison/max_days
   help_text: Calculates the number of days since the most recent event timestamp (freshness)
+  friendly_name: Data freshness (Maximum age of the most recent row)
   standard: true
+  default_severity: error

@@ -17,25 +17,25 @@ package com.dqops.data.incidents.services;
 
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
-import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.models.CheckResultEntryModel;
+import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.models.IncidentHistogramFilterParameters;
+import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
+import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
-import com.dqops.data.checkresults.models.CheckResultListFilterParameters;
-import com.dqops.data.checkresults.models.IncidentIssueHistogramModel;
 import com.dqops.data.incidents.models.*;
-import com.dqops.metadata.search.pattern.SearchPattern;
-import com.dqops.rest.models.common.SortDirection;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitionId;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import com.dqops.rest.models.common.SortDirection;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,6 @@ import tech.tablesaw.selection.Selection;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -161,7 +160,13 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     String status = statusColumn.get(rowIndex);
                     IncidentStatus incidentStatus = IncidentStatus.valueOf(status);
 
+                    int highestSeverity = highestSeverityColumn.get(rowIndex);
+
                     if (!filterParameters.isIncidentStatusEnabled(incidentStatus)) {
+                        continue; // skipping
+                    }
+
+                    if (filterParameters.getSeverity() != null && filterParameters.getSeverity() != highestSeverity) {
                         continue; // skipping
                     }
 
@@ -211,7 +216,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     if (!issueUrlColumn.isMissing(rowIndex)) {
                         incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
                     }
-                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    incidentModel.setHighestSeverity(highestSeverity);
                     if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
                         incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
                     }
@@ -451,6 +456,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         LocalDate dateUntil = now.atZone(defaultTimeZoneId).toLocalDate();
         LocalDate dateSince = since.atZone(defaultTimeZoneId).toLocalDate();
 
+        result.setOpenIncidentSeverityLevelCounts(IncidentSeverityLevelCountsModel.createInstance(defaultTimeZoneId));
+        result.setAcknowledgedIncidentSeverityLevelCounts(IncidentSeverityLevelCountsModel.createInstance(defaultTimeZoneId));
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity, true);
         ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
         List<ConnectionWrapper> connectionWrappers = connectionList.toList();
@@ -497,6 +505,17 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 for (int rowIndex = rowCount - 1; rowIndex >= 0; rowIndex--) {
                     String statusText = statusColumn.get(rowIndex);
                     IncidentStatus status = IncidentStatus.valueOf(statusText);
+
+                    Instant firstSeen = firstSeenColumn.get(rowIndex);
+                    int highestSeverity = highestSeverityColumn.get(rowIndex);
+
+                    if(status == IncidentStatus.open){
+                        result.getOpenIncidentSeverityLevelCounts().processAddCount(highestSeverity, firstSeen);
+                    }
+                    if(status == IncidentStatus.acknowledged){
+                        result.getAcknowledgedIncidentSeverityLevelCounts().processAddCount(highestSeverity, firstSeen);
+                    }
+
                     if (status != incidentStatus) {
                         continue;
                     }
@@ -525,8 +544,6 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                         incidentModelsByGroup = new ArrayList<>();
                         result.getTopIncidents().put(groupingKey, incidentModelsByGroup);
                     }
-
-                    Instant firstSeen = firstSeenColumn.get(rowIndex);
 
                     if (since.isAfter(firstSeen)) {
                         continue; // too old
@@ -571,7 +588,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     if (!issueUrlColumn.isMissing(rowIndex)) {
                         incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
                     }
-                    incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                    incidentModel.setHighestSeverity(highestSeverity);
                     if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
                         incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
                     }

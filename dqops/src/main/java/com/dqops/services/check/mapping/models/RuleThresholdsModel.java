@@ -31,12 +31,21 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "RuleThresholdsModel", description = "Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).")
 public class RuleThresholdsModel implements Cloneable {
+    /**
+     * Rule parameters for the error severity rule.
+     */
     @JsonPropertyDescription("Rule parameters for the error severity rule.")
     private RuleParametersModel error;
 
+    /**
+     * Rule parameters for the warning severity rule.
+     */
     @JsonPropertyDescription("Rule parameters for the warning severity rule.")
     private RuleParametersModel warning;
 
+    /**
+     * Rule parameters for the fatal severity rule.
+     */
     @JsonPropertyDescription("Rule parameters for the fatal severity rule.")
     private RuleParametersModel fatal;
 

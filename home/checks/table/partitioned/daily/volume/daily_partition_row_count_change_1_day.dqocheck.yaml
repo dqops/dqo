@@ -7,3 +7,5 @@ spec:
   help_text: 'Detects when the partition volume change (increase or decrease of the
     row count) since yesterday''s daily partition exceeds the maximum accepted change
     percentage. '
+  friendly_name: Maximum relative change in the row count vs 1 day ago
+  default_severity: warning

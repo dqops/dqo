@@ -452,7 +452,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Sets teh schema checks container for column level checks.
+     * Sets the schema checks container for column level checks.
      * @param schema Schema checks container.
      */
     public void setSchema(ColumnSchemaProfilingChecksSpec schema) {

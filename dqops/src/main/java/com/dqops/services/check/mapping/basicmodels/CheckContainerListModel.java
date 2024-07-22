@@ -34,6 +34,9 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckContainerListModel", description = "Simplistic model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
 public class CheckContainerListModel {
+    /**
+     * Simplistic list of all data quality checks.
+     */
     @JsonPropertyDescription("Simplistic list of all data quality checks.")
     private List<CheckListModel> checks = new ArrayList<>();
 

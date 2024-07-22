@@ -6,3 +6,6 @@ spec:
   rule_name: change/change_percent_7_days
   help_text: Verifies that the null percent value in a column changed in a fixed rate
     since the last readout from the last week.
+  friendly_name: Maximum percentage of change in the count of null values vs 7 day
+    ago
+  default_severity: warning

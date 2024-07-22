@@ -43,12 +43,12 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.")
     private String catalog;
 
-    @CommandLine.Option(names = {"--databricks-user"}, description = "Databricks user name.")
-    @JsonPropertyDescription("Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--databricks-user"}, description = "(Obsolete) Databricks user name.")
+    @JsonPropertyDescription("(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.")
     private String user;
 
-    @CommandLine.Option(names = {"--databricks-password"}, description = "Databricks database password.")
-    @JsonPropertyDescription("Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--databricks-password"}, description = "(Obsolete) Databricks database password.")
+    @JsonPropertyDescription("(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.")
     private String password;
 
     @CommandLine.Option(names = {"--databricks-http-path"}, description = "Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>")
@@ -58,6 +58,10 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--databricks-access-token"}, description = "Databricks access token for the warehouse.")
     @JsonPropertyDescription("Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.")
     private String accessToken;
+
+    @CommandLine.Option(names = {"--databricks-initialization-sql"}, description = "Custom SQL that is executed after connecting to Databricks.")
+    @JsonPropertyDescription("Custom SQL that is executed after connecting to Databricks.")
+    private String initializationSql;
 
     @CommandLine.Option(names = {"-D"}, description = "Databricks additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
@@ -185,6 +189,23 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns an initialization SQL that is executed after opening the connection.
+     * @return
+     */
+    public String getInitializationSql() {
+        return initializationSql;
+    }
+
+    /**
+     * Sets an SQL query that is executed after opening a connection.
+     * @param initializationSql Initialization sql.
+     */
+    public void setInitializationSql(String initializationSql) {
+        this.setDirtyIf(!Objects.equals(this.initializationSql, initializationSql));
+        this.initializationSql = initializationSql;
+    }
+
+    /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
@@ -235,6 +256,7 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.httpPath = secretValueProvider.expandValue(cloned.httpPath, lookupContext);
         cloned.accessToken = secretValueProvider.expandValue(cloned.accessToken, lookupContext);
+        cloned.initializationSql = secretValueProvider.expandValue(cloned.initializationSql, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;

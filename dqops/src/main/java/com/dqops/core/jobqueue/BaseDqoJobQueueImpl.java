@@ -109,7 +109,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         for (int i = 0; i < this.parallelJobLimitProvider.getMaxDegreeOfParallelism(); i++) {
             this.startedThreadsCount.incrementAndGet();
             Future<?> jobProcessingThreadFuture = this.executorService.submit(this::jobProcessingThreadLoop);
-            this.runnerThreadsFutures.add(jobProcessingThreadFuture);
+            synchronized (this.runnerThreadsFuturesLock) {
+                this.runnerThreadsFutures.add(jobProcessingThreadFuture);
+            }
         }
 
         List<DqoJobQueueEntry> preStartQueuedJobs;
@@ -272,6 +274,10 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
 
             for (int i = 0; i < threadFinishFutures.size(); i++) {
                 Future<?> threadFinishFuture = threadFinishFutures.get(i);
+                if (threadFinishFuture == null)  {
+                    continue;
+                }
+
                 try {
                     threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
                 }

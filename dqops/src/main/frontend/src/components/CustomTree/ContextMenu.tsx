@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Popover,
@@ -22,35 +22,29 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { urlencodeEncoder, useDecodedParams } from '../../utils';
 import SvgIcon from '../SvgIcon';
+import AddColumnDialog from './AddColumnDialog';
+import AddSchemaDialog from './AddSchemaDialog';
+import AddTableDialog from './AddTableDialog';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
+import ConfirmDialog from './ConfirmDialog';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import RunChecksDialog from './RunChecksDialog';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
-  openConfirm: (node: CustomTreeNode) => void;
-  openAddColumnDialog: (node: CustomTreeNode) => void;
-  openAddTableDialog: (node: CustomTreeNode) => void;
-  openAddSchemaDialog: (node: CustomTreeNode) => void;
 }
 
-const ContextMenu = ({
-  node,
-  openConfirm,
-  openAddColumnDialog,
-  openAddTableDialog,
-  openAddSchemaDialog
-}: ContextMenuProps) => {
+const ContextMenu = ({ node }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useDecodedParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const {
     refreshNode,
-    runChecks,
     collectStatisticsOnTable,
     deleteStoredData,
     runPartitionedChecks,
-    reimportTableMetadata
+    reimportTableMetadata,
+    removeNode
   } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
@@ -58,11 +52,42 @@ const ContextMenu = ({
   const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
   const [collectStatisticsDialogOpened, setCollectStatisticsDialogOpened] =
     useState(false);
+  const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
+  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
+  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+  const [deleteNodePopup, setDeleteNodePopup] = useState(false);
   const dispatch = useActionDispatch();
 
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
+  };
+  const openDeleteNodePopup = () => {
+    setDeleteNodePopup(true);
+  };
+
+  const openAddColumnDialog = () => {
+    setAddColumnDialogOpen(true);
+  };
+
+  const closeAddColumnDialog = () => {
+    setAddColumnDialogOpen(false);
+  };
+
+  const openAddTableDialog = () => {
+    setAddTableDialogOpen(true);
+  };
+
+  const closeAddTableDialog = () => {
+    setAddTableDialogOpen(false);
+  };
+
+  const openAddSchemaDialog = () => {
+    setAddSchemaDialogOpen(true);
+  };
+
+  const closeAddSchemaDialog = () => {
+    setAddSchemaDialogOpen(false);
   };
 
   const handleRunChecks = (
@@ -160,13 +185,25 @@ const ContextMenu = ({
     return obj;
   };
 
-  const onRunPartitionedChecks = (value: TimeWindowFilterParameters | null) => {
-    if (value) {
-      handleRunPartitionedChecks(value);
-    } else {
-      handleRunChecks();
+  const message = useMemo(() => {
+    if (node?.level === TREE_LEVEL.DATABASE) {
+      return `Are you sure want to remove connection ${node?.label}?`;
     }
-  };
+
+    if (node?.level === TREE_LEVEL.SCHEMA) {
+      return `Are you sure want to remove schema ${node?.label}?`;
+    }
+
+    if (node?.level === TREE_LEVEL.TABLE) {
+      return `Are you sure want to remove table ${node?.label}?`;
+    }
+
+    if (node?.level === TREE_LEVEL.COLUMN) {
+      return `Are you sure want to remove column ${node?.label}?`;
+    }
+
+    return '';
+  }, [node]);
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -195,24 +232,6 @@ const ContextMenu = ({
                   <SvgIcon name="options" className="w-5 h-5" />
                 )}
               </div>
-
-              <RunChecksDialog
-                checkType={checkTypes}
-                open={runChecksDialogOpened}
-                onClose={() => {
-                  setRunChecksDialogOpened(false), setOpen(false);
-                }}
-                onClick={(
-                  filter: CheckSearchFilters,
-                  timeWindowFilter?: TimeWindowFilterParameters,
-                  collectErrorSample?: boolean
-                ) => {
-                  handleRunChecks(filter, timeWindowFilter, collectErrorSample);
-                  setOpen(false);
-                  setRunChecksDialogOpened(false);
-                }}
-                runChecksJobTemplate={node.run_checks_job_template ?? {}}
-              />
             </>
           )}
           {/* {checkTypes === 'partitioned' &&
@@ -241,21 +260,6 @@ const ContextMenu = ({
               >
                 Collect statistics
               </div>
-              <CollectStatisticsDialog
-                open={collectStatisticsDialogOpened}
-                onClose={() => {
-                  setCollectStatisticsDialogOpened(false);
-                  setOpen(false);
-                }}
-                onClick={(filter) => {
-                  handleCollectStatisticsOnTable(filter),
-                    setCollectStatisticsDialogOpened(false);
-                  setOpen(false);
-                }}
-                collectStatisticsJobTemplate={
-                  node.collect_statistics_job_template ?? {}
-                }
-              />
             </>
           )}
           {node.level === TREE_LEVEL.DATABASE && (
@@ -275,7 +279,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openAddSchemaDialog(node)
+                  ? openAddSchemaDialog()
                   : undefined;
               }}
             >
@@ -316,7 +320,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openConfirm(node)
+                  ? openDeleteNodePopup()
                   : undefined;
               }}
             >
@@ -328,7 +332,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openConfirm(node)
+                  ? openDeleteNodePopup()
                   : undefined;
               }}
             >
@@ -340,7 +344,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openConfirm(node)
+                  ? openDeleteNodePopup()
                   : undefined;
               }}
             >
@@ -352,7 +356,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? (openAddTableDialog(node), setOpen(false))
+                  ? openAddTableDialog()
                   : undefined;
               }}
             >
@@ -366,7 +370,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => {
                 userProfile.can_manage_data_sources === true
-                  ? openAddColumnDialog(node)
+                  ? openAddColumnDialog()
                   : undefined;
               }}
             >
@@ -387,18 +391,6 @@ const ContextMenu = ({
               >
                 Delete data quality results
               </div>
-              <DeleteStoredDataExtendedPopUp
-                open={deleteDataDialogOpened}
-                onClose={() => {
-                  setDeleteDataDialogOpened(false), setOpen(false);
-                }}
-                onDelete={(params) => {
-                  setDeleteDataDialogOpened(false);
-                  deleteStoredData(node, params);
-                  setOpen(false);
-                }}
-                nodeId={String(node.id)}
-              />
             </>
           )}
 
@@ -414,24 +406,6 @@ const ContextMenu = ({
               >
                 Delete data quality results
               </div>
-              <DeleteStoredDataExtendedPopUp
-                open={deleteDataDialogOpened}
-                onClose={() => setDeleteDataDialogOpened(false)}
-                onDelete={(params) => {
-                  setDeleteDataDialogOpened(false);
-
-                  deleteStoredData(
-                    node,
-                    params,
-                    node.run_checks_job_template?.column && [
-                      node.run_checks_job_template?.column
-                    ]
-                  );
-                  setOpen(false);
-                }}
-                nameOfCol={node.run_checks_job_template?.column}
-                nodeId={String(node.id)}
-              />
             </>
           )}
           {node.level === TREE_LEVEL.TABLE &&
@@ -446,6 +420,91 @@ const ContextMenu = ({
               </div>
             )}
         </div>
+        {deleteDataDialogOpened && (
+          <DeleteStoredDataExtendedPopUp
+            open={deleteDataDialogOpened}
+            onClose={() => setDeleteDataDialogOpened(false)}
+            onDelete={(params) => {
+              setDeleteDataDialogOpened(false);
+
+              deleteStoredData(
+                node,
+                params,
+                node.run_checks_job_template?.column && [
+                  node.run_checks_job_template?.column
+                ]
+              );
+              setOpen(false);
+            }}
+            nameOfCol={node.run_checks_job_template?.column}
+            nodeId={String(node.id)}
+          />
+        )}
+        {collectStatisticsDialogOpened && (
+          <CollectStatisticsDialog
+            open={collectStatisticsDialogOpened}
+            onClose={() => {
+              setCollectStatisticsDialogOpened(false);
+              setOpen(false);
+            }}
+            onClick={(filter) => {
+              handleCollectStatisticsOnTable(filter),
+                setCollectStatisticsDialogOpened(false);
+              setOpen(false);
+            }}
+            collectStatisticsJobTemplate={
+              node.collect_statistics_job_template ?? {}
+            }
+          />
+        )}
+        {runChecksDialogOpened && (
+          <RunChecksDialog
+            checkType={checkTypes}
+            open={runChecksDialogOpened}
+            onClose={() => {
+              setRunChecksDialogOpened(false), setOpen(false);
+            }}
+            onClick={(
+              filter: CheckSearchFilters,
+              timeWindowFilter?: TimeWindowFilterParameters,
+              collectErrorSample?: boolean
+            ) => {
+              handleRunChecks(filter, timeWindowFilter, collectErrorSample);
+              setOpen(false);
+              setRunChecksDialogOpened(false);
+            }}
+            runChecksJobTemplate={node.run_checks_job_template ?? {}}
+          />
+        )}
+        {deleteNodePopup && (
+          <ConfirmDialog
+            open={deleteNodePopup}
+            onClose={() => setDeleteNodePopup(false)}
+            message={message}
+            onConfirm={() => removeNode(node)}
+          />
+        )}
+        {addColumnDialogOpen && (
+          <AddColumnDialog
+            open={addColumnDialogOpen}
+            onClose={closeAddColumnDialog}
+            node={node}
+          />
+        )}
+        {addTableDialogOpen && (
+          <AddTableDialog
+            open={addTableDialogOpen}
+            onClose={closeAddTableDialog}
+            node={node}
+          />
+        )}
+        {addSchemaDialogOpen && (
+          <AddSchemaDialog
+            open={addSchemaDialogOpen}
+            onClose={closeAddSchemaDialog}
+            node={node}
+          />
+        )}
       </PopoverContent>
     </Popover>
   );

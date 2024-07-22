@@ -5,7 +5,7 @@ import {
   CheckModel,
   CheckResultsOverviewDataModel,
   QualityCategoryModel,
-  TimeWindowFilterParameters,
+  TimeWindowFilterParameters
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCurrentJobId } from '../../redux/actions/source.actions';
@@ -13,10 +13,10 @@ import { IRootState } from '../../redux/reducers';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { JobApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
+import { useDecodedParams } from '../../utils';
 import DeleteOnlyDataDialog from '../CustomTree/DeleteOnlyDataDialog';
 import SvgIcon from '../SvgIcon';
 import CheckListItem from './CheckListItem';
-import { useDecodedParams } from '../../utils';
 
 type CheckIndexTuple = [check: CheckModel, index: number];
 
@@ -35,8 +35,10 @@ interface CheckCategoriesViewProps {
   copyCategory?: QualityCategoryModel;
   isDefaultEditing?: boolean;
   isFiltered?: boolean;
-  showAdvanced?: boolean,
-  isAlreadyDeleted?: boolean
+  showAdvanced?: boolean;
+  isAlreadyDeleted?: boolean;
+  ruleParamenterConfigured: boolean;
+  onChangeRuleParametersConfigured: (v: boolean) => void;
 }
 const CheckCategoriesView = ({
   mode,
@@ -51,7 +53,9 @@ const CheckCategoriesView = ({
   isDefaultEditing,
   isFiltered,
   showAdvanced,
-  isAlreadyDeleted
+  isAlreadyDeleted,
+  ruleParamenterConfigured,
+  onChangeRuleParametersConfigured
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useDecodedParams();
@@ -62,7 +66,11 @@ const CheckCategoriesView = ({
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const shouldExtend = () => {
-    if (category.checks?.some((x) => x.configured === true || x.default_check === true)) {
+    if (
+      category.checks?.some(
+        (x) => x.configured === true || x.default_check === true
+      )
+    ) {
       setIsExtended(true);
     }
   };
@@ -116,20 +124,23 @@ const CheckCategoriesView = ({
                     className="w-5 h-5 text-gray-700"
                   />
                 )}
-                { 
-                  category.category === 'pii' ? 'PII' :
-                  category.category === 'custom_sql' ? "Custom SQL" :
-                  category.category === 'datatype' ? "Detected data type" :
-                  category.category === 'datetime' ? "Date and time" :
-                    category.category?.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
-                }
+                {category.category === 'pii'
+                  ? 'PII'
+                  : category.category === 'custom_sql'
+                  ? 'Custom SQL'
+                  : category.category === 'datatype'
+                  ? 'Detected data type'
+                  : category.category === 'datetime'
+                  ? 'Date and time'
+                  : category.category
+                      ?.replace(/_/g, ' ')
+                      .replace(/^\w/, (c) => c.toUpperCase())}
               </div>
             </div>
             <div> </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
-        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
+        <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2} />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
           {isDefaultEditing !== true && (
             <div className="flex justify-end gap-x-3">
@@ -166,44 +177,56 @@ const CheckCategoriesView = ({
       </tr>
       {category.checks &&
         isExtended &&
-          category.checks.map((check, index) => {
+        category.checks
+          .map((check, index) => {
             const checkIndexPair: CheckIndexTuple = [check, index];
             return checkIndexPair;
           })
-          .filter((tuple) => showAdvanced || tuple[0].standard || tuple[0].configured || isAlreadyDeleted || isFiltered)
+          .filter(
+            (tuple) =>
+              showAdvanced ||
+              tuple[0].standard ||
+              tuple[0].configured ||
+              isAlreadyDeleted ||
+              isFiltered
+          )
           .map((tuple) => (
-          <CheckListItem
-            check={tuple[0]}
-            key={tuple[1]}
-            onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, tuple[1])
-            }
-            checkResult={checkResultsOverview.find(
-              (item) => item.checkHash === tuple[0].check_hash
-            )}
-            getCheckOverview={getCheckOverview}
-            onUpdate={onUpdate}
-            timeWindowFilter={timeWindowFilter}
-            mode={mode}
-            changeCopyUI={(value) =>
-              changeCopyUI(
-                category.category ?? '',
-                tuple[0].check_name ?? '',
-                value
-              )
-            }
-            checkedCopyUI={
-              copyCategory?.checks?.find(
-                (item) => item.check_name === tuple[0].check_name
-              )?.configured
-            }
-            category={category.category}
-            comparisonName={category.comparison_name}
-            isDefaultEditing={isDefaultEditing}
-            canUserRunChecks={userProfile.can_run_checks}
-            isAlreadyDeleted={isAlreadyDeleted}
-          />
-        ))}
+            <CheckListItem
+              check={tuple[0]}
+              key={tuple[1]}
+              onChange={(item) =>
+                handleChangeDataGroupingConfiguration(item, tuple[1])
+              }
+              checkResult={checkResultsOverview.find(
+                (item) => item.checkHash === tuple[0].check_hash
+              )}
+              getCheckOverview={getCheckOverview}
+              onUpdate={onUpdate}
+              timeWindowFilter={timeWindowFilter}
+              mode={mode}
+              changeCopyUI={(value) =>
+                changeCopyUI(
+                  category.category ?? '',
+                  tuple[0].check_name ?? '',
+                  value
+                )
+              }
+              checkedCopyUI={
+                copyCategory?.checks?.find(
+                  (item) => item.check_name === tuple[0].check_name
+                )?.configured
+              }
+              category={category.category}
+              comparisonName={category.comparison_name}
+              isDefaultEditing={isDefaultEditing}
+              canUserRunChecks={userProfile.can_run_checks}
+              isAlreadyDeleted={isAlreadyDeleted}
+              ruleParamenterConfigured={ruleParamenterConfigured}
+              onChangeRuleParametersConfigured={
+                onChangeRuleParametersConfigured
+              }
+            />
+          ))}
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}

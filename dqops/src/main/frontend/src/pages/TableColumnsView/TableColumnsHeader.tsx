@@ -13,7 +13,9 @@ export default function TableColumnsHeader({
   setSortedArray
 }: ITableColumnsHeaderProps) {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortedBy, setSortedBy] = useState<string>('');
   const [headerItems, setHeaderItems] = useState<Array<string>>([]);
+
   const getHeaderitemsBasedOnWidth = () => {
     const width = window.innerWidth;
     const excludedItems: string[] = [];
@@ -38,9 +40,76 @@ export default function TableColumnsHeader({
     setHeaderItems(arr);
     return arr;
   };
+
   useEffect(() => {
     getHeaderitemsBasedOnWidth();
-  }, [window.innerWidth]);
+    window.addEventListener('resize', getHeaderitemsBasedOnWidth);
+    return () => {
+      window.removeEventListener('resize', getHeaderitemsBasedOnWidth);
+    };
+  }, []);
+
+  const handleSortClick = (column: string) => {
+    setSortedBy(column);
+    handleSorting(
+      column as keyof MyData,
+      dataArray,
+      sortDirection,
+      setSortDirection,
+      setSortedArray
+    );
+  };
+
+  const renderChevrons = (x: string) => {
+    return (
+      <div>
+        {' '}
+        {sortedBy === x ? (
+          sortDirection === 'asc' ? (
+            <>
+              <SvgIcon
+                name="chevron-up"
+                className="w-2 h-2"
+                onClick={() => {
+                  handleSortClick(x);
+                }}
+              />
+              <div className="w-2 h-2"></div>
+            </>
+          ) : (
+            <>
+              <div className="w-2 h-2"></div>
+              <SvgIcon
+                name="chevron-down"
+                className="w-2 h-2"
+                onClick={() => {
+                  handleSortClick(x);
+                }}
+              />
+            </>
+          )
+        ) : (
+          <>
+            <SvgIcon
+              name="chevron-up"
+              className="w-2 h-2"
+              onClick={() => {
+                handleSortClick(x);
+              }}
+            />
+            <SvgIcon
+              name="chevron-down"
+              className="w-2 h-2"
+              onClick={() => {
+                handleSortClick(x);
+              }}
+            />
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <thead className="text-sm">
       <tr>
@@ -58,63 +127,22 @@ export default function TableColumnsHeader({
                     ? 'flex-end'
                     : 'flex-start'
               }}
-              onClick={() => {
-                handleSorting(
-                  x,
-                  dataArray,
-                  sortDirection,
-                  setSortDirection,
-                  setSortedArray
-                );
-              }}
             >
               <div>{x}</div>
-              <div>
-                <SvgIcon name="chevron-up" className="w-2 h-2" />
-                <SvgIcon name="chevron-down" className="w-2 h-2" />
-              </div>
+              {renderChevrons(x)}
             </div>
           </th>
         ))}
-
         <th className="border-b border-gray-100 text-right px-10 py-2 ">
-          <div
-            className="flex justify-center cursor-pointer"
-            onClick={() => {
-              handleSorting(
-                'Nulls percent',
-                dataArray,
-                sortDirection,
-                setSortDirection,
-                setSortedArray
-              );
-            }}
-          >
+          <div className="flex justify-center cursor-pointer">
             <div>Nulls percent</div>
-            <div>
-              <SvgIcon name="chevron-up" className="w-2 h-2" />
-              <SvgIcon name="chevron-down" className="w-2 h-2" />
-            </div>
+            {renderChevrons('Nulls percent')}
           </div>
         </th>
         <th className="border-b border-gray-100 text-right px-4 py-2">
-          <div
-            className="flex justify-end cursor-pointer"
-            onClick={() => {
-              handleSorting(
-                'Unique Values',
-                dataArray,
-                sortDirection,
-                setSortDirection,
-                setSortedArray
-              );
-            }}
-          >
+          <div className="flex justify-end cursor-pointer">
             <div>Distinct count</div>
-            <div>
-              <SvgIcon name="chevron-up" className="w-2 h-2" />
-              <SvgIcon name="chevron-down" className="w-2 h-2" />
-            </div>
+            {renderChevrons('Unique Values')}
           </div>
         </th>
         <th className="border-b border-gray-100 text-right px-7.5 py-2">

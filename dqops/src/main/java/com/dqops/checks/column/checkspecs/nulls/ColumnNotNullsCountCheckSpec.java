@@ -158,14 +158,14 @@ public class ColumnNotNullsCountCheckSpec
     }
 
     /**
-     * Returns an alternative check's friendly name that is shown on the check editor. It is used to show "empty table" name next to profile_row_count check.
+     * Returns an alternative check's friendly name that is shown on the check editor.
      *
      * @return An alternative name, or null when the check has no alternative name to show.
      */
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "empty column";
+        return "Minimum count of rows containing non-null values (find empty column)";
     }
 
     /**

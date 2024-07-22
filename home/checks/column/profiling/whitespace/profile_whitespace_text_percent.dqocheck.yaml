@@ -7,3 +7,5 @@ spec:
   help_text: Detects texts that contain only spaces and other whitespace characters
     and measures their percentage in the column. It raises a data quality issue when
     their rate exceeds a *max_percent* parameter value.
+  friendly_name: Maximum percentage of whitespace values
+  default_severity: error

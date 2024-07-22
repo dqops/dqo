@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the maximum value in a column does not exceed the expected
     range. Stores the most recent value for each month when the data quality check
     was evaluated.
+  friendly_name: Maximum numeric value is in the range
+  default_severity: error

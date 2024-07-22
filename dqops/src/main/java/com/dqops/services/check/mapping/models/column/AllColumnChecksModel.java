@@ -36,15 +36,27 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "AllColumnChecksModel", description = "Model containing selected information related to column checks on a connection level.")
 public class AllColumnChecksModel {
+    /**
+     * Check target.
+     */
     @JsonPropertyDescription("Check target.")
     private final CheckTarget checkTarget = CheckTarget.column;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this connection.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
+    /**
+     * Flattened table list containing information related to columns in each table.
+     */
     @JsonPropertyDescription("Flattened table list containing information related to columns in each table.")
     private List<TableColumnChecksModel> tableColumnChecksModels = new ArrayList<>();
 }

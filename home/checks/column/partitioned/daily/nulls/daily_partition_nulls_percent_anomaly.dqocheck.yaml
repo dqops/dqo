@@ -7,4 +7,7 @@ spec:
   help_text: Detects day-to-day anomalies in the percentage of null values. Raises
     a data quality issue when the rate of null values increases or decreases too much
     during the last 90 days.
+  friendly_name: Abnormal change in percentage of null values. Measured as a percentile
+    of anomalous measures.
   standard: true
+  default_severity: warning

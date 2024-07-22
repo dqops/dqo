@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.rule_severity_level import RuleSeverityLevel
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckDefinitionModel")
@@ -22,6 +23,7 @@ class CheckDefinitionModel:
         standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
             checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
             shown when the user decides to expand the list of checks.
+        default_severity (Union[Unset, RuleSeverityLevel]):
         custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
         built_in (Union[Unset, bool]): This check is provided with DQOps as a built-in check.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
@@ -36,6 +38,7 @@ class CheckDefinitionModel:
     help_text: Union[Unset, str] = UNSET
     friendly_name: Union[Unset, str] = UNSET
     standard: Union[Unset, bool] = UNSET
+    default_severity: Union[Unset, RuleSeverityLevel] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
@@ -49,6 +52,10 @@ class CheckDefinitionModel:
         help_text = self.help_text
         friendly_name = self.friendly_name
         standard = self.standard
+        default_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.default_severity, Unset):
+            default_severity = self.default_severity.value
+
         custom = self.custom
         built_in = self.built_in
         can_edit = self.can_edit
@@ -69,6 +76,8 @@ class CheckDefinitionModel:
             field_dict["friendly_name"] = friendly_name
         if standard is not UNSET:
             field_dict["standard"] = standard
+        if default_severity is not UNSET:
+            field_dict["default_severity"] = default_severity
         if custom is not UNSET:
             field_dict["custom"] = custom
         if built_in is not UNSET:
@@ -95,6 +104,13 @@ class CheckDefinitionModel:
 
         standard = d.pop("standard", UNSET)
 
+        _default_severity = d.pop("default_severity", UNSET)
+        default_severity: Union[Unset, RuleSeverityLevel]
+        if isinstance(_default_severity, Unset):
+            default_severity = UNSET
+        else:
+            default_severity = RuleSeverityLevel(_default_severity)
+
         custom = d.pop("custom", UNSET)
 
         built_in = d.pop("built_in", UNSET)
@@ -110,6 +126,7 @@ class CheckDefinitionModel:
             help_text=help_text,
             friendly_name=friendly_name,
             standard=standard,
+            default_severity=default_severity,
             custom=custom,
             built_in=built_in,
             can_edit=can_edit,

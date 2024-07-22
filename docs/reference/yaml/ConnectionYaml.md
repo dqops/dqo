@@ -123,12 +123,14 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`read_mode`</span>|DuckDB read mode.|*enum*|*in_memory*<br/>*files*<br/>| | |
-|<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>| | |
+|<span class="no-wrap-code ">`files_format_type`</span>|Type of source files format for DuckDB.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>*iceberg*<br/>*delta_lake*<br/>| | |
 |<span class="no-wrap-code ">`database`</span>|DuckDB database name for in-memory read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`iceberg`](./ConnectionYaml.md#icebergfileformatspec)</span>|Iceberg file format specification.|*[IcebergFileFormatSpec](./ConnectionYaml.md#icebergfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`delta_lake`](./ConnectionYaml.md#deltalakefileformatspec)</span>|Delta Lake file format specification.|*[DeltaLakeFileFormatSpec](./ConnectionYaml.md#deltalakefileformatspec)*| | | |
 |<span class="no-wrap-code ">`directories`</span>|Virtual schema name to directory mappings. The path must be an absolute path.|*Dict[string, string]*| | | |
 |<span class="no-wrap-code ">`storage_type`</span>|The storage type.|*enum*|*local*<br/>*s3*<br/>*azure*<br/>*gcs*<br/>| | |
 |<span class="no-wrap-code ">`aws_authentication_mode`</span>|The authentication mode for AWS. Supports also a ${DUCKDB_AWS_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
@@ -218,6 +220,27 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`union_by_name`</span>|Whether the columns of multiple schemas should be unified by name, rather than by position.|*boolean*| | | |
 |<span class="no-wrap-code ">`compression`</span>|The compression type for the file.|*enum*|*none*<br/>*auto*<br/>*gzip*<br/>*zstd*<br/>*snappy*<br/>*lz4*<br/>| | |
 |<span class="no-wrap-code ">`no_compression_extension`</span>|Whether the compression extension is present at the end of the file name.|*boolean*| | | |
+
+
+
+___
+
+## IcebergFileFormatSpec
+Iceberg file format specification for querying data in the csv format files.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`allow_moved_paths`</span>|The option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.|*boolean*| | | |
+
+
+
+___
+
+## DeltaLakeFileFormatSpec
+DeltaLake file format specification for querying data in the csv format files.
 
 
 
@@ -395,10 +418,11 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`host`</span>|Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`port`</span>|Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`catalog`</span>|Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`user`</span>|Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`password`</span>|Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`user`</span>|(Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|(Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`http_path`</span>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`access_token`</span>|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`initialization_sql`</span>|Custom SQL that is executed after connecting to Databricks.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 

@@ -32,6 +32,7 @@ export interface SelectProps {
   disableIcon?: boolean;
   selectedMenu?: string | number;
   onClickValue?: (value: string | number) => void;
+  truncateText?: boolean; // New prop
 }
 
 const Select = ({
@@ -52,7 +53,8 @@ const Select = ({
   empty,
   disableIcon,
   selectedMenu = label,
-  onClickValue
+  onClickValue,
+  truncateText = false // Default to false
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -118,14 +120,27 @@ const Select = ({
                 : {}
             }
           >
-            {selectedOption ? (
-              <div className="flex items-center gap-2">
-                {selectedOption.icon || ''}
-                {(prefix ? prefix + ' ' : '') + selectedOption.label}
-              </div>
-            ) : (
-              placeholder
-            )}
+            <div
+              className={clsx(
+                truncateText ? 'truncate max-w-full' : '', // Apply truncation classes
+                'flex items-center gap-2'
+              )}
+            >
+              {selectedOption ? (
+                <>
+                  {selectedOption.icon || ''}
+                  <span
+                    className={
+                      truncateText ? 'overflow-hidden text-ellipsis' : ''
+                    }
+                  >
+                    {(prefix ? prefix + ' ' : '') + selectedOption.label}
+                  </span>
+                </>
+              ) : (
+                placeholder
+              )}
+            </div>
             {disableIcon === true ? (
               <></>
             ) : (
@@ -136,7 +151,7 @@ const Select = ({
         {!disabled && label === selectedMenu && (
           <div
             className={clsx(
-              'absolute top-9 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in',
+              'absolute top-9 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in text-sm',
               isOpen
                 ? 'max-h-80 overflow-auto py-3'
                 : 'opacity-0 max-h-0 overflow-hidden py-0',
@@ -148,7 +163,7 @@ const Select = ({
                 data-testid="select-option"
                 key={index}
                 className={clsx(
-                  'py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8',
+                  'py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 h-8',
                   empty ? 'h-5' : '',
                   option.icon ? 'flex items-center gap-x-2' : ''
                 )}

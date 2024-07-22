@@ -8,4 +8,7 @@ spec:
     \ the column count of the reference table. Only one comparison result is returned,\
     \ without data grouping. Stores the most recent captured value for each month\
     \ when the data quality check was evaluated."
+  friendly_name: Maximum percentage of difference between column count of compared
+    tables
   standard: true
+  default_severity: error

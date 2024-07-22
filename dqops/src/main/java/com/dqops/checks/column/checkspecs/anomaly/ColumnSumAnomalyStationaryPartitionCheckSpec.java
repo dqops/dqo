@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
@@ -176,6 +177,17 @@ public class ColumnSumAnomalyStationaryPartitionCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Abnormal change in the sum of numeric values. Measured as a percentile of anomalous values.";
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.
@@ -183,5 +195,16 @@ public class ColumnSumAnomalyStationaryPartitionCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Consistency;
+    }
+
+    /**
+     * Returns the default rule severity level that is activated when a check is enabled in the check editor.
+     *
+     * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
+     */
+    @Override
+    @JsonIgnore
+    public RuleSeverityLevel getDefaultSeverity() {
+        return RuleSeverityLevel.warning;
     }
 }

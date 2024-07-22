@@ -8,4 +8,6 @@ spec:
     It raises a data quality issue when their count exceeds a *max_count* parameter
     value. Stores the most recent captured value for each day when the data quality
     check was evaluated.
+  friendly_name: Maximum count of whitespace values
   standard: true
+  default_severity: error

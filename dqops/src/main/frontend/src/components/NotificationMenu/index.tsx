@@ -33,7 +33,7 @@ const NotificationMenu = () => {
       </PopoverHandler>
       <PopoverContent
         className="min-w-120 max-w-120 px-0 relative z-[101]"
-        style={{ position: 'relative', zIndex: '100000' }}
+        style={{ position: 'relative', zIndex: '100' }}
       >
         <NotificationMenuContent />
       </PopoverContent>

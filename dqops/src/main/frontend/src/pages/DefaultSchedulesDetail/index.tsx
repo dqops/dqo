@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { MonitoringScheduleSpec } from "../../api";
-import Button from "../../components/Button";
-import ScheduleView from "../../components/ScheduleView";
-import SvgIcon from "../../components/SvgIcon";
-import Tabs from "../../components/Tabs";
-import { SettingsApi } from "../../services/apiClient";
-import { CheckRunMonitoringScheduleGroup } from "../../shared/enums/scheduling.enum";
-import { useDecodedParams } from "../../utils";
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { MonitoringScheduleSpec } from '../../api';
+import Button from '../../components/Button';
+import ScheduleView from '../../components/ScheduleView';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
+import { SettingsApi } from '../../services/apiClient';
+import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import { useDecodedParams } from '../../utils';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 const tabs = [
   {
@@ -32,8 +34,25 @@ const tabs = [
   }
 ];
 
+const freeTrialTabs = [
+  {
+    label: 'Profiling',
+    value: CheckRunMonitoringScheduleGroup.profiling
+  },
+  {
+    label: 'Monitoring',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
+  },
+  {
+    label: 'Partition',
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
+  }
+];
+
 const DefaultSchedulesDetail = () => {
-  const {tab} : {tab : CheckRunMonitoringScheduleGroup} = useDecodedParams()
+  const { userProfile } = useSelector((state: IRootState) => state.job);
+
+  const { tab }: { tab: CheckRunMonitoringScheduleGroup } = useDecodedParams();
   const [updatedSchedule, setUpdatedSchedule] = useState<
     MonitoringScheduleSpec | undefined
   >();
@@ -94,7 +113,18 @@ const DefaultSchedulesDetail = () => {
           />
         </div>
         <div className="border-b border-gray-300">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+          <Tabs
+            tabs={
+              userProfile &&
+              userProfile.license_type &&
+              userProfile.license_type?.toLowerCase() !== 'free' &&
+              !userProfile.trial_period_expires_at
+                ? tabs
+                : freeTrialTabs
+            }
+            activeTab={activeTab}
+            onChange={onChangeTab}
+          />
         </div>
         <ScheduleView
           handleChange={handleChange}

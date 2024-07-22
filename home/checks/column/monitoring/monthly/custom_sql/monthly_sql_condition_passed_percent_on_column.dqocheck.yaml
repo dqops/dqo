@@ -8,3 +8,5 @@ spec:
     \ (expression). Reference the current column by using tokens, for example: `{alias}.{column}\
     \ > {alias}.col_tax`.  Stores the most recent check result for each month when\
     \ the data quality check was evaluated."
+  friendly_name: Minimum percentage of rows that passed SQL condition
+  default_severity: error

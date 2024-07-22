@@ -1,5 +1,6 @@
 import {
   CsvFileFormatSpec,
+  IcebergFileFormatSpec,
   JsonFileFormatSpec,
   ParquetFileFormatSpec
 } from '../../api';
@@ -7,4 +8,6 @@ import {
 export type TConfiguration =
   | CsvFileFormatSpec
   | JsonFileFormatSpec
-  | ParquetFileFormatSpec;
+  | ParquetFileFormatSpec
+  | IcebergFileFormatSpec
+  ;

@@ -35,7 +35,6 @@ import tech.tablesaw.api.*;
 import tech.tablesaw.columns.AbstractColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.columns.strings.AbstractStringColumn;
-import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -383,11 +382,6 @@ public class ErrorSamplesNormalizationServiceImpl implements ErrorSamplesNormali
         TextColumn idColumn = this.commonNormalizationService.createErrorSampleRowIdColumn(dataGroupingHashColumn, collectedAtColumn, sampleIndexColumn,
                 checkHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
-
-        Selection errorSamplesResultWithNulls = normalizedResultColumn != null ? normalizedResultColumn.isMissing() : Selection.with();
-        if (!errorSamplesResultWithNulls.isEmpty()) {
-            normalizedResults = normalizedResults.dropWhere(errorSamplesResultWithNulls);
-        }
 
         if (!sensorExecutionResult.isSuccess()) {
             normalizedResults.clear(); // remove any fake columns, in case that the check failed to execute

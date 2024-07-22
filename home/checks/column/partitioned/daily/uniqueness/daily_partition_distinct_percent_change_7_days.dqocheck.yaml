@@ -6,3 +6,6 @@ spec:
   rule_name: change/change_percent_7_days
   help_text: Verifies that the distinct percent in a monitored column has changed
     by a fixed rate since the last readout from the last week.
+  friendly_name: Maximum relative change in the percentage of distinct values vs 7
+    days sago
+  default_severity: warning

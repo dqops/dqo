@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentile 25 of all values in a column is not outside
     the expected range. Stores a separate data quality check result for each daily
     partition.
+  friendly_name: The selected 25th percentile of numeric values is in the range
+  default_severity: error

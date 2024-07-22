@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Model object with the statistics results for a column.
@@ -41,7 +38,7 @@ public class StatisticsResultsForTableModel {
     private PhysicalTableName table;
 
     @JsonPropertyDescription("List of statistics metrics")
-    private Collection<StatisticsMetricModel> metrics = new ArrayList<>();
+    private List<StatisticsMetricModel> metrics = new ArrayList<>();
 
     @JsonPropertyDescription("Statistics metrics of columns")
     private Map<String, StatisticsResultsForColumnModel> columns = new LinkedHashMap<>();

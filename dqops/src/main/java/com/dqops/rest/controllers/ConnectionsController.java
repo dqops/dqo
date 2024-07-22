@@ -502,7 +502,7 @@ public class ConnectionsController {
     }
 
     /**
-     * Creates (adds) a new connection given teh basic information.
+     * Creates (adds) a new connection given the basic information.
      * @param connectionName Connection name.
      * @param connectionModel Basic connection model.
      * @return Empty response.

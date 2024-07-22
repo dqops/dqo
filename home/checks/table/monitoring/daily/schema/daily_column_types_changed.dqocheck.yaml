@@ -10,3 +10,5 @@ spec:
     \ the length, scale, precision, nullability). Compares the current hash to the\
     \ previously known hash to detect any changes to the list of columns or their\
     \ types."
+  friendly_name: Detect if column list or data type has changed
+  default_severity: error

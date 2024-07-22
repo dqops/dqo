@@ -15,7 +15,6 @@
  */
 package com.dqops.data.readouts.models;
 
-import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.models.ParquetDataFragmentFilter;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;

@@ -1,4 +1,4 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-{%- call lib.render_error_sampler(wrap_condition = 'NOT') -%}
+{%- call lib.render_error_sampler() -%}
     {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0
 {%- endcall -%}

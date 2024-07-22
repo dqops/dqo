@@ -27,7 +27,12 @@ import { IRootState } from '../../redux/reducers';
 import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
 import { IncidentsApi } from '../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { getDaysString, useDecodedParams } from '../../utils';
+import {
+  getDaysString,
+  getParamsFromURL,
+  getSeverity,
+  useDecodedParams
+} from '../../utils';
 import AddIssueUrlDialog from './AddIssueUrlDialog';
 import { SortableColumn } from './SortableColumn';
 
@@ -46,6 +51,28 @@ const options = [
   }
 ];
 
+const severityOptions = [
+  {
+    label: '',
+    value: undefined
+  },
+  {
+    label: 'Warning',
+    value: 1,
+    icon: renderIncidentHighestSeveritySquare(1)
+  },
+  {
+    label: 'Error',
+    value: 2,
+    icon: renderIncidentHighestSeveritySquare(2)
+  },
+  {
+    label: 'Fatal',
+    value: 3,
+    icon: renderIncidentHighestSeveritySquare(3)
+  }
+];
+
 const statusOptions = [
   {
     label: 'OPEN',
@@ -55,7 +82,7 @@ const statusOptions = [
   {
     label: 'ACKNOWLEDGED',
     value: IncidentModelStatusEnum.acknowledged,
-    icon: <div className="w-5 h-5 rounded-full bg-black" />
+    icon: <div className="w-5 h-5 rounded-full bg-black ml-0.5" />
   },
   {
     label: 'RESOLVED',
@@ -191,7 +218,9 @@ export const IncidentConnection = () => {
         return (
           <div className="flex items-center">
             <Select
-              className="!text-sm w-50"
+              className="!text-xs w-43"
+              triggerClassName="!text-xs"
+              menuClassName="!text-xs"
               value={value}
               options={statusOptions}
               onChange={(status) => onChangeIncidentStatus(row, status)}
@@ -203,7 +232,29 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
-          className="justify-end text-sm w-25"
+          className="text-sm"
+          label="Severity"
+          order="highestSeverity"
+          direction={
+            filters.sortBy === 'highestSeverity'
+              ? filters.sortDirection
+              : undefined
+          }
+          onChange={handleSortChange}
+        />
+      ),
+      label: 'Severity',
+      className:
+        'text-left text-sm py-2 px-4 max-w-27 min-w-27 whitespace-normal break-all',
+      value: 'highestSeverity',
+      render: (value: string) => {
+        return renderIncidentHighestSeveritySquare(Number(value));
+      }
+    },
+    {
+      header: () => (
+        <SortableColumn
+          className="justify-end text-sm w-15"
           label="Total issues"
           order="failedChecksCount"
           direction={
@@ -227,7 +278,7 @@ export const IncidentConnection = () => {
             }
           >
             <div>
-              <SvgIcon name="question_mark" className="w-5 h-5" />
+              <SvgIcon name="info" className="w-5 h-5" />
             </div>
           </Tooltip>
         </div>
@@ -388,16 +439,14 @@ export const IncidentConnection = () => {
       }
     }
   ];
-  const category = getLastValueFromURL(window.location.href, 'category');
-  const dimension = getLastValueFromURL(window.location.href, 'dimension');
+  const params = getParamsFromURL(history.location.search);
 
   useEffect(() => {
     if (activeTab && activeTab?.length > 0) {
       dispatch(
         getIncidentsByConnection({
           connection,
-          dimension,
-          category
+          ...params
         })
       );
     }
@@ -407,8 +456,9 @@ export const IncidentConnection = () => {
     onChangeFilter({
       optionalFilter: debouncedSearchTerm,
       page: 1,
-      openIncidents: true,
-      acknowledgedIncidents: true
+      open: true,
+      acknowledged: true,
+      ...params
     });
   }, [debouncedSearchTerm]);
 
@@ -416,20 +466,20 @@ export const IncidentConnection = () => {
     dispatch(
       setIncidentsFilter({
         ...(filters || {}),
+        ...params,
         ...obj
       })
     );
     dispatch(
       getIncidentsByConnection({
         ...(filters || {}),
+        ...params,
         ...obj,
-        category: category,
-        dimension: dimension,
+
         connection
       })
     );
   };
-
   const goToConfigure = () => {
     dispatch(
       addSourceFirstLevelTab(CheckTypes.SOURCES, {
@@ -456,14 +506,27 @@ export const IncidentConnection = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">
               Data quality incidents{' '}
-              {category || dimension
-                ? `for ${
-                    category ? `${category} category` : `${dimension} dimension`
-                  }`
+              {params.severity
+                ? `at ${getSeverity(String(params.severity))} severity level`
+                : params.category
+                ? `on ${params.category} category`
+                : params.dimension
+                ? `on ${params.dimension} dimension`
                 : `on ${connection}` || ''}
             </div>
           </div>
           <div className="flex items-center">
+            <Select
+              options={severityOptions}
+              className="mr-8 w-40"
+              value={
+                filters.severity === undefined
+                  ? 'Select severity'
+                  : filters.severity
+              }
+              onChange={(val) => onChangeFilter({ severity: val })}
+              placeholder="Select severity"
+            />
             <div className="mr-20">
               <StatusSelect onChangeFilter={onChangeFilter} />
             </div>
@@ -506,7 +569,11 @@ export const IncidentConnection = () => {
             </div>
           ) : (
             <Table
-              columns={columns}
+              columns={
+                filters.severity
+                  ? columns.filter((x) => x.value !== 'highestSeverity')
+                  : columns
+              }
               data={incidents || []}
               className="w-full mb-8"
             />
@@ -540,14 +607,22 @@ export const IncidentConnection = () => {
 
 export default IncidentConnection;
 
-function getLastValueFromURL(url: string, param: string): string | undefined {
-  const regex = new RegExp(`[?&]${param}=([^&]*)`);
-  const match = url.match(regex);
+function renderIncidentHighestSeveritySquare(severity: number) {
+  const getColor = () => {
+    switch (severity) {
+      case 1:
+        return 'bg-yellow-500';
+      case 2:
+        return 'bg-orange-500';
+      case 3:
+        return 'bg-red-500';
+    }
+    return '';
+  };
 
-  if (match && match[1]) {
-    const values = match[1].split(',');
-    return values[values.length - 1];
-  }
-
-  return undefined;
+  return (
+    <div className="flex items-center justify-center">
+      <div className={`w-4 h-4 ${getColor()} border border-gray-300`}></div>
+    </div>
+  );
 }

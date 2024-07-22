@@ -94,6 +94,12 @@ public class IncidentListFilterParameters {
     private boolean muted = false;
 
     /**
+     * Load incidents with given severity level.
+     */
+    @JsonPropertyDescription("Load incidents with given severity level.")
+    private Integer severity;
+
+    /**
      * Sort order.
      */
     @JsonPropertyDescription("Sort order.")

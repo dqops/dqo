@@ -36,18 +36,33 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "TableColumnChecksModel", description = "Model containing information related to column checks on a table level.")
 public class TableColumnChecksModel {
+    /**
+     * Physical table name.
+     */
     @JsonPropertyDescription("Physical table name.")
     private PhysicalTableName schemaTableName;
 
+    /**
+     * SQL WHERE clause added to the sensor query for every check on this table.
+     */
     @JsonPropertyDescription("SQL WHERE clause added to the sensor query for every check on this table.")
     private String tableLevelFilter;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this table.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
+    /**
+     * List containing information related to checks on each column.
+     */
     @JsonPropertyDescription("List containing information related to checks on each column.")
     private List<ColumnChecksModel> columnChecksModels = new ArrayList<>();
 }

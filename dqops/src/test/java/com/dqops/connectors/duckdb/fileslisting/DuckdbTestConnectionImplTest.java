@@ -2,9 +2,9 @@ package com.dqops.connectors.duckdb.fileslisting;
 
 import com.dqops.BaseTest;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
-import com.dqops.connectors.duckdb.DuckdbFilesFormatType;
+import com.dqops.connectors.duckdb.config.DuckdbFilesFormatType;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
-import com.dqops.connectors.duckdb.DuckdbStorageType;
+import com.dqops.connectors.duckdb.config.DuckdbStorageType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;

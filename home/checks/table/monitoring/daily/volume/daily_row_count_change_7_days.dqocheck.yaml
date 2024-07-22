@@ -7,3 +7,5 @@ spec:
   help_text: This check verifies that the percentage of change in the table's volume
     (row count) since seven days ago is below the maximum accepted percentage. Verifying
     a volume change since a value a week ago overcomes the effect of weekly seasonability.
+  friendly_name: Maximum relative change in the row count vs 7 days ago
+  default_severity: warning

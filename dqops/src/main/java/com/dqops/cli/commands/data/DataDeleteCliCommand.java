@@ -96,6 +96,9 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
     @CommandLine.Option(names = {"-es", "--error-samples"}, description = "Delete the error samples")
     private boolean deleteErrorSamples = false;
 
+    @CommandLine.Option(names = {"-i", "--incidents"}, description = "Delete the incidents")
+    private boolean deleteIncidents = false;
+
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
             converter = StringToLocalDateCliConverterMonthStart.class)
     private LocalDate begin;
@@ -140,6 +143,9 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
 
     @CommandLine.Option(names = {"-qd", "--quality-dimension"}, description = "Data quality dimension")
     private String qualityDimension;
+
+    @CommandLine.Option(names = {"-is", "--incidents-status"}, description = "Incidents status name (open, acknowledged, resolved or muted).")
+    private String incidentsStatus;
 
 
     /**
@@ -187,6 +193,7 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
         deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
         deleteStoredDataJobParameters.setDeleteErrorSamples(this.deleteErrorSamples);
+        deleteStoredDataJobParameters.setDeleteIncidents(this.deleteIncidents);
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
             deleteStoredDataJobParameters.setCheckCategory(this.checkCategory);
@@ -235,6 +242,10 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConn
 
         if (this.statisticsTarget != null) {
             deleteStoredDataJobParameters.setCollectorTarget(this.statisticsTarget.name());
+        }
+
+        if (!Strings.isNullOrEmpty(this.incidentsStatus)) {
+            deleteStoredDataJobParameters.setIncidentStatusName(this.incidentsStatus);
         }
 
         return deleteStoredDataJobParameters;

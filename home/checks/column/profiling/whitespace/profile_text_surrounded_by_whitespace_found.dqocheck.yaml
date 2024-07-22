@@ -7,3 +7,5 @@ spec:
   help_text: Detects text values that are surrounded by whitespace characters on any
     side. This check counts whitespace-surrounded texts and raises a data quality
     issue when their count exceeds the *max_count* parameter value.
+  friendly_name: Maximum count of text surrounded by whitespace characters
+  default_severity: error

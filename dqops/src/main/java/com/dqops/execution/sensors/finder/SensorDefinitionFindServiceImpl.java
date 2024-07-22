@@ -47,17 +47,30 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
         String dataDomain = executionContext.getUserHomeContext() != null ?
                 executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder() : UserDomainIdentity.DEFAULT_DATA_DOMAIN;
 
-        String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
-        HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome);
+        String jinjaFileNameRelativeToHome = providerType != null ? sensorName + "/" + providerType.name() + ".sql.jinja2" : null;
+        HomeFilePath jinjaFileHomePath = providerType != null ? HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome) : null;
 
-        String errorSamplingJinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sample.sql.jinja2";
-        HomeFilePath errorSamplingJinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, errorSamplingJinjaFileNameRelativeToHome);
+        String errorSamplingJinjaFileNameRelativeToHome = providerType != null ? sensorName + "/" + providerType.name() + ".sample.sql.jinja2" : null;
+        HomeFilePath errorSamplingJinjaFileHomePath = providerType != null ? HomeFilePath.fromFilePath(dataDomain, errorSamplingJinjaFileNameRelativeToHome) : null;
 
 
         if (userHome != null) {
-
             SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);
             if (userSensorDefinitionWrapper != null) {
+                if (providerType == null) {
+                    return new SensorDefinitionFindResult(userSensorDefinitionWrapper.getSpec(),
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            HomeType.USER_HOME,
+                            null,
+                            null
+                    );
+                }
+
                 ProviderSensorDefinitionWrapper userProviderSensorDefinitionWrapper =
                         userSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
                 if (userProviderSensorDefinitionWrapper != null) {
@@ -82,6 +95,21 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
         SensorDefinitionWrapper builtinSensorDefinitionWrapper = dqoHome.getSensors().getByObjectName(sensorName, true);
         if (builtinSensorDefinitionWrapper == null) {
             return null;
+        }
+
+        if (providerType == null) {
+            return new SensorDefinitionFindResult(
+                    builtinSensorDefinitionWrapper.getSpec(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    HomeType.DQO_HOME,
+                    null,
+                    null
+            );
         }
 
         ProviderSensorDefinitionWrapper builtinProviderSensorDefinitionWrapper =

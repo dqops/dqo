@@ -8,4 +8,7 @@ spec:
     \ known minimum value. If the minimum value is constantly changing, detects outliers\
     \ as the biggest change of the minimum value during the last 90 days. Finds the\
     \ minimum value of each daily partition and detect anomalies between daily partitions."
+  friendly_name: Abnormal change in the minimum of numeric values. Measured as a percentile
+    of anomalous values.
   standard: true
+  default_severity: warning

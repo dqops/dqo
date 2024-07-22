@@ -8,3 +8,5 @@ spec:
     and measures their percentage in the column. It raises a data quality issue when
     their rate exceeds a *max_percent* parameter value. Stores a separate data quality
     check result for each monthly partition.
+  friendly_name: Maximum percentage of whitespace values
+  default_severity: error

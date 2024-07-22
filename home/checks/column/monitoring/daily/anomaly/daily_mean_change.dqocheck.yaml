@@ -6,3 +6,6 @@ spec:
   rule_name: change/change_percent
   help_text: Verifies that the mean value in a column changed in a fixed rate since
     the last readout.
+  friendly_name: Maximum relative change in the mean (average) of numeric values since
+    the last known value
+  default_severity: warning

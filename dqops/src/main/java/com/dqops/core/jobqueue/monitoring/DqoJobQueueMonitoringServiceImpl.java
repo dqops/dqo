@@ -87,9 +87,13 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux().onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE);
-        dqoNotificationModelFlux.subscribeOn(Schedulers.parallel())
+        dqoNotificationModelFlux.subscribeOn(Schedulers.boundedElastic())
                 .doOnComplete(() -> releaseAwaitingClients())
-                .subscribe(changeNotificationEntry -> onJobChange(changeNotificationEntry));
+                .flatMap(changeNotificationEntry -> {
+                    onJobChange(changeNotificationEntry);
+                    return Mono.empty();
+                })
+                .subscribe();
 
         this.started = true;
     }
@@ -406,17 +410,26 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                         } else {
                             // update in the job
                             DqoJobHistoryEntryModel currentJobEntryModel = this.allJobs.get(jobChange.getJobId());
-                            DqoJobHistoryEntryModel clonedJobEntryModel = currentJobEntryModel.clone();
-                            clonedJobEntryModel.setStatus(jobChange.getStatus());
-                            clonedJobEntryModel.setStatusChangedAt(dqoUpdatedJobChangeModel.getStatusChangedAt());
-                            if (jobChange.getErrorMessage() != null) {
-                                clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
-                                dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
-                            }
-                            DqoQueueJobId jobId = jobChange.getJobId();
-                            this.allJobs.put(jobId, clonedJobEntryModel);
-                            if (jobId.getJobBusinessKey() != null) {
-                                this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                            if (currentJobEntryModel != null) {
+                                DqoJobHistoryEntryModel clonedJobEntryModel = currentJobEntryModel.clone();
+                                clonedJobEntryModel.setStatus(jobChange.getStatus());
+                                clonedJobEntryModel.setStatusChangedAt(dqoUpdatedJobChangeModel.getStatusChangedAt());
+                                if (jobChange.getErrorMessage() != null) {
+                                    clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
+                                    dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
+                                }
+                                DqoQueueJobId jobId = jobChange.getJobId();
+                                this.allJobs.put(jobId, clonedJobEntryModel);
+                                if (jobId.getJobBusinessKey() != null) {
+                                    this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                                }
+                            } else {
+                                this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
+                                if (jobChange.getJobId().getJobBusinessKey() != null) {
+                                    this.businessKeyToJobIdMap.put(jobChange.getJobId().getJobBusinessKey(), jobChange.getJobId());
+                                }
+                                DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
+                                this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
                             }
                         }
 

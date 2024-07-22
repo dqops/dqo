@@ -15,13 +15,16 @@
  */
 package com.dqops.databricks.connectors;
 
-import com.dqops.connectors.*;
+import com.dqops.connectors.ConnectionProvider;
+import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
+import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksSourceConnection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.databricks.BaseDatabricksIntegrationTest;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -33,7 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 public class DatabricksSourceConnectionIntegrationTests extends BaseDatabricksIntegrationTest {
@@ -58,23 +60,6 @@ public class DatabricksSourceConnectionIntegrationTests extends BaseDatabricksIn
     @Test
     void open_whenCalled_thenJustReturns() {
 		this.sut.open(this.secretValueLookupContext);
-    }
-
-    @Test
-    void listSchemas_whenSchemasPresent_thenReturnsKnownSchemas() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceSchemaModel> schemas = this.sut.listSchemas();
-
-        Assertions.assertEquals(1, schemas.size());
-        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), DatabricksConnectionSpecObjectMother.getSchemaName())));
-    }
-
-    @Test
-    void listTables_whenDefaultSchemaListed_thenReturnsTables() {
-		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables(DatabricksConnectionSpecObjectMother.getSchemaName(), null, 300, secretValueLookupContext);
-
-        Assertions.assertTrue(tables.size() == 0);
     }
 
     @Test

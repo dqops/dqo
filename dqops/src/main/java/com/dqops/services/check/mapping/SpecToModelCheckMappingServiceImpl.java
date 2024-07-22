@@ -627,27 +627,31 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setSensorParametersSpec(parametersSpec);
         SensorDefinitionSpec sensorDefinitionSpec = null;
 
-        if (executionContext != null && providerType != null) {
-            SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
+        if (executionContext != null) {
+            SensorDefinitionFindResult sensorDefinitionFindResult = this.sensorDefinitionFindService.findProviderSensorDefinition(
                     executionContext, sensorDefinitionName, providerType);
 
-            if (providerSensorDefinition == null) {
+            if (sensorDefinitionFindResult == null) {
                 return null; // skip this check, it is a misconfigured custom check that references a missing sensor, we don't know anything about it
             }
 
-            sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
+            sensorDefinitionSpec = sensorDefinitionFindResult.getSensorDefinitionSpec();
             if (sensorDefinitionSpec == null) {
                 return null; // skip this check, it is a misconfigured custom check that references a missing sensor
             }
 
-            ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
-            if (providerSensorDefinitionSpec == null) {
-                return null; // skip this check
-            }
+            ProviderSensorDefinitionSpec providerSensorDefinitionSpec = sensorDefinitionFindResult.getProviderSensorDefinitionSpec();
+            if (providerType != null) {
+                if (providerSensorDefinitionSpec == null) {
+                    return null; // skip this check
+                }
 
-            if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
-                    !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.partitioned) {
-                return null; // skip this check
+                if (providerSensorDefinitionSpec.getSupportsPartitionedChecks() != null &&
+                        !providerSensorDefinitionSpec.getSupportsPartitionedChecks() && checkType == CheckType.partitioned) {
+                    return null; // skip this check
+                }
+
+                checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
             }
 
             if (checkType == CheckType.partitioned && tableSpec != null && tableSpec.getTimestampColumns() != null &&
@@ -655,8 +659,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 checkModel.pushError(CheckConfigurationRequirementsError.MISSING_PARTITION_BY_COLUMN);
             }
 
-            checkModel.setSupportsErrorSampling(providerSensorDefinition.isErrorSamplingTemplatePresent()); // error sampling template is present
-            checkModel.setSupportsGrouping(providerSensorDefinitionSpec.getSupportsGrouping() == null || providerSensorDefinitionSpec.getSupportsGrouping());
+            checkModel.setSupportsErrorSampling(sensorDefinitionFindResult.isErrorSamplingTemplatePresent()); // error sampling template is present
 
             if (tableSpec != null && tableSpec.getTimestampColumns() != null && sensorDefinitionSpec.isRequiresEventTimestamp() &&
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
@@ -673,6 +676,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 }
             }
         }
+
         String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
         checkModel.setCheckName(checkName);
         checkModel.setHelpText(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getHelpText() :
@@ -680,6 +684,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setDisplayName(checkSpec.getDisplayName());
         checkModel.setFriendlyName(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getFriendlyName() : checkSpec.getFriendlyName());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
+        checkModel.setDefaultSeverity(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getDefaultSeverity() : checkSpec.getDefaultSeverity());
         checkModel.setDefaultCheck(checkSpec.isDefaultCheck());
 
         if (runChecksCategoryTemplate != null) {

@@ -1,10 +1,14 @@
-import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
-import React, { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import Checkbox from "../../components/Checkbox";
-import SvgIcon from "../../components/SvgIcon";
-import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
-import { getFirstLevelIncidentsState } from "../../redux/selectors";
+import {
+  Popover,
+  PopoverContent,
+  PopoverHandler
+} from '@material-tailwind/react';
+import React, { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import Checkbox from '../../components/Checkbox';
+import SvgIcon from '../../components/SvgIcon';
+import { IncidentFilter } from '../../redux/reducers/incidents.reducer';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
 
 type StatusSelectProps = {
   onChangeFilter: (obj: Partial<IncidentFilter>) => void;
@@ -12,7 +16,14 @@ type StatusSelectProps = {
 
 const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { filters = { connection: '', openIncidents: false, acknowledgedIncidents: false, resolvedIncidents: false } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
+  const {
+    filters = {
+      connection: '',
+      open: false,
+      acknowledged: false,
+      resolved: false
+    }
+  }: { filters: IncidentFilter } = useSelector(getFirstLevelIncidentsState);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -20,16 +31,16 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
 
   const valueString = useMemo(() => {
     const strArray: string[] = [];
-    if (filters.openIncidents) {
+    if (filters.open) {
       strArray.push('Open');
     }
-    if (filters.acknowledgedIncidents) {
+    if (filters.acknowledged) {
       strArray.push('Acknowledged');
     }
-    if (filters.resolvedIncidents) {
+    if (filters.resolved) {
       strArray.push('Resolved');
     }
-    if (filters.mutedIncidents) {
+    if (filters.muted) {
       strArray.push('Muted');
     }
 
@@ -48,24 +59,24 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
         <div className="px-4">
           <div className="flex flex-col gap-3 text-primary">
             <Checkbox
-              checked={filters.openIncidents}
+              checked={filters.open}
               label="Open"
-              onChange={(checked) => onChangeFilter({ openIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ open: checked })}
             />
             <Checkbox
-              checked={filters.acknowledgedIncidents}
+              checked={filters.acknowledged}
               label="Acknowledged"
-              onChange={(checked) => onChangeFilter({ acknowledgedIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ acknowledged: checked })}
             />
             <Checkbox
-              checked={filters.resolvedIncidents}
+              checked={filters.resolved}
               label="Resolved"
-              onChange={(checked) => onChangeFilter({ resolvedIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ resolved: checked })}
             />
             <Checkbox
-              checked={filters.mutedIncidents}
+              checked={filters.muted}
               label="Muted"
-              onChange={(checked) => onChangeFilter({ mutedIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ muted: checked })}
             />
           </div>
         </div>

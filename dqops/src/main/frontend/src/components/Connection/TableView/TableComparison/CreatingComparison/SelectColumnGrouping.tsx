@@ -12,7 +12,10 @@ import { useDecodedParams } from '../../../../../utils';
 import { Option } from '../../../../Select';
 import SvgIcon from '../../../../SvgIcon';
 import { SelectGroupColumnsTable } from '../../SelectGroupColumnsTable';
-import { getRequiredColumnsIndexes } from '../TableComparisonUtils';
+import {
+  getRequiredColumnsIndexes,
+  validate404Status
+} from '../TableComparisonUtils';
 
 type TSelectDataGrouping = {
   onChangeParameters: (obj: Partial<TParameters>) => void;
@@ -61,11 +64,9 @@ export default function SelectColumnGrouping({
 
   const getColumnsStatistics = async () => {
     try {
-      await ColumnApiClient.getColumnsStatistics(
-        connection,
-        schema,
-        table
-      ).then((res) => setStatistics(res.data));
+      await ColumnApiClient.getColumnsStatistics(connection, schema, table, {
+        validateStatus: validate404Status
+      }).then((res) => setStatistics(res.data));
     } catch (err) {
       console.error(err);
     }
@@ -80,7 +81,8 @@ export default function SelectColumnGrouping({
         await ColumnApiClient.getColumnsStatistics(
           editConfigurationParameters.refConnection,
           editConfigurationParameters.refSchema,
-          editConfigurationParameters.refTable
+          editConfigurationParameters.refTable,
+          { validateStatus: validate404Status }
         ).then((res) => setReferenceTableStatistics(res.data));
       }
     } catch (err) {

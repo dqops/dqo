@@ -2,20 +2,20 @@ import React, { useEffect } from 'react';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import AppProvider from './contexts/AppProvider';
-import Routes from './Routes';
 import { ThemeProvider } from '@material-tailwind/react';
-import { useActionDispatch } from './hooks/useActionDispatch';
-import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
+import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AppProvider from './contexts/AppProvider';
+import { useActionDispatch } from './hooks/useActionDispatch';
+import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
+import { IRootState } from './redux/reducers';
+import Routes from './Routes';
 import { LogErrorsApi } from './services/apiClient';
-import axios from 'axios';
 
-import Chart from 'chart.js/auto';
 import { CategoryScale } from 'chart.js';
+import Chart from 'chart.js/auto';
 
 Chart.register(CategoryScale);
 // import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, TimeScale } from "chart.js";
@@ -24,9 +24,10 @@ import 'chartjs-adapter-moment';
 
 axios.interceptors.response.use(undefined, function (error) {
   const statusCode = error.response ? error.response.status : null;
-  const isDashboardRequest = error.request.responseURL.includes("/api/dashboards/");
+  const isDashboardRequest =
+    error.request.responseURL.includes('/api/dashboards/');
   if ((statusCode === 401 && !isDashboardRequest) || statusCode === 403) {
-     location.reload();
+    location.reload();
   }
   return Promise.reject(error);
 });

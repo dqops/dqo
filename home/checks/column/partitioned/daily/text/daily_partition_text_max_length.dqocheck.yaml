@@ -9,4 +9,6 @@ spec:
     \ the texts are too long or not long enough. Analyzes every daily partition and\
     \ creates a separate data quality check result with the time period value that\
     \ identifies the daily partition."
+  friendly_name: Verify that the maximum length of the text is in the range
   standard: true
+  default_severity: error

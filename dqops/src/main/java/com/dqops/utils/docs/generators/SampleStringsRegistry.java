@@ -63,7 +63,7 @@ public class SampleStringsRegistry {
     }
 
     public static String getSensorName() {
-        return "sample_sensor";
+        return "table/volume/row_count";
     }
 
     public static String getRuleName() {

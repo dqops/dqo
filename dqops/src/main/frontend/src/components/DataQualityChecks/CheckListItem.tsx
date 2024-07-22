@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckModel,
+  CheckModelDefaultSeverityEnum,
   CheckResultsOverviewDataModel,
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
@@ -24,8 +25,8 @@ import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
 import Switch from '../Switch';
 import CheckDetails from './CheckDetails/CheckDetails';
-import CheckRuleItem from './CheckRuleItem';
 import CheckSettings from './CheckSettings';
+import RuleConfiguration from './RuleConfiguration/RuleConfiguration';
 import SensorParameters from './SensorParameters';
 
 export interface ITab {
@@ -50,6 +51,8 @@ interface ICheckListItemProps {
   isDefaultEditing?: boolean;
   canUserRunChecks?: boolean;
   isAlreadyDeleted?: boolean;
+  ruleParamenterConfigured: boolean;
+  onChangeRuleParametersConfigured: (v: boolean) => void;
 }
 
 interface IRefetchResultsProps {
@@ -69,7 +72,9 @@ const CheckListItem = ({
   comparisonName,
   isDefaultEditing,
   canUserRunChecks,
-  isAlreadyDeleted
+  isAlreadyDeleted,
+  ruleParamenterConfigured,
+  onChangeRuleParametersConfigured
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
@@ -192,17 +197,45 @@ const CheckListItem = ({
       : {};
 
     if (
+      configured &&
       !check?.rule?.warning?.configured &&
       !check?.rule?.error?.configured &&
       !check?.rule?.fatal?.configured
     ) {
-      newRuleConfiguration = {
-        ...newRuleConfiguration,
-        error: {
-          ...check.rule?.error,
-          configured: true
-        }
-      };
+      switch (check.default_severity) {
+        case CheckModelDefaultSeverityEnum.warning:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            warning: {
+              ...check.rule?.warning,
+              configured: true
+            }
+          };
+          setEnabledType("warning");
+          break;
+
+        case CheckModelDefaultSeverityEnum.error:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            error: {
+              ...check.rule?.error,
+              configured: true
+            }
+          };
+          setEnabledType("error");
+          break;
+
+        case CheckModelDefaultSeverityEnum.fatal:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            fatal: {
+              ...check.rule?.fatal,
+              configured: true
+            }
+          };
+          setEnabledType("fatal");
+          break;
+      }
     }
 
     handleChange({
@@ -224,8 +257,8 @@ const CheckListItem = ({
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: check?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { 
-            time_window_filter: timeWindowFilter, 
+        ? {
+            time_window_filter: timeWindowFilter,
             collect_error_samples: true
           }
         : { collect_error_samples: true })
@@ -352,10 +385,11 @@ const CheckListItem = ({
         className={clsx(
           expanded || showDetails ? '' : ' border-b border-gray-100',
           !isDisabled ? 'text-gray-700' : 'opacity-75',
-          check?.disabled ? 'line-through' : ''
+          check?.disabled ? 'line-through' : '',
+          'h-18'
         )}
       >
-        <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
+        <td className="pl-4 pr-4 min-w-130 max-w-130 h-full ">
           <div className="flex space-x-1 items-center">
             {isAlreadyDeleted !== true &&
               (mode ? (
@@ -572,25 +606,30 @@ const CheckListItem = ({
               </div>
             )}
             <div className="text-sm relative">
-              <p>
-                {check.display_name !== ''
-                  ? check.display_name ?? check.check_name
-                  : check.check_name}{' '}
-                {check.friendly_name && (
-                  <span className="text-xxs">({check.friendly_name})</span>
-                )}
+              <p className="text-nowrap">
+                {check.display_name && check.display_name !== ''
+                  ? check.display_name
+                  : check.friendly_name && check.friendly_name !== ''
+                  ? check.friendly_name
+                  : check.check_name}
               </p>
               <p className="absolute left-0 top-full text-xxs">
-                {check.quality_dimension}
+                {check.friendly_name ? (
+                  <>
+                    {check.check_name}&nbsp;({check.quality_dimension})
+                  </>
+                ) : (
+                  check.quality_dimension
+                )}
               </p>
             </div>
           </div>
         </td>
-        <div className="flex justify-center items-center mt-6 gap-x-6">
+        <div className="flex w-full items-center gap-x-6">
           {check.comments ? (
             <SvgIcon
               name="comment"
-              className="w-4 h-4 "
+              className="w-4 h-4 mt-7"
               onClick={() => openCheckSettings('comments')}
             />
           ) : null}
@@ -600,87 +639,35 @@ const CheckListItem = ({
               content={check.configuration_requirements_errors?.map((x) => x)}
               className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
             >
-              <div>
-                <SvgIcon name="warning" className="w-5 h-5" />
+              <div className="flex items-center h-full">
+                <SvgIcon name="warning" className="w-5 h-5 mt-7" />
               </div>
             </Tooltip>
           ) : null}
         </div>
-        <td className="py-2 px-4 flex items-end justify-end">
-          <div className=" space-x-2">
-            <div className="text-gray-700 text-sm w-full ">
-              <SensorParameters
-                parameters={check.sensor_parameters || []}
-                onChange={(parameters: FieldModel[]) =>
-                  handleChange({ sensor_parameters: parameters })
-                }
-                disabled={!check?.configured || check.disabled}
-                onUpdate={onUpdate}
-              />
-            </div>
+        <td className="h-full flex items-center justify-end mr-5">
+          <div className="text-gray-700 text-sm mt-1.5">
+            <SensorParameters
+              parameters={check.sensor_parameters || []}
+              onChange={(parameters: FieldModel[]) =>
+                handleChange({ sensor_parameters: parameters })
+              }
+              disabled={!check?.configured || check.disabled}
+              onUpdate={onUpdate}
+            />
           </div>
         </td>
-        <td className="py-2 px-4 bg-yellow-100 relative">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.warning}
-              onChange={(warning) =>
-                handleChange({
-                  rule: {
-                    ...check.rule,
-                    warning
-                  }
-                })
-              }
-              type="warning"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-          <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
-        </td>
-        <td className="py-2 px-4 bg-orange-100">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.error}
-              onChange={(error) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    error
-                  }
-                })
-              }
-              type="error"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
-        <td className="py-2 px-4 bg-red-100 h-18">
-          {isAlreadyDeleted !== true && (
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.fatal}
-              onChange={(fatal) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    fatal
-                  }
-                })
-              }
-              type="fatal"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-            />
-          )}
-        </td>
+        <RuleConfiguration
+          enabledType={enabledType}
+          isDisabled={isDisabled}
+          isAlreadyDeleted={isAlreadyDeleted}
+          changeEnabled={changeEnabled}
+          check={check}
+          onUpdate={onUpdate}
+          handleChange={handleChange}
+          ruleParamenterConfigured={ruleParamenterConfigured}
+          onChangeRuleParametersConfigured={onChangeRuleParametersConfigured}
+        />
       </tr>
       {expanded && (
         <tr className={clsx(' border-b border-gray-100')}>

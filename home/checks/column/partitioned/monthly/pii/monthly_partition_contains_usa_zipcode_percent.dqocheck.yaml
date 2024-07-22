@@ -7,3 +7,5 @@ spec:
   help_text: Detects USA zip codes in text columns. Verifies that the percentage of
     rows that contains USA zip code in a column does not exceed the maximum accepted
     percentage. Stores a separate data quality check result for each monthly partition.
+  friendly_name: Detect USA zip codes inside text columns
+  default_severity: error

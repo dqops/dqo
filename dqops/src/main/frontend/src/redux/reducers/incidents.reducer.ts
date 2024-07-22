@@ -21,10 +21,11 @@ import { Action, INestTab } from './source.reducer';
 export interface IncidentFilter {
   connection: string;
   numberOfMonth?: number;
-  openIncidents?: boolean;
-  acknowledgedIncidents?: boolean;
-  resolvedIncidents?: boolean;
-  mutedIncidents?: boolean;
+  open?: boolean;
+  acknowledged?: boolean;
+  resolved?: boolean;
+  muted?: boolean;
+  severity?: number;
   page?: number;
   pageSize?: number;
   optionalFilter?: string;
@@ -233,6 +234,11 @@ const incidentsReducer = (state = initialState, action: any) => {
     case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS: {
       return setActiveTabState(state, action, {
         loading: true
+      });
+    }
+    case INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM: {
+      return setActiveTabState(state, action, {
+        histograms: action.data
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS: {

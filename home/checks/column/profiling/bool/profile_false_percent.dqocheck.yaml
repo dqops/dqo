@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/between_percent
   help_text: Measures the percentage of **false** values in a boolean column and verifies
     that it is within the accepted range.
+  friendly_name: Percentage of false values in bool column
   standard: true
+  default_severity: error

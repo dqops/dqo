@@ -7,3 +7,5 @@ spec:
   help_text: The check counts the number of text values in the column that is above
     the length defined by the user as a parameter. Stores the most recent captured
     value for each day when the data quality check was evaluated.
+  friendly_name: Find text values longer than the maximum accepted length
+  default_severity: error

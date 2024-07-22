@@ -49,10 +49,15 @@ nav:
   - Data sources:
       - "data-sources/index.md"
       - Athena: "data-sources/athena.md"
+      - AWS: "data-sources/aws.md"
+      - Azure: "data-sources/azure.md"
       - BigQuery: "data-sources/bigquery.md"
       - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
+      - Delta Lake: "data-sources/deltalake.md"
       - DuckDB: "data-sources/duckdb.md"
+      - Google: "data-sources/google.md"
+      - Iceberg: "data-sources/iceberg.md"
       - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
@@ -153,6 +158,7 @@ nav:
           - Table status operator: "integrations/airflow/table-status-operator.md"
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
           - Run checks use case: "integrations/airflow/run-checks-use-case.md"
+      - Azure Data Factory: "integrations/azure-data-factory/index.md"
       - Dbt:
           - "integrations/dbt/index.md"
           - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"

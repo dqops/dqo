@@ -34,18 +34,30 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "AllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all checks that fit the filters.")
 public class AllChecksPatchParameters {
+    /**
+     * Filters addressing basic tree search parameters. These filters takes precedence over other selectors.
+     */
     @JsonPropertyDescription("Filters addressing basic tree search parameters. These filters takes precedence over other selectors.")
     @NotNull
-    CheckSearchFilters checkSearchFilters;
+    private CheckSearchFilters checkSearchFilters;
 
+    /**
+     * Sample configured check model which will pasted onto selected checks.
+     */
     @JsonPropertyDescription("Sample configured check model which will pasted onto selected checks.")
-    CheckModel checkModelPatch;
+    private CheckModel checkModelPatch;
 
+    /**
+     * List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.
+     */
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
-    Map<String, List<String>> selectedTablesToColumns;
+    private Map<String, List<String>> selectedTablesToColumns;
 
+    /**
+     * Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.
+     */
     @JsonPropertyDescription("Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.")
-    boolean overrideConflicts;
+    private boolean overrideConflicts;
 
     public static class AllChecksPatchParametersSampleFactory implements SampleValueFactory<AllChecksPatchParameters> {
         @Override

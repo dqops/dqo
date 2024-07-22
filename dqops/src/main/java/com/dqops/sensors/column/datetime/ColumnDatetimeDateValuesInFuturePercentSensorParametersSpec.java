@@ -19,9 +19,12 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
@@ -35,6 +38,26 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
         {
         }
     };
+
+    @JsonPropertyDescription("Maximum accepted number of days from now that are not treated as days from future. If value is not defined by user then default value is 0.0.")
+    private Double maxFutureDays = 0.0;
+
+    /**
+     * Returns the max future days.
+     * @return maxFutureDays.
+     */
+    public Double getMaxFutureDays() {
+        return maxFutureDays;
+    }
+
+    /**
+     * Sets the max future days
+     * @param maxFutureDays maxFutureDays.
+     */
+    public void setMaxFutureDays(Double maxFutureDays) {
+        this.setDirtyIf(!Objects.equals(this.maxFutureDays, maxFutureDays));
+        this.maxFutureDays = maxFutureDays;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

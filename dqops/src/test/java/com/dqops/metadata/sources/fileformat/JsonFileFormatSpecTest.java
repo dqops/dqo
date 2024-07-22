@@ -5,6 +5,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnSpecMap;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import org.junit.jupiter.api.Test;

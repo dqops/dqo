@@ -157,7 +157,7 @@ public class DatabricksColumnPatternsTextNotMatchingRegexCountSensorParametersSp
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingAndNoIdColumns_thenReturnsErrorSamples() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForErrorSampling(
                 sampleTableMetadata, "email", this.checkSpec);
 
@@ -176,7 +176,7 @@ public class DatabricksColumnPatternsTextNotMatchingRegexCountSensorParametersSp
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithNoGroupingButWithIdColumns_thenReturnsErrorSamples() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         sampleTableMetadata.getTableSpec().getColumns().getAt(0).setId(true);
         sampleTableMetadata.getTableSpec().getColumns().getAt(2).setId(true);
 
@@ -204,7 +204,7 @@ public class DatabricksColumnPatternsTextNotMatchingRegexCountSensorParametersSp
 
     @Test
     void runSensor_whenErrorSamplingSensorExecutedWithDataGroupingAndWithIdColumns_thenReturnsErrorSamples() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec() {{
             setLevel1(new DataGroupingDimensionSpec() {{
                 setSource(DataGroupingDimensionSource.column_value);

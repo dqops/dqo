@@ -252,7 +252,9 @@ filterPropertiesDirectories(database)
         freezeFileType={
           nameOfDatabase === 'CSV' ||
           nameOfDatabase === 'Parquet' ||
-          nameOfDatabase === 'JSON'
+          nameOfDatabase === 'JSON' ||
+          nameOfDatabase === 'Iceberg' ||
+          nameOfDatabase === 'Delta Lake'
         }
       />
     ),
