@@ -391,7 +391,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (driverRegisterLock){
-                Class.forName("com.oracle.jdbc.OracleDriver");
+                Class.forName("oracle.jdbc.OracleDriver");
                 driverRegistered = true;
             }
         } catch (ClassNotFoundException e) {

@@ -85,7 +85,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             try {
                 synchronized (driverRegisterLock){
                     Class.forName("io.trino.jdbc.TrinoDriver");
-                    TrinoSourceConnection.trinoDriverRegistered = true;
+                    trinoDriverRegistered = true;
                 }
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -99,7 +99,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             try {
                 synchronized (driverRegisterLock){
                     Class.forName("com.amazon.athena.jdbc.AthenaDriver");
-                    TrinoSourceConnection.athenaDriverRegistered = true;
+                    athenaDriverRegistered = true;
                 }
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
