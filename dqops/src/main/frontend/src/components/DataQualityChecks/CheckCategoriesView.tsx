@@ -140,7 +140,10 @@ const CheckCategoriesView = ({
             <div> </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2} />
+        <td
+          className="py-2 px-4 bg-gray-50 border-b border-t"
+          colSpan={ruleParamenterConfigured ? 2 : 1}
+        />
         <td className="py-2 px-4 bg-gray-50 border-b border-t">
           {isDefaultEditing !== true && (
             <div className="flex justify-end gap-x-3">

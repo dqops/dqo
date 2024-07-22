@@ -435,9 +435,6 @@ const TableHeader = ({
                 Rule thresholds
               </div>
             </td>
-            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
-              <div className="w-38 h-full bg-gray-400"></div>
-            </td>
           </>
         )}
       </tr>
