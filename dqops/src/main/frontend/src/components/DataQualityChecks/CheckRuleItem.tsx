@@ -72,14 +72,17 @@ const CheckRuleItem = ({
   return (
     <div
       className={
-        isSimpleMode
+        (isSimpleMode
           ? 'text-left text-gray-700 h-20 flex items-center justify-center'
-          : 'text-left text-gray-700 h-20 flex items-center justify-center' +
-            backgroundClassesMap[type]
+          : 'text-left text-gray-700 h-13') + backgroundClassesMap[type]
       }
     >
       <div
-        className={clsx('flex justify-center h-20', backgroundClassesMap[type])}
+        className={clsx(
+          'flex justify-center',
+          backgroundClassesMap[type],
+          isSimpleMode && ' items-center h-20 px-2'
+        )}
       >
         {parameters?.configured === true ? (
           <div className="flex items-center ">
