@@ -325,7 +325,7 @@ const TableHeader = ({
             )}
           </div>
         </th>
-        <th className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 flex">
+        <th className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
           <div className="flex gap-2 items-center font-normal text-gray-950 justify-end">
             {isFiltered !== true ? (
               <Checkbox

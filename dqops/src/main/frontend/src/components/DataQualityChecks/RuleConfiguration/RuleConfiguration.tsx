@@ -19,8 +19,8 @@ type ConfigurationType = 'error' | 'warning' | 'fatal' | '' | 'multiple_levels';
 
 const options = [
   { value: '', label: 'Disabled' },
-  { value: 'error', label: 'Error' },
   { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
   { value: 'fatal', label: 'Fatal' },
   { value: 'multiple_levels', label: 'Multiple Levels' }
 ];
@@ -101,6 +101,10 @@ export default function RuleConfiguration({
       setConfigurationType(getConfiguredType());
     }
   }, [ruleParamenterConfigured]);
+
+  useEffect(() => {
+    onChangeConfigurationType(getConfiguredType());
+  }, [enabledType]);
 
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
