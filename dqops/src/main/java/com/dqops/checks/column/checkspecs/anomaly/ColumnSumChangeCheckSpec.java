@@ -163,6 +163,17 @@ public class ColumnSumChangeCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Maximum relative change in the sum of numeric values since the last known value";
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.
