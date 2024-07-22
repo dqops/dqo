@@ -40,6 +40,7 @@ import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChec
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessAnomalyCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
@@ -149,6 +150,9 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         dailyMonitoring.setTimeliness(timelinessDailyMonitoring);
         timelinessDailyMonitoring.setDailyDataFreshness(new TableDataFreshnessCheckSpec() {{
             setWarning(new MaxDaysRule1ParametersSpec(2.0));
+        }});
+        timelinessDailyMonitoring.setDailyDataFreshnessAnomaly(new TableDataFreshnessAnomalyCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         timelinessDailyMonitoring.setDailyDataStaleness(new TableDataStalenessCheckSpec() {{
             setWarning(new MaxDaysRule1ParametersSpec(2.0));
