@@ -108,7 +108,7 @@ export default function RuleConfiguration({
         return <></>;
       case 'warning':
         return (
-          <td className="py-2 px-4 bg-yellow-100 relative">
+          <td>
             <div className="flex items-center justify-center">
               <CheckRuleItem
                 disabled={isDisabled}
@@ -132,7 +132,7 @@ export default function RuleConfiguration({
         );
       case 'error':
         return (
-          <td className="py-2 px-4 bg-orange-100">
+          <td>
             <div className="flex items-center justify-center">
               <CheckRuleItem
                 disabled={isDisabled}
@@ -156,7 +156,7 @@ export default function RuleConfiguration({
         );
       case 'fatal':
         return (
-          <td className="py-2 px-4 bg-red-100 h-18">
+          <td>
             <div className="flex items-center justify-center">
               <CheckRuleItem
                 disabled={isDisabled}
