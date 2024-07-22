@@ -111,6 +111,7 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
 
         Properties dataSourceProperties = new Properties();
         dataSourceProperties.putIfAbsent("connectTimeout", 10);
+        dataSourceProperties.putIfAbsent("loginTimeout", 10);
 
         if (postgresqlSpec.getSslmode() != null){
             dataSourceProperties.put("sslmode", postgresqlSpec.getSslmode().getValue());
