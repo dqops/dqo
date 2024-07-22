@@ -176,7 +176,7 @@ public class ColumnSchemaColumnExistsCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Verify if the column exist";
+        return "Verify if the column exists";
     }
 
     /**

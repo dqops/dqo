@@ -186,7 +186,7 @@ that are used by those checks.
 ## List of schema checks at a column level
 | Data quality check name | Friendly name | Data quality dimension | Description | Standard check |
 |-------------------------|---------------|------------------------|-------------|----------------|
-|[*column_exists*](../checks/column/schema/column-exists.md)|Verify if the column exist|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source. The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.|:material-check-bold:|
+|[*column_exists*](../checks/column/schema/column-exists.md)|Verify if the column exists|[Completeness](../dqo-concepts/data-quality-dimensions.md#data-completeness)|A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source. The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.|:material-check-bold:|
 |[*column_type_changed*](../checks/column/schema/column-type-changed.md)|Verify if the column data type has changed|[Consistency](../dqo-concepts/data-quality-dimensions.md#data-consistency)|A column-level check that detects if the data type of the column has changed since the last retrieval. This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability. A data quality issue will be detected if the hash of the column&#x27;s data types has changed.|:material-check-bold:|
 
 

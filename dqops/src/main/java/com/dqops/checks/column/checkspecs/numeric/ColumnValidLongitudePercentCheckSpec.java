@@ -171,7 +171,7 @@ public class ColumnValidLongitudePercentCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "";
+        return "Minimum percentage of rows containing valid longitude values";
     }
 
     /**
