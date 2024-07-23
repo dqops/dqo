@@ -41,7 +41,7 @@ const FieldControl = ({
   const value: any = useMemo(() => {
     switch (field.definition?.data_type) {
       case ParameterDefinitionSpecDataTypeEnum.string:
-        return field.string_value;
+        return field.string_value || '';
       case ParameterDefinitionSpecDataTypeEnum.column_name:
         return field.column_name_value;
       case ParameterDefinitionSpecDataTypeEnum.boolean:
