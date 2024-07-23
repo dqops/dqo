@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
-import TextArea from '../TextArea';
-import SvgIcon from '../SvgIcon';
 import { Dialog } from '@material-tailwind/react';
+import React, { ChangeEvent, useState } from 'react';
 import Button from '../Button';
+import SvgIcon from '../SvgIcon';
+import TextArea from '../TextArea';
 interface IExtendedTextAreaProps {
   className?: string;
   label?: string;
