@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of texts matching the name regular expression
     does not fall below the minimum accepted percentage.
+  friendly_name: Minimum percentage of rows containing texts that are valid names
+    (not numeric)
+  default_severity: error

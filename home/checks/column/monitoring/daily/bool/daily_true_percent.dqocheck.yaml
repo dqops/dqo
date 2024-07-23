@@ -7,4 +7,6 @@ spec:
   help_text: Measures the percentage of **true** values in a boolean column and verifies
     that it is within the accepted range. Stores the most recent captured value for
     each day when the data quality check was evaluated.
+  friendly_name: Percentage of true values in bool column
   standard: true
+  default_severity: error

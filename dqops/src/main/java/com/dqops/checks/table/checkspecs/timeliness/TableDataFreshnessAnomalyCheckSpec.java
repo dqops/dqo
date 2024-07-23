@@ -168,7 +168,18 @@ public class TableDataFreshnessAnomalyCheckSpec extends AbstractCheckSpec<TableT
     @Override
     @JsonIgnore
     public boolean isStandard() {
-        return false;
+        return true;
+    }
+
+    /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Data freshness anomaly (Abnormal delay in data delivery)";
     }
 
     /**

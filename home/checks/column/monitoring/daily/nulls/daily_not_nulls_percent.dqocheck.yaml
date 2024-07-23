@@ -8,3 +8,6 @@ spec:
     the percentage of rows that have non-null values. Raises a data quality issue
     when the percentage of non-null values is below min_percentage. Stores the most
     recent captured value for each day when the data quality check was evaluated.
+  friendly_name: Maximum percentage of rows containing non-null values (find empty
+    column)
+  default_severity: error

@@ -7,4 +7,6 @@ spec:
   help_text: Verifies that the number of days since the most recent event timestamp
     (freshness) changes in a rate within a percentile boundary during the last 90
     days.
+  friendly_name: Data freshness anomaly (Abnormal delay in data delivery)
+  standard: true
   default_severity: warning

@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/max_missing
   help_text: Verifies that the expected numeric values were found in the column. Raises
     a data quality issue when too many expected values were not found (were missing).
+  friendly_name: Maximum number of expected numeric values that are not in use
+  default_severity: error

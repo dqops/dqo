@@ -7,4 +7,7 @@ spec:
   help_text: "Verifies that the percentage of text values that are parsable to a boolean\
     \ value does not fall below the minimum accepted percentage, text values identified\
     \ as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n."
+  friendly_name: Minimum percentage of rows containing a text parsable to a boolean
+    value
   standard: true
+  default_severity: error

@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/between_floats
   help_text: "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is\
     \ not outside the expected range."
+  friendly_name: Custom aggregated SQL expression within range
+  default_severity: error

@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentage of duplicate values in a column does not
     exceed the maximum accepted percentage. Stores the most recent captured value
     for each day when the data quality check was evaluated.
+  friendly_name: Maximum percentage of duplicate values
+  default_severity: error

@@ -9,4 +9,7 @@ spec:
     \ strings and raises a data quality issue when too many invalid date strings are\
     \ found. Creates a separate data quality check (and an alert) for each monthly\
     \ monitoring."
+  friendly_name: Minimum percentage of rows containing text values that match a date
+    format
   standard: true
+  default_severity: error

@@ -8,3 +8,5 @@ spec:
     a data quality issue when too many expected values were not found (were missing).
     Stores the most recent captured value for each month when the data quality check
     was evaluated.
+  friendly_name: Maximum number of expected text values that are not in use
+  default_severity: error

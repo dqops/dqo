@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentile 10 of all values in a column is not outside
     the expected range. Stores the most recent captured value for each day when the
     data quality check was evaluated.
+  friendly_name: The selected 10th percentile of numeric values is in the range
+  default_severity: error

@@ -54,6 +54,7 @@ Check model that is returned by the REST API. Describes a single unique data qua
 |<span class="no-wrap-code">`help_text`</span>|Help text that is shown in the check editor that describes the purpose and usage of the check|*string*|
 |<span class="no-wrap-code">`friendly_name`</span>|An alternative check's name that is shown on the check editor.|*string*|
 |<span class="no-wrap-code">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*|
+|<span class="no-wrap-code">[`default_severity`](./common.md#ruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">`custom`</span>|This check has is a custom check or was customized by the user.|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This check is provided with DQOps as a built-in check.|*boolean*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|

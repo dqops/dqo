@@ -9,4 +9,7 @@ spec:
     a column in the reference table. The difference must be below defined percentage
     thresholds. Stores the most recent captured value for each day when the data quality
     check was evaluated.
+  friendly_name: Maximum percentage of difference between the counts of not null values
+    in compared columns
   standard: true
+  default_severity: error

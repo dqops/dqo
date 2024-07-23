@@ -8,4 +8,6 @@ spec:
     row count of the reference table. Compares each group of data with a GROUP BY
     clause. Stores the most recent captured value for each month when the data quality
     check was evaluated.
+  friendly_name: Maximum percentage of difference between row count of compared tables
   standard: true
+  default_severity: error

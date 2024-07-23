@@ -1530,10 +1530,11 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -1587,12 +1588,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -1649,12 +1651,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -1714,12 +1717,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -1779,12 +1783,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -1864,10 +1869,11 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -1921,12 +1927,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -1983,12 +1990,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2048,12 +2056,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2113,12 +2122,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2198,10 +2208,11 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -2255,12 +2266,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2317,12 +2329,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2382,12 +2395,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2447,12 +2461,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2532,10 +2547,11 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -2589,12 +2605,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2651,12 +2668,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2716,12 +2734,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2781,12 +2800,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2866,10 +2886,11 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -2923,12 +2944,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2985,12 +3007,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -3050,12 +3073,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -3115,12 +3139,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -3676,7 +3701,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -3692,7 +3717,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -3710,12 +3736,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -3752,7 +3779,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -3770,12 +3798,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -3812,7 +3841,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3833,12 +3863,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -3875,7 +3906,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3896,12 +3928,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -3973,7 +4006,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -3989,7 +4022,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4007,12 +4041,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4049,7 +4084,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4067,12 +4103,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4109,7 +4146,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4130,12 +4168,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4172,7 +4211,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4193,12 +4233,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4270,7 +4311,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -4286,7 +4327,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4304,12 +4346,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4346,7 +4389,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4364,12 +4408,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4406,7 +4451,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4427,12 +4473,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4469,7 +4516,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4490,12 +4538,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4567,7 +4616,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -4583,7 +4632,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4601,12 +4651,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4643,7 +4694,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4661,12 +4713,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4703,7 +4756,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4724,12 +4778,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4766,7 +4821,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4787,12 +4843,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4864,7 +4921,7 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -4880,7 +4937,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4898,12 +4956,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -4940,7 +4999,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4958,12 +5018,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5000,7 +5061,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5021,12 +5083,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5063,7 +5126,8 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5084,12 +5148,13 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,

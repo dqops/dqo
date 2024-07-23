@@ -102,6 +102,10 @@ export default function RuleConfiguration({
     }
   }, [ruleParamenterConfigured]);
 
+  useEffect(() => {
+    onChangeConfigurationType(getConfiguredType());
+  }, [enabledType]);
+
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
       case '':

@@ -48,7 +48,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"custom\":true,\"built_in\":false,\"can_edit\":true}"
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"default_severity\":\"error\",\"custom\":true,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -61,7 +61,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -69,10 +70,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -95,7 +97,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -103,10 +106,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -129,7 +133,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -140,10 +145,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -166,7 +172,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -177,10 +184,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -657,10 +665,11 @@ http://localhost:8888/api/checks/{fullCheckName}
         ```
         {
 		  "check_name" : "sample_check",
-		  "sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		  "rule_name" : "sample_target/sample_category/sample_rule",
 		  "help_text" : "Sample help text",
 		  "standard" : false,
+		  "default_severity" : "error",
 		  "custom" : true,
 		  "built_in" : false,
 		  "can_edit" : true
@@ -695,10 +704,11 @@ http://localhost:8888/api/checks/{fullCheckName}
         ```
         CheckDefinitionModel(
 			check_name='sample_check',
-			sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_name='sample_target/sample_category/table/volume/row_count',
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
+			default_severity=RuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -734,10 +744,11 @@ http://localhost:8888/api/checks/{fullCheckName}
         ```
         CheckDefinitionModel(
 			check_name='sample_check',
-			sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_name='sample_target/sample_category/table/volume/row_count',
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
+			default_severity=RuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -776,10 +787,11 @@ http://localhost:8888/api/checks/{fullCheckName}
         ```
         CheckDefinitionModel(
 			check_name='sample_check',
-			sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_name='sample_target/sample_category/table/volume/row_count',
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
+			default_severity=RuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -818,10 +830,11 @@ http://localhost:8888/api/checks/{fullCheckName}
         ```
         CheckDefinitionModel(
 			check_name='sample_check',
-			sensor_name='sample_target/sample_category/sample_sensor',
+			sensor_name='sample_target/sample_category/table/volume/row_count',
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
+			default_severity=RuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -1063,7 +1076,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"custom\":true,\"built_in\":false,\"can_edit\":true}"
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"default_severity\":\"error\",\"custom\":true,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -1076,7 +1089,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -1084,10 +1098,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1110,7 +1125,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -1118,10 +1134,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1144,7 +1161,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1155,10 +1173,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1181,7 +1200,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
-	from dqops.client.models import CheckDefinitionModel
+	from dqops.client.models import CheckDefinitionModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1192,10 +1212,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
 	request_body = CheckDefinitionModel(
 		check_name='sample_check',
-		sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_name='sample_target/sample_category/table/volume/row_count',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
+		default_severity=RuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True

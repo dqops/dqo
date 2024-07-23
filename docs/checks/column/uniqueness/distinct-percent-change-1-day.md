@@ -18,9 +18,9 @@ The **distinct percent change 1 day** data quality check has the following varia
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_distinct_percent_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_percent_change_1_day`</span>|Maximum relative change in the percentage of distinct values vs 1 day ago|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1021,9 +1021,9 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_distinct_percent_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_percent_change_1_day`</span>|Maximum relative change in the percentage of distinct values vs 1 day ago|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -2026,9 +2026,9 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_distinct_percent_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_percent_change_1_day`</span>|Maximum relative change in the percentage of distinct values vs 1 day ago|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 

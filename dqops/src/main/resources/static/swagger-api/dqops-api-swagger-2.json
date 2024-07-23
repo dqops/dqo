@@ -33764,6 +33764,9 @@
         }
       }
     },
+    "DeltaLakeFileFormatSpec" : {
+      "type" : "object"
+    },
     "DetectedDatatypeEqualsRuleParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -34164,7 +34167,7 @@
         "files_format_type" : {
           "type" : "string",
           "description" : "Type of source files format for DuckDB.",
-          "enum" : [ "csv", "json", "parquet" ]
+          "enum" : [ "csv", "json", "parquet", "iceberg", "delta_lake" ]
         },
         "database" : {
           "type" : "string",
@@ -34188,6 +34191,14 @@
         "parquet" : {
           "description" : "Parquet file format specification.",
           "$ref" : "#/definitions/ParquetFileFormatSpec"
+        },
+        "iceberg" : {
+          "description" : "Iceberg file format specification.",
+          "$ref" : "#/definitions/IcebergFileFormatSpec"
+        },
+        "delta_lake" : {
+          "description" : "Delta Lake file format specification.",
+          "$ref" : "#/definitions/DeltaLakeFileFormatSpec"
         },
         "directories" : {
           "type" : "object",
@@ -34705,6 +34716,14 @@
           "description" : "Parquet file format specification.",
           "$ref" : "#/definitions/ParquetFileFormatSpec"
         },
+        "iceberg" : {
+          "description" : "Iceberg file format specification.",
+          "$ref" : "#/definitions/IcebergFileFormatSpec"
+        },
+        "delta_lake" : {
+          "description" : "Delta Lake file format specification.",
+          "$ref" : "#/definitions/DeltaLakeFileFormatSpec"
+        },
         "file_paths" : {
           "type" : "array",
           "description" : "The list of paths to files with data that are used as a source.",
@@ -34722,6 +34741,15 @@
           "items" : {
             "type" : "object"
           }
+        }
+      }
+    },
+    "IcebergFileFormatSpec" : {
+      "type" : "object",
+      "properties" : {
+        "allow_moved_paths" : {
+          "type" : "boolean",
+          "description" : "The option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved."
         }
       }
     },

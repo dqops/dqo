@@ -9,4 +9,6 @@ spec:
     \ the texts are too long or not long enough. Analyzes every monthly partition\
     \ and creates a separate data quality check result with the time period value\
     \ that identifies the monthly partition."
+  friendly_name: Verify that the maximum length of the text is in the range
   standard: true
+  default_severity: error

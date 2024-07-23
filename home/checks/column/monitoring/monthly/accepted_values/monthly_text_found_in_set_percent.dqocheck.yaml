@@ -9,4 +9,7 @@ spec:
     that the percentage of rows having a valid column value does not exceed the minimum
     accepted percentage. Stores the most recent captured value for each month when
     the data quality check was evaluated.
+  friendly_name: Minimum percentage of rows having text values outside the list of
+    expected values
   standard: true
+  default_severity: error

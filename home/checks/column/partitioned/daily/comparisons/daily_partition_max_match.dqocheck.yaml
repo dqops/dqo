@@ -9,4 +9,7 @@ spec:
     reference table. The difference must be below defined percentage thresholds. Compares
     each daily partition (each day of data) between the compared table and the reference
     table (the source of truth).
+  friendly_name: Maximum percentage of difference between maximum values of compared
+    columns
   standard: true
+  default_severity: error

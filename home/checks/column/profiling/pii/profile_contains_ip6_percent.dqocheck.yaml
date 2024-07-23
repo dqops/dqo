@@ -7,3 +7,5 @@ spec:
   help_text: Detects IP6 addresses in text columns. Verifies that the percentage of
     rows that contains valid IP6 address values in a column does not fall below the
     minimum accepted percentage.
+  friendly_name: Detect IP6 addresses inside text columns
+  default_severity: error

@@ -17,11 +17,11 @@ A table-level check that calculates the time difference between the most recent 
  This check is also known as &quot;Data Freshness&quot;.
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_freshness`</span>](./data-freshness.md#profile-data-freshness)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_data_freshness`</span>](./data-freshness.md#daily-data-freshness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_data_freshness`</span>](./data-freshness.md#monthly-data-freshness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_data_freshness`</span>](./data-freshness.md#profile-data-freshness)|Data freshness (Maximum age of the most recent row)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_data_freshness`</span>](./data-freshness.md#daily-data-freshness)|Data freshness (Maximum age of the most recent row)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_data_freshness`</span>](./data-freshness.md#monthly-data-freshness)|Data freshness (Maximum age of the most recent row)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
 
 
 
@@ -32,10 +32,10 @@ This check calculates the most recent rows value and the current time and detect
  This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#profile-data-freshness-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#daily-data-freshness-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.| |
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#profile-data-freshness-anomaly)|Data freshness anomaly (Abnormal delay in data delivery)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_data_freshness_anomaly`</span>](./data-freshness-anomaly.md#daily-data-freshness-anomaly)|Data freshness anomaly (Abnormal delay in data delivery)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of days since the most recent event timestamp (freshness) changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
 
 
 
@@ -46,11 +46,11 @@ A table-level check that calculates the time difference between the last timesta
  This check is also known as &quot;Data Staleness&quot;.
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_staleness`</span>](./data-staleness.md#profile-data-staleness)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`daily_data_staleness`</span>](./data-staleness.md#daily-data-staleness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`monthly_data_staleness`</span>](./data-staleness.md#monthly-data-staleness)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_data_staleness`</span>](./data-staleness.md#profile-data-staleness)|Data staleness (Maximum number of days since the recent ingestion)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
+|[<span class="no-wrap-code">`daily_data_staleness`</span>](./data-staleness.md#daily-data-staleness)|Data staleness (Maximum number of days since the recent ingestion)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
+|[<span class="no-wrap-code">`monthly_data_staleness`</span>](./data-staleness.md#monthly-data-staleness)|Data staleness (Maximum number of days since the recent ingestion)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
 
 
 
@@ -62,13 +62,13 @@ A table-level check that calculates the time difference between the most recent 
  The names of both columns used for comparison should be specified in the &quot;timestamp_columns&quot; configuration entry on the table.
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_ingestion_delay`</span>](./data-ingestion-delay.md#profile-data-ingestion-delay)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`daily_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-data-ingestion-delay)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-data-ingestion-delay)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-partition-data-ingestion-delay)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-partition-data-ingestion-delay)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_data_ingestion_delay`</span>](./data-ingestion-delay.md#profile-data-ingestion-delay)|Data ingestion delay (Maximum number of days between the last record has been created and loaded)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+|[<span class="no-wrap-code">`daily_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-data-ingestion-delay)|Data ingestion delay (Maximum number of days between the last record has been created and loaded)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+|[<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-data-ingestion-delay)|Data ingestion delay (Maximum number of days between the last record has been created and loaded)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+|[<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#daily-partition-data-ingestion-delay)|Data ingestion delay (Maximum number of days between the last record has been created and loaded)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+|[<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>](./data-ingestion-delay.md#monthly-partition-data-ingestion-delay)|Data ingestion delay (Maximum number of days between the last record has been created and loaded)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
 
 
 
@@ -80,10 +80,10 @@ A table-level check that calculates the maximum difference in days between inges
  filled by the data pipeline or an ETL process during data loading.
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./reload-lag.md#daily-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./reload-lag.md#monthly-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
+| Data quality check name | Friendly name | Check type | Description | Standard |
+|-------------------------|---------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./reload-lag.md#daily-partition-reload-lag)|Reload lag (Maximum delay to load the last record for each partition)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./reload-lag.md#monthly-partition-reload-lag)|Reload lag (Maximum delay to load the last record for each partition)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
 
 
 

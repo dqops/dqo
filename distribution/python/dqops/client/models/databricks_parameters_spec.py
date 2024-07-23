@@ -24,15 +24,16 @@ class DatabricksParametersSpec:
             configuration with a custom environment variable.
         catalog (Union[Unset, str]): Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a
             custom environment variable.
-        user (Union[Unset, str]): Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom
-            environment variable.
-        password (Union[Unset, str]): Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration
-            with a custom environment variable.
+        user (Union[Unset, str]): (Obsolete) Databricks user name. Supports also a ${DATABRICKS_USER} configuration with
+            a custom environment variable.
+        password (Union[Unset, str]): (Obsolete) Databricks database password. Supports also a ${DATABRICKS_PASSWORD}
+            configuration with a custom environment variable.
         http_path (Union[Unset, str]): Databricks http path to the warehouse. For example:
             /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom
             environment variable.
         access_token (Union[Unset, str]): Databricks access token the warehouse. Supports also a
             ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.
+        initialization_sql (Union[Unset, str]): Custom SQL that is executed after connecting to Databricks.
         properties (Union[Unset, DatabricksParametersSpecProperties]): A dictionary of custom JDBC parameters that are
             added to the JDBC connection string, a key/value dictionary.
         database (Union[Unset, str]):
@@ -45,6 +46,7 @@ class DatabricksParametersSpec:
     password: Union[Unset, str] = UNSET
     http_path: Union[Unset, str] = UNSET
     access_token: Union[Unset, str] = UNSET
+    initialization_sql: Union[Unset, str] = UNSET
     properties: Union[Unset, "DatabricksParametersSpecProperties"] = UNSET
     database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -57,6 +59,7 @@ class DatabricksParametersSpec:
         password = self.password
         http_path = self.http_path
         access_token = self.access_token
+        initialization_sql = self.initialization_sql
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -80,6 +83,8 @@ class DatabricksParametersSpec:
             field_dict["http_path"] = http_path
         if access_token is not UNSET:
             field_dict["access_token"] = access_token
+        if initialization_sql is not UNSET:
+            field_dict["initialization_sql"] = initialization_sql
         if properties is not UNSET:
             field_dict["properties"] = properties
         if database is not UNSET:
@@ -108,6 +113,8 @@ class DatabricksParametersSpec:
 
         access_token = d.pop("access_token", UNSET)
 
+        initialization_sql = d.pop("initialization_sql", UNSET)
+
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, DatabricksParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -125,6 +132,7 @@ class DatabricksParametersSpec:
             password=password,
             http_path=http_path,
             access_token=access_token,
+            initialization_sql=initialization_sql,
             properties=properties,
             database=database,
         )

@@ -7,4 +7,6 @@ spec:
   help_text: Verifies that the percentage text values that are parsable to a float
     value in a column does not fall below the minimum accepted percentage. Stores
     the most recent captured value for each day when the data quality check was evaluated.
+  friendly_name: Minimum percentage of rows containing a text parsable to float
   standard: true
+  default_severity: error

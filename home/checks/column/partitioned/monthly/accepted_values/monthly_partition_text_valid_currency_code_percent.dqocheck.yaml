@@ -8,3 +8,5 @@ spec:
     does not fall below the minimum accepted percentage. Analyzes every monthly partition
     and creates a separate data quality check result with the time period value that
     identifies the monthly partition.
+  friendly_name: Minimum percentage of rows containing valid currency codes
+  default_severity: error

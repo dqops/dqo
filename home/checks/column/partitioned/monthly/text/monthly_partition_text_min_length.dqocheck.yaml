@@ -9,4 +9,6 @@ spec:
     \ that the shortest text is too short. Analyzes every monthly partition and creates\
     \ a separate data quality check result with the time period value that identifies\
     \ the monthly partition."
+  friendly_name: Verify that the minimum length of the text column is in the range
   standard: true
+  default_severity: error

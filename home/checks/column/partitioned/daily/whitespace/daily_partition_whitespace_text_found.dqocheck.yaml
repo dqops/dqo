@@ -7,4 +7,6 @@ spec:
   help_text: Detects texts that contain only spaces and other whitespace characters.
     It raises a data quality issue when their count exceeds a *max_count* parameter
     value. Stores a separate data quality check result for each daily partition.
+  friendly_name: Maximum count of whitespace values
   standard: true
+  default_severity: error

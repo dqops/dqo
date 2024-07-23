@@ -7,3 +7,5 @@ spec:
   help_text: "Runs a custom query that retrieves a result of a data quality check\
     \ performed in the data engineering, whose result (the severity level) is pulled\
     \ from a separate table."
+  friendly_name: Import custom data quality results on table
+  default_severity: error
