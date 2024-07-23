@@ -113,7 +113,7 @@ export default function RuleConfiguration({
       case 'warning':
         return (
           <td>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.warning}
@@ -137,7 +137,7 @@ export default function RuleConfiguration({
       case 'error':
         return (
           <td>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.error}
@@ -161,7 +161,7 @@ export default function RuleConfiguration({
       case 'fatal':
         return (
           <td>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.fatal}
@@ -248,8 +248,8 @@ export default function RuleConfiguration({
   return (
     <Fragment>
       {!ruleParamenterConfigured && (
-        <td>
-          <div className="flex items-center justify-end">
+        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 !w-40">
+          <div className="flex items-center justify-center !w-40">
             <Select
               value={configurationType}
               onChange={onChangeConfigurationType}

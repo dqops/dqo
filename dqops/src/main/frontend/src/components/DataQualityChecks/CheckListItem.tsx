@@ -211,7 +211,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("warning");
+          setEnabledType('warning');
           break;
 
         case CheckModelDefaultSeverityEnum.error:
@@ -222,7 +222,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("error");
+          setEnabledType('error');
           break;
 
         case CheckModelDefaultSeverityEnum.fatal:
@@ -233,7 +233,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("fatal");
+          setEnabledType('fatal');
           break;
       }
     }
@@ -645,7 +645,7 @@ const CheckListItem = ({
             </Tooltip>
           ) : null}
         </div>
-        <td className="h-full flex items-center justify-end mr-5">
+        <td className="h-full flex items-center justify-end">
           <div className="text-gray-700 text-sm mt-1.5">
             <SensorParameters
               parameters={check.sensor_parameters || []}

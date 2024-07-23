@@ -431,13 +431,16 @@ const TableHeader = ({
           </>
         ) : (
           <>
-            <td className="text-right whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
-              Issue severity level
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+              <div className="flex items-center !w-40">
+                Issue severity level
+              </div>
             </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
-              <div className="flex items-center justify-center">
-                Rule thresholds
-              </div>
+              <div className="flex items-center">Rule thresholds</div>
+            </td>
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+              <div className="w-38 h-full bg-gray-400"></div>
             </td>
           </>
         )}
