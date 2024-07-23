@@ -37,7 +37,7 @@ public class EffectiveIncidentGroupingConfiguration {
     private int muteForDays;
     private boolean divideByDataStream;
     private boolean disabled;
-    private IncidentWebhookNotificationsSpec webhooks;
+    private IncidentNotificationSpec webhooks;
 
     /**
      * Creates an effective incident grouping configuration by taking the configuration from the connection level
@@ -127,10 +127,10 @@ public class EffectiveIncidentGroupingConfiguration {
     }
 
     /**
-     * Returns the configuration of webhooks used for incident notifications.
-     * @return Webhooks configuration for incidents.
+     * Returns the configuration of addresses used for incident notifications.
+     * @return Adresses configuration for incidents.
      */
-    public IncidentWebhookNotificationsSpec getWebhooks() {
+    public IncidentNotificationSpec getWebhooks() {
         return webhooks;
     }
 

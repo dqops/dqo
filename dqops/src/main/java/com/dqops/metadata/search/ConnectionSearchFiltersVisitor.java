@@ -25,7 +25,7 @@ import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.ConnectionList;
@@ -244,14 +244,14 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor<Search
     }
 
     /**
-     * Accepts a default incident webhook notification wrapper instance.
+     * Accepts a default incident notification wrapper instance.
      *
-     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notification wrapper instance.
+     * @param defaultIncidentNotificationsWrapper Default incident notification wrapper instance.
      * @param parameter                                  Visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 

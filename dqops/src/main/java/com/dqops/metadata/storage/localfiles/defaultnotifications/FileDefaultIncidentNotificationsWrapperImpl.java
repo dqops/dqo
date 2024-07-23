@@ -5,8 +5,8 @@ import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.id.HierarchyId;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapperImpl;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * Default incident webhook notification spec wrapper.
  */
 @Slf4j
-public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultIncidentWebhookNotificationsWrapperImpl {
+public class FileDefaultIncidentNotificationsWrapperImpl extends DefaultIncidentNotificationsWrapperImpl {
 
     @JsonIgnore
     private final FolderTreeNode settingsFolderNode;
@@ -30,7 +30,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
      * @param yamlSerializer Yaml serializer.
      * @param readOnly Make the wrapper read-only.
      */
-    public FileDefaultIncidentWebhookNotificationsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
+    public FileDefaultIncidentNotificationsWrapperImpl(FolderTreeNode settingsFolderNode, YamlSerializer yamlSerializer, boolean readOnly) {
         super(readOnly);
         this.settingsFolderNode = settingsFolderNode;
         this.yamlSerializer = yamlSerializer;
@@ -41,14 +41,14 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
      * @return Loaded default notification webhooks specification.
      */
     @Override
-    public IncidentWebhookNotificationsSpec getSpec() {
-        IncidentWebhookNotificationsSpec spec = super.getSpec();
+    public IncidentNotificationSpec getSpec() {
+        IncidentNotificationSpec spec = super.getSpec();
         if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
                 String textContent = fileContent.getTextContent();
-                IncidentWebhookNotificationsSpec deserializedSpec = (IncidentWebhookNotificationsSpec) fileContent.getCachedObjectInstance();
+                IncidentNotificationSpec deserializedSpec = (IncidentNotificationSpec) fileContent.getCachedObjectInstance();
 
                 if (deserializedSpec == null) {
                     DefaultNotificationsYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultNotificationsYaml.class, fileNode.getPhysicalAbsolutePath());
@@ -58,7 +58,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
-                        IncidentWebhookNotificationsSpec cachedObjectInstance = deserializedSpec.deepClone();
+                        IncidentNotificationSpec cachedObjectInstance = deserializedSpec.deepClone();
                         cachedObjectInstance.makeReadOnly(true);
                         if (this.getHierarchyId() != null) {
                             cachedObjectInstance.setHierarchyId(new HierarchyId(this.getHierarchyId(), "spec"));
@@ -66,7 +66,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
                         fileContent.setCachedObjectInstance(cachedObjectInstance);
                     }
                 } else {
-                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (IncidentWebhookNotificationsSpec) deserializedSpec.deepClone();
+                    deserializedSpec = this.isReadOnly() ? deserializedSpec : (IncidentNotificationSpec) deserializedSpec.deepClone();
                 }
                 this.setSpec(deserializedSpec);
                 this.clearDirty(false);

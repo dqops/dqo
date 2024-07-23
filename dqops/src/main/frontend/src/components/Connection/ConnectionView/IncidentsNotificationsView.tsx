@@ -5,7 +5,7 @@ import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
   ConnectionIncidentGroupingSpecMinimumSeverityEnum,
-  IncidentWebhookNotificationsSpec
+  IncidentNotificationSpec
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -57,7 +57,7 @@ export const IncidentsNotificationsView = () => {
   );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
-    useState<IncidentWebhookNotificationsSpec>();
+    useState<IncidentNotificationSpec>();
 
   const getDefaultWebhooksConfiguration = async () => {
     await SettingsApi.getDefaultWebhooks().then((res) =>
@@ -84,7 +84,7 @@ export const IncidentsNotificationsView = () => {
     );
   };
 
-  const onChangeWebhooks = (obj: Partial<IncidentWebhookNotificationsSpec>) => {
+  const onChangeWebhooks = (obj: Partial<IncidentNotificationSpec>) => {
     dispatch(
       setUpdateIncidentGroup(checkTypes, firstLevelActiveTab, {
         ...(incidentGrouping || {}),

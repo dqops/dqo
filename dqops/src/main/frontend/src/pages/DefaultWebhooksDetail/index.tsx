@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IncidentWebhookNotificationsSpec } from '../../api';
+import { IncidentNotificationSpec } from '../../api';
 import Button from '../../components/Button';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import Input from '../../components/Input';
@@ -10,7 +10,7 @@ import { SettingsApi } from '../../services/apiClient';
 export default function DefaultWebhooksDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
-    useState<IncidentWebhookNotificationsSpec>();
+    useState<IncidentNotificationSpec>();
   const [isUpdated, setIsUpdated] = useState(false);
 
   const getDefaultWebhooksConfiguration = async () => {
@@ -19,7 +19,7 @@ export default function DefaultWebhooksDetail() {
     );
   };
 
-  const onChangeWebhooks = (obj: Partial<IncidentWebhookNotificationsSpec>) => {
+  const onChangeWebhooks = (obj: Partial<IncidentNotificationSpec>) => {
     setDefaultWebhooksConfiguration((prevState) => ({
       ...prevState,
       ...obj

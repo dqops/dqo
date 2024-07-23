@@ -15,13 +15,16 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.core.incidents.email.EmailSender;
+import com.dqops.core.incidents.email.EmailSenderProvider;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
+import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
@@ -31,6 +34,8 @@ import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -49,6 +54,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     private SharedHttpClientProvider sharedHttpClientProvider;
     private JsonSerializer jsonSerializer;
     private ExecutionContextFactory executionContextFactory;
+    private EmailSenderProvider emailSenderProvider;
 
     /**
      * Creates an incident notification service.
@@ -60,10 +66,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
                                            JsonSerializer jsonSerializer,
-                                           ExecutionContextFactory executionContextFactory) {
+                                           ExecutionContextFactory executionContextFactory,
+                                           EmailSenderProvider emailSenderProvider) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
         this.executionContextFactory = executionContextFactory;
+        this.emailSenderProvider = emailSenderProvider;
     }
 
     /**
@@ -77,25 +85,34 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     public void sendNotifications(List<IncidentNotificationMessage> newMessages,
                                   ConnectionIncidentGroupingSpec incidentGrouping,
                                   UserDomainIdentity userIdentity) {
-        IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping, userIdentity);
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec);
+        IncidentNotificationSpec webhooksSpec = prepareWebhooks(incidentGrouping, userIdentity);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec, userIdentity);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
     /**
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
-     * @param webhooksSpec Webhook specification.
+     * @param notificationSpec Webhook specification.
+     * @param userIdentity     User identity that specifies the data domain where the webhooks are defined.
      * @return Awaitable Mono object.
      */
-    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentWebhookNotificationsSpec webhooksSpec) {
+    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages,
+                                              IncidentNotificationSpec notificationSpec,
+                                              UserDomainIdentity userIdentity) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
-                .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
-                .map(message -> new MessageWebhookPair(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
-                .filter(messageUrlPair -> !Strings.isNullOrEmpty(messageUrlPair.getWebhookUrl()))
-                .flatMap(messageUrlPair -> sendNotification(messageUrlPair))
+                .filter(message -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(message.getStatus())))
+                .map(message -> new MessageAddressPair(message, notificationSpec.getNotificationAddressForStatus(message.getStatus())))
+                .filter(messageAddressPair -> !Strings.isNullOrEmpty(messageAddressPair.getNotificationAddress()))
+                .flatMap(messageAddressPair -> {
+                    // todo: messageAddressPair might contains comma separated addresses
+                    if(messageAddressPair.getNotificationAddress().contains("@")){
+                        return sendEmailNotification(messageAddressPair, userIdentity);
+                    }
+                    return sendWebhookNotification(messageAddressPair);
+                })
                 .onErrorContinue((Throwable ex, Object msg) -> {
-                    log.error("Failed to send notification to webhook: " +
+                    log.error("Failed to send notification to address(es): " +
                             msg + ", error: " + ex.getMessage(), ex);
                 })
                 .subscribeOn(Schedulers.parallel())
@@ -106,12 +123,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
     /**
      * Sets a single notification with one incident.
-     * @param messageWebhookPair Incident notification payload and webhook url pair.
+     * @param messageAddressPair Incident notification payload and webhook url pair.
      * @return Mono that returns the target webhook url.
      */
-    protected Mono<MessageWebhookPair> sendNotification(MessageWebhookPair messageWebhookPair) {
+    protected Mono<MessageAddressPair> sendWebhookNotification(MessageAddressPair messageAddressPair) {
         HttpClient httpClient = this.sharedHttpClientProvider.getHttp11SharedClient();
-        String serializedJsonMessage = this.jsonSerializer.serialize(messageWebhookPair.getIncidentNotificationMessage());
+        String serializedJsonMessage = this.jsonSerializer.serialize(messageAddressPair.getIncidentNotificationMessage());
         byte[] messageBytes = serializedJsonMessage.getBytes(StandardCharsets.UTF_8);
 
         Mono<Void> responseSent = httpClient
@@ -120,12 +137,40 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     httpHeaders.add(HttpHeaders.CONTENT_LENGTH, messageBytes.length);
                 })
                 .post()
-                .uri(messageWebhookPair.getWebhookUrl())
+                .uri(messageAddressPair.getNotificationAddress())
                 .send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)))
                 .response()
                 .then();
 
-        return responseSent.retry(3).thenReturn(messageWebhookPair);
+        return responseSent.retry(3).thenReturn(messageAddressPair);
+    }
+
+    /**
+     * Sets a single notification with one incident.
+     * @param messageAddressPair Incident notification payload and email address pair.
+     * @return Mono that returns the target email address.
+     */
+    protected Mono<MessageAddressPair> sendEmailNotification(MessageAddressPair messageAddressPair,
+                                                             UserDomainIdentity userIdentity) {
+        SmtpServerConfigurationSpec smtpServerConfigurationSpec = loadSmtpServerConfiguration(userIdentity);
+        JavaMailSender javaMailSender = emailSenderProvider.configureJavaMailSender(smtpServerConfigurationSpec);
+
+        Mono<Void> responseSent = Mono.fromCallable(() -> {
+                    try {
+                        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                        simpleMailMessage.setFrom(EmailSender.EMAIL_SENDER_FROM);
+                        simpleMailMessage.setTo(messageAddressPair.getNotificationAddress());
+                        simpleMailMessage.setSubject("subject here");
+                        simpleMailMessage.setText("test1");
+                        javaMailSender.send(simpleMailMessage);
+                        return simpleMailMessage;
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                        throw new RuntimeException(e);
+                    }
+                }
+        ).then();
+        return responseSent.retry(3).thenReturn(messageAddressPair);
     }
 
     /**
@@ -134,15 +179,15 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param userIdentity User identity that also specifies the data domain where the webhooks are defined.
      * @return Effective notification settings with webhooks that could be the default values.
      */
-    protected IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping,
-                                                               UserDomainIdentity userIdentity){
+    protected IncidentNotificationSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping,
+                                                       UserDomainIdentity userIdentity){
         ExecutionContext executionContext = executionContextFactory.create(userIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
-        DefaultIncidentWebhookNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultNotificationWebhook();
-        IncidentWebhookNotificationsSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
+        DefaultIncidentNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultIncidentNotifications();
+        IncidentNotificationSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
         if (defaultWebhooks == null) {
-            defaultWebhooks = new IncidentWebhookNotificationsSpec();
+            defaultWebhooks = new IncidentNotificationSpec();
         }
 
         if (incidentGrouping == null || incidentGrouping.getWebhooks() == null){
@@ -150,6 +195,22 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         } else {
             return incidentGrouping.getWebhooks().combineWithDefaults(defaultWebhooks);
         }
+    }
+
+    private SmtpServerConfigurationSpec loadSmtpServerConfiguration(UserDomainIdentity userIdentity){
+        ExecutionContext executionContext = executionContextFactory.create(userIdentity);
+        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
+        UserHome userHome = userHomeContext.getUserHome();
+        SmtpServerConfigurationSpec serverConfiguration;
+        if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null
+                || userHome.getSettings().getSpec().getSmtpServerConfiguration() == null) {
+            serverConfiguration = new SmtpServerConfigurationSpec();
+        }
+        else {
+            serverConfiguration = userHome.getSettings().getSpec().getSmtpServerConfiguration();
+        }
+
+        return serverConfiguration;
     }
 
 }

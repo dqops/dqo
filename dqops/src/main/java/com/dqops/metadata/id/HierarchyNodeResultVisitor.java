@@ -60,9 +60,9 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
@@ -658,11 +658,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
     /**
      * Accepts an incident notifications using webhooks configuration.
      *
-     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param incidentNotificationSpec Webhooks for incident notifications.
      * @param parameter                        Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, P parameter);
+    R accept(IncidentNotificationSpec incidentNotificationSpec, P parameter);
 
     /**
      * Accepts an incident configuration on a table level.
@@ -744,11 +744,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a default incident webhook notifications.
-     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notifications wrapper.
+     * @param defaultIncidentNotificationsWrapper Default incident webhook notifications wrapper.
      * @param parameter Visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, P parameter);
+    R accept(DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper, P parameter);
 
     /**
      * Accepts a data dictionary list.

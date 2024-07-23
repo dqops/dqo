@@ -69,10 +69,10 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("Configuration of Webhook URLs for new or updated incident notifications.")
+    @JsonPropertyDescription("Configuration of addresses for new or updated incident notifications.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private IncidentWebhookNotificationsSpec webhooks;
+    private IncidentNotificationSpec webhooks;
 
     /**
      * Returns the data quality issue grouping level used to group similar issues into incidents.
@@ -177,18 +177,18 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     }
 
     /**
-     * Returns the configuration of webhooks used for incident notifications.
-     * @return Webhooks configuration for incidents.
+     * Returns the configuration of addresses used for incident notifications.
+     * @return Addresses configuration for incidents.
      */
-    public IncidentWebhookNotificationsSpec getWebhooks() {
+    public IncidentNotificationSpec getWebhooks() {
         return webhooks;
     }
 
     /**
-     * Sets a new configuration of incident notification webhooks.
-     * @param webhooks New configuration of incident notification webhooks.
+     * Sets a new configuration of incident notification addresses.
+     * @param webhooks New configuration of incident notification addresses.
      */
-    public void setWebhooks(IncidentWebhookNotificationsSpec webhooks) {
+    public void setWebhooks(IncidentNotificationSpec webhooks) {
         setDirtyIf(!Objects.equals(this.webhooks, webhooks));
         this.webhooks = webhooks;
         propagateHierarchyIdToField(webhooks, "webhooks");
@@ -262,7 +262,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
             return new ConnectionIncidentGroupingSpec() {{
                 setGroupingLevel(IncidentGroupingLevel.table_dimension);
                 setDivideByDataGroups(true);
-                setWebhooks(new IncidentWebhookNotificationsSpec.IncidentWebhookNotificationsSpecSampleFactory().createSample());
+                setWebhooks(new IncidentNotificationSpec.IncidentNotificationSpecSampleFactory().createSample());
             }};
         }
     }

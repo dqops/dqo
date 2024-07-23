@@ -16,20 +16,20 @@
 package com.dqops.core.incidents;
 
 /**
- * A pair of a message and a webhook url that is sent as a notification.
+ * A pair of a message and a notification address that is sent as a notification.
  */
-public class MessageWebhookPair {
+public class MessageAddressPair {
     private final IncidentNotificationMessage incidentNotificationMessage;
-    private final String webhookUrl;
+    private final String notificationAddress;
 
     /**
-     * Creates an incident notification info with the target webhook url.
+     * Creates an incident notification info with the target address.
      * @param incidentNotificationMessage Notification message.
-     * @param webhookUrl Webhook url.
+     * @param notificationAddress Notification address.
      */
-    public MessageWebhookPair(IncidentNotificationMessage incidentNotificationMessage, String webhookUrl) {
+    public MessageAddressPair(IncidentNotificationMessage incidentNotificationMessage, String notificationAddress) {
         this.incidentNotificationMessage = incidentNotificationMessage;
-        this.webhookUrl = webhookUrl;
+        this.notificationAddress = notificationAddress;
     }
 
     /**
@@ -41,18 +41,18 @@ public class MessageWebhookPair {
     }
 
     /**
-     * Target webhook url.
-     * @return Webhook url.
+     * Target notification address.
+     * @return Notification address.
      */
-    public String getWebhookUrl() {
-        return webhookUrl;
+    public String getNotificationAddress() {
+        return notificationAddress;
     }
 
     @Override
     public String toString() {
-        return "MessageWebhookPair{" +
+        return "MessageAddressPair{" +
                 "incidentNotificationMessage=" + incidentNotificationMessage +
-                ", webhookUrl='" + webhookUrl + '\'' +
+                ", notificationAddress='" + notificationAddress + '\'' +
                 '}';
     }
 }

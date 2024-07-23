@@ -38,29 +38,29 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * Configuration of Webhook URLs used for new or updated incident's notifications.
- * Specifies the URLs of webhooks where the notification messages are sent.
+ * Configuration of addresses used for new or updated incident's notifications.
+ * Specifies the Webhook URL or email address where the notification messages are sent.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
-    private static final ChildHierarchyNodeFieldMapImpl<IncidentWebhookNotificationsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class IncidentNotificationSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
+    private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
+    @JsonPropertyDescription("Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentOpenedWebhookUrl;
 
-    @JsonPropertyDescription("Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
+    @JsonPropertyDescription("Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentAcknowledgedWebhookUrl;
 
-    @JsonPropertyDescription("Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
+    @JsonPropertyDescription("Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentResolvedWebhookUrl;
 
-    @JsonPropertyDescription("Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
+    @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedWebhookUrl;
 
     @JsonIgnore
@@ -155,11 +155,11 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
     }
 
     /**
-     * Returns a webhook url for an incident status.
+     * Returns a notification address for an incident status.
      * @param incidentStatus Incident status.
-     * @return Webhook URL for incident status.
+     * @return Notification address for incident status.
      */
-    public String getWebhookUrlForStatus(IncidentStatus incidentStatus) {
+    public String getNotificationAddressForStatus(IncidentStatus incidentStatus) {
         switch (incidentStatus) {
             case open:
                 return this.incidentOpenedWebhookUrl;
@@ -203,8 +203,8 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
      * Creates and returns a copy of this object.
      */
     @Override
-    public IncidentWebhookNotificationsSpec deepClone() {
-        IncidentWebhookNotificationsSpec cloned = (IncidentWebhookNotificationsSpec) super.deepClone();
+    public IncidentNotificationSpec deepClone() {
+        IncidentNotificationSpec cloned = (IncidentNotificationSpec) super.deepClone();
         return cloned;
     }
 
@@ -214,8 +214,8 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
      * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        IncidentWebhookNotificationsSpec cloned = this.deepClone();
+    public IncidentNotificationSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        IncidentNotificationSpec cloned = this.deepClone();
         cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl, lookupContext);
         cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl, lookupContext);
         cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl, lookupContext);
@@ -226,10 +226,10 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
     /**
      * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
      * @param defaultWebhooks Default incident webhook notification spec
-     * @return Combined IncidentWebhookNotificationsSpec object with default webhooks.
+     * @return Combined IncidentNotificationSpec object with default webhooks.
      */
-    public IncidentWebhookNotificationsSpec combineWithDefaults(IncidentWebhookNotificationsSpec defaultWebhooks){
-        IncidentWebhookNotificationsSpec clonedWebhooks = this.deepClone();
+    public IncidentNotificationSpec combineWithDefaults(IncidentNotificationSpec defaultWebhooks){
+        IncidentNotificationSpec clonedWebhooks = this.deepClone();
 
         if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
             clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
@@ -250,10 +250,10 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
         return clonedWebhooks;
     }
 
-    public static class IncidentWebhookNotificationsSpecSampleFactory implements SampleValueFactory<IncidentWebhookNotificationsSpec> {
+    public static class IncidentNotificationSpecSampleFactory implements SampleValueFactory<IncidentNotificationSpec> {
         @Override
-        public IncidentWebhookNotificationsSpec createSample() {
-            return new IncidentWebhookNotificationsSpec() {{
+        public IncidentNotificationSpec createSample() {
+            return new IncidentNotificationSpec() {{
                 setIncidentOpenedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/opened");
                 setIncidentAcknowledgedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
                 setIncidentResolvedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/resolved");

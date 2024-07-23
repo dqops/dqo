@@ -61,9 +61,9 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
@@ -848,14 +848,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts an incident notifications using webhooks configuration.
+     * Accepts an incident notifications using addresses configuration.
      *
-     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param incidentNotificationSpec Addresses for incident notifications.
      * @param parameter                        Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, T parameter) {
+    public TreeNodeTraversalResult accept(IncidentNotificationSpec incidentNotificationSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -968,14 +968,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a default incident webhook notification wrapper instance.
+     * Accepts a default incident notification wrapper instance.
      *
-     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notification wrapper instance.
+     * @param defaultIncidentNotificationsWrapper Default incident notification wrapper instance.
      * @param parameter                Visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, T parameter) {
+    public TreeNodeTraversalResult accept(DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

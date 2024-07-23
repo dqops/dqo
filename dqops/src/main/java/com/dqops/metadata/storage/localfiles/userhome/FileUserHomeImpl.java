@@ -29,7 +29,7 @@ import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionL
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.sources.FileConnectionListImpl;
-import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentWebhookNotificationsWrapperImpl;
+import com.dqops.metadata.storage.localfiles.defaultnotifications.FileDefaultIncidentNotificationsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.FileTableDefaultChecksPatternListImpl;
 import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.utils.serialization.JsonSerializer;
@@ -75,7 +75,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
                             FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
                             FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
-                            FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
+                            FileDefaultIncidentNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext,
                             boolean readOnly) {
         super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
@@ -116,7 +116,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer, readOnly);
         FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
         FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer, readOnly);
-        FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer, readOnly);
+        FileDefaultIncidentNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentNotificationsWrapperImpl(settingsFolder, yamlSerializer, readOnly);
 
         return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
                 sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
