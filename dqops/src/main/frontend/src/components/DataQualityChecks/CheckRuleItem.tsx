@@ -29,6 +29,12 @@ const classesMap = {
   fatal: 'bg-red-900'
 };
 
+const backgroundClassesMap = {
+  error: 'bg-orange-100',
+  warning: 'bg-yellow-100',
+  fatal: 'bg-red-100'
+};
+
 const CheckRuleItem = ({
   parameters,
   onChange,
@@ -66,14 +72,20 @@ const CheckRuleItem = ({
   return (
     <div
       className={
-        isSimpleMode
-          ? 'text-left text-gray-700 h-13 flex'
-          : 'text-left text-gray-700 h-13 flex items-center justify-center'
+        (isSimpleMode
+          ? 'text-left text-gray-700 h-20 flex items-center justify-center min-w-100'
+          : 'text-left text-gray-700 h-13') + backgroundClassesMap[type]
       }
     >
-      <div className="flex justify-center">
+      <div
+        className={clsx(
+          'flex justify-center items-center gap-x-2 min-w-38',
+          backgroundClassesMap[type],
+          isSimpleMode && ' items-center h-20 px-2'
+        )}
+      >
         {parameters?.configured === true ? (
-          <div className="flex items-center">
+          <div className="flex items-center ">
             {!isSimpleMode && (
               <IconButton
                 className={clsx(
