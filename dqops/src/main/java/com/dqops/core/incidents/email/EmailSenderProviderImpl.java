@@ -7,9 +7,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
+/**
+ * The provider class for the JavaEmailSender.
+ */
 @Component
 public class EmailSenderProviderImpl implements EmailSenderProvider {
 
+    /**
+     * Sets JavaMailSender with the SmtpServerConfigurationSpec values.
+     * @param smtpServerConfiguration SMTP server configuration.
+     * @return Configured JavaMailSender
+     */
     public JavaMailSender configureJavaMailSender(SmtpServerConfigurationSpec smtpServerConfiguration) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(smtpServerConfiguration.getHost());
@@ -26,7 +34,7 @@ public class EmailSenderProviderImpl implements EmailSenderProvider {
         } else {
             props.put("mail.smtp.starttls.enable", "true");
         }
-        props.put("mail.debug", "true");
+//        props.put("mail.debug", "true");
 
         return mailSender;
     }

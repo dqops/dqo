@@ -44,7 +44,6 @@ import tech.tablesaw.selection.Selection;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,7 +60,6 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private IncidentNotificationService incidentNotificationService;
     private final Object connectionsLock = new Object();
     private final Map<DataDomainConnectionKey, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
-    private final IncidentNotificationMessageFormatter incidentNotificationMessageFormatter;
     private final UserDomainIdentityFactory userDomainIdentityFactory;
     private final DqoIncidentsConfigurationProperties incidentsConfigurationProperties;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
@@ -71,7 +69,6 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
      *
      * @param incidentsSnapshotFactory               Incident snapshot factory.
      * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
-     * @param incidentNotificationMessageFormatter   Message formatter that creates formatted messages for Slack.
      * @param userDomainIdentityFactory              User data domain identity factory.
      * @param incidentsConfigurationProperties       Incidents configuration parameters.
      * @param defaultTimeZoneProvider                Default time zone provider.
@@ -79,13 +76,11 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                           IncidentNotificationService incidentNotificationService,
-                                          IncidentNotificationMessageFormatter incidentNotificationMessageFormatter,
                                           UserDomainIdentityFactory userDomainIdentityFactory,
                                           DqoIncidentsConfigurationProperties incidentsConfigurationProperties,
                                           DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
-        this.incidentNotificationMessageFormatter = incidentNotificationMessageFormatter;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
         this.incidentsConfigurationProperties = incidentsConfigurationProperties;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
@@ -560,8 +555,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                                 .connectionName(connectionName)
                                 .build();
 
-                        return IncidentNotificationMessage
-                                .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
+                        return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                     })
                     .collect(Collectors.toList());
 
@@ -635,8 +629,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             .incidentRow(this.allNewIncidentRows.row(newRowIndex))
                             .connectionName(incidentStatusChangeParameters.getConnectionName())
                             .build();
-                    return IncidentNotificationMessage
-                            .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
+                    return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                 }
             } else if (this.allExistingIncidentRows != null) {
                 Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
@@ -671,8 +664,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             .incidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex))
                             .connectionName(incidentStatusChangeParameters.getConnectionName())
                             .build();
-                    return IncidentNotificationMessage
-                            .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
+                    return IncidentNotificationMessage.fromIncidentRow(messageParameters);
                 }
             }
 

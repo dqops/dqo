@@ -17,10 +17,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * A creator for text field of incident notification message.
+ * A creator for text field of incident notification message in markdown format.
  */
 @Component
-public class IncidentNotificationMessageFormatterImpl implements IncidentNotificationMessageFormatter {
+public class IncidentNotificationMessageMarkdownFormatterImpl implements IncidentNotificationMessageMarkdownFormatter {
 
     private static final String KEY_VALUE_FORMAT = "%s" + ": %s";
     private static final String NEW_LINE = " \n";
@@ -33,14 +33,14 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
      * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
-    public IncidentNotificationMessageFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
-                                                    DefaultTimeZoneProvider defaultTimeZoneProvider) {
+    public IncidentNotificationMessageMarkdownFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
+                                                            DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
-     * Prepares string for text field of notification message, which is built from multiple fields from its parameters.
+     * Prepares string for text field of notification message in markdown format, which is built from multiple fields from its parameters.
      * @param messageParameters A container with parameters that are used to build text field and make up links to application.
      * @return Markdown formatted string
      */
@@ -99,6 +99,59 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
     }
 
     /**
+     * Prepares string for text field of notification message, which is built from multiple fields from it's parameters.
+     * @param notificationMessage A notification message.
+     * @return Markdown formatted string
+     */
+    public String prepareText(IncidentNotificationMessage notificationMessage){
+
+        String fullTableNameWithLink = formatToLink(
+                prepareUrlToTable(notificationMessage),
+                notificationMessage.getSchema() + "." + notificationMessage.getTable()
+        );
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getBlockQuotedLine(prepareHeader(notificationMessage.getStatus(),
+                fullTableNameWithLink
+        )));
+        stringBuilder.append(getBlockQuotedLine(""));
+
+        stringBuilder.append(extractInstantWithFormatting(notificationMessage.getFirstSeen(), IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
+        if(!notificationMessage.getStatus().equals(IncidentStatus.open)){
+            stringBuilder.append(extractInstantWithFormatting(notificationMessage.getLastSeen(), IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
+        }
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getQualityDimension(), IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckCategory(), IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
+        stringBuilder.append(String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                readableColumnName(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
+                RuleSeverityLevel.fromSeverityLevel(notificationMessage.getHighestSeverity()).name()));
+        stringBuilder.append(
+                String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                        "Total data quality issues",
+                        notificationMessage.getFailedChecksCount()));
+        stringBuilder.append(extractIntWithFormatting(notificationMessage.getTablePriority(), IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
+
+        if (notificationMessage.getIssueUrl() != null && !notificationMessage.getIssueUrl().isEmpty()) {
+            stringBuilder.append( String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
+                    formatToLink(notificationMessage.getIssueUrl(), "LINK")));
+        }
+
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getDataGroupName(), IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckType(), IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
+        stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckName(), IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
+
+        stringBuilder.append(getBlockQuotedLine(""));
+
+        stringBuilder.append(getBlockQuotedLine(formatToLink(
+                prepareUrlToIncident(notificationMessage),
+                "View in DQOps"
+        )));
+
+        return stringBuilder.toString();
+    }
+
+    /**
      * Prepares an url to an incident in application UI instance.
      * @param messageParameters Message parameters
      * @return A complete URL to an incident
@@ -116,6 +169,20 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
     }
 
     /**
+     * Prepares an url to an incident in application UI instance.
+     * @param notificationMessage Notification message
+     * @return A complete URL to an incident
+     */
+    private String prepareUrlToIncident(IncidentNotificationMessage notificationMessage){
+        return instanceCloudLoginService.getReturnBaseUrl()
+                + "/incidents/"
+                + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8) + "/"
+                + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getYear() + "/"
+                + notificationMessage.getFirstSeen().atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId()).getMonthValue() + "/"
+                + notificationMessage.getIncidentId();
+    }
+
+    /**
      * Prepares an url to table's details in application UI instance.
      * @param messageParameters Message parameters
      * @return A complete URL to table details
@@ -125,6 +192,19 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
                 + "/sources/connection/" + URLEncoder.encode(messageParameters.getConnectionName(), StandardCharsets.UTF_8)
                 + "/schema/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
                 + "/table/" + URLEncoder.encode(messageParameters.getIncidentRow().getString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME), StandardCharsets.UTF_8)
+                + "/detail";
+    }
+
+    /**
+     * Prepares an url to table's details in application UI instance.
+     * @param notificationMessage Notification message with details.
+     * @return A complete URL to table details
+     */
+    private String prepareUrlToTable(IncidentNotificationMessage notificationMessage){
+        return instanceCloudLoginService.getReturnBaseUrl()
+                + "/sources/connection/" + URLEncoder.encode(notificationMessage.getConnection(), StandardCharsets.UTF_8)
+                + "/schema/" + URLEncoder.encode(notificationMessage.getSchema(), StandardCharsets.UTF_8)
+                + "/table/" + URLEncoder.encode(notificationMessage.getTable(), StandardCharsets.UTF_8)
                 + "/detail";
     }
 
@@ -159,6 +239,21 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
     }
 
     /**
+     * Extracts a string value from selected column for Row object and applies formatting.
+     * @param value String value
+     * @param incidentsColumnName Column name used for extraction
+     * @return A formatted string value from selected column. If it does not exist a blank string is returned.
+     */
+    private String extractStringWithFormatting(String value, String incidentsColumnName){
+        if (value != null && !value.isEmpty()) {
+            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(incidentsColumnName),
+                    value);
+        }
+        return "";
+    }
+
+    /**
      * Extracts a string value of instant from selected column for Row object and applies formatting.
      * @param incidentRow Row object
      * @param incidentsColumnName Column name used for extraction
@@ -177,6 +272,23 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
     }
 
     /**
+     * Extracts a string value of instant from selected column for Row object and applies formatting.
+     * @param instant Instant time.
+     * @param incidentsColumnName Column name used for extraction.
+     * @return A formatted date time with GMT from selected column.
+     */
+    private String extractInstantWithFormatting(Instant instant, String incidentsColumnName){
+        ZonedDateTime zonedDateTime = instant.atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
+        ZoneOffset zoneOffset = this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(instant);
+        int hours = zoneOffset.getTotalSeconds() / 3600;
+
+        return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                readableColumnName(incidentsColumnName),
+                zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                        + " (GMT" + (hours > 0 ? "+":"") + hours + ")");
+    }
+
+    /**
      * Extracts a string value of int from selected column for Row object and applies formatting.
      * @param incidentRow
      * @param incidentsColumnName
@@ -184,6 +296,21 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
      */
     private String extractIntWithFormatting(Row incidentRow, String incidentsColumnName){
         int value = incidentRow.getInt(incidentsColumnName);
+        if(value > 0){
+            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                    readableColumnName(incidentsColumnName),
+                    value);
+        }
+        return "";
+    }
+
+    /**
+     * Applies formatting.
+     * @param value
+     * @param incidentsColumnName
+     * @return A formatted int from selected column. If contains a negative value a blank string is returned.
+     */
+    private String extractIntWithFormatting(int value, String incidentsColumnName){
         if(value > 0){
             return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
                     readableColumnName(incidentsColumnName),

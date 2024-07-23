@@ -16,6 +16,9 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
+/**
+ * SMTP server configuration specification.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)

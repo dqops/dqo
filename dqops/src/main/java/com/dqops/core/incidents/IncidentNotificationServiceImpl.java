@@ -55,23 +55,32 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     private JsonSerializer jsonSerializer;
     private ExecutionContextFactory executionContextFactory;
     private EmailSenderProvider emailSenderProvider;
+    private final IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter;
+    private final IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter;
+
 
     /**
      * Creates an incident notification service.
      *
-     * @param sharedHttpClientProvider Shared http client provider that manages the HTTP connection pooling.
-     * @param jsonSerializer           Json serializer.
-     * @param executionContextFactory  Execution context factory.
+     * @param sharedHttpClientProvider                     Shared http client provider that manages the HTTP connection pooling.
+     * @param jsonSerializer                               Json serializer.
+     * @param executionContextFactory                      Execution context factory.
+     * @param incidentNotificationMessageMarkdownFormatter
+     * @param incidentNotificationHtmlMessageFormatter
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
                                            JsonSerializer jsonSerializer,
                                            ExecutionContextFactory executionContextFactory,
-                                           EmailSenderProvider emailSenderProvider) {
+                                           EmailSenderProvider emailSenderProvider,
+                                           IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter,
+                                           IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
         this.executionContextFactory = executionContextFactory;
         this.emailSenderProvider = emailSenderProvider;
+        this.incidentNotificationMessageMarkdownFormatter = incidentNotificationMessageMarkdownFormatter;
+        this.incidentNotificationHtmlMessageFormatter = incidentNotificationHtmlMessageFormatter;
     }
 
     /**
@@ -107,8 +116,15 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                 .flatMap(messageAddressPair -> {
                     // todo: messageAddressPair might contains comma separated addresses
                     if(messageAddressPair.getNotificationAddress().contains("@")){
+                        String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
+                        messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
+
                         return sendEmailNotification(messageAddressPair, userIdentity);
                     }
+
+                    String incidentText = incidentNotificationMessageMarkdownFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
+                    messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
+
                     return sendWebhookNotification(messageAddressPair);
                 })
                 .onErrorContinue((Throwable ex, Object msg) -> {

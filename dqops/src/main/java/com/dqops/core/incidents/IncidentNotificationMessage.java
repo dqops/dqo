@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
-import lombok.ToString;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
@@ -146,9 +145,10 @@ public class IncidentNotificationMessage {
     private IncidentStatus status;
 
     /**
-     * Notification text in Markdown format that contains the most important fields from the class.
+     * Notification text that contains the most important fields from the class.
+     * The "text" field of webhook body request is directly used by Slack notifications.
      */
-    @JsonPropertyDescription("Notification text in Markdown format that contains the most important fields from the class.")
+    @JsonPropertyDescription("Notification text that contains the most important fields from the class.")
     private String text;
 
     /**
@@ -156,9 +156,7 @@ public class IncidentNotificationMessage {
      * @param messageParameters Incident notification message parameters with Tablesaw row.
      * @return Incident notification message.
      */
-    public static IncidentNotificationMessage fromIncidentRow(
-            IncidentNotificationMessageParameters messageParameters,
-            IncidentNotificationMessageFormatter textCreator) {
+    public static IncidentNotificationMessage fromIncidentRow(IncidentNotificationMessageParameters messageParameters) {
 
         Row incidentRow = messageParameters.getIncidentRow();
 
@@ -195,8 +193,6 @@ public class IncidentNotificationMessage {
         message.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         message.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
-
-        message.setText(textCreator.prepareText(messageParameters));
 
         return message;
     }
