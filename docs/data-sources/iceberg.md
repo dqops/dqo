@@ -1,5 +1,5 @@
 ---
-title: How to activate data observability for CSV files
+title: How to activate data observability for Iceberg files
 ---
 # How to activate data observability for Iceberg table
 Read this guide to learn how to configure DQOps to use Iceberg table from the UI, command-line interface, or directly in YAML files, and activate monitoring.
@@ -85,7 +85,7 @@ The following example shows a folder structure with Iceberg table.
 To load the Iceberg table in DQOps path prefix must be set to the table's parent folder: **/usr/share**. 
 The selection of the specific Iceberg table is done on the next step of importing the table metadata.
 
-### Additional CSV format options
+### Additional Iceberg format options
 
 The allow moved paths option ensures that some path resolution is performed, which allows scanning Iceberg tables that are moved.
 
@@ -130,14 +130,14 @@ Now we can import Iceberg table.
 
 2. Select the tables (folders with Iceberg table) you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-csv.png){ loading=lazy; width="1200px" }
+    ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-iceberg.png){ loading=lazy; width="1200px" }
 
 When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count,
 table availability, and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m.
 By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks,
 or modify the schedule for newly imported tables.
 
-![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-csv.png){ loading=lazy; width="1200px" }
+![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/duckdb/importing-tables-advisor-iceberg.png){ loading=lazy; width="1200px" }
 
 ## Add an Iceberg connection using DQOps Shell
 
@@ -222,7 +222,7 @@ character can be used at the beginning, middle, or end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the CSV data source connection.
+Below is a sample YAML file showing an example configuration of the Iceberg data source connection.
 
 ``` yaml
 apiVersion: dqo/v1

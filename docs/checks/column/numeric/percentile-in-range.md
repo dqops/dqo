@@ -19,9 +19,9 @@ The **percentile in range** data quality check has the following variants for ea
 
 Verifies that the percentile of all values in a column is not outside the expected range.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_percentile_in_range`</span>|The selected percentile of numeric values is in the range|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -1348,9 +1348,9 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_percentile_in_range`</span>|The selected percentile of numeric values is in the range|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -2679,9 +2679,9 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_percentile_in_range`</span>|The selected percentile of numeric values is in the range|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -4010,9 +4010,9 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_percentile_in_range`</span>|The selected percentile of numeric values is in the range|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -5479,9 +5479,9 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_percentile_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_percentile_in_range`</span>|The selected percentile of numeric values is in the range|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 

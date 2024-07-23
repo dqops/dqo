@@ -7,3 +7,5 @@ spec:
   help_text: The check counts the percentage of values in the column that are above
     the value defined by the user as a parameter. Stores a separate data quality check
     result for each monthly partition.
+  friendly_name: Maximum percentage of numeric values above the maximum value
+  default_severity: error

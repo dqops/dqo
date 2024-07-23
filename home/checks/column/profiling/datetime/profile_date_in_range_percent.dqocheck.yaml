@@ -8,4 +8,6 @@ spec:
     \ within a reasonable range of dates. The default configuration detects fake dates\
     \ such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and\
     \ raises a data quality issue when too many dates are found."
+  friendly_name: Minimum percentage of rows containing dates within an expected range
   standard: true
+  default_severity: error

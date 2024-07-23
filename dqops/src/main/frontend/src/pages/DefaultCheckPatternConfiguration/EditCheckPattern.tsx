@@ -1,5 +1,6 @@
 import { AxiosPromise, AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   CheckContainerModel,
   DefaultColumnChecksPatternListModel,
@@ -11,6 +12,7 @@ import Button from '../../components/Button';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
+import { IRootState } from '../../redux/reducers';
 import {
   DefaultColumnCheckPatternsApiClient,
   DefaultTableCheckPatternsApiClient
@@ -72,6 +74,44 @@ const tabsColumnChecks = [
   }
 ];
 
+const tabsTableChecksFreeTrial = [
+  {
+    label: 'Target table',
+    value: 'table-target'
+  },
+  {
+    label: 'Profiling',
+    value: CheckRunMonitoringScheduleGroup.profiling
+  },
+  {
+    label: 'Monitoring',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
+  },
+  {
+    label: 'Partition',
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
+  }
+];
+
+const tabsColumnChecksFreeTrial = [
+  {
+    label: 'Target column',
+    value: 'table-target'
+  },
+  {
+    label: 'Profiling',
+    value: CheckRunMonitoringScheduleGroup.profiling
+  },
+  {
+    label: 'Monitoring',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
+  },
+  {
+    label: 'Partition',
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
+  }
+];
+
 type TCheckTypes =
   | 'profiling'
   | 'monitoring_daily'
@@ -105,8 +145,19 @@ export default function EditCheckPattern({
   pattern_name,
   create
 }: TEditCheckPatternProps) {
+  const { userProfile } = useSelector((state: IRootState) => state.job);
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
-  const tabs = type === 'column' ? tabsColumnChecks : tabsTableChecks;
+  const tabs =
+    userProfile &&
+    userProfile.license_type &&
+    userProfile.license_type?.toLowerCase() !== 'free' &&
+    !userProfile.trial_period_expires_at
+      ? type === 'column'
+        ? tabsColumnChecks
+        : tabsTableChecks
+      : type === 'column'
+      ? tabsColumnChecksFreeTrial
+      : tabsTableChecksFreeTrial;
 
   const [activeTab, setActiveTab] = useState('table-target');
   const [checkContainers, setCheckContainers] =

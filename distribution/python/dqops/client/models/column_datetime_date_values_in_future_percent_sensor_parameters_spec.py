@@ -14,19 +14,25 @@ class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
+        max_future_days (Union[Unset, float]): Maximum accepted number of days from now that are not treated as days
+            from future. If value is not defined by user then default value is 0.0.
     """
 
     filter_: Union[Unset, str] = UNSET
+    max_future_days: Union[Unset, float] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
+        max_future_days = self.max_future_days
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
+        if max_future_days is not UNSET:
+            field_dict["max_future_days"] = max_future_days
 
         return field_dict
 
@@ -35,8 +41,11 @@ class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
+        max_future_days = d.pop("max_future_days", UNSET)
+
         column_datetime_date_values_in_future_percent_sensor_parameters_spec = cls(
             filter_=filter_,
+            max_future_days=max_future_days,
         )
 
         column_datetime_date_values_in_future_percent_sensor_parameters_spec.additional_properties = (

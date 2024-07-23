@@ -7,4 +7,6 @@ spec:
   help_text: Measures the percentage of **true** values in a boolean column and verifies
     that it is within the accepted range. Stores a separate data quality check result
     for each monthly partition.
+  friendly_name: Percentage of true values in bool column
   standard: true
+  default_severity: error

@@ -40,6 +40,10 @@ const sourceFilesTypeOptions = [
   {
     label: 'Iceberg',
     value: DuckdbParametersSpecFilesFormatTypeEnum.iceberg
+  },
+  {
+    label: 'Delta Lake',
+    value: DuckdbParametersSpecFilesFormatTypeEnum.delta_lake
   }
 ];
 
@@ -141,7 +145,12 @@ export default function FileFormatConfiguration({
               className="text-sm"
             />
           ) : (
-            <div className="font-bold">{fileFormatType}</div>
+            <div className="font-bold">
+              {
+                sourceFilesTypeOptions.find((x) => x.value === fileFormatType)
+                  ?.label
+              }
+            </div>
           )}
         </div>
         {/* {freezeFileType && <div>{fileFormatType}</div>} */}

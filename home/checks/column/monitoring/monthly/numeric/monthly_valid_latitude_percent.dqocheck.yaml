@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentage of valid latitude values in a column does
     not fall below the minimum accepted percentage. Stores the most recent value for
     each month when the data quality check was evaluated.
+  friendly_name: Minimum percentage of rows containing valid latitude values
+  default_severity: error

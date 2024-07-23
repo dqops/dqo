@@ -8,3 +8,5 @@ spec:
     the most recent day. Retrieves the metadata of the monitored table and calculates
     an unordered hash of the column names. Compares the current hash to the previously
     known hash to detect any changes to the list of columns.
+  friendly_name: Detect if columns were added or removed
+  default_severity: error

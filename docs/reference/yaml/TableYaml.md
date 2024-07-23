@@ -785,6 +785,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`iceberg`](./ConnectionYaml.md#icebergfileformatspec)</span>|Iceberg file format specification.|*[IcebergFileFormatSpec](./ConnectionYaml.md#icebergfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`delta_lake`](./ConnectionYaml.md#deltalakefileformatspec)</span>|Delta Lake file format specification.|*[DeltaLakeFileFormatSpec](./ConnectionYaml.md#deltalakefileformatspec)*| | | |
 |<span class="no-wrap-code ">[`file_paths`](./TableYaml.md#filepathlistspec)</span>|The list of paths to files with data that are used as a source.|*[FilePathListSpec](./TableYaml.md#filepathlistspec)*| | | |
 
 

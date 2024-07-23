@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/between_floats
   help_text: Verifies that the percentile 25 of all values in a column is not outside
     the expected range.
+  friendly_name: The selected 25th percentile of numeric values is in the range
+  default_severity: error

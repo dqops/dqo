@@ -12,6 +12,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -43,6 +44,7 @@ public class FileFormatSpec extends AbstractSpec {
             put("json", o -> o.json);
             put("parquet", o -> o.parquet);
             put("iceberg", o -> o.iceberg);
+            put("delta_lake", o -> o.deltaLake);
         }
     };
 
@@ -65,6 +67,11 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private IcebergFileFormatSpec iceberg;
+
+    @JsonPropertyDescription("Delta Lake file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DeltaLakeFileFormatSpec deltaLake;
 
     @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -126,21 +133,39 @@ public class FileFormatSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the iceberg file format specification.
-     * @return Iceberg file format specification.
+     * Returns the Iceberg table format specification.
+     * @return Iceberg table format specification.
      */
     public IcebergFileFormatSpec getIceberg() {
         return iceberg;
     }
 
     /**
-     * Sets the iceberg file format specification.
-     * @param iceberg Iceberg file format specification.
+     * Sets the Iceberg table format specification.
+     * @param iceberg Iceberg table format specification.
      */
     public void setIceberg(IcebergFileFormatSpec iceberg) {
         setDirtyIf(!Objects.equals(this.iceberg, iceberg));
         this.iceberg = iceberg;
         propagateHierarchyIdToField(iceberg, "iceberg");
+    }
+
+    /**
+     * Returns the Delta Lake table format specification.
+     * @return Delta Lake table format specification.
+     */
+    public DeltaLakeFileFormatSpec getDeltaLake() {
+        return deltaLake;
+    }
+
+    /**
+     * Sets the Delta Lake table format specification.
+     * @param deltaLake Delta Lake table file format specification.
+     */
+    public void setDeltaLake(DeltaLakeFileFormatSpec deltaLake) {
+        setDirtyIf(!Objects.equals(this.deltaLake, deltaLake));
+        this.deltaLake = deltaLake;
+        propagateHierarchyIdToField(deltaLake, "delta_lake");
     }
 
     /**
@@ -198,6 +223,7 @@ public class FileFormatSpec extends AbstractSpec {
             case json: return json.buildSourceTableOptionsString(filePathList, tableSpec);
             case parquet: return parquet.buildSourceTableOptionsString(filePathList, tableSpec);
             case iceberg: return iceberg.buildSourceTableOptionsString(filePathList, tableSpec);
+            case delta_lake: return deltaLake.buildSourceTableOptionsString(filePathList, tableSpec);
             default: throw new RuntimeException("Cant create table options string for the given files: " + filePathList);
         }
     }
@@ -213,6 +239,7 @@ public class FileFormatSpec extends AbstractSpec {
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
             case iceberg: return this.getIceberg() != null;
+            case delta_lake: return this.getDeltaLake() != null;
             default: throw new RuntimeException("The file format is not supported : " + duckdbFilesFormatType);
         }
     }
@@ -305,6 +332,12 @@ public class FileFormatSpec extends AbstractSpec {
         }
         if (cloned.parquet != null) {
             cloned.parquet = cloned.parquet.deepClone();
+        }
+        if (cloned.iceberg != null) {
+            cloned.iceberg = cloned.iceberg.deepClone();
+        }
+        if (cloned.deltaLake != null) {
+            cloned.deltaLake = cloned.deltaLake.deepClone();
         }
         if (cloned.filePaths != null) {
             cloned.filePaths = cloned.filePaths.deepClone();

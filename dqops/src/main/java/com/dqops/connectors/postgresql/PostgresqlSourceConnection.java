@@ -38,6 +38,10 @@ import java.util.stream.Collectors;
 @Component("postgresql-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean driverRegistered = false;
+
     /**
      * Injection constructor for the postgresql connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -51,12 +55,31 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(){
+        if(driverRegistered){
+            return;
+        }
+        try {
+            synchronized (driverRegisterLock){
+                Class.forName("org.postgresql.Driver");
+                driverRegistered = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        registerDriver();
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
@@ -87,6 +110,8 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+        dataSourceProperties.putIfAbsent("connectTimeout", 10);
+        dataSourceProperties.putIfAbsent("loginTimeout", 10);
 
         if (postgresqlSpec.getSslmode() != null){
             dataSourceProperties.put("sslmode", postgresqlSpec.getSslmode().getValue());

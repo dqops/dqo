@@ -7,4 +7,6 @@ spec:
   help_text: "Detects if the number of column matches an expected number. Retrieves\
     \ the metadata of the monitored table, counts the number of columns and compares\
     \ it to an expected value (an expected number of columns)."
+  friendly_name: Expected column count
   standard: true
+  default_severity: error

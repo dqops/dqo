@@ -18,9 +18,9 @@ The **distinct count** data quality check has the following variants for each
 
 Verifies that the number of distinct values stays within an accepted range.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_distinct_count`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_count`</span>|Verify that the count of distinct values is in the expected range|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -913,9 +913,9 @@ ___
 
 Verifies that the number of distinct values stays within an accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_distinct_count`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_count`</span>|Verify that the count of distinct values is in the expected range|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1810,9 +1810,9 @@ ___
 
 Verifies  that the number of distinct values stays within an accepted range. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_distinct_count`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_distinct_count`</span>|Verify that the count of distinct values is in the expected range|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2707,9 +2707,9 @@ ___
 
 Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_distinct_count`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_count`</span>|Verify that the count of distinct values is in the expected range|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3708,9 +3708,9 @@ ___
 
 Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_distinct_count`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_distinct_count`</span>|Verify that the count of distinct values is in the expected range|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Uniqueness](../../../dqo-concepts/data-quality-dimensions.md#data-uniqueness)|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 

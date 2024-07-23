@@ -34,7 +34,9 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpe
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.*;
-import com.dqops.metadata.defaultchecks.column.*;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
@@ -68,8 +70,11 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.fileformat.*;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FilePathListSpec;
+import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -805,6 +810,15 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(IcebergFileFormatSpec icebergFileFormatSpec, P parameter);
+
+    /**
+     * Accepts a Delta Lake file format specification.
+     *
+     * @param deltaLakeFileFormatSpec Delta Lake file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(DeltaLakeFileFormatSpec deltaLakeFileFormatSpec, P parameter);
 
     /**
      * Accepts a file path list specification.

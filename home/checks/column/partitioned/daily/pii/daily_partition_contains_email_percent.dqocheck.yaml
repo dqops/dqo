@@ -7,4 +7,6 @@ spec:
   help_text: Detects emails in text columns. Verifies that the percentage of rows
     that contains emails in a column does not exceed the minimum accepted percentage.
     Stores a separate data quality check result for each daily partition.
+  friendly_name: Detect emails inside text columns
   standard: true
+  default_severity: error

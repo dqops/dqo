@@ -10,22 +10,24 @@ import {
   setUpdatedSchedulingGroup,
   updateConnectionSchedulingGroup
 } from '../../../redux/actions/connection.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
 import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import ScheduleView from '../../ScheduleView';
 import Tabs from '../../Tabs';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useDecodedParams } from '../../../utils';
 
 const ScheduleDetail = () => {
   const {
     connection,
     checkTypes
   }: { checkTypes: CheckTypes; connection: string } = useDecodedParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job);
 
   const getPageTabs = () => {
     switch (checkTypes) {
@@ -38,52 +40,91 @@ const ScheduleDetail = () => {
         ];
       }
       case CheckTypes.PARTITIONED: {
-        return [
-          {
-            label: 'Partition Daily',
-            value: CheckRunMonitoringScheduleGroup.partitioned_daily
-          },
-          {
-            label: 'Partition Monthly',
-            value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-          }
-        ];
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Partition Daily',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              },
+              {
+                label: 'Partition Monthly',
+                value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Partition',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              }
+            ];
       }
       case CheckTypes.MONITORING: {
-        return [
-          {
-            label: 'Monitoring Daily',
-            value: CheckRunMonitoringScheduleGroup.monitoring_daily
-          },
-          {
-            label: 'Monitoring Monthly',
-            value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-          }
-        ];
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Monitoring Daily',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+              {
+                label: 'Monitoring Monthly',
+                value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Monitoring',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              }
+            ];
       }
       default: {
-        return [
-          {
-            label: 'Profiling',
-            value: CheckRunMonitoringScheduleGroup.profiling
-          },
-          {
-            label: 'Monitoring Daily',
-            value: CheckRunMonitoringScheduleGroup.monitoring_daily
-          },
-          {
-            label: 'Monitoring Monthly',
-            value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-          },
-          {
-            label: 'Partition Daily',
-            value: CheckRunMonitoringScheduleGroup.partitioned_daily
-          },
-          {
-            label: 'Partition Monthly',
-            value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-          }
-        ];
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Profiling',
+                value: CheckRunMonitoringScheduleGroup.profiling
+              },
+              {
+                label: 'Monitoring Daily',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+              {
+                label: 'Monitoring Monthly',
+                value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+              },
+              {
+                label: 'Partition Daily',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              },
+              {
+                label: 'Partition Monthly',
+                value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Profiling',
+                value: CheckRunMonitoringScheduleGroup.profiling
+              },
+              {
+                label: 'Monitoring',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+
+              {
+                label: 'Partition',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              }
+            ];
       }
     }
   };

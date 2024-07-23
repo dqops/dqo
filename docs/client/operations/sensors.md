@@ -44,11 +44,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
     **Execution**
 
     ```bash
-    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/table/volume/row_count^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+		"{\"full_sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -71,7 +71,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -87,7 +87,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = create_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -113,7 +113,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -129,7 +129,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await create_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -158,7 +158,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -174,7 +174,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = create_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -203,7 +203,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -219,7 +219,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await create_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -262,7 +262,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     **Execution**
 
     ```bash
-    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/table/volume/row_count^
 		-H "Accept: application/json"
 	
     ```
@@ -282,7 +282,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = delete_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -303,7 +303,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await delete_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -327,7 +327,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = delete_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -351,7 +351,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await delete_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -647,7 +647,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     **Execution**
 
     ```bash
-    curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+    curl http://localhost:8888/api/sensors/sample_target/sample_category/table/volume/row_count^
 		-H "Accept: application/json"
 	
     ```
@@ -658,7 +658,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
         ```
         {
-		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "full_sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		  "sensor_definition_spec" : {
 		    "fields" : [ {
 		      "field_name" : "sample_string_param",
@@ -692,7 +692,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = get_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -703,7 +703,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
         ```
         SensorModel(
-			full_sensor_name='sample_target/sample_category/sample_sensor',
+			full_sensor_name='sample_target/sample_category/table/volume/row_count',
 			sensor_definition_spec=SensorDefinitionSpec(
 				fields=ParameterDefinitionsListSpec(),
 				requires_event_timestamp=False,
@@ -736,7 +736,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await get_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -747,7 +747,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
         ```
         SensorModel(
-			full_sensor_name='sample_target/sample_category/sample_sensor',
+			full_sensor_name='sample_target/sample_category/table/volume/row_count',
 			sensor_definition_spec=SensorDefinitionSpec(
 				fields=ParameterDefinitionsListSpec(),
 				requires_event_timestamp=False,
@@ -783,7 +783,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = get_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -794,7 +794,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
         ```
         SensorModel(
-			full_sensor_name='sample_target/sample_category/sample_sensor',
+			full_sensor_name='sample_target/sample_category/table/volume/row_count',
 			sensor_definition_spec=SensorDefinitionSpec(
 				fields=ParameterDefinitionsListSpec(),
 				requires_event_timestamp=False,
@@ -830,7 +830,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await get_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client
 	)
 	
@@ -841,7 +841,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     
         ```
         SensorModel(
-			full_sensor_name='sample_target/sample_category/sample_sensor',
+			full_sensor_name='sample_target/sample_category/table/volume/row_count',
 			sensor_definition_spec=SensorDefinitionSpec(
 				fields=ParameterDefinitionsListSpec(),
 				requires_event_timestamp=False,
@@ -1103,11 +1103,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
     **Execution**
 
     ```bash
-    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/table/volume/row_count^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+		"{\"full_sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -1130,7 +1130,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -1146,7 +1146,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = update_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1172,7 +1172,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -1188,7 +1188,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await update_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1217,7 +1217,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -1233,7 +1233,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = update_sensor.sync(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1262,7 +1262,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	request_body = SensorModel(
-		full_sensor_name='sample_target/sample_category/sample_sensor',
+		full_sensor_name='sample_target/sample_category/table/volume/row_count',
 		sensor_definition_spec=SensorDefinitionSpec(
 			fields=ParameterDefinitionsListSpec(),
 			requires_event_timestamp=False,
@@ -1278,7 +1278,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	)
 	
 	call_result = await update_sensor.asyncio(
-	    'sample_target/sample_category/sample_sensor',
+	    'sample_target/sample_category/table/volume/row_count',
 	    client=dqops_client,
 	    json_body=request_body
 	)

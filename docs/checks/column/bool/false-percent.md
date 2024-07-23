@@ -18,9 +18,9 @@ The **false percent** data quality check has the following variants for each
 
 Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_false_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_false_percent`</span>|Percentage of false values in bool column|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1245,9 +1245,9 @@ ___
 
 Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_false_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_false_percent`</span>|Percentage of false values in bool column|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2474,9 +2474,9 @@ ___
 
 Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_false_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_false_percent`</span>|Percentage of false values in bool column|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3703,9 +3703,9 @@ ___
 
 Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_false_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_false_percent`</span>|Percentage of false values in bool column|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5036,9 +5036,9 @@ ___
 
 Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_false_percent`</span>|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_false_percent`</span>|Percentage of false values in bool column|[bool](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Reasonableness](../../../dqo-concepts/data-quality-dimensions.md#data-reasonableness)|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*between_percent*](../../../reference/rules/Comparison.md#between-percent)|:material-check-bold:|
 
 **Command-line examples**
 

@@ -9,4 +9,5 @@ export type TConfiguration =
   | CsvFileFormatSpec
   | JsonFileFormatSpec
   | ParquetFileFormatSpec
-  | IcebergFileFormatSpec;
+  | IcebergFileFormatSpec
+  ;

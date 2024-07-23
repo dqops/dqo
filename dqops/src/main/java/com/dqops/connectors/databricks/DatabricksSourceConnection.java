@@ -48,6 +48,10 @@ import java.util.stream.Collectors;
 @Component("databricks-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object driverRegisterLock = new Object();
+    private static boolean driverRegistered = false;
+
     /**
      * Injection constructor for the databricks connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -74,6 +78,24 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+
+    /**
+     * Manually registers the JDBC Driver allowing the control of the registration time.
+     */
+    private static void registerDriver(){
+        if(driverRegistered){
+            return;
+        }
+        try {
+            synchronized (driverRegisterLock){
+                Class.forName("com.databricks.client.jdbc.Driver");
+                driverRegistered = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Creates a hikari connection pool config for the connection specification.
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
@@ -81,12 +103,7 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
-
-        try {
-            Class.forName("com.databricks.client.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        registerDriver();
 
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();

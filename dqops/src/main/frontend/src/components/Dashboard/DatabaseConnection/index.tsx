@@ -253,7 +253,8 @@ filterPropertiesDirectories(database)
           nameOfDatabase === 'CSV' ||
           nameOfDatabase === 'Parquet' ||
           nameOfDatabase === 'JSON' ||
-          nameOfDatabase === 'Iceberg'
+          nameOfDatabase === 'Iceberg' ||
+          nameOfDatabase === 'Delta Lake'
         }
       />
     ),

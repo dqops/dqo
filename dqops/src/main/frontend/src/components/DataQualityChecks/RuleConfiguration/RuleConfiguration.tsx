@@ -19,8 +19,8 @@ type ConfigurationType = 'error' | 'warning' | 'fatal' | '' | 'multiple_levels';
 
 const options = [
   { value: '', label: 'Disabled' },
-  { value: 'error', label: 'Error' },
   { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
   { value: 'fatal', label: 'Fatal' },
   { value: 'multiple_levels', label: 'Multiple Levels' }
 ];
@@ -102,6 +102,10 @@ export default function RuleConfiguration({
     }
   }, [ruleParamenterConfigured]);
 
+  useEffect(() => {
+    onChangeConfigurationType(getConfiguredType());
+  }, [enabledType]);
+
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
       case '':
@@ -109,68 +113,73 @@ export default function RuleConfiguration({
       case 'warning':
         return (
           <td className="py-2 px-4 bg-yellow-100 relative">
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.warning}
-              onChange={(warning) =>
-                handleChange({
-                  rule: {
-                    ...check.rule,
-                    warning
-                  }
-                })
-              }
-              type="warning"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-              isSimpleMode={true}
-            />
-            <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+            <div className="flex items-center justify-center">
+              <CheckRuleItem
+                disabled={isDisabled}
+                parameters={check?.rule?.warning}
+                onChange={(warning) =>
+                  handleChange({
+                    rule: {
+                      ...check.rule,
+                      warning
+                    }
+                  })
+                }
+                type="warning"
+                onUpdate={onUpdate}
+                changeEnabled={changeEnabled}
+                configuredType={enabledType}
+                isSimpleMode={true}
+              />
+            </div>
           </td>
         );
       case 'error':
         return (
           <td className="py-2 px-4 bg-orange-100">
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.error}
-              onChange={(error) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    error
-                  }
-                })
-              }
-              type="error"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-              isSimpleMode={true}
-            />
+            <div className="flex items-center justify-center">
+              <CheckRuleItem
+                disabled={isDisabled}
+                parameters={check?.rule?.error}
+                onChange={(error) =>
+                  handleChange({
+                    rule: {
+                      ...check?.rule,
+                      error
+                    }
+                  })
+                }
+                type="error"
+                onUpdate={onUpdate}
+                changeEnabled={changeEnabled}
+                configuredType={enabledType}
+                isSimpleMode={true}
+              />
+            </div>
           </td>
         );
       case 'fatal':
         return (
           <td className="py-2 px-4 bg-red-100 h-18">
-            <CheckRuleItem
-              disabled={isDisabled}
-              parameters={check?.rule?.fatal}
-              onChange={(fatal) =>
-                handleChange({
-                  rule: {
-                    ...check?.rule,
-                    fatal
-                  }
-                })
-              }
-              type="fatal"
-              onUpdate={onUpdate}
-              changeEnabled={changeEnabled}
-              configuredType={enabledType}
-              isSimpleMode={true}
-            />
+            <div className="flex items-center justify-center">
+              <CheckRuleItem
+                disabled={isDisabled}
+                parameters={check?.rule?.fatal}
+                onChange={(fatal) =>
+                  handleChange({
+                    rule: {
+                      ...check?.rule,
+                      fatal
+                    }
+                  })
+                }
+                type="fatal"
+                onUpdate={onUpdate}
+                changeEnabled={changeEnabled}
+                configuredType={enabledType}
+                isSimpleMode={true}
+              />
+            </div>
           </td>
         );
       case 'multiple_levels':
@@ -193,7 +202,7 @@ export default function RuleConfiguration({
                 changeEnabled={changeEnabled}
                 configuredType={enabledType}
               />
-              <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
+              <div className="w-4 bg-white absolute h-full right-0 top-0"></div>
             </td>
             <td className="py-2 px-4 bg-orange-100">
               <CheckRuleItem

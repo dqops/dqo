@@ -6,5 +6,6 @@ spec:
   rule_name: change/change_percent
   help_text: Detects when the volume (row count) changes since the last known row
     count from a previous month exceeds the maximum accepted change percentage.
+  friendly_name: Maximum relative change in the row count since the last known value
   standard: true
   default_severity: warning

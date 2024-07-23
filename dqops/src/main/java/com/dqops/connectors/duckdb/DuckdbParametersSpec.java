@@ -27,6 +27,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
 import com.dqops.metadata.sources.fileformat.csv.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.deltalake.DeltaLakeFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.iceberg.IcebergFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
@@ -63,6 +64,8 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             put("csv", o -> o.csv);
             put("json", o -> o.json);
             put("parquet", o -> o.parquet);
+            put("iceberg", o -> o.iceberg);
+            put("delta_lake", o -> o.deltaLake);
         }
     };
 
@@ -102,6 +105,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private IcebergFileFormatSpec iceberg;
+
+    @JsonPropertyDescription("Delta Lake file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DeltaLakeFileFormatSpec deltaLake;
 
     @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -274,21 +282,40 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the iceberg file format specification.
-     * @return Iceberg file format specification.
+     * Returns the Iceberg table format specification.
+     * @return Iceberg table format specification.
      */
     public IcebergFileFormatSpec getIceberg() {
         return iceberg;
     }
 
     /**
-     * Sets the iceberg file format specification.
-     * @param iceberg Iceberg file format specification.
+     * Sets the iceberg table format specification.
+     * @param iceberg Iceberg table format specification.
      */
     public void setIceberg(IcebergFileFormatSpec iceberg) {
         setDirtyIf(!Objects.equals(this.iceberg, iceberg));
         this.iceberg = iceberg;
         propagateHierarchyIdToField(iceberg, "iceberg");
+    }
+
+
+    /**
+     * Returns the Delta Lake table format specification.
+     * @return Delta Lake table format specification.
+     */
+    public DeltaLakeFileFormatSpec getDeltaLake() {
+        return deltaLake;
+    }
+
+    /**
+     * Sets the Delta Lake table format specification.
+     * @param deltaLake Delta Lake table format specification.
+     */
+    public void setDeltaLake(DeltaLakeFileFormatSpec deltaLake) {
+        setDirtyIf(!Objects.equals(this.deltaLake, deltaLake));
+        this.deltaLake = deltaLake;
+        propagateHierarchyIdToField(deltaLake, "delta_lake");
     }
 
     /**
@@ -578,6 +605,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
             case json: return this.getJson() != null;
             case parquet: return this.getParquet() != null;
             case iceberg: return this.getIceberg() != null;
+            case delta_lake: return this.getDeltaLake() != null;
             default: throw new RuntimeException("The file format is not supported : " + filesFormatType);
         }
     }

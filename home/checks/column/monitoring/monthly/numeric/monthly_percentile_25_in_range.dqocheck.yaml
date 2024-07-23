@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentile 25 of all values in a column is not outside
     the expected range. Stores the most recent value for each month when the data
     quality check was evaluated.
+  friendly_name: The selected 25th percentile of numeric values is in the range
+  default_severity: error

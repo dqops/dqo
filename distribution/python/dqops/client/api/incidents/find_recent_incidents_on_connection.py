@@ -19,6 +19,7 @@ def _get_kwargs(
     acknowledged: Union[Unset, None, bool] = UNSET,
     resolved: Union[Unset, None, bool] = UNSET,
     muted: Union[Unset, None, bool] = UNSET,
+    severity: Union[Unset, None, int] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -40,6 +41,8 @@ def _get_kwargs(
     params["resolved"] = resolved
 
     params["muted"] = muted
+
+    params["severity"] = severity
 
     params["page"] = page
 
@@ -112,6 +115,7 @@ def sync_detailed(
     acknowledged: Union[Unset, None, bool] = UNSET,
     resolved: Union[Unset, None, bool] = UNSET,
     muted: Union[Unset, None, bool] = UNSET,
+    severity: Union[Unset, None, int] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -131,6 +135,7 @@ def sync_detailed(
         acknowledged (Union[Unset, None, bool]):
         resolved (Union[Unset, None, bool]):
         muted (Union[Unset, None, bool]):
+        severity (Union[Unset, None, int]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
@@ -154,6 +159,7 @@ def sync_detailed(
         acknowledged=acknowledged,
         resolved=resolved,
         muted=muted,
+        severity=severity,
         page=page,
         limit=limit,
         filter_=filter_,
@@ -179,6 +185,7 @@ def sync(
     acknowledged: Union[Unset, None, bool] = UNSET,
     resolved: Union[Unset, None, bool] = UNSET,
     muted: Union[Unset, None, bool] = UNSET,
+    severity: Union[Unset, None, int] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -198,6 +205,7 @@ def sync(
         acknowledged (Union[Unset, None, bool]):
         resolved (Union[Unset, None, bool]):
         muted (Union[Unset, None, bool]):
+        severity (Union[Unset, None, int]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
@@ -222,6 +230,7 @@ def sync(
         acknowledged=acknowledged,
         resolved=resolved,
         muted=muted,
+        severity=severity,
         page=page,
         limit=limit,
         filter_=filter_,
@@ -241,6 +250,7 @@ async def asyncio_detailed(
     acknowledged: Union[Unset, None, bool] = UNSET,
     resolved: Union[Unset, None, bool] = UNSET,
     muted: Union[Unset, None, bool] = UNSET,
+    severity: Union[Unset, None, int] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -260,6 +270,7 @@ async def asyncio_detailed(
         acknowledged (Union[Unset, None, bool]):
         resolved (Union[Unset, None, bool]):
         muted (Union[Unset, None, bool]):
+        severity (Union[Unset, None, int]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
@@ -283,6 +294,7 @@ async def asyncio_detailed(
         acknowledged=acknowledged,
         resolved=resolved,
         muted=muted,
+        severity=severity,
         page=page,
         limit=limit,
         filter_=filter_,
@@ -306,6 +318,7 @@ async def asyncio(
     acknowledged: Union[Unset, None, bool] = UNSET,
     resolved: Union[Unset, None, bool] = UNSET,
     muted: Union[Unset, None, bool] = UNSET,
+    severity: Union[Unset, None, int] = UNSET,
     page: Union[Unset, None, int] = UNSET,
     limit: Union[Unset, None, int] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -325,6 +338,7 @@ async def asyncio(
         acknowledged (Union[Unset, None, bool]):
         resolved (Union[Unset, None, bool]):
         muted (Union[Unset, None, bool]):
+        severity (Union[Unset, None, int]):
         page (Union[Unset, None, int]):
         limit (Union[Unset, None, int]):
         filter_ (Union[Unset, None, str]):
@@ -350,6 +364,7 @@ async def asyncio(
             acknowledged=acknowledged,
             resolved=resolved,
             muted=muted,
+            severity=severity,
             page=page,
             limit=limit,
             filter_=filter_,

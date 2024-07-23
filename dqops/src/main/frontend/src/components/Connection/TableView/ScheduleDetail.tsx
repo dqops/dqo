@@ -10,39 +10,17 @@ import {
   setUpdatedSchedulingGroup,
   updateTableSchedulingGroup
 } from '../../../redux/actions/table.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
 import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../../shared/routes';
+import { useDecodedParams } from '../../../utils';
 import ScheduleView from '../../ScheduleView';
 import Tabs from '../../Tabs';
 import ActionGroup from './TableActionGroup';
-import { useDecodedParams } from '../../../utils';
-
-const pageTabs = [
-  {
-    label: 'Profiling',
-    value: CheckRunMonitoringScheduleGroup.profiling
-  },
-  {
-    label: 'Monitoring Daily',
-    value: CheckRunMonitoringScheduleGroup.monitoring_daily
-  },
-  {
-    label: 'Monitoring Monthly',
-    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-  },
-  {
-    label: 'Partition Daily',
-    value: CheckRunMonitoringScheduleGroup.partitioned_daily
-  },
-  {
-    label: 'Partition Monthly',
-    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-  }
-];
 
 const ScheduleDetail = () => {
   const {
@@ -56,7 +34,107 @@ const ScheduleDetail = () => {
     schema: string;
     table: string;
   } = useDecodedParams();
-  const [tabs, setTabs] = useState(pageTabs);
+  const { userProfile } = useSelector((state: IRootState) => state.job);
+  const getPageTabs = () => {
+    switch (checkTypes) {
+      case CheckTypes.PROFILING: {
+        return [
+          {
+            label: 'Profiling',
+            value: CheckRunMonitoringScheduleGroup.profiling
+          }
+        ];
+      }
+      case CheckTypes.PARTITIONED: {
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Partition Daily',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              },
+              {
+                label: 'Partition Monthly',
+                value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Partition',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              }
+            ];
+      }
+      case CheckTypes.MONITORING: {
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Monitoring Daily',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+              {
+                label: 'Monitoring Monthly',
+                value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Monitoring',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              }
+            ];
+      }
+      default: {
+        return userProfile &&
+          userProfile.license_type &&
+          userProfile.license_type?.toLowerCase() !== 'free' &&
+          !userProfile.trial_period_expires_at
+          ? [
+              {
+                label: 'Profiling',
+                value: CheckRunMonitoringScheduleGroup.profiling
+              },
+              {
+                label: 'Monitoring Daily',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+              {
+                label: 'Monitoring Monthly',
+                value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+              },
+              {
+                label: 'Partition Daily',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              },
+              {
+                label: 'Partition Monthly',
+                value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+              }
+            ]
+          : [
+              {
+                label: 'Profiling',
+                value: CheckRunMonitoringScheduleGroup.profiling
+              },
+              {
+                label: 'Monitoring',
+                value: CheckRunMonitoringScheduleGroup.monitoring_daily
+              },
+
+              {
+                label: 'Partition',
+                value: CheckRunMonitoringScheduleGroup.partitioned_daily
+              }
+            ];
+      }
+    }
+  };
+  const [tabs, setTabs] = useState(getPageTabs());
   const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(
     location.search
   ) as any;

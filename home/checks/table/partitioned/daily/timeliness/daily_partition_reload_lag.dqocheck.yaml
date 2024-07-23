@@ -7,4 +7,6 @@ spec:
   help_text: "Daily partitioned check calculating the longest time a row waited to\
     \ be loaded, it is the maximum difference in days between the ingestion timestamp\
     \ and the event timestamp column on any row in the monitored partition"
+  friendly_name: Reload lag (Maximum delay to load the last record for each partition)
   standard: true
+  default_severity: error
