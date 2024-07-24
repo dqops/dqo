@@ -96,41 +96,11 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessageParameters messageParameters = createSampleMessageParameters(instant, IncidentStatus.open, "");
-
-        String message = sut.prepareText(messageParameters);
-
-        assertNotNull(message);
-        assertEquals("""
-                               > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
-                               > \s
-                               > First seen: 2023-09-01 14:30:20 (GMT+2)\s
-                               > Quality dimension: Reasonableness\s
-                               > Check category: volume\s
-                               > Highest severity: fatal\s
-                               > Total data quality issues: 10\s
-                               > Table priority: 2\s
-                               > \s
-                               > <http://localhost:8888/incidents/connection_name/2023/9/1 | View in DQOps>\s
-                        """.replaceAll("\\s+", ""),
-                message.replaceAll("\\s+", "")
-        );
-    }
-
-    @Test
-    void prepareText_fromNotificationMessageParametersOfOpenedIncident_generatesValidMessage() {
-        ((DefaultTimeZoneProviderStub)defaultTimeZoneProvider).setTimeZone(ZoneId.of("+02:00"));
-
-        Instant instant = LocalDateTime
-                .of(2023, 9, 1, 12, 30, 20)
-                .toInstant(ZoneOffset.UTC);
-
         IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.open);
 
         String message = sut.prepareText(notificationMessage);
 
         assertNotNull(message);
-
         assertEquals("""
                                > New incident detected in <http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail | schema_here.table_name_here> table.
                                > \s
@@ -155,9 +125,9 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessageParameters messageParameters = createSampleMessageParameters(instant, IncidentStatus.acknowledged, "");
+        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
 
-        String message = sut.prepareText(messageParameters);
+        String message = sut.prepareText(notificationMessage);
 
         assertNotNull(message);
         assertEquals("""
@@ -185,9 +155,10 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessageParameters messageParameters = createSampleMessageParameters(instant, IncidentStatus.acknowledged, "https://www.google.com");
+        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
+        notificationMessage.setIssueUrl("https://www.google.com");
 
-        String message = sut.prepareText(messageParameters);
+        String message = sut.prepareText(notificationMessage);
 
         assertNotNull(message);
         assertEquals("""
@@ -216,9 +187,9 @@ class IncidentNotificationMessageMarkdownFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessageParameters messageParameters = createSampleMessageParameters(instant, IncidentStatus.open, "");
+        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.open);
 
-        String message = sut.prepareText(messageParameters);
+        String message = sut.prepareText(notificationMessage);
 
         assertNotNull(message);
         assertEquals("""

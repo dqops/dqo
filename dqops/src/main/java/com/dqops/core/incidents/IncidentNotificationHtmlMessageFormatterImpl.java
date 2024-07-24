@@ -16,13 +16,13 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * A creator for text field of incident notification message in markdown format.
+ * A creator for text field of incident notification message in html format.
  */
 @Component
-public class IncidentNotificationMessageMarkdownFormatterImpl implements IncidentNotificationMessageMarkdownFormatter {
+public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNotificationHtmlMessageFormatter {
 
-    private static final String KEY_VALUE_FORMAT = "%s" + ": %s";
-    private static final String NEW_LINE = " \n";
+    private static final String KEY_VALUE_FORMAT = "<b>%s:</b> %s";
+    private static final String NEW_LINE = "\n";
 
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
@@ -32,7 +32,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
-    public IncidentNotificationMessageMarkdownFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
+    public IncidentNotificationHtmlMessageFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
                                                             DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
@@ -51,10 +51,10 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
         );
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getBlockQuotedLine(prepareHeader(notificationMessage.getStatus(),
+        stringBuilder.append(getFormatParagraph(bold(prepareHeader(notificationMessage.getStatus(),
                 fullTableNameWithLink
-        )));
-        stringBuilder.append(getBlockQuotedLine(""));
+        ))));
+        stringBuilder.append(getFormatParagraph(""));
 
         stringBuilder.append(extractInstantWithFormatting(notificationMessage.getFirstSeen(), IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME));
         if(!notificationMessage.getStatus().equals(IncidentStatus.open)){
@@ -62,34 +62,114 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
         }
         stringBuilder.append(extractStringWithFormatting(notificationMessage.getQualityDimension(), IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
         stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckCategory(), IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
-        stringBuilder.append(String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+        stringBuilder.append(String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                 readableColumnName(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
                 RuleSeverityLevel.fromSeverityLevel(notificationMessage.getHighestSeverity()).name()));
         stringBuilder.append(
-                String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+                String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                         "Total data quality issues",
                         notificationMessage.getFailedChecksCount()));
-        stringBuilder.append(extractIntWithFormatting(notificationMessage.getTablePriority(), IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
+        if(notificationMessage.getTablePriority() != null){
+            stringBuilder.append(extractIntWithFormatting(notificationMessage.getTablePriority(), IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME));
+        }
 
         if (notificationMessage.getIssueUrl() != null && !notificationMessage.getIssueUrl().isEmpty()) {
-            stringBuilder.append( String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+            stringBuilder.append( String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                     readableColumnName(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
                     formatToLink(notificationMessage.getIssueUrl(), "LINK")));
         }
 
-        stringBuilder.append(extractStringWithFormatting(notificationMessage.getDataGroupName(), IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
-        stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckType(), IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
-        stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckName(), IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
+        if(notificationMessage.getDataGroupName() != null && !notificationMessage.getDataGroupName().isEmpty()){
+            stringBuilder.append(extractStringWithFormatting(notificationMessage.getDataGroupName(), IncidentsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
+        }
 
-        stringBuilder.append(getBlockQuotedLine(""));
+        if(notificationMessage.getCheckType() != null && !notificationMessage.getCheckType().isEmpty()) {
+            stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckType(), IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME));
+        }
 
-        stringBuilder.append(getBlockQuotedLine(formatToLink(
+        if(notificationMessage.getCheckName() != null && !notificationMessage.getCheckName().isEmpty()) {
+            stringBuilder.append(extractStringWithFormatting(notificationMessage.getCheckName(), IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
+        }
+
+        stringBuilder.append(getFormatParagraph(""));
+
+        stringBuilder.append(getFormatParagraph(formatToLink(
                 prepareUrlToIncident(notificationMessage),
                 "View in DQOps"
         )));
 
-        return stringBuilder.toString();
+        return wrapInHtml(stringBuilder.toString());
     }
+
+    private String wrapInHtml(String mainMessage){
+        String htmlMessage = """
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>DQOps Incident Notification</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                background-color: #f6f6f6;
+                            }
+                            .container {
+                                width: 100%;
+                                max-width: 600px;
+                                margin: 0 auto;
+                                background-color: #ffffff;
+                                padding: 20px;
+                                border: 1px solid #dddddd;
+                            }
+                            .logo {
+                                text-align: center;
+                                padding: 10px 0;
+                                border-bottom: 2px solid #000;
+                            }
+                            .content {
+                                padding: 20px;
+                                text-align: left;
+                            }
+                            .footer {
+                                text-align: center;
+                                padding: 10px 0;
+                                color: #777777;
+                                font-size: 12px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="logo">
+                                <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
+                            </div>
+                            <div class="content">
+                %s
+                            </div>
+                            <div class="footer">
+                                <p>&copy; 2024 DQOps. All rights reserved.</p>
+                                <p><a href="https://dqops.com/docs/working-with-dqo/managing-data-quality-incidents-with-dqops/#configure-incidents">Configure incidents</a></p>
+                            </div>
+                        </div>
+                    </body>
+                </html>""".replace("%s\n", mainMessage);
+
+        return htmlMessage;
+    }
+
+//                                   <p><b>New incident detected in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table.</b></p>
+//                                   <br>
+//                                   <p><b>First seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
+//                                   <p><b>Quality dimension:</b> Reasonableness</p>
+//                                   <p><b>Check category:</b> volume</p>
+//                                   <p><b>Highest severity:</b> fatal</p>
+//                                   <p><b>Total data quality issues:</b> 10</p>
+//                                   <p><b>Table priority:</b> 2</p>
+//                                   <br>
+//                                   <a href="http://localhost:8888/incidents/connection_name/2023/9/1">View in DQOps</a>
 
     /**
      * Prepares an url to an incident in application UI instance.
@@ -126,24 +206,23 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String prepareHeader(IncidentStatus incidentStatus,
                                  String fullTableName){
-        String commonPart = String.format("in %s table", fullTableName);
         if(incidentStatus.equals(IncidentStatus.open)){
-            return "New incident detected " + commonPart + ".";
+            return "New incident detected in the " + fullTableName + " table.";
         }
-        return "The incident " + commonPart + " has been " + incidentStatus.name() + ".";
+        return "The incident in the " + fullTableName + " table has been " + incidentStatus.name() + ".";
     }
 
     /**
      * Extracts a string value from selected column for Row object and applies formatting.
-     * @param value String value
+     * @param incidentRow Row object
      * @param incidentsColumnName Column name used for extraction
      * @return A formatted string value from selected column. If it does not exist a blank string is returned.
      */
-    private String extractStringWithFormatting(String value, String incidentsColumnName){
-        if (value != null && !value.isEmpty()) {
-            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+    private String extractStringWithFormatting(String incidentRow, String incidentsColumnName){
+        if (incidentRow != null) {
+            return String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                     readableColumnName(incidentsColumnName),
-                    value);
+                    incidentRow);
         }
         return "";
     }
@@ -159,7 +238,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
         ZoneOffset zoneOffset = this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(instant);
         int hours = zoneOffset.getTotalSeconds() / 3600;
 
-        return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+        return String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                 readableColumnName(incidentsColumnName),
                 zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                         + " (GMT" + (hours > 0 ? "+":"") + hours + ")");
@@ -173,7 +252,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      */
     private String extractIntWithFormatting(int value, String incidentsColumnName){
         if(value > 0){
-            return String.format(getBlockQuotedLine(KEY_VALUE_FORMAT),
+            return String.format(getFormatParagraph(KEY_VALUE_FORMAT),
                     readableColumnName(incidentsColumnName),
                     value);
         }
@@ -181,7 +260,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
     }
 
     /**
-     * Applies capitalizaiton and removed underscores.
+     * Applies capitalization and removed underscores.
      * @param columnName
      * @return User friendly column name
      */
@@ -199,12 +278,22 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
     }
 
     /**
+     * Bolds text
+     * @param text text
+     * @return Modified text
+     */
+    private String bold(String text){
+        return String.format("<b>%s</b>", text);
+    }
+
+
+    /**
      * Formats a line of text to block
      * @param text text to be formatted
      * @return Formatted text
      */
-    private String getBlockQuotedLine(String text){
-        return "> " + text + NEW_LINE;
+    private String getFormatParagraph(String text){
+        return "                <p>" + text + "</p>" + NEW_LINE;
     }
 
     /**
@@ -212,7 +301,7 @@ public class IncidentNotificationMessageMarkdownFormatterImpl implements Inciden
      * @return Link formatted text
      */
     private String formatToLink(String link, String text){
-        return "<" + link + " | " + text + ">";
+        return String.format("<a href=\"%s\">%s</a>", link, text);
     }
 
 }

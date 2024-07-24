@@ -18,6 +18,7 @@ package com.dqops.core.incidents;
 import com.dqops.core.incidents.email.EmailSender;
 import com.dqops.core.incidents.email.EmailSenderProvider;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
@@ -29,6 +30,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
+import jakarta.mail.internet.InternetAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
@@ -174,10 +176,19 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         Mono<Void> responseSent = Mono.fromCallable(() -> {
                     try {
                         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                        simpleMailMessage.setFrom(EmailSender.EMAIL_SENDER_FROM);
+                        simpleMailMessage.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM, "DQOps Incident Notification")));
                         simpleMailMessage.setTo(messageAddressPair.getNotificationAddress());
-                        simpleMailMessage.setSubject("subject here");
-                        simpleMailMessage.setText("test1");
+
+                        String messageTemplate = (messageAddressPair.getIncidentNotificationMessage().getStatus().equals(IncidentStatus.open))
+                                ? "New incident detected in %s table."
+                                : "The incident in $s table has been detected.";
+
+                        String subjectMessage = String.format(messageTemplate,
+                                messageAddressPair.getIncidentNotificationMessage().getConnection()
+                                        + "." + messageAddressPair.getIncidentNotificationMessage().getTable());
+
+                        simpleMailMessage.setSubject(subjectMessage);
+                        simpleMailMessage.setText(messageAddressPair.getIncidentNotificationMessage().getText());
                         javaMailSender.send(simpleMailMessage);
                         return simpleMailMessage;
                     } catch (Exception e) {
