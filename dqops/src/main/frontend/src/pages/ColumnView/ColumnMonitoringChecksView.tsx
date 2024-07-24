@@ -222,7 +222,7 @@ const ColumnMonitoringChecksView = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col overflow-x-auto overflow-y-hidden">
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -234,31 +234,34 @@ const ColumnMonitoringChecksView = () => {
         userProfile.license_type?.toLowerCase() !== 'free' &&
         !userProfile.trial_period_expires_at && (
           <div className="border-b border-gray-300">
-            <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+            <Tabs
+              tabs={tabs}
+              activeTab={tab}
+              onChange={onChangeTab}
+              className="w-full overflow-hidden max-w-full"
+            />
           </div>
         )}
-      <div>
-        {tab === 'daily' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={dailyMonitoring}
-            onChange={onDailyMonitoringChange}
-            checkResultsOverview={checkResultsOverview}
-            getCheckOverview={getCheckOverview}
-            loading={loading}
-          />
-        )}
-        {tab === 'monthly' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={monthlyMonitoring}
-            onChange={onMonthlyMonitoringChange}
-            checkResultsOverview={checkResultsOverview}
-            getCheckOverview={getCheckOverview}
-            loading={loading}
-          />
-        )}
-      </div>
+      {tab === 'daily' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={dailyMonitoring}
+          onChange={onDailyMonitoringChange}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
+          loading={loading}
+        />
+      )}
+      {tab === 'monthly' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={monthlyMonitoring}
+          onChange={onMonthlyMonitoringChange}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
