@@ -139,6 +139,9 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
                                 color: #777777;
                                 font-size: 12px;
                             }
+                            a {
+                                text-decoration: none;
+                            }
                         </style>
                     </head>
                     <body>

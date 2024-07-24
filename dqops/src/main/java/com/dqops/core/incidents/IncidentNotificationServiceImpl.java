@@ -31,22 +31,24 @@ import com.dqops.utils.http.SharedHttpClientProvider;
 import com.dqops.utils.serialization.JsonSerializer;
 import io.netty.buffer.Unpooled;
 import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import jakarta.mail.internet.MimeMessage;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Incident notification service that sends notifications when new data quality incidents are detected.
@@ -114,10 +116,17 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                                               UserDomainIdentity userIdentity) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(message.getStatus())))
-                .map(message -> new MessageAddressPair(message, notificationSpec.getNotificationAddressForStatus(message.getStatus())))
+                .map(message -> {
+                    String addressesString = notificationSpec.getNotificationAddressForStatus(message.getStatus());
+                    List<String> addresses = addressesString.contains(",")
+                            ? Arrays.stream(addressesString.split(",")).map(String::trim).collect(Collectors.toList())
+                            : List.of(addressesString);
+                    return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
+                })
+                .flatMap(Flux::fromIterable)
                 .filter(messageAddressPair -> !Strings.isNullOrEmpty(messageAddressPair.getNotificationAddress()))
                 .flatMap(messageAddressPair -> {
-                    // todo: messageAddressPair might contains comma separated addresses
+
                     if(messageAddressPair.getNotificationAddress().contains("@")){
                         String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
                         messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
