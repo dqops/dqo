@@ -1,4 +1,4 @@
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.data.incidents.factory.IncidentStatus;

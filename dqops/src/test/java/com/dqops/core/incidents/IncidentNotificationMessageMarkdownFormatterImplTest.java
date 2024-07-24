@@ -2,6 +2,9 @@ package com.dqops.core.incidents;
 
 import com.dqops.BaseTest;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginServiceObjectMother;
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
+import com.dqops.core.incidents.message.IncidentNotificationMessageMarkdownFormatterImpl;
+import com.dqops.core.incidents.message.IncidentNotificationMessageParameters;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.factory.IncidentsTableFactoryObjectMother;

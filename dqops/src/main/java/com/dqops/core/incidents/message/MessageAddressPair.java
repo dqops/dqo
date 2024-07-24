@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 /**
  * A pair of a message and a notification address that is sent as a notification.

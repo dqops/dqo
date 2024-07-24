@@ -17,6 +17,10 @@ package com.dqops.core.incidents;
 
 import com.dqops.core.incidents.email.EmailSender;
 import com.dqops.core.incidents.email.EmailSenderProvider;
+import com.dqops.core.incidents.message.IncidentNotificationHtmlMessageFormatter;
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
+import com.dqops.core.incidents.message.IncidentNotificationMessageMarkdownFormatter;
+import com.dqops.core.incidents.message.MessageAddressPair;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;

@@ -1,4 +1,4 @@
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 /**
  * A creator for text field of incident notification message.

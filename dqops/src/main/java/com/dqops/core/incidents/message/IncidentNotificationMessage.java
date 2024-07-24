@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;

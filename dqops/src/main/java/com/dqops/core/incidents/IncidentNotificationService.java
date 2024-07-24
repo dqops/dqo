@@ -15,6 +15,7 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 

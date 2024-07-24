@@ -2,6 +2,8 @@ package com.dqops.core.incidents;
 
 import com.dqops.BaseTest;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginServiceObjectMother;
+import com.dqops.core.incidents.message.IncidentNotificationHtmlMessageFormatterImpl;
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderStub;

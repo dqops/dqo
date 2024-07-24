@@ -18,6 +18,8 @@ package com.dqops.core.incidents;
 
 import com.dqops.checks.CheckType;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
+import com.dqops.core.incidents.message.IncidentNotificationMessageParameters;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
