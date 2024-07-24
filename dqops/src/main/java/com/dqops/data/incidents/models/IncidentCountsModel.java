@@ -22,6 +22,12 @@ import java.time.temporal.ChronoUnit;
 public class IncidentCountsModel {
 
     /**
+     * Number of incidents in total.
+     */
+    @JsonPropertyDescription("Number of incidents in total.")
+    int totalCount;
+
+    /**
      * Number of incidents from the last 24h from now.
      */
     @JsonPropertyDescription("Number of incidents from the last 24h from now.")
@@ -80,11 +86,17 @@ public class IncidentCountsModel {
      * @param occurrenceTime Time of incident occurrence.
      */
     public void processCountIncrementation(Instant occurrenceTime){
+        totalCount++;
+
         Instant now = Instant.now();
         if(occurrenceTime.isAfter(now.minus(1, ChronoUnit.DAYS))){
             countFromLast24h++;
         }
-        if(occurrenceTime.isAfter(now.minus(7, ChronoUnit.DAYS))){
+
+        LocalDate lastSevenDays = LocalDate.ofInstant(now, defaultTimeZoneId).minusDays(7);
+        Instant lastSevenDaysFromMidnight = Instant.from(lastSevenDays.atStartOfDay(defaultTimeZoneId));
+
+        if(occurrenceTime.isAfter(lastSevenDaysFromMidnight)){
             countFromLast7days++;
         }
         Instant currentMonth = Instant.from(currentMonthDate.atStartOfDay(defaultTimeZoneId));
@@ -105,7 +117,6 @@ public class IncidentCountsModel {
         }
     }
 
-
     /**
      * Sample factory for an IncidentCountsModel.
      */
@@ -113,6 +124,7 @@ public class IncidentCountsModel {
         @Override
         public IncidentCountsModel createSample() {
             return new IncidentCountsModel() {{
+                setTotalCount(129 + 165);
                 setCountFromLast24h(3);
                 setCountFromLast7days(22);
                 setCurrentMonthCount(129);

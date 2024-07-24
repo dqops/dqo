@@ -40,7 +40,7 @@ export default function Gauge({
         onClick={() => goToIncidents(severity, status)}
       >
         <div className="text-center pt-1 text-2xl w-full">
-          {incidentCounts?.currentMonthCount && incidentCounts?.previousMonthCount && incidentCounts?.currentMonthCount + incidentCounts?.previousMonthCount}
+          {incidentCounts?.totalCount !== undefined && incidentCounts?.totalCount}
         </div>
         <div className="text-center pb-3 text-2xl text-xs">
           {title}
