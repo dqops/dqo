@@ -36,13 +36,14 @@ import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import jakarta.mail.internet.MimeMessage;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -175,20 +176,19 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         Mono<Void> responseSent = Mono.fromCallable(() -> {
                     try {
-                        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                        simpleMailMessage.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM, "DQOps Incident Notification")));
-                        simpleMailMessage.setTo(messageAddressPair.getNotificationAddress());
-
+                        MimeMessage simpleMailMessage = javaMailSender.createMimeMessage();
                         String messageTemplate = (messageAddressPair.getIncidentNotificationMessage().getStatus().equals(IncidentStatus.open))
                                 ? "New incident detected in %s table."
-                                : "The incident in $s table has been detected.";
-
+                                : "The incident in %s table has been detected.";
                         String subjectMessage = String.format(messageTemplate,
                                 messageAddressPair.getIncidentNotificationMessage().getConnection()
                                         + "." + messageAddressPair.getIncidentNotificationMessage().getTable());
-
                         simpleMailMessage.setSubject(subjectMessage);
-                        simpleMailMessage.setText(messageAddressPair.getIncidentNotificationMessage().getText());
+                        MimeMessageHelper helper;
+                        helper = new MimeMessageHelper(simpleMailMessage, true);
+                        helper.setFrom(String.valueOf(new InternetAddress(EmailSender.EMAIL_SENDER_FROM_EMAIL, EmailSender.EMAIL_SENDER_FROM_NAME)));
+                        helper.setTo(messageAddressPair.getNotificationAddress());
+                        helper.setText(messageAddressPair.getIncidentNotificationMessage().getText(), true);
                         javaMailSender.send(simpleMailMessage);
                         return simpleMailMessage;
                     } catch (Exception e) {

@@ -160,17 +160,6 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
         return htmlMessage;
     }
 
-//                                   <p><b>New incident detected in the <a href="http://localhost:8888/sources/connection/connection_name/schema/schema_here/table/table_name_here/detail">schema_here.table_name_here</a> table.</b></p>
-//                                   <br>
-//                                   <p><b>First seen:</b> 2023-09-01 14:30:20 (GMT+2)</p>
-//                                   <p><b>Quality dimension:</b> Reasonableness</p>
-//                                   <p><b>Check category:</b> volume</p>
-//                                   <p><b>Highest severity:</b> fatal</p>
-//                                   <p><b>Total data quality issues:</b> 10</p>
-//                                   <p><b>Table priority:</b> 2</p>
-//                                   <br>
-//                                   <a href="http://localhost:8888/incidents/connection_name/2023/9/1">View in DQOps</a>
-
     /**
      * Prepares an url to an incident in application UI instance.
      * @param notificationMessage Notification message
