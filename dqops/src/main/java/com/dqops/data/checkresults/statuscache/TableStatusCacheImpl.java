@@ -274,7 +274,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.queueEmptyFuture = new CompletableFuture<>();
         this.queueEmptyFuture.complete(0);
 
-        this.loadTableStatusRequestSink = Sinks.many().unicast().onBackpressureBuffer();
+        this.loadTableStatusRequestSink = Sinks.many().multicast().onBackpressureBuffer();
         Flux<List<CurrentTableStatusKey>> requestLoadFlux = this.loadTableStatusRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
                 .buffer(Duration.ofMillis(TableStatusCache.BATCH_COLLECTION_TIMEOUT_MS));  // wait 50 millis, maybe multiple file system updates are made, like changing multiple parquet files... we want to merge all file changes

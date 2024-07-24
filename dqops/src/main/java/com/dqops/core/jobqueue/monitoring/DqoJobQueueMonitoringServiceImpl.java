@@ -85,7 +85,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             return;
         }
 
-        this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
+        this.jobUpdateSink = Sinks.many().multicast().onBackpressureBuffer();
         Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux().onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE);
         dqoNotificationModelFlux.subscribeOn(Schedulers.boundedElastic())
                 .doOnComplete(() -> releaseAwaitingClients())
