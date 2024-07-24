@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of non-negative values in a column does
     not exceed the maximum accepted percentage.
+  friendly_name: Maximum percentage of rows containing non negative values
+  default_severity: error

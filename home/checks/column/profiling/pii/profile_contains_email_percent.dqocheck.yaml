@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/max_percent
   help_text: Detects emails in text columns. Verifies that the percentage of rows
     that contains valid emails in a column does not exceed the minimum accepted percentage.
+  friendly_name: Detect emails inside text columns
   standard: true
+  default_severity: error

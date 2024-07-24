@@ -9,4 +9,6 @@ spec:
     \ data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 - timestamps, 6\
     \ - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured\
     \ value for each day when the data quality check was evaluated."
+  friendly_name: Detect a change of the data type of all values in a text column
   standard: true
+  default_severity: error

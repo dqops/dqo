@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentage of valid longitude values in a column does
     not fall below the minimum accepted percentage. Stores a separate data quality
     check result for each monthly partition.
+  friendly_name: Minimum percentage of rows containing valid longitude values
+  default_severity: error

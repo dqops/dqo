@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/diff_percent
   help_text: Verifies that the total row count of the tested table matches the total
     row count of another (reference) table.
+  friendly_name: Maximum percentage of difference in total row count between tables
   standard: true
+  default_severity: error

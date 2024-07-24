@@ -19,9 +19,9 @@ The **text matching date pattern percent** data quality check has the following 
 
 Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_matching_date_pattern_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_text_matching_date_pattern_percent`</span>|Minimum percentage of rows containing texts matching an expected date pattern|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1284,9 +1284,9 @@ ___
 
 Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_matching_date_pattern_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_text_matching_date_pattern_percent`</span>|Minimum percentage of rows containing texts matching an expected date pattern|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2551,9 +2551,9 @@ ___
 
 Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_matching_date_pattern_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_text_matching_date_pattern_percent`</span>|Minimum percentage of rows containing texts matching an expected date pattern|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -3818,9 +3818,9 @@ ___
 
 Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_matching_date_pattern_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_text_matching_date_pattern_percent`</span>|Minimum percentage of rows containing texts matching an expected date pattern|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -5189,9 +5189,9 @@ ___
 
 Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_matching_date_pattern_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_text_matching_date_pattern_percent`</span>|Minimum percentage of rows containing texts matching an expected date pattern|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 

@@ -194,6 +194,41 @@ Enumeration of groupings for incidents.
 
 ___
 
+## IncidentCountsModel
+Stores numbers of incidents over a specific time period.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`count_from_last24h`</span>|Number of incidents from the last 24h from now.|*integer*|
+|<span class="no-wrap-code">`count_from_last7days`</span>|Number of incidents from the last 7 days, the number of 7 * 24 hours from now.|*integer*|
+|<span class="no-wrap-code">`current_month_count`</span>|Number of incidents from the complete current month.|*integer*|
+|<span class="no-wrap-code">`current_month_date`</span>|The first day of the current month date.|*date*|
+|<span class="no-wrap-code">`previous_month_count`</span>|Number of incidents from the complete previous month.|*integer*|
+|<span class="no-wrap-code">`previous_month_date`</span>|The first day of the previous month date.|*date*|
+
+
+___
+
+## IncidentSeverityLevelCountsModel
+Contains the counts for each of severity level.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`warning_counts`](#incidentcountsmodel)</span>|Counts for the warning severity level.|*[IncidentCountsModel](#incidentcountsmodel)*|
+|<span class="no-wrap-code">[`error_counts`](./incidents.md#incidentcountsmodel)</span>|Counts for the error severity level.|*[IncidentCountsModel](./incidents.md#incidentcountsmodel)*|
+|<span class="no-wrap-code">[`fatal_counts`](./incidents.md#incidentcountsmodel)</span>|Counts for the fatal severity level.|*[IncidentCountsModel](./incidents.md#incidentcountsmodel)*|
+
+
+___
+
 ## TopIncidentsModel
 Summary model with the most recent incidents grouped by one attribute (data quality dimension, data quality check category, etc).
 
@@ -206,6 +241,8 @@ Summary model with the most recent incidents grouped by one attribute (data qual
 |<span class="no-wrap-code">[`grouping`](./incidents.md#topincidentgrouping)</span>|Incident grouping used to group the top incidents in the dictionary of top incidents.|*[TopIncidentGrouping](./incidents.md#topincidentgrouping)*|
 |<span class="no-wrap-code">[`status`](./incidents.md#incidentstatus)</span>|Incident status of the incidents that are returned.|*[IncidentStatus](./incidents.md#incidentstatus)*|
 |<span class="no-wrap-code">`top_incidents`</span>|Dictionary of the top incidents, grouped by the grouping such as the data quality dimension or a data quality check category. The incidents are sorted by the first seen descending (the most recent first).|*Dict[string, List[[IncidentModel](./incidents.md#incidentmodel)]]*|
+|<span class="no-wrap-code">[`open_incident_severity_level_counts`](#incidentseveritylevelcountsmodel)</span>|Incident severity level count container for the incident with open status.|*[IncidentSeverityLevelCountsModel](#incidentseveritylevelcountsmodel)*|
+|<span class="no-wrap-code">[`acknowledged_incident_severity_level_counts`](./incidents.md#incidentseveritylevelcountsmodel)</span>|Incident severity level count container for the incident with acknowledged status.|*[IncidentSeverityLevelCountsModel](./incidents.md#incidentseveritylevelcountsmodel)*|
 
 
 ___

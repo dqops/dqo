@@ -18,9 +18,9 @@ The **column count match** data quality check has the following variants for eac
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_count_match`</span>|Maximum percentage of difference between column count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -157,9 +157,9 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_count_match`</span>|Maximum percentage of difference between column count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -297,9 +297,9 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_count_match`</span>|Maximum percentage of difference between column count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 

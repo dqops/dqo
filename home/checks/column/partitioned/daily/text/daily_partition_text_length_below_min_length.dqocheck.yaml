@@ -8,3 +8,5 @@ spec:
     the length defined by the user as a parameter. Analyzes every daily partition
     and creates a separate data quality check result with the time period value that
     identifies the daily partition.
+  friendly_name: Find text values shorter than the minimum accepted length
+  default_severity: error

@@ -7,3 +7,6 @@ spec:
   help_text: Detects incomplete columns that contain too few non-null values. Measures
     the percentage of rows that have non-null values. Raises a data quality issue
     when the percentage of non-null values is below min_percentage.
+  friendly_name: Maximum percentage of rows containing non-null values (find empty
+    column)
+  default_severity: error

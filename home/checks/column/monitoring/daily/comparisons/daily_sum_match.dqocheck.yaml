@@ -8,4 +8,6 @@ spec:
     in a tested column in a parent table and the sum of a values in a column in the
     reference table. The difference must be below defined percentage thresholds. Stores
     the most recent captured value for each day when the data quality check was evaluated.
+  friendly_name: Maximum percentage of difference between sums of compared columns
   standard: true
+  default_severity: error

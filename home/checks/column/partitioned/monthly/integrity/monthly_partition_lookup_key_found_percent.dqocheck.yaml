@@ -7,3 +7,6 @@ spec:
   help_text: Measures the percentage of valid values that are present in a dictionary
     table. Joins this table to a dictionary table using an outer join. Stores a separate
     data quality check result for each monthly partition.
+  friendly_name: Minimum percentage of rows containing values not found in a reference
+    table (foreign key lookup)
+  default_severity: error

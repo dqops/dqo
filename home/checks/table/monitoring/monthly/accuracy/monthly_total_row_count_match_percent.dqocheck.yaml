@@ -7,4 +7,6 @@ spec:
   help_text: Verifies the total row count of a tested table and compares it to a row
     count of a reference table. Stores the most recent check result for each month
     when the data quality check was evaluated.
+  friendly_name: Maximum percentage of difference in total row count between tables
   standard: true
+  default_severity: error

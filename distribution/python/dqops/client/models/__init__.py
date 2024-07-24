@@ -1368,6 +1368,7 @@ from .delete_stored_data_result import DeleteStoredDataResult
 from .delete_stored_data_result_partition_results import (
     DeleteStoredDataResultPartitionResults,
 )
+from .delta_lake_file_format_spec import DeltaLakeFileFormatSpec
 from .detected_datatype_category import DetectedDatatypeCategory
 from .detected_datatype_equals_rule_parameters_spec import (
     DetectedDatatypeEqualsRuleParametersSpec,
@@ -1422,11 +1423,13 @@ from .folder_synchronization_status import FolderSynchronizationStatus
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
 from .historic_data_points_grouping import HistoricDataPointsGrouping
+from .iceberg_file_format_spec import IcebergFileFormatSpec
 from .import_schema_queue_job_parameters import ImportSchemaQueueJobParameters
 from .import_severity_rule_parameters_spec import ImportSeverityRuleParametersSpec
 from .import_tables_queue_job_parameters import ImportTablesQueueJobParameters
 from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
+from .incident_counts_model import IncidentCountsModel
 from .incident_daily_issues_count import IncidentDailyIssuesCount
 from .incident_grouping_level import IncidentGroupingLevel
 from .incident_issue_histogram_model import IncidentIssueHistogramModel
@@ -1434,6 +1437,7 @@ from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelCh
 from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
 from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
+from .incident_severity_level_counts_model import IncidentSeverityLevelCountsModel
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
@@ -2509,6 +2513,7 @@ __all__ = (
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
     "DeleteStoredDataResultPartitionResults",
+    "DeltaLakeFileFormatSpec",
     "DetectedDatatypeCategory",
     "DetectedDatatypeEqualsRuleParametersSpec",
     "DimensionCurrentDataQualityStatusModel",
@@ -2555,11 +2560,13 @@ __all__ = (
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
     "HistoricDataPointsGrouping",
+    "IcebergFileFormatSpec",
     "ImportSchemaQueueJobParameters",
     "ImportSeverityRuleParametersSpec",
     "ImportTablesQueueJobParameters",
     "ImportTablesQueueJobResult",
     "ImportTablesResult",
+    "IncidentCountsModel",
     "IncidentDailyIssuesCount",
     "IncidentGroupingLevel",
     "IncidentIssueHistogramModel",
@@ -2567,6 +2574,7 @@ __all__ = (
     "IncidentIssueHistogramModelColumns",
     "IncidentIssueHistogramModelDays",
     "IncidentModel",
+    "IncidentSeverityLevelCountsModel",
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
     "IncidentStatus",

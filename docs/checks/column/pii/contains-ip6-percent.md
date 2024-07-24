@@ -18,9 +18,9 @@ The **contains ip6 percent** data quality check has the following variants for e
 
 Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_contains_ip6_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_contains_ip6_percent`</span>|Detect IP6 addresses inside text columns|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -1549,9 +1549,9 @@ ___
 
 Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_contains_ip6_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_contains_ip6_percent`</span>|Detect IP6 addresses inside text columns|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -3082,9 +3082,9 @@ ___
 
 Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>|Detect IP6 addresses inside text columns|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -4615,9 +4615,9 @@ ___
 
 Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>|Detect IP6 addresses inside text columns|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -6252,9 +6252,9 @@ ___
 
 Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>|Detect IP6 addresses inside text columns|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 

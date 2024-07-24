@@ -19,9 +19,9 @@ The **lookup key not found** data quality check has the following variants for e
 
 Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1282,9 +1282,9 @@ ___
 
 Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2547,9 +2547,9 @@ ___
 
 Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3812,9 +3812,9 @@ ___
 
 Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5181,9 +5181,9 @@ ___
 
 Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Integrity](../../../dqo-concepts/data-quality-dimensions.md#data-integrity)|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 

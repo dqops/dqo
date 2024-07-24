@@ -176,6 +176,17 @@ public class ColumnNullPercentAnomalyStationaryCheckSpec
     }
 
     /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Abnormal change in percentage of null values. Measured as a percentile of anomalous measures.";
+    }
+
+    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.

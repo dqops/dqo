@@ -18,9 +18,9 @@ The **row count match** data quality check has the following variants for each
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_row_count_match`</span>|Maximum percentage of difference between row count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -442,9 +442,9 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_row_count_match`</span>|Maximum percentage of difference between row count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -867,9 +867,9 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_row_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_row_count_match`</span>|Maximum percentage of difference between row count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1292,9 +1292,9 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_row_count_match`</span>|Maximum percentage of difference between row count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1783,9 +1783,9 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_row_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_row_count_match`</span>|Maximum percentage of difference between row count of compared tables|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Accuracy](../../../dqo-concepts/data-quality-dimensions.md#data-accuracy)|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 

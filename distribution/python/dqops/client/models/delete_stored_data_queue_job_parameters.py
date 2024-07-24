@@ -35,6 +35,9 @@ class DeleteStoredDataQueueJobParameters:
         delete_error_samples (Union[Unset, bool]): Delete the data from the
             [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this
             parameter must be set to *true* to delete the error samples.
+        delete_incidents (Union[Unset, bool]): Delete the data from the
+            [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this
+            parameter must be set to *true* to delete the error samples.
         column_names (Union[Unset, List[str]]): The list of column names to delete the data for column level results or
             errors only for selected columns.
         check_category (Union[Unset, str]): The check category name, for example *volume* or *anomaly*.
@@ -59,6 +62,8 @@ class DeleteStoredDataQueueJobParameters:
             selected collector, for example *sample_values*.
         collector_target (Union[Unset, str]): The type of the target object for which the basic statistics are deleted.
             Supported values are *table* and *column*.
+        incident_status_name (Union[Unset, str]): The incidents status name when only incidents are deleted, for example
+            *muted*.
     """
 
     connection: Union[Unset, str] = UNSET
@@ -70,6 +75,7 @@ class DeleteStoredDataQueueJobParameters:
     delete_check_results: Union[Unset, bool] = UNSET
     delete_sensor_readouts: Union[Unset, bool] = UNSET
     delete_error_samples: Union[Unset, bool] = UNSET
+    delete_incidents: Union[Unset, bool] = UNSET
     column_names: Union[Unset, List[str]] = UNSET
     check_category: Union[Unset, str] = UNSET
     table_comparison_name: Union[Unset, str] = UNSET
@@ -82,6 +88,7 @@ class DeleteStoredDataQueueJobParameters:
     collector_category: Union[Unset, str] = UNSET
     collector_name: Union[Unset, str] = UNSET
     collector_target: Union[Unset, str] = UNSET
+    incident_status_name: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -100,6 +107,7 @@ class DeleteStoredDataQueueJobParameters:
         delete_check_results = self.delete_check_results
         delete_sensor_readouts = self.delete_sensor_readouts
         delete_error_samples = self.delete_error_samples
+        delete_incidents = self.delete_incidents
         column_names: Union[Unset, List[str]] = UNSET
         if not isinstance(self.column_names, Unset):
             column_names = self.column_names
@@ -115,6 +123,7 @@ class DeleteStoredDataQueueJobParameters:
         collector_category = self.collector_category
         collector_name = self.collector_name
         collector_target = self.collector_target
+        incident_status_name = self.incident_status_name
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -137,6 +146,8 @@ class DeleteStoredDataQueueJobParameters:
             field_dict["deleteSensorReadouts"] = delete_sensor_readouts
         if delete_error_samples is not UNSET:
             field_dict["deleteErrorSamples"] = delete_error_samples
+        if delete_incidents is not UNSET:
+            field_dict["deleteIncidents"] = delete_incidents
         if column_names is not UNSET:
             field_dict["columnNames"] = column_names
         if check_category is not UNSET:
@@ -161,6 +172,8 @@ class DeleteStoredDataQueueJobParameters:
             field_dict["collectorName"] = collector_name
         if collector_target is not UNSET:
             field_dict["collectorTarget"] = collector_target
+        if incident_status_name is not UNSET:
+            field_dict["incidentStatusName"] = incident_status_name
 
         return field_dict
 
@@ -195,6 +208,8 @@ class DeleteStoredDataQueueJobParameters:
 
         delete_error_samples = d.pop("deleteErrorSamples", UNSET)
 
+        delete_incidents = d.pop("deleteIncidents", UNSET)
+
         column_names = cast(List[str], d.pop("columnNames", UNSET))
 
         check_category = d.pop("checkCategory", UNSET)
@@ -219,6 +234,8 @@ class DeleteStoredDataQueueJobParameters:
 
         collector_target = d.pop("collectorTarget", UNSET)
 
+        incident_status_name = d.pop("incidentStatusName", UNSET)
+
         delete_stored_data_queue_job_parameters = cls(
             connection=connection,
             full_table_name=full_table_name,
@@ -229,6 +246,7 @@ class DeleteStoredDataQueueJobParameters:
             delete_check_results=delete_check_results,
             delete_sensor_readouts=delete_sensor_readouts,
             delete_error_samples=delete_error_samples,
+            delete_incidents=delete_incidents,
             column_names=column_names,
             check_category=check_category,
             table_comparison_name=table_comparison_name,
@@ -241,6 +259,7 @@ class DeleteStoredDataQueueJobParameters:
             collector_category=collector_category,
             collector_name=collector_name,
             collector_target=collector_target,
+            incident_status_name=incident_status_name,
         )
 
         delete_stored_data_queue_job_parameters.additional_properties = d

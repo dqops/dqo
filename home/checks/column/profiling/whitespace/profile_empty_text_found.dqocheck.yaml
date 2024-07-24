@@ -7,4 +7,6 @@ spec:
   help_text: "Detects empty texts (not null, zero-length texts). This check counts\
     \ empty and raises a data quality issue when their count exceeds a *max_count*\
     \ parameter value."
+  friendly_name: Maximum count of empty text values
   standard: true
+  default_severity: error

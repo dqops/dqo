@@ -9,4 +9,6 @@ spec:
     \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 5 -\
     \ timestamps, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate\
     \ data quality check result for each monthly partition."
+  friendly_name: Detect a change of the data type of all values in a text column
   standard: true
+  default_severity: error

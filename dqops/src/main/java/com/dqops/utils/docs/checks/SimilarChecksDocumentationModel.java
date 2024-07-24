@@ -51,6 +51,11 @@ public class SimilarChecksDocumentationModel {
     private String primaryCheckName;
 
     /**
+     * Friendly name of a data quality check.
+     */
+    private String friendlyName;
+
+    /**
      * True for standard data quality checks, false for advanced.
      */
     private boolean standard;

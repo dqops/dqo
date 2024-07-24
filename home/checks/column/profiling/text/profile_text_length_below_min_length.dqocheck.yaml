@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/max_count
   help_text: The check counts the number of text values in the column that is below
     the length defined by the user as a parameter.
+  friendly_name: Find text values shorter than the minimum accepted length
+  default_severity: error

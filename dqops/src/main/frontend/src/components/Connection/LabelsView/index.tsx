@@ -55,7 +55,7 @@ const LabelsView = ({
   };
 
   return (
-    <div className="p-4 text-sm w-full max-w-200">
+    <div className="p-4 text-sm w-full max-w-200 !text-black">
       <div className={clsx('flex items-center font-bold', titleClassName)}>
         <div className="text-left min-w-40 w-11/12 pr-4">
           {title ?? 'Label'}

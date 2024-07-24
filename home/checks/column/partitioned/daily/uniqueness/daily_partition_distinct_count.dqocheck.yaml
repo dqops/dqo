@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/count_between
   help_text: Verifies  that the number of distinct values stays within an accepted
     range. Stores a separate data quality check result for each daily partition.
+  friendly_name: Verify that the count of distinct values is in the expected range
   standard: true
+  default_severity: error

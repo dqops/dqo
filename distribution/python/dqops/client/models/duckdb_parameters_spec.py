@@ -12,12 +12,14 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.csv_file_format_spec import CsvFileFormatSpec
+    from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
     from ..models.duckdb_parameters_spec_directories import (
         DuckdbParametersSpecDirectories,
     )
     from ..models.duckdb_parameters_spec_properties import (
         DuckdbParametersSpecProperties,
     )
+    from ..models.iceberg_file_format_spec import IcebergFileFormatSpec
     from ..models.json_file_format_spec import JsonFileFormatSpec
     from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
@@ -38,6 +40,8 @@ class DuckdbParametersSpec:
         csv (Union[Unset, CsvFileFormatSpec]):
         json (Union[Unset, JsonFileFormatSpec]):
         parquet (Union[Unset, ParquetFileFormatSpec]):
+        iceberg (Union[Unset, IcebergFileFormatSpec]):
+        delta_lake (Union[Unset, DeltaLakeFileFormatSpec]):
         directories (Union[Unset, DuckdbParametersSpecDirectories]): Virtual schema name to directory mappings. The path
             must be an absolute path.
         storage_type (Union[Unset, DuckdbStorageType]):
@@ -66,6 +70,8 @@ class DuckdbParametersSpec:
     csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
     json: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
+    iceberg: Union[Unset, "IcebergFileFormatSpec"] = UNSET
+    delta_lake: Union[Unset, "DeltaLakeFileFormatSpec"] = UNSET
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
     storage_type: Union[Unset, DuckdbStorageType] = UNSET
     aws_authentication_mode: Union[Unset, AwsAuthenticationMode] = UNSET
@@ -104,6 +110,14 @@ class DuckdbParametersSpec:
         parquet: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parquet, Unset):
             parquet = self.parquet.to_dict()
+
+        iceberg: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.iceberg, Unset):
+            iceberg = self.iceberg.to_dict()
+
+        delta_lake: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.delta_lake, Unset):
+            delta_lake = self.delta_lake.to_dict()
 
         directories: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.directories, Unset):
@@ -146,6 +160,10 @@ class DuckdbParametersSpec:
             field_dict["json"] = json
         if parquet is not UNSET:
             field_dict["parquet"] = parquet
+        if iceberg is not UNSET:
+            field_dict["iceberg"] = iceberg
+        if delta_lake is not UNSET:
+            field_dict["delta_lake"] = delta_lake
         if directories is not UNSET:
             field_dict["directories"] = directories
         if storage_type is not UNSET:
@@ -174,12 +192,14 @@ class DuckdbParametersSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.csv_file_format_spec import CsvFileFormatSpec
+        from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
         from ..models.duckdb_parameters_spec_directories import (
             DuckdbParametersSpecDirectories,
         )
         from ..models.duckdb_parameters_spec_properties import (
             DuckdbParametersSpecProperties,
         )
+        from ..models.iceberg_file_format_spec import IcebergFileFormatSpec
         from ..models.json_file_format_spec import JsonFileFormatSpec
         from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
@@ -227,6 +247,20 @@ class DuckdbParametersSpec:
             parquet = UNSET
         else:
             parquet = ParquetFileFormatSpec.from_dict(_parquet)
+
+        _iceberg = d.pop("iceberg", UNSET)
+        iceberg: Union[Unset, IcebergFileFormatSpec]
+        if isinstance(_iceberg, Unset):
+            iceberg = UNSET
+        else:
+            iceberg = IcebergFileFormatSpec.from_dict(_iceberg)
+
+        _delta_lake = d.pop("delta_lake", UNSET)
+        delta_lake: Union[Unset, DeltaLakeFileFormatSpec]
+        if isinstance(_delta_lake, Unset):
+            delta_lake = UNSET
+        else:
+            delta_lake = DeltaLakeFileFormatSpec.from_dict(_delta_lake)
 
         _directories = d.pop("directories", UNSET)
         directories: Union[Unset, DuckdbParametersSpecDirectories]
@@ -280,6 +314,8 @@ class DuckdbParametersSpec:
             csv=csv,
             json=json,
             parquet=parquet,
+            iceberg=iceberg,
+            delta_lake=delta_lake,
             directories=directories,
             storage_type=storage_type,
             aws_authentication_mode=aws_authentication_mode,

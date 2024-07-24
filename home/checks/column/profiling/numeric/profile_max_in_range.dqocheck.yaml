@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/between_floats
   help_text: Verifies that the maximum value in a column is not outside the expected
     range.
+  friendly_name: Maximum numeric value is in the range
+  default_severity: error

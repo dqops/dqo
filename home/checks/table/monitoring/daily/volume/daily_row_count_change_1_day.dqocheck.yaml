@@ -6,4 +6,5 @@ spec:
   rule_name: change/change_percent_1_day
   help_text: 'Detects when the volume''s change (increase or decrease of the row count)
     since the previous day exceeds the maximum accepted change percentage. '
+  friendly_name: Maximum relative change in the row count vs 1 day ago
   default_severity: warning

@@ -285,14 +285,26 @@ const Header = () => {
                 location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
                   ? 'font-bold'
                   : '',
-                isTextWrapped && !isWindowSmall && 'w-24'
+                isTextWrapped && !isWindowSmall && 'w-27'
               )}
               onClick={onClick(CheckTypes.PARTITIONED)}
             >
               <div className="!w-4.5 !h-4.5 mr-2">
-                <SvgIcon name="partitioned_checks" className="!w-4.5 !h-4.5" />
+                <SvgIcon
+                  name="partitioned_checks"
+                  className={clsx(
+                    '!w-4.5 !h-4.5',
+                    isTextWrapped && !isWindowSmall && 'ml-1'
+                  )}
+                />
               </div>
-              {!isWindowSmall && <div>Partition Checks</div>}
+              {!isWindowSmall && (
+                <div
+                  className={clsx(isTextWrapped && !isWindowSmall && 'ml-1')}
+                >
+                  Partition Checks
+                </div>
+              )}
             </div>
           </Tooltip>
           <Tooltip

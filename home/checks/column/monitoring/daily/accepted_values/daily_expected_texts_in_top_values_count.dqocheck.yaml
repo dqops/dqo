@@ -7,3 +7,6 @@ spec:
   help_text: Verifies that the top X most popular column values contain all values
     from a list of expected values. Stores the most recent captured value for each
     day when the data quality check was evaluated.
+  friendly_name: Verify that the most popular text values match the list of expected
+    values
+  default_severity: error

@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of valid latitude values in a column does
     not fall below the minimum accepted percentage.
+  friendly_name: Minimum percentage of rows containing valid latitude values
+  default_severity: error

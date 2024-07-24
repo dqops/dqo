@@ -9,3 +9,5 @@ spec:
     \ calculates an ordered hash of the column names. Compares the current hash to\
     \ the previously known hash to detect any changes to the list of columns or their\
     \ order."
+  friendly_name: Detect if column list or order has changed
+  default_severity: error

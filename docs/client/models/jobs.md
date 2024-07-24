@@ -156,6 +156,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`delete_check_results`</span>|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|*boolean*|
 |<span class="no-wrap-code">`delete_sensor_readouts`</span>|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|*boolean*|
 |<span class="no-wrap-code">`delete_error_samples`</span>|Delete the data from the [error_samples](../../reference/parquetfiles/error_samples.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
+|<span class="no-wrap-code">`delete_incidents`</span>|Delete the data from the [incidents](../../reference/parquetfiles/incidents.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the error samples.|*boolean*|
 |<span class="no-wrap-code">`column_names`</span>|The list of column names to delete the data for column level results or errors only for selected columns.|*List[string]*|
 |<span class="no-wrap-code">`check_category`</span>|The check category name, for example *volume* or *anomaly*.|*string*|
 |<span class="no-wrap-code">`table_comparison_name`</span>|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|*string*|
@@ -168,6 +169,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |<span class="no-wrap-code">`collector_category`</span>|The statistics collector category when statistics should be deleted. A statistics category is a group of statistics, for example *sampling* for the column value samples.|*string*|
 |<span class="no-wrap-code">`collector_name`</span>|The statistics collector name when only statistics are deleted for a selected collector, for example *sample_values*.|*string*|
 |<span class="no-wrap-code">`collector_target`</span>|The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*.|*string*|
+|<span class="no-wrap-code">`incident_status_name`</span>|The incidents status name when only incidents are deleted, for example *muted*.|*string*|
 
 
 ___
@@ -199,7 +201,7 @@ Identifies a single partition for hive partitioned tables stored as parquet file
 |<span class="no-wrap-code">[`table_type`](#dqoroot)</span>|Table type.|*[DqoRoot](#dqoroot)*|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">[`table_name`](./common.md#physicaltablename)</span>|Table name (schema.table).|*[PhysicalTableName](./common.md#physicaltablename)*|
-|<span class="no-wrap-code">`month`</span>|The date of teh first day of the month that identifies a monthly partition.|*date*|
+|<span class="no-wrap-code">`month`</span>|The date of the first day of the month that identifies a monthly partition.|*date*|
 
 
 ___

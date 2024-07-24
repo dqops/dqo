@@ -8,4 +8,6 @@ spec:
     \ empty and raises a data quality issue when their count exceeds a *max_count*\
     \ parameter value. Stores a separate data quality check result for each monthly\
     \ partition."
+  friendly_name: Maximum count of empty text values
   standard: true
+  default_severity: error

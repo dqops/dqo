@@ -24,6 +24,7 @@ import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericIntegerInRangePercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -154,6 +155,17 @@ public class ColumnIntegerInRangePercentCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Maximum percentage of rows containing integer values in the range";
     }
 
     /**

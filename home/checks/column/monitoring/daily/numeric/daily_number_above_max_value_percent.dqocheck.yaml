@@ -7,3 +7,5 @@ spec:
   help_text: The check counts the percentage of values in the column that are above
     the value defined by the user as a parameter. Stores the most recent captured
     value for each day when the data quality check was evaluated.
+  friendly_name: Maximum percentage of numeric values above the maximum value
+  default_severity: error

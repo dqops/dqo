@@ -6,4 +6,5 @@ spec:
   rule_name: change/change_percent
   help_text: Verifies that the null percent value in a column changed in a fixed rate
     since the last readout.
+  friendly_name: Maximum percentage of change in the count of null values
   default_severity: warning

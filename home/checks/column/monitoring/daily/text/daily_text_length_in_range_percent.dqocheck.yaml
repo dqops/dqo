@@ -7,3 +7,6 @@ spec:
   help_text: The check measures the percentage of those text values with length in
     the range provided by the user in the column. Stores the most recent captured
     value for each day when the data quality check was evaluated.
+  friendly_name: Measure the percentage of rows containing text values in the expected
+    range
+  default_severity: error

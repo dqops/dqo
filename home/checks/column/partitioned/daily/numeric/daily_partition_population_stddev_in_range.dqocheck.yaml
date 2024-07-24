@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the population standard deviation of all values in a column
     is not outside the expected range. Stores a separate data quality check result
     for each daily partition.
+  friendly_name: Population standard deviation of numeric values is in the range
+  default_severity: error

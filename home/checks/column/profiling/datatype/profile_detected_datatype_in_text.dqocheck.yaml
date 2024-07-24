@@ -9,4 +9,6 @@ spec:
     \ 3 - dates, 4 - datetimes, 5 - timestamps, 6 - booleans, 7 - strings, 8 - mixed\
     \ data types. Raises a data quality issue when the detected data type does not\
     \ match the expected data type."
+  friendly_name: Detect and verify the data type of all values in a text column
   standard: true
+  default_severity: error

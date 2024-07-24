@@ -8,3 +8,5 @@ spec:
     \ number of rows where the expression is not satisfied, and raises an issue if\
     \ too many failures were detected. This check is used also to compare values between\
     \ columns: `{alias}.col_price > {alias}.col_tax`."
+  friendly_name: Minimum percentage of rows that passed SQL condition
+  default_severity: error

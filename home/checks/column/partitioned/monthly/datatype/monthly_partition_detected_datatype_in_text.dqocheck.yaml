@@ -10,4 +10,6 @@ spec:
     \ data types. Raises a data quality issue when the detected data type does not\
     \ match the expected data type. Stores a separate data quality check result for\
     \ each monthly partition."
+  friendly_name: Detect and verify the data type of all values in a text column
   standard: true
+  default_severity: error

@@ -8,4 +8,6 @@ spec:
     \ number of rows where the expression is not satisfied, and raises an issue if\
     \ too many failures were detected. This check is used also to compare values between\
     \ the current column and another column: `{alias}.{column} > col_tax`."
+  friendly_name: Maximum count of rows that failed SQL conditions
   standard: true
+  default_severity: error

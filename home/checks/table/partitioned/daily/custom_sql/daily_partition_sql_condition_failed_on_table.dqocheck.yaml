@@ -9,4 +9,6 @@ spec:
     \ too many failures were detected. This check is used also to compare values between\
     \ columns: `{alias}.col_price > {alias}.col_tax`. Stores a separate data quality\
     \ check result for each daily partition."
+  friendly_name: Maximum count of rows that failed SQL conditions
   standard: true
+  default_severity: error

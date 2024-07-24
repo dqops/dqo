@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the mean (average) length of texts in a column is within
     an accepted range. Stores the most recent captured value for each month when the
     data quality check was evaluated.
+  friendly_name: Verify that the mean length of the text is in the range
+  default_severity: error

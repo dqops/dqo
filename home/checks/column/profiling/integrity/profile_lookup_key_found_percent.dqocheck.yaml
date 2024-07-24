@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/min_percent
   help_text: Measures the percentage of valid values that are present in a dictionary
     table. Joins this table to a dictionary table using an outer join.
+  friendly_name: Minimum percentage of rows containing values not found in a reference
+    table (foreign key lookup)
+  default_severity: error

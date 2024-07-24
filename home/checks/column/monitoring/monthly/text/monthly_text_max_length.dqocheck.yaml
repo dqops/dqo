@@ -8,4 +8,6 @@ spec:
     \ verifies that the maximum length is within an accepted range. It detects that\
     \ the texts are too long or not long enough. Stores the most recent captured value\
     \ for each month when the data quality check was evaluated."
+  friendly_name: Verify that the maximum length of the text is in the range
   standard: true
+  default_severity: error

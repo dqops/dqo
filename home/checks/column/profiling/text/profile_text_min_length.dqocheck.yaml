@@ -7,4 +7,6 @@ spec:
   help_text: "This check finds the length of the shortest text in a column. Then,\
     \ it verifies that the minimum length is within an accepted range. It detects\
     \ that the shortest text is too short."
+  friendly_name: Verify that the minimum length of the text column is in the range
   standard: true
+  default_severity: error

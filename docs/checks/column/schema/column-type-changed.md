@@ -20,9 +20,9 @@ The **column type changed** data quality check has the following variants for ea
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_type_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_type_changed`</span>|Verify if the column data type has changed|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -125,9 +125,9 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_type_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_type_changed`</span>|Verify if the column data type has changed|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -231,9 +231,9 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_type_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_type_changed`</span>|Verify if the column data type has changed|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Consistency](../../../dqo-concepts/data-quality-dimensions.md#data-consistency)|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 

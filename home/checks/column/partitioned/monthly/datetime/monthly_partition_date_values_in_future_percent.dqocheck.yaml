@@ -8,4 +8,6 @@ spec:
     \ Measures a percentage of dates in the future. Raises a data quality issue when\
     \ too many future dates are found. Stores a separate data quality check result\
     \ for each monthly partition."
+  friendly_name: Maximum percentage of rows containing dates in future
   standard: true
+  default_severity: error

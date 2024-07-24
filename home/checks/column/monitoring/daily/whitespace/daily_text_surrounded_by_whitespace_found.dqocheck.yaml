@@ -8,3 +8,5 @@ spec:
     side. This check counts whitespace-surrounded texts and raises a data quality
     issue when their count exceeds the *max_count* parameter value. Stores the most
     recent captured value for each day when the data quality check was evaluated.
+  friendly_name: Maximum count of text surrounded by whitespace characters
+  default_severity: error

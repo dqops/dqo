@@ -19,9 +19,9 @@ The **invalid ip6 address format found** data quality check has the following va
 
 Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>|Maximum count of rows containing invalid IP6 address values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -1116,9 +1116,9 @@ ___
 
 Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>|Maximum count of rows containing invalid IP6 address values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -2215,9 +2215,9 @@ ___
 
 Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>|Maximum count of rows containing invalid IP6 address values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -3314,9 +3314,9 @@ ___
 
 Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>|Maximum count of rows containing invalid IP6 address values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -4517,9 +4517,9 @@ ___
 
 Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>|Maximum count of rows containing invalid IP6 address values|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Validity](../../../dqo-concepts/data-quality-dimensions.md#data-validity)|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 

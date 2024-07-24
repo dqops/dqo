@@ -351,6 +351,12 @@ The date values in future percent sensor is documented below.
 | column | datetime | <span class="no-wrap-code">`column/datetime/date_values_in_future_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
 
 
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`max_future_days`</span>|Maximum accepted number of days from now that are not treated as days from future. If value is not defined by user then default value is 0.0.|*double*| ||
+
 
 
 
@@ -371,13 +377,13 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            {{ lib.render_target_column('analyzed_table') }} > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL CAST({{(parameters.max_future_days)}} AS INT64) DAY)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                         {% else -%}
-                            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST({{(parameters.max_future_days)}} * 86400 AS INT64) SECOND)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -403,13 +409,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% else -%}
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -435,13 +441,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                         {% else -%}
-                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -467,13 +473,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATE(), INTERVAL ({{(parameters.max_future_days)}}) DAY)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD(CURRENT_DATETIME(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                         {% else -%}
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > CURRENT_TIMESTAMP()
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -499,13 +505,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + numToDSInterval( CAST( ({{(parameters.max_future_days)}}) AS INTEGER), 'day' )
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                         {% else -%}
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP + numToDSInterval( CAST( ({{(parameters.max_future_days)}} * 86400) AS INTEGER), 'second' )
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -537,13 +543,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% else -%}
-                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -573,13 +579,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                         {% else -%}
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -611,14 +617,14 @@ The templates used to generate the SQL query for each data source supported by D
             ELSE 100.0 * SUM(
                 CASE
                     WHEN
-                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        {% if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% else -%}
-                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                            ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -644,13 +650,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_TIMESTAMP)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% else -%}
-                            TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                            TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > TIMESTAMPADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -676,13 +682,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            {{ lib.render_target_column('analyzed_table') }} > (CURRENT_DATE() + INTERVAL {{((parameters.max_future_days) * 1) | int}} DAY)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% else -%}
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() + INTERVAL {{((parameters.max_future_days) * 86400) | int}} SECOND
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -708,13 +714,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD(DAY, CAST({{(parameters.max_future_days)}} AS INT), GETDATE())
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                            {{ lib.render_target_column('analyzed_table') }} > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), GETDATE())
                         {% else -%}
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > DATEADD(SECOND, CAST({{(parameters.max_future_days)}} * 86400 AS INT), SYSDATETIME())
                         {% endif -%}
                         THEN 1
                     ELSE 0
@@ -740,13 +746,13 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN
                         {% if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('DAY', CAST({{(parameters.max_future_days)}} AS INTEGER), CURRENT_DATE)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            {{ lib.render_target_column('analyzed_table') }} > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_DATETIME)
                         {% else -%}
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > DATE_ADD('SECOND', CAST({{(parameters.max_future_days)}} * 86400 AS INTEGER), CURRENT_TIMESTAMP)
                         {% endif -%}
                         THEN 1
                     ELSE 0

@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/max_count
   help_text: Verifies that the number of texts not matching the date format regular
     expression does not exceed the maximum accepted count.
+  friendly_name: Maximum count of rows containing texts not matching an expected date
+    pattern
+  default_severity: error

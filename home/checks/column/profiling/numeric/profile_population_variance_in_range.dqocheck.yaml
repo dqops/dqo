@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/between_floats
   help_text: Verifies that the population variance of all values in a column is not
     outside the expected range.
+  friendly_name: Population variance of numeric values is in the range
+  default_severity: error

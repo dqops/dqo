@@ -98,7 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -125,7 +125,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -152,7 +152,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -179,7 +179,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -214,7 +214,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -241,7 +241,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -268,7 +268,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -295,7 +295,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -330,7 +330,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -357,7 +357,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -384,7 +384,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -411,7 +411,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -482,7 +482,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -510,7 +510,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -538,7 +538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -566,7 +566,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -604,7 +604,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -632,7 +632,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -660,7 +660,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -688,7 +688,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -726,7 +726,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -754,7 +754,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -782,7 +782,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -810,7 +810,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -884,7 +884,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -912,7 +912,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -940,7 +940,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -968,7 +968,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1006,7 +1006,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1034,7 +1034,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1062,7 +1062,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1090,7 +1090,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1128,7 +1128,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1156,7 +1156,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1184,7 +1184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1212,7 +1212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -1289,7 +1289,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1317,7 +1317,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1345,7 +1345,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1373,7 +1373,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1411,7 +1411,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1439,7 +1439,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1467,7 +1467,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1495,7 +1495,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1533,7 +1533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1561,7 +1561,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1589,7 +1589,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1617,7 +1617,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -1694,7 +1694,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1722,7 +1722,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1750,7 +1750,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1778,7 +1778,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1816,7 +1816,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1844,7 +1844,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1872,7 +1872,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -1900,7 +1900,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -1938,7 +1938,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -1966,7 +1966,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -1994,7 +1994,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -2022,7 +2022,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -2127,7 +2127,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -2154,7 +2154,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -2181,7 +2181,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -2208,7 +2208,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -2243,7 +2243,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -2270,7 +2270,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -2297,7 +2297,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -2324,7 +2324,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -2359,7 +2359,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -2386,7 +2386,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -2413,7 +2413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -2440,7 +2440,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -2511,7 +2511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -2539,7 +2539,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -2567,7 +2567,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -2595,7 +2595,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -2633,7 +2633,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -2661,7 +2661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -2689,7 +2689,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -2717,7 +2717,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -2755,7 +2755,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -2783,7 +2783,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -2811,7 +2811,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -2839,7 +2839,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -2913,7 +2913,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -2941,7 +2941,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -2969,7 +2969,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -2997,7 +2997,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3035,7 +3035,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3063,7 +3063,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3091,7 +3091,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3119,7 +3119,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3157,7 +3157,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3185,7 +3185,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3213,7 +3213,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3241,7 +3241,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -3318,7 +3318,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3346,7 +3346,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3374,7 +3374,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3402,7 +3402,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3440,7 +3440,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3468,7 +3468,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3496,7 +3496,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3524,7 +3524,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3562,7 +3562,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3590,7 +3590,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3618,7 +3618,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3646,7 +3646,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -3723,7 +3723,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3751,7 +3751,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3779,7 +3779,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3807,7 +3807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3845,7 +3845,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3873,7 +3873,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -3901,7 +3901,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -3929,7 +3929,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -3967,7 +3967,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -3995,7 +3995,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -4023,7 +4023,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -4051,7 +4051,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -4155,7 +4155,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -4182,7 +4182,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -4209,7 +4209,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -4236,7 +4236,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -4271,7 +4271,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -4298,7 +4298,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -4325,7 +4325,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -4352,7 +4352,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -4387,7 +4387,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -4414,7 +4414,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -4441,7 +4441,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -4468,7 +4468,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -4537,7 +4537,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -4565,7 +4565,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -4593,7 +4593,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -4621,7 +4621,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -4659,7 +4659,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -4687,7 +4687,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -4715,7 +4715,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -4743,7 +4743,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -4781,7 +4781,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -4809,7 +4809,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -4837,7 +4837,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -4865,7 +4865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -4937,7 +4937,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -4965,7 +4965,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -4993,7 +4993,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5021,7 +5021,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5059,7 +5059,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5087,7 +5087,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5115,7 +5115,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5143,7 +5143,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5181,7 +5181,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5209,7 +5209,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5237,7 +5237,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5265,7 +5265,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -5340,7 +5340,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5368,7 +5368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5396,7 +5396,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5424,7 +5424,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5462,7 +5462,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5490,7 +5490,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5518,7 +5518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5546,7 +5546,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5584,7 +5584,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5612,7 +5612,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5640,7 +5640,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5668,7 +5668,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -5743,7 +5743,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5771,7 +5771,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5799,7 +5799,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5827,7 +5827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5865,7 +5865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -5893,7 +5893,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -5921,7 +5921,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -5949,7 +5949,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -5987,7 +5987,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -6015,7 +6015,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -6043,7 +6043,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -6071,7 +6071,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -7201,7 +7201,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -7228,7 +7228,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -7255,7 +7255,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -7282,7 +7282,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -7317,7 +7317,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -7344,7 +7344,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -7371,7 +7371,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -7398,7 +7398,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -7433,7 +7433,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -7460,7 +7460,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -7487,7 +7487,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -7514,7 +7514,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -7584,7 +7584,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -7612,7 +7612,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -7640,7 +7640,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -7668,7 +7668,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -7706,7 +7706,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -7734,7 +7734,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -7762,7 +7762,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -7790,7 +7790,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -7828,7 +7828,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -7856,7 +7856,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -7884,7 +7884,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -7912,7 +7912,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -7985,7 +7985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8013,7 +8013,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8041,7 +8041,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8069,7 +8069,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -8107,7 +8107,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8135,7 +8135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8163,7 +8163,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8191,7 +8191,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -8229,7 +8229,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8257,7 +8257,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8285,7 +8285,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8313,7 +8313,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -8389,7 +8389,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8417,7 +8417,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8445,7 +8445,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8473,7 +8473,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -8511,7 +8511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8539,7 +8539,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8567,7 +8567,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8595,7 +8595,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -8633,7 +8633,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8661,7 +8661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8689,7 +8689,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8717,7 +8717,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -8793,7 +8793,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8821,7 +8821,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8849,7 +8849,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8877,7 +8877,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -8915,7 +8915,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -8943,7 +8943,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -8971,7 +8971,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -8999,7 +8999,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -9037,7 +9037,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -9065,7 +9065,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -9093,7 +9093,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -9121,7 +9121,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -9225,7 +9225,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -9252,7 +9252,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -9279,7 +9279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -9306,7 +9306,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -9341,7 +9341,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -9368,7 +9368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -9395,7 +9395,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -9422,7 +9422,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -9457,7 +9457,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -9484,7 +9484,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -9511,7 +9511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -9538,7 +9538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -9608,7 +9608,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -9636,7 +9636,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -9664,7 +9664,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -9692,7 +9692,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -9730,7 +9730,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -9758,7 +9758,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -9786,7 +9786,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -9814,7 +9814,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -9852,7 +9852,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -9880,7 +9880,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -9908,7 +9908,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -9936,7 +9936,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -10009,7 +10009,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10037,7 +10037,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10065,7 +10065,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10093,7 +10093,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -10131,7 +10131,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10159,7 +10159,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10187,7 +10187,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10215,7 +10215,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -10253,7 +10253,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10281,7 +10281,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10309,7 +10309,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10337,7 +10337,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -10413,7 +10413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10441,7 +10441,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10469,7 +10469,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10497,7 +10497,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -10535,7 +10535,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10563,7 +10563,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10591,7 +10591,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10619,7 +10619,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -10657,7 +10657,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10685,7 +10685,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10713,7 +10713,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10741,7 +10741,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -10817,7 +10817,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10845,7 +10845,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10873,7 +10873,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -10901,7 +10901,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -10939,7 +10939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -10967,7 +10967,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -10995,7 +10995,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -11023,7 +11023,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -11061,7 +11061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -11089,7 +11089,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -11117,7 +11117,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -11145,7 +11145,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -11248,7 +11248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -11275,7 +11275,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -11302,7 +11302,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -11329,7 +11329,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -11364,7 +11364,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -11391,7 +11391,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -11418,7 +11418,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -11445,7 +11445,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		}, {
 		  "checkHash" : 0,
@@ -11480,7 +11480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "-8597741925434587255",
 		    "checkHash" : 0,
@@ -11507,7 +11507,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "8520797026624525526",
 		    "checkHash" : 0,
@@ -11534,7 +11534,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  }, {
 		    "id" : "879763789071004098",
 		    "checkHash" : 0,
@@ -11561,7 +11561,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "includeInSla" : true,
 		    "provider" : "BigQuery",
 		    "qualityDimension" : "sample_quality_dimension",
-		    "sensorName" : "sample_target/sample_category/sample_sensor"
+		    "sensorName" : "sample_target/sample_category/table/volume/row_count"
 		  } ]
 		} ]
         ```
@@ -11629,7 +11629,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -11657,7 +11657,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -11685,7 +11685,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -11713,7 +11713,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -11751,7 +11751,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -11779,7 +11779,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -11807,7 +11807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -11835,7 +11835,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -11873,7 +11873,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -11901,7 +11901,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -11929,7 +11929,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -11957,7 +11957,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -12028,7 +12028,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12056,7 +12056,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12084,7 +12084,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12112,7 +12112,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -12150,7 +12150,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12178,7 +12178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12206,7 +12206,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12234,7 +12234,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -12272,7 +12272,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12300,7 +12300,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12328,7 +12328,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12356,7 +12356,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -12430,7 +12430,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12458,7 +12458,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12486,7 +12486,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12514,7 +12514,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -12552,7 +12552,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12580,7 +12580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12608,7 +12608,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12636,7 +12636,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -12674,7 +12674,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12702,7 +12702,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12730,7 +12730,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12758,7 +12758,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)
@@ -12832,7 +12832,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12860,7 +12860,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -12888,7 +12888,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -12916,7 +12916,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -12954,7 +12954,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -12982,7 +12982,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -13010,7 +13010,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -13038,7 +13038,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			),
@@ -13076,7 +13076,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='-8597741925434587255',
@@ -13104,7 +13104,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='8520797026624525526',
@@ -13132,7 +13132,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					),
 					CheckResultEntryModel(
 						id='879763789071004098',
@@ -13160,7 +13160,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						include_in_sla=True,
 						provider='BigQuery',
 						quality_dimension='sample_quality_dimension',
-						sensor_name='sample_target/sample_category/sample_sensor'
+						sensor_name='sample_target/sample_category/table/volume/row_count'
 					)
 				]
 			)

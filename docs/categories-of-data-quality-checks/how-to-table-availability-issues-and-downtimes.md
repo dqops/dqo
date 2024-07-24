@@ -89,9 +89,9 @@ The dashboard shows a calendar for each day of month, when the table availabilit
 | [Detect table availability issues](../examples/data-availability/detect-table-availability-issues.md) | This example shows how to verify that a query can be executed on a table and that the server does not return errors using [table_availability](../checks/table/availability/table-availability.md) check.  |
 
 ## List of availability checks at a table level
-| Data quality check name | Data quality dimension | Description | Standard check |
-|-------------------------|------------------------|-------------|-------|
-|[*table_availability*](../checks/table/availability/table-availability.md)|[Availability](../dqo-concepts/data-quality-dimensions.md#data-availability)|A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable). The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0. A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.|:material-check-bold:|
+| Data quality check name | Friendly name | Data quality dimension | Description | Standard check |
+|-------------------------|---------------|------------------------|-------------|----------------|
+|[*table_availability*](../checks/table/availability/table-availability.md)|Table availability|[Availability](../dqo-concepts/data-quality-dimensions.md#data-availability)|A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable). The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0. A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.|:material-check-bold:|
 
 
 **Reference and samples**

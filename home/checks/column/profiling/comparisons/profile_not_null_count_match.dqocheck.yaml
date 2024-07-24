@@ -8,4 +8,7 @@ spec:
     values in a tested column in a parent table and the count of not null values in
     a column in the reference table. The difference must be below defined percentage
     thresholds.
+  friendly_name: Maximum percentage of difference between the counts of not null values
+    in compared columns
   standard: true
+  default_severity: error

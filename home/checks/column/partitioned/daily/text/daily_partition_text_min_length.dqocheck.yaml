@@ -9,4 +9,6 @@ spec:
     \ that the shortest text is too short. Analyzes every daily partition and creates\
     \ a separate data quality check result with the time period value that identifies\
     \ the daily partition."
+  friendly_name: Verify that the minimum length of the text column is in the range
   standard: true
+  default_severity: error

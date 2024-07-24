@@ -9,4 +9,7 @@ spec:
     \ as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores\
     \ the most recent captured value for each day when the data quality check was\
     \ evaluated."
+  friendly_name: Minimum percentage of rows containing a text parsable to a boolean
+    value
   standard: true
+  default_severity: error

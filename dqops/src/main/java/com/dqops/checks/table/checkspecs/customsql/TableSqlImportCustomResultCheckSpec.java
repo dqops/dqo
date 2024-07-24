@@ -25,6 +25,7 @@ import com.dqops.rules.comparison.PassRuleParametersSpec;
 import com.dqops.sensors.table.customsql.TableSqlAggregatedExpressionSensorParametersSpec;
 import com.dqops.sensors.table.customsql.TableSqlImportCustomResultSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -157,6 +158,17 @@ public class TableSqlImportCustomResultCheckSpec extends AbstractCheckSpec<Table
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns an alternative check's friendly name that is shown on the check editor.
+     *
+     * @return An alternative name, or null when the check has no alternative name to show.
+     */
+    @Override
+    @JsonIgnore
+    public String getFriendlyName() {
+        return "Import custom data quality results on table";
     }
 
     /**

@@ -19,8 +19,8 @@ type ConfigurationType = 'error' | 'warning' | 'fatal' | '' | 'multiple_levels';
 
 const options = [
   { value: '', label: 'Disabled' },
-  { value: 'error', label: 'Error' },
   { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
   { value: 'fatal', label: 'Fatal' },
   { value: 'multiple_levels', label: 'Multiple Levels' }
 ];
@@ -102,14 +102,18 @@ export default function RuleConfiguration({
     }
   }, [ruleParamenterConfigured]);
 
+  useEffect(() => {
+    onChangeConfigurationType(getConfiguredType());
+  }, [enabledType]);
+
   const renderRuleConfiguration = (type: ConfigurationType) => {
     switch (type) {
       case '':
         return <></>;
       case 'warning':
         return (
-          <td className="py-2 px-4 bg-yellow-100 relative">
-            <div className="flex items-center justify-center">
+          <td>
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.warning}
@@ -132,8 +136,8 @@ export default function RuleConfiguration({
         );
       case 'error':
         return (
-          <td className="py-2 px-4 bg-orange-100">
-            <div className="flex items-center justify-center">
+          <td>
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.error}
@@ -156,8 +160,8 @@ export default function RuleConfiguration({
         );
       case 'fatal':
         return (
-          <td className="py-2 px-4 bg-red-100 h-18">
-            <div className="flex items-center justify-center">
+          <td>
+            <div className="flex items-center">
               <CheckRuleItem
                 disabled={isDisabled}
                 parameters={check?.rule?.fatal}
@@ -244,8 +248,8 @@ export default function RuleConfiguration({
   return (
     <Fragment>
       {!ruleParamenterConfigured && (
-        <td>
-          <div className="flex items-center justify-end">
+        <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 !w-40">
+          <div className="flex items-center justify-center !w-40">
             <Select
               value={configurationType}
               onChange={onChangeConfigurationType}

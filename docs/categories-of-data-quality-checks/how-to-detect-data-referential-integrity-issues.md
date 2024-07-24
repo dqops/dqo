@@ -204,10 +204,10 @@ spec:
 | [Detect missing keys between different tables](../examples/data-accuracy/integrity-check-between-columns-in-different-tables.md) | This example shows how to check the referential integrity of a column against a column in another table using [lookup_key_found_percent](../checks/column/integrity/lookup-key-found-percent.md) check. |
 
 ## List of integrity checks at a column level
-| Data quality check name | Data quality dimension | Description | Standard check |
-|-------------------------|------------------------|-------------|-------|
-|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
-|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
+| Data quality check name | Friendly name | Data quality dimension | Description | Standard check |
+|-------------------------|---------------|------------------------|-------------|----------------|
+|[*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md)|Maximum count of rows containing values not found in a reference table (foreign key lookup)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.|:material-check-bold:|
+|[*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md)|Minimum percentage of rows containing values not found in a reference table (foreign key lookup)|[Integrity](../dqo-concepts/data-quality-dimensions.md#data-integrity)|This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database. This check measures the percentage of valid keys found in the dictionary table. It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.| |
 
 
 **Reference and samples**

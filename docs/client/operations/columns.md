@@ -2338,10 +2338,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -2400,12 +2401,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2467,12 +2469,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2537,12 +2540,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2607,12 +2611,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2698,10 +2703,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -2762,12 +2768,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2831,12 +2838,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2903,12 +2911,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -2975,12 +2984,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -3971,10 +3981,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -4033,12 +4044,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4100,12 +4112,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4170,12 +4183,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4240,12 +4254,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4331,10 +4346,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -4395,12 +4411,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4464,12 +4481,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4536,12 +4554,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -4608,12 +4627,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -5594,10 +5614,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -5654,12 +5675,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -5719,12 +5741,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -5787,12 +5810,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -5855,12 +5879,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -5945,10 +5970,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		      "check_name" : "sample_check",
 		      "help_text" : "Sample help text",
 		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
+		      "sensor_name" : "sample_target/sample_category/table/volume/row_count",
 		      "quality_dimension" : "sample_quality_dimension",
 		      "supports_error_sampling" : false,
 		      "supports_grouping" : false,
+		      "default_severity" : "error",
 		      "disabled" : false,
 		      "exclude_from_kpi" : false,
 		      "include_in_sla" : false,
@@ -6007,12 +6033,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -6074,12 +6101,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -6144,12 +6172,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -6214,12 +6243,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 							sensor_parameters=[
 							
 							],
-							sensor_name='sample_target/sample_category/sample_sensor',
+							sensor_name='sample_target/sample_category/table/volume/row_count',
 							quality_dimension='sample_quality_dimension',
 							supports_error_sampling=False,
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
+							default_severity=RuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
@@ -6310,30 +6340,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		  "statistics" : [ {
 		    "category" : "sample_category",
 		    "collector" : "sample_collector",
+		    "sensorName" : "table/volume/row_count",
 		    "resultDataType" : "integer",
 		    "result" : 4372,
 		    "collectedAt" : "2007-10-11T18:00:00"
 		  }, {
 		    "category" : "sample_category",
 		    "collector" : "sample_collector",
+		    "sensorName" : "table/volume/row_count",
 		    "resultDataType" : "integer",
 		    "result" : 9624,
 		    "collectedAt" : "2007-10-12T18:00:00"
 		  }, {
 		    "category" : "sample_category",
 		    "collector" : "sample_collector",
+		    "sensorName" : "table/volume/row_count",
 		    "resultDataType" : "integer",
 		    "result" : 1575,
 		    "collectedAt" : "2007-10-13T18:00:00"
 		  }, {
 		    "category" : "sample_category",
 		    "collector" : "sample_collector",
+		    "sensorName" : "table/volume/row_count",
 		    "resultDataType" : "integer",
 		    "result" : 5099,
 		    "collectedAt" : "2007-10-14T18:00:00"
 		  }, {
 		    "category" : "sample_category",
 		    "collector" : "sample_collector",
+		    "sensorName" : "table/volume/row_count",
 		    "resultDataType" : "integer",
 		    "result" : 9922,
 		    "collectedAt" : "2007-10-15T18:00:00"
@@ -6395,6 +6430,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=4372,
 					collected_at=Some date/time value: [2007-10-11T18:00]
@@ -6402,6 +6438,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9624,
 					collected_at=Some date/time value: [2007-10-12T18:00]
@@ -6409,6 +6446,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=1575,
 					collected_at=Some date/time value: [2007-10-13T18:00]
@@ -6416,6 +6454,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=5099,
 					collected_at=Some date/time value: [2007-10-14T18:00]
@@ -6423,6 +6462,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9922,
 					collected_at=Some date/time value: [2007-10-15T18:00]
@@ -6488,6 +6528,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=4372,
 					collected_at=Some date/time value: [2007-10-11T18:00]
@@ -6495,6 +6536,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9624,
 					collected_at=Some date/time value: [2007-10-12T18:00]
@@ -6502,6 +6544,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=1575,
 					collected_at=Some date/time value: [2007-10-13T18:00]
@@ -6509,6 +6552,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=5099,
 					collected_at=Some date/time value: [2007-10-14T18:00]
@@ -6516,6 +6560,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9922,
 					collected_at=Some date/time value: [2007-10-15T18:00]
@@ -6584,6 +6629,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=4372,
 					collected_at=Some date/time value: [2007-10-11T18:00]
@@ -6591,6 +6637,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9624,
 					collected_at=Some date/time value: [2007-10-12T18:00]
@@ -6598,6 +6645,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=1575,
 					collected_at=Some date/time value: [2007-10-13T18:00]
@@ -6605,6 +6653,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=5099,
 					collected_at=Some date/time value: [2007-10-14T18:00]
@@ -6612,6 +6661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9922,
 					collected_at=Some date/time value: [2007-10-15T18:00]
@@ -6680,6 +6730,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=4372,
 					collected_at=Some date/time value: [2007-10-11T18:00]
@@ -6687,6 +6738,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9624,
 					collected_at=Some date/time value: [2007-10-12T18:00]
@@ -6694,6 +6746,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=1575,
 					collected_at=Some date/time value: [2007-10-13T18:00]
@@ -6701,6 +6754,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=5099,
 					collected_at=Some date/time value: [2007-10-14T18:00]
@@ -6708,6 +6762,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 				StatisticsMetricModel(
 					category='sample_category',
 					collector='sample_collector',
+					sensor_name='table/volume/row_count',
 					result_data_type=StatisticsResultDataType.INTEGER,
 					result=9922,
 					collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7335,30 +7390,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "statistics" : [ {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 4372,
 		      "collectedAt" : "2007-10-11T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 9624,
 		      "collectedAt" : "2007-10-12T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 1575,
 		      "collectedAt" : "2007-10-13T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 5099,
 		      "collectedAt" : "2007-10-14T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 9922,
 		      "collectedAt" : "2007-10-15T18:00:00"
@@ -7386,30 +7446,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		    "statistics" : [ {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 4372,
 		      "collectedAt" : "2007-10-11T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 9624,
 		      "collectedAt" : "2007-10-12T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 1575,
 		      "collectedAt" : "2007-10-13T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 5099,
 		      "collectedAt" : "2007-10-14T18:00:00"
 		    }, {
 		      "category" : "sample_category",
 		      "collector" : "sample_collector",
+		      "sensorName" : "table/volume/row_count",
 		      "resultDataType" : "integer",
 		      "result" : 9922,
 		      "collectedAt" : "2007-10-15T18:00:00"
@@ -7486,6 +7551,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7493,6 +7559,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7500,6 +7567,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7507,6 +7575,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7514,6 +7583,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7547,6 +7617,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7554,6 +7625,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7561,6 +7633,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7568,6 +7641,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7575,6 +7649,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7658,6 +7733,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7665,6 +7741,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7672,6 +7749,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7679,6 +7757,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7686,6 +7765,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7719,6 +7799,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7726,6 +7807,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7733,6 +7815,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7740,6 +7823,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7747,6 +7831,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7833,6 +7918,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7840,6 +7926,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7847,6 +7934,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7854,6 +7942,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7861,6 +7950,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -7894,6 +7984,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -7901,6 +7992,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -7908,6 +8000,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -7915,6 +8008,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -7922,6 +8016,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -8008,6 +8103,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -8015,6 +8111,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -8022,6 +8119,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -8029,6 +8127,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -8036,6 +8135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -8069,6 +8169,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=4372,
 							collected_at=Some date/time value: [2007-10-11T18:00]
@@ -8076,6 +8177,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9624,
 							collected_at=Some date/time value: [2007-10-12T18:00]
@@ -8083,6 +8185,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=1575,
 							collected_at=Some date/time value: [2007-10-13T18:00]
@@ -8090,6 +8193,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=5099,
 							collected_at=Some date/time value: [2007-10-14T18:00]
@@ -8097,6 +8201,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						StatisticsMetricModel(
 							category='sample_category',
 							collector='sample_collector',
+							sensor_name='table/volume/row_count',
 							result_data_type=StatisticsResultDataType.INTEGER,
 							result=9922,
 							collected_at=Some date/time value: [2007-10-15T18:00]
@@ -9382,7 +9487,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -9399,7 +9504,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -9417,12 +9523,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9464,7 +9571,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -9482,12 +9590,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9529,7 +9638,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -9550,12 +9660,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9597,7 +9708,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -9618,12 +9730,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10175,7 +10288,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -10192,7 +10305,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -10210,12 +10324,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10257,7 +10372,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -10275,12 +10391,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10322,7 +10439,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -10343,12 +10461,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10390,7 +10509,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                CheckModel, \
 	                                CheckTimeScale, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -10411,12 +10531,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -10967,7 +11088,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/table/volume/row_count\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_error_sampling\":false,\"supports_grouping\":false,\"default_severity\":\"error\",\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 	
     ```
 
@@ -10983,7 +11104,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -11001,12 +11123,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11046,7 +11169,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -11064,12 +11188,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11109,7 +11234,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -11130,12 +11256,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -11175,7 +11302,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
 	                                FieldModel, \
-	                                QualityCategoryModel
+	                                QualityCategoryModel, \
+	                                RuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -11196,12 +11324,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_parameters=[
 						
 						],
-						sensor_name='sample_target/sample_category/sample_sensor',
+						sensor_name='sample_target/sample_category/table/volume/row_count',
 						quality_dimension='sample_quality_dimension',
 						supports_error_sampling=False,
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
+						default_severity=RuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,

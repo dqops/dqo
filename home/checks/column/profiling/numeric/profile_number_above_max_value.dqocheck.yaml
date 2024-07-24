@@ -6,4 +6,6 @@ spec:
   rule_name: comparison/max_count
   help_text: The check counts the number of values in the column that are above the
     value defined by the user as a parameter.
+  friendly_name: Find invalid numeric values above an expected maximum value
   standard: true
+  default_severity: error

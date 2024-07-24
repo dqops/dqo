@@ -8,4 +8,7 @@ spec:
     a table and total max of a column of another table does not exceed the set number.
     Stores the most recent captured value for each day when the data quality check
     was evaluated.
+  friendly_name: The maximum difference in percent between the maximum value of this
+    column and the reference column
   standard: true
+  default_severity: error

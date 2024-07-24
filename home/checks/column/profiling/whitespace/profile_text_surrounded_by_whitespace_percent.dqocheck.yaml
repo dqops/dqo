@@ -7,3 +7,5 @@ spec:
   help_text: This check detects text values that are surrounded by whitespace characters
     on any side and measures their percentage. This check raises a data quality issue
     when their percentage exceeds the *max_percent* parameter value.
+  friendly_name: Maximum percentage of text surrounded by whitespace characters
+  default_severity: error

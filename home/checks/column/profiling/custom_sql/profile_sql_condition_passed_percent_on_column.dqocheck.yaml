@@ -7,3 +7,5 @@ spec:
   help_text: "Verifies that a minimum percentage of rows passed a custom SQL condition\
     \ (expression). Reference the current column by using tokens, for example: `{alias}.{column}\
     \ > {alias}.col_tax`."
+  friendly_name: Minimum percentage of rows that passed SQL condition
+  default_severity: error

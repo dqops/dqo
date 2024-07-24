@@ -59,6 +59,11 @@ public class CheckDocumentationModel {
     private String checkName;
 
     /**
+     * Check friendly name.
+     */
+    private String friendlyName;
+
+    /**
      * Check type.
      */
     private String checkType;

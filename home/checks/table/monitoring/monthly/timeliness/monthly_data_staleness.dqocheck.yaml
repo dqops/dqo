@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/max_days
   help_text: Monthly monitoring calculating the time difference in days between the
     current date and the most recent data ingestion timestamp (staleness)
+  friendly_name: Data staleness (Maximum number of days since the recent ingestion)
+  default_severity: error

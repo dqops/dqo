@@ -8,4 +8,7 @@ spec:
     \ date formats, such as an ISO 8601 date. Measures the percentage of valid date\
     \ strings and raises a data quality issue when too many invalid date strings are\
     \ found. Creates a separate data quality check (and an alert) for each daily monitoring."
+  friendly_name: Minimum percentage of rows containing text values that match a date
+    format
   standard: true
+  default_severity: error

@@ -9,4 +9,6 @@ spec:
     \ too many failures were detected. This check is used also to compare values between\
     \ columns: `{alias}.col_price > {alias}.col_tax`. Stores the most recent count\
     \ of failed rows for each month when the data quality check was evaluated."
+  friendly_name: Maximum count of rows that failed SQL conditions
   standard: true
+  default_severity: error

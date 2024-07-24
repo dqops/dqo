@@ -8,4 +8,6 @@ spec:
     that contains emails in a column does not exceed the minimum accepted percentage.
     Stores the most recent check result for each month when the data quality check
     was evaluated.
+  friendly_name: Detect emails inside text columns
   standard: true
+  default_severity: error

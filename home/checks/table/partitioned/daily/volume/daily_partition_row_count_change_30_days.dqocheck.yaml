@@ -8,4 +8,5 @@ spec:
     volume (row count) since thirty days ago is below the maximum accepted percentage.
     Comparing the current row count to a value 30 days ago overcomes the effect of
     monthly seasonability.
+  friendly_name: Maximum relative change in the row count vs 30 days ago
   default_severity: warning

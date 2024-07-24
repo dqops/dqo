@@ -20,9 +20,9 @@ The **nulls percent change 30 days** data quality check has the following varian
 
 Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_nulls_percent_change_30_days`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_nulls_percent_change_30_days`</span>|Maximum percentage of change in the count of null values vs 30 day ago|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
 
 **Command-line examples**
 
@@ -1215,9 +1215,9 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_nulls_percent_change_30_days`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_nulls_percent_change_30_days`</span>|Maximum percentage of change in the count of null values vs 30 day ago|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
 
 **Command-line examples**
 
@@ -2412,9 +2412,9 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.
 
-|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
-|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_nulls_percent_change_30_days`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
+|Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_nulls_percent_change_30_days`</span>|Maximum percentage of change in the count of null values vs 30 day ago|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)| |
 
 **Command-line examples**
 

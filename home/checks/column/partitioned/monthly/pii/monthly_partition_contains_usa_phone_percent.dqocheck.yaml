@@ -8,4 +8,6 @@ spec:
     of rows that contains USA phone number in a column does not exceed the maximum
     accepted percentage. Stores a separate data quality check result for each monthly
     partition.
+  friendly_name: Detect USA phone numbers inside text columns
   standard: true
+  default_severity: error

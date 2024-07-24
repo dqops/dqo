@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the mean (average) length of texts in a column is within
     an accepted range. Analyzes every daily partition and creates a separate data
     quality check result with the time period value that identifies the daily partition.
+  friendly_name: Verify that the mean length of the text is in the range
+  default_severity: error

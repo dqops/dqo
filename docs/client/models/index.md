@@ -18,6 +18,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckListModel*](./common.md#checklistmodel)|Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.|
 |[*CheckContainerListModel*](./common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
 |[*RuleThresholdsModel*](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
+|[*RuleSeverityLevel*](./common.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
 |[*MonitoringScheduleSpec*](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
 |[*CheckRunScheduleGroup*](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
 |[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule can be configured.|
@@ -34,7 +35,6 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*CheckContainerTypeModel*](./common.md#checkcontainertypemodel)|Model identifying the check type and timescale of checks belonging to a container.|
 |[*CheckTemplate*](./common.md#checktemplate)|Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.|
 |[*PhysicalTableName*](./common.md#physicaltablename)|Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).|
-|[*RuleSeverityLevel*](./common.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
 |[*CheckResultStatus*](./common.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
 |[*CheckCurrentDataQualityStatusModel*](./common.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
 |[*DimensionCurrentDataQualityStatusModel*](./common.md#dimensioncurrentdataqualitystatusmodel)|A model that describes the current data quality status for a single data quality dimension.|
@@ -205,6 +205,8 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*IncidentsPerConnectionModel*](./incidents.md#incidentsperconnectionmodel)|Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.|
 |[*SortDirection*](./incidents.md#sortdirection)|REST api model sort direction.|
 |[*TopIncidentGrouping*](./incidents.md#topincidentgrouping)|Enumeration of groupings for incidents.|
+|[*IncidentCountsModel*](./incidents.md#incidentcountsmodel)|Stores numbers of incidents over a specific time period.|
+|[*IncidentSeverityLevelCountsModel*](./incidents.md#incidentseveritylevelcountsmodel)|Contains the counts for each of severity level.|
 |[*TopIncidentsModel*](./incidents.md#topincidentsmodel)|Summary model with the most recent incidents grouped by one attribute (data quality dimension, data quality check category, etc).|
 
 

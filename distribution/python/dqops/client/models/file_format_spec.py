@@ -7,6 +7,8 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.csv_file_format_spec import CsvFileFormatSpec
+    from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
+    from ..models.iceberg_file_format_spec import IcebergFileFormatSpec
     from ..models.json_file_format_spec import JsonFileFormatSpec
     from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
@@ -21,12 +23,16 @@ class FileFormatSpec:
         csv (Union[Unset, CsvFileFormatSpec]):
         json (Union[Unset, JsonFileFormatSpec]):
         parquet (Union[Unset, ParquetFileFormatSpec]):
+        iceberg (Union[Unset, IcebergFileFormatSpec]):
+        delta_lake (Union[Unset, DeltaLakeFileFormatSpec]):
         file_paths (Union[Unset, List[str]]): The list of paths to files with data that are used as a source.
     """
 
     csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
     json: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
+    iceberg: Union[Unset, "IcebergFileFormatSpec"] = UNSET
+    delta_lake: Union[Unset, "DeltaLakeFileFormatSpec"] = UNSET
     file_paths: Union[Unset, List[str]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -43,6 +49,14 @@ class FileFormatSpec:
         if not isinstance(self.parquet, Unset):
             parquet = self.parquet.to_dict()
 
+        iceberg: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.iceberg, Unset):
+            iceberg = self.iceberg.to_dict()
+
+        delta_lake: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.delta_lake, Unset):
+            delta_lake = self.delta_lake.to_dict()
+
         file_paths: Union[Unset, List[str]] = UNSET
         if not isinstance(self.file_paths, Unset):
             file_paths = self.file_paths
@@ -56,6 +70,10 @@ class FileFormatSpec:
             field_dict["json"] = json
         if parquet is not UNSET:
             field_dict["parquet"] = parquet
+        if iceberg is not UNSET:
+            field_dict["iceberg"] = iceberg
+        if delta_lake is not UNSET:
+            field_dict["delta_lake"] = delta_lake
         if file_paths is not UNSET:
             field_dict["file_paths"] = file_paths
 
@@ -64,6 +82,8 @@ class FileFormatSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.csv_file_format_spec import CsvFileFormatSpec
+        from ..models.delta_lake_file_format_spec import DeltaLakeFileFormatSpec
+        from ..models.iceberg_file_format_spec import IcebergFileFormatSpec
         from ..models.json_file_format_spec import JsonFileFormatSpec
         from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
@@ -89,12 +109,28 @@ class FileFormatSpec:
         else:
             parquet = ParquetFileFormatSpec.from_dict(_parquet)
 
+        _iceberg = d.pop("iceberg", UNSET)
+        iceberg: Union[Unset, IcebergFileFormatSpec]
+        if isinstance(_iceberg, Unset):
+            iceberg = UNSET
+        else:
+            iceberg = IcebergFileFormatSpec.from_dict(_iceberg)
+
+        _delta_lake = d.pop("delta_lake", UNSET)
+        delta_lake: Union[Unset, DeltaLakeFileFormatSpec]
+        if isinstance(_delta_lake, Unset):
+            delta_lake = UNSET
+        else:
+            delta_lake = DeltaLakeFileFormatSpec.from_dict(_delta_lake)
+
         file_paths = cast(List[str], d.pop("file_paths", UNSET))
 
         file_format_spec = cls(
             csv=csv,
             json=json,
             parquet=parquet,
+            iceberg=iceberg,
+            delta_lake=delta_lake,
             file_paths=file_paths,
         )
 

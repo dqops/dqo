@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckModel,
+  CheckModelDefaultSeverityEnum,
   CheckResultsOverviewDataModel,
   CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
@@ -196,17 +197,45 @@ const CheckListItem = ({
       : {};
 
     if (
+      configured &&
       !check?.rule?.warning?.configured &&
       !check?.rule?.error?.configured &&
       !check?.rule?.fatal?.configured
     ) {
-      newRuleConfiguration = {
-        ...newRuleConfiguration,
-        error: {
-          ...check.rule?.error,
-          configured: true
-        }
-      };
+      switch (check.default_severity) {
+        case CheckModelDefaultSeverityEnum.warning:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            warning: {
+              ...check.rule?.warning,
+              configured: true
+            }
+          };
+          setEnabledType('warning');
+          break;
+
+        case CheckModelDefaultSeverityEnum.error:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            error: {
+              ...check.rule?.error,
+              configured: true
+            }
+          };
+          setEnabledType('error');
+          break;
+
+        case CheckModelDefaultSeverityEnum.fatal:
+          newRuleConfiguration = {
+            ...newRuleConfiguration,
+            fatal: {
+              ...check.rule?.fatal,
+              configured: true
+            }
+          };
+          setEnabledType('fatal');
+          break;
+      }
     }
 
     handleChange({
@@ -616,7 +645,7 @@ const CheckListItem = ({
             </Tooltip>
           ) : null}
         </div>
-        <td className="h-full flex items-center justify-end mr-5">
+        <td className="h-full flex items-center justify-end">
           <div className="text-gray-700 text-sm mt-1.5">
             <SensorParameters
               parameters={check.sensor_parameters || []}

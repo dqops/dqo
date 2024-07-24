@@ -7,3 +7,5 @@ spec:
   help_text: Verifies that the percentage of values from range in a column does not
     exceed the minimum accepted percentage. Stores a separate data quality check result
     for each monthly partition.
+  friendly_name: Maximum percentage of rows containing integer values in the range
+  default_severity: error

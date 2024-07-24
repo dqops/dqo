@@ -7,4 +7,7 @@ spec:
   help_text: Detects invalid values that are not present in a dictionary table using
     an outer join query. Counts the number of invalid keys. Stores the most recent
     check result for each month when the data quality check was evaluated.
+  friendly_name: Maximum count of rows containing values not found in a reference
+    table (foreign key lookup)
   standard: true
+  default_severity: error

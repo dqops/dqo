@@ -9,3 +9,5 @@ spec:
     when their percentage exceeds the *max_percent* parameter value. Analyzes every
     monthly partition and creates a separate data quality check result with the time
     period value that identifies the monthly partition.
+  friendly_name: Maximum percentage of text surrounded by whitespace characters
+  default_severity: error

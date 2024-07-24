@@ -8,4 +8,6 @@ spec:
     percentage of rows having a null value. Raises a data quality issue when the percentage
     of null values is above a max_percent threshold. Stores the most recent check
     result for each month when the data quality check was evaluated.
+  friendly_name: Maximum percentage of rows containing null values (incomplete column)
   standard: true
+  default_severity: error

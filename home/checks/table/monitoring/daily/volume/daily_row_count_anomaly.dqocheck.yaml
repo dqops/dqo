@@ -7,5 +7,6 @@ spec:
   help_text: Detects when the row count has changed too much since the previous day.
     It uses time series anomaly detection to find the biggest volume changes during
     the last 90 days.
+  friendly_name: Abnormal change in row count since the last known value
   standard: true
   default_severity: warning

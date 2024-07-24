@@ -6,3 +6,5 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of valid country codes in a text column
     does not fall below the minimum accepted percentage
+  friendly_name: Minimum percentage of rows containing valid country codes
+  default_severity: error

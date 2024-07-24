@@ -7,4 +7,6 @@ spec:
   help_text: "This check finds the length of the longest text in a column. Then, it\
     \ verifies that the maximum length is within an accepted range. It detects that\
     \ the texts are too long or not long enough."
+  friendly_name: Verify that the maximum length of the text is in the range
   standard: true
+  default_severity: error

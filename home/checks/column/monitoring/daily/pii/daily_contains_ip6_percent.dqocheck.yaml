@@ -8,3 +8,5 @@ spec:
     rows that contains valid IP6 address values in a column does not fall below the
     minimum accepted percentage. Stores the most recent captured value for each day
     when the data quality check was evaluated.
+  friendly_name: Detect IP6 addresses inside text columns
+  default_severity: error

@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/max_days
   help_text: Daily calculating the time difference in days between the most recent
     event timestamp and the most recent ingestion timestamp
+  friendly_name: Data ingestion delay (Maximum number of days between the last record
+    has been created and loaded)
+  default_severity: error

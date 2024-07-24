@@ -8,4 +8,6 @@ spec:
     \ as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality\
     \ issue when their count exceeds a *max_count* parameter value. Stores a separate\
     \ data quality check result for each daily partition."
+  friendly_name: "Maximum count of null placeholder values (i.e., None, n/a, null)"
   standard: true
+  default_severity: error

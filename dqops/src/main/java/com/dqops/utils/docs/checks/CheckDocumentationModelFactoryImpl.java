@@ -277,6 +277,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
                 similarChecksDocumentationModel.setPrimaryCheckName(firstCheckName.replace('_', ' '));
                 similarChecksDocumentationModel.setStandard(firstCheckModel.getCheckModel().isStandard());
+                similarChecksDocumentationModel.setFriendlyName(firstCheckModel.getCheckModel().getFriendlyName());
                 similarChecksDocumentationModel.setQualityDimension(firstCheckModel.getCheckModel().getQualityDimension());
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
@@ -325,6 +326,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setStandard(checkModel.isStandard());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
+        checkDocumentationModel.setFriendlyName(checkModel.getFriendlyName());
 
         SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(
                 checkModel.getSensorParametersSpec());

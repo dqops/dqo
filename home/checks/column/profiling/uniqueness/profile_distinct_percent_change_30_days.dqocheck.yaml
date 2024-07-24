@@ -6,4 +6,6 @@ spec:
   rule_name: change/change_percent_30_days
   help_text: Verifies that the distinct percent in a monitored column has changed
     by a fixed rate since the last readout from last month.
+  friendly_name: Maximum relative change in the percentage of distinct values vs 30
+    days ago
   default_severity: warning

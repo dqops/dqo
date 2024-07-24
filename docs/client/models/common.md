@@ -154,6 +154,19 @@ Model that returns the form definition and the form data to edit a single rule w
 
 ___
 
+## RuleSeverityLevel
+Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>error<br/>fatal<br/>|
+
+___
+
 ## MonitoringScheduleSpec
 Monitoring job schedule specification.
 
@@ -335,6 +348,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`supports_grouping`</span>|The data quality check supports a custom data grouping configuration.|*boolean*|
 |<span class="no-wrap-code">`standard`</span>|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|*boolean*|
 |<span class="no-wrap-code">`default_check`</span>|This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.|*boolean*|
+|<span class="no-wrap-code">[`default_severity`](#ruleseveritylevel)</span>|The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.|*[RuleSeverityLevel](#ruleseveritylevel)*|
 |<span class="no-wrap-code">[`data_grouping_override`](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)</span>|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |*[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)*|
 |<span class="no-wrap-code">[`schedule_override`](./common.md#monitoringschedulespec)</span>|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|*[MonitoringScheduleSpec](./common.md#monitoringschedulespec)*|
 |<span class="no-wrap-code">[`effective_schedule`](#effectiveschedulemodel)</span>|Model of configured schedule enabled on the check level.|*[EffectiveScheduleModel](#effectiveschedulemodel)*|
@@ -452,19 +466,6 @@ Physical table name that is a combination of a schema name and a physical table 
 
 ___
 
-## RuleSeverityLevel
-Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
-
-
-**The structure of this object is described below**
-
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|valid<br/>warning<br/>error<br/>fatal<br/>|
-
-___
-
 ## CheckResultStatus
 Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.
 
@@ -538,7 +539,7 @@ The column validity status. It is a summary of the results of the most recently 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`current_severity`](#ruleseveritylevel)</span>|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](#ruleseveritylevel)*|
+|<span class="no-wrap-code">[`current_severity`](./common.md#ruleseveritylevel)</span>|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">[`highest_historical_severity`](./common.md#ruleseveritylevel)</span>|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|*[RuleSeverityLevel](./common.md#ruleseveritylevel)*|
 |<span class="no-wrap-code">`executed_checks`</span>|The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|*integer*|
 |<span class="no-wrap-code">`valid_results`</span>|The number of most recent valid data quality checks that passed without raising any issues.|*integer*|

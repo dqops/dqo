@@ -6,3 +6,6 @@ spec:
   rule_name: comparison/max_missing
   help_text: Verifies that the top X most popular column values contain all values
     from a list of expected values.
+  friendly_name: Verify that the most popular text values match the list of expected
+    values
+  default_severity: error
