@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @SpringBootTest
 class IncidentCountsModelTest extends BaseTest {
@@ -30,6 +31,7 @@ class IncidentCountsModelTest extends BaseTest {
 
         incidentCountsModel.processCountIncrementation(momentAgo);
 
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
         Assertions.assertEquals(1, incidentCountsModel.getCurrentMonthCount());
@@ -45,6 +47,23 @@ class IncidentCountsModelTest extends BaseTest {
 
         incidentCountsModel.processCountIncrementation(toDaysAgo);
 
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
+        Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
+        Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
+        Assertions.assertEquals(1, incidentCountsModel.getCurrentMonthCount());
+        Assertions.assertEquals(0, incidentCountsModel.getPreviousMonthCount());
+    }
+
+    @Test
+    void verifyAddition_whenOccurredSevenDaysAgoAtDayStart_isCounted() {
+        ZoneId zoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
+        IncidentCountsModel incidentCountsModel = IncidentCountsModel.createInstance(zoneId);
+
+        Instant sevenDaysAgoDayStart = Instant.now().atZone(zoneId).minusDays(7).toLocalDate().atStartOfDay().plusHours(1).atZone(zoneId).toInstant();
+
+        incidentCountsModel.processCountIncrementation(sevenDaysAgoDayStart);
+
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
         Assertions.assertEquals(1, incidentCountsModel.getCurrentMonthCount());
@@ -60,24 +79,63 @@ class IncidentCountsModelTest extends BaseTest {
 
         incidentCountsModel.processCountIncrementation(lastMonth);
 
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
         Assertions.assertEquals(0, incidentCountsModel.getCurrentMonthCount());
         Assertions.assertEquals(1, incidentCountsModel.getPreviousMonthCount());
     }
+
     @Test
-    void verifyAddition_whenOccurredTwoAndHalfMonthAgo_isNotCounted() {
+    void verifyAddition_whenOccurredThreeAndHalfMonthAgo_isNotCounted() {
 
         IncidentCountsModel incidentCountsModel = IncidentCountsModel.createInstance(defaultTimeZoneProvider.getDefaultTimeZoneId());
 
-        Instant twoAndHalfMonthsAgo = Instant.now().minusSeconds(45 * 24 * 60 * 60);
+        Instant twoAndHalfMonthsAgo = Instant.now().minusSeconds(75 * 24 * 60 * 60);
 
         incidentCountsModel.processCountIncrementation(twoAndHalfMonthsAgo);
 
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
         Assertions.assertEquals(0, incidentCountsModel.getCurrentMonthCount());
         Assertions.assertEquals(0, incidentCountsModel.getPreviousMonthCount());
+    }
+
+    @Test
+    void verifyAddition_whenOccurredOnMonthBeginningPositiveZone_isCounted() {
+
+        ZoneId nearZeroPositiveZone = ZoneId.of("Europe/Warsaw");
+
+        IncidentCountsModel incidentCountsModel = IncidentCountsModel.createInstance(ZoneId.of("Europe/Warsaw"));
+
+        Instant monthAgoFirstDay = Instant.now().atZone(nearZeroPositiveZone).minusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay(nearZeroPositiveZone).toInstant();
+
+        incidentCountsModel.processCountIncrementation(monthAgoFirstDay);
+
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
+        Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
+        Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
+        Assertions.assertEquals(0, incidentCountsModel.getCurrentMonthCount());
+        Assertions.assertEquals(1, incidentCountsModel.getPreviousMonthCount());
+    }
+
+    @Test
+    void verifyAddition_whenOccurredOnMonthBeginningNegativeZone_isCounted() {
+
+        ZoneId nearZeroPositiveZone = ZoneId.of("US/Eastern");
+
+        IncidentCountsModel incidentCountsModel = IncidentCountsModel.createInstance(ZoneId.of("US/Eastern"));
+
+        Instant monthAgoFirstDay = Instant.now().atZone(nearZeroPositiveZone).minusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay(nearZeroPositiveZone).toInstant();
+
+        incidentCountsModel.processCountIncrementation(monthAgoFirstDay);
+
+        Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
+        Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
+        Assertions.assertEquals(0, incidentCountsModel.getCountFromLast7days());
+        Assertions.assertEquals(0, incidentCountsModel.getCurrentMonthCount());
+        Assertions.assertEquals(1, incidentCountsModel.getPreviousMonthCount());
     }
 
 }

@@ -432,7 +432,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param incidentGrouping   Incident grouping.
      * @param incidentStatus     Incident status to filter by.
      * @param limitPerGroup      The maximum number of incidents per group to return.
-     * @param daysToScan         The number of days back to scan.
+     * @param monthsToScan       The number of months back to scan.
      * @param userDomainIdentity Calling user identity with the data domain.
      * @return Summary of the most recent incidents.
      */
@@ -440,19 +440,20 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
     public TopIncidentsModel findTopIncidents(TopIncidentGrouping incidentGrouping,
                                               IncidentStatus incidentStatus,
                                               int limitPerGroup,
-                                              int daysToScan,
+                                              int monthsToScan,
                                               UserDomainIdentity userDomainIdentity) {
         TopIncidentsModel result = new TopIncidentsModel();
         result.setGrouping(incidentGrouping);
         result.setStatus(incidentStatus);
 
-        if (daysToScan > 180) {
-            daysToScan = 180; // sanity limit
+        if (monthsToScan > 6) {
+            monthsToScan = 6; // sanity limit on ca. 180 days
         }
 
-        Instant now = Instant.now();
-        Instant since = now.minus(daysToScan, ChronoUnit.DAYS);
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        Instant now = Instant.now();
+        LocalDate nowLocalDate = now.atZone(defaultTimeZoneId).toLocalDate().withDayOfMonth(1).minusMonths(monthsToScan - 1);
+        Instant since = nowLocalDate.atStartOfDay(defaultTimeZoneId).toInstant();
         LocalDate dateUntil = now.atZone(defaultTimeZoneId).toLocalDate();
         LocalDate dateSince = since.atZone(defaultTimeZoneId).toLocalDate();
 
@@ -508,6 +509,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
 
                     Instant firstSeen = firstSeenColumn.get(rowIndex);
                     int highestSeverity = highestSeverityColumn.get(rowIndex);
+                    if (since.isAfter(firstSeen)) {
+                        continue; // too old
+                    }
 
                     if(status == IncidentStatus.open){
                         result.getOpenIncidentSeverityLevelCounts().processAddCount(highestSeverity, firstSeen);
@@ -543,10 +547,6 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     if (incidentModelsByGroup == null) {
                         incidentModelsByGroup = new ArrayList<>();
                         result.getTopIncidents().put(groupingKey, incidentModelsByGroup);
-                    }
-
-                    if (since.isAfter(firstSeen)) {
-                        continue; // too old
                     }
 
                     if (incidentModelsByGroup.size() >= limitPerGroup) {

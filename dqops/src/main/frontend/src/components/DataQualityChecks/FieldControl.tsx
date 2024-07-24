@@ -5,7 +5,7 @@ import {
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
-import Checkbox from '../Checkbox';
+import CheckboxColumn from '../Checkbox/CheckBoxColumn';
 import ExtendedTextAre from '../ExtendedTextArea';
 import FieldDatePicker from '../FieldDatePicker';
 import FloatingPointInput from '../FloatingPointInput';
@@ -83,14 +83,16 @@ const FieldControl = ({
   return (
     <div>
       {type === 'boolean' && (
-        <Checkbox
-          onChange={(value) => handleChange({ boolean_value: value })}
-          checked={value}
-          label={label}
-          tooltipText={tooltip}
-          disabled={disabled}
-          error={checkBoxNotRed ? false : isInvalid}
-        />
+        <div className=" mb-4">
+          <CheckboxColumn
+            onChange={(value) => handleChange({ boolean_value: value })}
+            checked={value}
+            label={label}
+            tooltipText={tooltip}
+            disabled={disabled}
+            error={checkBoxNotRed ? false : isInvalid}
+          />
+        </div>
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
         <>
@@ -153,6 +155,7 @@ const FieldControl = ({
               long_value: String(value).length === 0 ? undefined : Number(value)
             })
           }
+          onChangeUndefined={() => handleChange({ long_value: undefined })}
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -208,28 +211,32 @@ const FieldControl = ({
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.string_list && (
-        <StringListField
-          value={value}
-          label={label}
-          tooltipText={tooltip}
-          onChange={(value: string[]) =>
-            handleChange({ string_list_value: value })
-          }
-          onSave={onSave}
-          disabled={disabled}
-        />
+        <div className="mt-4">
+          <StringListField
+            value={value}
+            label={label}
+            tooltipText={tooltip}
+            onChange={(value: string[]) =>
+              handleChange({ string_list_value: value })
+            }
+            onSave={onSave}
+            disabled={disabled}
+          />
+        </div>
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.integer_list && (
-        <IntegerListField
-          value={value}
-          label={label}
-          tooltipText={tooltip}
-          onChange={(value: number[]) =>
-            handleChange({ integer_list_value: value })
-          }
-          disabled={disabled}
-        />
+        <div className="mt-4">
+          <IntegerListField
+            value={value}
+            label={label}
+            tooltipText={tooltip}
+            onChange={(value: number[]) =>
+              handleChange({ integer_list_value: value })
+            }
+            disabled={disabled}
+          />
+        </div>
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.object && (
