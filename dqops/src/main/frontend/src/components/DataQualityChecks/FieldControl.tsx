@@ -5,7 +5,7 @@ import {
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from '../../api';
-import Checkbox from '../Checkbox';
+import CheckboxColumn from '../Checkbox/CheckBoxColumn';
 import ExtendedTextAre from '../ExtendedTextArea';
 import FieldDatePicker from '../FieldDatePicker';
 import FloatingPointInput from '../FloatingPointInput';
@@ -83,14 +83,16 @@ const FieldControl = ({
   return (
     <div>
       {type === 'boolean' && (
-        <Checkbox
-          onChange={(value) => handleChange({ boolean_value: value })}
-          checked={value}
-          label={label}
-          tooltipText={tooltip}
-          disabled={disabled}
-          error={checkBoxNotRed ? false : isInvalid}
-        />
+        <div className=" mb-4">
+          <CheckboxColumn
+            onChange={(value) => handleChange({ boolean_value: value })}
+            checked={value}
+            label={label}
+            tooltipText={tooltip}
+            disabled={disabled}
+            error={checkBoxNotRed ? false : isInvalid}
+          />
+        </div>
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
         <>
@@ -153,6 +155,7 @@ const FieldControl = ({
               long_value: String(value).length === 0 ? undefined : Number(value)
             })
           }
+          onChangeUndefined={() => handleChange({ long_value: undefined })}
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',

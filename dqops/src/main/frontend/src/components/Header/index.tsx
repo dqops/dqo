@@ -285,7 +285,7 @@ const Header = () => {
                 location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`)
                   ? 'font-bold'
                   : '',
-                isTextWrapped && !isWindowSmall && 'w-27'
+                isTextWrapped && !isWindowSmall && 'w-28'
               )}
               onClick={onClick(CheckTypes.PARTITIONED)}
             >
@@ -294,13 +294,13 @@ const Header = () => {
                   name="partitioned_checks"
                   className={clsx(
                     '!w-4.5 !h-4.5',
-                    isTextWrapped && !isWindowSmall && 'ml-1'
+                    isTextWrapped && !isWindowSmall && 'ml-2'
                   )}
                 />
               </div>
               {!isWindowSmall && (
                 <div
-                  className={clsx(isTextWrapped && !isWindowSmall && 'ml-1')}
+                  className={clsx(isTextWrapped && !isWindowSmall && 'ml-2')}
                 >
                   Partition Checks
                 </div>
