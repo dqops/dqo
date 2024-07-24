@@ -15,6 +15,7 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.core.configuration.SmtpServerConfigurationProperties;
 import com.dqops.core.incidents.email.EmailSender;
 import com.dqops.core.incidents.email.EmailSenderProvider;
 import com.dqops.core.incidents.message.IncidentNotificationHtmlMessageFormatter;
@@ -66,7 +67,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     private EmailSenderProvider emailSenderProvider;
     private final IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter;
     private final IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter;
-
+    private final SmtpServerConfigurationProperties smtpServerConfigurationProperties;
 
     /**
      * Creates an incident notification service.
@@ -74,8 +75,9 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param sharedHttpClientProvider                     Shared http client provider that manages the HTTP connection pooling.
      * @param jsonSerializer                               Json serializer.
      * @param executionContextFactory                      Execution context factory.
-     * @param incidentNotificationMessageMarkdownFormatter
-     * @param incidentNotificationHtmlMessageFormatter
+     * @param incidentNotificationMessageMarkdownFormatter Incident notification message formatter that creates a markdown formatted message.
+     * @param incidentNotificationHtmlMessageFormatter     Incident notification message formatter that creates an HTML formatted message.
+     * @param smtpServerConfigurationProperties            SMTP
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
@@ -83,13 +85,15 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                                            ExecutionContextFactory executionContextFactory,
                                            EmailSenderProvider emailSenderProvider,
                                            IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter,
-                                           IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter) {
+                                           IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter,
+                                           SmtpServerConfigurationProperties smtpServerConfigurationProperties) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
         this.executionContextFactory = executionContextFactory;
         this.emailSenderProvider = emailSenderProvider;
         this.incidentNotificationMessageMarkdownFormatter = incidentNotificationMessageMarkdownFormatter;
         this.incidentNotificationHtmlMessageFormatter = incidentNotificationHtmlMessageFormatter;
+        this.smtpServerConfigurationProperties = smtpServerConfigurationProperties;
     }
 
     /**
@@ -245,6 +249,27 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null
                 || userHome.getSettings().getSpec().getSmtpServerConfiguration() == null) {
             serverConfiguration = new SmtpServerConfigurationSpec();
+
+            String host = smtpServerConfigurationProperties.getHost();
+            if(host != null && !host.isEmpty()){
+                smtpServerConfigurationProperties.setHost(host);
+            }
+            String port = smtpServerConfigurationProperties.getPort();
+            if(port != null && !port.isEmpty()){
+                smtpServerConfigurationProperties.setPort(port);
+            }
+            Boolean useSsl = smtpServerConfigurationProperties.getUseSsl();
+            if(useSsl != null){
+                smtpServerConfigurationProperties.setUseSsl(useSsl);
+            }
+            String username = smtpServerConfigurationProperties.getUsername();
+            if(username != null && !username.isEmpty()){
+                smtpServerConfigurationProperties.setUsername(username);
+            }
+            String password = smtpServerConfigurationProperties.getPassword();
+            if(password != null && !password.isEmpty()){
+                smtpServerConfigurationProperties.setPassword(password);
+            }
         }
         else {
             serverConfiguration = userHome.getSettings().getSpec().getSmtpServerConfiguration();
