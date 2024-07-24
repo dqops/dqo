@@ -208,28 +208,32 @@ const FieldControl = ({
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.string_list && (
-        <StringListField
-          value={value}
-          label={label}
-          tooltipText={tooltip}
-          onChange={(value: string[]) =>
-            handleChange({ string_list_value: value })
-          }
-          onSave={onSave}
-          disabled={disabled}
-        />
+        <div className="mt-4">
+          <StringListField
+            value={value}
+            label={label}
+            tooltipText={tooltip}
+            onChange={(value: string[]) =>
+              handleChange({ string_list_value: value })
+            }
+            onSave={onSave}
+            disabled={disabled}
+          />
+        </div>
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.integer_list && (
-        <IntegerListField
-          value={value}
-          label={label}
-          tooltipText={tooltip}
-          onChange={(value: number[]) =>
-            handleChange({ integer_list_value: value })
-          }
-          disabled={disabled}
-        />
+        <div className="mt-4">
+          <IntegerListField
+            value={value}
+            label={label}
+            tooltipText={tooltip}
+            onChange={(value: number[]) =>
+              handleChange({ integer_list_value: value })
+            }
+            disabled={disabled}
+          />
+        </div>
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.object && (
