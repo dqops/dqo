@@ -11,6 +11,7 @@ import lombok.Data;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -87,19 +88,19 @@ public class IncidentCountsModel {
         if(occurrenceTime.isAfter(now.minus(7, ChronoUnit.DAYS))){
             countFromLast7days++;
         }
-        Instant currentMonth = Instant.from(currentMonthDate.atStartOfDay(defaultTimeZoneId));
+        Instant currentMonth = Instant.from(currentMonthDate.atStartOfDay(ZoneOffset.UTC));
         LocalDate nextMonthDate = LocalDate.ofInstant(occurrenceTime, defaultTimeZoneId).plusMonths(1);
 
         if(occurrenceTime.equals(currentMonth) ||
                 occurrenceTime.isAfter(currentMonth) &&
-                occurrenceTime.isBefore(nextMonthDate.atStartOfDay(defaultTimeZoneId).toInstant())
+                occurrenceTime.isBefore(nextMonthDate.atStartOfDay(ZoneOffset.UTC).toInstant())
         ){
             currentMonthCount++;
         }
-        Instant previousMonth = Instant.from(previousMonthDate.atStartOfDay(defaultTimeZoneId));
+        Instant previousMonth = Instant.from(previousMonthDate.atStartOfDay(ZoneOffset.UTC));
         if(occurrenceTime.equals(previousMonth) ||
                 occurrenceTime.isAfter(previousMonth) &&
-                occurrenceTime.isBefore(currentMonthDate.atStartOfDay(defaultTimeZoneId).toInstant())
+                occurrenceTime.isBefore(currentMonthDate.atStartOfDay(ZoneOffset.UTC).toInstant())
         ){
             previousMonthCount++;
         }
