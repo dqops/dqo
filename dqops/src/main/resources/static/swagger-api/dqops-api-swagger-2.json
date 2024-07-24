@@ -33247,6 +33247,10 @@
           "items" : {
             "$ref" : "#/definitions/DashboardsFolderSpec"
           }
+        },
+        "hide_folder" : {
+          "type" : "boolean",
+          "description" : "Hides the whole folder and all nested dashboards from the navigation tree. If you want to hide some of the build-in folders, update the settings/dashboardslist.dqodashboards.yaml file in the DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of this field to true."
         }
       }
     },

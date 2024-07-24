@@ -283,6 +283,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path customDashboardsPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(customDashboardsPath)) {
                 DashboardYaml dashboardYaml = new DashboardYaml();
+                DashboardsFolderListSpec dashboardsFolderListSpec = dashboardYaml.getSpec();
+                addDefaultDashboardFolders(dashboardsFolderListSpec);
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
             }
@@ -355,6 +357,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         catch (Exception ex) {
             throw new LocalFileSystemException("Cannot initialize a DQOps User home at " + userHomePathString, ex);
         }
+    }
+
+    /**
+     * Adds default dashboard folders.
+     * @param dashboardsFolderListSpec Target object to add default dashboard folders.
+     */
+    private void addDefaultDashboardFolders(DashboardsFolderListSpec dashboardsFolderListSpec) {
+        dashboardsFolderListSpec.getOrCreateChildFolder("Profiling");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Monitoring");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Partitions");
+        dashboardsFolderListSpec.getOrCreateChildFolder("DQOps usage");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Aggregated results for all check types");
     }
 
     /**
@@ -456,7 +470,9 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (userHome.getDashboards() != null && userHome.getDashboards().getSpec() == null) {
-            userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
+            DashboardsFolderListSpec dashboardsFolderListSpec = new DashboardsFolderListSpec();
+            addDefaultDashboardFolders(dashboardsFolderListSpec);
+            userHome.getDashboards().setSpec(dashboardsFolderListSpec);
         }
 
         if (localSettingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

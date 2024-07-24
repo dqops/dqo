@@ -1,6 +1,4 @@
-# 1.6.0
-* Fixes to some error sampling templates
-* Redesigned data quality check editor to work in a simplified mode
-* JDBC drivers are pre-loaded to avoid issues with automatic registration of JDBC drivers by Java
-* Delta Lake and Iceberg support
-* Global incident screen redesigned to show the counts of incidents
+# 1.6.1
+* Small fixes in the data quality check editor - styling fixes
+* Parallel invocation of notification events
+* The calculation logic for counting incidents on the global incident screen modified to use dates correctly
