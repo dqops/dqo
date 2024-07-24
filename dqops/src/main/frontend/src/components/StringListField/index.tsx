@@ -72,7 +72,12 @@ const StringListField = ({
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
-          <LabelsView labels={labels} onChange={handleChange} hasAdd />
+          <LabelsView
+            labels={labels}
+            onChange={handleChange}
+            hasAdd
+            title="Text values"
+          />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
               color="primary"
