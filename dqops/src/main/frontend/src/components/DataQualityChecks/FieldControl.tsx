@@ -155,6 +155,7 @@ const FieldControl = ({
               long_value: String(value).length === 0 ? undefined : Number(value)
             })
           }
+          onChangeUndefined={() => handleChange({ long_value: undefined })}
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
