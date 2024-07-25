@@ -188,17 +188,14 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     }
 
     public void setIncidentAcknowledgedWebhookUrl(String incidentAcknowledgedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentAcknowledgedAddresses, incidentAcknowledgedWebhookUrl));
         this.incidentAcknowledgedAddresses = incidentAcknowledgedWebhookUrl;
     }
 
     public void setIncidentResolvedWebhookUrl(String incidentResolvedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentResolvedAddresses, incidentResolvedWebhookUrl));
         this.incidentResolvedAddresses = incidentResolvedWebhookUrl;
     }
 
     public void setIncidentMutedWebhookUrl(String incidentMutedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentMutedAddresses, incidentMutedWebhookUrl));
         this.incidentMutedAddresses = incidentMutedWebhookUrl;
     }
 

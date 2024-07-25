@@ -24,13 +24,13 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Objects;
@@ -45,7 +45,6 @@ import java.util.Objects;
 public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionIncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-//            put("webhooks", o -> o.webhooks);
             put("incident_notification", o -> o.incidentNotification);
         }
     };
@@ -78,7 +77,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
 
     @JsonPropertyDescription("Obsolete, use the incidentNotificationSpec instead.")
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @JsonIgnore
+    @Getter
     private IncidentNotificationSpec webhooks;
 
     /**
@@ -198,10 +197,14 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
      * Sets a new configuration of incident notification addresses.
      * @param incidentNotification New configuration of incident notification addresses.
      */
-    public void setWebhooks(IncidentNotificationSpec incidentNotification) {
+    public void setIncidentNotification(IncidentNotificationSpec incidentNotification) {
         setDirtyIf(!Objects.equals(this.incidentNotification, incidentNotification));
         this.incidentNotification = incidentNotification;
         propagateHierarchyIdToField(incidentNotification, "incident_notification");
+    }
+
+    public void setWebhooks(IncidentNotificationSpec incidentNotification){
+        this.incidentNotification = incidentNotification;
     }
 
     /**
@@ -272,7 +275,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
             return new ConnectionIncidentGroupingSpec() {{
                 setGroupingLevel(IncidentGroupingLevel.table_dimension);
                 setDivideByDataGroups(true);
-                setWebhooks(new IncidentNotificationSpec.IncidentNotificationSpecSampleFactory().createSample());
+                setIncidentNotification(new IncidentNotificationSpec.IncidentNotificationSpecSampleFactory().createSample());
             }};
         }
     }
