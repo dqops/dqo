@@ -103,7 +103,7 @@ const TablePartitionedChecksView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily' || activeTab === 'daily_comparisons') {
+    if (secondTab === 'daily') {
       if (!dailyPartitionedChecks) return;
 
       await dispatch(
