@@ -11093,6 +11093,48 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/default/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}:
+    post:
+      tags:
+      - "DefaultColumnCheckPatterns"
+      summary: "copyFromDefaultColumnChecksPattern"
+      description: "Creates (adds) a copy of an existing default column-level checks\
+        \ pattern configuration, under a new name."
+      operationId: "copyFromDefaultColumnChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "targetPatternName"
+        in: "path"
+        description: "Target pattern name"
+        required: true
+        type: "string"
+      - name: "sourcePatternName"
+        in: "path"
+        description: "Source pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Checks pattern successfully copied"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Source check pattern not found"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Checks pattern with the target name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/default/checks/table:
     get:
       tags:
@@ -11730,6 +11772,48 @@ paths:
           description: "Bad request, adjust before retrying"
         404:
           description: "Pattern not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{targetPatternName}/copyfrom/{sourcePatternName}:
+    post:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "copyFromDefaultTableChecksPattern"
+      description: "Creates (adds) a copy of an existing default table-level checks\
+        \ pattern configuration, under a new name."
+      operationId: "copyFromDefaultTableChecksPattern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "targetPatternName"
+        in: "path"
+        description: "Target pattern name"
+        required: true
+        type: "string"
+      - name: "sourcePatternName"
+        in: "path"
+        description: "Source pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "Checks pattern successfully copied"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Source check pattern not found"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Checks pattern with the target name already exists"
         500:
           description: "Internal Server Error"
           schema:

@@ -19,7 +19,6 @@ import autovalue.shaded.com.google.common.base.Strings;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -316,6 +315,66 @@ public class DefaultTableCheckPatternsController {
                         userHomeContext.flush();
 
                         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+                    });
+        }));
+    }
+
+    /**
+     * Creates (adds) a copy of an existing default table-level checks pattern configuration, under a new name.
+     * @param targetPatternName New name of the copied checks pattern.
+     * @param sourcePatternName Name of the existing checks pattern.
+     * @return Empty response.
+     */
+    @PostMapping(value = "/default/checks/table/{targetPatternName}/copyfrom/{sourcePatternName}", produces = "application/json")
+    @ApiOperation(value = "copyFromDefaultTableChecksPattern", notes = "Creates (adds) a copy of an existing default table-level checks pattern configuration, under a new name.", response = Void.class,
+            authorizations = {
+                    @Authorization(value = "authorization_bearer_api_key")
+            })
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Checks pattern successfully copied", response = Void.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Source check pattern not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Checks pattern with the target name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Secured({DqoPermissionNames.EDIT})
+    public Mono<ResponseEntity<Mono<Void>>> copyFromDefaultTableChecksPattern(
+            @AuthenticationPrincipal DqoUserPrincipal principal,
+            @ApiParam("Target pattern name") @PathVariable String targetPatternName,
+            @ApiParam("Source pattern name") @PathVariable String sourcePatternName) {
+        return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
+            if (Strings.isNullOrEmpty(targetPatternName) || Strings.isNullOrEmpty(sourcePatternName)) {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+            }
+
+            return this.lockService.callSynchronouslyOnCheckPattern(targetPatternName,
+                    () -> {
+                        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), false);
+                        UserHome userHome = userHomeContext.getUserHome();
+
+                        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
+                        TableDefaultChecksPatternWrapper sourceDefaultChecksPatternWrapper =
+                                defaultChecksPatternsList.getByObjectName(sourcePatternName, true);
+
+                        if (sourceDefaultChecksPatternWrapper == null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+                        }
+
+                        TableDefaultChecksPatternWrapper existingTargetDefaultChecksPatternWrapper =
+                                defaultChecksPatternsList.getByObjectName(targetPatternName, true);
+
+                        if (existingTargetDefaultChecksPatternWrapper != null) {
+                            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409
+                        }
+
+                        TableDefaultChecksPatternWrapper targetDefaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(targetPatternName);
+                        TableDefaultChecksPatternSpec targetDefaultChecksPatternSpec = (TableDefaultChecksPatternSpec) sourceDefaultChecksPatternWrapper.getSpec().deepClone();
+                        targetDefaultChecksPatternWrapper.setSpec(targetDefaultChecksPatternSpec);
+
+                        userHomeContext.flush();
+                        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
                     });
         }));
     }
