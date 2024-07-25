@@ -121,7 +121,7 @@ const SelectInput = ({
             'cursor-pointer text-gray-900 h-9 pr-8 rounded flex items-center text-sm border overflow-hidden',
             triggerClassName,
             disabled ? 'bg-gray-50 cursor-not-allowed' : '',
-            error ? 'border-red-500' : 'border-gray-50'
+            error ? 'border-red-500' : 'border-gray-300'
           )}
           onClick={() => (!disabled ? toggleMenu() : {})}
         >

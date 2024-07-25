@@ -78,7 +78,7 @@ const DeleteStoredDataExtendedPopUp = ({
     const { schema, table, ...restParams } = params;
     const newParams: DeleteStoredDataQueueJobParameters = {
       ...restParams,
-      fullTableName: (schema || table) ? `${schema}.${table}` : undefined
+      fullTableName: schema || table ? `${schema}.${table}` : undefined
     };
     if (mode === 'part') {
       onDelete({
@@ -223,7 +223,7 @@ const DeleteStoredDataExtendedPopUp = ({
             />
           </div>
           <div className=" border-b pb-4 border-gray-300">
-            <div className="flex items-start text-gray-700">
+            <div className="flex items-center text-gray-700">
               <Radio
                 id="part"
                 name="delete_mode"
@@ -232,27 +232,25 @@ const DeleteStoredDataExtendedPopUp = ({
                 onChange={() => setMode('part')}
                 color="teal"
               />
-              <div className="mt-2">
-                <p>For the time range</p>
-                <div className="flex space-x-6 items-center">
-                  <DatePicker
-                    showIcon
-                    placeholderText="Select date start"
-                    onChange={setStartDate}
-                    selected={startDate}
-                    disabled={isDisabled}
-                    dateFormat="yyyy-MM-dd"
-                  />
-                  <span>to</span>
-                  <DatePicker
-                    showIcon
-                    placeholderText="Select date end"
-                    onChange={setEndDate}
-                    selected={endDate}
-                    disabled={isDisabled}
-                    dateFormat="yyyy-MM-dd"
-                  />
-                </div>
+              <p>For the time range</p>
+              <div className="ml-4 flex space-x-4 items-center">
+                <DatePicker
+                  showIcon
+                  placeholderText="Select date start"
+                  onChange={setStartDate}
+                  selected={startDate}
+                  disabled={isDisabled}
+                  dateFormat="yyyy-MM-dd"
+                />
+                <span>to</span>
+                <DatePicker
+                  showIcon
+                  placeholderText="Select date end"
+                  onChange={setEndDate}
+                  selected={endDate}
+                  disabled={isDisabled}
+                  dateFormat="yyyy-MM-dd"
+                />
               </div>
             </div>
           </div>
@@ -443,7 +441,9 @@ const DeleteStoredDataExtendedPopUp = ({
           <div className="flex flex-col space-y-5 w-1/4 items-start">
             <Checkbox
               checked={params.deleteIncidents}
-              onChange={(deleteIncidents) => onChangeParams({ deleteIncidents })}
+              onChange={(deleteIncidents) =>
+                onChangeParams({ deleteIncidents })
+              }
               label="Incidents"
               checkClassName="bg-teal-500"
             />
@@ -463,7 +463,8 @@ const DeleteStoredDataExtendedPopUp = ({
               }
               onChange={(value) =>
                 onChangeParams({
-                  incidentStatusName: String(value) !== 'All incident status' ? value : undefined,
+                  incidentStatusName:
+                    String(value) !== 'All incident status' ? value : undefined
                 })
               }
             />
@@ -475,7 +476,9 @@ const DeleteStoredDataExtendedPopUp = ({
             />
             <Checkbox
               checked={params.deleteErrorSamples}
-              onChange={(deleteErrorSamples) => onChangeParams({ deleteErrorSamples })}
+              onChange={(deleteErrorSamples) =>
+                onChangeParams({ deleteErrorSamples })
+              }
               label="Error samples"
               checkClassName="bg-teal-500"
             />

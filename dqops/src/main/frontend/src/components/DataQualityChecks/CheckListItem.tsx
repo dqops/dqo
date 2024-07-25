@@ -389,7 +389,7 @@ const CheckListItem = ({
           'h-18'
         )}
       >
-        <td className="pl-4 pr-8 min-w-130 max-w-130 h-full ">
+        <td className="pl-4 pr-8 min-w-133 max-w-133 h-full ">
           <div className="flex space-x-1 items-center">
             {isAlreadyDeleted !== true &&
               (mode ? (
@@ -605,7 +605,7 @@ const CheckListItem = ({
                 ))}
               </div>
             )}
-            <div className="text-sm relative">
+            <div className="text-sm !ml-2">
               <p className="text-nowrap">
                 {check.display_name && check.display_name !== ''
                   ? check.display_name
@@ -613,7 +613,7 @@ const CheckListItem = ({
                   ? check.friendly_name
                   : check.check_name}
               </p>
-              <p className="absolute left-0 top-full text-xxs">
+              <p className="text-xxs mt-0.5">
                 {check.friendly_name ? (
                   <>
                     {check.check_name}&nbsp;({check.quality_dimension})
