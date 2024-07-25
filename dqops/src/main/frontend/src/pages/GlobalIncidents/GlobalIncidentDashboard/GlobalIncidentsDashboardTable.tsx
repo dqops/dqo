@@ -96,7 +96,7 @@ export default function GlobalIncidentsDashboardTable({
               className="py-1.5 border-b border-gray-300 grid grid-cols-24"
             >
               <div
-                className={tableRowClassName + ' flex items-center col-span-1'}
+                className={tableRowClassName + ' col-span-1'}
               >
                 {renderIncidentHighestSeveritySquare(
                   incident.highestSeverity ?? 3
