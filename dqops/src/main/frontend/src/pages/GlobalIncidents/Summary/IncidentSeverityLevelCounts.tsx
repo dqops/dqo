@@ -18,7 +18,7 @@ export default function IncidentSeverityLevelCounts({
 
   return (
     <SectionWrapper 
-      className={"flex items-center grid grid-cols-3 "}
+      className={"flex items-center grid grid-cols-3 border-[#BCBCBC] "}
       title={title}
       titleIcon={icon}
     >
