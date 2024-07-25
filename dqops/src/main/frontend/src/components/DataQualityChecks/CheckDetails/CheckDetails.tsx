@@ -358,7 +358,6 @@ const CheckDetails = ({
   ];
   return (
     <div
-      className="my-4"
       style={{
         maxWidth: `calc(100vw - ${sidebarWidth + 40}px`
       }}

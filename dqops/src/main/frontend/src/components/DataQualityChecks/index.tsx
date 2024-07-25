@@ -533,7 +533,7 @@ const DataQualityChecks = ({
 
             {checksUI?.effective_schedule_enabled_status ===
               CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
-              <div className="flex items-center gap-x-4">
+              <div className="flex items-center gap-x-4 !mr-2">
                 <Button
                   label="Configure a schedule for the connection"
                   color="primary"
