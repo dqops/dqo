@@ -26,13 +26,13 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.util.NoSuchElementException;
@@ -64,22 +64,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
 
-    @JsonPropertyDescription("Obsolete, use the incidentOpenedAddresses instead.")
-    @Getter
-    private String incidentOpenedWebhookUrl;
-
-    @JsonPropertyDescription("Obsolete, use the incidentAcknowledgedAddresses instead.")
-    @Getter
-    private String incidentAcknowledgedWebhookUrl;
-
-    @JsonPropertyDescription("Obsolete, use the incidentResolvedAddresses instead.")
-    @Getter
-    private String incidentResolvedWebhookUrl;
-
-    @JsonPropertyDescription("Obsolete, use the incidentMutedAddresses instead.")
-    @Getter
-    private String incidentMutedWebhookUrl;
-
     @JsonIgnore
     private String yamlParsingError;
 
@@ -108,9 +92,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @return Webhook URLs or email addresses.
      */
     public String getIncidentOpenedAddresses() {
-        if(incidentOpenedAddresses == null){
-            return incidentOpenedWebhookUrl;
-        }
         return incidentOpenedAddresses;
     }
 
@@ -128,10 +109,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @return Webhook URLs or email addresses
      */
     public String getIncidentAcknowledgedAddresses() {
-        if(incidentAcknowledgedAddresses != null){
-            return incidentAcknowledgedAddresses;
-        }
-        return incidentAcknowledgedWebhookUrl;
+        return incidentAcknowledgedAddresses;
     }
 
     /**
@@ -148,10 +126,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @return Webhook URLs or email addresses
      */
     public String getIncidentResolvedAddresses() {
-        if(incidentResolvedAddresses != null){
-            return incidentResolvedAddresses;
-        }
-        return incidentResolvedWebhookUrl;
+        return incidentResolvedAddresses;
     }
 
     /**
@@ -168,10 +143,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @return Webhook URLs or email addresses
      */
     public String getIncidentMutedAddresses() {
-        if(incidentMutedAddresses != null){
-            return incidentMutedAddresses;
-        }
-        return incidentMutedWebhookUrl;
+        return incidentMutedAddresses;
     }
 
     /**
@@ -183,20 +155,35 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         this.incidentMutedAddresses = incidentMutedAddresses;
     }
 
-    public void setIncidentOpenedWebhookUrl(String incidentOpenedWebhookUrl) {
-        this.incidentOpenedAddresses = incidentOpenedWebhookUrl;
-    }
+    @Override
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (value instanceof String) {
+            String valueString = String.valueOf(value);
+            switch (name) {
+                case "incident_opened_webhook_url":
+                    this.setIncidentOpenedAddresses(valueString);
+                    return;
 
-    public void setIncidentAcknowledgedWebhookUrl(String incidentAcknowledgedWebhookUrl) {
-        this.incidentAcknowledgedAddresses = incidentAcknowledgedWebhookUrl;
-    }
+                case "incident_acknowledged_webhook_url":
+                    this.setIncidentAcknowledgedAddresses(valueString);
+                    return;
 
-    public void setIncidentResolvedWebhookUrl(String incidentResolvedWebhookUrl) {
-        this.incidentResolvedAddresses = incidentResolvedWebhookUrl;
-    }
+                case "incident_resolved_webhook_url":
+                    this.setIncidentResolvedAddresses(valueString);
+                    return;
 
-    public void setIncidentMutedWebhookUrl(String incidentMutedWebhookUrl) {
-        this.incidentMutedAddresses = incidentMutedWebhookUrl;
+                case "incident_muted_webhook_url":
+                    this.setIncidentMutedAddresses(valueString);
+                    return;
+            }
+        }
+        super.handleUndeclaredProperty(name, value);
     }
 
     /**
