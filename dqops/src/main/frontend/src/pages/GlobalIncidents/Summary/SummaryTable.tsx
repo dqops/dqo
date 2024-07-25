@@ -12,7 +12,7 @@ export default function Summary({
 
   return (
     <div className="flex flex-wrap mt-4 p-1 grid grid-cols-1 lg:grid-cols-2">
-      <div className="mx-1">
+      <div className="mx-1 mr-1 lg:mr-2">
         <IncidentSeverityLevelCounts 
           incidentSeverityLevelCounts={incidents.openIncidentSeverityLevelCounts} 
           title="Open incidents"
@@ -20,7 +20,7 @@ export default function Summary({
           incidentStatus="open"
         />
       </div>
-      <div className="mx-1">
+      <div className="mx-1 ml-1 lg:ml-2 mt-4 lg:mt-0">
         <IncidentSeverityLevelCounts 
           incidentSeverityLevelCounts={incidents.acknowledgedIncidentSeverityLevelCounts} 
           title="Acknowledged incidents"
