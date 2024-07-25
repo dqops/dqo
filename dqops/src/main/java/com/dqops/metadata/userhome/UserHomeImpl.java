@@ -156,7 +156,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         MonitoringSchedulesWrapperImpl schedules,
                         TableDefaultChecksPatternListImpl tableDefaultChecksPatterns,
                         ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns,
-                        DefaultIncidentNotificationsWrapperImpl notificationWebhooks,
+                        DefaultIncidentNotificationsWrapperImpl incidentNotifications,
                         boolean readOnly) {
         this.userIdentity = userIdentity;
 		this.setConnections(connections);
@@ -171,7 +171,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDefaultSchedules(schedules);
         this.setTableDefaultChecksPatterns(tableDefaultChecksPatterns);
         this.setColumnDefaultChecksPatterns(columnDefaultChecksPatterns);
-        this.setDefaultIncidentNotifications(notificationWebhooks);
+        this.setDefaultIncidentNotifications(incidentNotifications);
         if (readOnly) {
             makeReadOnly(true);
         }

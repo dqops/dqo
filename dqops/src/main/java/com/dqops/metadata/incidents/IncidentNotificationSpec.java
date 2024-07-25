@@ -23,15 +23,16 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.utils.serialization.InvalidYamlStatusHolder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.NoSuchElementException;
@@ -39,7 +40,7 @@ import java.util.Objects;
 
 /**
  * Configuration of addresses used for new or updated incident's notifications.
- * Specifies the Webhook URL or email address where the notification messages are sent.
+ * Specifies the webhook URLs or email addresses where the notification messages are sent.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -52,15 +53,31 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     };
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String incidentOpenedWebhookUrl;
+    private String incidentOpenedAddresses;
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String incidentAcknowledgedWebhookUrl;
+    private String incidentAcknowledgedAddresses;
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String incidentResolvedWebhookUrl;
+    private String incidentResolvedAddresses;
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
+    private String incidentMutedAddresses;
+
+    @JsonPropertyDescription("Obsolete, use the incidentOpenedAddresses instead.")
+    @Getter
+    private String incidentOpenedWebhookUrl;
+
+    @JsonPropertyDescription("Obsolete, use the incidentAcknowledgedAddresses instead.")
+    @Getter
+    private String incidentAcknowledgedWebhookUrl;
+
+    @JsonPropertyDescription("Obsolete, use the incidentResolvedAddresses instead.")
+    @Getter
+    private String incidentResolvedWebhookUrl;
+
+    @JsonPropertyDescription("Obsolete, use the incidentMutedAddresses instead.")
+    @Getter
     private String incidentMutedWebhookUrl;
 
     @JsonIgnore
@@ -87,71 +104,102 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     }
 
     /**
-     * Returns the URL where notifications of new incidents are pushed using a HTTP POST request.
-     * @return Webhook url.
+     * Returns the addresses where notifications of new incidents are sent.
+     * @return Webhook URLs or email addresses.
      */
-    public String getIncidentOpenedWebhookUrl() {
-        return incidentOpenedWebhookUrl;
+    public String getIncidentOpenedAddresses() {
+        if(incidentOpenedAddresses == null){
+            return incidentOpenedWebhookUrl;
+        }
+        return incidentOpenedAddresses;
     }
 
     /**
-     * Sets an url to a HTTP webhook where notifications of new incidents are posted.
-     * @param incidentOpenedWebhookUrl Webhook url.
+     * Sets addresses where notifications of new incidents are sent.
+     * @param incidentOpenedAddresses Webhook URLs or email addresses.
      */
-    public void setIncidentOpenedWebhookUrl(String incidentOpenedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentOpenedWebhookUrl, incidentOpenedWebhookUrl));
-        this.incidentOpenedWebhookUrl = incidentOpenedWebhookUrl;
+    public void setIncidentOpenedAddresses(String incidentOpenedAddresses) {
+        this.setDirtyIf(!Objects.equals(this.incidentOpenedAddresses, incidentOpenedAddresses));
+        this.incidentOpenedAddresses = incidentOpenedAddresses;
     }
 
     /**
-     * Returns the URL where notifications of acknowledged incidents are pushed using a HTTP POST request.
-     * @return Webhook url.
+     * Returns addresses where notifications of acknowledged incidents are sent.
+     * @return Webhook URLs or email addresses
      */
-    public String getIncidentAcknowledgedWebhookUrl() {
+    public String getIncidentAcknowledgedAddresses() {
+        if(incidentAcknowledgedAddresses != null){
+            return incidentAcknowledgedAddresses;
+        }
         return incidentAcknowledgedWebhookUrl;
     }
 
     /**
-     * Sets an url to a HTTP webhook where notifications of acknowledged incidents are posted.
-     * @param incidentAcknowledgedWebhookUrl Webhook url.
+     * Sets addresses where notifications of acknowledged incidents are sent.
+     * @param incidentAcknowledgedAddresses Webhook url.
      */
-    public void setIncidentAcknowledgedWebhookUrl(String incidentAcknowledgedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentAcknowledgedWebhookUrl, incidentAcknowledgedWebhookUrl));
-        this.incidentAcknowledgedWebhookUrl = incidentAcknowledgedWebhookUrl;
+    public void setIncidentAcknowledgedAddresses(String incidentAcknowledgedAddresses) {
+        this.setDirtyIf(!Objects.equals(this.incidentAcknowledgedAddresses, incidentAcknowledgedAddresses));
+        this.incidentAcknowledgedAddresses = incidentAcknowledgedAddresses;
     }
 
     /**
-     * Returns the URL where notifications of resolved incidents are pushed using a HTTP POST request.
-     * @return Webhook url.
+     * Returns addresses where notifications of resolved incidents are pushed using a HTTP POST request.
+     * @return Webhook URLs or email addresses
      */
-    public String getIncidentResolvedWebhookUrl() {
+    public String getIncidentResolvedAddresses() {
+        if(incidentResolvedAddresses != null){
+            return incidentResolvedAddresses;
+        }
         return incidentResolvedWebhookUrl;
     }
 
     /**
-     * Sets an url to a HTTP webhook where notifications of resolved incidents are posted.
-     * @param incidentResolvedWebhookUrl Webhook url.
+     * Sets addresses where notifications of resolved incidents are sent.
+     * @param incidentResolvedAddresses Webhook URLs or email addresses
      */
-    public void setIncidentResolvedWebhookUrl(String incidentResolvedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentResolvedWebhookUrl, incidentResolvedWebhookUrl));
-        this.incidentResolvedWebhookUrl = incidentResolvedWebhookUrl;
+    public void setIncidentResolvedAddresses(String incidentResolvedAddresses) {
+        this.setDirtyIf(!Objects.equals(this.incidentResolvedAddresses, incidentResolvedAddresses));
+        this.incidentResolvedAddresses = incidentResolvedAddresses;
     }
 
     /**
-     * Returns the URL where notifications of muted incidents are pushed using a HTTP POST request.
-     * @return Webhook url.
+     * Returns addresses where notifications of muted incidents are pushed using a HTTP POST request.
+     * @return Webhook URLs or email addresses
      */
-    public String getIncidentMutedWebhookUrl() {
+    public String getIncidentMutedAddresses() {
+        if(incidentMutedAddresses != null){
+            return incidentMutedAddresses;
+        }
         return incidentMutedWebhookUrl;
     }
 
     /**
-     * Sets an url to a HTTP webhook where notifications of muted incidents are posted.
-     * @param incidentMutedWebhookUrl Webhook url.
+     * Sets addresses where notifications of muted incidents are sent.
+     * @param incidentMutedAddresses Webhook URLs or email addresses
      */
+    public void setIncidentMutedAddresses(String incidentMutedAddresses) {
+        this.setDirtyIf(!Objects.equals(this.incidentMutedAddresses, incidentMutedAddresses));
+        this.incidentMutedAddresses = incidentMutedAddresses;
+    }
+
+    public void setIncidentOpenedWebhookUrl(String incidentOpenedWebhookUrl) {
+        this.incidentOpenedAddresses = incidentOpenedWebhookUrl;
+    }
+
+    public void setIncidentAcknowledgedWebhookUrl(String incidentAcknowledgedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentAcknowledgedAddresses, incidentAcknowledgedWebhookUrl));
+        this.incidentAcknowledgedAddresses = incidentAcknowledgedWebhookUrl;
+    }
+
+    public void setIncidentResolvedWebhookUrl(String incidentResolvedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentResolvedAddresses, incidentResolvedWebhookUrl));
+        this.incidentResolvedAddresses = incidentResolvedWebhookUrl;
+    }
+
     public void setIncidentMutedWebhookUrl(String incidentMutedWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.incidentMutedWebhookUrl, incidentMutedWebhookUrl));
-        this.incidentMutedWebhookUrl = incidentMutedWebhookUrl;
+        this.setDirtyIf(!Objects.equals(this.incidentMutedAddresses, incidentMutedWebhookUrl));
+        this.incidentMutedAddresses = incidentMutedWebhookUrl;
     }
 
     /**
@@ -162,16 +210,16 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     public String getNotificationAddressForStatus(IncidentStatus incidentStatus) {
         switch (incidentStatus) {
             case open:
-                return this.incidentOpenedWebhookUrl;
+                return this.incidentOpenedAddresses;
 
             case acknowledged:
-                return this.incidentAcknowledgedWebhookUrl;
+                return this.incidentAcknowledgedAddresses;
 
             case resolved:
-                return this.incidentResolvedWebhookUrl;
+                return this.incidentResolvedAddresses;
 
             case muted:
-                return this.incidentMutedWebhookUrl;
+                return this.incidentMutedAddresses;
 
             default:
                 throw new NoSuchElementException("Unsupported incident status: " + incidentStatus);
@@ -216,48 +264,48 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      */
     public IncidentNotificationSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         IncidentNotificationSpec cloned = this.deepClone();
-        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl, lookupContext);
-        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl, lookupContext);
-        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl, lookupContext);
-        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl, lookupContext);
+        cloned.incidentOpenedAddresses = secretValueProvider.expandValue(cloned.incidentOpenedAddresses, lookupContext);
+        cloned.incidentAcknowledgedAddresses = secretValueProvider.expandValue(cloned.incidentAcknowledgedAddresses, lookupContext);
+        cloned.incidentResolvedAddresses = secretValueProvider.expandValue(cloned.incidentResolvedAddresses, lookupContext);
+        cloned.incidentMutedAddresses = secretValueProvider.expandValue(cloned.incidentMutedAddresses, lookupContext);
         return cloned;
     }
 
     /**
-     * Combines the notification webhooks spec with the default webhooks. If the incident status' webhook is null, the corresponding value from default is set.
-     * @param defaultWebhooks Default incident webhook notification spec
-     * @return Combined IncidentNotificationSpec object with default webhooks.
+     * Combines the incident notification spec with the default addresses. If the incident status' address is null, the corresponding value from default is set.
+     * @param defaultIncidentNotification Default incident notification spec.
+     * @return Combined IncidentNotificationSpec object with default addresses.
      */
-    public IncidentNotificationSpec combineWithDefaults(IncidentNotificationSpec defaultWebhooks){
-        IncidentNotificationSpec clonedWebhooks = this.deepClone();
+    public IncidentNotificationSpec combineWithDefaults(IncidentNotificationSpec defaultIncidentNotification){
+        IncidentNotificationSpec clonedIncidentNotification = this.deepClone();
 
-        if(clonedWebhooks.getIncidentOpenedWebhookUrl() == null){
-            clonedWebhooks.setIncidentOpenedWebhookUrl(defaultWebhooks.getIncidentOpenedWebhookUrl());
+        if(clonedIncidentNotification.getIncidentOpenedAddresses() == null){
+            clonedIncidentNotification.setIncidentOpenedAddresses(defaultIncidentNotification.getIncidentOpenedAddresses());
         }
 
-        if(clonedWebhooks.getIncidentAcknowledgedWebhookUrl() == null){
-            clonedWebhooks.setIncidentAcknowledgedWebhookUrl(defaultWebhooks.getIncidentAcknowledgedWebhookUrl());
+        if(clonedIncidentNotification.getIncidentAcknowledgedAddresses() == null){
+            clonedIncidentNotification.setIncidentAcknowledgedAddresses(defaultIncidentNotification.getIncidentAcknowledgedAddresses());
         }
 
-        if(clonedWebhooks.getIncidentResolvedWebhookUrl() == null){
-            clonedWebhooks.setIncidentResolvedWebhookUrl(defaultWebhooks.getIncidentResolvedWebhookUrl());
+        if(clonedIncidentNotification.getIncidentResolvedAddresses() == null){
+            clonedIncidentNotification.setIncidentResolvedAddresses(defaultIncidentNotification.getIncidentResolvedAddresses());
         }
 
-        if(clonedWebhooks.getIncidentMutedWebhookUrl() == null){
-            clonedWebhooks.setIncidentMutedWebhookUrl(defaultWebhooks.getIncidentMutedWebhookUrl());
+        if(clonedIncidentNotification.getIncidentMutedAddresses() == null){
+            clonedIncidentNotification.setIncidentMutedAddresses(defaultIncidentNotification.getIncidentMutedAddresses());
         }
 
-        return clonedWebhooks;
+        return clonedIncidentNotification;
     }
 
     public static class IncidentNotificationSpecSampleFactory implements SampleValueFactory<IncidentNotificationSpec> {
         @Override
         public IncidentNotificationSpec createSample() {
             return new IncidentNotificationSpec() {{
-                setIncidentOpenedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/opened");
-                setIncidentAcknowledgedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
-                setIncidentResolvedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/resolved");
-                setIncidentMutedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/muted");
+                setIncidentOpenedAddresses(SampleStringsRegistry.getSampleUrl() + "/opened");
+                setIncidentAcknowledgedAddresses(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
+                setIncidentResolvedAddresses(SampleStringsRegistry.getSampleUrl() + "/resolved");
+                setIncidentMutedAddresses(SampleStringsRegistry.getSampleUrl() + "/muted");
             }};
         }
     }

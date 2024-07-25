@@ -75,11 +75,11 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
                             FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
                             FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
-                            FileDefaultIncidentNotificationsWrapperImpl notificationWebhooks,
+                            FileDefaultIncidentNotificationsWrapperImpl incidentNotifications,
                             UserHomeContext userHomeContext,
                             boolean readOnly) {
         super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
-                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks, readOnly);
+                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, incidentNotifications, readOnly);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }

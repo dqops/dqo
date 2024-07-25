@@ -24,6 +24,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -44,7 +45,8 @@ import java.util.Objects;
 public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionIncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("webhooks", o -> o.webhooks);
+//            put("webhooks", o -> o.webhooks);
+            put("incident_notification", o -> o.incidentNotification);
         }
     };
 
@@ -72,6 +74,11 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     @JsonPropertyDescription("Configuration of addresses for new or updated incident notifications.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IncidentNotificationSpec incidentNotification;
+
+    @JsonPropertyDescription("Obsolete, use the incidentNotificationSpec instead.")
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @JsonIgnore
     private IncidentNotificationSpec webhooks;
 
     /**
@@ -180,18 +187,21 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
      * Returns the configuration of addresses used for incident notifications.
      * @return Addresses configuration for incidents.
      */
-    public IncidentNotificationSpec getWebhooks() {
+    public IncidentNotificationSpec getIncidentNotification() {
+        if(incidentNotification != null){
+            return incidentNotification;
+        }
         return webhooks;
     }
 
     /**
      * Sets a new configuration of incident notification addresses.
-     * @param webhooks New configuration of incident notification addresses.
+     * @param incidentNotification New configuration of incident notification addresses.
      */
-    public void setWebhooks(IncidentNotificationSpec webhooks) {
-        setDirtyIf(!Objects.equals(this.webhooks, webhooks));
-        this.webhooks = webhooks;
-        propagateHierarchyIdToField(webhooks, "webhooks");
+    public void setWebhooks(IncidentNotificationSpec incidentNotification) {
+        setDirtyIf(!Objects.equals(this.incidentNotification, incidentNotification));
+        this.incidentNotification = incidentNotification;
+        propagateHierarchyIdToField(incidentNotification, "incident_notification");
     }
 
     /**
@@ -239,7 +249,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     }
 
     /**
-     * Creates a table level incident grouping configuration that is a copy of the connection level configuration. Webhooks are not copied.
+     * Creates a table level incident grouping configuration that is a copy of the connection level configuration. Incident notification configurations are not copied.
      * @return Table level configuration.
      */
     public TableIncidentGroupingSpec toTableIncidentGrouping() {

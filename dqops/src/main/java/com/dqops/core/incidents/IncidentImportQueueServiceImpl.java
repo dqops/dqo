@@ -70,7 +70,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
      * Creates an incident import queue service.
      *
      * @param incidentsSnapshotFactory               Incident snapshot factory.
-     * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
+     * @param incidentNotificationService            Incident notification service. Sends notifications to addresses.
      * @param userDomainIdentityFactory              User data domain identity factory.
      * @param incidentsConfigurationProperties       Incidents configuration parameters.
      * @param defaultTimeZoneProvider                Default time zone provider.

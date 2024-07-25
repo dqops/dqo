@@ -37,7 +37,7 @@ public class EffectiveIncidentGroupingConfiguration {
     private int muteForDays;
     private boolean divideByDataStream;
     private boolean disabled;
-    private IncidentNotificationSpec webhooks;
+    private IncidentNotificationSpec incidentNotification;
 
     /**
      * Creates an effective incident grouping configuration by taking the configuration from the connection level
@@ -57,7 +57,7 @@ public class EffectiveIncidentGroupingConfiguration {
         this.disabled = connectionIncidentGrouping.isDisabled();
         this.maxIncidentLengthDays = connectionIncidentGrouping.getMaxIncidentLengthDays();
         this.muteForDays = connectionIncidentGrouping.getMuteForDays();
-        this.webhooks = connectionIncidentGrouping.getWebhooks();
+        this.incidentNotification = connectionIncidentGrouping.getIncidentNotification();
 
         if (tableIncidentGrouping != null) {
             if (tableIncidentGrouping.getGroupingLevel() != null) {
@@ -130,8 +130,8 @@ public class EffectiveIncidentGroupingConfiguration {
      * Returns the configuration of addresses used for incident notifications.
      * @return Adresses configuration for incidents.
      */
-    public IncidentNotificationSpec getWebhooks() {
-        return webhooks;
+    public IncidentNotificationSpec getIncidentNotification() {
+        return incidentNotification;
     }
 
 

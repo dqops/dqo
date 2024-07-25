@@ -656,9 +656,9 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(ConnectionIncidentGroupingSpec connectionIncidentGroupingSpec, P parameter);
 
     /**
-     * Accepts an incident notifications using webhooks configuration.
+     * Accepts an incident notifications using incident notification configuration.
      *
-     * @param incidentNotificationSpec Webhooks for incident notifications.
+     * @param incidentNotificationSpec Addresses for incident notifications.
      * @param parameter                        Additional visitor's parameter.
      * @return Accept's result.
      */
@@ -743,8 +743,8 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
 
     /**
-     * Accepts a default incident webhook notifications.
-     * @param defaultIncidentNotificationsWrapper Default incident webhook notifications wrapper.
+     * Accepts a default incident notifications.
+     * @param defaultIncidentNotificationsWrapper Default incident notifications wrapper.
      * @param parameter Visitor's parameter.
      * @return Accept's result.
      */

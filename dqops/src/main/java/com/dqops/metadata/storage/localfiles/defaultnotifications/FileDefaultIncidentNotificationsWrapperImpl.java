@@ -25,8 +25,8 @@ public class FileDefaultIncidentNotificationsWrapperImpl extends DefaultIncident
     private final YamlSerializer yamlSerializer;
 
     /**
-     * Creates a default notification webhooks wrapper for its specification that uses yaml files for storage.
-     * @param settingsFolderNode Folder with yaml files for webhooks specifications.
+     * Creates a default incident notifications wrapper for its specification that uses yaml files for storage.
+     * @param settingsFolderNode Folder with yaml files for incident notification specifications.
      * @param yamlSerializer Yaml serializer.
      * @param readOnly Make the wrapper read-only.
      */
@@ -38,7 +38,7 @@ public class FileDefaultIncidentNotificationsWrapperImpl extends DefaultIncident
 
     /**
      * Loads the default notification webhooks specification from a .yaml file.
-     * @return Loaded default notification webhooks specification.
+     * @return Loaded default incident notification specification.
      */
     @Override
     public IncidentNotificationSpec getSpec() {

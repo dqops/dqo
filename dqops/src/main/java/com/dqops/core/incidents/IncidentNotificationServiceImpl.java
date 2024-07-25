@@ -97,18 +97,18 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     }
 
     /**
-     * Sends new incident notifications to the notification targets (webhooks) specified in the incident grouping configuration.
+     * Sends new incident notifications to the notification targets addresses specified in the incident grouping configuration.
      *
      * @param newMessages      List of new data quality incidents that will be sent as a payload.
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
-     * @param userIdentity     User identity that specifies the data domain where the webhooks are defined.
+     * @param userIdentity     User identity that specifies the data domain where the addresses are defined.
      */
     @Override
     public void sendNotifications(List<IncidentNotificationMessage> newMessages,
                                   ConnectionIncidentGroupingSpec incidentGrouping,
                                   UserDomainIdentity userIdentity) {
-        IncidentNotificationSpec webhooksSpec = prepareWebhooks(incidentGrouping, userIdentity);
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec, userIdentity);
+        IncidentNotificationSpec incidentNotificationSpec = prepareIncidentNotifications(incidentGrouping, userIdentity);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationSpec, userIdentity);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
@@ -221,23 +221,23 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * Returns a combined list of web hooks, combining the default notification channels with the notification settings on a connection.
      * @param incidentGrouping Incident grouping and notification settings from a connection.
      * @param userIdentity User identity that also specifies the data domain where the webhooks are defined.
-     * @return Effective notification settings with webhooks that could be the default values.
+     * @return Effective notification settings with addresses that could be the default values.
      */
-    protected IncidentNotificationSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping,
-                                                       UserDomainIdentity userIdentity){
+    protected IncidentNotificationSpec prepareIncidentNotifications(ConnectionIncidentGroupingSpec incidentGrouping,
+                                                                    UserDomainIdentity userIdentity){
         ExecutionContext executionContext = executionContextFactory.create(userIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
-        DefaultIncidentNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultIncidentNotifications();
-        IncidentNotificationSpec defaultWebhooks = defaultWebhooksWrapper.getSpec();
-        if (defaultWebhooks == null) {
-            defaultWebhooks = new IncidentNotificationSpec();
+        DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper = userHome.getDefaultIncidentNotifications();
+        IncidentNotificationSpec defaultIncidentNotifications = defaultIncidentNotificationsWrapper.getSpec();
+        if (defaultIncidentNotifications == null) {
+            defaultIncidentNotifications = new IncidentNotificationSpec();
         }
 
-        if (incidentGrouping == null || incidentGrouping.getWebhooks() == null){
-            return defaultWebhooks.deepClone();
+        if (incidentGrouping == null || incidentGrouping.getIncidentNotification() == null){
+            return defaultIncidentNotifications.deepClone();
         } else {
-            return incidentGrouping.getWebhooks().combineWithDefaults(defaultWebhooks);
+            return incidentGrouping.getIncidentNotification().combineWithDefaults(defaultIncidentNotifications);
         }
     }
 
