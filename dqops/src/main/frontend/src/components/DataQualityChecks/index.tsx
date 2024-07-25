@@ -14,9 +14,15 @@ import {
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setRuleParametersConfigured
+} from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
-import { getFirstLevelActiveTab } from '../../redux/selectors';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
@@ -97,11 +103,10 @@ const DataQualityChecks = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
-  const [ruleParametersConfigured, setRuleParametersConfigured] = useState<
-    boolean | undefined
-  >();
-
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { ruleParametersConfigured } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
 
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
@@ -403,23 +408,6 @@ const DataQualityChecks = ({
     );
     return groupedArray ?? [];
   };
-  const getRuleParametersConfigured = () => {
-    const param = !!checksUI?.categories
-      ?.flatMap((category) => category.checks || [])
-      .flatMap((check) => check || [])
-      .flatMap((check) => check.rule || [])
-      .find((x) => {
-        let count = 0;
-        if (x.warning?.configured) count++;
-        if (x.error?.configured) count++;
-        if (x.fatal?.configured) count++;
-        return count > 1;
-      });
-    if (ruleParametersConfigured === undefined) {
-      setRuleParametersConfigured(param);
-    }
-    return param;
-  };
 
   const getScheduleLevelBasedOnEnum = (
     schedule?: EffectiveScheduleModelScheduleLevelEnum
@@ -435,6 +423,11 @@ const DataQualityChecks = ({
         return 'Table level';
       }
     }
+  };
+  const onChangeRuleParametersConfigured = (param: boolean) => {
+    dispatch(
+      setRuleParametersConfigured(checkTypes, firstLevelActiveTab, param)
+    );
   };
 
   return (
@@ -623,12 +616,10 @@ const DataQualityChecks = ({
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
-              ruleParamenterConfigured={
-                ruleParametersConfigured === undefined
-                  ? getRuleParametersConfigured()
-                  : ruleParametersConfigured
+              ruleParamenterConfigured={ruleParametersConfigured}
+              onChangeRuleParametersConfigured={
+                onChangeRuleParametersConfigured
               }
-              onChangeRuleParametersConfigured={setRuleParametersConfigured}
             />
           ))}
           {isFiltered !== true &&
@@ -652,7 +643,9 @@ const DataQualityChecks = ({
                 showAdvanced={showAdvanced}
                 isAlreadyDeleted={true}
                 ruleParamenterConfigured={!!ruleParametersConfigured}
-                onChangeRuleParametersConfigured={setRuleParametersConfigured}
+                onChangeRuleParametersConfigured={
+                  onChangeRuleParametersConfigured
+                }
               />
             ))}
         </tbody>

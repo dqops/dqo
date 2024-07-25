@@ -17,6 +17,7 @@
 import { DataGroupingConfigurationSpec } from '../../api';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 import { CheckTypes } from '../../shared/routes';
+import { getRuleParametersConfigured } from '../../utils';
 import { SOURCE_ACTION } from '../types';
 
 export interface INestTab {
@@ -561,7 +562,8 @@ const connectionReducer = (state = initialState, action: Action) => {
       return setActiveTabState(state, action, {
         loading: false,
         checks: action.data,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -577,7 +579,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         checksUI: action.data,
         isUpdatedChecksUi: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_PROFILING_CHECKS_MODEL_ERROR:
       return setActiveTabState(state, action, {
@@ -639,7 +642,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monthlyMonitoring: action.data,
         isUpdatedMonthlyMonitoring: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -655,7 +659,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         dailyPartitionedChecks: action.data,
         isUpdatedDailyPartitionedChecks: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -671,7 +676,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monthlyPartitionedChecks: action.data,
         isUpdatedMonthlyPartitionedChecks: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_TABLE_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -971,7 +977,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         checksUI: action.data,
         isUpdatedChecksUi: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_PROFILING_CHECKS_MODEL_ERROR:
       return setActiveTabState(state, action, {
@@ -987,7 +994,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         dailyMonitoring: action.data,
         isUpdatedDailyMonitoring: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_DAILY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -1003,7 +1011,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monthlyMonitoring: action.data,
         isUpdatedMonthlyMonitoring: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_MONTHLY_MONITORING_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -1019,7 +1028,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         dailyPartitionedChecks: action.data,
         isUpdatedDailyPartitionedChecks: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_DAILY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -1035,7 +1045,8 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         monthlyPartitionedChecks: action.data,
         isUpdatedMonthlyPartitionedChecks: false,
-        error: null
+        error: null,
+        ruleParametersConfigured: getRuleParametersConfigured(action.data)
       });
     case SOURCE_ACTION.GET_COLUMN_MONTHLY_PARTITIONED_CHECKS_ERROR:
       return setActiveTabState(state, action, {
@@ -1430,6 +1441,11 @@ const connectionReducer = (state = initialState, action: Action) => {
           activeTab: action.data
         }
       };
+    }
+    case SOURCE_ACTION.SET_RULE_PARAMETERS_CONFIGURED: {
+      return setActiveTabState(state, action, {
+        ruleParametersConfigured: action.data
+      });
     }
     default:
       return state;
