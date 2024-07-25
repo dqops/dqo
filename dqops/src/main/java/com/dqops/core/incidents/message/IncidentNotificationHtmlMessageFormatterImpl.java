@@ -102,63 +102,62 @@ public class IncidentNotificationHtmlMessageFormatterImpl implements IncidentNot
     }
 
     private String wrapInHtml(String mainMessage){
-        String htmlMessage = """
-                <!DOCTYPE html>
-                <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>DQOps Incident Notification</title>
-                        <style>
-                            body {
-                                font-family: Arial, sans-serif;
-                                margin: 0;
-                                padding: 0;
-                                background-color: #f6f6f6;
-                            }
-                            .container {
-                                width: 100%;
-                                max-width: 600px;
-                                margin: 0 auto;
-                                background-color: #ffffff;
-                                padding: 20px;
-                                border: 1px solid #dddddd;
-                            }
-                            .logo {
-                                text-align: center;
-                                padding: 10px 0;
-                                border-bottom: 2px solid #000;
-                            }
-                            .content {
-                                padding: 20px;
-                                text-align: left;
-                            }
-                            .footer {
-                                text-align: center;
-                                padding: 10px 0;
-                                color: #777777;
-                                font-size: 12px;
-                            }
-                            a {
-                                text-decoration: none;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="container">
-                            <div class="logo">
-                                <img src="https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png" alt="Company Logo">
-                            </div>
-                            <div class="content">
-                %s
-                            </div>
-                            <div class="footer">
-                                <p>&copy; 2024 DQOps. All rights reserved.</p>
-                                <p><a href="https://dqops.com/docs/working-with-dqo/managing-data-quality-incidents-with-dqops/#configure-incidents">Configure incidents</a></p>
-                            </div>
-                        </div>
-                    </body>
-                </html>""".replace("%s\n", mainMessage);
+        String htmlMessage = ("<!DOCTYPE html>\n" +
+                              "<html>\n" +
+                              "    <head>\n" +
+                              "        <meta charset=\"UTF-8\">\n" +
+                              "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                              "        <title>DQOps Incident Notification</title>\n" +
+                              "        <style>\n" +
+                              "            body {\n" +
+                              "                font-family: Arial, sans-serif;\n" +
+                              "                margin: 0;\n" +
+                              "                padding: 0;\n" +
+                              "                background-color: #f6f6f6;\n" +
+                              "            }\n" +
+                              "            .container {\n" +
+                              "                width: 100%;\n" +
+                              "                max-width: 600px;\n" +
+                              "                margin: 0 auto;\n" +
+                              "                background-color: #ffffff;\n" +
+                              "                padding: 20px;\n" +
+                              "                border: 1px solid #dddddd;\n" +
+                              "            }\n" +
+                              "            .logo {\n" +
+                              "                text-align: center;\n" +
+                              "                padding: 10px 0;\n" +
+                              "                border-bottom: 2px solid #000;\n" +
+                              "            }\n" +
+                              "            .content {\n" +
+                              "                padding: 20px;\n" +
+                              "                text-align: left;\n" +
+                              "            }\n" +
+                              "            .footer {\n" +
+                              "                text-align: center;\n" +
+                              "                padding: 10px 0;\n" +
+                              "                color: #777777;\n" +
+                              "                font-size: 12px;\n" +
+                              "            }\n" +
+                              "            a {\n" +
+                              "                text-decoration: none;\n" +
+                              "            }\n" +
+                              "        </style>\n" +
+                              "    </head>\n" +
+                              "    <body>\n" +
+                              "        <div class=\"container\">\n" +
+                              "            <div class=\"logo\">\n" +
+                              "                <img src=\"https://dqops.com/wp-content/uploads/2023/06/DQOps_logo_180x47.png\" alt=\"Company Logo\">\n" +
+                              "            </div>\n" +
+                              "            <div class=\"content\">\n" +
+                              "%s\n" +
+                              "            </div>\n" +
+                              "            <div class=\"footer\">\n" +
+                              "                <p>&copy; 2024 DQOps. All rights reserved.</p>\n" +
+                              "                <p><a href=\"https://dqops.com/docs/working-with-dqo/managing-data-quality-incidents-with-dqops/#configure-incidents\">Configure incidents</a></p>\n" +
+                              "            </div>\n" +
+                              "        </div>\n" +
+                              "    </body>\n" +
+                              "</html>").replace("%s\n", mainMessage);
 
         return htmlMessage;
     }
