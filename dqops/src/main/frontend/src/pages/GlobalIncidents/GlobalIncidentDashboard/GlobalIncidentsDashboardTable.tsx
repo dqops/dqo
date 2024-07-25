@@ -72,13 +72,13 @@ export default function GlobalIncidentsDashboardTable({
       </div>
       <div className="">
         <div className="grid grid-cols-24 font-bold border-b border-gray-300">
-          <div className={tableHeaderClassName + ' col-span-2'}>Severity</div>
-          <div className={tableHeaderClassName + ' col-span-2 text-right'}>
+          <div className={tableHeaderClassName + ' col-span-1'}>Severity</div>
+          <div className={tableHeaderClassName + ' col-span-2 text-right whitespace-break-spaces'}>
             Total issues
           </div>
           <div className={tableHeaderClassName + ' col-span-3'}>Connection</div>
           <div className={tableHeaderClassName + ' col-span-3'}>Schema</div>
-          <div className={tableHeaderClassName + ' col-span-4'}>Table</div>
+          <div className={tableHeaderClassName + ' col-span-5'}>Table</div>
           <div className={tableHeaderClassName + ' col-span-4'}>
             {groupBy === 'dimension' ? (
               <p>Check category</p>
@@ -96,7 +96,7 @@ export default function GlobalIncidentsDashboardTable({
               className="py-1.5 border-b border-gray-300 grid grid-cols-24"
             >
               <div
-                className={tableRowClassName + ' flex items-center col-span-2'}
+                className={tableRowClassName + ' flex items-center col-span-1'}
               >
                 {renderIncidentHighestSeveritySquare(
                   incident.highestSeverity ?? 3
@@ -126,7 +126,7 @@ export default function GlobalIncidentsDashboardTable({
               <div
                 className={
                   tableRowClassName +
-                  ' underline cursor-pointer col-span-4 truncate'
+                  ' underline cursor-pointer col-span-5 truncate'
                 }
                 onClick={() => goToIncidents(incident)}
               >
