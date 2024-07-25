@@ -107,7 +107,6 @@ const DataQualityChecks = ({
   const { ruleParametersConfigured } = useSelector(
     getFirstLevelState(checkTypes)
   );
-  console.log('ruleParametersConfigured', ruleParametersConfigured);
 
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
@@ -425,6 +424,11 @@ const DataQualityChecks = ({
       }
     }
   };
+  const onChangeRuleParametersConfigured = (param: boolean) => {
+    dispatch(
+      setRuleParametersConfigured(checkTypes, firstLevelActiveTab, param)
+    );
+  };
 
   return (
     <div
@@ -613,8 +617,8 @@ const DataQualityChecks = ({
               showAdvanced={showAdvanced}
               isFiltered={isFiltered}
               ruleParamenterConfigured={ruleParametersConfigured}
-              onChangeRuleParametersConfigured={(param: boolean) =>
-                dispatch(setRuleParametersConfigured(param))
+              onChangeRuleParametersConfigured={
+                onChangeRuleParametersConfigured
               }
             />
           ))}
@@ -639,7 +643,9 @@ const DataQualityChecks = ({
                 showAdvanced={showAdvanced}
                 isAlreadyDeleted={true}
                 ruleParamenterConfigured={!!ruleParametersConfigured}
-                onChangeRuleParametersConfigured={setRuleParametersConfigured}
+                onChangeRuleParametersConfigured={
+                  onChangeRuleParametersConfigured
+                }
               />
             ))}
         </tbody>

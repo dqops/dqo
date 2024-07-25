@@ -1248,8 +1248,12 @@ export const setHomeFirstLevelTab = (data: string) => ({
 });
 
 export const setRuleParametersConfigured = (
+  checkType: CheckTypes,
+  activeTab: string,
   ruleParametersConfigurated: boolean
 ) => ({
   type: SOURCE_ACTION.SET_RULE_PARAMETERS_CONFIGURED,
-  data: ruleParametersConfigurated
+  data: ruleParametersConfigurated,
+  activeTab,
+  checkType
 });
