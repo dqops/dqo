@@ -168,21 +168,22 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
             switch (name) {
                 case "incident_opened_webhook_url":
                     this.setIncidentOpenedAddresses(valueString);
-                    break;
+                    return;
 
                 case "incident_acknowledged_webhook_url":
                     this.setIncidentAcknowledgedAddresses(valueString);
-                    break;
+                    return;
 
                 case "incident_resolved_webhook_url":
                     this.setIncidentResolvedAddresses(valueString);
-                    break;
+                    return;
 
                 case "incident_muted_webhook_url":
                     this.setIncidentMutedAddresses(valueString);
-                    break;
+                    return;
             }
         }
+        super.handleUndeclaredProperty(name, value);
     }
 
     /**
