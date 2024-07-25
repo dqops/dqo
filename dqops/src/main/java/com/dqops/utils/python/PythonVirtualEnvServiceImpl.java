@@ -50,6 +50,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final DqoUserConfigurationProperties userConfigurationProperties;
     private PythonVirtualEnv pythonVirtualEnv;
+    private final Object lock = new Object();
 
     /**
      * Default injection constructor.
@@ -276,7 +277,9 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
                 return; // no more requirements to install
             }
 
-			installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
+            synchronized (this.lock) { // first call for installing pip requirements might run pip upgrade, it is sync to install
+                installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
+            }
 
             Files.copy(pathToRequirementsTxt, pathToLastInstalledRequirements, StandardCopyOption.REPLACE_EXISTING);
         }
@@ -339,7 +342,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
                 return; // no more requirements to install
             }
 
-			installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
+            installPipRequirements(pythonVirtualEnv, pathToRequirementsTxt);
 
             Files.copy(pathToRequirementsTxt, pathToLastInstalledRequirements, StandardCopyOption.REPLACE_EXISTING);
         }
