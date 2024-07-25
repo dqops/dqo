@@ -35,7 +35,7 @@ const initTabs = [
     value: 'table-quality-status'
   },
   {
-    label: 'Check editor',
+    label: 'Data quality checks editor',
     value: 'check-editor'
   },
   {
