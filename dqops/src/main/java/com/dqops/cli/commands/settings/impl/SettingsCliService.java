@@ -76,6 +76,33 @@ public interface SettingsCliService {
 	CliOperationStatus showApiKey();
 
 	/**
+	 * Sets a new SMTP server configuration.
+	 * @param host SMTP server host.
+	 * @param port SMTP server port.
+	 * @param useSSL SMTP server useSSL.
+	 * @param username SMTP server username.
+	 * @param password SMTP server password.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus setSmtpServerConfiguration(String host,
+												  String port,
+												  Boolean useSSL,
+												  String username,
+												  String password);
+
+	/**
+	 * Removes a new SMTP server configuration.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus removeSmtpServerConfiguration();
+
+	/**
+	 * Shows a new SMTP server configuration.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus showSmtpServerConfiguration();
+
+	/**
 	 * Sets a new IANA time zone name.
 	 * @param timeZone Time zone name.
 	 * @return Cli operation status.

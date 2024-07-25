@@ -16,23 +16,23 @@
 package com.dqops.cli.commands.settings;
 
 import com.dqops.cli.commands.BaseCommand;
+import com.dqops.cli.commands.settings.smtp.SettingsSmtpRemoveCliCommand;
+import com.dqops.cli.commands.settings.smtp.SettingsSmtpSetCliCommand;
+import com.dqops.cli.commands.settings.smtp.SettingsSmtpShowCliCommand;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "settings" 1st level cli command.
+ * Cli settings SMTP server configuration base command.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", description = "Show or set settings", subcommands = {
-		SettingsEditorCliCommand.class,
-		SettingsInitCliCommand.class,
-		SettingsRemoveCliCommand.class,
-		SettingsApiKeyCliCommand.class,
-		SettingsTimeZoneCliCommand.class,
-		SettingsSmtpCliCommand.class,
+@CommandLine.Command(name = "smtp", description = "Set, show or remove SMTP server settings for incident notifications.", subcommands = {
+		SettingsSmtpSetCliCommand.class,
+		SettingsSmtpRemoveCliCommand.class,
+		SettingsSmtpShowCliCommand.class,
 })
-public class SettingsCliCommand extends BaseCommand {
+public class SettingsSmtpCliCommand extends BaseCommand {
 }

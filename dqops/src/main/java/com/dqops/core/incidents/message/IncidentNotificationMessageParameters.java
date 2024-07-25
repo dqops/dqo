@@ -1,4 +1,4 @@
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.dqops.metadata.storage.localfiles.defaultnotifications;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -21,8 +21,8 @@ public class DefaultNotificationsYaml  implements InvalidYamlStatusHolder {
     @DefaultFieldValue("default_notifications")
     private SpecificationKind kind = SpecificationKind.default_notifications;
 
-    @JsonPropertyDescription("The configuration object with the definition of the default webhook notification urls")
-    private IncidentWebhookNotificationsSpec spec = new IncidentWebhookNotificationsSpec();
+    @JsonPropertyDescription("The configuration object with the definition of the default webhook notification urls and email addresses")
+    private IncidentNotificationSpec spec = new IncidentNotificationSpec();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -30,7 +30,7 @@ public class DefaultNotificationsYaml  implements InvalidYamlStatusHolder {
     public DefaultNotificationsYaml() {
     }
 
-    public DefaultNotificationsYaml(IncidentWebhookNotificationsSpec spec) {
+    public DefaultNotificationsYaml(IncidentNotificationSpec spec) {
         this.spec = spec;
     }
 
@@ -70,7 +70,7 @@ public class DefaultNotificationsYaml  implements InvalidYamlStatusHolder {
      * Returns a data source specification.
      * @return Data source specification.
      */
-    public IncidentWebhookNotificationsSpec getSpec() {
+    public IncidentNotificationSpec getSpec() {
         return spec;
     }
 
@@ -78,7 +78,7 @@ public class DefaultNotificationsYaml  implements InvalidYamlStatusHolder {
      * Sets a data source specification.
      * @param spec Data source specification.
      */
-    public void setSpec(IncidentWebhookNotificationsSpec spec) {
+    public void setSpec(IncidentNotificationSpec spec) {
         this.spec = spec;
     }
 

@@ -5,7 +5,7 @@ import {
   ConnectionIncidentGroupingSpec,
   ConnectionIncidentGroupingSpecGroupingLevelEnum,
   ConnectionIncidentGroupingSpecMinimumSeverityEnum,
-  IncidentWebhookNotificationsSpec
+  IncidentNotificationSpec
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -57,7 +57,7 @@ export const IncidentsNotificationsView = () => {
   );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [defaultWebhooksConfiguration, setDefaultWebhooksConfiguration] =
-    useState<IncidentWebhookNotificationsSpec>();
+    useState<IncidentNotificationSpec>();
 
   const getDefaultWebhooksConfiguration = async () => {
     await SettingsApi.getDefaultWebhooks().then((res) =>
@@ -84,7 +84,7 @@ export const IncidentsNotificationsView = () => {
     );
   };
 
-  const onChangeWebhooks = (obj: Partial<IncidentWebhookNotificationsSpec>) => {
+  const onChangeWebhooks = (obj: Partial<IncidentNotificationSpec>) => {
     dispatch(
       setUpdateIncidentGroup(checkTypes, firstLevelActiveTab, {
         ...(incidentGrouping || {}),
@@ -178,57 +178,57 @@ export const IncidentsNotificationsView = () => {
         </div>
 
         <SectionWrapper
-          title="Webhooks for notifications of an incident state change"
+          title="Addresses for notifications of an incident state change"
           className="mt-8"
         >
           <Input
             className="mb-4"
             label="A new incident was opened (detected)"
-            value={incidentGrouping?.webhooks?.incident_opened_webhook_url}
+            value={incidentGrouping?.webhooks?.incident_opened_addresses}
             onChange={(e) =>
-              onChangeWebhooks({ incident_opened_webhook_url: e.target.value })
+              onChangeWebhooks({ incident_opened_addresses: e.target.value })
             }
             placeholder={
-              defaultWebhooksConfiguration?.incident_opened_webhook_url
+              defaultWebhooksConfiguration?.incident_opened_addresses
             }
           />
           <Input
             className="mb-4"
             label="An incident was acknowledged"
             value={
-              incidentGrouping?.webhooks?.incident_acknowledged_webhook_url
+              incidentGrouping?.webhooks?.incident_acknowledged_addresses
             }
             onChange={(e) =>
               onChangeWebhooks({
-                incident_acknowledged_webhook_url: e.target.value
+                incident_acknowledged_addresses: e.target.value
               })
             }
             placeholder={
-              defaultWebhooksConfiguration?.incident_acknowledged_webhook_url
+              defaultWebhooksConfiguration?.incident_acknowledged_addresses
             }
           />
           <Input
             className="mb-4"
             label="An incident was resolved"
-            value={incidentGrouping?.webhooks?.incident_resolved_webhook_url}
+            value={incidentGrouping?.webhooks?.incident_resolved_addresses}
             onChange={(e) =>
               onChangeWebhooks({
-                incident_resolved_webhook_url: e.target.value
+                incident_resolved_addresses: e.target.value
               })
             }
             placeholder={
-              defaultWebhooksConfiguration?.incident_resolved_webhook_url
+              defaultWebhooksConfiguration?.incident_resolved_addresses
             }
           />
           <Input
             className="mb-4"
             label="An incident was muted"
-            value={incidentGrouping?.webhooks?.incident_muted_webhook_url}
+            value={incidentGrouping?.webhooks?.incident_muted_addresses}
             onChange={(e) =>
-              onChangeWebhooks({ incident_muted_webhook_url: e.target.value })
+              onChangeWebhooks({ incident_muted_addresses: e.target.value })
             }
             placeholder={
-              defaultWebhooksConfiguration?.incident_muted_webhook_url
+              defaultWebhooksConfiguration?.incident_muted_addresses
             }
           />
         </SectionWrapper>

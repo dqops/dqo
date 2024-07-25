@@ -15,6 +15,7 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 
@@ -25,10 +26,10 @@ import java.util.List;
  */
 public interface IncidentNotificationService {
     /**
-     * Sends new incident notifications to the notification targets (webhooks) specified in the incident grouping configuration.
+     * Sends new incident notifications to the notification target addresses specified in the incident grouping configuration.
      * @param newMessages List of new data quality incidents that will be sent as a payload.
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
-     * @param userIdentity     User identity that specifies the data domain where the webhooks are defined.
+     * @param userIdentity     User identity that specifies the data domain where the addresses are defined.
      */
     void sendNotifications(List<IncidentNotificationMessage> newMessages,
                            ConnectionIncidentGroupingSpec incidentGrouping,

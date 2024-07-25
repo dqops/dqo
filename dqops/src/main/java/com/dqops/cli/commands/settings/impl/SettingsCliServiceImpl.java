@@ -26,6 +26,7 @@ import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
+import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -343,6 +344,123 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		cliOperationStatus.setSuccessMessage(textBuilder.toString());
 		return cliOperationStatus;
 	}
+
+
+	/**
+	 * Sets a new SMTP server configuration.
+	 * @param host SMTP server host.
+	 * @param port SMTP server port.
+	 * @param useSSL SMTP server useSSL.
+	 * @param username SMTP server username.
+	 * @param password SMTP server password.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus setSmtpServerConfiguration(String host,
+														 String port,
+														 Boolean useSSL,
+														 String username,
+														 String password){
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		SmtpServerConfigurationSpec smtpServerConfigurationSpec = new SmtpServerConfigurationSpec() {{
+				setHost(host);
+				setPort(port);
+				setUseSSL(useSSL);
+				setUsername(username);
+				setPassword(password);
+		}};
+		settings.setSmtpServerConfiguration(smtpServerConfigurationSpec);
+
+		userHomeContext.flush();
+		this.dqoCloudApiKeyProvider.invalidate();
+		this.dqoCloudAccessTokenCache.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully set SMTP server configuration");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Removes a new SMTP server configuration.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus removeSmtpServerConfiguration(){
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), false);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		SmtpServerConfigurationSpec smtpServerConfiguration = settings.getSmtpServerConfiguration();
+		if (smtpServerConfiguration == null) {
+			cliOperationStatus.setFailedMessage(String.format("SMTP server configuration is not set"));
+			return cliOperationStatus;
+		}
+
+		settings.setSmtpServerConfiguration(null);
+		userHomeContext.flush();
+		this.dqoCloudApiKeyProvider.invalidate();
+		this.dqoCloudAccessTokenCache.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully removed SMTP server configuration");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Shows a new SMTP server configuration.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus showSmtpServerConfiguration(){
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity(), true);
+		UserHome userHome = userHomeContext.getUserHome();
+		LocalSettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		SmtpServerConfigurationSpec smtpServerConfiguration = settings.getSmtpServerConfiguration();
+		if (smtpServerConfiguration == null) {
+			cliOperationStatus.setFailedMessage(String.format("SMTP server configuration is not set."));
+			return cliOperationStatus;
+		}
+
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(String.format("SMTP server host: %s\n", smtpServerConfiguration.getHost()));
+		textBuilder.append(String.format("SMTP server port: %s/%d\n", smtpServerConfiguration.getPort()));
+		textBuilder.append(String.format("SMTP server use SSL: %s\n", smtpServerConfiguration.getUseSSL()));
+		textBuilder.append(String.format("SMTP server user name: %s\n", smtpServerConfiguration.getUsername()));
+		textBuilder.append(String.format("SMTP server password: %s\n", smtpServerConfiguration.getPassword()));
+
+		cliOperationStatus.setSuccessMessage(textBuilder.toString());
+		return cliOperationStatus;
+	}
+
 
 	/**
 	 * Sets a new IANA time zone.

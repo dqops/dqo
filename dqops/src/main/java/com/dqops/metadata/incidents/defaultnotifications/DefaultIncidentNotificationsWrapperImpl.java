@@ -19,22 +19,22 @@ package com.dqops.metadata.incidents.defaultnotifications;
 import com.dqops.metadata.basespecs.AbstractElementWrapper;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Default incident webhook notification spec wrapper.
  */
-public class DefaultIncidentWebhookNotificationsWrapperImpl extends AbstractElementWrapper<String, IncidentWebhookNotificationsSpec>
-        implements DefaultIncidentWebhookNotificationsWrapper {
+public class DefaultIncidentNotificationsWrapperImpl extends AbstractElementWrapper<String, IncidentNotificationSpec>
+        implements DefaultIncidentNotificationsWrapper {
 
     @JsonIgnore
     private final static String NAME = "default_notification_webhooks";
 
-    public DefaultIncidentWebhookNotificationsWrapperImpl() {
+    public DefaultIncidentNotificationsWrapperImpl() {
     }
 
-    public DefaultIncidentWebhookNotificationsWrapperImpl(boolean readOnly) {
+    public DefaultIncidentNotificationsWrapperImpl(boolean readOnly) {
         super(readOnly);
     }
 
