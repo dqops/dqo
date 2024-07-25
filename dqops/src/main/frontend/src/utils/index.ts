@@ -1,6 +1,7 @@
 import moment from 'moment/moment';
 import { useParams } from 'react-router-dom';
 import {
+  CheckContainerModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
   ConnectionModel,
@@ -857,4 +858,19 @@ export const getSeverity = (severity: string | undefined) => {
     default:
       return severity;
   }
+};
+
+export const getRuleParametersConfigured = (checksUI?: CheckContainerModel) => {
+  const param = !!checksUI?.categories
+    ?.flatMap((category) => category.checks || [])
+    .flatMap((check) => check || [])
+    .flatMap((check) => check.rule || [])
+    .find((x) => {
+      let count = 0;
+      if (x.warning?.configured) count++;
+      if (x.error?.configured) count++;
+      if (x.fatal?.configured) count++;
+      return count > 1;
+    });
+  return param;
 };

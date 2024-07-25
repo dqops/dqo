@@ -1246,3 +1246,10 @@ export const setHomeFirstLevelTab = (data: string) => ({
   type: SOURCE_ACTION.SET_FIRST_LEVEL_HOME_TAB,
   data
 });
+
+export const setRuleParametersConfigured = (
+  ruleParametersConfigurated: boolean
+) => ({
+  type: SOURCE_ACTION.SET_RULE_PARAMETERS_CONFIGURED,
+  data: ruleParametersConfigurated
+});
