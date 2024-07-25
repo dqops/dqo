@@ -16,6 +16,7 @@ import {
 import { useActionDispatch } from '../hooks/useActionDispatch';
 import { toggleMenu } from '../redux/actions/job.actions';
 import { addFirstLevelTab } from '../redux/actions/source.actions';
+import { IRootState } from '../redux/reducers';
 import { getFirstLevelActiveTab } from '../redux/selectors';
 import {
   ColumnApiClient,
@@ -114,7 +115,7 @@ function TreeProvider(props: any) {
     {}
   );
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-
+  const { userProfile } = useSelector((state: IRootState) => state.job);
   const getConnections = async () => {
     try {
       const res: AxiosResponse<ConnectionModel[]> =
@@ -359,48 +360,80 @@ function TreeProvider(props: any) {
       });
     }
     if (checkTypes === CheckTypes.MONITORING) {
-      items.push(
-        {
+      if (
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at
+      ) {
+        items.push(
+          {
+            id: `${node.id}.dailyCheck`,
+            label: 'Daily monitoring',
+            level: TREE_LEVEL.TABLE_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${node.tooltip} daily monitoring`,
+            open: false
+          },
+          {
+            id: `${node.id}.monthlyCheck`,
+            label: 'Monthly monitoring',
+            level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${node.tooltip} monthly monitoring`,
+            open: false
+          }
+        );
+      } else {
+        items.push({
           id: `${node.id}.dailyCheck`,
-          label: 'Daily monitoring',
+          label: 'All data quality checks',
           level: TREE_LEVEL.TABLE_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${node.tooltip} daily monitoring`,
+          tooltip: `${node.tooltip} all data quality checks`,
           open: false
-        },
-        {
-          id: `${node.id}.monthlyCheck`,
-          label: 'Monthly monitoring',
-          level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
-          parentId: node.id,
-          items: [],
-          tooltip: `${node.tooltip} monthly monitoring`,
-          open: false
-        }
-      );
+        });
+      }
     }
     if (checkTypes === CheckTypes.PARTITIONED) {
-      items.push(
-        {
+      if (
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at
+      ) {
+        items.push(
+          {
+            id: `${node.id}.dailyPartitionedChecks`,
+            label: 'Day period checks',
+            level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${node.tooltip} day period checks`,
+            open: false
+          },
+          {
+            id: `${node.id}.monthlyPartitionedChecks`,
+            label: 'Month period checks',
+            level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${node.tooltip} month period checks`,
+            open: false
+          }
+        );
+      } else {
+        items.push({
           id: `${node.id}.dailyPartitionedChecks`,
-          label: 'Day period checks',
+          label: 'All data quality checks',
           level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${node.tooltip} day period checks`,
+          tooltip: `${node.tooltip} all data quality checks`,
           open: false
-        },
-        {
-          id: `${node.id}.monthlyPartitionedChecks`,
-          label: 'Month period checks',
-          level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
-          parentId: node.id,
-          items: [],
-          tooltip: `${node.tooltip} month period checks`,
-          open: false
-        }
-      );
+        });
+      }
     }
 
     if (reset) {
@@ -426,48 +459,80 @@ function TreeProvider(props: any) {
       });
     }
     if (checkTypes === CheckTypes.MONITORING) {
-      items.push(
-        {
+      if (
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at
+      ) {
+        items.push(
+          {
+            id: `${node.id}.dailyCheck`,
+            label: 'Daily monitoring',
+            level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connection}.${schema}.${table}.${node?.label} daily monitoring`,
+            open: false
+          },
+          {
+            id: `${node.id}.monthlyCheck`,
+            label: 'Monthly monitoring',
+            level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connection}.${schema}.${table}.${node?.label} monthly monitoring`,
+            open: false
+          }
+        );
+      } else {
+        items.push({
           id: `${node.id}.dailyCheck`,
-          label: 'Daily monitoring',
+          label: 'All data quality checks',
           level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} daily monitoring`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} all data quality checks`,
           open: false
-        },
-        {
-          id: `${node.id}.monthlyCheck`,
-          label: 'Monthly monitoring',
-          level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
-          parentId: node.id,
-          items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} monthly monitoring`,
-          open: false
-        }
-      );
+        });
+      }
     }
     if (checkTypes === CheckTypes.PARTITIONED) {
-      items.push(
-        {
+      if (
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at
+      ) {
+        items.push(
+          {
+            id: `${node.id}.dailyPartitionedChecks`,
+            label: 'Day period checks',
+            level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connection}.${schema}.${table}.${node?.label} day period checks`,
+            open: false
+          },
+          {
+            id: `${node.id}.monthlyPartitionedChecks`,
+            label: 'Month period checks',
+            level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connection}.${schema}.${table}.${node?.label} month period checks`,
+            open: false
+          }
+        );
+      } else {
+        items.push({
           id: `${node.id}.dailyPartitionedChecks`,
-          label: 'Day period checks',
+          label: 'All data quality checks',
           level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} day period checks`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} all data quality checks`,
           open: false
-        },
-        {
-          id: `${node.id}.monthlyPartitionedChecks`,
-          label: 'Month period checks',
-          level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
-          parentId: node.id,
-          items: [],
-          tooltip: `${connection}.${schema}.${table}.${node?.label} month period checks`,
-          open: false
-        }
-      );
+        });
+      }
     }
     if (reset) {
       resetTreeData(node, items);
