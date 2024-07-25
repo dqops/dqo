@@ -12,6 +12,7 @@ interface INumberInputProps {
   name?: string;
   value?: string | number;
   onChange: (value: number) => void;
+  onChangeUndefined?: () => void;
   onBlur?: (e: FocusEvent) => void;
   dataTestId?: string;
   min?: number;
@@ -36,12 +37,18 @@ const NumberInput = ({
   tooltipText,
   disabled,
   error,
-  step
+  step,
+  onChangeUndefined
 }: INumberInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === '') {
-      onChange(+e.target.value);
-      return;
+      if (onChangeUndefined) {
+        onChangeUndefined();
+        return;
+      } else {
+        onChange(+e.target.value);
+        return;
+      }
     }
     if (onChange) {
       onChange(Number(e.target.value));

@@ -77,6 +77,11 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DashboardsFolderListSpec folders = new DashboardsFolderListSpec();
 
+    @JsonPropertyDescription("Hides the whole folder and all nested dashboards from the navigation tree. If you want to hide some of the build-in folders," +
+            " update the settings/dashboardslist.dqodashboards.yaml file in the DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of this field to true.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hideFolder;
+
     /**
      * Returns the folder name.
      * @return Folder name.
@@ -145,6 +150,23 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
         setDirtyIf(!Objects.equals(this.folders, folders));
         this.folders = folders;
         propagateHierarchyIdToField(folders, "folders");
+    }
+
+    /**
+     * Returns true if the whole folder should be hidden.
+     * @return True when the folder should be hidden.
+     */
+    public boolean isHideFolder() {
+        return hideFolder;
+    }
+
+    /**
+     * Sets a flag to hide a whole folder and all the subfolders and dashboards inside.
+     * @param hideFolder True when the folder should be hidden.
+     */
+    public void setHideFolder(boolean hideFolder) {
+        this.setDirtyIf(this.hideFolder != hideFolder);
+        this.hideFolder = hideFolder;
     }
 
     /**
@@ -392,6 +414,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @return Merged folder that includes current folders and dashboards, merged with the other dashboards.
      */
     public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {
+        if (this.hideFolder || otherFolder.hideFolder) {
+            return null; // hide the folder
+        }
+
         DashboardsFolderSpec cloned = new DashboardsFolderSpec();
         cloned.setFolderName(this.folderName);
         cloned.setStandard(this.standard || otherFolder.standard);

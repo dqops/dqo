@@ -222,7 +222,7 @@ const ColumnPartitionedChecksView = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col overflow-x-auto overflow-y-hidden">
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -239,28 +239,26 @@ const ColumnPartitionedChecksView = () => {
             <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
           </div>
         )}
-      <div>
-        {tab === 'daily' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={dailyPartitionedChecks}
-            onChange={onDailyPartitionedChecksChange}
-            checkResultsOverview={checkResultsOverview}
-            getCheckOverview={getCheckOverview}
-            loading={loading}
-          />
-        )}
-        {tab === 'monthly' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={monthlyPartitionedChecks}
-            onChange={onMonthlyPartitionedChecksChange}
-            checkResultsOverview={checkResultsOverview}
-            getCheckOverview={getCheckOverview}
-            loading={loading}
-          />
-        )}
-      </div>
+      {tab === 'daily' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={dailyPartitionedChecks}
+          onChange={onDailyPartitionedChecksChange}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
+          loading={loading}
+        />
+      )}
+      {tab === 'monthly' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={monthlyPartitionedChecks}
+          onChange={onMonthlyPartitionedChecksChange}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };

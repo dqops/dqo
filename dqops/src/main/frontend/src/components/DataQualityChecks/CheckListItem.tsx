@@ -211,7 +211,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("warning");
+          setEnabledType('warning');
           break;
 
         case CheckModelDefaultSeverityEnum.error:
@@ -222,7 +222,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("error");
+          setEnabledType('error');
           break;
 
         case CheckModelDefaultSeverityEnum.fatal:
@@ -233,7 +233,7 @@ const CheckListItem = ({
               configured: true
             }
           };
-          setEnabledType("fatal");
+          setEnabledType('fatal');
           break;
       }
     }
@@ -389,7 +389,7 @@ const CheckListItem = ({
           'h-18'
         )}
       >
-        <td className="pl-4 pr-4 min-w-130 max-w-130 h-full ">
+        <td className="pl-4 pr-8 min-w-130 max-w-130 h-full ">
           <div className="flex space-x-1 items-center">
             {isAlreadyDeleted !== true &&
               (mode ? (
@@ -625,7 +625,7 @@ const CheckListItem = ({
             </div>
           </div>
         </td>
-        <div className="flex w-full items-center gap-x-6">
+        <div className="flex items-center gap-x-6 !w-45">
           {check.comments ? (
             <SvgIcon
               name="comment"
@@ -639,13 +639,15 @@ const CheckListItem = ({
               content={check.configuration_requirements_errors?.map((x) => x)}
               className="max-w-80 py-2 px-2 bg-gray-800 delay-700"
             >
-              <div className="flex items-center h-full">
-                <SvgIcon name="warning" className="w-5 h-5 mt-7" />
+              <div className="relative">
+                <div className="absolute" style={{ left: '-30px' }}>
+                  <SvgIcon name="warning" className="w-5 h-5 mt-7" />
+                </div>
               </div>
             </Tooltip>
           ) : null}
         </div>
-        <td className="h-full flex items-center justify-end mr-5">
+        <td className="h-full flex items-center justify-end">
           <div className="text-gray-700 text-sm mt-1.5">
             <SensorParameters
               parameters={check.sensor_parameters || []}

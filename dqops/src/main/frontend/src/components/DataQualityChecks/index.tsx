@@ -463,22 +463,26 @@ const DataQualityChecks = ({
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">
             <div className="flex items-center space-x-1">
-              <span>Scheduling status:</span>
-              <span>
+              <div className="inline-block whitespace-nowrap">
+                Scheduling status:
+              </div>
+              <div className="inline-block whitespace-nowrap">
                 {checksUI?.effective_schedule_enabled_status
                   ?.replaceAll('_', ' ')
                   .split(' ')
                   .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
                   .join(' ')}
-              </span>
+              </div>
             </div>
             {checksUI.effective_schedule_enabled_status !==
             CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
               <div className="flex items-center gap-x-4">
                 <div className="flex items-center space-x-1">
-                  <span>Scheduling configured at:</span>
+                  <div className="whitespace-normal min-w-23">
+                    Scheduling configured at:
+                  </div>
                   <a
-                    className="underline cursor-pointer"
+                    className="underline cursor-pointer inline-block whitespace-nowrap  "
                     onClick={goToSchedule}
                   >
                     {getScheduleLevelBasedOnEnum(
@@ -487,8 +491,12 @@ const DataQualityChecks = ({
                   </a>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <span>Effective cron expression:</span>
-                  <span>{checksUI?.effective_schedule?.cron_expression}</span>
+                  <div className="inline-block whitespace-nowrap">
+                    Effective cron expression:
+                  </div>
+                  <div className="inline-block whitespace-nowrap">
+                    {checksUI?.effective_schedule?.cron_expression}
+                  </div>
                 </div>
               </div>
             ) : (
@@ -499,20 +507,25 @@ const DataQualityChecks = ({
             )}
             {checksUI?.effective_schedule?.cron_expression && (
               <div className="flex items-center space-x-1">
-                <span>Next execution at:</span>
-                <span>
+                <div className="inline-block whitespace-nowrap">
+                  Next execution at:
+                </div>
+                <div className="inline-block whitespace-nowrap">
                   {moment(
                     checksUI?.effective_schedule?.time_of_execution
                   ).format('MMM, DD YYYY HH:mm')}
-                </span>
+                </div>
               </div>
             )}
           </div>
         )}
         {isDefaultEditing !== true && (
           <div className="flex items-center justify-between">
-            <span className="pr-2">Schedule configuration: </span>
-            <a className="underline cursor-pointer" onClick={goToScheduleTab}>
+            <div className="whitespace-normal">Schedule configuration: </div>
+            <a
+              className="underline cursor-pointer pl-1"
+              onClick={goToScheduleTab}
+            >
               {checksUI?.effective_schedule?.schedule_group
                 ?.replace(/_/, ' ')
                 .replace(/./, (c) => c.toUpperCase())}
@@ -546,11 +559,11 @@ const DataQualityChecks = ({
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6 ml-4">
           <div className="text-sm text-red-500">
-            <span className="mr-3 text-black">
+            <div className="mr-3 text-black">
               The results are date partitioned (grouped) by a column:
-            </span>
+            </div>
             {checksUI.partition_by_column ? (
-              <span className="text-black">{checksUI.partition_by_column}</span>
+              <div className="text-black">{checksUI.partition_by_column}</div>
             ) : (
               'Warning: Partition checks will not be run, please configure the date or datetime column'
             )}
@@ -565,7 +578,7 @@ const DataQualityChecks = ({
           />
           {checksUI.partition_by_column && (
             <div className="flex gap-2 text-sm items-center">
-              <span>Time window:</span>
+              <div className="inline-block whitespace-nowrap">Time window:</div>
               <Select
                 options={timeWindowOptions}
                 value={timeWindow}
