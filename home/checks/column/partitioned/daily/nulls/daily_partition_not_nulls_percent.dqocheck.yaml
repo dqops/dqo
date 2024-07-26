@@ -8,7 +8,6 @@ spec:
     the percentage of rows that have non-null values. Raises a data quality issue
     when the percentage of non-null values is below min_percentage. Stores a separate
     data quality check result for each daily partition.
-  friendly_name: Minimum percentage of rows containing non-null values (find empty
-    column)
+  friendly_name: Minimum percentage of rows containing non-null values
   standard: true
   default_severity: error

@@ -8,6 +8,6 @@ spec:
     The default value of the *min_count* parameter is 1 to detect at least one value
     in a monitored column. Raises a data quality issue when the count of non-null
     values is below min_count.
-  friendly_name: Minimum count of rows containing non-null values (find empty column)
+  friendly_name: Minimum count of rows containing non-null values
   standard: true
   default_severity: error

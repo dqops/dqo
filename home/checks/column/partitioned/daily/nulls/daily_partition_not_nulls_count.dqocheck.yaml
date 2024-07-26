@@ -9,6 +9,6 @@ spec:
     in a monitored column. Raises a data quality issue when the count of non-null
     values is below min_count. Stores a separate data quality check result for each
     daily partition.
-  friendly_name: Minimum count of rows containing non-null values (find empty column)
+  friendly_name: Minimum count of rows containing non-null values
   standard: true
   default_severity: error

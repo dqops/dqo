@@ -163,7 +163,7 @@ public class ColumnNotNullsCountCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Minimum count of rows containing non-null values (find empty column)";
+        return "Minimum count of rows containing non-null values";
     }
 
     /**
