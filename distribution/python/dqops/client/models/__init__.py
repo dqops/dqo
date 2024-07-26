@@ -1437,10 +1437,10 @@ from .incident_issue_histogram_model_checks import IncidentIssueHistogramModelCh
 from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelColumns
 from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
+from .incident_notification_spec import IncidentNotificationSpec
 from .incident_severity_level_counts_model import IncidentSeverityLevelCountsModel
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
-from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .json_file_format_spec import JsonFileFormatSpec
 from .json_format_type import JsonFormatType
@@ -1490,9 +1490,7 @@ from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
 from .optional import Optional
-from .optional_incident_webhook_notifications_spec import (
-    OptionalIncidentWebhookNotificationsSpec,
-)
+from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
 from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
 from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
@@ -2574,11 +2572,11 @@ __all__ = (
     "IncidentIssueHistogramModelColumns",
     "IncidentIssueHistogramModelDays",
     "IncidentModel",
+    "IncidentNotificationSpec",
     "IncidentSeverityLevelCountsModel",
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
     "IncidentStatus",
-    "IncidentWebhookNotificationsSpec",
     "JsonFileFormatSpec",
     "JsonFormatType",
     "JsonRecordsType",
@@ -2617,7 +2615,7 @@ __all__ = (
     "MySqlSslMode",
     "NewLineCharacterType",
     "Optional",
-    "OptionalIncidentWebhookNotificationsSpec",
+    "OptionalIncidentNotificationSpec",
     "OptionalMonitoringScheduleSpec",
     "OracleParametersSpec",
     "OracleParametersSpecProperties",

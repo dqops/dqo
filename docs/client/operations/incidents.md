@@ -885,6 +885,7 @@ http://localhost:8888/api/topincidents
 		  },
 		  "openIncidentSeverityLevelCounts" : {
 		    "warningCounts" : {
+		      "totalCount" : 294,
 		      "countFromLast24h" : 3,
 		      "countFromLast7days" : 22,
 		      "currentMonthCount" : 129,
@@ -946,6 +947,7 @@ http://localhost:8888/api/topincidents
 			},
 			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
 				warning_counts=IncidentCountsModel(
+					total_count=294,
 					count_from_last24h=3,
 					count_from_last7days=22,
 					current_month_count=129,
@@ -1008,6 +1010,7 @@ http://localhost:8888/api/topincidents
 			},
 			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
 				warning_counts=IncidentCountsModel(
+					total_count=294,
 					count_from_last24h=3,
 					count_from_last7days=22,
 					current_month_count=129,
@@ -1073,6 +1076,7 @@ http://localhost:8888/api/topincidents
 			},
 			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
 				warning_counts=IncidentCountsModel(
+					total_count=294,
 					count_from_last24h=3,
 					count_from_last7days=22,
 					current_month_count=129,
@@ -1138,6 +1142,7 @@ http://localhost:8888/api/topincidents
 			},
 			open_incident_severity_level_counts=IncidentSeverityLevelCountsModel(
 				warning_counts=IncidentCountsModel(
+					total_count=294,
 					count_from_last24h=3,
 					count_from_last7days=22,
 					current_month_count=129,

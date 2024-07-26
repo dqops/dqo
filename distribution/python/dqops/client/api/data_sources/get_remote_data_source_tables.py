@@ -15,7 +15,6 @@ def _get_kwargs(
     *,
     table_name_contains: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

@@ -17,7 +17,6 @@ def _get_kwargs(
     check_category: str,
     check_name: str,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

@@ -17,7 +17,6 @@ def _get_kwargs(
     table_name: str,
     column_name: str,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

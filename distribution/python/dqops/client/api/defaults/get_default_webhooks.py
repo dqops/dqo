@@ -5,14 +5,11 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.incident_webhook_notifications_spec import (
-    IncidentWebhookNotificationsSpec,
-)
+from ...models.incident_notification_spec import IncidentNotificationSpec
 from ...types import Response
 
 
 def _get_kwargs() -> Dict[str, Any]:
-
     pass
 
     return {
@@ -23,9 +20,9 @@ def _get_kwargs() -> Dict[str, Any]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[IncidentWebhookNotificationsSpec]:
+) -> Optional[IncidentNotificationSpec]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = IncidentWebhookNotificationsSpec.from_dict(response.json())
+        response_200 = IncidentNotificationSpec.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -36,7 +33,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[IncidentWebhookNotificationsSpec]:
+) -> Response[IncidentNotificationSpec]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -48,17 +45,17 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[IncidentWebhookNotificationsSpec]:
+) -> Response[IncidentNotificationSpec]:
     """getDefaultWebhooks
 
-     Returns spec to show and edit the default configuration of webhooks.
+     Returns spec to show and edit the default configuration of addresses for incident notifications.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[IncidentWebhookNotificationsSpec]
+        Response[IncidentNotificationSpec]
     """
 
     kwargs = _get_kwargs()
@@ -73,17 +70,17 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[IncidentWebhookNotificationsSpec]:
+) -> Optional[IncidentNotificationSpec]:
     """getDefaultWebhooks
 
-     Returns spec to show and edit the default configuration of webhooks.
+     Returns spec to show and edit the default configuration of addresses for incident notifications.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        IncidentWebhookNotificationsSpec
+        IncidentNotificationSpec
     """
 
     return sync_detailed(
@@ -94,17 +91,17 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[IncidentWebhookNotificationsSpec]:
+) -> Response[IncidentNotificationSpec]:
     """getDefaultWebhooks
 
-     Returns spec to show and edit the default configuration of webhooks.
+     Returns spec to show and edit the default configuration of addresses for incident notifications.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[IncidentWebhookNotificationsSpec]
+        Response[IncidentNotificationSpec]
     """
 
     kwargs = _get_kwargs()
@@ -117,17 +114,17 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[IncidentWebhookNotificationsSpec]:
+) -> Optional[IncidentNotificationSpec]:
     """getDefaultWebhooks
 
-     Returns spec to show and edit the default configuration of webhooks.
+     Returns spec to show and edit the default configuration of addresses for incident notifications.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        IncidentWebhookNotificationsSpec
+        IncidentNotificationSpec
     """
 
     return (

@@ -26,7 +26,6 @@ def _get_kwargs(
     table_comparison: Union[Unset, None, str] = UNSET,
     max_results_per_check: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

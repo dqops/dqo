@@ -6,6 +6,142 @@ Operations for managing the configuration of the default column-level checks for
 
 
 ___
+## copy_from_default_column_checks_pattern
+Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.
+
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/default_column_check_patterns/copy_from_default_column_checks_pattern.py) to see the source code on GitHub.
+
+
+**POST**
+```
+http://localhost:8888/api/default/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}
+```
+
+
+
+**Parameters of this method are described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|<span class="no-wrap-code">`target_pattern_name`</span>|Target pattern name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`source_pattern_name`</span>|Source pattern name|*string*|:material-check-bold:|
+
+
+
+
+
+
+**Usage examples**
+
+
+=== "curl"
+    **Execution**
+
+    ```bash
+    curl -X POST http://localhost:8888/api/default/checks/column/default/copyfrom/default^
+		-H "Accept: application/json"
+	
+    ```
+
+    
+
+
+=== "Python sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.default_column_check_patterns import copy_from_default_column_checks_pattern
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = copy_from_default_column_checks_pattern.sync(
+	    'default',
+	    'default',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.default_column_check_patterns import copy_from_default_column_checks_pattern
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = await copy_from_default_column_checks_pattern.asyncio(
+	    'default',
+	    'default',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth sync client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.default_column_check_patterns import copy_from_default_column_checks_pattern
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = copy_from_default_column_checks_pattern.sync(
+	    'default',
+	    'default',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+=== "Python auth async client"
+    **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.default_column_check_patterns import copy_from_default_column_checks_pattern
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = await copy_from_default_column_checks_pattern.asyncio(
+	    'default',
+	    'default',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+
+
+
+___
 ## create_default_column_checks_pattern
 Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.
 

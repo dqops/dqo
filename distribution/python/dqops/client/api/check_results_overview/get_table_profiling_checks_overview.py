@@ -17,7 +17,6 @@ def _get_kwargs(
     category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

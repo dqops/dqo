@@ -14240,14 +14240,14 @@
       "get" : {
         "tags" : [ "Defaults" ],
         "summary" : "getDefaultWebhooks",
-        "description" : "Returns spec to show and edit the default configuration of webhooks.",
+        "description" : "Returns spec to show and edit the default configuration of addresses for incident notifications.",
         "operationId" : "getDefaultWebhooks",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
             "description" : "OK",
             "schema" : {
-              "$ref" : "#/definitions/IncidentWebhookNotificationsSpec"
+              "$ref" : "#/definitions/IncidentNotificationSpec"
             }
           },
           "500" : {
@@ -14264,17 +14264,17 @@
       "put" : {
         "tags" : [ "Defaults" ],
         "summary" : "updateDefaultWebhooks",
-        "description" : "New configuration of the default webhooks.",
+        "description" : "New configuration of the default addresses.",
         "operationId" : "updateDefaultWebhooks",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "description" : "Spec with default notification webhooks changes to be applied to the default configuration",
+          "description" : "Spec with default notification addresses changes to be applied to the default configuration",
           "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/IncidentWebhookNotificationsSpec"
+            "$ref" : "#/definitions/IncidentNotificationSpec"
           }
         } ],
         "responses" : {
@@ -14285,7 +14285,7 @@
             }
           },
           "204" : {
-            "description" : "The default configuration of notification webhooks successfully updated."
+            "description" : "The default configuration of notification addresses successfully updated."
           },
           "400" : {
             "description" : "Bad request, adjust before retrying"
@@ -32867,9 +32867,13 @@
           "type" : "boolean",
           "description" : "Disables data quality incident creation for failed data quality checks on the data source."
         },
+        "incident_notification" : {
+          "description" : "Configuration of addresses for new or updated incident notifications.",
+          "$ref" : "#/definitions/IncidentNotificationSpec"
+        },
         "webhooks" : {
-          "description" : "Configuration of Webhook URLs for new or updated incident notifications.",
-          "$ref" : "#/definitions/IncidentWebhookNotificationsSpec"
+          "description" : "Obsolete, use the incidentNotificationSpec instead.",
+          "$ref" : "#/definitions/IncidentNotificationSpec"
         }
       }
     },
@@ -34944,6 +34948,11 @@
     "IncidentCountsModel" : {
       "type" : "object",
       "properties" : {
+        "totalCount" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of incidents in total."
+        },
         "countFromLast24h" : {
           "type" : "integer",
           "format" : "int32",
@@ -35149,6 +35158,27 @@
         }
       }
     },
+    "IncidentNotificationSpec" : {
+      "type" : "object",
+      "properties" : {
+        "incident_opened_addresses" : {
+          "type" : "string",
+          "description" : "Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+        },
+        "incident_acknowledged_addresses" : {
+          "type" : "string",
+          "description" : "Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+        },
+        "incident_resolved_addresses" : {
+          "type" : "string",
+          "description" : "Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+        },
+        "incident_muted_addresses" : {
+          "type" : "string",
+          "description" : "Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+        }
+      }
+    },
     "IncidentSeverityLevelCountsModel" : {
       "type" : "object",
       "properties" : {
@@ -35163,27 +35193,6 @@
         "fatalCounts" : {
           "description" : "Counts for the fatal severity level.",
           "$ref" : "#/definitions/IncidentCountsModel"
-        }
-      }
-    },
-    "IncidentWebhookNotificationsSpec" : {
-      "type" : "object",
-      "properties" : {
-        "incident_opened_webhook_url" : {
-          "type" : "string",
-          "description" : "Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-        },
-        "incident_acknowledged_webhook_url" : {
-          "type" : "string",
-          "description" : "Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-        },
-        "incident_resolved_webhook_url" : {
-          "type" : "string",
-          "description" : "Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-        },
-        "incident_muted_webhook_url" : {
-          "type" : "string",
-          "description" : "Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
         }
       }
     },
@@ -35595,7 +35604,7 @@
         }
       }
     },
-    "OptionalIncidentWebhookNotificationsSpec" : {
+    "OptionalIncidentNotificationSpec" : {
       "type" : "object",
       "properties" : {
         "empty" : {

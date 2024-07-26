@@ -17582,6 +17582,51 @@
       },
       "extensions" : { }
     },
+    "api/default/checks/column/{targetPatternName}/copyfrom/{sourcePatternName}" : {
+      "post" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "copyFromDefaultColumnChecksPattern",
+        "description" : "Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.",
+        "operationId" : "copyFromDefaultColumnChecksPattern",
+        "parameters" : [ {
+          "name" : "targetPatternName",
+          "in" : "path",
+          "description" : "Target pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "sourcePatternName",
+          "in" : "path",
+          "description" : "Source pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Checks pattern successfully copied",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/default/checks/table" : {
       "get" : {
         "tags" : [ "DefaultTableCheckPatterns" ],
@@ -18347,6 +18392,51 @@
       },
       "extensions" : { }
     },
+    "api/default/checks/table/{targetPatternName}/copyfrom/{sourcePatternName}" : {
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "copyFromDefaultTableChecksPattern",
+        "description" : "Creates (adds) a copy of an existing default table-level checks pattern configuration, under a new name.",
+        "operationId" : "copyFromDefaultTableChecksPattern",
+        "parameters" : [ {
+          "name" : "targetPatternName",
+          "in" : "path",
+          "description" : "Target pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "sourcePatternName",
+          "in" : "path",
+          "description" : "Source pattern name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Checks pattern successfully copied",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
     "api/defaults/defaultschedule/{schedulingGroup}" : {
       "get" : {
         "tags" : [ "Defaults" ],
@@ -18434,7 +18524,7 @@
       "get" : {
         "tags" : [ "Defaults" ],
         "summary" : "getDefaultWebhooks",
-        "description" : "Returns spec to show and edit the default configuration of webhooks.",
+        "description" : "Returns spec to show and edit the default configuration of addresses for incident notifications.",
         "operationId" : "getDefaultWebhooks",
         "responses" : {
           "200" : {
@@ -18442,7 +18532,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/IncidentWebhookNotificationsSpec",
+                  "$ref" : "#/components/schemas/IncidentNotificationSpec",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -18459,14 +18549,14 @@
       "put" : {
         "tags" : [ "Defaults" ],
         "summary" : "updateDefaultWebhooks",
-        "description" : "New configuration of the default webhooks.",
+        "description" : "New configuration of the default addresses.",
         "operationId" : "updateDefaultWebhooks",
         "requestBody" : {
-          "description" : "Spec with default notification webhooks changes to be applied to the default configuration",
+          "description" : "Spec with default notification addresses changes to be applied to the default configuration",
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/IncidentWebhookNotificationsSpec",
+                "$ref" : "#/components/schemas/IncidentNotificationSpec",
                 "exampleSetFlag" : false
               },
               "exampleSetFlag" : false
@@ -18477,7 +18567,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "The default configuration of notification webhooks successfully updated.",
+            "description" : "The default configuration of notification addresses successfully updated.",
             "content" : { },
             "extensions" : { }
           }
@@ -62544,8 +62634,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "incident_notification" : {
+            "$ref" : "#/components/schemas/IncidentNotificationSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "webhooks" : {
-            "$ref" : "#/components/schemas/IncidentWebhookNotificationsSpec",
+            "$ref" : "#/components/schemas/IncidentNotificationSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -62583,10 +62678,15 @@
               "type" : "boolean",
               "description" : "Disables data quality incident creation for failed data quality checks on the data source."
             },
+            "incident_notification" : {
+              "description" : "Configuration of addresses for new or updated incident notifications.",
+              "originalRef" : "#/components/schemas/IncidentNotificationSpec",
+              "$ref" : "#/components/schemas/IncidentNotificationSpec"
+            },
             "webhooks" : {
-              "description" : "Configuration of Webhook URLs for new or updated incident notifications.",
-              "originalRef" : "#/components/schemas/IncidentWebhookNotificationsSpec",
-              "$ref" : "#/components/schemas/IncidentWebhookNotificationsSpec"
+              "description" : "Obsolete, use the incidentNotificationSpec instead.",
+              "originalRef" : "#/components/schemas/IncidentNotificationSpec",
+              "$ref" : "#/components/schemas/IncidentNotificationSpec"
             }
           }
         }
@@ -63809,6 +63909,13 @@
               "exampleSetFlag" : false
             },
             "types" : [ "array" ]
+          },
+          "hide_folder" : {
+            "type" : "boolean",
+            "description" : "Hides the whole folder and all nested dashboards from the navigation tree. If you want to hide some of the build-in folders, update the settings/dashboardslist.dqodashboards.yaml file in the DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of this field to true.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
           }
         },
         "exampleSetFlag" : false,
@@ -63839,6 +63946,10 @@
                 "originalRef" : "#/components/schemas/DashboardsFolderSpec",
                 "$ref" : "#/components/schemas/DashboardsFolderSpec"
               }
+            },
+            "hide_folder" : {
+              "type" : "boolean",
+              "description" : "Hides the whole folder and all nested dashboards from the navigation tree. If you want to hide some of the build-in folders, update the settings/dashboardslist.dqodashboards.yaml file in the DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of this field to true."
             }
           }
         }
@@ -67957,6 +68068,14 @@
       "IncidentCountsModel" : {
         "type" : "object",
         "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "Number of incidents in total.",
+            "format" : "int32",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
           "countFromLast24h" : {
             "type" : "integer",
             "description" : "Number of incidents from the last 24h from now.",
@@ -68011,6 +68130,11 @@
         "jsonSchema" : {
           "type" : "object",
           "properties" : {
+            "totalCount" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "Number of incidents in total."
+            },
             "countFromLast24h" : {
               "type" : "integer",
               "format" : "int32",
@@ -68512,6 +68636,62 @@
           }
         }
       },
+      "IncidentNotificationSpec" : {
+        "type" : "object",
+        "properties" : {
+          "incident_opened_addresses" : {
+            "type" : "string",
+            "description" : "Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "incident_acknowledged_addresses" : {
+            "type" : "string",
+            "description" : "Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "incident_resolved_addresses" : {
+            "type" : "string",
+            "description" : "Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "incident_muted_addresses" : {
+            "type" : "string",
+            "description" : "Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "incident_opened_addresses" : {
+              "type" : "string",
+              "description" : "Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+            },
+            "incident_acknowledged_addresses" : {
+              "type" : "string",
+              "description" : "Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+            },
+            "incident_resolved_addresses" : {
+              "type" : "string",
+              "description" : "Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+            },
+            "incident_muted_addresses" : {
+              "type" : "string",
+              "description" : "Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object."
+            }
+          }
+        }
+      },
       "IncidentSeverityLevelCountsModel" : {
         "type" : "object",
         "properties" : {
@@ -68550,62 +68730,6 @@
               "description" : "Counts for the fatal severity level.",
               "originalRef" : "#/components/schemas/IncidentCountsModel",
               "$ref" : "#/components/schemas/IncidentCountsModel"
-            }
-          }
-        }
-      },
-      "IncidentWebhookNotificationsSpec" : {
-        "type" : "object",
-        "properties" : {
-          "incident_opened_webhook_url" : {
-            "type" : "string",
-            "description" : "Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "incident_acknowledged_webhook_url" : {
-            "type" : "string",
-            "description" : "Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "incident_resolved_webhook_url" : {
-            "type" : "string",
-            "description" : "Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          },
-          "incident_muted_webhook_url" : {
-            "type" : "string",
-            "description" : "Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        },
-        "exampleSetFlag" : false,
-        "types" : [ "object" ],
-        "jsonSchema" : {
-          "type" : "object",
-          "properties" : {
-            "incident_opened_webhook_url" : {
-              "type" : "string",
-              "description" : "Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-            },
-            "incident_acknowledged_webhook_url" : {
-              "type" : "string",
-              "description" : "Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-            },
-            "incident_resolved_webhook_url" : {
-              "type" : "string",
-              "description" : "Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
-            },
-            "incident_muted_webhook_url" : {
-              "type" : "string",
-              "description" : "Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object."
             }
           }
         }
@@ -69641,7 +69765,7 @@
           }
         }
       },
-      "OptionalIncidentWebhookNotificationsSpec" : {
+      "OptionalIncidentNotificationSpec" : {
         "type" : "object",
         "properties" : {
           "empty" : {

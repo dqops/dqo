@@ -79,17 +79,20 @@ http://localhost:8888/api/dashboards
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			)
 		]
         ```
@@ -124,17 +127,20 @@ http://localhost:8888/api/dashboards
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			)
 		]
         ```
@@ -172,17 +178,20 @@ http://localhost:8888/api/dashboards
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			)
 		]
         ```
@@ -220,17 +229,20 @@ http://localhost:8888/api/dashboards
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			),
 			DashboardsFolderSpec(
 				standard=False,
 				dashboards=DashboardListSpec(),
-				folders=DashboardsFolderListSpec()
+				folders=DashboardsFolderListSpec(),
+				hide_folder=False
 			)
 		]
         ```

@@ -15,7 +15,6 @@ def _get_kwargs(
     *,
     data_grouping_configuration_name: str,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

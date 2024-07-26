@@ -11903,7 +11903,8 @@ paths:
       tags:
       - "Defaults"
       summary: "getDefaultWebhooks"
-      description: "Returns spec to show and edit the default configuration of webhooks."
+      description: "Returns spec to show and edit the default configuration of addresses\
+        \ for incident notifications."
       operationId: "getDefaultWebhooks"
       produces:
       - "application/json"
@@ -11912,7 +11913,7 @@ paths:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+            $ref: "#/definitions/IncidentNotificationSpec"
         500:
           description: "Internal Server Error"
           schema:
@@ -11923,7 +11924,7 @@ paths:
       tags:
       - "Defaults"
       summary: "updateDefaultWebhooks"
-      description: "New configuration of the default webhooks."
+      description: "New configuration of the default addresses."
       operationId: "updateDefaultWebhooks"
       consumes:
       - "application/json"
@@ -11932,18 +11933,18 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Spec with default notification webhooks changes to be applied\
+        description: "Spec with default notification addresses changes to be applied\
           \ to the default configuration"
         required: false
         schema:
-          $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+          $ref: "#/definitions/IncidentNotificationSpec"
       responses:
         200:
           description: "successful operation"
           schema:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
-          description: "The default configuration of notification webhooks successfully\
+          description: "The default configuration of notification addresses successfully\
             \ updated."
         400:
           description: "Bad request, adjust before retrying"
@@ -31398,9 +31399,12 @@ definitions:
         type: "boolean"
         description: "Disables data quality incident creation for failed data quality\
           \ checks on the data source."
+      incident_notification:
+        description: "Configuration of addresses for new or updated incident notifications."
+        $ref: "#/definitions/IncidentNotificationSpec"
       webhooks:
-        description: "Configuration of Webhook URLs for new or updated incident notifications."
-        $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+        description: "Obsolete, use the incidentNotificationSpec instead."
+        $ref: "#/definitions/IncidentNotificationSpec"
   ConnectionModel:
     type: "object"
     properties:
@@ -33405,6 +33409,10 @@ definitions:
   IncidentCountsModel:
     type: "object"
     properties:
+      totalCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents in total."
       countFromLast24h:
         type: "integer"
         format: "int32"
@@ -33601,6 +33609,33 @@ definitions:
         - "acknowledged"
         - "resolved"
         - "muted"
+  IncidentNotificationSpec:
+    type: "object"
+    properties:
+      incident_opened_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ new incidents are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_acknowledged_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ acknowledged messages are pushed using a HTTP POST request (for webhook\
+          \ address) or an SMTP (for email address). The format of the JSON message\
+          \ is documented in the IncidentNotificationMessage object."
+      incident_resolved_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ resolved messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_muted_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ muted messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
   IncidentSeverityLevelCountsModel:
     type: "object"
     properties:
@@ -33613,29 +33648,6 @@ definitions:
       fatalCounts:
         description: "Counts for the fatal severity level."
         $ref: "#/definitions/IncidentCountsModel"
-  IncidentWebhookNotificationsSpec:
-    type: "object"
-    properties:
-      incident_opened_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing new incidents\
-          \ are pushed using a HTTP POST request. The format of the JSON message is\
-          \ documented in the IncidentNotificationMessage object."
-      incident_acknowledged_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing acknowledged\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
-      incident_resolved_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing resolved\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
-      incident_muted_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing muted\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
   IncidentsPerConnectionModel:
     type: "object"
     properties:
@@ -33999,7 +34011,7 @@ definitions:
         type: "boolean"
       present:
         type: "boolean"
-  OptionalIncidentWebhookNotificationsSpec:
+  OptionalIncidentNotificationSpec:
     type: "object"
     properties:
       empty:

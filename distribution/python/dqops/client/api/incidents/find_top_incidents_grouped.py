@@ -18,7 +18,6 @@ def _get_kwargs(
     limit: Union[Unset, None, int] = UNSET,
     days: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

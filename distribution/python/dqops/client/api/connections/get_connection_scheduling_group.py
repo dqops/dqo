@@ -14,7 +14,6 @@ def _get_kwargs(
     connection_name: str,
     scheduling_group: CheckRunScheduleGroup,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

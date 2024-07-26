@@ -5,11 +5,11 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="OptionalIncidentWebhookNotificationsSpec")
+T = TypeVar("T", bound="OptionalIncidentNotificationSpec")
 
 
 @_attrs_define
-class OptionalIncidentWebhookNotificationsSpec:
+class OptionalIncidentNotificationSpec:
     """
     Attributes:
         empty (Union[Unset, bool]):
@@ -41,13 +41,13 @@ class OptionalIncidentWebhookNotificationsSpec:
 
         present = d.pop("present", UNSET)
 
-        optional_incident_webhook_notifications_spec = cls(
+        optional_incident_notification_spec = cls(
             empty=empty,
             present=present,
         )
 
-        optional_incident_webhook_notifications_spec.additional_properties = d
-        return optional_incident_webhook_notifications_spec
+        optional_incident_notification_spec.additional_properties = d
+        return optional_incident_notification_spec
 
     @property
     def additional_keys(self) -> List[str]:

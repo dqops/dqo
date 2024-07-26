@@ -17,7 +17,6 @@ def _get_kwargs(
     column_name: str,
     time_scale: CheckTimeScale,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

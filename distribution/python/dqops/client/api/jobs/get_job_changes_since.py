@@ -14,7 +14,6 @@ from ...types import Response
 def _get_kwargs(
     sequence_number: int,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

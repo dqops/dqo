@@ -16,7 +16,6 @@ def _get_kwargs(
     *,
     json_body: List[str],
 ) -> Dict[str, Any]:
-
     pass
 
     json_json_body = json_body

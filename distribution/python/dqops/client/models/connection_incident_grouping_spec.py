@@ -8,9 +8,7 @@ from ..models.minimum_grouping_severity_level import MinimumGroupingSeverityLeve
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.incident_webhook_notifications_spec import (
-        IncidentWebhookNotificationsSpec,
-    )
+    from ..models.incident_notification_spec import IncidentNotificationSpec
 
 
 T = TypeVar("T", bound="ConnectionIncidentGroupingSpec")
@@ -33,7 +31,8 @@ class ConnectionIncidentGroupingSpec:
             data quality incident is closed in the 'mute' status.
         disabled (Union[Unset, bool]): Disables data quality incident creation for failed data quality checks on the
             data source.
-        webhooks (Union[Unset, IncidentWebhookNotificationsSpec]):
+        incident_notification (Union[Unset, IncidentNotificationSpec]):
+        webhooks (Union[Unset, IncidentNotificationSpec]):
     """
 
     grouping_level: Union[Unset, IncidentGroupingLevel] = UNSET
@@ -42,7 +41,8 @@ class ConnectionIncidentGroupingSpec:
     max_incident_length_days: Union[Unset, int] = UNSET
     mute_for_days: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
-    webhooks: Union[Unset, "IncidentWebhookNotificationsSpec"] = UNSET
+    incident_notification: Union[Unset, "IncidentNotificationSpec"] = UNSET
+    webhooks: Union[Unset, "IncidentNotificationSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -58,6 +58,10 @@ class ConnectionIncidentGroupingSpec:
         max_incident_length_days = self.max_incident_length_days
         mute_for_days = self.mute_for_days
         disabled = self.disabled
+        incident_notification: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.incident_notification, Unset):
+            incident_notification = self.incident_notification.to_dict()
+
         webhooks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.webhooks, Unset):
             webhooks = self.webhooks.to_dict()
@@ -77,6 +81,8 @@ class ConnectionIncidentGroupingSpec:
             field_dict["mute_for_days"] = mute_for_days
         if disabled is not UNSET:
             field_dict["disabled"] = disabled
+        if incident_notification is not UNSET:
+            field_dict["incident_notification"] = incident_notification
         if webhooks is not UNSET:
             field_dict["webhooks"] = webhooks
 
@@ -84,9 +90,7 @@ class ConnectionIncidentGroupingSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.incident_webhook_notifications_spec import (
-            IncidentWebhookNotificationsSpec,
-        )
+        from ..models.incident_notification_spec import IncidentNotificationSpec
 
         d = src_dict.copy()
         _grouping_level = d.pop("grouping_level", UNSET)
@@ -111,12 +115,21 @@ class ConnectionIncidentGroupingSpec:
 
         disabled = d.pop("disabled", UNSET)
 
+        _incident_notification = d.pop("incident_notification", UNSET)
+        incident_notification: Union[Unset, IncidentNotificationSpec]
+        if isinstance(_incident_notification, Unset):
+            incident_notification = UNSET
+        else:
+            incident_notification = IncidentNotificationSpec.from_dict(
+                _incident_notification
+            )
+
         _webhooks = d.pop("webhooks", UNSET)
-        webhooks: Union[Unset, IncidentWebhookNotificationsSpec]
+        webhooks: Union[Unset, IncidentNotificationSpec]
         if isinstance(_webhooks, Unset):
             webhooks = UNSET
         else:
-            webhooks = IncidentWebhookNotificationsSpec.from_dict(_webhooks)
+            webhooks = IncidentNotificationSpec.from_dict(_webhooks)
 
         connection_incident_grouping_spec = cls(
             grouping_level=grouping_level,
@@ -125,6 +138,7 @@ class ConnectionIncidentGroupingSpec:
             max_incident_length_days=max_incident_length_days,
             mute_for_days=mute_for_days,
             disabled=disabled,
+            incident_notification=incident_notification,
             webhooks=webhooks,
         )
 

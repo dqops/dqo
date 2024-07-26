@@ -82,6 +82,7 @@ Description of a folder with multiple dashboards or other folders.
 |<span class="no-wrap-code">`standard`</span>|Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.|*boolean*|
 |<span class="no-wrap-code">[`dashboards`](#dashboardlistspec)</span>|List of data quality dashboard at this level.|*[DashboardListSpec](#dashboardlistspec)*|
 |<span class="no-wrap-code">[`folders`](#dashboardsfolderlistspec)</span>|List of data quality dashboard folders at this level.|*[DashboardsFolderListSpec](#dashboardsfolderlistspec)*|
+|<span class="no-wrap-code">`hide_folder`</span>|Hides the whole folder and all nested dashboards from the navigation tree. If you want to hide some of the build-in folders, update the settings/dashboardslist.dqodashboards.yaml file in the DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of this field to true.|*boolean*|
 
 
 ___

@@ -60,9 +60,9 @@ class TopIncidentsModel:
                 self.open_incident_severity_level_counts.to_dict()
             )
 
-        acknowledged_incident_severity_level_counts: Union[Unset, Dict[str, Any]] = (
-            UNSET
-        )
+        acknowledged_incident_severity_level_counts: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
         if not isinstance(self.acknowledged_incident_severity_level_counts, Unset):
             acknowledged_incident_severity_level_counts = (
                 self.acknowledged_incident_severity_level_counts.to_dict()
@@ -78,13 +78,13 @@ class TopIncidentsModel:
         if top_incidents is not UNSET:
             field_dict["topIncidents"] = top_incidents
         if open_incident_severity_level_counts is not UNSET:
-            field_dict["openIncidentSeverityLevelCounts"] = (
-                open_incident_severity_level_counts
-            )
+            field_dict[
+                "openIncidentSeverityLevelCounts"
+            ] = open_incident_severity_level_counts
         if acknowledged_incident_severity_level_counts is not UNSET:
-            field_dict["acknowledgedIncidentSeverityLevelCounts"] = (
-                acknowledged_incident_severity_level_counts
-            )
+            field_dict[
+                "acknowledgedIncidentSeverityLevelCounts"
+            ] = acknowledged_incident_severity_level_counts
 
         return field_dict
 

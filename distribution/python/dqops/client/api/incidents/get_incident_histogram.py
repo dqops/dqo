@@ -22,7 +22,6 @@ def _get_kwargs(
     column: Union[Unset, None, str] = UNSET,
     check: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

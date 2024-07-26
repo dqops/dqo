@@ -21,7 +21,6 @@ def _get_kwargs(
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

@@ -16,7 +16,6 @@ def _get_kwargs(
     *,
     issue_url: str,
 ) -> Dict[str, Any]:
-
     pass
 
     params: Dict[str, Any] = {}

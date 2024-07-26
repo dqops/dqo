@@ -15,7 +15,6 @@ def _get_kwargs(
     table_name: str,
     table_comparison_configuration_name: str,
 ) -> Dict[str, Any]:
-
     pass
 
     return {

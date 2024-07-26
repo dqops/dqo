@@ -156,6 +156,7 @@ Operations for managing the configuration of the default column-level checks for
 
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`copy_from_default_column_checks_pattern`</span>](./default_column_check_patterns.md#copy_from_default_column_checks_pattern)|POST|Creates (adds) a copy of an existing default column-level checks pattern configuration, under a new name.|
 |<span class="no-wrap-code">[`create_default_column_checks_pattern`</span>](./default_column_check_patterns.md#create_default_column_checks_pattern)|POST|Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.|
 |<span class="no-wrap-code">[`create_default_column_checks_pattern_target`</span>](./default_column_check_patterns.md#create_default_column_checks_pattern_target)|POST|Creates (adds) a new default column-level checks pattern configuration.|
 |<span class="no-wrap-code">[`delete_default_column_checks_pattern`</span>](./default_column_check_patterns.md#delete_default_column_checks_pattern)|DELETE|Deletes a default column-level checks pattern|
@@ -181,6 +182,7 @@ Operations for managing the configuration of the default table-level checks for 
 
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`copy_from_default_table_checks_pattern`</span>](./default_table_check_patterns.md#copy_from_default_table_checks_pattern)|POST|Creates (adds) a copy of an existing default table-level checks pattern configuration, under a new name.|
 |<span class="no-wrap-code">[`create_default_table_checks_pattern`</span>](./default_table_check_patterns.md#create_default_table_checks_pattern)|POST|Creates (adds) a new default table-level checks pattern configuration by saving a full specification object.|
 |<span class="no-wrap-code">[`create_default_table_checks_pattern_target`</span>](./default_table_check_patterns.md#create_default_table_checks_pattern_target)|POST|Creates (adds) a new default table-level checks pattern configuration.|
 |<span class="no-wrap-code">[`delete_default_table_checks_pattern`</span>](./default_table_check_patterns.md#delete_default_table_checks_pattern)|DELETE|Deletes a default table-level checks pattern|
@@ -207,9 +209,9 @@ Default settings management for configuring the default data quality checks that
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`get_default_schedule`</span>](./defaults.md#get_default_schedule)|GET|Returns spec to show and edit the default configuration of schedules.|
-|<span class="no-wrap-code">[`get_default_webhooks`</span>](./defaults.md#get_default_webhooks)|GET|Returns spec to show and edit the default configuration of webhooks.|
+|<span class="no-wrap-code">[`get_default_webhooks`</span>](./defaults.md#get_default_webhooks)|GET|Returns spec to show and edit the default configuration of addresses for incident notifications.|
 |<span class="no-wrap-code">[`update_default_schedules`</span>](./defaults.md#update_default_schedules)|PUT|New configuration of the default schedules.|
-|<span class="no-wrap-code">[`update_default_webhooks`</span>](./defaults.md#update_default_webhooks)|PUT|New configuration of the default webhooks.|
+|<span class="no-wrap-code">[`update_default_webhooks`</span>](./defaults.md#update_default_webhooks)|PUT|New configuration of the default addresses.|
 
 
 ## dictionaries
