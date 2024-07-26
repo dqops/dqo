@@ -66,6 +66,7 @@ export default function CopyCheckPatternDialog({
           className="px-8"
           onClick={handleSubmit}
           label="Save"
+          disabled={tableName.length === 0}
         />
       </DialogFooter>
     </Dialog>
