@@ -15,6 +15,7 @@ if TYPE_CHECKING:
         ColumnNullsMonthlyPartitionedChecksSpecCustomChecks,
     )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsMonthlyPartitionedChecksSpec")
@@ -31,6 +32,7 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
         monthly_partition_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
         monthly_partition_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         monthly_partition_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
+        monthly_partition_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
     """
 
     custom_checks: Union[
@@ -38,12 +40,15 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
     ] = UNSET
     monthly_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     monthly_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
-    monthly_partition_not_nulls_count: Union[
-        Unset, "ColumnNotNullsCountCheckSpec"
-    ] = UNSET
+    monthly_partition_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
+    monthly_partition_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,6 +78,12 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
                 self.monthly_partition_not_nulls_percent.to_dict()
             )
 
+        monthly_partition_empty_column_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_empty_column_found, Unset):
+            monthly_partition_empty_column_found = (
+                self.monthly_partition_empty_column_found.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -81,17 +92,21 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
         if monthly_partition_nulls_count is not UNSET:
             field_dict["monthly_partition_nulls_count"] = monthly_partition_nulls_count
         if monthly_partition_nulls_percent is not UNSET:
-            field_dict[
-                "monthly_partition_nulls_percent"
-            ] = monthly_partition_nulls_percent
+            field_dict["monthly_partition_nulls_percent"] = (
+                monthly_partition_nulls_percent
+            )
         if monthly_partition_not_nulls_count is not UNSET:
-            field_dict[
-                "monthly_partition_not_nulls_count"
-            ] = monthly_partition_not_nulls_count
+            field_dict["monthly_partition_not_nulls_count"] = (
+                monthly_partition_not_nulls_count
+            )
         if monthly_partition_not_nulls_percent is not UNSET:
-            field_dict[
-                "monthly_partition_not_nulls_percent"
-            ] = monthly_partition_not_nulls_percent
+            field_dict["monthly_partition_not_nulls_percent"] = (
+                monthly_partition_not_nulls_percent
+            )
+        if monthly_partition_empty_column_found is not UNSET:
+            field_dict["monthly_partition_empty_column_found"] = (
+                monthly_partition_empty_column_found
+            )
 
         return field_dict
 
@@ -108,6 +123,7 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
             ColumnNullsMonthlyPartitionedChecksSpecCustomChecks,
         )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -167,12 +183,24 @@ class ColumnNullsMonthlyPartitionedChecksSpec:
                 )
             )
 
+        _monthly_partition_empty_column_found = d.pop(
+            "monthly_partition_empty_column_found", UNSET
+        )
+        monthly_partition_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        if isinstance(_monthly_partition_empty_column_found, Unset):
+            monthly_partition_empty_column_found = UNSET
+        else:
+            monthly_partition_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+                _monthly_partition_empty_column_found
+            )
+
         column_nulls_monthly_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_partition_nulls_count=monthly_partition_nulls_count,
             monthly_partition_nulls_percent=monthly_partition_nulls_percent,
             monthly_partition_not_nulls_count=monthly_partition_not_nulls_count,
             monthly_partition_not_nulls_percent=monthly_partition_not_nulls_percent,
+            monthly_partition_empty_column_found=monthly_partition_empty_column_found,
         )
 
         column_nulls_monthly_partitioned_checks_spec.additional_properties = d

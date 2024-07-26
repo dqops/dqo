@@ -100,9 +100,9 @@ class ColumnStatisticsModel:
         if statistics is not UNSET:
             field_dict["statistics"] = statistics
         if collect_column_statistics_job_template is not UNSET:
-            field_dict[
-                "collect_column_statistics_job_template"
-            ] = collect_column_statistics_job_template
+            field_dict["collect_column_statistics_job_template"] = (
+                collect_column_statistics_job_template
+            )
         if can_collect_statistics is not UNSET:
             field_dict["can_collect_statistics"] = can_collect_statistics
 

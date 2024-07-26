@@ -149,9 +149,9 @@ class DqoUserProfileModel:
         if account_role is not UNSET:
             field_dict["account_role"] = account_role
         if data_quality_data_warehouse_enabled is not UNSET:
-            field_dict[
-                "data_quality_data_warehouse_enabled"
-            ] = data_quality_data_warehouse_enabled
+            field_dict["data_quality_data_warehouse_enabled"] = (
+                data_quality_data_warehouse_enabled
+            )
         if can_manage_account is not UNSET:
             field_dict["can_manage_account"] = can_manage_account
         if can_view_any_object is not UNSET:
@@ -181,9 +181,9 @@ class DqoUserProfileModel:
         if can_manage_users is not UNSET:
             field_dict["can_manage_users"] = can_manage_users
         if can_manage_and_view_shared_credentials is not UNSET:
-            field_dict[
-                "can_manage_and_view_shared_credentials"
-            ] = can_manage_and_view_shared_credentials
+            field_dict["can_manage_and_view_shared_credentials"] = (
+                can_manage_and_view_shared_credentials
+            )
         if can_change_own_password is not UNSET:
             field_dict["can_change_own_password"] = can_change_own_password
 

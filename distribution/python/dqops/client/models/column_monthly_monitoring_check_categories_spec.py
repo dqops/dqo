@@ -95,9 +95,9 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
     custom: Union[Unset, "ColumnMonthlyMonitoringCheckCategoriesSpecCustom"] = UNSET
     nulls: Union[Unset, "ColumnNullsMonthlyMonitoringChecksSpec"] = UNSET
     uniqueness: Union[Unset, "ColumnUniquenessMonthlyMonitoringChecksSpec"] = UNSET
-    accepted_values: Union[
-        Unset, "ColumnAcceptedValuesMonthlyMonitoringChecksSpec"
-    ] = UNSET
+    accepted_values: Union[Unset, "ColumnAcceptedValuesMonthlyMonitoringChecksSpec"] = (
+        UNSET
+    )
     text: Union[Unset, "ColumnTextMonthlyMonitoringChecksSpec"] = UNSET
     whitespace: Union[Unset, "ColumnWhitespaceMonthlyMonitoringChecksSpec"] = UNSET
     conversions: Union[Unset, "ColumnConversionsMonthlyMonitoringChecksSpec"] = UNSET

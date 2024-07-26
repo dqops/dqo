@@ -65,13 +65,13 @@ class ColumnIntegrityMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_lookup_key_not_found is not UNSET:
-            field_dict[
-                "monthly_partition_lookup_key_not_found"
-            ] = monthly_partition_lookup_key_not_found
+            field_dict["monthly_partition_lookup_key_not_found"] = (
+                monthly_partition_lookup_key_not_found
+            )
         if monthly_partition_lookup_key_found_percent is not UNSET:
-            field_dict[
-                "monthly_partition_lookup_key_found_percent"
-            ] = monthly_partition_lookup_key_found_percent
+            field_dict["monthly_partition_lookup_key_found_percent"] = (
+                monthly_partition_lookup_key_found_percent
+            )
 
         return field_dict
 

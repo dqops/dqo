@@ -90,9 +90,9 @@ class CheckContainerModel:
         if effective_schedule is not UNSET:
             field_dict["effective_schedule"] = effective_schedule
         if effective_schedule_enabled_status is not UNSET:
-            field_dict[
-                "effective_schedule_enabled_status"
-            ] = effective_schedule_enabled_status
+            field_dict["effective_schedule_enabled_status"] = (
+                effective_schedule_enabled_status
+            )
         if partition_by_column is not UNSET:
             field_dict["partition_by_column"] = partition_by_column
         if run_checks_job_template is not UNSET:

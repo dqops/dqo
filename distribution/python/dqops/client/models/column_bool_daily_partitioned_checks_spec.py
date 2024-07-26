@@ -27,9 +27,9 @@ class ColumnBoolDailyPartitionedChecksSpec:
         daily_partition_false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnBoolDailyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnBoolDailyPartitionedChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_partition_true_percent: Union[Unset, "ColumnTruePercentCheckSpec"] = UNSET
     daily_partition_false_percent: Union[Unset, "ColumnFalsePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)

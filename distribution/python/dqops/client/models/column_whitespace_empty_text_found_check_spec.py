@@ -64,9 +64,9 @@ class ColumnWhitespaceEmptyTextFoundCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnWhitespaceEmptyTextCountSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnWhitespaceEmptyTextCountSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "MaxCountRule0WarningParametersSpec"] = UNSET
     error: Union[Unset, "MaxCountRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxCountRule100ParametersSpec"] = UNSET

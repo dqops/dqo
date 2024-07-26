@@ -31,9 +31,9 @@ class ColumnSchemaDailyMonitoringChecksSpec:
         daily_column_type_changed (Union[Unset, ColumnSchemaTypeChangedCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnSchemaDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnSchemaDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_column_exists: Union[Unset, "ColumnSchemaColumnExistsCheckSpec"] = UNSET
     daily_column_type_changed: Union[Unset, "ColumnSchemaTypeChangedCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)

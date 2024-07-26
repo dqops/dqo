@@ -30,6 +30,7 @@ if TYPE_CHECKING:
         ColumnNullsDailyMonitoringChecksSpecCustomChecks,
     )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsDailyMonitoringChecksSpec")
@@ -47,15 +48,16 @@ class ColumnNullsDailyMonitoringChecksSpec:
         daily_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         daily_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         daily_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
+        daily_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
         daily_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         daily_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         daily_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
         daily_nulls_percent_change_30_days (Union[Unset, ColumnNullPercentChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnNullsDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnNullsDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
     daily_nulls_percent_anomaly: Union[
@@ -63,6 +65,7 @@ class ColumnNullsDailyMonitoringChecksSpec:
     ] = UNSET
     daily_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
     daily_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
+    daily_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = UNSET
     daily_nulls_percent_change: Union[Unset, "ColumnNullPercentChangeCheckSpec"] = UNSET
     daily_nulls_percent_change_1_day: Union[
         Unset, "ColumnNullPercentChange1DayCheckSpec"
@@ -99,6 +102,10 @@ class ColumnNullsDailyMonitoringChecksSpec:
         daily_not_nulls_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_not_nulls_percent, Unset):
             daily_not_nulls_percent = self.daily_not_nulls_percent.to_dict()
+
+        daily_empty_column_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_empty_column_found, Unset):
+            daily_empty_column_found = self.daily_empty_column_found.to_dict()
 
         daily_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_nulls_percent_change, Unset):
@@ -137,20 +144,22 @@ class ColumnNullsDailyMonitoringChecksSpec:
             field_dict["daily_not_nulls_count"] = daily_not_nulls_count
         if daily_not_nulls_percent is not UNSET:
             field_dict["daily_not_nulls_percent"] = daily_not_nulls_percent
+        if daily_empty_column_found is not UNSET:
+            field_dict["daily_empty_column_found"] = daily_empty_column_found
         if daily_nulls_percent_change is not UNSET:
             field_dict["daily_nulls_percent_change"] = daily_nulls_percent_change
         if daily_nulls_percent_change_1_day is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_1_day"
-            ] = daily_nulls_percent_change_1_day
+            field_dict["daily_nulls_percent_change_1_day"] = (
+                daily_nulls_percent_change_1_day
+            )
         if daily_nulls_percent_change_7_days is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_7_days"
-            ] = daily_nulls_percent_change_7_days
+            field_dict["daily_nulls_percent_change_7_days"] = (
+                daily_nulls_percent_change_7_days
+            )
         if daily_nulls_percent_change_30_days is not UNSET:
-            field_dict[
-                "daily_nulls_percent_change_30_days"
-            ] = daily_nulls_percent_change_30_days
+            field_dict["daily_nulls_percent_change_30_days"] = (
+                daily_nulls_percent_change_30_days
+            )
 
         return field_dict
 
@@ -182,6 +191,7 @@ class ColumnNullsDailyMonitoringChecksSpec:
             ColumnNullsDailyMonitoringChecksSpecCustomChecks,
         )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -238,6 +248,15 @@ class ColumnNullsDailyMonitoringChecksSpec:
         else:
             daily_not_nulls_percent = ColumnNotNullsPercentCheckSpec.from_dict(
                 _daily_not_nulls_percent
+            )
+
+        _daily_empty_column_found = d.pop("daily_empty_column_found", UNSET)
+        daily_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        if isinstance(_daily_empty_column_found, Unset):
+            daily_empty_column_found = UNSET
+        else:
+            daily_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+                _daily_empty_column_found
             )
 
         _daily_nulls_percent_change = d.pop("daily_nulls_percent_change", UNSET)
@@ -301,6 +320,7 @@ class ColumnNullsDailyMonitoringChecksSpec:
             daily_nulls_percent_anomaly=daily_nulls_percent_anomaly,
             daily_not_nulls_count=daily_not_nulls_count,
             daily_not_nulls_percent=daily_not_nulls_percent,
+            daily_empty_column_found=daily_empty_column_found,
             daily_nulls_percent_change=daily_nulls_percent_change,
             daily_nulls_percent_change_1_day=daily_nulls_percent_change_1_day,
             daily_nulls_percent_change_7_days=daily_nulls_percent_change_7_days,

@@ -56,9 +56,9 @@ class ColumnComparisonDailyPartitionedChecksSpec:
     daily_partition_sum_match: Union[Unset, "ColumnComparisonSumMatchCheckSpec"] = UNSET
     daily_partition_min_match: Union[Unset, "ColumnComparisonMinMatchCheckSpec"] = UNSET
     daily_partition_max_match: Union[Unset, "ColumnComparisonMaxMatchCheckSpec"] = UNSET
-    daily_partition_mean_match: Union[
-        Unset, "ColumnComparisonMeanMatchCheckSpec"
-    ] = UNSET
+    daily_partition_mean_match: Union[Unset, "ColumnComparisonMeanMatchCheckSpec"] = (
+        UNSET
+    )
     daily_partition_not_null_count_match: Union[
         Unset, "ColumnComparisonNotNullCountMatchCheckSpec"
     ] = UNSET
@@ -117,13 +117,13 @@ class ColumnComparisonDailyPartitionedChecksSpec:
         if daily_partition_mean_match is not UNSET:
             field_dict["daily_partition_mean_match"] = daily_partition_mean_match
         if daily_partition_not_null_count_match is not UNSET:
-            field_dict[
-                "daily_partition_not_null_count_match"
-            ] = daily_partition_not_null_count_match
+            field_dict["daily_partition_not_null_count_match"] = (
+                daily_partition_not_null_count_match
+            )
         if daily_partition_null_count_match is not UNSET:
-            field_dict[
-                "daily_partition_null_count_match"
-            ] = daily_partition_null_count_match
+            field_dict["daily_partition_null_count_match"] = (
+                daily_partition_null_count_match
+            )
 
         return field_dict
 

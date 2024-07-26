@@ -134,9 +134,9 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
                 self.monthly_invalid_email_format_percent.to_dict()
             )
 
-        monthly_text_not_matching_date_pattern_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_text_not_matching_date_pattern_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_text_not_matching_date_pattern_found, Unset):
             monthly_text_not_matching_date_pattern_found = (
                 self.monthly_text_not_matching_date_pattern_found.to_dict()
@@ -184,49 +184,49 @@ class ColumnPatternsMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_text_not_matching_regex_found is not UNSET:
-            field_dict[
-                "monthly_text_not_matching_regex_found"
-            ] = monthly_text_not_matching_regex_found
+            field_dict["monthly_text_not_matching_regex_found"] = (
+                monthly_text_not_matching_regex_found
+            )
         if monthly_texts_matching_regex_percent is not UNSET:
-            field_dict[
-                "monthly_texts_matching_regex_percent"
-            ] = monthly_texts_matching_regex_percent
+            field_dict["monthly_texts_matching_regex_percent"] = (
+                monthly_texts_matching_regex_percent
+            )
         if monthly_invalid_email_format_found is not UNSET:
-            field_dict[
-                "monthly_invalid_email_format_found"
-            ] = monthly_invalid_email_format_found
+            field_dict["monthly_invalid_email_format_found"] = (
+                monthly_invalid_email_format_found
+            )
         if monthly_invalid_email_format_percent is not UNSET:
-            field_dict[
-                "monthly_invalid_email_format_percent"
-            ] = monthly_invalid_email_format_percent
+            field_dict["monthly_invalid_email_format_percent"] = (
+                monthly_invalid_email_format_percent
+            )
         if monthly_text_not_matching_date_pattern_found is not UNSET:
-            field_dict[
-                "monthly_text_not_matching_date_pattern_found"
-            ] = monthly_text_not_matching_date_pattern_found
+            field_dict["monthly_text_not_matching_date_pattern_found"] = (
+                monthly_text_not_matching_date_pattern_found
+            )
         if monthly_text_matching_date_pattern_percent is not UNSET:
-            field_dict[
-                "monthly_text_matching_date_pattern_percent"
-            ] = monthly_text_matching_date_pattern_percent
+            field_dict["monthly_text_matching_date_pattern_percent"] = (
+                monthly_text_matching_date_pattern_percent
+            )
         if monthly_text_matching_name_pattern_percent is not UNSET:
-            field_dict[
-                "monthly_text_matching_name_pattern_percent"
-            ] = monthly_text_matching_name_pattern_percent
+            field_dict["monthly_text_matching_name_pattern_percent"] = (
+                monthly_text_matching_name_pattern_percent
+            )
         if monthly_invalid_uuid_format_found is not UNSET:
-            field_dict[
-                "monthly_invalid_uuid_format_found"
-            ] = monthly_invalid_uuid_format_found
+            field_dict["monthly_invalid_uuid_format_found"] = (
+                monthly_invalid_uuid_format_found
+            )
         if monthly_valid_uuid_format_percent is not UNSET:
-            field_dict[
-                "monthly_valid_uuid_format_percent"
-            ] = monthly_valid_uuid_format_percent
+            field_dict["monthly_valid_uuid_format_percent"] = (
+                monthly_valid_uuid_format_percent
+            )
         if monthly_invalid_ip4_address_format_found is not UNSET:
-            field_dict[
-                "monthly_invalid_ip4_address_format_found"
-            ] = monthly_invalid_ip4_address_format_found
+            field_dict["monthly_invalid_ip4_address_format_found"] = (
+                monthly_invalid_ip4_address_format_found
+            )
         if monthly_invalid_ip6_address_format_found is not UNSET:
-            field_dict[
-                "monthly_invalid_ip6_address_format_found"
-            ] = monthly_invalid_ip6_address_format_found
+            field_dict["monthly_invalid_ip6_address_format_found"] = (
+                monthly_invalid_ip6_address_format_found
+            )
 
         return field_dict
 

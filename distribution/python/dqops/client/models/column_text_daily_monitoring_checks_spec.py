@@ -51,9 +51,9 @@ class ColumnTextDailyMonitoringChecksSpec:
         daily_text_length_in_range_percent (Union[Unset, ColumnTextLengthInRangePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnTextDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnTextDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_text_min_length: Union[Unset, "ColumnTextMinLengthCheckSpec"] = UNSET
     daily_text_max_length: Union[Unset, "ColumnTextMaxLengthCheckSpec"] = UNSET
     daily_text_mean_length: Union[Unset, "ColumnTextMeanLengthCheckSpec"] = UNSET
@@ -133,25 +133,25 @@ class ColumnTextDailyMonitoringChecksSpec:
         if daily_text_mean_length is not UNSET:
             field_dict["daily_text_mean_length"] = daily_text_mean_length
         if daily_text_length_below_min_length is not UNSET:
-            field_dict[
-                "daily_text_length_below_min_length"
-            ] = daily_text_length_below_min_length
+            field_dict["daily_text_length_below_min_length"] = (
+                daily_text_length_below_min_length
+            )
         if daily_text_length_below_min_length_percent is not UNSET:
-            field_dict[
-                "daily_text_length_below_min_length_percent"
-            ] = daily_text_length_below_min_length_percent
+            field_dict["daily_text_length_below_min_length_percent"] = (
+                daily_text_length_below_min_length_percent
+            )
         if daily_text_length_above_max_length is not UNSET:
-            field_dict[
-                "daily_text_length_above_max_length"
-            ] = daily_text_length_above_max_length
+            field_dict["daily_text_length_above_max_length"] = (
+                daily_text_length_above_max_length
+            )
         if daily_text_length_above_max_length_percent is not UNSET:
-            field_dict[
-                "daily_text_length_above_max_length_percent"
-            ] = daily_text_length_above_max_length_percent
+            field_dict["daily_text_length_above_max_length_percent"] = (
+                daily_text_length_above_max_length_percent
+            )
         if daily_text_length_in_range_percent is not UNSET:
-            field_dict[
-                "daily_text_length_in_range_percent"
-            ] = daily_text_length_in_range_percent
+            field_dict["daily_text_length_in_range_percent"] = (
+                daily_text_length_in_range_percent
+            )
 
         return field_dict
 

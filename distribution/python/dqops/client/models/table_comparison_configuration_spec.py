@@ -49,9 +49,9 @@ class TableComparisonConfigurationSpec:
     reference_table_filter: Union[Unset, str] = UNSET
     check_type: Union[Unset, CheckType] = UNSET
     time_scale: Union[Unset, CheckTimeScale] = UNSET
-    grouping_columns: Union[
-        Unset, List["TableComparisonGroupingColumnsPairSpec"]
-    ] = UNSET
+    grouping_columns: Union[Unset, List["TableComparisonGroupingColumnsPairSpec"]] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,9 +80,9 @@ class TableComparisonConfigurationSpec:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if reference_table_connection_name is not UNSET:
-            field_dict[
-                "reference_table_connection_name"
-            ] = reference_table_connection_name
+            field_dict["reference_table_connection_name"] = (
+                reference_table_connection_name
+            )
         if reference_table_schema_name is not UNSET:
             field_dict["reference_table_schema_name"] = reference_table_schema_name
         if reference_table_name is not UNSET:

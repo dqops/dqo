@@ -133,9 +133,9 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         Unset, "ColumnNumberAboveMaxValueCheckSpec"
     ] = UNSET
     monthly_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
-    monthly_negative_values_percent: Union[
-        Unset, "ColumnNegativePercentCheckSpec"
-    ] = UNSET
+    monthly_negative_values_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = (
+        UNSET
+    )
     monthly_number_below_min_value_percent: Union[
         Unset, "ColumnNumberBelowMinValuePercentCheckSpec"
     ] = UNSET
@@ -153,9 +153,9 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
     monthly_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
     monthly_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
     monthly_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
-    monthly_percentile_in_range: Union[
-        Unset, "ColumnPercentileInRangeCheckSpec"
-    ] = UNSET
+    monthly_percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = (
+        UNSET
+    )
     monthly_percentile_10_in_range: Union[
         Unset, "ColumnPercentile10InRangeCheckSpec"
     ] = UNSET
@@ -180,15 +180,15 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
     monthly_population_variance_in_range: Union[
         Unset, "ColumnPopulationVarianceInRangeCheckSpec"
     ] = UNSET
-    monthly_invalid_latitude: Union[
-        Unset, "ColumnInvalidLatitudeCountCheckSpec"
-    ] = UNSET
+    monthly_invalid_latitude: Union[Unset, "ColumnInvalidLatitudeCountCheckSpec"] = (
+        UNSET
+    )
     monthly_valid_latitude_percent: Union[
         Unset, "ColumnValidLatitudePercentCheckSpec"
     ] = UNSET
-    monthly_invalid_longitude: Union[
-        Unset, "ColumnInvalidLongitudeCountCheckSpec"
-    ] = UNSET
+    monthly_invalid_longitude: Union[Unset, "ColumnInvalidLongitudeCountCheckSpec"] = (
+        UNSET
+    )
     monthly_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
     ] = UNSET
@@ -357,35 +357,35 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_number_below_min_value is not UNSET:
-            field_dict[
-                "monthly_number_below_min_value"
-            ] = monthly_number_below_min_value
+            field_dict["monthly_number_below_min_value"] = (
+                monthly_number_below_min_value
+            )
         if monthly_number_above_max_value is not UNSET:
-            field_dict[
-                "monthly_number_above_max_value"
-            ] = monthly_number_above_max_value
+            field_dict["monthly_number_above_max_value"] = (
+                monthly_number_above_max_value
+            )
         if monthly_negative_values is not UNSET:
             field_dict["monthly_negative_values"] = monthly_negative_values
         if monthly_negative_values_percent is not UNSET:
-            field_dict[
-                "monthly_negative_values_percent"
-            ] = monthly_negative_values_percent
+            field_dict["monthly_negative_values_percent"] = (
+                monthly_negative_values_percent
+            )
         if monthly_number_below_min_value_percent is not UNSET:
-            field_dict[
-                "monthly_number_below_min_value_percent"
-            ] = monthly_number_below_min_value_percent
+            field_dict["monthly_number_below_min_value_percent"] = (
+                monthly_number_below_min_value_percent
+            )
         if monthly_number_above_max_value_percent is not UNSET:
-            field_dict[
-                "monthly_number_above_max_value_percent"
-            ] = monthly_number_above_max_value_percent
+            field_dict["monthly_number_above_max_value_percent"] = (
+                monthly_number_above_max_value_percent
+            )
         if monthly_number_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_number_in_range_percent"
-            ] = monthly_number_in_range_percent
+            field_dict["monthly_number_in_range_percent"] = (
+                monthly_number_in_range_percent
+            )
         if monthly_integer_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_integer_in_range_percent"
-            ] = monthly_integer_in_range_percent
+            field_dict["monthly_integer_in_range_percent"] = (
+                monthly_integer_in_range_percent
+            )
         if monthly_min_in_range is not UNSET:
             field_dict["monthly_min_in_range"] = monthly_min_in_range
         if monthly_max_in_range is not UNSET:
@@ -399,55 +399,55 @@ class ColumnNumericMonthlyMonitoringChecksSpec:
         if monthly_percentile_in_range is not UNSET:
             field_dict["monthly_percentile_in_range"] = monthly_percentile_in_range
         if monthly_percentile_10_in_range is not UNSET:
-            field_dict[
-                "monthly_percentile_10_in_range"
-            ] = monthly_percentile_10_in_range
+            field_dict["monthly_percentile_10_in_range"] = (
+                monthly_percentile_10_in_range
+            )
         if monthly_percentile_25_in_range is not UNSET:
-            field_dict[
-                "monthly_percentile_25_in_range"
-            ] = monthly_percentile_25_in_range
+            field_dict["monthly_percentile_25_in_range"] = (
+                monthly_percentile_25_in_range
+            )
         if monthly_percentile_75_in_range is not UNSET:
-            field_dict[
-                "monthly_percentile_75_in_range"
-            ] = monthly_percentile_75_in_range
+            field_dict["monthly_percentile_75_in_range"] = (
+                monthly_percentile_75_in_range
+            )
         if monthly_percentile_90_in_range is not UNSET:
-            field_dict[
-                "monthly_percentile_90_in_range"
-            ] = monthly_percentile_90_in_range
+            field_dict["monthly_percentile_90_in_range"] = (
+                monthly_percentile_90_in_range
+            )
         if monthly_sample_stddev_in_range is not UNSET:
-            field_dict[
-                "monthly_sample_stddev_in_range"
-            ] = monthly_sample_stddev_in_range
+            field_dict["monthly_sample_stddev_in_range"] = (
+                monthly_sample_stddev_in_range
+            )
         if monthly_population_stddev_in_range is not UNSET:
-            field_dict[
-                "monthly_population_stddev_in_range"
-            ] = monthly_population_stddev_in_range
+            field_dict["monthly_population_stddev_in_range"] = (
+                monthly_population_stddev_in_range
+            )
         if monthly_sample_variance_in_range is not UNSET:
-            field_dict[
-                "monthly_sample_variance_in_range"
-            ] = monthly_sample_variance_in_range
+            field_dict["monthly_sample_variance_in_range"] = (
+                monthly_sample_variance_in_range
+            )
         if monthly_population_variance_in_range is not UNSET:
-            field_dict[
-                "monthly_population_variance_in_range"
-            ] = monthly_population_variance_in_range
+            field_dict["monthly_population_variance_in_range"] = (
+                monthly_population_variance_in_range
+            )
         if monthly_invalid_latitude is not UNSET:
             field_dict["monthly_invalid_latitude"] = monthly_invalid_latitude
         if monthly_valid_latitude_percent is not UNSET:
-            field_dict[
-                "monthly_valid_latitude_percent"
-            ] = monthly_valid_latitude_percent
+            field_dict["monthly_valid_latitude_percent"] = (
+                monthly_valid_latitude_percent
+            )
         if monthly_invalid_longitude is not UNSET:
             field_dict["monthly_invalid_longitude"] = monthly_invalid_longitude
         if monthly_valid_longitude_percent is not UNSET:
-            field_dict[
-                "monthly_valid_longitude_percent"
-            ] = monthly_valid_longitude_percent
+            field_dict["monthly_valid_longitude_percent"] = (
+                monthly_valid_longitude_percent
+            )
         if monthly_non_negative_values is not UNSET:
             field_dict["monthly_non_negative_values"] = monthly_non_negative_values
         if monthly_non_negative_values_percent is not UNSET:
-            field_dict[
-                "monthly_non_negative_values_percent"
-            ] = monthly_non_negative_values_percent
+            field_dict["monthly_non_negative_values_percent"] = (
+                monthly_non_negative_values_percent
+            )
 
         return field_dict
 

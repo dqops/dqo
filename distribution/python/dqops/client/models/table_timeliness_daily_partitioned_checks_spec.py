@@ -61,9 +61,9 @@ class TableTimelinessDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_data_ingestion_delay is not UNSET:
-            field_dict[
-                "daily_partition_data_ingestion_delay"
-            ] = daily_partition_data_ingestion_delay
+            field_dict["daily_partition_data_ingestion_delay"] = (
+                daily_partition_data_ingestion_delay
+            )
         if daily_partition_reload_lag is not UNSET:
             field_dict["daily_partition_reload_lag"] = daily_partition_reload_lag
 

@@ -40,9 +40,9 @@ class CollectStatisticsResult:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if executed_statistics_collectors is not UNSET:
-            field_dict[
-                "executed_statistics_collectors"
-            ] = executed_statistics_collectors
+            field_dict["executed_statistics_collectors"] = (
+                executed_statistics_collectors
+            )
         if columns_analyzed is not UNSET:
             field_dict["columns_analyzed"] = columns_analyzed
         if columns_successfully_analyzed is not UNSET:

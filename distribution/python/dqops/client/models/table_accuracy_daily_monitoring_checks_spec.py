@@ -52,9 +52,9 @@ class TableAccuracyDailyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_total_row_count_match_percent is not UNSET:
-            field_dict[
-                "daily_total_row_count_match_percent"
-            ] = daily_total_row_count_match_percent
+            field_dict["daily_total_row_count_match_percent"] = (
+                daily_total_row_count_match_percent
+            )
 
         return field_dict
 

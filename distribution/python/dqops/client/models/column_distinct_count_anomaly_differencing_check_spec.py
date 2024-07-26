@@ -64,9 +64,9 @@ class ColumnDistinctCountAnomalyDifferencingCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[
         Unset, "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
     ] = UNSET

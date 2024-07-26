@@ -2846,6 +2846,130 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ---
 
+## min count 1
+Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+
+**Rule summary**
+
+The min count 1 data quality rule is described below.
+
+| Category | Full rule name | Rule specification source code | Python source code |
+| ---------|----------------|--------------------|--------------------|
+| comparison | <span class="no-wrap-code">`comparison/min_count_1`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count_1.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count_1.py) |
+
+
+
+
+
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_count_1.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
+??? abstract "Please expand to see the content of the .dqorule.yaml file"
+
+    ``` { .yaml linenums="1" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+    apiVersion: dqo/v1
+    kind: rule
+    spec:
+      type: python
+      java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+      mode: current_value
+    ```
+
+
+
+
+
+
+**Rule source code**
+
+Please expand the section below to see the Python source code for the *comparison/min_count_1* rule.
+The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/comparison/min_count_1.py* file in the DQOps distribution.
+
+??? abstract "Rule source code"
+
+    ``` { .python linenums="1" }
+    #
+    # Copyright © 2021 DQOps (support@dqops.com)
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    #
+    
+    from datetime import datetime
+    from typing import Sequence
+    
+    
+    # rule specific parameters object, contains values received from the quality check threshold configuration
+    class MinCount1RuleParametersSpec:
+        pass
+    
+    
+    class HistoricDataPoint:
+        timestamp_utc: datetime
+        local_datetime: datetime
+        back_periods_index: int
+        sensor_readout: float
+        expected_value: float
+    
+    
+    class RuleTimeWindowSettingsSpec:
+        prediction_time_window: int
+        min_periods_with_readouts: int
+    
+    
+    # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+    class RuleExecutionRunParameters:
+        actual_value: float
+        parameters: MinCount1RuleParametersSpec
+        time_period_local: datetime
+        previous_readouts: Sequence[HistoricDataPoint]
+        time_window: RuleTimeWindowSettingsSpec
+    
+    
+    # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+    # what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+    class RuleExecutionResult:
+        passed: bool
+        expected_value: float
+        lower_bound: float
+        upper_bound: float
+    
+        def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
+            self.passed = passed
+            self.expected_value = expected_value
+            self.lower_bound = lower_bound
+            self.upper_bound = upper_bound
+    
+    
+    # rule evaluation method that should be modified for each type of rule
+    def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+        if not hasattr(rule_parameters, 'actual_value'):
+            return RuleExecutionResult()
+    
+        expected_value = 1
+        lower_bound = expected_value
+        upper_bound = None
+        passed = rule_parameters.actual_value >= expected_value
+    
+        return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+    
+    ```
+
+
+
+---
+
 ## min percent
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 

@@ -35,17 +35,17 @@ class TableTimelinessProfilingChecksSpec:
         profile_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableTimelinessProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableTimelinessProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
     profile_data_freshness_anomaly: Union[
         Unset, "TableDataFreshnessAnomalyCheckSpec"
     ] = UNSET
     profile_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
-    profile_data_ingestion_delay: Union[
-        Unset, "TableDataIngestionDelayCheckSpec"
-    ] = UNSET
+    profile_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,9 +79,9 @@ class TableTimelinessProfilingChecksSpec:
         if profile_data_freshness is not UNSET:
             field_dict["profile_data_freshness"] = profile_data_freshness
         if profile_data_freshness_anomaly is not UNSET:
-            field_dict[
-                "profile_data_freshness_anomaly"
-            ] = profile_data_freshness_anomaly
+            field_dict["profile_data_freshness_anomaly"] = (
+                profile_data_freshness_anomaly
+            )
         if profile_data_staleness is not UNSET:
             field_dict["profile_data_staleness"] = profile_data_staleness
         if profile_data_ingestion_delay is not UNSET:

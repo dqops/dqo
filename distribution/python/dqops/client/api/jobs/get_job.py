@@ -12,6 +12,7 @@ from ...types import Response
 def _get_kwargs(
     job_id: str,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

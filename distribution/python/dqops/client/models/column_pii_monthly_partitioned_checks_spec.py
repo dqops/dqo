@@ -43,9 +43,9 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         monthly_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnPiiMonthlyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnPiiMonthlyPartitionedChecksSpecCustomChecks"] = (
+        UNSET
+    )
     monthly_partition_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -68,9 +68,9 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        monthly_partition_contains_usa_phone_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_contains_usa_phone_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_contains_usa_phone_percent, Unset):
             monthly_partition_contains_usa_phone_percent = (
                 self.monthly_partition_contains_usa_phone_percent.to_dict()
@@ -82,9 +82,9 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
                 self.monthly_partition_contains_email_percent.to_dict()
             )
 
-        monthly_partition_contains_usa_zipcode_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_contains_usa_zipcode_percent, Unset):
             monthly_partition_contains_usa_zipcode_percent = (
                 self.monthly_partition_contains_usa_zipcode_percent.to_dict()
@@ -108,25 +108,25 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_contains_usa_phone_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_usa_phone_percent"
-            ] = monthly_partition_contains_usa_phone_percent
+            field_dict["monthly_partition_contains_usa_phone_percent"] = (
+                monthly_partition_contains_usa_phone_percent
+            )
         if monthly_partition_contains_email_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_email_percent"
-            ] = monthly_partition_contains_email_percent
+            field_dict["monthly_partition_contains_email_percent"] = (
+                monthly_partition_contains_email_percent
+            )
         if monthly_partition_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_usa_zipcode_percent"
-            ] = monthly_partition_contains_usa_zipcode_percent
+            field_dict["monthly_partition_contains_usa_zipcode_percent"] = (
+                monthly_partition_contains_usa_zipcode_percent
+            )
         if monthly_partition_contains_ip4_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_ip4_percent"
-            ] = monthly_partition_contains_ip4_percent
+            field_dict["monthly_partition_contains_ip4_percent"] = (
+                monthly_partition_contains_ip4_percent
+            )
         if monthly_partition_contains_ip6_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_ip6_percent"
-            ] = monthly_partition_contains_ip6_percent
+            field_dict["monthly_partition_contains_ip6_percent"] = (
+                monthly_partition_contains_ip6_percent
+            )
 
         return field_dict
 

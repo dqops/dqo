@@ -19,9 +19,9 @@ class TableCurrentDataQualityStatusModelColumns:
 
     """
 
-    additional_properties: Dict[
-        str, "ColumnCurrentDataQualityStatusModel"
-    ] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, "ColumnCurrentDataQualityStatusModel"] = (
+        _attrs_field(init=False, factory=dict)
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         pass

@@ -81,9 +81,9 @@ class DqoJobEntryParametersModel:
     collect_statistics_on_table_parameters: Union[
         Unset, "CollectStatisticsOnTableQueueJobParameters"
     ] = UNSET
-    collect_error_samples_parameters: Union[
-        Unset, "CollectErrorSamplesParameters"
-    ] = UNSET
+    collect_error_samples_parameters: Union[Unset, "CollectErrorSamplesParameters"] = (
+        UNSET
+    )
     collect_error_samples_on_table_parameters: Union[
         Unset, "CollectErrorSamplesOnTableParameters"
     ] = UNSET
@@ -168,13 +168,13 @@ class DqoJobEntryParametersModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if synchronize_root_folder_parameters is not UNSET:
-            field_dict[
-                "synchronizeRootFolderParameters"
-            ] = synchronize_root_folder_parameters
+            field_dict["synchronizeRootFolderParameters"] = (
+                synchronize_root_folder_parameters
+            )
         if synchronize_multiple_folders_parameters is not UNSET:
-            field_dict[
-                "synchronizeMultipleFoldersParameters"
-            ] = synchronize_multiple_folders_parameters
+            field_dict["synchronizeMultipleFoldersParameters"] = (
+                synchronize_multiple_folders_parameters
+            )
         if run_scheduled_checks_parameters is not UNSET:
             field_dict["runScheduledChecksParameters"] = run_scheduled_checks_parameters
         if run_checks_parameters is not UNSET:
@@ -184,17 +184,17 @@ class DqoJobEntryParametersModel:
         if collect_statistics_parameters is not UNSET:
             field_dict["collectStatisticsParameters"] = collect_statistics_parameters
         if collect_statistics_on_table_parameters is not UNSET:
-            field_dict[
-                "collectStatisticsOnTableParameters"
-            ] = collect_statistics_on_table_parameters
+            field_dict["collectStatisticsOnTableParameters"] = (
+                collect_statistics_on_table_parameters
+            )
         if collect_error_samples_parameters is not UNSET:
-            field_dict[
-                "collectErrorSamplesParameters"
-            ] = collect_error_samples_parameters
+            field_dict["collectErrorSamplesParameters"] = (
+                collect_error_samples_parameters
+            )
         if collect_error_samples_on_table_parameters is not UNSET:
-            field_dict[
-                "collectErrorSamplesOnTableParameters"
-            ] = collect_error_samples_on_table_parameters
+            field_dict["collectErrorSamplesOnTableParameters"] = (
+                collect_error_samples_on_table_parameters
+            )
         if import_schema_parameters is not UNSET:
             field_dict["importSchemaParameters"] = import_schema_parameters
         if import_table_parameters is not UNSET:

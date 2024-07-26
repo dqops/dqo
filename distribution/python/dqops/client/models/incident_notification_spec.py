@@ -44,9 +44,9 @@ class IncidentNotificationSpec:
         if incident_opened_addresses is not UNSET:
             field_dict["incident_opened_addresses"] = incident_opened_addresses
         if incident_acknowledged_addresses is not UNSET:
-            field_dict[
-                "incident_acknowledged_addresses"
-            ] = incident_acknowledged_addresses
+            field_dict["incident_acknowledged_addresses"] = (
+                incident_acknowledged_addresses
+            )
         if incident_resolved_addresses is not UNSET:
             field_dict["incident_resolved_addresses"] = incident_resolved_addresses
         if incident_muted_addresses is not UNSET:

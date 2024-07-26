@@ -58,9 +58,9 @@ class ColumnPopulationVarianceInRangeCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnNumericPopulationVarianceSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnNumericPopulationVarianceSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "BetweenFloatsRuleParametersSpec"] = UNSET
     error: Union[Unset, "BetweenFloatsRuleParametersSpec"] = UNSET
     fatal: Union[Unset, "BetweenFloatsRuleParametersSpec"] = UNSET

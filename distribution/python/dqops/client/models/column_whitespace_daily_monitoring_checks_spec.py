@@ -60,9 +60,9 @@ class ColumnWhitespaceDailyMonitoringChecksSpec:
     custom_checks: Union[
         Unset, "ColumnWhitespaceDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    daily_empty_text_found: Union[
-        Unset, "ColumnWhitespaceEmptyTextFoundCheckSpec"
-    ] = UNSET
+    daily_empty_text_found: Union[Unset, "ColumnWhitespaceEmptyTextFoundCheckSpec"] = (
+        UNSET
+    )
     daily_whitespace_text_found: Union[
         Unset, "ColumnWhitespaceWhitespaceTextFoundCheckSpec"
     ] = UNSET
@@ -125,9 +125,9 @@ class ColumnWhitespaceDailyMonitoringChecksSpec:
                 self.daily_text_surrounded_by_whitespace_found.to_dict()
             )
 
-        daily_text_surrounded_by_whitespace_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_text_surrounded_by_whitespace_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_text_surrounded_by_whitespace_percent, Unset):
             daily_text_surrounded_by_whitespace_percent = (
                 self.daily_text_surrounded_by_whitespace_percent.to_dict()
@@ -143,25 +143,25 @@ class ColumnWhitespaceDailyMonitoringChecksSpec:
         if daily_whitespace_text_found is not UNSET:
             field_dict["daily_whitespace_text_found"] = daily_whitespace_text_found
         if daily_null_placeholder_text_found is not UNSET:
-            field_dict[
-                "daily_null_placeholder_text_found"
-            ] = daily_null_placeholder_text_found
+            field_dict["daily_null_placeholder_text_found"] = (
+                daily_null_placeholder_text_found
+            )
         if daily_empty_text_percent is not UNSET:
             field_dict["daily_empty_text_percent"] = daily_empty_text_percent
         if daily_whitespace_text_percent is not UNSET:
             field_dict["daily_whitespace_text_percent"] = daily_whitespace_text_percent
         if daily_null_placeholder_text_percent is not UNSET:
-            field_dict[
-                "daily_null_placeholder_text_percent"
-            ] = daily_null_placeholder_text_percent
+            field_dict["daily_null_placeholder_text_percent"] = (
+                daily_null_placeholder_text_percent
+            )
         if daily_text_surrounded_by_whitespace_found is not UNSET:
-            field_dict[
-                "daily_text_surrounded_by_whitespace_found"
-            ] = daily_text_surrounded_by_whitespace_found
+            field_dict["daily_text_surrounded_by_whitespace_found"] = (
+                daily_text_surrounded_by_whitespace_found
+            )
         if daily_text_surrounded_by_whitespace_percent is not UNSET:
-            field_dict[
-                "daily_text_surrounded_by_whitespace_percent"
-            ] = daily_text_surrounded_by_whitespace_percent
+            field_dict["daily_text_surrounded_by_whitespace_percent"] = (
+                daily_text_surrounded_by_whitespace_percent
+            )
 
         return field_dict
 

@@ -103,21 +103,21 @@ class ColumnConversionsMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_text_parsable_to_boolean_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_parsable_to_boolean_percent"
-            ] = monthly_partition_text_parsable_to_boolean_percent
+            field_dict["monthly_partition_text_parsable_to_boolean_percent"] = (
+                monthly_partition_text_parsable_to_boolean_percent
+            )
         if monthly_partition_text_parsable_to_integer_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_parsable_to_integer_percent"
-            ] = monthly_partition_text_parsable_to_integer_percent
+            field_dict["monthly_partition_text_parsable_to_integer_percent"] = (
+                monthly_partition_text_parsable_to_integer_percent
+            )
         if monthly_partition_text_parsable_to_float_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_parsable_to_float_percent"
-            ] = monthly_partition_text_parsable_to_float_percent
+            field_dict["monthly_partition_text_parsable_to_float_percent"] = (
+                monthly_partition_text_parsable_to_float_percent
+            )
         if monthly_partition_text_parsable_to_date_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_parsable_to_date_percent"
-            ] = monthly_partition_text_parsable_to_date_percent
+            field_dict["monthly_partition_text_parsable_to_date_percent"] = (
+                monthly_partition_text_parsable_to_date_percent
+            )
 
         return field_dict
 

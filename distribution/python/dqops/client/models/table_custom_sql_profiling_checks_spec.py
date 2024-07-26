@@ -65,9 +65,9 @@ class TableCustomSqlProfilingChecksSpec:
                 self.profile_sql_condition_failed_on_table.to_dict()
             )
 
-        profile_sql_condition_passed_percent_on_table: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        profile_sql_condition_passed_percent_on_table: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.profile_sql_condition_passed_percent_on_table, Unset):
             profile_sql_condition_passed_percent_on_table = (
                 self.profile_sql_condition_passed_percent_on_table.to_dict()
@@ -91,21 +91,21 @@ class TableCustomSqlProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_sql_condition_failed_on_table is not UNSET:
-            field_dict[
-                "profile_sql_condition_failed_on_table"
-            ] = profile_sql_condition_failed_on_table
+            field_dict["profile_sql_condition_failed_on_table"] = (
+                profile_sql_condition_failed_on_table
+            )
         if profile_sql_condition_passed_percent_on_table is not UNSET:
-            field_dict[
-                "profile_sql_condition_passed_percent_on_table"
-            ] = profile_sql_condition_passed_percent_on_table
+            field_dict["profile_sql_condition_passed_percent_on_table"] = (
+                profile_sql_condition_passed_percent_on_table
+            )
         if profile_sql_aggregate_expression_on_table is not UNSET:
-            field_dict[
-                "profile_sql_aggregate_expression_on_table"
-            ] = profile_sql_aggregate_expression_on_table
+            field_dict["profile_sql_aggregate_expression_on_table"] = (
+                profile_sql_aggregate_expression_on_table
+            )
         if profile_import_custom_result_on_table is not UNSET:
-            field_dict[
-                "profile_import_custom_result_on_table"
-            ] = profile_import_custom_result_on_table
+            field_dict["profile_import_custom_result_on_table"] = (
+                profile_import_custom_result_on_table
+            )
 
         return field_dict
 

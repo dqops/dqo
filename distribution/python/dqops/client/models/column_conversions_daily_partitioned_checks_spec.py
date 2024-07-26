@@ -77,17 +77,17 @@ class ColumnConversionsDailyPartitionedChecksSpec:
                 self.daily_partition_text_parsable_to_integer_percent.to_dict()
             )
 
-        daily_partition_text_parsable_to_float_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_text_parsable_to_float_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_text_parsable_to_float_percent, Unset):
             daily_partition_text_parsable_to_float_percent = (
                 self.daily_partition_text_parsable_to_float_percent.to_dict()
             )
 
-        daily_partition_text_parsable_to_date_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_text_parsable_to_date_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_text_parsable_to_date_percent, Unset):
             daily_partition_text_parsable_to_date_percent = (
                 self.daily_partition_text_parsable_to_date_percent.to_dict()
@@ -99,21 +99,21 @@ class ColumnConversionsDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_text_parsable_to_boolean_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_parsable_to_boolean_percent"
-            ] = daily_partition_text_parsable_to_boolean_percent
+            field_dict["daily_partition_text_parsable_to_boolean_percent"] = (
+                daily_partition_text_parsable_to_boolean_percent
+            )
         if daily_partition_text_parsable_to_integer_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_parsable_to_integer_percent"
-            ] = daily_partition_text_parsable_to_integer_percent
+            field_dict["daily_partition_text_parsable_to_integer_percent"] = (
+                daily_partition_text_parsable_to_integer_percent
+            )
         if daily_partition_text_parsable_to_float_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_parsable_to_float_percent"
-            ] = daily_partition_text_parsable_to_float_percent
+            field_dict["daily_partition_text_parsable_to_float_percent"] = (
+                daily_partition_text_parsable_to_float_percent
+            )
         if daily_partition_text_parsable_to_date_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_parsable_to_date_percent"
-            ] = daily_partition_text_parsable_to_date_percent
+            field_dict["daily_partition_text_parsable_to_date_percent"] = (
+                daily_partition_text_parsable_to_date_percent
+            )
 
         return field_dict
 

@@ -39,9 +39,9 @@ class ColumnDatetimeProfilingChecksSpec:
     profile_date_values_in_future_percent: Union[
         Unset, "ColumnDateValuesInFuturePercentCheckSpec"
     ] = UNSET
-    profile_date_in_range_percent: Union[
-        Unset, "ColumnDateInRangePercentCheckSpec"
-    ] = UNSET
+    profile_date_in_range_percent: Union[Unset, "ColumnDateInRangePercentCheckSpec"] = (
+        UNSET
+    )
     profile_text_match_date_format_percent: Union[
         Unset, "ColumnTextMatchDateFormatPercentCheckSpec"
     ] = UNSET
@@ -74,15 +74,15 @@ class ColumnDatetimeProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_date_values_in_future_percent is not UNSET:
-            field_dict[
-                "profile_date_values_in_future_percent"
-            ] = profile_date_values_in_future_percent
+            field_dict["profile_date_values_in_future_percent"] = (
+                profile_date_values_in_future_percent
+            )
         if profile_date_in_range_percent is not UNSET:
             field_dict["profile_date_in_range_percent"] = profile_date_in_range_percent
         if profile_text_match_date_format_percent is not UNSET:
-            field_dict[
-                "profile_text_match_date_format_percent"
-            ] = profile_text_match_date_format_percent
+            field_dict["profile_text_match_date_format_percent"] = (
+                profile_text_match_date_format_percent
+            )
 
         return field_dict
 

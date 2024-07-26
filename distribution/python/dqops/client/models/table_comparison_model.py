@@ -79,9 +79,9 @@ class TableComparisonModel:
     reference_table: Union[Unset, "PhysicalTableName"] = UNSET
     compared_table_filter: Union[Unset, str] = UNSET
     reference_table_filter: Union[Unset, str] = UNSET
-    grouping_columns: Union[
-        Unset, List["TableComparisonGroupingColumnPairModel"]
-    ] = UNSET
+    grouping_columns: Union[Unset, List["TableComparisonGroupingColumnPairModel"]] = (
+        UNSET
+    )
     default_compare_thresholds: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_row_count: Union[Unset, "CompareThresholdsModel"] = UNSET
     compare_column_count: Union[Unset, "CompareThresholdsModel"] = UNSET
@@ -159,9 +159,9 @@ class TableComparisonModel:
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if table_comparison_configuration_name is not UNSET:
-            field_dict[
-                "table_comparison_configuration_name"
-            ] = table_comparison_configuration_name
+            field_dict["table_comparison_configuration_name"] = (
+                table_comparison_configuration_name
+            )
         if compared_connection is not UNSET:
             field_dict["compared_connection"] = compared_connection
         if compared_table is not UNSET:
@@ -187,13 +187,13 @@ class TableComparisonModel:
         if columns is not UNSET:
             field_dict["columns"] = columns
         if compare_table_run_checks_job_template is not UNSET:
-            field_dict[
-                "compare_table_run_checks_job_template"
-            ] = compare_table_run_checks_job_template
+            field_dict["compare_table_run_checks_job_template"] = (
+                compare_table_run_checks_job_template
+            )
         if compare_table_clean_data_job_template is not UNSET:
-            field_dict[
-                "compare_table_clean_data_job_template"
-            ] = compare_table_clean_data_job_template
+            field_dict["compare_table_clean_data_job_template"] = (
+                compare_table_clean_data_job_template
+            )
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
         if can_run_compare_checks is not UNSET:

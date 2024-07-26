@@ -63,13 +63,13 @@ class ColumnDatatypeProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_detected_datatype_in_text is not UNSET:
-            field_dict[
-                "profile_detected_datatype_in_text"
-            ] = profile_detected_datatype_in_text
+            field_dict["profile_detected_datatype_in_text"] = (
+                profile_detected_datatype_in_text
+            )
         if profile_detected_datatype_in_text_changed is not UNSET:
-            field_dict[
-                "profile_detected_datatype_in_text_changed"
-            ] = profile_detected_datatype_in_text_changed
+            field_dict["profile_detected_datatype_in_text_changed"] = (
+                profile_detected_datatype_in_text_changed
+            )
 
         return field_dict
 

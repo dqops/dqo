@@ -61,9 +61,9 @@ class TableCustomSqlDailyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_partition_sql_condition_failed_on_table: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_sql_condition_failed_on_table: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_sql_condition_failed_on_table, Unset):
             daily_partition_sql_condition_failed_on_table = (
                 self.daily_partition_sql_condition_failed_on_table.to_dict()
@@ -89,9 +89,9 @@ class TableCustomSqlDailyPartitionedChecksSpec:
                 self.daily_partition_sql_aggregate_expression_on_table.to_dict()
             )
 
-        daily_partition_import_custom_result_on_table: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_import_custom_result_on_table, Unset):
             daily_partition_import_custom_result_on_table = (
                 self.daily_partition_import_custom_result_on_table.to_dict()
@@ -103,21 +103,21 @@ class TableCustomSqlDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_sql_condition_failed_on_table is not UNSET:
-            field_dict[
-                "daily_partition_sql_condition_failed_on_table"
-            ] = daily_partition_sql_condition_failed_on_table
+            field_dict["daily_partition_sql_condition_failed_on_table"] = (
+                daily_partition_sql_condition_failed_on_table
+            )
         if daily_partition_sql_condition_passed_percent_on_table is not UNSET:
-            field_dict[
-                "daily_partition_sql_condition_passed_percent_on_table"
-            ] = daily_partition_sql_condition_passed_percent_on_table
+            field_dict["daily_partition_sql_condition_passed_percent_on_table"] = (
+                daily_partition_sql_condition_passed_percent_on_table
+            )
         if daily_partition_sql_aggregate_expression_on_table is not UNSET:
-            field_dict[
-                "daily_partition_sql_aggregate_expression_on_table"
-            ] = daily_partition_sql_aggregate_expression_on_table
+            field_dict["daily_partition_sql_aggregate_expression_on_table"] = (
+                daily_partition_sql_aggregate_expression_on_table
+            )
         if daily_partition_import_custom_result_on_table is not UNSET:
-            field_dict[
-                "daily_partition_import_custom_result_on_table"
-            ] = daily_partition_import_custom_result_on_table
+            field_dict["daily_partition_import_custom_result_on_table"] = (
+                daily_partition_import_custom_result_on_table
+            )
 
         return field_dict
 

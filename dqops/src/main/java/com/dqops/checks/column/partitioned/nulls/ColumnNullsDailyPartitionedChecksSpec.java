@@ -50,7 +50,7 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
             put("daily_partition_not_nulls_count", o -> o.dailyPartitionNotNullsCount);
             put("daily_partition_not_nulls_percent", o -> o.dailyPartitionNotNullsPercent);
 
-            put("daily_empty_column_found", o -> o.dailyPartitionEmptyColumnFound);
+            put("daily_partition_empty_column_found", o -> o.dailyPartitionEmptyColumnFound);
 
             put("daily_partition_nulls_percent_change", o ->o.dailyPartitionNullsPercentChange);
             put("daily_partition_nulls_percent_change_1_day", o ->o.dailyPartitionNullsPercentChange1Day);

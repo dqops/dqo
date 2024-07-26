@@ -4,9 +4,10 @@ kind: check
 spec:
   sensor_name: column/nulls/not_null_count
   rule_name: comparison/min_count
-  help_text: Detects empty columns that contain only null values. Counts the number
-    of rows that have non-null values. Raises a data quality issue when the count
-    of non-null values is below min_count.
+  help_text: Verifies that a column contains a minimum number of non-null values.
+    The default value of the *min_count* parameter is 1 to detect at least one value
+    in a monitored column. Raises a data quality issue when the count of non-null
+    values is below min_count.
   friendly_name: Minimum count of rows containing non-null values (find empty column)
   standard: true
   default_severity: error

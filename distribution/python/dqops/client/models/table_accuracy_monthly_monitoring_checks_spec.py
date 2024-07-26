@@ -52,9 +52,9 @@ class TableAccuracyMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_total_row_count_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_row_count_match_percent"
-            ] = monthly_total_row_count_match_percent
+            field_dict["monthly_total_row_count_match_percent"] = (
+                monthly_total_row_count_match_percent
+            )
 
         return field_dict
 

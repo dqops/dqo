@@ -182,49 +182,49 @@ class ColumnPatternsDailyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_text_not_matching_regex_found is not UNSET:
-            field_dict[
-                "daily_text_not_matching_regex_found"
-            ] = daily_text_not_matching_regex_found
+            field_dict["daily_text_not_matching_regex_found"] = (
+                daily_text_not_matching_regex_found
+            )
         if daily_texts_matching_regex_percent is not UNSET:
-            field_dict[
-                "daily_texts_matching_regex_percent"
-            ] = daily_texts_matching_regex_percent
+            field_dict["daily_texts_matching_regex_percent"] = (
+                daily_texts_matching_regex_percent
+            )
         if daily_invalid_email_format_found is not UNSET:
-            field_dict[
-                "daily_invalid_email_format_found"
-            ] = daily_invalid_email_format_found
+            field_dict["daily_invalid_email_format_found"] = (
+                daily_invalid_email_format_found
+            )
         if daily_invalid_email_format_percent is not UNSET:
-            field_dict[
-                "daily_invalid_email_format_percent"
-            ] = daily_invalid_email_format_percent
+            field_dict["daily_invalid_email_format_percent"] = (
+                daily_invalid_email_format_percent
+            )
         if daily_text_not_matching_date_pattern_found is not UNSET:
-            field_dict[
-                "daily_text_not_matching_date_pattern_found"
-            ] = daily_text_not_matching_date_pattern_found
+            field_dict["daily_text_not_matching_date_pattern_found"] = (
+                daily_text_not_matching_date_pattern_found
+            )
         if daily_text_matching_date_pattern_percent is not UNSET:
-            field_dict[
-                "daily_text_matching_date_pattern_percent"
-            ] = daily_text_matching_date_pattern_percent
+            field_dict["daily_text_matching_date_pattern_percent"] = (
+                daily_text_matching_date_pattern_percent
+            )
         if daily_text_matching_name_pattern_percent is not UNSET:
-            field_dict[
-                "daily_text_matching_name_pattern_percent"
-            ] = daily_text_matching_name_pattern_percent
+            field_dict["daily_text_matching_name_pattern_percent"] = (
+                daily_text_matching_name_pattern_percent
+            )
         if daily_invalid_uuid_format_found is not UNSET:
-            field_dict[
-                "daily_invalid_uuid_format_found"
-            ] = daily_invalid_uuid_format_found
+            field_dict["daily_invalid_uuid_format_found"] = (
+                daily_invalid_uuid_format_found
+            )
         if daily_valid_uuid_format_percent is not UNSET:
-            field_dict[
-                "daily_valid_uuid_format_percent"
-            ] = daily_valid_uuid_format_percent
+            field_dict["daily_valid_uuid_format_percent"] = (
+                daily_valid_uuid_format_percent
+            )
         if daily_invalid_ip4_address_format_found is not UNSET:
-            field_dict[
-                "daily_invalid_ip4_address_format_found"
-            ] = daily_invalid_ip4_address_format_found
+            field_dict["daily_invalid_ip4_address_format_found"] = (
+                daily_invalid_ip4_address_format_found
+            )
         if daily_invalid_ip6_address_format_found is not UNSET:
-            field_dict[
-                "daily_invalid_ip6_address_format_found"
-            ] = daily_invalid_ip6_address_format_found
+            field_dict["daily_invalid_ip6_address_format_found"] = (
+                daily_invalid_ip6_address_format_found
+            )
 
         return field_dict
 

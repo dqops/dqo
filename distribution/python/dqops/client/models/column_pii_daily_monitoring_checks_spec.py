@@ -43,9 +43,9 @@ class ColumnPiiDailyMonitoringChecksSpec:
         daily_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnPiiDailyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnPiiDailyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
@@ -55,12 +55,12 @@ class ColumnPiiDailyMonitoringChecksSpec:
     daily_contains_usa_zipcode_percent: Union[
         Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
-    daily_contains_ip4_percent: Union[
-        Unset, "ColumnPiiContainsIp4PercentCheckSpec"
-    ] = UNSET
-    daily_contains_ip6_percent: Union[
-        Unset, "ColumnPiiContainsIp6PercentCheckSpec"
-    ] = UNSET
+    daily_contains_ip4_percent: Union[Unset, "ColumnPiiContainsIp4PercentCheckSpec"] = (
+        UNSET
+    )
+    daily_contains_ip6_percent: Union[Unset, "ColumnPiiContainsIp6PercentCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -98,15 +98,15 @@ class ColumnPiiDailyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_contains_usa_phone_percent is not UNSET:
-            field_dict[
-                "daily_contains_usa_phone_percent"
-            ] = daily_contains_usa_phone_percent
+            field_dict["daily_contains_usa_phone_percent"] = (
+                daily_contains_usa_phone_percent
+            )
         if daily_contains_email_percent is not UNSET:
             field_dict["daily_contains_email_percent"] = daily_contains_email_percent
         if daily_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "daily_contains_usa_zipcode_percent"
-            ] = daily_contains_usa_zipcode_percent
+            field_dict["daily_contains_usa_zipcode_percent"] = (
+                daily_contains_usa_zipcode_percent
+            )
         if daily_contains_ip4_percent is not UNSET:
             field_dict["daily_contains_ip4_percent"] = daily_contains_ip4_percent
         if daily_contains_ip6_percent is not UNSET:

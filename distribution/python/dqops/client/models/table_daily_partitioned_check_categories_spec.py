@@ -44,9 +44,9 @@ class TableDailyPartitionedCheckCategoriesSpec:
     volume: Union[Unset, "TableVolumeDailyPartitionedChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessDailyPartitionedChecksSpec"] = UNSET
     custom_sql: Union[Unset, "TableCustomSqlDailyPartitionedChecksSpec"] = UNSET
-    comparisons: Union[
-        Unset, "TableDailyPartitionedCheckCategoriesSpecComparisons"
-    ] = UNSET
+    comparisons: Union[Unset, "TableDailyPartitionedCheckCategoriesSpecComparisons"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

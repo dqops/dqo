@@ -70,13 +70,13 @@ class ColumnDatatypeDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_detected_datatype_in_text is not UNSET:
-            field_dict[
-                "daily_partition_detected_datatype_in_text"
-            ] = daily_partition_detected_datatype_in_text
+            field_dict["daily_partition_detected_datatype_in_text"] = (
+                daily_partition_detected_datatype_in_text
+            )
         if daily_partition_detected_datatype_in_text_changed is not UNSET:
-            field_dict[
-                "daily_partition_detected_datatype_in_text_changed"
-            ] = daily_partition_detected_datatype_in_text_changed
+            field_dict["daily_partition_detected_datatype_in_text_changed"] = (
+                daily_partition_detected_datatype_in_text_changed
+            )
 
         return field_dict
 

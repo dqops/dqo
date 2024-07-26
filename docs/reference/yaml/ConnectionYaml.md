@@ -509,7 +509,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`mute_for_days`</span>|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|*integer*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables data quality incident creation for failed data quality checks on the data source.|*boolean*| | | |
 |<span class="no-wrap-code ">[`incident_notification`](./ConnectionYaml.md#incidentnotificationspec)</span>|Configuration of addresses for new or updated incident notifications.|*[IncidentNotificationSpec](./ConnectionYaml.md#incidentnotificationspec)*| | | |
-|<span class="no-wrap-code ">[`webhooks`](./ConnectionYaml.md#incidentnotificationspec)</span>|Obsolete, use the incidentNotificationSpec instead.|*[IncidentNotificationSpec](./ConnectionYaml.md#incidentnotificationspec)*| | | |
 
 
 

@@ -88,9 +88,9 @@ class ColumnAcceptedValuesDailyPartitionedChecksSpec:
                 self.daily_partition_text_found_in_set_percent.to_dict()
             )
 
-        daily_partition_number_found_in_set_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_number_found_in_set_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_number_found_in_set_percent, Unset):
             daily_partition_number_found_in_set_percent = (
                 self.daily_partition_number_found_in_set_percent.to_dict()
@@ -116,9 +116,9 @@ class ColumnAcceptedValuesDailyPartitionedChecksSpec:
                 self.daily_partition_expected_texts_in_top_values_count.to_dict()
             )
 
-        daily_partition_expected_numbers_in_use_count: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_expected_numbers_in_use_count: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_expected_numbers_in_use_count, Unset):
             daily_partition_expected_numbers_in_use_count = (
                 self.daily_partition_expected_numbers_in_use_count.to_dict()
@@ -146,33 +146,33 @@ class ColumnAcceptedValuesDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_text_found_in_set_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_found_in_set_percent"
-            ] = daily_partition_text_found_in_set_percent
+            field_dict["daily_partition_text_found_in_set_percent"] = (
+                daily_partition_text_found_in_set_percent
+            )
         if daily_partition_number_found_in_set_percent is not UNSET:
-            field_dict[
-                "daily_partition_number_found_in_set_percent"
-            ] = daily_partition_number_found_in_set_percent
+            field_dict["daily_partition_number_found_in_set_percent"] = (
+                daily_partition_number_found_in_set_percent
+            )
         if daily_partition_expected_text_values_in_use_count is not UNSET:
-            field_dict[
-                "daily_partition_expected_text_values_in_use_count"
-            ] = daily_partition_expected_text_values_in_use_count
+            field_dict["daily_partition_expected_text_values_in_use_count"] = (
+                daily_partition_expected_text_values_in_use_count
+            )
         if daily_partition_expected_texts_in_top_values_count is not UNSET:
-            field_dict[
-                "daily_partition_expected_texts_in_top_values_count"
-            ] = daily_partition_expected_texts_in_top_values_count
+            field_dict["daily_partition_expected_texts_in_top_values_count"] = (
+                daily_partition_expected_texts_in_top_values_count
+            )
         if daily_partition_expected_numbers_in_use_count is not UNSET:
-            field_dict[
-                "daily_partition_expected_numbers_in_use_count"
-            ] = daily_partition_expected_numbers_in_use_count
+            field_dict["daily_partition_expected_numbers_in_use_count"] = (
+                daily_partition_expected_numbers_in_use_count
+            )
         if daily_partition_text_valid_country_code_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_valid_country_code_percent"
-            ] = daily_partition_text_valid_country_code_percent
+            field_dict["daily_partition_text_valid_country_code_percent"] = (
+                daily_partition_text_valid_country_code_percent
+            )
         if daily_partition_text_valid_currency_code_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_valid_currency_code_percent"
-            ] = daily_partition_text_valid_currency_code_percent
+            field_dict["daily_partition_text_valid_currency_code_percent"] = (
+                daily_partition_text_valid_currency_code_percent
+            )
 
         return field_dict
 

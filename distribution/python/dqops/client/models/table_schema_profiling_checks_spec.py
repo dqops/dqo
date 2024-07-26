@@ -98,9 +98,9 @@ class TableSchemaProfilingChecksSpec:
         if profile_column_list_changed is not UNSET:
             field_dict["profile_column_list_changed"] = profile_column_list_changed
         if profile_column_list_or_order_changed is not UNSET:
-            field_dict[
-                "profile_column_list_or_order_changed"
-            ] = profile_column_list_or_order_changed
+            field_dict["profile_column_list_or_order_changed"] = (
+                profile_column_list_or_order_changed
+            )
         if profile_column_types_changed is not UNSET:
             field_dict["profile_column_types_changed"] = profile_column_types_changed
 

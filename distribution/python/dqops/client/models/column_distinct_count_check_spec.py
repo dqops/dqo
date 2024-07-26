@@ -58,9 +58,9 @@ class ColumnDistinctCountCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET
     error: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET
     fatal: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET

@@ -122,9 +122,9 @@ class DqopsWaitForJobOperator(BaseOperator):
             self.retries = 0
             raise DqopsJobFailedException(context["ti"], job_result.to_dict())
 
-        run_check_result: Union[
-            RunChecksResult, None
-        ] = job_result.parameters.run_checks_parameters.run_checks_result
+        run_check_result: Union[RunChecksResult, None] = (
+            job_result.parameters.run_checks_parameters.run_checks_result
+        )
 
         if (
             job_result.job_type == DqoJobType.RUN_CHECKS

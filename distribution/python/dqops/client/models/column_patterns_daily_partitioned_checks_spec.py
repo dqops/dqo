@@ -113,17 +113,17 @@ class ColumnPatternsDailyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_partition_text_not_matching_regex_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_text_not_matching_regex_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_text_not_matching_regex_found, Unset):
             daily_partition_text_not_matching_regex_found = (
                 self.daily_partition_text_not_matching_regex_found.to_dict()
             )
 
-        daily_partition_texts_matching_regex_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_texts_matching_regex_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_texts_matching_regex_percent, Unset):
             daily_partition_texts_matching_regex_percent = (
                 self.daily_partition_texts_matching_regex_percent.to_dict()
@@ -135,9 +135,9 @@ class ColumnPatternsDailyPartitionedChecksSpec:
                 self.daily_partition_invalid_email_format_found.to_dict()
             )
 
-        daily_partition_invalid_email_format_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_invalid_email_format_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_invalid_email_format_percent, Unset):
             daily_partition_invalid_email_format_percent = (
                 self.daily_partition_invalid_email_format_percent.to_dict()
@@ -207,49 +207,49 @@ class ColumnPatternsDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_text_not_matching_regex_found is not UNSET:
-            field_dict[
-                "daily_partition_text_not_matching_regex_found"
-            ] = daily_partition_text_not_matching_regex_found
+            field_dict["daily_partition_text_not_matching_regex_found"] = (
+                daily_partition_text_not_matching_regex_found
+            )
         if daily_partition_texts_matching_regex_percent is not UNSET:
-            field_dict[
-                "daily_partition_texts_matching_regex_percent"
-            ] = daily_partition_texts_matching_regex_percent
+            field_dict["daily_partition_texts_matching_regex_percent"] = (
+                daily_partition_texts_matching_regex_percent
+            )
         if daily_partition_invalid_email_format_found is not UNSET:
-            field_dict[
-                "daily_partition_invalid_email_format_found"
-            ] = daily_partition_invalid_email_format_found
+            field_dict["daily_partition_invalid_email_format_found"] = (
+                daily_partition_invalid_email_format_found
+            )
         if daily_partition_invalid_email_format_percent is not UNSET:
-            field_dict[
-                "daily_partition_invalid_email_format_percent"
-            ] = daily_partition_invalid_email_format_percent
+            field_dict["daily_partition_invalid_email_format_percent"] = (
+                daily_partition_invalid_email_format_percent
+            )
         if daily_partition_text_not_matching_date_pattern_found is not UNSET:
-            field_dict[
-                "daily_partition_text_not_matching_date_pattern_found"
-            ] = daily_partition_text_not_matching_date_pattern_found
+            field_dict["daily_partition_text_not_matching_date_pattern_found"] = (
+                daily_partition_text_not_matching_date_pattern_found
+            )
         if daily_partition_text_matching_date_pattern_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_matching_date_pattern_percent"
-            ] = daily_partition_text_matching_date_pattern_percent
+            field_dict["daily_partition_text_matching_date_pattern_percent"] = (
+                daily_partition_text_matching_date_pattern_percent
+            )
         if daily_partition_text_matching_name_pattern_percent is not UNSET:
-            field_dict[
-                "daily_partition_text_matching_name_pattern_percent"
-            ] = daily_partition_text_matching_name_pattern_percent
+            field_dict["daily_partition_text_matching_name_pattern_percent"] = (
+                daily_partition_text_matching_name_pattern_percent
+            )
         if daily_partition_invalid_uuid_format_found is not UNSET:
-            field_dict[
-                "daily_partition_invalid_uuid_format_found"
-            ] = daily_partition_invalid_uuid_format_found
+            field_dict["daily_partition_invalid_uuid_format_found"] = (
+                daily_partition_invalid_uuid_format_found
+            )
         if daily_partition_valid_uuid_format_percent is not UNSET:
-            field_dict[
-                "daily_partition_valid_uuid_format_percent"
-            ] = daily_partition_valid_uuid_format_percent
+            field_dict["daily_partition_valid_uuid_format_percent"] = (
+                daily_partition_valid_uuid_format_percent
+            )
         if daily_partition_invalid_ip4_address_format_found is not UNSET:
-            field_dict[
-                "daily_partition_invalid_ip4_address_format_found"
-            ] = daily_partition_invalid_ip4_address_format_found
+            field_dict["daily_partition_invalid_ip4_address_format_found"] = (
+                daily_partition_invalid_ip4_address_format_found
+            )
         if daily_partition_invalid_ip6_address_format_found is not UNSET:
-            field_dict[
-                "daily_partition_invalid_ip6_address_format_found"
-            ] = daily_partition_invalid_ip6_address_format_found
+            field_dict["daily_partition_invalid_ip6_address_format_found"] = (
+                daily_partition_invalid_ip6_address_format_found
+            )
 
         return field_dict
 

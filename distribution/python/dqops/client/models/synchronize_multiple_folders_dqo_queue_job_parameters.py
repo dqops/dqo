@@ -116,9 +116,9 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         if data_incidents is not UNSET:
             field_dict["dataIncidents"] = data_incidents
         if synchronize_folder_with_local_changes is not UNSET:
-            field_dict[
-                "synchronizeFolderWithLocalChanges"
-            ] = synchronize_folder_with_local_changes
+            field_dict["synchronizeFolderWithLocalChanges"] = (
+                synchronize_folder_with_local_changes
+            )
 
         return field_dict
 

@@ -36,9 +36,9 @@ class TableTimelinessMonthlyMonitoringChecksSpec:
     ] = UNSET
     monthly_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
     monthly_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
-    monthly_data_ingestion_delay: Union[
-        Unset, "TableDataIngestionDelayCheckSpec"
-    ] = UNSET
+    monthly_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = (
+        UNSET
+    )
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

@@ -39,9 +39,9 @@ class TableTimelinessDailyMonitoringChecksSpec:
         Unset, "TableTimelinessDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
     daily_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
-    daily_data_freshness_anomaly: Union[
-        Unset, "TableDataFreshnessAnomalyCheckSpec"
-    ] = UNSET
+    daily_data_freshness_anomaly: Union[Unset, "TableDataFreshnessAnomalyCheckSpec"] = (
+        UNSET
+    )
     daily_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
     daily_data_ingestion_delay: Union[Unset, "TableDataIngestionDelayCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)

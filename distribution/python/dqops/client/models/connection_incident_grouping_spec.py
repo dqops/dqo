@@ -32,7 +32,6 @@ class ConnectionIncidentGroupingSpec:
         disabled (Union[Unset, bool]): Disables data quality incident creation for failed data quality checks on the
             data source.
         incident_notification (Union[Unset, IncidentNotificationSpec]):
-        webhooks (Union[Unset, IncidentNotificationSpec]):
     """
 
     grouping_level: Union[Unset, IncidentGroupingLevel] = UNSET
@@ -42,7 +41,6 @@ class ConnectionIncidentGroupingSpec:
     mute_for_days: Union[Unset, int] = UNSET
     disabled: Union[Unset, bool] = UNSET
     incident_notification: Union[Unset, "IncidentNotificationSpec"] = UNSET
-    webhooks: Union[Unset, "IncidentNotificationSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -62,10 +60,6 @@ class ConnectionIncidentGroupingSpec:
         if not isinstance(self.incident_notification, Unset):
             incident_notification = self.incident_notification.to_dict()
 
-        webhooks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.webhooks, Unset):
-            webhooks = self.webhooks.to_dict()
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -83,8 +77,6 @@ class ConnectionIncidentGroupingSpec:
             field_dict["disabled"] = disabled
         if incident_notification is not UNSET:
             field_dict["incident_notification"] = incident_notification
-        if webhooks is not UNSET:
-            field_dict["webhooks"] = webhooks
 
         return field_dict
 
@@ -124,13 +116,6 @@ class ConnectionIncidentGroupingSpec:
                 _incident_notification
             )
 
-        _webhooks = d.pop("webhooks", UNSET)
-        webhooks: Union[Unset, IncidentNotificationSpec]
-        if isinstance(_webhooks, Unset):
-            webhooks = UNSET
-        else:
-            webhooks = IncidentNotificationSpec.from_dict(_webhooks)
-
         connection_incident_grouping_spec = cls(
             grouping_level=grouping_level,
             minimum_severity=minimum_severity,
@@ -139,7 +124,6 @@ class ConnectionIncidentGroupingSpec:
             mute_for_days=mute_for_days,
             disabled=disabled,
             incident_notification=incident_notification,
-            webhooks=webhooks,
         )
 
         connection_incident_grouping_spec.additional_properties = d

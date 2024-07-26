@@ -31,9 +31,9 @@ class ProviderSensorModel:
     """
 
     provider_type: Union[Unset, ProviderType] = UNSET
-    provider_sensor_definition_spec: Union[
-        Unset, "ProviderSensorDefinitionSpec"
-    ] = UNSET
+    provider_sensor_definition_spec: Union[Unset, "ProviderSensorDefinitionSpec"] = (
+        UNSET
+    )
     sql_template: Union[Unset, str] = UNSET
     error_sampling_template: Union[Unset, str] = UNSET
     custom: Union[Unset, bool] = UNSET

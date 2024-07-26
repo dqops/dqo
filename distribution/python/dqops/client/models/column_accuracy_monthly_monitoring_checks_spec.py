@@ -104,25 +104,25 @@ class ColumnAccuracyMonthlyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_total_sum_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_sum_match_percent"
-            ] = monthly_total_sum_match_percent
+            field_dict["monthly_total_sum_match_percent"] = (
+                monthly_total_sum_match_percent
+            )
         if monthly_total_min_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_min_match_percent"
-            ] = monthly_total_min_match_percent
+            field_dict["monthly_total_min_match_percent"] = (
+                monthly_total_min_match_percent
+            )
         if monthly_total_max_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_max_match_percent"
-            ] = monthly_total_max_match_percent
+            field_dict["monthly_total_max_match_percent"] = (
+                monthly_total_max_match_percent
+            )
         if monthly_total_average_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_average_match_percent"
-            ] = monthly_total_average_match_percent
+            field_dict["monthly_total_average_match_percent"] = (
+                monthly_total_average_match_percent
+            )
         if monthly_total_not_null_count_match_percent is not UNSET:
-            field_dict[
-                "monthly_total_not_null_count_match_percent"
-            ] = monthly_total_not_null_count_match_percent
+            field_dict["monthly_total_not_null_count_match_percent"] = (
+                monthly_total_not_null_count_match_percent
+            )
 
         return field_dict
 

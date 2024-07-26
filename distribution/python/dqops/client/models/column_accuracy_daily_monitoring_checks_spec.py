@@ -104,13 +104,13 @@ class ColumnAccuracyDailyMonitoringChecksSpec:
         if daily_total_max_match_percent is not UNSET:
             field_dict["daily_total_max_match_percent"] = daily_total_max_match_percent
         if daily_total_average_match_percent is not UNSET:
-            field_dict[
-                "daily_total_average_match_percent"
-            ] = daily_total_average_match_percent
+            field_dict["daily_total_average_match_percent"] = (
+                daily_total_average_match_percent
+            )
         if daily_total_not_null_count_match_percent is not UNSET:
-            field_dict[
-                "daily_total_not_null_count_match_percent"
-            ] = daily_total_not_null_count_match_percent
+            field_dict["daily_total_not_null_count_match_percent"] = (
+                daily_total_not_null_count_match_percent
+            )
 
         return field_dict
 

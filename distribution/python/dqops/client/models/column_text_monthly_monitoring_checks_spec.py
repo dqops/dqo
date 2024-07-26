@@ -51,9 +51,9 @@ class ColumnTextMonthlyMonitoringChecksSpec:
         monthly_text_length_in_range_percent (Union[Unset, ColumnTextLengthInRangePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnTextMonthlyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnTextMonthlyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     monthly_text_min_length: Union[Unset, "ColumnTextMinLengthCheckSpec"] = UNSET
     monthly_text_max_length: Union[Unset, "ColumnTextMaxLengthCheckSpec"] = UNSET
     monthly_text_mean_length: Union[Unset, "ColumnTextMeanLengthCheckSpec"] = UNSET
@@ -97,9 +97,9 @@ class ColumnTextMonthlyMonitoringChecksSpec:
                 self.monthly_text_length_below_min_length.to_dict()
             )
 
-        monthly_text_length_below_min_length_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_text_length_below_min_length_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_text_length_below_min_length_percent, Unset):
             monthly_text_length_below_min_length_percent = (
                 self.monthly_text_length_below_min_length_percent.to_dict()
@@ -111,9 +111,9 @@ class ColumnTextMonthlyMonitoringChecksSpec:
                 self.monthly_text_length_above_max_length.to_dict()
             )
 
-        monthly_text_length_above_max_length_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_text_length_above_max_length_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_text_length_above_max_length_percent, Unset):
             monthly_text_length_above_max_length_percent = (
                 self.monthly_text_length_above_max_length_percent.to_dict()
@@ -137,25 +137,25 @@ class ColumnTextMonthlyMonitoringChecksSpec:
         if monthly_text_mean_length is not UNSET:
             field_dict["monthly_text_mean_length"] = monthly_text_mean_length
         if monthly_text_length_below_min_length is not UNSET:
-            field_dict[
-                "monthly_text_length_below_min_length"
-            ] = monthly_text_length_below_min_length
+            field_dict["monthly_text_length_below_min_length"] = (
+                monthly_text_length_below_min_length
+            )
         if monthly_text_length_below_min_length_percent is not UNSET:
-            field_dict[
-                "monthly_text_length_below_min_length_percent"
-            ] = monthly_text_length_below_min_length_percent
+            field_dict["monthly_text_length_below_min_length_percent"] = (
+                monthly_text_length_below_min_length_percent
+            )
         if monthly_text_length_above_max_length is not UNSET:
-            field_dict[
-                "monthly_text_length_above_max_length"
-            ] = monthly_text_length_above_max_length
+            field_dict["monthly_text_length_above_max_length"] = (
+                monthly_text_length_above_max_length
+            )
         if monthly_text_length_above_max_length_percent is not UNSET:
-            field_dict[
-                "monthly_text_length_above_max_length_percent"
-            ] = monthly_text_length_above_max_length_percent
+            field_dict["monthly_text_length_above_max_length_percent"] = (
+                monthly_text_length_above_max_length_percent
+            )
         if monthly_text_length_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_text_length_in_range_percent"
-            ] = monthly_text_length_in_range_percent
+            field_dict["monthly_text_length_in_range_percent"] = (
+                monthly_text_length_in_range_percent
+            )
 
         return field_dict
 

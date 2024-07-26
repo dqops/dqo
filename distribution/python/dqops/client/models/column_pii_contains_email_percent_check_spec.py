@@ -64,9 +64,9 @@ class ColumnPiiContainsEmailPercentCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
-    parameters: Union[
-        Unset, "ColumnPiiContainsEmailPercentSensorParametersSpec"
-    ] = UNSET
+    parameters: Union[Unset, "ColumnPiiContainsEmailPercentSensorParametersSpec"] = (
+        UNSET
+    )
     warning: Union[Unset, "MaxPercentRule0WarningParametersSpec"] = UNSET
     error: Union[Unset, "MaxPercentRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET

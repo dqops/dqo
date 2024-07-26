@@ -57,9 +57,9 @@ class ColumnWhitespaceProfilingChecksSpec:
             ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnWhitespaceProfilingChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnWhitespaceProfilingChecksSpecCustomChecks"] = (
+        UNSET
+    )
     profile_empty_text_found: Union[
         Unset, "ColumnWhitespaceEmptyTextFoundCheckSpec"
     ] = UNSET
@@ -121,17 +121,17 @@ class ColumnWhitespaceProfilingChecksSpec:
                 self.profile_null_placeholder_text_percent.to_dict()
             )
 
-        profile_text_surrounded_by_whitespace_found: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        profile_text_surrounded_by_whitespace_found: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.profile_text_surrounded_by_whitespace_found, Unset):
             profile_text_surrounded_by_whitespace_found = (
                 self.profile_text_surrounded_by_whitespace_found.to_dict()
             )
 
-        profile_text_surrounded_by_whitespace_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        profile_text_surrounded_by_whitespace_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.profile_text_surrounded_by_whitespace_percent, Unset):
             profile_text_surrounded_by_whitespace_percent = (
                 self.profile_text_surrounded_by_whitespace_percent.to_dict()
@@ -147,27 +147,27 @@ class ColumnWhitespaceProfilingChecksSpec:
         if profile_whitespace_text_found is not UNSET:
             field_dict["profile_whitespace_text_found"] = profile_whitespace_text_found
         if profile_null_placeholder_text_found is not UNSET:
-            field_dict[
-                "profile_null_placeholder_text_found"
-            ] = profile_null_placeholder_text_found
+            field_dict["profile_null_placeholder_text_found"] = (
+                profile_null_placeholder_text_found
+            )
         if profile_empty_text_percent is not UNSET:
             field_dict["profile_empty_text_percent"] = profile_empty_text_percent
         if profile_whitespace_text_percent is not UNSET:
-            field_dict[
-                "profile_whitespace_text_percent"
-            ] = profile_whitespace_text_percent
+            field_dict["profile_whitespace_text_percent"] = (
+                profile_whitespace_text_percent
+            )
         if profile_null_placeholder_text_percent is not UNSET:
-            field_dict[
-                "profile_null_placeholder_text_percent"
-            ] = profile_null_placeholder_text_percent
+            field_dict["profile_null_placeholder_text_percent"] = (
+                profile_null_placeholder_text_percent
+            )
         if profile_text_surrounded_by_whitespace_found is not UNSET:
-            field_dict[
-                "profile_text_surrounded_by_whitespace_found"
-            ] = profile_text_surrounded_by_whitespace_found
+            field_dict["profile_text_surrounded_by_whitespace_found"] = (
+                profile_text_surrounded_by_whitespace_found
+            )
         if profile_text_surrounded_by_whitespace_percent is not UNSET:
-            field_dict[
-                "profile_text_surrounded_by_whitespace_percent"
-            ] = profile_text_surrounded_by_whitespace_percent
+            field_dict["profile_text_surrounded_by_whitespace_percent"] = (
+                profile_text_surrounded_by_whitespace_percent
+            )
 
         return field_dict
 

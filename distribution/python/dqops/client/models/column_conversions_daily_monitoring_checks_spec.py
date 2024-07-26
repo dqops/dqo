@@ -91,21 +91,21 @@ class ColumnConversionsDailyMonitoringChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_text_parsable_to_boolean_percent is not UNSET:
-            field_dict[
-                "daily_text_parsable_to_boolean_percent"
-            ] = daily_text_parsable_to_boolean_percent
+            field_dict["daily_text_parsable_to_boolean_percent"] = (
+                daily_text_parsable_to_boolean_percent
+            )
         if daily_text_parsable_to_integer_percent is not UNSET:
-            field_dict[
-                "daily_text_parsable_to_integer_percent"
-            ] = daily_text_parsable_to_integer_percent
+            field_dict["daily_text_parsable_to_integer_percent"] = (
+                daily_text_parsable_to_integer_percent
+            )
         if daily_text_parsable_to_float_percent is not UNSET:
-            field_dict[
-                "daily_text_parsable_to_float_percent"
-            ] = daily_text_parsable_to_float_percent
+            field_dict["daily_text_parsable_to_float_percent"] = (
+                daily_text_parsable_to_float_percent
+            )
         if daily_text_parsable_to_date_percent is not UNSET:
-            field_dict[
-                "daily_text_parsable_to_date_percent"
-            ] = daily_text_parsable_to_date_percent
+            field_dict["daily_text_parsable_to_date_percent"] = (
+                daily_text_parsable_to_date_percent
+            )
 
         return field_dict
 

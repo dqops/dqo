@@ -27,9 +27,9 @@ class ColumnBoolMonthlyMonitoringChecksSpec:
         monthly_false_percent (Union[Unset, ColumnFalsePercentCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "ColumnBoolMonthlyMonitoringChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "ColumnBoolMonthlyMonitoringChecksSpecCustomChecks"] = (
+        UNSET
+    )
     monthly_true_percent: Union[Unset, "ColumnTruePercentCheckSpec"] = UNSET
     monthly_false_percent: Union[Unset, "ColumnFalsePercentCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)

@@ -99,9 +99,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
     daily_mean_change_30_days: Union[Unset, "ColumnMeanChange30DaysCheckSpec"] = UNSET
     daily_median_change_1_day: Union[Unset, "ColumnMedianChange1DayCheckSpec"] = UNSET
     daily_median_change_7_days: Union[Unset, "ColumnMedianChange7DaysCheckSpec"] = UNSET
-    daily_median_change_30_days: Union[
-        Unset, "ColumnMedianChange30DaysCheckSpec"
-    ] = UNSET
+    daily_median_change_30_days: Union[Unset, "ColumnMedianChange30DaysCheckSpec"] = (
+        UNSET
+    )
     daily_sum_change_1_day: Union[Unset, "ColumnSumChange1DayCheckSpec"] = UNSET
     daily_sum_change_7_days: Union[Unset, "ColumnSumChange7DaysCheckSpec"] = UNSET
     daily_sum_change_30_days: Union[Unset, "ColumnSumChange30DaysCheckSpec"] = UNSET

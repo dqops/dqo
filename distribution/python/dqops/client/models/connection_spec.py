@@ -73,9 +73,9 @@ class ConnectionSpec:
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
     databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
-    default_grouping_configuration: Union[
-        Unset, "DataGroupingConfigurationSpec"
-    ] = UNSET
+    default_grouping_configuration: Union[Unset, "DataGroupingConfigurationSpec"] = (
+        UNSET
+    )
     schedules: Union[Unset, "DefaultSchedulesSpec"] = UNSET
     incident_grouping: Union[Unset, "ConnectionIncidentGroupingSpec"] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -194,9 +194,9 @@ class ConnectionSpec:
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
-            field_dict[
-                "default_grouping_configuration"
-            ] = default_grouping_configuration
+            field_dict["default_grouping_configuration"] = (
+                default_grouping_configuration
+            )
         if schedules is not UNSET:
             field_dict["schedules"] = schedules
         if incident_grouping is not UNSET:

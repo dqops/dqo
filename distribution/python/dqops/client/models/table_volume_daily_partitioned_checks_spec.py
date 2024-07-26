@@ -43,16 +43,16 @@ class TableVolumeDailyPartitionedChecksSpec:
         daily_partition_row_count_change_30_days (Union[Unset, TableRowCountChange30DaysCheckSpec]):
     """
 
-    custom_checks: Union[
-        Unset, "TableVolumeDailyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
+    custom_checks: Union[Unset, "TableVolumeDailyPartitionedChecksSpecCustomChecks"] = (
+        UNSET
+    )
     daily_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     daily_partition_row_count_anomaly: Union[
         Unset, "TableRowCountAnomalyStationaryPartitionCheckSpec"
     ] = UNSET
-    daily_partition_row_count_change: Union[
-        Unset, "TableRowCountChangeCheckSpec"
-    ] = UNSET
+    daily_partition_row_count_change: Union[Unset, "TableRowCountChangeCheckSpec"] = (
+        UNSET
+    )
     daily_partition_row_count_change_1_day: Union[
         Unset, "TableRowCountChange1DayCheckSpec"
     ] = UNSET
@@ -111,25 +111,25 @@ class TableVolumeDailyPartitionedChecksSpec:
         if daily_partition_row_count is not UNSET:
             field_dict["daily_partition_row_count"] = daily_partition_row_count
         if daily_partition_row_count_anomaly is not UNSET:
-            field_dict[
-                "daily_partition_row_count_anomaly"
-            ] = daily_partition_row_count_anomaly
+            field_dict["daily_partition_row_count_anomaly"] = (
+                daily_partition_row_count_anomaly
+            )
         if daily_partition_row_count_change is not UNSET:
-            field_dict[
-                "daily_partition_row_count_change"
-            ] = daily_partition_row_count_change
+            field_dict["daily_partition_row_count_change"] = (
+                daily_partition_row_count_change
+            )
         if daily_partition_row_count_change_1_day is not UNSET:
-            field_dict[
-                "daily_partition_row_count_change_1_day"
-            ] = daily_partition_row_count_change_1_day
+            field_dict["daily_partition_row_count_change_1_day"] = (
+                daily_partition_row_count_change_1_day
+            )
         if daily_partition_row_count_change_7_days is not UNSET:
-            field_dict[
-                "daily_partition_row_count_change_7_days"
-            ] = daily_partition_row_count_change_7_days
+            field_dict["daily_partition_row_count_change_7_days"] = (
+                daily_partition_row_count_change_7_days
+            )
         if daily_partition_row_count_change_30_days is not UNSET:
-            field_dict[
-                "daily_partition_row_count_change_30_days"
-            ] = daily_partition_row_count_change_30_days
+            field_dict["daily_partition_row_count_change_30_days"] = (
+                daily_partition_row_count_change_30_days
+            )
 
         return field_dict
 

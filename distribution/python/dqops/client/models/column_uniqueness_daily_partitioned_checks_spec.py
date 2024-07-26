@@ -79,12 +79,12 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
         Unset, "ColumnUniquenessDailyPartitionedChecksSpecCustomChecks"
     ] = UNSET
     daily_partition_distinct_count: Union[Unset, "ColumnDistinctCountCheckSpec"] = UNSET
-    daily_partition_distinct_percent: Union[
-        Unset, "ColumnDistinctPercentCheckSpec"
-    ] = UNSET
-    daily_partition_duplicate_count: Union[
-        Unset, "ColumnDuplicateCountCheckSpec"
-    ] = UNSET
+    daily_partition_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = (
+        UNSET
+    )
+    daily_partition_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = (
+        UNSET
+    )
     daily_partition_duplicate_percent: Union[
         Unset, "ColumnDuplicatePercentCheckSpec"
     ] = UNSET
@@ -173,41 +173,41 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
                 self.daily_partition_distinct_percent_change.to_dict()
             )
 
-        daily_partition_distinct_count_change_1_day: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_distinct_count_change_1_day: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_distinct_count_change_1_day, Unset):
             daily_partition_distinct_count_change_1_day = (
                 self.daily_partition_distinct_count_change_1_day.to_dict()
             )
 
-        daily_partition_distinct_count_change_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_distinct_count_change_7_days: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_distinct_count_change_7_days, Unset):
             daily_partition_distinct_count_change_7_days = (
                 self.daily_partition_distinct_count_change_7_days.to_dict()
             )
 
-        daily_partition_distinct_count_change_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_distinct_count_change_30_days: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_distinct_count_change_30_days, Unset):
             daily_partition_distinct_count_change_30_days = (
                 self.daily_partition_distinct_count_change_30_days.to_dict()
             )
 
-        daily_partition_distinct_percent_change_1_day: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_distinct_percent_change_1_day: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_distinct_percent_change_1_day, Unset):
             daily_partition_distinct_percent_change_1_day = (
                 self.daily_partition_distinct_percent_change_1_day.to_dict()
             )
 
-        daily_partition_distinct_percent_change_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        daily_partition_distinct_percent_change_7_days: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.daily_partition_distinct_percent_change_7_days, Unset):
             daily_partition_distinct_percent_change_7_days = (
                 self.daily_partition_distinct_percent_change_7_days.to_dict()
@@ -227,61 +227,61 @@ class ColumnUniquenessDailyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_distinct_count is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count"
-            ] = daily_partition_distinct_count
+            field_dict["daily_partition_distinct_count"] = (
+                daily_partition_distinct_count
+            )
         if daily_partition_distinct_percent is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent"
-            ] = daily_partition_distinct_percent
+            field_dict["daily_partition_distinct_percent"] = (
+                daily_partition_distinct_percent
+            )
         if daily_partition_duplicate_count is not UNSET:
-            field_dict[
-                "daily_partition_duplicate_count"
-            ] = daily_partition_duplicate_count
+            field_dict["daily_partition_duplicate_count"] = (
+                daily_partition_duplicate_count
+            )
         if daily_partition_duplicate_percent is not UNSET:
-            field_dict[
-                "daily_partition_duplicate_percent"
-            ] = daily_partition_duplicate_percent
+            field_dict["daily_partition_duplicate_percent"] = (
+                daily_partition_duplicate_percent
+            )
         if daily_partition_distinct_count_anomaly is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count_anomaly"
-            ] = daily_partition_distinct_count_anomaly
+            field_dict["daily_partition_distinct_count_anomaly"] = (
+                daily_partition_distinct_count_anomaly
+            )
         if daily_partition_distinct_percent_anomaly is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent_anomaly"
-            ] = daily_partition_distinct_percent_anomaly
+            field_dict["daily_partition_distinct_percent_anomaly"] = (
+                daily_partition_distinct_percent_anomaly
+            )
         if daily_partition_distinct_count_change is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count_change"
-            ] = daily_partition_distinct_count_change
+            field_dict["daily_partition_distinct_count_change"] = (
+                daily_partition_distinct_count_change
+            )
         if daily_partition_distinct_percent_change is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent_change"
-            ] = daily_partition_distinct_percent_change
+            field_dict["daily_partition_distinct_percent_change"] = (
+                daily_partition_distinct_percent_change
+            )
         if daily_partition_distinct_count_change_1_day is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count_change_1_day"
-            ] = daily_partition_distinct_count_change_1_day
+            field_dict["daily_partition_distinct_count_change_1_day"] = (
+                daily_partition_distinct_count_change_1_day
+            )
         if daily_partition_distinct_count_change_7_days is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count_change_7_days"
-            ] = daily_partition_distinct_count_change_7_days
+            field_dict["daily_partition_distinct_count_change_7_days"] = (
+                daily_partition_distinct_count_change_7_days
+            )
         if daily_partition_distinct_count_change_30_days is not UNSET:
-            field_dict[
-                "daily_partition_distinct_count_change_30_days"
-            ] = daily_partition_distinct_count_change_30_days
+            field_dict["daily_partition_distinct_count_change_30_days"] = (
+                daily_partition_distinct_count_change_30_days
+            )
         if daily_partition_distinct_percent_change_1_day is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent_change_1_day"
-            ] = daily_partition_distinct_percent_change_1_day
+            field_dict["daily_partition_distinct_percent_change_1_day"] = (
+                daily_partition_distinct_percent_change_1_day
+            )
         if daily_partition_distinct_percent_change_7_days is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent_change_7_days"
-            ] = daily_partition_distinct_percent_change_7_days
+            field_dict["daily_partition_distinct_percent_change_7_days"] = (
+                daily_partition_distinct_percent_change_7_days
+            )
         if daily_partition_distinct_percent_change_30_days is not UNSET:
-            field_dict[
-                "daily_partition_distinct_percent_change_30_days"
-            ] = daily_partition_distinct_percent_change_30_days
+            field_dict["daily_partition_distinct_percent_change_30_days"] = (
+                daily_partition_distinct_percent_change_30_days
+            )
 
         return field_dict
 

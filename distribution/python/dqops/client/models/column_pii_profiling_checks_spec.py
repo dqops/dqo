@@ -98,17 +98,17 @@ class ColumnPiiProfilingChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if profile_contains_usa_phone_percent is not UNSET:
-            field_dict[
-                "profile_contains_usa_phone_percent"
-            ] = profile_contains_usa_phone_percent
+            field_dict["profile_contains_usa_phone_percent"] = (
+                profile_contains_usa_phone_percent
+            )
         if profile_contains_email_percent is not UNSET:
-            field_dict[
-                "profile_contains_email_percent"
-            ] = profile_contains_email_percent
+            field_dict["profile_contains_email_percent"] = (
+                profile_contains_email_percent
+            )
         if profile_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "profile_contains_usa_zipcode_percent"
-            ] = profile_contains_usa_zipcode_percent
+            field_dict["profile_contains_usa_zipcode_percent"] = (
+                profile_contains_usa_zipcode_percent
+            )
         if profile_contains_ip4_percent is not UNSET:
             field_dict["profile_contains_ip4_percent"] = profile_contains_ip4_percent
         if profile_contains_ip6_percent is not UNSET:

@@ -83,17 +83,17 @@ class ColumnAcceptedValuesMonthlyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        monthly_partition_text_found_in_set_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_text_found_in_set_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_text_found_in_set_percent, Unset):
             monthly_partition_text_found_in_set_percent = (
                 self.monthly_partition_text_found_in_set_percent.to_dict()
             )
 
-        monthly_partition_number_found_in_set_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_number_found_in_set_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_number_found_in_set_percent, Unset):
             monthly_partition_number_found_in_set_percent = (
                 self.monthly_partition_number_found_in_set_percent.to_dict()
@@ -153,33 +153,33 @@ class ColumnAcceptedValuesMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_text_found_in_set_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_found_in_set_percent"
-            ] = monthly_partition_text_found_in_set_percent
+            field_dict["monthly_partition_text_found_in_set_percent"] = (
+                monthly_partition_text_found_in_set_percent
+            )
         if monthly_partition_number_found_in_set_percent is not UNSET:
-            field_dict[
-                "monthly_partition_number_found_in_set_percent"
-            ] = monthly_partition_number_found_in_set_percent
+            field_dict["monthly_partition_number_found_in_set_percent"] = (
+                monthly_partition_number_found_in_set_percent
+            )
         if monthly_partition_expected_text_values_in_use_count is not UNSET:
-            field_dict[
-                "monthly_partition_expected_text_values_in_use_count"
-            ] = monthly_partition_expected_text_values_in_use_count
+            field_dict["monthly_partition_expected_text_values_in_use_count"] = (
+                monthly_partition_expected_text_values_in_use_count
+            )
         if monthly_partition_expected_texts_in_top_values_count is not UNSET:
-            field_dict[
-                "monthly_partition_expected_texts_in_top_values_count"
-            ] = monthly_partition_expected_texts_in_top_values_count
+            field_dict["monthly_partition_expected_texts_in_top_values_count"] = (
+                monthly_partition_expected_texts_in_top_values_count
+            )
         if monthly_partition_expected_numbers_in_use_count is not UNSET:
-            field_dict[
-                "monthly_partition_expected_numbers_in_use_count"
-            ] = monthly_partition_expected_numbers_in_use_count
+            field_dict["monthly_partition_expected_numbers_in_use_count"] = (
+                monthly_partition_expected_numbers_in_use_count
+            )
         if monthly_partition_text_valid_country_code_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_valid_country_code_percent"
-            ] = monthly_partition_text_valid_country_code_percent
+            field_dict["monthly_partition_text_valid_country_code_percent"] = (
+                monthly_partition_text_valid_country_code_percent
+            )
         if monthly_partition_text_valid_currency_code_percent is not UNSET:
-            field_dict[
-                "monthly_partition_text_valid_currency_code_percent"
-            ] = monthly_partition_text_valid_currency_code_percent
+            field_dict["monthly_partition_text_valid_currency_code_percent"] = (
+                monthly_partition_text_valid_currency_code_percent
+            )
 
         return field_dict
 

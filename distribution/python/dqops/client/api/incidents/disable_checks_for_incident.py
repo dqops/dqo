@@ -14,6 +14,7 @@ def _get_kwargs(
     month: int,
     incident_id: str,
 ) -> Dict[str, Any]:
+
     pass
 
     return {

@@ -132,9 +132,9 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
     monthly_partition_number_above_max_value: Union[
         Unset, "ColumnNumberAboveMaxValueCheckSpec"
     ] = UNSET
-    monthly_partition_negative_values: Union[
-        Unset, "ColumnNegativeCountCheckSpec"
-    ] = UNSET
+    monthly_partition_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_negative_values_percent: Union[
         Unset, "ColumnNegativePercentCheckSpec"
     ] = UNSET
@@ -154,9 +154,9 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
     monthly_partition_max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
     monthly_partition_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
     monthly_partition_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
-    monthly_partition_median_in_range: Union[
-        Unset, "ColumnMedianInRangeCheckSpec"
-    ] = UNSET
+    monthly_partition_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = (
+        UNSET
+    )
     monthly_partition_percentile_in_range: Union[
         Unset, "ColumnPercentileInRangeCheckSpec"
     ] = UNSET
@@ -327,9 +327,9 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
                 self.monthly_partition_sample_stddev_in_range.to_dict()
             )
 
-        monthly_partition_population_stddev_in_range: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_population_stddev_in_range: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_population_stddev_in_range, Unset):
             monthly_partition_population_stddev_in_range = (
                 self.monthly_partition_population_stddev_in_range.to_dict()
@@ -341,9 +341,9 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
                 self.monthly_partition_sample_variance_in_range.to_dict()
             )
 
-        monthly_partition_population_variance_in_range: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_population_variance_in_range: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_population_variance_in_range, Unset):
             monthly_partition_population_variance_in_range = (
                 self.monthly_partition_population_variance_in_range.to_dict()
@@ -379,9 +379,9 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
                 self.monthly_partition_non_negative_values.to_dict()
             )
 
-        monthly_partition_non_negative_values_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
+        monthly_partition_non_negative_values_percent: Union[Unset, Dict[str, Any]] = (
+            UNSET
+        )
         if not isinstance(self.monthly_partition_non_negative_values_percent, Unset):
             monthly_partition_non_negative_values_percent = (
                 self.monthly_partition_non_negative_values_percent.to_dict()
@@ -393,117 +393,117 @@ class ColumnNumericMonthlyPartitionedChecksSpec:
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
         if monthly_partition_number_below_min_value is not UNSET:
-            field_dict[
-                "monthly_partition_number_below_min_value"
-            ] = monthly_partition_number_below_min_value
+            field_dict["monthly_partition_number_below_min_value"] = (
+                monthly_partition_number_below_min_value
+            )
         if monthly_partition_number_above_max_value is not UNSET:
-            field_dict[
-                "monthly_partition_number_above_max_value"
-            ] = monthly_partition_number_above_max_value
+            field_dict["monthly_partition_number_above_max_value"] = (
+                monthly_partition_number_above_max_value
+            )
         if monthly_partition_negative_values is not UNSET:
-            field_dict[
-                "monthly_partition_negative_values"
-            ] = monthly_partition_negative_values
+            field_dict["monthly_partition_negative_values"] = (
+                monthly_partition_negative_values
+            )
         if monthly_partition_negative_values_percent is not UNSET:
-            field_dict[
-                "monthly_partition_negative_values_percent"
-            ] = monthly_partition_negative_values_percent
+            field_dict["monthly_partition_negative_values_percent"] = (
+                monthly_partition_negative_values_percent
+            )
         if monthly_partition_number_below_min_value_percent is not UNSET:
-            field_dict[
-                "monthly_partition_number_below_min_value_percent"
-            ] = monthly_partition_number_below_min_value_percent
+            field_dict["monthly_partition_number_below_min_value_percent"] = (
+                monthly_partition_number_below_min_value_percent
+            )
         if monthly_partition_number_above_max_value_percent is not UNSET:
-            field_dict[
-                "monthly_partition_number_above_max_value_percent"
-            ] = monthly_partition_number_above_max_value_percent
+            field_dict["monthly_partition_number_above_max_value_percent"] = (
+                monthly_partition_number_above_max_value_percent
+            )
         if monthly_partition_number_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_partition_number_in_range_percent"
-            ] = monthly_partition_number_in_range_percent
+            field_dict["monthly_partition_number_in_range_percent"] = (
+                monthly_partition_number_in_range_percent
+            )
         if monthly_partition_integer_in_range_percent is not UNSET:
-            field_dict[
-                "monthly_partition_integer_in_range_percent"
-            ] = monthly_partition_integer_in_range_percent
+            field_dict["monthly_partition_integer_in_range_percent"] = (
+                monthly_partition_integer_in_range_percent
+            )
         if monthly_partition_min_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_min_in_range"
-            ] = monthly_partition_min_in_range
+            field_dict["monthly_partition_min_in_range"] = (
+                monthly_partition_min_in_range
+            )
         if monthly_partition_max_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_max_in_range"
-            ] = monthly_partition_max_in_range
+            field_dict["monthly_partition_max_in_range"] = (
+                monthly_partition_max_in_range
+            )
         if monthly_partition_sum_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_sum_in_range"
-            ] = monthly_partition_sum_in_range
+            field_dict["monthly_partition_sum_in_range"] = (
+                monthly_partition_sum_in_range
+            )
         if monthly_partition_mean_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_mean_in_range"
-            ] = monthly_partition_mean_in_range
+            field_dict["monthly_partition_mean_in_range"] = (
+                monthly_partition_mean_in_range
+            )
         if monthly_partition_median_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_median_in_range"
-            ] = monthly_partition_median_in_range
+            field_dict["monthly_partition_median_in_range"] = (
+                monthly_partition_median_in_range
+            )
         if monthly_partition_percentile_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_percentile_in_range"
-            ] = monthly_partition_percentile_in_range
+            field_dict["monthly_partition_percentile_in_range"] = (
+                monthly_partition_percentile_in_range
+            )
         if monthly_partition_percentile_10_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_percentile_10_in_range"
-            ] = monthly_partition_percentile_10_in_range
+            field_dict["monthly_partition_percentile_10_in_range"] = (
+                monthly_partition_percentile_10_in_range
+            )
         if monthly_partition_percentile_25_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_percentile_25_in_range"
-            ] = monthly_partition_percentile_25_in_range
+            field_dict["monthly_partition_percentile_25_in_range"] = (
+                monthly_partition_percentile_25_in_range
+            )
         if monthly_partition_percentile_75_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_percentile_75_in_range"
-            ] = monthly_partition_percentile_75_in_range
+            field_dict["monthly_partition_percentile_75_in_range"] = (
+                monthly_partition_percentile_75_in_range
+            )
         if monthly_partition_percentile_90_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_percentile_90_in_range"
-            ] = monthly_partition_percentile_90_in_range
+            field_dict["monthly_partition_percentile_90_in_range"] = (
+                monthly_partition_percentile_90_in_range
+            )
         if monthly_partition_sample_stddev_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_sample_stddev_in_range"
-            ] = monthly_partition_sample_stddev_in_range
+            field_dict["monthly_partition_sample_stddev_in_range"] = (
+                monthly_partition_sample_stddev_in_range
+            )
         if monthly_partition_population_stddev_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_population_stddev_in_range"
-            ] = monthly_partition_population_stddev_in_range
+            field_dict["monthly_partition_population_stddev_in_range"] = (
+                monthly_partition_population_stddev_in_range
+            )
         if monthly_partition_sample_variance_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_sample_variance_in_range"
-            ] = monthly_partition_sample_variance_in_range
+            field_dict["monthly_partition_sample_variance_in_range"] = (
+                monthly_partition_sample_variance_in_range
+            )
         if monthly_partition_population_variance_in_range is not UNSET:
-            field_dict[
-                "monthly_partition_population_variance_in_range"
-            ] = monthly_partition_population_variance_in_range
+            field_dict["monthly_partition_population_variance_in_range"] = (
+                monthly_partition_population_variance_in_range
+            )
         if monthly_partition_invalid_latitude is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_latitude"
-            ] = monthly_partition_invalid_latitude
+            field_dict["monthly_partition_invalid_latitude"] = (
+                monthly_partition_invalid_latitude
+            )
         if monthly_partition_valid_latitude_percent is not UNSET:
-            field_dict[
-                "monthly_partition_valid_latitude_percent"
-            ] = monthly_partition_valid_latitude_percent
+            field_dict["monthly_partition_valid_latitude_percent"] = (
+                monthly_partition_valid_latitude_percent
+            )
         if monthly_partition_invalid_longitude is not UNSET:
-            field_dict[
-                "monthly_partition_invalid_longitude"
-            ] = monthly_partition_invalid_longitude
+            field_dict["monthly_partition_invalid_longitude"] = (
+                monthly_partition_invalid_longitude
+            )
         if monthly_partition_valid_longitude_percent is not UNSET:
-            field_dict[
-                "monthly_partition_valid_longitude_percent"
-            ] = monthly_partition_valid_longitude_percent
+            field_dict["monthly_partition_valid_longitude_percent"] = (
+                monthly_partition_valid_longitude_percent
+            )
         if monthly_partition_non_negative_values is not UNSET:
-            field_dict[
-                "monthly_partition_non_negative_values"
-            ] = monthly_partition_non_negative_values
+            field_dict["monthly_partition_non_negative_values"] = (
+                monthly_partition_non_negative_values
+            )
         if monthly_partition_non_negative_values_percent is not UNSET:
-            field_dict[
-                "monthly_partition_non_negative_values_percent"
-            ] = monthly_partition_non_negative_values_percent
+            field_dict["monthly_partition_non_negative_values_percent"] = (
+                monthly_partition_non_negative_values_percent
+            )
 
         return field_dict
 
