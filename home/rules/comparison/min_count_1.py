@@ -19,8 +19,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinCountRuleParametersSpec:
-    min_count: int
+class MinCount1RuleParametersSpec:
+    pass
 
 
 class HistoricDataPoint:
@@ -39,7 +39,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinCountRuleParametersSpec
+    parameters: MinCount1RuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -65,9 +65,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    expected_value = 0
+    expected_value = 1
     lower_bound = expected_value
     upper_bound = None
-    passed = rule_parameters.actual_value > expected_value
+    passed = rule_parameters.actual_value >= expected_value
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

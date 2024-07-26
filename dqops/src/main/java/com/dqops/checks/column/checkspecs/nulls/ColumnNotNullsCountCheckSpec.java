@@ -33,10 +33,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
- * Raises a data quality issue when the count of non-null values is below *min_count*.
- * The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number
- * to assert that a column has at least that many non-null values.
+ * Verifies that a column contains a minimum number of non-null values.
+ * The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
