@@ -50,6 +50,8 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
             put("daily_not_nulls_count", o -> o.dailyNotNullsCount);
             put("daily_not_nulls_percent", o -> o.dailyNotNullsPercent);
 
+            put("daily_empty_column_found", o -> o.dailyEmptyColumnFound);
+
             put("daily_nulls_percent_change", o ->o.dailyNullsPercentChange);
             put("daily_nulls_percent_change_1_day", o ->o.dailyNullsPercentChange1Day);
             put("daily_nulls_percent_change_7_days", o ->o.dailyNullsPercentChange7Days);
@@ -71,6 +73,9 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
 
     @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private EmptyColumnFoundCheckSpec dailyEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout.")
     private ColumnNullPercentChangeCheckSpec dailyNullsPercentChange;
@@ -175,6 +180,24 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyNotNullsPercent, dailyNotNullsPercent));
         this.dailyNotNullsPercent = dailyNotNullsPercent;
         propagateHierarchyIdToField(dailyNotNullsPercent, "daily_not_nulls_percent");
+    }
+
+    /**
+     * Returns an empty column found check specification.
+     * @return Empty column found check specification.
+     */
+    public EmptyColumnFoundCheckSpec getDailyEmptyColumnFound() {
+        return dailyEmptyColumnFound;
+    }
+
+    /**
+     * Sets an empty column found check specification
+     * @param dailyEmptyColumnFound Empty column found check specification.
+     */
+    public void setDailyEmptyColumnFound(EmptyColumnFoundCheckSpec dailyEmptyColumnFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyEmptyColumnFound, dailyEmptyColumnFound));
+        this.dailyEmptyColumnFound = dailyEmptyColumnFound;
+        propagateHierarchyIdToField(dailyEmptyColumnFound, "daily_empty_column_found");
     }
 
     /**
