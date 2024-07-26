@@ -222,7 +222,7 @@ export default function TableQualityStatus({
           </div>
         </div>
       </div>
-      <div className="flex gap-x-5">
+      <div className="flex gap-x-5 ml-4">
         <CurrentTableStatus tableDataQualityStatus={tableDataQualityStatus} />
         <TotalChecksExecuted tableDataQualityStatus={tableDataQualityStatus} />
       </div>

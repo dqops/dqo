@@ -69,7 +69,10 @@ export default function TableQualityStatusCategory({
   return (
     <React.Fragment>
       <tr key="row_table_level_checks" style={{ margin: 0 }}>
-        <td key="cell_table_level_checks_title" className="font-bold px-4">
+        <td
+          key="cell_table_level_checks_title"
+          className="font-bold px-4 whitespace-nowrap"
+        >
           Table level checks
         </td>
         {Object.keys(firstLevelChecks).map((key) => (
