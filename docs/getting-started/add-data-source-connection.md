@@ -151,13 +151,6 @@ then clicking the **Job scheduler** toggle button.
 There are several tabs to explore in the **Data sources** section that differs depending on the selection of the elements in the tree view on the left (connection, schema, table or column):
 The following tabs are shown at the connection level:
 
-- **Connection** - provide details about the connection parameters.
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
-- **Comments** - allows adding comments to your connection.
-- **Labels** - allows adding labels to your connection.
-- **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
-- **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
-- **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../integrations/webhooks/index.md) whenever a new incident is created or modified.
 
 ## Explore the table-level tabs in the Data sources section
 

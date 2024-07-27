@@ -21,12 +21,17 @@ class DashboardsFolderSpec:
             the value to false to show this folder only when advanced dashboards are enabled.
         dashboards (Union[Unset, List['DashboardSpec']]): List of data quality dashboard at this level.
         folders (Union[Unset, List['DashboardsFolderSpec']]): List of data quality dashboard folders at this level.
+        hide_folder (Union[Unset, bool]): Hides the whole folder and all nested dashboards from the navigation tree. If
+            you want to hide some of the build-in folders, update the settings/dashboardslist.dqodashboards.yaml file in the
+            DQOps user home folder, create an empty folder with the same name as a built-in folder, and set the value of
+            this field to true.
     """
 
     folder_name: Union[Unset, str] = UNSET
     standard: Union[Unset, bool] = UNSET
     dashboards: Union[Unset, List["DashboardSpec"]] = UNSET
     folders: Union[Unset, List["DashboardsFolderSpec"]] = UNSET
+    hide_folder: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,6 +53,8 @@ class DashboardsFolderSpec:
 
                 folders.append(folders_item)
 
+        hide_folder = self.hide_folder
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -59,6 +66,8 @@ class DashboardsFolderSpec:
             field_dict["dashboards"] = dashboards
         if folders is not UNSET:
             field_dict["folders"] = folders
+        if hide_folder is not UNSET:
+            field_dict["hide_folder"] = hide_folder
 
         return field_dict
 
@@ -85,11 +94,14 @@ class DashboardsFolderSpec:
 
             folders.append(folders_item)
 
+        hide_folder = d.pop("hide_folder", UNSET)
+
         dashboards_folder_spec = cls(
             folder_name=folder_name,
             standard=standard,
             dashboards=dashboards,
             folders=folders,
+            hide_folder=hide_folder,
         )
 
         dashboards_folder_spec.additional_properties = d

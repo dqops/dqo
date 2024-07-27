@@ -34,7 +34,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
@@ -159,8 +159,8 @@ public interface UserHome extends Flushable, HierarchyNode {
     ColumnDefaultChecksPatternList getColumnDefaultChecksPatterns();
 
     /**
-     * Returns a default notification webhooks.
+     * Returns a default notification addresses.
      * @return Collection of default observability checks definitions.
      */
-    DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
+    DefaultIncidentNotificationsWrapper getDefaultIncidentNotifications();
 }

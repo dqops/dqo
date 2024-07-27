@@ -81,21 +81,28 @@ To learn more about Incidents refer to the [Data quality incident management, gr
 
 To access **Incidents summary** click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
 
-![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary.png){ loading=lazy; width="1200px" }
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary2.png){ loading=lazy; width="1200px" }
 
-
-The **Incidents summary** screen allows you to view incidents grouped by either check category or data quality dimension. 
-You can switch between these groupings using the radio buttons provided.
+The **Incidents summary** screen provides an overview of data quality incidents categorized by either check category or data quality dimension.
+You can easily switch between these groupings using the provided radio buttons.
 The **Refresh** button located at the top right of the screen, allows you to refresh the displayed incident data.
 
-The summary screen displays incidents in a table format with the following columns:
+At the top of The Incidents summary screen, there are two sections displaying the summaries of **Open** and **Acknowledged** incidents.
+Each section is divided into three blocks based on severity level: Warnings, Errors and Fatal errors. In each block,
+there is a summary of new incidents from the last 2 months along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
+current month and previous month.
 
+Below the **Open** and **Acknowledged** incidents summaries, there is a table that list incidents grouped by the selected check category or the quality dimension, depending on your grouping selection.
+The table includes the following columns:
+
+- **Severity** - Indicates the severity of the incident with colored squares (yellow for warning, orange for error and red for fatal error)
+- **Total issues** - Displays the total number of times the data quality issue has occurred in the incident.
 - **Connection** - The name of the connection where the incident was detected.
 - **Schema** - The schema name within the connection where the incident occurred.
 - **Table** - The name of the table where the incident was detected.
 - **Quality dimension** or **Check category** (depending on chosen grouping) - This column will display either the data quality dimension associated with the incident (e.g., Completeness, Validity, Consistency) or the check category that triggered the incident (e.g., anomaly, datetime, nulls, uniqueness).
-- **First seen** - The date the incident was first detected.
-- **Last seen** - The date the incident was last detected.
+- **First seen** - Shows the date the incident was first detected.
+- **Last seen** - Displays the date the incident was last detected.
 
 Each table has a **Show more** button. Clicking this button will navigate you to the dedicated Incidents screen for a more detailed view.
 
@@ -135,33 +142,45 @@ The right side of the navigation bar provides access to the main settings and so
 
 ## Tree view
 
+The tree view changes depending on the section chosen in the navigation bar.
+
+
+### **Data Source, Profiling, Monitoring Checks and Partition Checks tree view**
+
 The tree view at the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** displays all the added sources and allows
-expanding its schemas, tables, and columns. Additionally, on the Profiling, Monitoring Checks and Partition Checks sections the three view
+expanding its schemas, tables, and columns. Additionally, in the Profiling, Monitoring Checks and Partition Checks sections, the three view
 contains the list of checks.
 
-![DQOps tree view - monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-monitoring.png)
+![DQOps tree view - monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view1.png){ loading=lazy }
 
-Clicking on an object in the tree view displays settings, statistics or a list of table or column data quality checks on
-the main workspace. Clicking on an object always opens a new tab in the main workspace.
+Clicking on an object in the tree view displays available components in the main workspace depending on the chosen section. 
 
-### **Profiling, Monitoring Checks and Partition Checks tree view**
+For efficient navigation, a funnel icon is available to filter the list of tables and columns. By clicking the funnel icon,
+a filter dialog opens, allowing users to refine the list based on table or column names or partial matches.
 
-In the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, when you configure checks on any table or column, this
-table or column is displayed in bold on the tree view. In the **Data Source** section the bolded column or table name indicates
-that there is a check configured on any category.
+**Visual cues for check configuration in the tree view**
 
-![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
+- In the **Data Source** section, a table or column with a bold font indicates a configured check on any category.
+- In the **Profiling**, **Monitoring Checks**, and **Partition Checks** sections, tables or columns with configured checks are displayed in bold font.
+- In the **Partition Checks** section, tables without configured data or a datetime column needed to run partition checks are displayed in orange font to highlight potential issues.
 
-Clicking on the tree vertical dots at the end of each element in the tree view in the **Profiling**, **Monitoring Checks**
-and **Partition Checks** sections opens a menu that allows to run the following functions:
+**Tree view context menu**
 
-- Run all activated checks on connection, schema, table or column
-- Collect statistics
-- Import metadata
-- Add schema, table or column
-- Refresh connection, schema, table or column
-- Delete connection, schema, table or column
-- Delete data
+Clicking the vertical dots at the end of each element in the tree view reveals a context menu offering various functions.
+
+![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu3.png){ loading=lazy; width="1200px" }
+
+The available options depend on the selected element type.
+
+- **Run checks:** Launches a dialog to execute checks on specific connections, tables, or columns.
+- **Collect statistics:** Launches a dialog to gathers statistics for specific connections, tables, or columns.
+- **Import tables:** Open a screen for importing schemas and tables.
+- **Copy name:** Copies the element name to the clipboard.
+- **Refresh:** Updates the data for the selected connection, schema, table, or column.
+- **Add schema/table/column:** Add new schemas, table or column.
+- **Delete connection/table:** Allow deleting connection or table.
+- **Delete data quality results:** Launches a dialog to delete results from statistics, sensors, checks, errors, etc. 
+- **Reimport metadata:** Allows reimporting tables metadata.
 
 ### **Data Quality Dashboards tree view**
 
@@ -173,7 +192,8 @@ When you hover your cursor over a dashboard name, thumbnails will appear.
 
 ### **Incidents tree view**
 
-The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the last 15 days (including today) in brackets.
+The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the
+last 15 days (including today) in brackets. The connections with new incidents are displayed in bold font.
 
 ![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents.png)
 
@@ -210,49 +230,63 @@ These tabs are stored locally, which means that you can always return to them ev
 
 If the tab's content no longer exists, a pop-up notification will appear and the corresponding tab will close automatically.
 
-![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png){ loading=lazy; width="1200px" }
+![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png){ loading=lazy; width="800px" }
 
 ### **Main workspace tabs**
 
-Below we explain the main tabs of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
+Below we explain the main tabs of the workspace in the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
+The number of tabs differs depending on the selected element from the tree on the left. 
+
+![Main workspace tabs - Data Source](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-data-source1.png){ loading=lazy; width="1200px" }
+
+In the **Data Source** section, you can access:
+
+- **Connection:** Provides details about the connection parameters.
+- **Schedule:** Allows you to [configure of the check execution schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) at the connection level.
+- **Comments:** Allows adding comments to your connection.
+- **Labels:** Allows adding labels to your connection.
+- **Tables:** Displays a summary of the data quality status for tables in this connection. 
+- **Columns:** Displays a summary of the data quality status for columns in this connection. 
+- **Default grouping template:** Allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
+- **Incidents and notifications:** Allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../integrations/webhooks/index.md) whenever a new incident is created or modified.
+
+![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling2.png){ loading=lazy; width="1200px" }
 
 In the **Profiling** section you can access:
 
-![Main workspace tabs - Profiling](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-profiling.png){ loading=lazy; width="1200px" }
+- **Basic data statistics:** Allows you to [collect basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) about data sources during the data profiling stage.
+- **Table preview:** Provides a summary preview of the table. 
+- **Table quality status:** Provides a summary of the results of the executed profiling checks.
+- **Profiling checks editor:** Gives access to the Check editor of profiling checks.
+- **Table comparison:** Enables you to [identify differences between two tables](../working-with-dqo/compare-tables-between-data-sources.md).
 
-- **Basic data statistics** that allows you to [collect basic statistics](../working-with-dqo/collecting-basic-data-statistics.md) about data sources during the data profiling stage.
-- **Table preview** that provides a summary preview of the table. 
-- **Table quality status** provides a summary of the results of the executed profiling checks.
-- **Profiling checks** that gives access to the Check editor.
-- **Table comparison** that enables you to [identify differences between two tables](../working-with-dqo/compare-tables-between-data-sources.md).
+![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring2.png){ loading=lazy; width="1200px" }
 
 In the **Monitoring Checks** section you can access
 
-![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring.png){ loading=lazy; width="1200px" }
+- **Table quality status:** Provides a summary of the results of the executed monitoring checks.
+    * Free version: Summary of daily monitoring checks only.
+    * Paid versions: Summary of both daily and monthly monitoring checks.
+- **Data quality checks editor:** Provides access to the Check editor for monitoring checks. 
+    * Free version: Limited to running daily monitoring checks.
+    * Paid versions: Enables running both daily and monthly monitoring checks. 
+- **Table comparisons:** Enables you to [identify differences between two tables using monitoring checks](../working-with-dqo/compare-tables-between-data-sources.md).
 
+![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition2.png){ loading=lazy; width="1200px" }
 
-- **Table quality status (daily checks)** provides a summary of the results of the executed daily monitoring checks.
-- **Daily checks** that gives access to the Check editor for daily checks.
-- **Table quality status (monthly checks)** provides a summary of the results of the executed monthly monitoring checks.
-- **Monthly checks** that gives access to the Check editor for monthly checks.
-- **Daily comparisons** that enables you to [identify differences between two tables using daily checks](../working-with-dqo/compare-tables-between-data-sources.md).
-- **Monthly comparisons** that enables you to [identify differences between two tables using monthly checks](../working-with-dqo/compare-tables-between-data-sources.md).
-  
 In the **Partition Checks** section you can access
 
-![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition.png){ loading=lazy; width="1200px" }
-
-- **Table quality status (daily checks)** provides a summary of the results of the executed daily partition checks.
-- **Daily checks** that gives access to the Check editor for daily checks.
-- **Table quality status (monthly checks)** provides a summary of the results of the executed monthly partition checks.
-- **Monthly checks** that gives access to the Check editor for monthly checks.
-- **Daily comparisons** that enables you to [identify differences between two tables using daily partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
-- **Monthly comparisons** that enables you to [identify differences between two tables using monthly partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
-
+- **Table quality status:** Provides a summary of the results of the executed partition checks.
+    * Free version: Summary of daily partition checks only.
+    * Paid versions: Summary of both daily and monthly partition checks. 
+- **Data quality checks editor:** Provides access to the Check editor for partition checks.
+    * Free version: Limited to running daily partition checks.
+    * Paid versions: Enables running both daily and monthly partition checks.
+- **Table comparisons:** Enables you to [identify differences between two tables using partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
 
 ### **Check editor**
 
-The Check editor screen allows you to work with checks.
+The Check editor screen allows you to work with checks. There are two types of checks editors simplified and advanced. 
 
 ![Main workspace tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor3.png){ loading=lazy; width="1200px" }
 

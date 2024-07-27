@@ -28,7 +28,7 @@ import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.configuration.DqoPythonConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
-import com.dqops.core.incidents.IncidentNotificationMessage;
+import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;

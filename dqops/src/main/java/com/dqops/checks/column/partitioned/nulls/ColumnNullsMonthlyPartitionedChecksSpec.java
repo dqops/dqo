@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -49,6 +46,8 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
             put("monthly_partition_nulls_percent", o -> o.monthlyPartitionNullsPercent);
             put("monthly_partition_not_nulls_count", o -> o.monthlyPartitionNotNullsCount);
             put("monthly_partition_not_nulls_percent", o -> o.monthlyPartitionNotNullsPercent);
+
+            put("monthly_partition_empty_column_found", o -> o.monthlyPartitionEmptyColumnFound);
         }
     };
 
@@ -58,11 +57,14 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each monthly partition.")
     private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
 
     @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores a separate data quality check result for each monthly partition.")
+    private EmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound;
 
     /**
      * Returns a nulls count check.
@@ -134,6 +136,24 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionNotNullsPercent, monthlyPartitionNotNullsPercent));
         this.monthlyPartitionNotNullsPercent = monthlyPartitionNotNullsPercent;
         propagateHierarchyIdToField(monthlyPartitionNotNullsPercent, "monthly_partition_not_nulls_percent");
+    }
+
+    /**
+     * Returns an empty column found check specification.
+     * @return Empty column found check specification.
+     */
+    public EmptyColumnFoundCheckSpec getMonthlyPartitionEmptyColumnFound() {
+        return monthlyPartitionEmptyColumnFound;
+    }
+
+    /**
+     * Sets an empty column found check specification
+     * @param monthlyPartitionEmptyColumnFound Empty column found check specification.
+     */
+    public void setMonthlyPartitionEmptyColumnFound(EmptyColumnFoundCheckSpec monthlyPartitionEmptyColumnFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionEmptyColumnFound, monthlyPartitionEmptyColumnFound));
+        this.monthlyPartitionEmptyColumnFound = monthlyPartitionEmptyColumnFound;
+        propagateHierarchyIdToField(monthlyPartitionEmptyColumnFound, "monthly_partition_empty_column_found");
     }
 
     /**

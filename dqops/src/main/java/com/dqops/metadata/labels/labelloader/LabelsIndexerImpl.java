@@ -334,7 +334,7 @@ public class LabelsIndexerImpl implements LabelsIndexer {
         this.queueEmptyFuture = new CompletableFuture<>();
         this.queueEmptyFuture.complete(0);
 
-        this.loadObjectRequestSink = Sinks.many().unicast().onBackpressureBuffer();
+        this.loadObjectRequestSink = Sinks.many().multicast().onBackpressureBuffer();
         Flux<List<LabelRefreshKey>> requestLoadFlux = this.loadObjectRequestSink.asFlux()
                 .onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE)
                 .buffer(Duration.ofMillis(50))  // wait 50 millis, maybe multiple file system updates are made, we want to merge all file changes

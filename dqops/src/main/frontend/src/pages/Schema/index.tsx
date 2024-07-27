@@ -48,7 +48,7 @@ const SchemaPage = () => {
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
             {
-              label: 'Data quality checks',
+              label: 'Multiple data quality checks editor',
               value: 'multiple_checks'
             }
           ]

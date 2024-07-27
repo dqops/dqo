@@ -225,9 +225,13 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
             DashboardsFolderSpec otherFolder = otherFolderList.getFolderByName(folderSpec.getFolderName());
             if (otherFolder != null) {
                 DashboardsFolderSpec mergedFolder = folderSpec.merge(otherFolder);
-                cloned.add(mergedFolder);
+                if (mergedFolder != null) {
+                    cloned.add(mergedFolder);
+                }
             } else {
-                cloned.add(folderSpec);
+                if (!folderSpec.isHideFolder()) {
+                    cloned.add(folderSpec);
+                }
             }
         }
 

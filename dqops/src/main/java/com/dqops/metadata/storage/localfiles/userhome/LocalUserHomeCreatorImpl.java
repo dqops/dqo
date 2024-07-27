@@ -25,16 +25,13 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
-import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
-import com.dqops.metadata.credentials.SharedCredentialList;
-import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -283,6 +280,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             Path customDashboardsPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DASHBOARDS_SPEC_FILE_NAME_YAML);
             if (!Files.exists(customDashboardsPath)) {
                 DashboardYaml dashboardYaml = new DashboardYaml();
+                DashboardsFolderListSpec dashboardsFolderListSpec = dashboardYaml.getSpec();
+                addDefaultDashboardFolders(dashboardsFolderListSpec);
                 String emptyDashboards = this.yamlSerializer.serialize(dashboardYaml);
                 Files.writeString(customDashboardsPath, emptyDashboards);
             }
@@ -355,6 +354,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         catch (Exception ex) {
             throw new LocalFileSystemException("Cannot initialize a DQOps User home at " + userHomePathString, ex);
         }
+    }
+
+    /**
+     * Adds default dashboard folders.
+     * @param dashboardsFolderListSpec Target object to add default dashboard folders.
+     */
+    private void addDefaultDashboardFolders(DashboardsFolderListSpec dashboardsFolderListSpec) {
+        dashboardsFolderListSpec.getOrCreateChildFolder("Profiling");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Monitoring");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Partitions");
+        dashboardsFolderListSpec.getOrCreateChildFolder("DQOps usage");
+        dashboardsFolderListSpec.getOrCreateChildFolder("Aggregated results for all check types");
     }
 
     /**
@@ -451,12 +462,14 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 
-        if (userHome.getDefaultNotificationWebhook() != null && userHome.getDefaultNotificationWebhook().getSpec() == null) {
-            userHome.getDefaultNotificationWebhook().setSpec(new IncidentWebhookNotificationsSpec());
+        if (userHome.getDefaultIncidentNotifications() != null && userHome.getDefaultIncidentNotifications().getSpec() == null) {
+            userHome.getDefaultIncidentNotifications().setSpec(new IncidentNotificationSpec());
         }
 
         if (userHome.getDashboards() != null && userHome.getDashboards().getSpec() == null) {
-            userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
+            DashboardsFolderListSpec dashboardsFolderListSpec = new DashboardsFolderListSpec();
+            addDefaultDashboardFolders(dashboardsFolderListSpec);
+            userHome.getDashboards().setSpec(dashboardsFolderListSpec);
         }
 
         if (localSettingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {

@@ -66,23 +66,31 @@ On the Incidents and Notifications tab, you can customize:
 ## **View incidents summary**
 
 DQOps allows you for a quick overview of all incidents within your environment.
-To access **Incidents summary** click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
+To access the **Incidents summary**, click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
 
-![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary.png){ loading=lazy; width="1200px" }
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary2.png){ loading=lazy; width="1200px" }
 
 
-The **Incidents summary** screen allows you to view incidents grouped by either check category or data quality dimension.
-You can switch between these groupings using the radio buttons provided.
+The **Incidents summary** screen provides an overview of data quality incidents categorized by either check category or data quality dimension.
+You can easily switch between these groupings using the provided radio buttons.
 The **Refresh** button located at the top right of the screen, allows you to refresh the displayed incident data.
 
-The summary screen displays incidents in a table format with the following columns:
+At the top of The Incidents summary screen, there are two sections displaying the summaries of **Open** and **Acknowledged** incidents. 
+Each section is divided into three blocks based on severity level: Warnings, Errors and Fatal errors. In each block,
+there is a summary of new incidents from the last 2 months along with detailed data showing the number of incidents detected in the last 24h, last 7 days,
+current month and previous month.
 
+Below the **Open** and **Acknowledged** incidents summaries, there is a table that list incidents grouped by the selected check category or the quality dimension, depending on your grouping selection.
+The table includes the following columns:
+
+- **Severity** - Indicates the severity of the incident with colored squares (yellow for warning, orange for error and red for fatal error)
+- **Total issues** - Displays the total number of times the data quality issue has occurred in the incident.
 - **Connection** - The name of the connection where the incident was detected.
 - **Schema** - The schema name within the connection where the incident occurred.
 - **Table** - The name of the table where the incident was detected.
 - **Quality dimension** or **Check category** (depending on chosen grouping) - This column will display either the data quality dimension associated with the incident (e.g., Completeness, Validity, Consistency) or the check category that triggered the incident (e.g., anomaly, datetime, nulls, uniqueness).
-- **First seen** - The date the incident was first detected.
-- **Last seen** - The date the incident was last detected.
+- **First seen** - Shows the date the incident was first detected.
+- **Last seen** - Displays the date the incident was last detected.
 
 Each table has a **Show more** button. Clicking this button will navigate you to the dedicated Incidents screen for a more detailed view.
 

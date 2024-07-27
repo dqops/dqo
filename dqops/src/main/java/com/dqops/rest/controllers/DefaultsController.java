@@ -21,7 +21,7 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
@@ -162,22 +162,22 @@ public class DefaultsController {
     }
 
     /**
-     * Returns the spec for the default notification webhooks.
-     * @return Notification webhooks spec.
+     * Returns the spec for the default notification addresses.
+     * @return Notification addresses spec.
      */
     @GetMapping(value = "/defaultwebhooks", produces = "application/json")
-    @ApiOperation(value = "getDefaultWebhooks", notes = "Returns spec to show and edit the default configuration of webhooks.",
-            response = IncidentWebhookNotificationsSpec.class,
+    @ApiOperation(value = "getDefaultWebhooks", notes = "Returns spec to show and edit the default configuration of addresses for incident notifications.",
+            response = IncidentNotificationSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = IncidentWebhookNotificationsSpec.class),
+            @ApiResponse(code = 200, message = "OK", response = IncidentNotificationSpec.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Mono<IncidentWebhookNotificationsSpec>>> getDefaultWebhooks(
+    public Mono<ResponseEntity<Mono<IncidentNotificationSpec>>> getDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -185,35 +185,35 @@ public class DefaultsController {
             UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
             UserHome userHome = userHomeContext.getUserHome();
-            IncidentWebhookNotificationsSpec defaultNotificationWebhooks = null;
+            IncidentNotificationSpec defaultNotification = null;
 
             if (userHome == null
-                    || userHome.getDefaultNotificationWebhook() == null
-                    || userHome.getDefaultNotificationWebhook().getSpec() == null
+                    || userHome.getDefaultIncidentNotifications() == null
+                    || userHome.getDefaultIncidentNotifications().getSpec() == null
             ) {
-                defaultNotificationWebhooks = new IncidentWebhookNotificationsSpec();
+                defaultNotification = new IncidentNotificationSpec();
             } else {
-                defaultNotificationWebhooks = userHome.getDefaultNotificationWebhook().getSpec();
+                defaultNotification = userHome.getDefaultIncidentNotifications().getSpec();
             }
 
-            return new ResponseEntity<>(Mono.just(defaultNotificationWebhooks), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(defaultNotification), HttpStatus.OK);
         }));
     }
 
     /**
-     * Updates the configuration of default notification webhooks
-     * @param newIncidentWebhookNotificationsSpec New configuration of the default notification webhooks
+     * Updates the configuration of default notification addresses.
+     * @param newIncidentNotificationsSpec New configuration of the default notification addresses.
      * @return Empty response.
      */
     @PutMapping(value = "/defaultwebhooks", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDefaultWebhooks",
-            notes = "New configuration of the default webhooks.", response = Void.class,
+            notes = "New configuration of the default addresses.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "The default configuration of notification webhooks successfully updated.", response = Void.class),
+            @ApiResponse(code = 204, message = "The default configuration of notification addresses successfully updated.", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -221,8 +221,8 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.EDIT})
     public Mono<ResponseEntity<Mono<Void>>> updateDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
-            @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
+            @ApiParam("Spec with default notification addresses changes to be applied to the default configuration")
+            @RequestBody Optional<IncidentNotificationSpec> newIncidentNotificationsSpec) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
             ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity, false);
@@ -230,8 +230,8 @@ public class DefaultsController {
 
             UserHome userHome = userHomeContext.getUserHome();
 
-            if (newIncidentWebhookNotificationsSpec.isPresent()) {
-                userHome.getDefaultNotificationWebhook().setSpec(newIncidentWebhookNotificationsSpec.get());
+            if (newIncidentNotificationsSpec.isPresent()) {
+                userHome.getDefaultIncidentNotifications().setSpec(newIncidentNotificationsSpec.get());
             }
 
             userHomeContext.flush();

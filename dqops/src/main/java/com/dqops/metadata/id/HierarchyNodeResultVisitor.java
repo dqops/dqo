@@ -60,14 +60,15 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FilePathListSpec;
@@ -655,13 +656,13 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(ConnectionIncidentGroupingSpec connectionIncidentGroupingSpec, P parameter);
 
     /**
-     * Accepts an incident notifications using webhooks configuration.
+     * Accepts an incident notifications using incident notification configuration.
      *
-     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param incidentNotificationSpec Addresses for incident notifications.
      * @param parameter                        Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, P parameter);
+    R accept(IncidentNotificationSpec incidentNotificationSpec, P parameter);
 
     /**
      * Accepts an incident configuration on a table level.
@@ -742,12 +743,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
 
     /**
-     * Accepts a default incident webhook notifications.
-     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notifications wrapper.
+     * Accepts a default incident notifications.
+     * @param defaultIncidentNotificationsWrapper Default incident notifications wrapper.
      * @param parameter Visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, P parameter);
+    R accept(DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper, P parameter);
 
     /**
      * Accepts a data dictionary list.
@@ -889,4 +890,13 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TargetTablePatternSpec targetTablePatternSpec, P parameter);
+
+    /**
+     * Accept an SMTP server configuration.
+     * @param smtpServerConfigurationSpec SMTP server configuration specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(SmtpServerConfigurationSpec smtpServerConfigurationSpec, P parameter);
+
 }

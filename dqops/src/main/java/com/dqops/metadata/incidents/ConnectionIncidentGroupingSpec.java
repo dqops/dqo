@@ -24,6 +24,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -44,7 +46,7 @@ import java.util.Objects;
 public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionIncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("webhooks", o -> o.webhooks);
+            put("incident_notification", o -> o.incidentNotification);
         }
     };
 
@@ -69,10 +71,10 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("Configuration of Webhook URLs for new or updated incident notifications.")
+    @JsonPropertyDescription("Configuration of addresses for new or updated incident notifications.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private IncidentWebhookNotificationsSpec webhooks;
+    private IncidentNotificationSpec incidentNotification;
 
     /**
      * Returns the data quality issue grouping level used to group similar issues into incidents.
@@ -177,21 +179,43 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
     }
 
     /**
-     * Returns the configuration of webhooks used for incident notifications.
-     * @return Webhooks configuration for incidents.
+     * Returns the configuration of addresses used for incident notifications.
+     * @return Addresses configuration for incidents.
      */
-    public IncidentWebhookNotificationsSpec getWebhooks() {
-        return webhooks;
+    public IncidentNotificationSpec getIncidentNotification() {
+        return incidentNotification;
     }
 
     /**
-     * Sets a new configuration of incident notification webhooks.
-     * @param webhooks New configuration of incident notification webhooks.
+     * Sets a new configuration of incident notification addresses.
+     * @param incidentNotification New configuration of incident notification addresses.
      */
-    public void setWebhooks(IncidentWebhookNotificationsSpec webhooks) {
-        setDirtyIf(!Objects.equals(this.webhooks, webhooks));
-        this.webhooks = webhooks;
-        propagateHierarchyIdToField(webhooks, "webhooks");
+    public void setIncidentNotification(IncidentNotificationSpec incidentNotification) {
+        setDirtyIf(!Objects.equals(this.incidentNotification, incidentNotification));
+        this.incidentNotification = incidentNotification;
+        propagateHierarchyIdToField(incidentNotification, "incident_notification");
+    }
+
+    @Override
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (name.equals("webhooks") && value instanceof LinkedHashMap) {
+            LinkedHashMap map = (LinkedHashMap)value;
+            IncidentNotificationSpec incidentNotificationSpec = new IncidentNotificationSpec();
+            this.setIncidentNotification(incidentNotificationSpec);
+            map.forEach((k, v) -> {
+                if(k instanceof String){
+                    incidentNotificationSpec.handleUndeclaredProperty((String)k, v);
+                }
+            });
+            return;
+        }
+        super.handleUndeclaredProperty(name, value);
     }
 
     /**
@@ -232,14 +256,14 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
      */
     public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
         ConnectionIncidentGroupingSpec cloned = this.deepClone();
-        if (cloned.webhooks != null) {
-            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider, secretValueLookupContext);
+        if (cloned.incidentNotification != null) {
+            cloned.incidentNotification = cloned.incidentNotification.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         return cloned;
     }
 
     /**
-     * Creates a table level incident grouping configuration that is a copy of the connection level configuration. Webhooks are not copied.
+     * Creates a table level incident grouping configuration that is a copy of the connection level configuration. Incident notification configurations are not copied.
      * @return Table level configuration.
      */
     public TableIncidentGroupingSpec toTableIncidentGrouping() {
@@ -262,7 +286,7 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
             return new ConnectionIncidentGroupingSpec() {{
                 setGroupingLevel(IncidentGroupingLevel.table_dimension);
                 setDivideByDataGroups(true);
-                setWebhooks(new IncidentWebhookNotificationsSpec.IncidentWebhookNotificationsSpecSampleFactory().createSample());
+                setIncidentNotification(new IncidentNotificationSpec.IncidentNotificationSpecSampleFactory().createSample());
             }};
         }
     }

@@ -35,7 +35,7 @@ const initTabs = [
     value: 'table-quality-status'
   },
   {
-    label: 'Check editor',
+    label: 'Data quality checks editor',
     value: 'check-editor'
   },
   {
@@ -102,7 +102,7 @@ const MonitoringView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily' || activeTab === 'daily_comparisons') {
+    if (secondTab === 'daily') {
       if (!dailyMonitoring) return;
 
       await dispatch(

@@ -15,7 +15,6 @@ interface ISectionWrapperProps {
 
 const SectionWrapper = ({
   title,
-  titleIcon,
   children,
   className,
   svgIcon,
@@ -38,18 +37,7 @@ const SectionWrapper = ({
         onClick={onClick}
       >
         {svgIcon && <SvgIcon name="chevron-down" className="w-5 h-5" />}
-        {titleIcon ?
-          <div className="flex items-center">
-            {titleIcon && <div className="mr-1">
-              {titleIcon}
-            </div>}
-            <div className="">
-              {title}
-            </div>
-          </div>
-          :
-          <>{title}</>
-        }
+        {title}
       </div>
       {children}
     </div>

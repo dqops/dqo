@@ -202,8 +202,8 @@ const ColumnView = () => {
 
   return (
     <>
-      <div className="relative">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[360px]">
+      <div className="relative h-full min-h-full flex flex-col">
+        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="column" className="w-5 h-5 shrink-0" />
             <div className="text-lg font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>

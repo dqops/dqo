@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from ..models.column_nulls_profiling_checks_spec_custom_checks import (
         ColumnNullsProfilingChecksSpecCustomChecks,
     )
+    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsProfilingChecksSpec")
@@ -47,6 +48,7 @@ class ColumnNullsProfilingChecksSpec:
         profile_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         profile_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         profile_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
+        profile_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
         profile_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         profile_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         profile_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -61,6 +63,7 @@ class ColumnNullsProfilingChecksSpec:
     ] = UNSET
     profile_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
     profile_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
+    profile_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = UNSET
     profile_nulls_percent_change: Union[Unset, "ColumnNullPercentChangeCheckSpec"] = (
         UNSET
     )
@@ -100,6 +103,10 @@ class ColumnNullsProfilingChecksSpec:
         if not isinstance(self.profile_not_nulls_percent, Unset):
             profile_not_nulls_percent = self.profile_not_nulls_percent.to_dict()
 
+        profile_empty_column_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_empty_column_found, Unset):
+            profile_empty_column_found = self.profile_empty_column_found.to_dict()
+
         profile_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_nulls_percent_change, Unset):
             profile_nulls_percent_change = self.profile_nulls_percent_change.to_dict()
@@ -137,6 +144,8 @@ class ColumnNullsProfilingChecksSpec:
             field_dict["profile_not_nulls_count"] = profile_not_nulls_count
         if profile_not_nulls_percent is not UNSET:
             field_dict["profile_not_nulls_percent"] = profile_not_nulls_percent
+        if profile_empty_column_found is not UNSET:
+            field_dict["profile_empty_column_found"] = profile_empty_column_found
         if profile_nulls_percent_change is not UNSET:
             field_dict["profile_nulls_percent_change"] = profile_nulls_percent_change
         if profile_nulls_percent_change_1_day is not UNSET:
@@ -182,6 +191,7 @@ class ColumnNullsProfilingChecksSpec:
         from ..models.column_nulls_profiling_checks_spec_custom_checks import (
             ColumnNullsProfilingChecksSpecCustomChecks,
         )
+        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -240,6 +250,15 @@ class ColumnNullsProfilingChecksSpec:
         else:
             profile_not_nulls_percent = ColumnNotNullsPercentCheckSpec.from_dict(
                 _profile_not_nulls_percent
+            )
+
+        _profile_empty_column_found = d.pop("profile_empty_column_found", UNSET)
+        profile_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        if isinstance(_profile_empty_column_found, Unset):
+            profile_empty_column_found = UNSET
+        else:
+            profile_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+                _profile_empty_column_found
             )
 
         _profile_nulls_percent_change = d.pop("profile_nulls_percent_change", UNSET)
@@ -303,6 +322,7 @@ class ColumnNullsProfilingChecksSpec:
             profile_nulls_percent_anomaly=profile_nulls_percent_anomaly,
             profile_not_nulls_count=profile_not_nulls_count,
             profile_not_nulls_percent=profile_not_nulls_percent,
+            profile_empty_column_found=profile_empty_column_found,
             profile_nulls_percent_change=profile_nulls_percent_change,
             profile_nulls_percent_change_1_day=profile_nulls_percent_change_1_day,
             profile_nulls_percent_change_7_days=profile_nulls_percent_change_7_days,

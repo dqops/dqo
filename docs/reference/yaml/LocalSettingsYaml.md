@@ -37,6 +37,25 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`disable_cloud_sync`</span>|Disable synchronization with DQOps cloud|*boolean*| | | |
 |<span class="no-wrap-code ">`instance_signature_key`</span>|DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.|*string*| | | |
 |<span class="no-wrap-code ">`time_zone`</span>|Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.|*string*| | | |
+|<span class="no-wrap-code ">[`smtp_server_configuration`](./LocalSettingsYaml.md#smtpserverconfigurationspec)</span>|SMTP server configuration for incident notifications.|*[SmtpServerConfigurationSpec](./LocalSettingsYaml.md#smtpserverconfigurationspec)*| | | |
+
+
+
+___
+
+## SmtpServerConfigurationSpec
+SMTP server configuration specification.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`host`</span>|SMTP server host|*string*| | | |
+|<span class="no-wrap-code ">`port`</span>|SMTP server port|*string*| | | |
+|<span class="no-wrap-code ">`use_ssl`</span>|SMTP server use SSL option|*boolean*| | | |
+|<span class="no-wrap-code ">`username`</span>|SMTP server username|*string*| | | |
+|<span class="no-wrap-code ">`password`</span>|SMTP server password|*string*| | | |
 
 
 

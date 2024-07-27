@@ -3,6 +3,7 @@ import { IncidentSeverityLevelCountsModel, TopIncidentsModel } from "../../../ap
 import SectionWrapper from "../../../components/Dashboard/SectionWrapper";
 import moment from 'moment';
 import Gauge from "./Gauge";
+import SummarySectionWrapper from "../../../components/Dashboard/SectionWrapper/SummarySectionWrapper";
 
 export default function IncidentSeverityLevelCounts({
   incidentSeverityLevelCounts,
@@ -17,8 +18,8 @@ export default function IncidentSeverityLevelCounts({
 }) {
 
   return (
-    <SectionWrapper 
-      className={"flex items-center grid grid-cols-3 "}
+    <SummarySectionWrapper 
+      className={"flex items-center grid grid-cols-3 rounded-md border-gray-150 "}
       title={title}
       titleIcon={icon}
     >
@@ -43,7 +44,7 @@ export default function IncidentSeverityLevelCounts({
         severity={3}
         status={incidentStatus}
       />
-    </SectionWrapper>
+    </SummarySectionWrapper>
   );
 
 }

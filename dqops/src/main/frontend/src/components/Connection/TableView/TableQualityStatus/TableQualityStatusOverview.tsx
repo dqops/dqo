@@ -127,14 +127,14 @@ export default function TableQualityStatusOverview({
   };
 
   return (
-    <table className="border border-gray-150 mt-4">
+    <table className="border border-gray-300 m-4">
       <thead>
-        <th key="header_blank" className="p-4 border-b border-b-gray-150"></th>
+        <th key="header_blank" className="p-4 border-b border-b-gray-300"></th>
         {Object.keys(firstLevelChecks).map((key) => (
           <th
             key={`header_${key}`}
             className={clsx(
-              'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold cursor-pointer underline'
+              'p-4 border-b min-w-40 w-40 border-b-gray-300 font-bold cursor-pointer underline'
             )}
             onClick={() =>
               openFirstLevelTableTab(

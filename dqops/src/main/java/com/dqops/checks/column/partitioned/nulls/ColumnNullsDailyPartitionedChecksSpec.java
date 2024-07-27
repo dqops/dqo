@@ -50,6 +50,8 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
             put("daily_partition_not_nulls_count", o -> o.dailyPartitionNotNullsCount);
             put("daily_partition_not_nulls_percent", o -> o.dailyPartitionNotNullsPercent);
 
+            put("daily_partition_empty_column_found", o -> o.dailyPartitionEmptyColumnFound);
+
             put("daily_partition_nulls_percent_change", o ->o.dailyPartitionNullsPercentChange);
             put("daily_partition_nulls_percent_change_1_day", o ->o.dailyPartitionNullsPercentChange1Day);
             put("daily_partition_nulls_percent_change_7_days", o ->o.dailyPartitionNullsPercentChange7Days);
@@ -66,11 +68,14 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.")
     private ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly;
 
-    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
 
     @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores a separate data quality check result for each daily partition.")
+    private EmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec dailyPartitionNullsPercentChange;
@@ -175,6 +180,24 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.dailyPartitionNotNullsPercent, dailyPartitionNotNullsPercent));
         this.dailyPartitionNotNullsPercent = dailyPartitionNotNullsPercent;
         propagateHierarchyIdToField(dailyPartitionNotNullsPercent, "daily_partition_not_nulls_percent");
+    }
+
+    /**
+     * Returns an empty column found check specification.
+     * @return Empty column found check specification.
+     */
+    public EmptyColumnFoundCheckSpec getDailyPartitionEmptyColumnFound() {
+        return dailyPartitionEmptyColumnFound;
+    }
+
+    /**
+     * Sets an empty column found check specification
+     * @param dailyPartitionEmptyColumnFound Empty column found check specification.
+     */
+    public void setDailyPartitionEmptyColumnFound(EmptyColumnFoundCheckSpec dailyPartitionEmptyColumnFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionEmptyColumnFound, dailyPartitionEmptyColumnFound));
+        this.dailyPartitionEmptyColumnFound = dailyPartitionEmptyColumnFound;
+        propagateHierarchyIdToField(dailyPartitionEmptyColumnFound, "daily_partition_empty_column_found");
     }
 
     /**

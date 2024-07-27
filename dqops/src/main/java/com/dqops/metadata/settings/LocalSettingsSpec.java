@@ -40,6 +40,7 @@ import java.util.Objects;
 public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatusHolder {
 	private static final ChildHierarchyNodeFieldMapImpl<LocalSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
+			put("smtp_server_configuration", o -> o.smtpServerConfiguration);
 		}
 	};
 
@@ -62,6 +63,9 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned " +
 			"from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.")
 	private String timeZone;
+
+	@JsonPropertyDescription("SMTP server configuration for incident notifications.")
+	private SmtpServerConfigurationSpec smtpServerConfiguration;
 
 	@JsonIgnore
 	private String yamlParsingError;
@@ -98,7 +102,6 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	public String getYamlParsingError() {
 		return this.yamlParsingError;
 	}
-
 
 	/**
 	 * Returns an editor name.
@@ -200,6 +203,23 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	public void setTimeZone(String timeZone) {
 		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
 		this.timeZone = timeZone;
+	}
+
+	/**
+	 * Returns the SMTP server configuration for the incident notifications.
+	 * @return The SMTP server configuration for the incident notifications.
+	 */
+	public SmtpServerConfigurationSpec getSmtpServerConfiguration() {
+		return smtpServerConfiguration;
+	}
+
+	/**
+	 * Sets the SMTP server configuration for the incident notifications.
+	 * @param smtpServerConfiguration SMTP server configuration for the incident notifications.
+	 */
+	public void setSmtpServerConfiguration(SmtpServerConfigurationSpec smtpServerConfiguration) {
+		setDirtyIf(!Objects.equals(this.smtpServerConfiguration, smtpServerConfiguration));
+		this.smtpServerConfiguration = smtpServerConfiguration;
 	}
 
 	/**

@@ -40,7 +40,7 @@ const tabs = [
     value: 'statistics'
   },
   {
-    label: 'Profiling checks',
+    label: 'Profiling checks editor',
     value: 'advanced'
   }
 ];

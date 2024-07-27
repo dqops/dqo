@@ -19,10 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -49,6 +46,8 @@ public class ColumnNullsMonthlyMonitoringChecksSpec extends AbstractCheckCategor
             put("monthly_nulls_percent", o -> o.monthlyNullsPercent);
             put("monthly_not_nulls_count", o -> o.monthlyNotNullsCount);
             put("monthly_not_nulls_percent", o -> o.monthlyNotNullsPercent);
+
+            put("monthly_empty_column_found", o -> o.monthlyEmptyColumnFound);
         }
     };
 
@@ -58,11 +57,14 @@ public class ColumnNullsMonthlyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec monthlyNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent check result for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNotNullsCountCheckSpec monthlyNotNullsCount;
 
     @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNotNullsPercentCheckSpec monthlyNotNullsPercent;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores the most recent check result for each month when the data quality check was evaluated.")
+    private EmptyColumnFoundCheckSpec monthlyEmptyColumnFound;
 
     /**
      * Returns a nulls count check specification.
@@ -134,6 +136,24 @@ public class ColumnNullsMonthlyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyNotNullsPercent, monthlyNotNullsPercent));
         this.monthlyNotNullsPercent = monthlyNotNullsPercent;
         propagateHierarchyIdToField(monthlyNotNullsPercent, "monthly_not_nulls_percent");
+    }
+
+    /**
+     * Returns an empty column found check specification.
+     * @return Empty column found check specification.
+     */
+    public EmptyColumnFoundCheckSpec getMonthlyEmptyColumnFound() {
+        return monthlyEmptyColumnFound;
+    }
+
+    /**
+     * Sets an empty column found check specification
+     * @param monthlyEmptyColumnFound Empty column found check specification.
+     */
+    public void setMonthlyEmptyColumnFound(EmptyColumnFoundCheckSpec monthlyEmptyColumnFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyEmptyColumnFound, monthlyEmptyColumnFound));
+        this.monthlyEmptyColumnFound = monthlyEmptyColumnFound;
+        propagateHierarchyIdToField(monthlyEmptyColumnFound, "monthly_empty_column_found");
     }
 
     /**

@@ -64,6 +64,7 @@ The full list of data quality rules supported by DQOps. The source code is found
 |[*max_value*](./Comparison.md#max-value)|Data quality rule that verifies if a data quality check readout is less or equal a maximum value.|
 |[*min*](./Comparison.md#min)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*min_count*](./Comparison.md#min-count)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
+|[*min_count_1*](./Comparison.md#min-count-1)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*min_percent*](./Comparison.md#min-percent)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*min_value*](./Comparison.md#min-value)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*pass*](./Comparison.md#pass)|A dummy data quality rule that always passes.|

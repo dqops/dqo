@@ -141,7 +141,7 @@ function DefinitionProvider(props: any) {
       addFirstLevelTab({
         url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
         value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
-        label: 'Default webhooks'
+        label: 'Default notifications'
       })
     );
   };
@@ -270,7 +270,7 @@ function DefinitionProvider(props: any) {
     {
       onClick: openDefaultWebhooksFirstLevelTab,
       icon: 'webhooks',
-      text: 'Default webhooks'
+      text: 'Default notifications'
     },
     {
       onClick: openSharedCredentialsFirstLevelTab,

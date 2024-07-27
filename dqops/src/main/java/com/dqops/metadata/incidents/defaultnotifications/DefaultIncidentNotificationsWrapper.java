@@ -18,7 +18,7 @@ package com.dqops.metadata.incidents.defaultnotifications;
 
 import com.dqops.metadata.basespecs.ElementWrapper;
 import com.dqops.metadata.basespecs.ObjectName;
-import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
 
-public interface DefaultIncidentWebhookNotificationsWrapper extends ElementWrapper<IncidentWebhookNotificationsSpec>, ObjectName<String> {
+public interface DefaultIncidentNotificationsWrapper extends ElementWrapper<IncidentNotificationSpec>, ObjectName<String> {
 }

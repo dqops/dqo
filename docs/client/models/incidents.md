@@ -203,6 +203,7 @@ Stores numbers of incidents over a specific time period.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`total_count`</span>|Number of incidents in total.|*integer*|
 |<span class="no-wrap-code">`count_from_last24h`</span>|Number of incidents from the last 24h from now.|*integer*|
 |<span class="no-wrap-code">`count_from_last7days`</span>|Number of incidents from the last 7 days, the number of 7 * 24 hours from now.|*integer*|
 |<span class="no-wrap-code">`current_month_count`</span>|Number of incidents from the complete current month.|*integer*|

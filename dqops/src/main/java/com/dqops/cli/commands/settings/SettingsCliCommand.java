@@ -32,6 +32,7 @@ import picocli.CommandLine;
 		SettingsRemoveCliCommand.class,
 		SettingsApiKeyCliCommand.class,
 		SettingsTimeZoneCliCommand.class,
+		SettingsSmtpCliCommand.class,
 })
 public class SettingsCliCommand extends BaseCommand {
 }

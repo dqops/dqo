@@ -56,7 +56,7 @@ nav:
       - Databricks: "data-sources/databricks.md"
       - Delta Lake: "data-sources/deltalake.md"
       - DuckDB: "data-sources/duckdb.md"
-      - Google: "data-sources/google.md"
+      - GCP: "data-sources/gcp.md"
       - Iceberg: "data-sources/iceberg.md"
       - JSON: "data-sources/json.md"
       - MySQL: "data-sources/mysql.md"
@@ -377,6 +377,7 @@ nav:
         - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
+        - empty column found: 'checks/column/nulls/empty-column-found.md'
         - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
         - nulls percent change 1 day: 'checks/column/nulls/nulls-percent-change-1-day.md'
         - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'

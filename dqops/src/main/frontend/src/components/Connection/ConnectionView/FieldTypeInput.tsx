@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import Select from '../../Select';
-import Input from '../../Input';
 import clsx from 'clsx';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import Input from '../../Input';
+import Select from '../../Select';
 import SelectInput from '../../SelectInput';
 
 interface FieldTypeInputProps {
@@ -153,6 +153,7 @@ const FieldTypeInput = ({
           onChange={onChangeType}
           disabled={disabled}
           placeholder=""
+          menuClassName="!right-0 !left-[-90px]"
         />
       </div>
     </div>

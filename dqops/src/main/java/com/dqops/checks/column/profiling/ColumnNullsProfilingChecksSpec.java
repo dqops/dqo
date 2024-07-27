@@ -50,6 +50,8 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_not_nulls_count", o -> o.profileNotNullsCount);
             put("profile_not_nulls_percent", o -> o.profileNotNullsPercent);
 
+            put("profile_empty_column_found", o -> o.profileEmptyColumnFound);
+
             put("profile_nulls_percent_change", o ->o.profileNullsPercentChange);
             put("profile_nulls_percent_change_1_day", o ->o.profileNullsPercentChange1Day);
             put("profile_nulls_percent_change_7_days", o ->o.profileNullsPercentChange7Days);
@@ -66,11 +68,14 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.")
     private ColumnNullPercentAnomalyStationaryCheckSpec profileNullsPercentAnomaly;
 
-    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count.")
+    @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count.")
     private ColumnNotNullsCountCheckSpec profileNotNullsCount;
 
     @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage.")
     private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty.")
+    private EmptyColumnFoundCheckSpec profileEmptyColumnFound;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec profileNullsPercentChange;
@@ -151,7 +156,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Sets a new not nulls count check  specification.
+     * Sets a new not nulls count check specification.
      * @param profileNotNullsCount Not nulls count check specification.
      */
     public void setProfileNotNullsCount(ColumnNotNullsCountCheckSpec profileNotNullsCount) {
@@ -176,6 +181,24 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileNotNullsPercent, profileNotNullsPercent));
         this.profileNotNullsPercent = profileNotNullsPercent;
         propagateHierarchyIdToField(profileNotNullsPercent, "profile_not_nulls_percent");
+    }
+
+    /**
+     * Returns an empty column found check specification.
+     * @return Empty column found check specification.
+     */
+    public EmptyColumnFoundCheckSpec getProfileEmptyColumnFound() {
+        return profileEmptyColumnFound;
+    }
+
+    /**
+     * Sets an empty column found check specification
+     * @param profileEmptyColumnFound Empty column found check specification.
+     */
+    public void setProfileEmptyColumnFound(EmptyColumnFoundCheckSpec profileEmptyColumnFound) {
+        this.setDirtyIf(!Objects.equals(this.profileEmptyColumnFound, profileEmptyColumnFound));
+        this.profileEmptyColumnFound = profileEmptyColumnFound;
+        propagateHierarchyIdToField(profileEmptyColumnFound, "profile_empty_column_found");
     }
 
     /**

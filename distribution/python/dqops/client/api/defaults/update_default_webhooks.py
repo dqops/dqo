@@ -5,15 +5,13 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.incident_webhook_notifications_spec import (
-    IncidentWebhookNotificationsSpec,
-)
+from ...models.incident_notification_spec import IncidentNotificationSpec
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    json_body: IncidentWebhookNotificationsSpec,
+    json_body: IncidentNotificationSpec,
 ) -> Dict[str, Any]:
 
     pass
@@ -52,14 +50,14 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: IncidentWebhookNotificationsSpec,
+    json_body: IncidentNotificationSpec,
 ) -> Response[Any]:
     """updateDefaultWebhooks
 
-     New configuration of the default webhooks.
+     New configuration of the default addresses.
 
     Args:
-        json_body (IncidentWebhookNotificationsSpec):
+        json_body (IncidentNotificationSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -83,14 +81,14 @@ def sync_detailed(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: IncidentWebhookNotificationsSpec,
+    json_body: IncidentNotificationSpec,
 ) -> Response[Any]:
     """updateDefaultWebhooks
 
-     New configuration of the default webhooks.
+     New configuration of the default addresses.
 
     Args:
-        json_body (IncidentWebhookNotificationsSpec):
+        json_body (IncidentNotificationSpec):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

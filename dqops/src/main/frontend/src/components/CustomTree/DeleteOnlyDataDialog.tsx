@@ -5,14 +5,14 @@ import {
   DialogHeader,
   Radio
 } from '@material-tailwind/react';
-import DatePicker from '../DatePicker';
-import Button from '../Button';
-import React, { useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
-import Checkbox from '../Checkbox';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { CheckTypes } from '../../shared/routes';
+import Button from '../Button';
+import Checkbox from '../Checkbox';
+import DatePicker from '../DatePicker';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -36,7 +36,9 @@ const DeleteOnlyDataDialog = ({
   selectedReference,
   checkTypes
 }: DeleteOnlyDataDialogProps) => {
-  const [startDate, setStartDate] = useState(new Date(new Date().getTime() - 1000 * 3600 * 24 * 30));
+  const [startDate, setStartDate] = useState(
+    new Date(new Date().getTime() - 1000 * 3600 * 24 * 30)
+  );
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState('part');
   const [params, setParams] = useState({
@@ -120,27 +122,25 @@ const DeleteOnlyDataDialog = ({
                 onChange={() => setMode('part')}
                 color="teal"
               />
-              <div className="mt-2">
-                <p>For the time range:</p>
-                <div className="flex space-x-6 items-center">
-                  <DatePicker
-                    showIcon
-                    placeholderText="Select date start"
-                    onChange={setStartDate}
-                    selected={startDate}
-                    disabled={isDisabled}
-                    dateFormat="yyyy-MM-dd"
-                  />
-                  <span>to</span>
-                  <DatePicker
-                    showIcon
-                    placeholderText="Select date end"
-                    onChange={setEndDate}
-                    selected={endDate}
-                    disabled={isDisabled}
-                    dateFormat="yyyy-MM-dd"
-                  />
-                </div>
+              <div>For the time range:</div>
+              <div className="flex space-x-6 items-center">
+                <DatePicker
+                  showIcon
+                  placeholderText="Select date start"
+                  onChange={setStartDate}
+                  selected={startDate}
+                  disabled={isDisabled}
+                  dateFormat="yyyy-MM-dd"
+                />
+                <span>to</span>
+                <DatePicker
+                  showIcon
+                  placeholderText="Select date end"
+                  onChange={setEndDate}
+                  selected={endDate}
+                  disabled={isDisabled}
+                  dateFormat="yyyy-MM-dd"
+                />
               </div>
             </div>
             <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">

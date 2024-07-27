@@ -8,6 +8,7 @@ import {
   setMultiCheckFilters,
   setMultiCheckSearchedChecks
 } from '../../../redux/actions/source.actions';
+import { IRootState } from '../../../redux/reducers';
 import {
   getFirstLevelActiveTab,
   getFirstLevelState
@@ -38,6 +39,8 @@ export const MultiChecks = () => {
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useDecodedParams();
+  const { userProfile } = useSelector((state: IRootState) => state.job);
+
   const { multiCheckFilters, multiCheckSearchedChecks } = useSelector(
     getFirstLevelState(checkTypes)
   );
@@ -60,11 +63,9 @@ export const MultiChecks = () => {
   }, [connection, schema, multiCheckFilters, timeScale]);
 
   const searchResults = useMemo(() => {
-    return (
-      multiCheckSearchedChecks?.[
-        checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale
-      ]
-    );
+    return multiCheckSearchedChecks?.[
+      checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale
+    ];
   }, [connection, schema, timeScale, multiCheckFilters]);
 
   const onChangefilterParameters = (obj: Partial<IFilterTemplate>) => {
@@ -173,15 +174,19 @@ export const MultiChecks = () => {
 
   return (
     <div className="text-sm py-4">
-      {checkTypes !== CheckTypes.PROFILING && (
-        <div className="border-b border-gray-300 pb-0 mb-4">
-          <Tabs
-            tabs={tabs}
-            activeTab={timeScale}
-            onChange={(value: any) => setTimeScale(value)}
-          />
-        </div>
-      )}
+      {checkTypes !== CheckTypes.PROFILING &&
+        userProfile &&
+        userProfile.license_type &&
+        userProfile.license_type?.toLowerCase() !== 'free' &&
+        !userProfile.trial_period_expires_at && (
+          <div className="border-b border-gray-300 pb-0 mb-4">
+            <Tabs
+              tabs={tabs}
+              activeTab={timeScale}
+              onChange={(value: any) => setTimeScale(value)}
+            />
+          </div>
+        )}
       <div className="px-8">
         <MultiChecksFilter
           filterParameters={filterParameters as IFilterTemplate}
@@ -210,7 +215,9 @@ export const MultiChecks = () => {
             checkTarget={filterParameters?.checkTarget}
             checks={searchResults}
             filterParameters={filterParameters as IFilterTemplate}
-            selectedCheckModel={filterParameters?.selectedCheck?.check_model ?? {}}
+            selectedCheckModel={
+              filterParameters?.selectedCheck?.check_model ?? {}
+            }
             searchChecks={searchChecks}
             timeScale={timeScale}
           />

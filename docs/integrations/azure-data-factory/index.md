@@ -2,167 +2,160 @@
 title: How to activate data observability with Azure Data Factory
 ---
 # How to activate data observability with Azure Data Factory
-Read this guide to learn how to use DQOps API from Azure Data Factory to activate monitoring.
+Read this guide to learn how to use the DQOps API in Azure Data Factory to activate monitoring.
 
 ## Overview
 
-You can easily utilize Azure Data Factory to call DQOps API for:
+By integrating Azure Data Factory with the DQOps API, you can streamline data quality processes and gain deeper insights
+into your data. This integration empowers you to:
 
-- running data quality checks,
-- collect statistics about tables,
-- import the table schema to DQOps,
-- get table data quality status, 
- 
-and dozens of others.
+- Run data quality checks
+- Collect comprehensive statistics about tables
+- Import table schema to DQOps
+- Get table data quality status, 
 
-for running data quality checks.
-The guide will use the data stored in Azure Blob Storage.
+This guide provides a practical demonstration of running data quality checks on data residing in Azure Blob Storage.
 
 
 ## Prerequisite
 
-Before you integrate DQOps into Azure Data Factory pipelines you need to configure a data source in DOQps.
-You can easily connect to the data source located on [Azure](../../data-sources/azure.md), [Databricks](../../data-sources/databricks.md) or anywhere else. 
-[DQOps supports all commonly used databases, check out the complete list here](../../data-sources/index.md).
+Before you integrate DQOps into Azure Data Factory pipelines, you need to configure a data source in DOQps.
+You can easily connect to the data source located on [Azure](../../data-sources/azure.md), [Databricks](../../data-sources/databricks.md), or elsewhere. 
+DQOps supports all commonly used databases. [You can check out the complete list of supported databases here](../../data-sources/index.md).
 
 
 ## Azure Data Factory integration
 
-Accessing the DQOps API involves using a personal API key to authenticate requests. 
+To interact with the DQOps API, you will need a unique personal API key. This key acts as your authentication credential.
 
 ### Getting the personal API Key
 
 You can easily get your personal, user-unique API Key through the DQOps Web UI.
 
 1. Open your DQOps instance's Web UI in your browser.
-2. Click on your portrait in the top-right corner.
-3. Click on the "Generate API Key" button.
+2. Click on the user profile icon in the top-right corner of the interface.
+3. Click on the **Generate API Key** button to create a new key.
+4. Copy the generated API key and use it in your Azure Data Factory pipeline.
 
 ![User portrait menu](../../images/api-key.png "User portrait menu"){ loading=lazy } &nbsp;&nbsp;&nbsp;&nbsp; ![Generate API Key](../../images/generated-api-key.png "Generate API Key"){ loading=lazy }
-
-You can copy the generated API Key and use it in Azure Data Factory.
 
 
 ### Run checks
 
-Run checks job in DQOps executes checks depending on your selection. 
-You can specify only those checks that are attached to the specific table on a connection, with specific names for label, quality dimension, type of checks and much more.
+DQOps offers granular control over which checks are executed.
+You can specify checks attached to a table on a connection, with specific names for labels, quality dimensions, types of checks, and more.
 
-To create the run checks job in DQOps from Azure Data Factory create a new pipeline and put **Web** activity.
+To create the run checks job in DQOps from Azure Data Factory:
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/add-web-activity.png){ loading=lazy; }
+1. Create a new pipeline and add a new **Web** activity.
 
-Click on the Web activity and open the **Settings** tab.
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/add-web-activity.png){ loading=lazy; }
 
-Fill the **URL** with the link that calls run checks endpoint. It is crucial to set the wait parameter which makes the DQOps backend wait for finishing the execution. Calling the run checks endpoint without the wait parameter will run checks not allowing to see the results in Azure Data Factory. 
+2. Click on the Web activity and open the **Settings** tab.
 
-```
-https://<your_DQOps_instance>/api/jobs/runchecks?wait=true
-```
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/activity-settings.png){ loading=lazy; }
 
-Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
+3. Configure the **Setting** as follows:
 
-Set **Method** as **POST**.
+    - Fill the **URL** with the link that calls the run checks endpoint. It is crucial to set the wait parameter, which makes the DQOps backend wait for the execution to finish.
+         Calling the run checks endpoint without the wait parameter will run checks without allowing you to see the results in Azure Data Factory.
 
-The **Body** of the request contains the filtering configuration that points to DQOps which checks should be run.
+         Construct the URL using the following template and replacing **&lt;your_DQOps_instance&gt;** with your actual DQOps instance address.
+         ```
+         https://<your_DQOps_instance>/api/jobs/runchecks?wait=true
+         ```
+      
+    - Set the **Method** as **POST**.
+    - Specify the checks to be executed in the **Body** of the request. The following example runs all activated profiling checks on the "files.readouts" table from the "azure-storage-parquet"
+       connection and collects error samples on failed checks.
 
-The below example runs all profiling checks that are enabled (turned on) on the table "files.readouts" from the "azure-storage-parquet" connection.
-It also collects error samples on checks that fail.
+         ```text
+         {
+             "check_search_filters": {
+                 "connection": "azure-storage-parquet",
+                 "fullTableName": "files.readouts",
+                 "enabled": true, 
+                 "checkType": "profiling"
+             },
+             "collect_error_samples": true
+         }
+         ```
 
-```text
-{
-    "check_search_filters": {
-        "connection": "azure-storage-parquet",
-        "fullTableName": "files.readouts",
-        "enabled": true, 
-        "checkType": "profiling"
-    },
-    "collect_error_samples": true
-}
-```
+    - Leave the **Authentication combo box** as **None**.
+    - In the **Headers** section, add three variables.
+        The name **Authorization** contains the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
+        The names **accept** and **Content-Type** should contain value as **application/json**.
 
-The **Authentication combo box** leave as **None**. 
+4. Save the pipeline by clicking on **Publish all** button.
 
-In **Headers** add three variables.
+To initiate the pipeline execution, follow these steps:
 
-The names **accept** and **Content-Type** should contain value as **applicaiton/json**.
+1. Navigate to **Add trigger** and select the **Trigger now**
 
-The name **Authorization** contain the token starting with **Bearer** and space character. The rest of the value is your personal API Key.
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/trigger-now.png){ loading=lazy; }
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/activity-settings.png){ loading=lazy; }
+    In a moment, you should receive a notification about the completion of the pipeline execution. 
 
-Save the pipeline by clicking on **Publish all** button.
+2. Click the **view pipeline run** link to access detailed execution information
 
-Now the pipeline can be executed. Navigate to **Add trigger** and select the **Trigger now**
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/view-run-pipeline.png){ loading=lazy; }
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/trigger-now.png){ loading=lazy; }
+3. Select the output of the Web activity to retrieve the DQOps API response in JSON format.
 
-In a moment you should receive a notification about the execution completion of the pipeline. 
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
 
-Click the **view pipeline run** link.
+    ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/result.png){ loading=lazy; }
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/view-run-pipeline.png){ loading=lazy; }
+    ```json5 hl_lines="6-14"
+    {
+    	"jobId": {
+    		"jobId": 1720691395000000,
+    		"createdAt": "2024-07-11T09:49:55.017423827Z"
+    	},
+    	"result": {
+    		"highest_severity": "warning",
+    		"executed_checks": 143,
+    		"valid_results": 143,
+    		"warnings": 47,
+    		"errors": 0,
+    		"fatals": 0,
+    		"execution_errors": 0
+    	},
+    	"status": "finished",
+        // ...
+    }
+    ```
 
-Select the output of the Web activity.
+You can see that running checks resulted in 47 execution warnings. The data has data quality issues and requires review.
 
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/check-run-details.png){ loading=lazy; }
-
-The DQOps API returned the JSON object.
-
-![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/result.png){ loading=lazy; }
-
-```json5 hl_lines="6-14"
-{
-	"jobId": {
-		"jobId": 1720691395000000,
-		"createdAt": "2024-07-11T09:49:55.017423827Z"
-	},
-	"result": {
-		"highest_severity": "warning",
-		"executed_checks": 143,
-		"valid_results": 143,
-		"warnings": 47,
-		"errors": 0,
-		"fatals": 0,
-		"execution_errors": 0
-	},
-	"status": "finished",
-    // ...
-}
-```
-
-You can see running checks resulted with 47 execution warnings. The data has a quality issue and needs to be reviewed.
-
-The execution of the run checks API call can be incorporated into existing pipelines to make branches during pipeline execution.
+The run checks API call can be integrated into existing pipelines to create conditional branches during pipeline execution.
 
 ### Integrate run checks action with your pipeline
 
-You can integrate run checks that can disallow to copy new data to the corrupted data source.
+To integrate run checks with your pipeline, you can disallow copying new data to a corrupted data source. To do this, you need to use the returned JSON from DQOps.
 
-To achieve this you need to base on the returned JSON from DQOps.
-
-The example first calls the DQOps to fetch the status of your data. Then the status is verified. 
-If it succeeded the data was copied. Otherwise, the pipeline is marked as failed, returning the code of the issue.
+First, call DQOps to fetch the status of your data, then verify the status. If it is successful, the data is copied. 
+If not, the pipeline is marked as failed, and the code of the issue is returned.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/run-checks-pipeline.png){ loading=lazy; }
 
-To create this pipeline add the **If condition** activity to the previously configured Web activity (now named as "DQOps run checks") 
+To create this pipeline, add the **If condition** activity to the previously configured Web activity (now named "DQOps run checks") 
 and fill the **Expression** field with:
 
 ```text
 @contains(activity('DQOps run checks').output.result.highest_severity, 'valid')
 ```
 
-The expression verifies that the highest severity from the returned JSON is "valid".
+The expression verifies that the highest severity from the returned JSON is "valid."
 
-The valid status means that no issues have been detected. If any will, the status becomes the severity of the issue.
-You can see there one of the following: warning, error, fatal.
+The "valid" status means that no issues have been detected. If any issues are detected, the status becomes the severity 
+of the issue, such as warning, error, or fatal.
 
-For marking the issue, add the **Fail** activity in the False section of the If condition activity.
+To mark the issue, add the **Fail** activity in the False section of the If condition activity.
 
-For making Fail activity more informative, the returned data from DQOps API can be used.
+To make the Fail activity more informative, utilize the returned data from the DQOps API.
 
-Fill **Fail message** (simply as e.g. "Data quality issue detected") and **Error code** (the code below).
+Fill in the **Fail message** (e.g., "Data quality issue detected") and **Error code** (the code below).
 
 ```text
 @if(
@@ -176,48 +169,50 @@ Fill **Fail message** (simply as e.g. "Data quality issue detected") and **Error
 )
 ```
 
-The Error code transcodes the severities to the integer numbers marking severities as follows: warning - 1, error - 2, fatal - 3.
-The code 4 stands for other issues such as sensor execution errors or user misconfigurations in DQOps.
+The Error code corresponds to different severity levels by assigning integer numbers as follows: warning - 1, error - 2, fatal - 3.
+The code 4 is used for other issues, such as sensor execution errors or user misconfigurations in DQOps.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/if-statement-configuration.png){ loading=lazy; }
 
-If no issues are present, the copy data activity is executed. 
-
-Otherwise, you will see the failure on the Monitor page with the error message.
+If there are no issues, the copy data activity will be executed. Otherwise, you will see a failure on the Monitor page
+along with an error message.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/pipeline-status.png){ loading=lazy; }
 
-The details of the error provides you with the error code as well.
+The error details will also provide you with the error code.
 
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details.png){ loading=lazy; }
 ![Adding connection settings](https://dqops.com/docs/images/integrations/azure-data-factory/error-details-json.png){ loading=lazy; }
 
-Instead of Fail activity you can also run another REST API that will inform about data quality issues as fast as is detected.
+Instead of the Fail activity, you can also initiate another REST API that will promptly notify about data quality issues as soon as they are detected.
 
 ### Example jobs
 
-DQOps REST API provides an extensive range of endpoints. You can reach the details through the Swagger API.
+Here are some example jobs for DQOps REST API that provide a range of endpoints. You can access the details through the 
+Swagger API at the following address:
 
 ```url
 https://**<your_DQOps_instance>**/swagger-ui/#/
 ```
 
-Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
+You need to replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
 
 === "Collect statistics"
 
-    Collect statistics job in DQOps provides summary information about your tables and columns.
-    This information is valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
+    The collect statistics job in DQOps provides summary information about your tables and columns.
+    This information is can help in deciding which data quality checks and threshold levels should be set to monitor data quality.
     You can specify to run this job only to the specific table on a connection.
+
+    Here is an example endpoint for collecting statistics for a table:
 
     ```url
     https://<your_DQOps_instance>/api/jobs/collectstatistics/table?wait=true
     ```
 
-    The **Body** of the request contains the name of the table on which statistics will be collected.
+    The **Body** of the request should contain the name of the table for which statistics will be collected.
     
-    The below example collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
+    For example, the following request collects statistics for the table "files.readouts" from the "azure-storage-parquet" connection.
     
     ```json5
     {
@@ -227,7 +222,7 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
     }
     ```
 
-    Example of the returned response.
+    Example of the response returned.
 
     ```json5
     {
@@ -249,13 +244,13 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
 === "Import table"
 
-    The import table job is used to import the table schema to the existing connection in DQOps.
+    The import table job is used to import the table schema into the existing connection in DQOps.
 
     ```url
     https://<your_DQOps_instance>/api/jobs/importtables/table?wait=true
     ```
 
-    The **Body** of the request of the below example imports table schema of "files.readouts" table from the "azure-storage-parquet" connection.
+    The **Body** of the request in the example below imports the table schema of "files.readouts" table from the "azure-storage-parquet" connection.
     
     ```json5
     {
@@ -267,7 +262,7 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
     }
     ```
 
-    Example of the returned response.
+    Example of the response returned.
 
     ```json5
     {
@@ -307,10 +302,10 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
 
 === "Get table data quality status"
 
-    The table data quality status receives the overall data quality status of a table based on checks run in the DQOps platform.
-    If there are any issues with the table, the operator will inform about the scale of the issue and point towards a specific area of the data quality that needs improvement.
+    The table data quality status provides an overall assessment of data quality status for a specific table, based on checks run in the DQOps platform.
+    If there are any issues with the table, the operator will inform the severity of the issue and point towards an areas that require improvement in data quality.
     
-    It can be used to collect information about the data quality before or after the execution of a significant operation, which might save operational costs and time.
+    This job can be used to collect information about data quality before or after carrying out significant operation, potentially saving operational costs and time.
 
     The URL contains the name of the connection, schema and table.
 
@@ -320,13 +315,13 @@ Replace **&lt;your_DQOps_instance&gt;** with your DQOps instance address.
     http://<your_DQOps_instance>/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/status
     ```
 
-    The below url calls api to receive status for the table files.readouts from the azure-storage-parquet connection.
+    The following URL calls the API to retrieve the status for the table files.readouts from the azure-storage-parquet connection.
 
     ```url
     http://<your_DQOps_instance>/api/connections/azure-storage-parquet/schemas/files/tables/readouts/status
     ```
 
-    Example of the returned response.
+    Example of the response returned.
 
     ```json5
     {

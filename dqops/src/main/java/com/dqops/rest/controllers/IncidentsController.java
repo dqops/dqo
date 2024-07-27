@@ -437,13 +437,13 @@ public class IncidentsController {
             @ApiParam(name = "limit", value = "The result limit for each group. When this parameter is missing, returns the default limit of " + TOP_INCIDENTS_LIMIT_PER_GROUP, required = false)
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "days", value = "Optional filter to configure a time window before now to scan for incidents based on the incident's first seen attribute.", required = false)
-            @RequestParam(required = false) Optional<Integer> days) {
+            @RequestParam(required = false) Optional<Integer> months) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             TopIncidentsModel topIncidentsModel = this.incidentsDataService.findTopIncidents(
                     groupBy.orElse(TopIncidentGrouping.category),
                     status.orElse(IncidentStatus.open),
                     limit.orElse(TOP_INCIDENTS_LIMIT_PER_GROUP),
-                    days.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsDays()),
+                    months.orElse(this.dqoIncidentsConfigurationProperties.getTopIncidentsMonths()),
                     principal.getDataDomainIdentity());
             return new ResponseEntity<>(Mono.just(topIncidentsModel), HttpStatus.OK);
         }));

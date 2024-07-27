@@ -111,6 +111,14 @@ but the support team decided that they will not be resolved.
 
 
 ## Incident management
+
+DQOps allows you for a quick overview of all incidents within your environment.
+To access the **Incidents summary**, click on the DQOps logo in the top left corner and select the **Incidents summary** tab.
+
+![Incidents summary](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/incidents-summary2.png){ loading=lazy; width="1200px" }
+
+The DQOps user interface overview section provides [a more detailed description of the **Incident summary** screen](dqops-user-interface-overview.md#incidents_summary).
+
 The list of incidents is shown in the *Incidents* section of the [DQOps user interface](dqops-user-interface-overview.md).
 The incident review begins on the incident list screen shown below.
 

@@ -159,7 +159,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-quality-status'
     },
     {
-      label: 'Profiling checks',
+      label: 'Profiling checks editor',
       value: 'advanced'
     },
     {
@@ -173,7 +173,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-quality-status'
     },
     {
-      label: 'Check editor',
+      label: 'Data quality checks editor',
       value: 'check-editor'
     },
     {
@@ -187,7 +187,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'table-quality-status'
     },
     {
-      label: 'Check editor',
+      label: 'Data quality checks editor',
       value: 'check-editor'
     },
     {

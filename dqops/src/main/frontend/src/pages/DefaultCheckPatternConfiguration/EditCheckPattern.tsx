@@ -18,6 +18,7 @@ import {
   DefaultTableCheckPatternsApiClient
 } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
+import CopyCheckPatternDialog from './CopyCheckPatternDialog';
 import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
 
 const tabsTableChecks = [
@@ -164,6 +165,7 @@ export default function EditCheckPattern({
     useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
+  const [copyPatternOpen, setCopyPatternOpen] = useState(false);
   const onChangeTab = (tab: any) => {
     setActiveTab(tab);
   };
@@ -372,12 +374,20 @@ export default function EditCheckPattern({
               {pattern_name}
             </div>
           </div>
-          <Button
-            label="Save"
-            color={isUpdated ? 'primary' : 'secondary'}
-            className="pl-14 pr-14"
-            onClick={updateChecks}
-          />
+          <div className="flex items-center gap-x-4">
+            <Button
+              label="Copy"
+              color="primary"
+              className="pl-14 pr-14"
+              onClick={() => setCopyPatternOpen(true)}
+            />
+            <Button
+              label="Save"
+              color={isUpdated ? 'primary' : 'secondary'}
+              className="pl-14 pr-14"
+              onClick={updateChecks}
+            />
+          </div>
         </div>
         <div className="border-b border-gray-300">
           <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
@@ -409,6 +419,12 @@ export default function EditCheckPattern({
             })
           )}
         </div>
+        <CopyCheckPatternDialog
+          type={type}
+          sourceTableName={pattern_name}
+          open={copyPatternOpen}
+          setOpen={setCopyPatternOpen}
+        />
       </div>
     </>
   );

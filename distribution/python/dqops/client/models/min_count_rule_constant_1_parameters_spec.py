@@ -1,53 +1,32 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="OptionalIncidentWebhookNotificationsSpec")
+T = TypeVar("T", bound="MinCountRuleConstant1ParametersSpec")
 
 
 @_attrs_define
-class OptionalIncidentWebhookNotificationsSpec:
-    """
-    Attributes:
-        empty (Union[Unset, bool]):
-        present (Union[Unset, bool]):
-    """
+class MinCountRuleConstant1ParametersSpec:
+    """ """
 
-    empty: Union[Unset, bool] = UNSET
-    present: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        empty = self.empty
-        present = self.present
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if empty is not UNSET:
-            field_dict["empty"] = empty
-        if present is not UNSET:
-            field_dict["present"] = present
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        empty = d.pop("empty", UNSET)
+        min_count_rule_constant_1_parameters_spec = cls()
 
-        present = d.pop("present", UNSET)
-
-        optional_incident_webhook_notifications_spec = cls(
-            empty=empty,
-            present=present,
-        )
-
-        optional_incident_webhook_notifications_spec.additional_properties = d
-        return optional_incident_webhook_notifications_spec
+        min_count_rule_constant_1_parameters_spec.additional_properties = d
+        return min_count_rule_constant_1_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

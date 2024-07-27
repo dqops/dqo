@@ -526,3 +526,151 @@ All parameters supported by the command are listed below.
 
 
 
+
+___
+
+## dqo settings smtp set
+
+Set SMTP config
+
+
+**Description**
+
+
+Set SMTP server configuration for incident notifications.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings smtp set -s [-h] [-fw] [-hl] -ho=<host> [-of=<outputFormat>]
+                   -p=<port> -ps=<password> -u=<username>
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings smtp set -s [-h] [-fw] [-hl] -ho=<host> [-of=<outputFormat>]
+                   -p=<port> -ps=<password> -u=<username>
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings smtp set-fw" class="no-wrap-code">`-fw`</div><div id="settings smtp set--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings smtp set--headless" class="no-wrap-code">`--headless`</div><div id="settings smtp set-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings smtp set-h" class="no-wrap-code">`-h`</div><div id="settings smtp set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings smtp set-ho" class="no-wrap-code">`-ho`</div><div id="settings smtp set--host" class="no-wrap-code">`--host`</div>|SMTP server host|:material-check-bold:||
+|<div id="settings smtp set-of" class="no-wrap-code">`-of`</div><div id="settings smtp set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="settings smtp set-ps" class="no-wrap-code">`-ps`</div><div id="settings smtp set--password" class="no-wrap-code">`--password`</div>|SMTP server password|:material-check-bold:||
+|<div id="settings smtp set-p" class="no-wrap-code">`-p`</div><div id="settings smtp set--port" class="no-wrap-code">`--port`</div>|SMTP server port|:material-check-bold:||
+|<div id="settings smtp set-s" class="no-wrap-code">`-s`</div><div id="settings smtp set--use-ssl" class="no-wrap-code">`--use-ssl`</div>|SMTP server use SSL|:material-check-bold:||
+|<div id="settings smtp set-u" class="no-wrap-code">`-u`</div><div id="settings smtp set--username" class="no-wrap-code">`--username`</div>|SMTP server user name|:material-check-bold:||
+
+
+
+
+
+
+___
+
+## dqo settings smtp remove
+
+Remove SMTP server config
+
+
+**Description**
+
+
+Remove the API key used for accessing external services.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings smtp remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings smtp remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings smtp remove-fw" class="no-wrap-code">`-fw`</div><div id="settings smtp remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings smtp remove--headless" class="no-wrap-code">`--headless`</div><div id="settings smtp remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings smtp remove-h" class="no-wrap-code">`-h`</div><div id="settings smtp remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings smtp remove-of" class="no-wrap-code">`-of`</div><div id="settings smtp remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo settings smtp show
+
+Show SMTP server configuration
+
+
+**Description**
+
+
+Display the current SMTP server configuration for incident notifications.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] settings smtp show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> settings smtp show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="settings smtp show-fw" class="no-wrap-code">`-fw`</div><div id="settings smtp show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings smtp show--headless" class="no-wrap-code">`--headless`</div><div id="settings smtp show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings smtp show-h" class="no-wrap-code">`-h`</div><div id="settings smtp show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings smtp show-of" class="no-wrap-code">`-of`</div><div id="settings smtp show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
