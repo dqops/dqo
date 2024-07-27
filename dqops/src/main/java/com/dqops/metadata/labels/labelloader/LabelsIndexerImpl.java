@@ -69,7 +69,6 @@ public class LabelsIndexerImpl implements LabelsIndexer {
     private boolean started;
     private Sinks.Many<LabelRefreshKey> loadObjectRequestSink;
     private Disposable subscription;
-    private Sinks.EmitFailureHandler emitFailureHandlerPublisher;
     private int queuedOperationsCount;
     private final Object lock = new Object();
     private CompletableFuture<Integer> queueEmptyFuture;
@@ -97,10 +96,17 @@ public class LabelsIndexerImpl implements LabelsIndexer {
         this.userHomeContextFactory = userHomeContextFactory;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
         this.globalLabelsContainer = globalLabelsContainer;
-        this.emitFailureHandlerPublisher = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
-                this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
         this.queueEmptyFuture = new CompletableFuture<>();
         this.queueEmptyFuture.complete(0);
+    }
+
+    /**
+     * Creates a failure handler with a new duration.
+     * @return Failure handler.
+     */
+    protected Sinks.EmitFailureHandler createFailureHandler() {
+        return Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
     }
 
     /**
@@ -111,7 +117,7 @@ public class LabelsIndexerImpl implements LabelsIndexer {
     protected LabelsLoadEntry loadEntryCore(LabelRefreshKey targetKey) {
         LabelsLoadEntry labelsLoadEntry = new LabelsLoadEntry(targetKey, LabelRefreshStatus.LOADING_QUEUED);
         if (this.loadObjectRequestSink != null) {
-            this.loadObjectRequestSink.emitNext(targetKey, this.emitFailureHandlerPublisher);
+            this.loadObjectRequestSink.emitNext(targetKey, createFailureHandler());
             incrementAwaitingOperationsCount();
         }
         return labelsLoadEntry;
@@ -137,7 +143,7 @@ public class LabelsIndexerImpl implements LabelsIndexer {
         }
 
         currentTableStatusCacheEntry.setStatus(LabelRefreshStatus.REFRESH_QUEUED);
-        this.loadObjectRequestSink.emitNext(targetLabelsKey, this.emitFailureHandlerPublisher);
+        this.loadObjectRequestSink.emitNext(targetLabelsKey, createFailureHandler());
         incrementAwaitingOperationsCount();
     }
 
@@ -342,10 +348,11 @@ public class LabelsIndexerImpl implements LabelsIndexer {
         int concurrency = Runtime.getRuntime().availableProcessors();
         this.subscription = requestLoadFlux
                 .flatMap((List<LabelRefreshKey> targetKeys) -> Mono.just(targetKeys)) // single thread forwarder
+                .parallel(concurrency)
                 .flatMap((List<LabelRefreshKey> targetKeys) -> {
                     onRequestLoadLabelsForObjects(targetKeys);
                     return Mono.empty();
-                }, concurrency, concurrency * 2)
+                })
                 .subscribe();
     }
 

@@ -61,7 +61,6 @@ public class TableStatusCacheImpl implements TableStatusCache {
     private boolean started;
     private Sinks.Many<CurrentTableStatusKey> loadTableStatusRequestSink;
     private Disposable subscription;
-    private Sinks.EmitFailureHandler emitFailureHandlerPublisher;
     private int queuedOperationsCount;
     private final Object lock = new Object();
     private CompletableFuture<Integer> queueEmptyFuture;
@@ -86,10 +85,17 @@ public class TableStatusCacheImpl implements TableStatusCache {
         this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
         this.checkResultsDataService = checkResultsDataService;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
-        this.emitFailureHandlerPublisher = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
-                this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
         this.queueEmptyFuture = new CompletableFuture<>();
         this.queueEmptyFuture.complete(0);
+    }
+
+    /**
+     * Creates a failure handler with a new duration.
+     * @return Failure handler.
+     */
+    protected Sinks.EmitFailureHandler createFailureHandler() {
+        return Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                this.dqoQueueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
     }
 
     /**
@@ -100,7 +106,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
     protected CurrentTableStatusCacheEntry loadEntryCore(CurrentTableStatusKey tableStatusKey) {
         CurrentTableStatusCacheEntry currentTableStatusCacheEntry = new CurrentTableStatusCacheEntry(tableStatusKey, CurrentTableStatusEntryStatus.LOADING_QUEUED);
         if (this.loadTableStatusRequestSink != null) {
-            this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+            this.loadTableStatusRequestSink.emitNext(tableStatusKey, createFailureHandler());
             incrementAwaitingOperationsCount();
         }
         return currentTableStatusCacheEntry;
@@ -165,7 +171,7 @@ public class TableStatusCacheImpl implements TableStatusCache {
 
         currentTableStatusCacheEntry.setStatus(CurrentTableStatusEntryStatus.REFRESH_QUEUED);
         if (this.loadTableStatusRequestSink != null) {
-            this.loadTableStatusRequestSink.emitNext(tableStatusKey, this.emitFailureHandlerPublisher);
+            this.loadTableStatusRequestSink.emitNext(tableStatusKey, createFailureHandler());
             incrementAwaitingOperationsCount();
         }
     }
@@ -281,10 +287,11 @@ public class TableStatusCacheImpl implements TableStatusCache {
         int concurrency = Runtime.getRuntime().availableProcessors();
         this.subscription = requestLoadFlux.subscribeOn(Schedulers.boundedElastic())
                 .flatMap(list -> Flux.fromIterable(list)) // single thread forwarder
+                .parallel(concurrency)
                 .flatMap(tableKey -> {
                     onRequestLoadTableStatus(tableKey);
                     return Mono.empty();
-                }, concurrency, concurrency * 2)
+                })
                 .subscribe();
     }
 
