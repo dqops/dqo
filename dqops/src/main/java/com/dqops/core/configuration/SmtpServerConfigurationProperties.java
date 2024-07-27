@@ -22,10 +22,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration POJO with the mapping for the Spring Boot built-in configuration parameters for server.*
+ * Configuration POJO with the mapping for the Spring Boot built-in configuration parameters for dqo.smtp-server.*
  */
 @Configuration
-@ConfigurationProperties(prefix = "smtp-server")
+@ConfigurationProperties(prefix = "dqo.smtp-server")
 @EqualsAndHashCode(callSuper = false)
 public class SmtpServerConfigurationProperties implements Cloneable {
     /**

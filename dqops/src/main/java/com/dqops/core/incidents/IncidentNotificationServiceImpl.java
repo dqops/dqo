@@ -108,7 +108,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                                   ConnectionIncidentGroupingSpec incidentGrouping,
                                   UserDomainIdentity userIdentity) {
         IncidentNotificationSpec incidentNotificationSpec = prepareIncidentNotifications(incidentGrouping, userIdentity);
-        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationSpec, userIdentity);
+        Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationSpec);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
 
@@ -116,12 +116,10 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
      * @param notificationSpec Webhook specification.
-     * @param userIdentity     User identity that specifies the data domain where the webhooks are defined.
      * @return Awaitable Mono object.
      */
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages,
-                                              IncidentNotificationSpec notificationSpec,
-                                              UserDomainIdentity userIdentity) {
+                                              IncidentNotificationSpec notificationSpec) {
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
                 .filter(message -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(message.getStatus())))
                 .map(message -> {
@@ -139,7 +137,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                         String incidentText = incidentNotificationHtmlMessageFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
                         messageAddressPair.getIncidentNotificationMessage().setText(incidentText);
 
-                        return sendEmailNotification(messageAddressPair, userIdentity);
+                        return sendEmailNotification(messageAddressPair);
                     }
 
                     String incidentText = incidentNotificationMessageMarkdownFormatter.prepareText(messageAddressPair.getIncidentNotificationMessage());
@@ -186,9 +184,8 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param messageAddressPair Incident notification payload and email address pair.
      * @return Mono that returns the target email address.
      */
-    protected Mono<MessageAddressPair> sendEmailNotification(MessageAddressPair messageAddressPair,
-                                                             UserDomainIdentity userIdentity) {
-        SmtpServerConfigurationSpec smtpServerConfigurationSpec = loadSmtpServerConfiguration(userIdentity);
+    protected Mono<MessageAddressPair> sendEmailNotification(MessageAddressPair messageAddressPair) {
+        SmtpServerConfigurationSpec smtpServerConfigurationSpec = loadSmtpServerConfiguration();
         JavaMailSender javaMailSender = emailSenderProvider.configureJavaMailSender(smtpServerConfigurationSpec);
 
         Mono<Void> responseSent = Mono.fromCallable(() -> {
@@ -241,8 +238,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         }
     }
 
-    private SmtpServerConfigurationSpec loadSmtpServerConfiguration(UserDomainIdentity userIdentity){
-        ExecutionContext executionContext = executionContextFactory.create(userIdentity);
+    /**
+     * Loads SMTP server configuration, picking the configuration from the local user settings, or from the configuration parameters (failback).
+     * @return Effective SMTP configuration.
+     */
+    private SmtpServerConfigurationSpec loadSmtpServerConfiguration(){
+        ExecutionContext executionContext = executionContextFactory.create(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SmtpServerConfigurationSpec serverConfiguration;
