@@ -94,10 +94,10 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     public CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                                        CheckResultsOverviewParameters loadParameters,
                                                                        UserDomainIdentity userDomainIdentity) {
-        Map<Long, CheckResultsOverviewDataModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
+        int resultsCountLimit = loadParameters.getResultsCount();
 
         Table ruleResultsTable = loadCheckResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table errorsTable = loadErrorsNormalizedToResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
@@ -119,11 +119,27 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             combinedTable = combinedTable.where(categoryColumn.isEqualTo(loadParameters.getCategory()));
         }
 
+        return makeCheckResultsOverviewDataModelsForContainer(rootChecksContainerSpec, combinedTable, resultsCountLimit);
+    }
+
+    /**
+     * Filters all table's data quality results by the target container, which is the type of checks (table/column), column name, and check type (i.e., daily monitoring).
+     * Then, finds the most recent results for each data quality check that has any results.
+     * @param rootChecksContainerSpec Root container for the data quality check, used to identify the type of checks (partitioned, monitoring, profiling), the time scale and possibly the column name.
+     * @param combinedTable All results of the checks and errors combined for the table.
+     * @param resultsCountLimit Maximum number of results to return for each table.
+     * @return Array of data quality results for each check.
+     */
+    public CheckResultsOverviewDataModel[] makeCheckResultsOverviewDataModelsForContainer(
+            AbstractRootChecksContainerSpec rootChecksContainerSpec, 
+            Table combinedTable,
+            int resultsCountLimit) {
         Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, combinedTable);
         Table sortedTable = filteredTable.sortDescendingOn(
                 SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
+        Map<Long, CheckResultsOverviewDataModel> resultMap = new LinkedHashMap<>();
 
         int rowCount = sortedTable.rowCount();
         DateTimeColumn timePeriodColumn = sortedTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
@@ -163,7 +179,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             checkResultsOverviewDataModel.appendResult(timePeriod, timePeriodUtc, executedAt, rootChecksContainerSpec.getCheckTimeScale(),
-                    severity, actualValue, dataGroupName, loadParameters.getResultsCount());
+                    severity, actualValue, dataGroupName, resultsCountLimit);
         }
 
         resultMap.values().forEach(m -> m.reverseLists());
