@@ -466,6 +466,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "Statistics values captured earlier are still stored, but are not shown in the DQOps UI.", defaultValue = "3")
     private int dqoStatisticsViewedStatisticsAgeMonths;
 
+    @CommandLine.Option(names = {"--dqo.statistics.samples-limit"},
+            description = "The limit of column value samples that are collected when the basic table statistics are gathered. " +
+                    "DQOps collects only the most popular values, which is determined by the number of value occurrences.", defaultValue = "100")
+    private int dqoStatisticsSamplesLimit;
+
     @CommandLine.Option(names = {"--dqo.error-sampling.truncated-strings-length"},
             description = "The maximum length of error samples captured from text columns (varchar, string, text, etc.) that are stored as error samples table. " +
                     "DQOps truncates longer column values and stores only the first few characters, up to the character count limit defined by this parameter.", defaultValue = "100")

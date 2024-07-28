@@ -153,6 +153,7 @@ dqo:
   statistics:
     truncated-strings-length: 50
     viewed-statistics-age-months: 3
+    samples-limit: 100
   error-sampling:
     truncated-strings-length: 50
     samples-limit: 50

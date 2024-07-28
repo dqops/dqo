@@ -617,6 +617,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setCanEdit(canManageChecks);
         checkModel.setCanRunChecks(canManageChecks);
         checkModel.setCanDeleteData(canManageChecks);
+        checkModel.setCheckFieldInfo(checkFieldInfo);
+        checkModel.setCustomCheckDefinitionSpec(customCheckDefinitionSpec);
+        checkModel.setScheduleGroup(scheduleGroup);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");

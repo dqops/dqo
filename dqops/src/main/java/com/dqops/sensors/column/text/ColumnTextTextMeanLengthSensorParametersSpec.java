@@ -37,6 +37,11 @@ public class ColumnTextTextMeanLengthSensorParametersSpec extends AbstractSensor
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/text/text_mean_length";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,6 +58,6 @@ public class ColumnTextTextMeanLengthSensorParametersSpec extends AbstractSensor
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/text/text_mean_length";
+        return SENSOR_NAME;
     }
 }

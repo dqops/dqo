@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoStatisticsCollectorConfigurationProperties implements Cloneable {
     private int truncatedStringsLength = 50;
     private int viewedStatisticsAgeMonths = 3;
+    private int samplesLimit = 100;
 
     /**
      * Returns the length of a the results returned by a statistics collector (for min, max operations) on string columns.
@@ -60,6 +61,22 @@ public class DqoStatisticsCollectorConfigurationProperties implements Cloneable 
      */
     public void setViewedStatisticsAgeMonths(int viewedStatisticsAgeMonths) {
         this.viewedStatisticsAgeMonths = viewedStatisticsAgeMonths;
+    }
+
+    /**
+     * Returns the default limit of column value samples that are collected.
+     * @return The default limit of column value samples.
+     */
+    public int getSamplesLimit() {
+        return samplesLimit;
+    }
+
+    /**
+     * Sets the default limit of column value samples.
+     * @param samplesLimit The default limit of column value samples.
+     */
+    public void setSamplesLimit(int samplesLimit) {
+        this.samplesLimit = samplesLimit;
     }
 
     /**

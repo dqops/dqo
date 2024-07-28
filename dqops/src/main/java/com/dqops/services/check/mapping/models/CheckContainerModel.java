@@ -75,6 +75,27 @@ public class CheckContainerModel {
     public CheckContainerModel() {
     }
 
+    /**
+     * Iterates over categories and removes checks that are already configured. This method is used by the rule mining module.
+     */
+    public void dropConfiguredChecks() {
+        for (QualityCategoryModel categoryModel : this.getCategories()) {
+            categoryModel.dropConfiguredChecks();
+        }
+    }
+
+    /**
+     * Drops empty categories that do not have any checks.
+     */
+    public void dropEmptyCategories() {
+        ArrayList<QualityCategoryModel> copyOfCategories = new ArrayList<>(this.categories);
+        for (QualityCategoryModel categoryModel : copyOfCategories) {
+            if (categoryModel.getChecks().isEmpty()) {
+                this.categories.remove(categoryModel);
+            }
+        }
+    }
+
     public static class CheckContainerModelSampleFactory implements SampleValueFactory<CheckContainerModel> {
         @Override
         public CheckContainerModel createSample() {

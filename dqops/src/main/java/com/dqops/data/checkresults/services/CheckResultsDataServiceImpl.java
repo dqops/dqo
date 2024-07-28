@@ -35,11 +35,15 @@ import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.storage.LoadedMonthlyPartition;
 import com.dqops.data.storage.ParquetPartitionId;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.rest.models.common.SortDirection;
 import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.services.check.mining.DataAssetProfilingResults;
+import com.dqops.services.check.mining.TableProfilingResults;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
@@ -182,6 +186,50 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         resultMap.values().forEach(m -> m.reverseLists());
 
         return resultMap.values().toArray(CheckResultsOverviewDataModel[]::new);
+    }
+
+    /**
+     * Loads the most recent table profiling results for a table and its columns. Reads one most recent result of the profiling checks.
+     * @param tableSpec Table specification for which we are loading the results.
+     * @param userDomainIdentity User domain identity to identify the data domain.
+     * @return Aggregated results for the most recent check result.
+     */
+    @Override
+    public TableProfilingResults loadProfilingChecksResultsForTable(
+            TableSpec tableSpec,
+            UserDomainIdentity userDomainIdentity) {
+        TableProfilingResults tableProfilingResults = new TableProfilingResults();
+        HierarchyId tableHierarchyId = tableSpec.getHierarchyId();
+        String connectionName = tableHierarchyId.getConnectionName();
+        PhysicalTableName physicalTableName = tableHierarchyId.getPhysicalTableName();
+        int resultsCountLimit = 1;
+
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        List<Table> checkResultsList = loadCheckResultsPartitions(checkResultsOverviewParameters, connectionName, physicalTableName, userDomainIdentity);
+        if (checkResultsList.isEmpty()) {
+            return tableProfilingResults;
+        }
+
+        AbstractRootChecksContainerSpec tableProfilingChecksContainer = tableSpec.getTableCheckRootContainer(
+                CheckType.profiling, null, false, true);
+
+        CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel = makeCheckResultsOverviewDataModelsForContainer(
+                tableProfilingChecksContainer, checkResultsList, null, null, resultsCountLimit);
+        DataAssetProfilingResults tableAssetProfilingResultsContainer = tableProfilingResults.getTableProfilingResults();
+        tableAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewTableLevel);
+
+        for (ColumnSpec columnSpec : tableSpec.getColumns().values()) {
+            AbstractRootChecksContainerSpec columnProfilingChecksContainer = columnSpec.getColumnCheckRootContainer(
+                    CheckType.profiling, null, false, true);
+
+            CheckResultsOverviewDataModel[] checkResultsOverviewColumnLevel = makeCheckResultsOverviewDataModelsForContainer(
+                    columnProfilingChecksContainer, checkResultsList, null, null, resultsCountLimit);
+
+            DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
+            columnAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewColumnLevel);
+        }
+
+        return tableProfilingResults;
     }
 
     /**

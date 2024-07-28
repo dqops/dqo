@@ -15590,6 +15590,8 @@ definitions:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -26899,7 +26901,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "The limit of results that are returned. The default value is\
-          \ 10 sample values with the highest count (the most popular)."
+          \ 100 sample values with the highest count (the most popular)."
   ColumnSamplingColumnSamplesStatisticsCollectorSpec:
     type: "object"
     properties:
@@ -35509,6 +35511,10 @@ definitions:
         enum:
         - "table"
         - "column"
+      samplesLimit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
       collectorsHierarchyIdsModels:
         type: "array"
         items:
@@ -35545,6 +35551,10 @@ definitions:
         type: "string"
         format: "date-time"
         description: "The local timestamp when the metric was collected"
+      executedAt:
+        type: "integer"
+        format: "int64"
+        description: "The UTC timestamp when the metric was collected (executed)"
       sampleCount:
         type: "integer"
         format: "int64"

@@ -18347,6 +18347,9 @@
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
+        },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."
@@ -28703,7 +28706,7 @@
         "limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular)."
+          "description" : "The limit of results that are returned. The default value is 100 sample values with the highest count (the most popular)."
         }
       }
     },
@@ -37082,6 +37085,11 @@
           "description" : "The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.",
           "enum" : [ "table", "column" ]
         },
+        "samplesLimit" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The default limit of column samples that are collected."
+        },
         "collectorsHierarchyIdsModels" : {
           "type" : "array",
           "items" : {
@@ -37118,6 +37126,11 @@
           "type" : "string",
           "format" : "date-time",
           "description" : "The local timestamp when the metric was collected"
+        },
+        "executedAt" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The UTC timestamp when the metric was collected (executed)"
         },
         "sampleCount" : {
           "type" : "integer",

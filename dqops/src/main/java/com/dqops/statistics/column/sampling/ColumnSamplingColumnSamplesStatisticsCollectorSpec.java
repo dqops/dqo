@@ -42,6 +42,11 @@ public class ColumnSamplingColumnSamplesStatisticsCollectorSpec extends Abstract
         }
     };
 
+    /**
+     * The sensor name used by this collector (the column sampling sensor).
+     */
+    public static final String SENSOR_NAME = ColumnSamplingColumnSamplesSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

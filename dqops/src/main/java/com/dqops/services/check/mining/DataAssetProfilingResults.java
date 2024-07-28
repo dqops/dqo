@@ -16,12 +16,14 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.data.checkresults.models.CheckResultsOverviewDataModel;
 import com.dqops.data.statistics.models.StatisticsMetricModel;
+import com.dqops.services.check.mapping.models.CheckContainerModel;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mapping.models.QualityCategoryModel;
+import com.dqops.statistics.column.sampling.ColumnSamplingColumnSamplesStatisticsCollectorSpec;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Summary information with the recent basic statistics and profiling check results extracted for one target data asset.
@@ -38,6 +40,11 @@ public class DataAssetProfilingResults {
      * Dictionary of check results, indexed by a check name.
      */
     private Map<String, ProfilingCheckResult> profilingCheckResults = new LinkedHashMap<>();
+
+    /**
+     * A list of sample values for the data asset. Provided only for column data assets, and filled from the results of the column sampling sensor.
+     */
+    private List<Object> sampleValues = new ArrayList<>();
 
     /**
      * Returns a list of statistic values for a given sensor name, if a statistics collector has results for that sensor.
@@ -60,17 +67,73 @@ public class DataAssetProfilingResults {
      * @param checkName Check name.
      * @return Profiling check results object with the severity.
      */
-    public ProfilingCheckResult getProfilingCheckByCheckName(String checkName) {
+    public ProfilingCheckResult getProfilingCheckByCheckName(String checkName, boolean addWhenMissing) {
         ProfilingCheckResult profilingCheckResult = this.profilingCheckResults.get(checkName);
+        if (profilingCheckResult == null && addWhenMissing) {
+            profilingCheckResult = new ProfilingCheckResult();
+            this.profilingCheckResults.put(checkName, profilingCheckResult);
+        }
         return profilingCheckResult;
     }
 
     /**
-     * Adds the results of a profiling check, given its name.
-     * @param checkName Check name.
-     * @param profilingCheckResult Profiling check results object with the severity.
+     * Imports check results from the check overview.
+     * @param checkResultsOverviewTableLevel Check results from the check results overview to be imported and categorized by check names.
      */
-    public void addProfilingCheckByCheckName(String checkName, ProfilingCheckResult profilingCheckResult) {
-        this.profilingCheckResults.put(checkName, profilingCheckResult);
+    public void importProfilingChecksResults(CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel) {
+        for (CheckResultsOverviewDataModel checkResultsOverviewDataModel : checkResultsOverviewTableLevel) {
+            String checkName = checkResultsOverviewDataModel.getCheckName();
+            ProfilingCheckResult profilingCheckByCheckName = this.getProfilingCheckByCheckName(checkName, true);
+            profilingCheckByCheckName.importCheckResultsOverview(checkResultsOverviewDataModel);
+        }
+    }
+
+    /**
+     * Imports check models from the check container.
+     * @param checkContainerModel Check container model with all checks.
+     */
+    public void importChecksModels(CheckContainerModel checkContainerModel) {
+        List<QualityCategoryModel> categoriesList = checkContainerModel.getCategories();
+
+        for (QualityCategoryModel categoryModel : categoriesList) {
+            List<CheckModel> checkModels = categoryModel.getChecks();
+
+            for (CheckModel checkModel : checkModels) {
+                if (!checkModel.isConfigured() && !checkModel.isDefaultCheck()) {
+                    continue;
+                }
+
+                ProfilingCheckResult profilingCheckResult = getProfilingCheckByCheckName(checkModel.getCheckName(), true);
+                profilingCheckResult.importCheckModel(checkModel);
+            }
+        }
+    }
+
+    /**
+     * Import results from the statistics.
+     * @param statistics Statistics models.
+     */
+    public void importStatistics(List<StatisticsMetricModel> statistics) {
+        for (StatisticsMetricModel statisticsMetricModel : statistics) {
+            String sensorName = statisticsMetricModel.getSensorName();
+            List<StatisticsMetricModel> statisticsModelBySensor = this.basicStatistics.get(sensorName);
+            if (statisticsModelBySensor == null) {
+                statisticsModelBySensor = new ArrayList<>();
+                this.basicStatistics.put(sensorName, statisticsModelBySensor);
+            }
+            statisticsModelBySensor.add(statisticsMetricModel);
+
+            for (ProfilingCheckResult profilingCheckResult : this.profilingCheckResults.values()) {
+                if (Objects.equals(sensorName, profilingCheckResult.getSensorName())) {
+                    profilingCheckResult.importStatistics(statisticsMetricModel);
+                }
+            }
+
+            if (Objects.equals(sensorName, ColumnSamplingColumnSamplesStatisticsCollectorSpec.SENSOR_NAME)) {
+                // column sampling sensor
+                Object sampleValue = statisticsMetricModel.getResult();
+                this.sampleValues.add(sampleValue);
+            }
+        }
     }
 }

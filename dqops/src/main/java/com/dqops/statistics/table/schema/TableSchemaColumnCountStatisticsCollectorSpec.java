@@ -42,6 +42,11 @@ public class TableSchemaColumnCountStatisticsCollectorSpec extends AbstractStati
         }
     };
 
+    /**
+     * Sensor name used by this collector.
+     */
+    public static final String SENSOR_NAME = TableColumnCountSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

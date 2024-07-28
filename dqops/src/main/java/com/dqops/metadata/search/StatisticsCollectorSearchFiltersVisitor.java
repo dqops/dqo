@@ -23,6 +23,7 @@ import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
 import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorCategorySpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
@@ -274,6 +275,12 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             statisticsCollector = new ColumnStatisticsCollectorsRootCategoriesSpec();
             if (columnSpec.getHierarchyId() != null) {
                 statisticsCollector.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "statistics_collector"));
+            }
+
+            if (this.filters.getSamplesLimit() != null) {
+                ColumnSamplingColumnSamplesSensorParametersSpec columnSamplingColumnSamplesSensorParametersSpec =
+                        statisticsCollector.getSampling().getColumnSamples().getParameters();
+                columnSamplingColumnSamplesSensorParametersSpec.setLimit(this.filters.getSamplesLimit());
             }
         }
 

@@ -35,15 +35,20 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnSamplingColumnSamplesSensorParametersSpec extends AbstractSensorParametersSpec {
+    /**
+     * The sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/sampling/column_samples";
+
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSamplingColumnSamplesSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).")
+    @JsonPropertyDescription("The limit of results that are returned. The default value is 100 sample values with the highest count (the most popular).")
     @RequiredField
-    private Integer limit = 10;
+    private Integer limit = 100;
 
     /**
      * Returns the limit of rows that are returned in the sample.
@@ -79,6 +84,6 @@ public class ColumnSamplingColumnSamplesSensorParametersSpec extends AbstractSen
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/sampling/column_samples";
+        return SENSOR_NAME;
     }
 }

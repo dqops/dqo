@@ -25,9 +25,14 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.services.check.mining.CheckMiningParametersModel;
+import com.dqops.services.check.mining.DataAssetProfilingResults;
+import com.dqops.services.check.mining.ProfilingCheckResult;
+import com.dqops.services.check.mining.TableProfilingResults;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -509,5 +514,27 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 this.getWarning().decreaseRuleSensitivity(checkResultsSingleCheck);
             }
         }
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     * @param profilingCheckByCheckName Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec Parent table specification for reference.
+     * @param targetCheckRootContainer Parent check container, to identify the type of checks.
+     * @param miningParameters Additional rule mining parameters given by the user.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    public boolean proposeCheckConfiguration(
+            ProfilingCheckResult profilingCheckByCheckName,
+            DataAssetProfilingResults dataAssetProfilingResults,
+            TableProfilingResults tableProfilingResults,
+            TableSpec tableSpec,
+            AbstractRootChecksContainerSpec targetCheckRootContainer,
+            CheckMiningParametersModel miningParameters) {
+
+
+        return false;
     }
 }

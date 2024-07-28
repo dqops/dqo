@@ -31,15 +31,27 @@ import java.util.*;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class StatisticsResultsForTableModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name")
     private String connectionName;
 
+    /**
+     * Physical table name including the schema and table names.
+     */
     @JsonPropertyDescription("Physical table name including the schema and table names")
     private PhysicalTableName table;
 
+    /**
+     * List of statistics metrics.
+     */
     @JsonPropertyDescription("List of statistics metrics")
     private List<StatisticsMetricModel> metrics = new ArrayList<>();
 
+    /**
+     * Statistics metrics of columns.
+     */
     @JsonPropertyDescription("Statistics metrics of columns")
     private Map<String, StatisticsResultsForColumnModel> columns = new LinkedHashMap<>();
 }

@@ -38,6 +38,11 @@ public class ColumnNullsNullsCountSensorParametersSpec extends AbstractSensorPar
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/nulls/null_count";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -54,7 +59,7 @@ public class ColumnNullsNullsCountSensorParametersSpec extends AbstractSensorPar
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/nulls/null_count";
+        return SENSOR_NAME;
     }
 
     public static class ColumnNullsNullsCountSensorParametersSpecSampleFactory implements SampleValueFactory<ColumnNullsNullsCountSensorParametersSpec> {
