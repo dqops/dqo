@@ -35,12 +35,12 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
         IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
         IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
-        notificationSpec.setIncidentOpenedAddresses("first@email.com");
+        notificationSpec.setIncidentOpenedAddresses("default@email.com");
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
         assertEquals(1, messageAddressPairs.size());
-        assertEquals("first@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("default@email.com", messageAddressPairs.get(0).getNotificationAddress());
     }
 
     @Test
@@ -64,7 +64,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec();
         filteredNotificationSpec.setNotificationTarget(new IncidentNotificationSpec(){{
-            setIncidentOpenedAddresses("filtered@email.com");
+            setIncidentOpenedAddresses("1_filtered@email.com");
         }});
         filteredNotificationSpec.setProcessAdditionalFilters(true);
         filteredNotificationSpec.setNotificationFilter(new NotificationFilterSpec(){{
@@ -74,7 +74,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec();
         secondFilteredNotificationSpec.setNotificationTarget(new IncidentNotificationSpec(){{
-            setIncidentOpenedAddresses("filtered_two@email.com");
+            setIncidentOpenedAddresses("2_filtered@email.com");
         }});
         secondFilteredNotificationSpec.setProcessAdditionalFilters(true);
         secondFilteredNotificationSpec.setNotificationFilter(new NotificationFilterSpec(){{
@@ -83,15 +83,15 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
 
         FilteredNotificationSpecMap filteredNotificationSpecMap = new FilteredNotificationSpecMap();
-        filteredNotificationSpecMap.put("one_filtered_notification", secondFilteredNotificationSpec);
-        filteredNotificationSpecMap.put("second_filtered_notification", filteredNotificationSpec);
+        filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
+        filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
 
         notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
         assertEquals(2, messageAddressPairs.size());
-        assertEquals("filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
         assertEquals("default@email.com", messageAddressPairs.get(1).getNotificationAddress());
     }
 
@@ -243,6 +243,33 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
     }
 
+    @Test
+    void filterNotifications_commaSeparatedAddresses_returnedBoth() {
+        Instant instant = LocalDateTime.of(2023, 9, 1, 12, 30, 20).toInstant(ZoneOffset.UTC);
+        IncidentNotificationMessage message = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
+        IncidentNotificationSpec notificationSpec = new IncidentNotificationSpec();
+        notificationSpec.setIncidentOpenedAddresses("default@email.com");
 
+        FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
+            setPriority(1);
+            setNotificationTarget(new IncidentNotificationSpec(){{
+                setIncidentOpenedAddresses("1_filtered@email.com, 2_filtered@email.com");
+            }});
+            setNotificationFilter(new NotificationFilterSpec(){{
+                setConnection("connection_name");
+            }});
+        }};
+
+        FilteredNotificationSpecMap filteredNotificationSpecMap = new FilteredNotificationSpecMap();
+        filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
+
+        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+
+        List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
+
+        assertEquals(2, messageAddressPairs.size());
+        assertEquals("1_filtered@email.com", messageAddressPairs.get(0).getNotificationAddress());
+        assertEquals("2_filtered@email.com", messageAddressPairs.get(1).getNotificationAddress());
+    }
 
 }

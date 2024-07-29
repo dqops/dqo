@@ -5,14 +5,17 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-// todo: description
-@Data // todo remove
+import java.util.Objects;
+
+/**
+ * Notification with filters that is sent only if values in notification message match the filters.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
@@ -25,21 +28,85 @@ public class FilteredNotificationSpec extends AbstractSpec {
         }
     };
 
-
-    // todo
+    @JsonPropertyDescription("Notification filter specification for filtering the incident by the values of its fields.")
     private NotificationFilterSpec notificationFilter;
 
-    // todo
+    @JsonPropertyDescription("Notification target addresses for each of the status.")
     private IncidentNotificationSpec notificationTarget;
 
-    // todo
+    @JsonPropertyDescription("The priority of the notification. Notifications are sent to the first notification targets that matches the filters when processAdditionalFilters is not set.")
     private Integer priority = 1000;
 
-    // todo
+    @JsonPropertyDescription("Flag to break sending next notifications. Setting to true allows to send next notification from the list in priority order that matches the filter.")
     private Boolean processAdditionalFilters = false;
 
-    // todo: getters, setters
+    /**
+     * Returns a notification filter.
+     * @return Notification filter.
+     */
+    public NotificationFilterSpec getNotificationFilter() {
+        return notificationFilter;
+    }
 
+    /**
+     * Sets a notification filter.
+     * @param notificationFilter Notification filter.
+     */
+    public void setNotificationFilter(NotificationFilterSpec notificationFilter) {
+        setDirtyIf(!Objects.equals(this.notificationFilter, notificationFilter));
+        this.notificationFilter = notificationFilter;
+    }
+
+    /**
+     * Returns an incident notification target.
+     * @return Incident notification target.
+     */
+    public IncidentNotificationSpec getNotificationTarget() {
+        return notificationTarget;
+    }
+
+    /**
+     * Sets an incident notification target.
+     * @param notificationTarget Incident notification target.
+     */
+    public void setNotificationTarget(IncidentNotificationSpec notificationTarget) {
+        setDirtyIf(!Objects.equals(this.notificationTarget, notificationTarget));
+        this.notificationTarget = notificationTarget;
+    }
+
+    /**
+     * Returns a notification priority.
+     * @return Notification priority.
+     */
+    public Integer getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets a notification priority.
+     * @param priority Notification priority.
+     */
+    public void setPriority(Integer priority) {
+        setDirtyIf(!Objects.equals(this.priority, priority));
+        this.priority = priority;
+    }
+
+    /**
+     * Returns a process additional filters flag.
+     * @return process additional filters flag.
+     */
+    public Boolean getProcessAdditionalFilters() {
+        return processAdditionalFilters;
+    }
+
+    /**
+     * Sets a process additional filters flag.
+     * @param processAdditionalFilters Process additional filters flag.
+     */
+    public void setProcessAdditionalFilters(Boolean processAdditionalFilters) {
+        setDirtyIf(!Objects.equals(this.processAdditionalFilters, processAdditionalFilters));
+        this.processAdditionalFilters = processAdditionalFilters;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

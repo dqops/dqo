@@ -176,22 +176,23 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
         List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
         List<IncidentNotificationSpec> notificationsToSend = new ArrayList<>();
+        int processAdditionalFiltersNumber = 0;
         for (FilteredNotificationSpec filteredNotification : filteredNotificationsList) {
             notificationsToSend.add(filteredNotification.getNotificationTarget());
             if (!filteredNotification.getProcessAdditionalFilters()) {
                 break;
             }
+            processAdditionalFiltersNumber++;
         }
 
         // all filtered notifications got ProcessAdditionalFilters flag
-        if (filteredNotificationsList.size() == notificationsToSend.size()) {
+        if (notificationsToSend.isEmpty() || filteredNotificationsList.size() == processAdditionalFiltersNumber) {
             notificationsToSend.add(notificationSpec);
         }
 
         List<String> compoundAddressesList = notificationsToSend.stream().map(notificationTarget -> {
-            return notificationTarget.getNotificationAddressForStatus(message.getStatus()) != null
-                    ? notificationTarget.getNotificationAddressForStatus(message.getStatus())
-                    : "";
+            String notificationAddress = notificationTarget.getNotificationAddressForStatus(message.getStatus());
+            return notificationAddress != null ? notificationAddress : "";
         }).collect(Collectors.toList());
 
         String addressesString = StringUtils.join(compoundAddressesList, ',');
