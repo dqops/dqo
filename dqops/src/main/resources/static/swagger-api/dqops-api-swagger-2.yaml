@@ -78,6 +78,9 @@ tags:
 - name: "LogShipping"
   description: "Log shipping controller that accepts logs sent from a web application\
     \ or external tools and aggregates them in the local DQOps instance logs."
+- name: "RuleMining"
+  description: "Performs rule mining and proposes the configuration of data quality\
+    \ checks and their rule thresholds for tables."
 - name: "Rules"
   description: "Operations for managing custom data quality rule definitions in DQOps.\
     \ The custom rules are stored in the DQOps user home folder."
@@ -6222,6 +6225,68 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedMonitoringChecks"
+      description: "Applies the proposed configuration of data quality monitoring\
+        \ checks on a table."
+      operationId: "applyProposedMonitoringChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality monitoring checks successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results
   : get:
       tags:
@@ -6727,6 +6792,63 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTableMonitoringChecks"
+      description: "Proposes the configuration of monitoring checks on a table by\
+        \ generating suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTableMonitoringChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality monitoring checks\
+            \ on a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts:
     get:
       tags:
@@ -7080,6 +7202,68 @@ paths:
         204:
           description: "Monthly table level data quality partitioned checks successfully\
             \ updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedPartitionedChecks"
+      description: "Applies the proposed configuration of data quality partitioned\
+        \ checks on a table."
+      operationId: "applyProposedPartitionedChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality partitioned checks successfully updated"
         400:
           description: "Bad request, adjust before retrying"
         404:
@@ -7597,6 +7781,63 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTablePartitionedChecks"
+      description: "Proposes the configuration of partitioned checks on a table by\
+        \ generating suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTablePartitionedChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality partitioned checks\
+            \ on a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts:
     get:
       tags:
@@ -7944,6 +8185,60 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedProfilingChecks"
+      description: "Applies the proposed configuration of data quality profiling checks\
+        \ on a table."
+      operationId: "applyProposedProfilingChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality profiling checks successfully updated"
         400:
           description: "Bad request, adjust before retrying"
         404:
@@ -8388,6 +8683,55 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CheckResultsOverviewDataModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTableProfilingChecks"
+      description: "Proposes the configuration of profiling checks on a table by generating\
+        \ suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTableProfilingChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality profiling checks on\
+            \ a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
         404:
           description: "Connection or table not found"
         500:
@@ -15425,6 +15769,48 @@ definitions:
           \ storing the check."
     description: "Simplistic model that returns a single data quality check, its name\
       \ and \"configured\" flag"
+  CheckMiningParametersModel:
+    type: "object"
+    properties:
+      severity_level:
+        type: "string"
+        description: "The default severity level for rules that are proposed by the\
+          \ rule mining engine. The default value is 'error'."
+        enum:
+        - "warning"
+        - "error"
+        - "fatal"
+      category_filter:
+        type: "string"
+        description: "Optional filter for the check category names, supports filtering\
+          \ with prefixes and suffixes defined as a '*' character."
+      check_name_filter:
+        type: "string"
+        description: "Optional filter for the check names, supports filtering with\
+          \ prefixes and suffixes defined as a '*' character."
+      column_name_filter:
+        type: "string"
+        description: "Optional filter for the column names, supports filtering with\
+          \ prefixes and suffixes defined as a '*' character."
+      copy_failed_profiling_checks:
+        type: "boolean"
+        description: "Copy also the configuration of profiling checks that failed."
+    description: "Data quality check rule mining parameters. Configure what type of\
+      \ checks should be configured."
+  CheckMiningProposalModel:
+    type: "object"
+    properties:
+      table_checks:
+        description: "Proposed configuration of table-level data quality checks, such\
+          \ as volume, timeliness or schema."
+        $ref: "#/definitions/CheckContainerModel"
+      column_checks:
+        type: "object"
+        description: "Dictionary of proposed data quality checks for each column."
+        additionalProperties:
+          $ref: "#/definitions/CheckContainerModel"
+    description: "Model that has a proposed configuration of checks on a table and\
+      \ its columns generated by a data quality check mining service."
   CheckModel:
     type: "object"
     properties:
@@ -15584,12 +15970,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:

@@ -17,7 +17,6 @@
 package com.dqops.services.check.mining;
 
 import com.dqops.rules.DefaultRuleSeverityLevel;
-import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,4 +37,28 @@ public class CheckMiningParametersModel {
      */
     @JsonPropertyDescription("The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.")
     private DefaultRuleSeverityLevel severityLevel = DefaultRuleSeverityLevel.error;
+
+    /**
+     * Optional filter for the check category names, supports filtering with prefixes and suffixes defined as a '*' character.
+     */
+    @JsonPropertyDescription("Optional filter for the check category names, supports filtering with prefixes and suffixes defined as a '*' character.")
+    private String categoryFilter;
+
+    /**
+     * Optional filter for the check names, supports filtering with prefixes and suffixes defined as a '*' character.
+     */
+    @JsonPropertyDescription("Optional filter for the check names, supports filtering with prefixes and suffixes defined as a '*' character.")
+    private String checkNameFilter;
+
+    /**
+     * Optional filter for the column names, supports filtering with prefixes and suffixes defined as a '*' character.
+     */
+    @JsonPropertyDescription("Optional filter for the column names, supports filtering with prefixes and suffixes defined as a '*' character.")
+    private String columnNameFilter;
+
+    /**
+     * Copy also the configuration of profiling checks that failed.
+     */
+    @JsonPropertyDescription("Copy also the configuration of profiling checks that failed.")
+    private boolean copyFailedProfilingChecks;
 }

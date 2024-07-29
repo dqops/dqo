@@ -23,6 +23,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -34,6 +35,9 @@ import com.dqops.services.check.mapping.models.RuleParametersModel;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
+import com.dqops.utils.serialization.JsonSerializer;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,20 +48,25 @@ import java.util.List;
  * Service that proposes a configuration of data quality checks for a table and a target check type. This is a data quality rule mining engine.
  */
 @Service
+@Slf4j
 public class CheckMiningServiceImpl implements CheckMiningService {
     private final SpecToModelCheckMappingService specToModelCheckMappingService;
     private final TableProfilingResultsReadService tableProfilingResultsReadService;
+    private final JsonSerializer jsonSerializer;
 
     /**
      * Dependency injection constructor that receives dependencies of the service.
      * @param specToModelCheckMappingService Specification to model mapping service.
      * @param tableProfilingResultsReadService Service that loads statistics and profiling check results.
+     * @param jsonSerializer Json serializer, used to convert sensor parameters and rule parameters to the target type by serializing and deserializing.
      */
     @Autowired
     public CheckMiningServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService,
-                                  TableProfilingResultsReadService tableProfilingResultsReadService) {
+                                  TableProfilingResultsReadService tableProfilingResultsReadService,
+                                  JsonSerializer jsonSerializer) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.tableProfilingResultsReadService = tableProfilingResultsReadService;
+        this.jsonSerializer = jsonSerializer;
     }
 
     /**
@@ -87,14 +96,25 @@ public class CheckMiningServiceImpl implements CheckMiningService {
         AbstractRootChecksContainerSpec tableCheckRootContainer = clonedTableSpec.getTableCheckRootContainer(
                 checkType, checkTimeScale, false, true);
 
-        CheckContainerModel proposedTableChecks = this.proposeChecksForContainer(tableCheckRootContainer, tableProfilingResults.getTableProfilingResults(),
-                tableProfilingResults, connectionSpec, clonedTableSpec, executionContext, miningParameters);
-        checkProposalModel.setTableChecks(proposedTableChecks);
+        if (Strings.isNullOrEmpty(miningParameters.getColumnNameFilter())) {
+            CheckContainerModel proposedTableChecks = this.proposeChecksForContainer(tableCheckRootContainer, tableProfilingResults.getTableProfilingResults(),
+                    tableProfilingResults, connectionSpec, clonedTableSpec, executionContext, miningParameters);
+            checkProposalModel.setTableChecks(proposedTableChecks);
+        } else {
+            checkProposalModel.setTableChecks(new CheckContainerModel()); // a column filter given, no table level checks proposed
+        }
 
         for (ColumnSpec columnSpec : clonedTableSpec.getColumns().values()) {
             AbstractRootChecksContainerSpec columnCheckRootContainer = columnSpec.getColumnCheckRootContainer(
                     checkType, checkTimeScale, false, true);
             String columnName = columnSpec.getColumnName();
+
+            if (!Strings.isNullOrEmpty(miningParameters.getColumnNameFilter())) {
+                if (!StringPatternComparer.matchSearchPattern(columnName, miningParameters.getColumnNameFilter())) {
+                    continue;
+                }
+            }
+
             DataAssetProfilingResults columnProfilingResults = tableProfilingResults.getColumnProfilingResults(columnName);
             CheckContainerModel proposedColumnChecks = this.proposeChecksForContainer(columnCheckRootContainer, columnProfilingResults,
                     tableProfilingResults, connectionSpec, clonedTableSpec, executionContext, miningParameters);
@@ -128,17 +148,39 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                 connectionSpec.getProviderType(), true);
         targetModel.dropConfiguredChecks();
 
-        for (QualityCategoryModel categoryModel : targetModel.getCategories()) {
+        for (QualityCategoryModel categoryModel : new ArrayList<>(targetModel.getCategories())) {
+            if (!Strings.isNullOrEmpty(miningParameters.getCategoryFilter())) {
+                if (!StringPatternComparer.matchSearchPattern(categoryModel.getCategory(), miningParameters.getCategoryFilter())) {
+                    targetModel.getCategories().remove(categoryModel);
+                    continue;
+                }
+            }
+
             List<CheckModel> listOfChecksInCategory = categoryModel.getChecks();
             for (CheckModel checkModel : new ArrayList<>(listOfChecksInCategory)) {
+                if (!Strings.isNullOrEmpty(miningParameters.getCheckNameFilter())) {
+                    if (!StringPatternComparer.matchSearchPattern(checkModel.getCheckName(), miningParameters.getCheckNameFilter())) {
+                        listOfChecksInCategory.remove(checkModel);
+                        continue;
+                    }
+                }
+
                 AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
                 SimilarCheckModel similarProfilingCheck = checkModel.getSimilarProfilingCheck();
                 ProfilingCheckResult profilingCheckByCheckName = similarProfilingCheck != null ?
                         dataAssetProfilingResults.getProfilingCheckByCheckName(similarProfilingCheck.getCheckName(), true) : null;
+                boolean checkWasConfigured = false;
 
-                // let the check configure itself
-                boolean checkWasConfigured = checkSpec.proposeCheckConfiguration(
-                        profilingCheckByCheckName, dataAssetProfilingResults, tableProfilingResults, tableSpec, targetCheckRootContainer, miningParameters);
+                try {
+                    // let the check configure itself
+                    checkWasConfigured = checkSpec.proposeCheckConfiguration(
+                            profilingCheckByCheckName, dataAssetProfilingResults, tableProfilingResults, tableSpec,
+                            targetCheckRootContainer, checkModel, miningParameters, this.jsonSerializer);
+                }
+                catch (Exception ex) {
+                    checkWasConfigured = false;
+                    log.error("The rule mining engine failed to configure the check '" + checkModel.getCheckName() + "', error: " + ex.getMessage(), ex);
+                }
 
                 if (checkWasConfigured) {
                     CheckModel updatedCheckModel = this.specToModelCheckMappingService.createCheckModel(
