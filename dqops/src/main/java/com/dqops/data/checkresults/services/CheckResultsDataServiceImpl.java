@@ -152,7 +152,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             TextColumn checkNameColumn = filteredTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
             TextColumn tableComparisonColumn = filteredTable.textColumn(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
             DoubleColumn actualValueColumn = filteredTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            for (int i = 0; i < rowCount ; i++) {
+            for (int i = rowCount - 1; i >= 0 ; i--) {
                 LocalDateTime timePeriod = timePeriodColumn.get(i);
                 Instant timePeriodUtc = timePeriodUtcColumn.get(i);
                 if (timePeriodUtc == null) {
