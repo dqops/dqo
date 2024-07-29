@@ -1,4 +1,4 @@
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 import com.dqops.BaseTest;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginServiceObjectMother;
