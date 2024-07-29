@@ -174,7 +174,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     public void setFilteredNotificationMap(FilteredNotificationSpecMap filteredNotificationMap) {
         setDirtyIf(!Objects.equals(this.filteredNotificationMap, filteredNotificationMap));
         this.filteredNotificationMap = filteredNotificationMap;
-        propagateHierarchyIdToField(filteredNotificationMap, "filteredNotificationMap");
+        propagateHierarchyIdToField(filteredNotificationMap, "filtered_notification_map");
     }
 
     @Override
