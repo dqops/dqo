@@ -16,7 +16,10 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.rules.DefaultRuleSeverityLevel;
+import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
@@ -30,4 +33,9 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckMiningParametersModel", description = "Data quality check rule mining parameters. Configure what type of checks should be configured.")
 public class CheckMiningParametersModel {
+    /**
+     * The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.
+     */
+    @JsonPropertyDescription("The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.")
+    private DefaultRuleSeverityLevel severityLevel = DefaultRuleSeverityLevel.error;
 }

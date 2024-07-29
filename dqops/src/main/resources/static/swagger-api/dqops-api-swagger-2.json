@@ -18154,7 +18154,7 @@
         "default_severity" : {
           "type" : "string",
           "description" : "The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.",
-          "enum" : [ "valid", "warning", "error", "fatal" ]
+          "enum" : [ "warning", "error", "fatal" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -18254,7 +18254,7 @@
         "default_severity" : {
           "type" : "string",
           "description" : "The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.",
-          "enum" : [ "valid", "warning", "error", "fatal" ]
+          "enum" : [ "warning", "error", "fatal" ]
         },
         "data_grouping_override" : {
           "description" : "Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). ",
@@ -18343,13 +18343,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."
