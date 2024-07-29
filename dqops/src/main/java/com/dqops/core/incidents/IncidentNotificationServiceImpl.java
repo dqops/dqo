@@ -146,19 +146,21 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                             ).sorted(Comparator.comparing(value -> value.getValue().getPriority())).collect(Collectors.toList()); // todo: reversed
 
                     List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
-                    List<FilteredNotificationSpec> filteredNotificationsToSend = new ArrayList<>();
+                    List<IncidentNotificationSpec> notificationsToSend = new ArrayList<>();
                     for (int i = 0; i < filteredNotificationsList.size(); i++) {
                         FilteredNotificationSpec filteredNotification = filteredNotificationsList.get(i);
-                        filteredNotificationsToSend.add(filteredNotification);
+                        notificationsToSend.add(filteredNotification.getNotificationTarget());
                         if (!filteredNotification.getProcessAdditionalFilters()) {
                             break;
                         }
+                        if (i == filteredNotificationsList.size() - 1) {
+                            notificationsToSend.add(notificationSpec);
+                        }
                     }
 
-                    if (!filteredNotificationsToSend.isEmpty()) {
+                    if (!notificationsToSend.isEmpty()) {
 
-                        List<String> compoundAddressesList = filteredNotificationsToSend.stream().map(filteredNotificationSpec -> {
-                            IncidentNotificationSpec notificationTarget = filteredNotificationSpec.getNotificationTarget();
+                        List<String> compoundAddressesList = notificationsToSend.stream().map(notificationTarget -> {
                             return notificationTarget.getNotificationAddressForStatus(message.getStatus()) != null
                                     ? notificationTarget.getNotificationAddressForStatus(message.getStatus())
                                     : "";
@@ -173,17 +175,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                         return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
                     }
 
-                    // todo: send it when list of filteredNotification is full of entries with processAdditionalFilters
-
-                    String addressesString = notificationSpec.getNotificationAddressForStatus(message.getStatus()) != null
-                            ? notificationSpec.getNotificationAddressForStatus(message.getStatus())
-                            : "";
-
-                    List<String> addresses = addressesString.contains(",")
-                            ? Arrays.stream(addressesString.split(",")).map(String::trim).collect(Collectors.toList())
-                            : List.of(addressesString);
-
-                    return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
+                    return List.of(new MessageAddressPair());
                 })
                 .flatMap(Flux::fromIterable)
                 .filter(messageAddressPair -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(messageAddressPair.getIncidentNotificationMessage().getStatus())))
