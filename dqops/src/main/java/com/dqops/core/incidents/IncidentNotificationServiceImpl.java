@@ -27,7 +27,9 @@ import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.incidents.FilteredNotificationSpec;
 import com.dqops.metadata.incidents.IncidentNotificationSpec;
+import com.dqops.metadata.incidents.NotificationFilterSpec;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -38,6 +40,7 @@ import io.netty.buffer.Unpooled;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +54,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -122,16 +124,69 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages,
                                               IncidentNotificationSpec notificationSpec,
                                               UserDomainIdentity userIdentity) {
+
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
-                .filter(message -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(message.getStatus())))
                 .map(message -> {
-                    String addressesString = notificationSpec.getNotificationAddressForStatus(message.getStatus());
+                    List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotificationMap()
+                            .entrySet().stream()
+                            .filter(stringFilteredNotificationSpecEntry -> {
+                                        NotificationFilterSpec filter = stringFilteredNotificationSpecEntry.getValue().getNotificationFilter();
+
+                                        return message.getConnection().equals(filter.getConnection()) &&
+                                               message.getSchema().equals(filter.getSchema()) &&
+                                               message.getTable().equals(filter.getTable()) &&
+                                               message.getTablePriority().equals(filter.getTablePriority()) &&
+                                               message.getDataGroupName().equals(filter.getDataGroupName()) &&
+                                               message.getQualityDimension().equals(filter.getQualityDimension()) &&
+                                               message.getCheckCategory().equals(filter.getCheckCategory()) &&
+                                               message.getCheckType().equals(filter.getCheckType()) &&
+                                               message.getCheckName().equals(filter.getCheckName()) &&
+                                               filter.getHighestSeverity().equals(message.getHighestSeverity());
+                                    }
+                            ).sorted(Comparator.comparing(value -> value.getValue().getPriority())).collect(Collectors.toList()); // todo: reversed
+
+                    List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
+                    List<FilteredNotificationSpec> filteredNotificationsToSend = new ArrayList<>();
+                    for (int i = 0; i < filteredNotificationsList.size(); i++) {
+                        FilteredNotificationSpec filteredNotification = filteredNotificationsList.get(i);
+                        filteredNotificationsToSend.add(filteredNotification);
+                        if (!filteredNotification.getProcessAdditionalFilters()) {
+                            break;
+                        }
+                    }
+
+                    if (!filteredNotificationsToSend.isEmpty()) {
+
+                        List<String> compoundAddressesList = filteredNotificationsToSend.stream().map(filteredNotificationSpec -> {
+                            IncidentNotificationSpec notificationTarget = filteredNotificationSpec.getNotificationTarget();
+                            return notificationTarget.getNotificationAddressForStatus(message.getStatus()) != null
+                                    ? notificationTarget.getNotificationAddressForStatus(message.getStatus())
+                                    : "";
+                        }).collect(Collectors.toList());
+
+                        String addressesString = StringUtils.join(compoundAddressesList, ',');
+
+                        List<String> addresses = addressesString.contains(",")
+                                ? Arrays.stream(addressesString.split(",")).map(String::trim).collect(Collectors.toList())
+                                : List.of(addressesString);
+
+                        return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
+                    }
+
+                    // todo: send it when list of filteredNotification is full of entries with processAdditionalFilters
+
+                    String addressesString = notificationSpec.getNotificationAddressForStatus(message.getStatus()) != null
+                            ? notificationSpec.getNotificationAddressForStatus(message.getStatus())
+                            : "";
+
                     List<String> addresses = addressesString.contains(",")
                             ? Arrays.stream(addressesString.split(",")).map(String::trim).collect(Collectors.toList())
                             : List.of(addressesString);
+
                     return addresses.stream().map(address -> new MessageAddressPair(message, address)).collect(Collectors.toList());
                 })
                 .flatMap(Flux::fromIterable)
+                .filter(messageAddressPair -> !Strings.isNullOrEmpty(notificationSpec.getNotificationAddressForStatus(messageAddressPair.getIncidentNotificationMessage().getStatus())))
                 .filter(messageAddressPair -> !Strings.isNullOrEmpty(messageAddressPair.getNotificationAddress()))
                 .flatMap(messageAddressPair -> {
 

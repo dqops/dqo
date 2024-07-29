@@ -59,9 +59,7 @@ import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
-import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
+import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -898,5 +896,30 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(SmtpServerConfigurationSpec smtpServerConfigurationSpec, P parameter);
+
+    /**
+     * Accept a filtered notification.
+     * @param filteredNotificationSpec Filtered notification specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(FilteredNotificationSpec filteredNotificationSpec, P parameter);
+
+    /**
+     * Accepts a map (hashtable) of filtered notification mappings.
+     *
+     * @param filteredNotificationSpecMap Filtered notification mappings map.
+     * @param parameter                        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(FilteredNotificationSpecMap filteredNotificationSpecMap, P parameter);
+
+    /**
+     * Accept a notification filter.
+     * @param notificationFilterSpec Notification filter specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(NotificationFilterSpec notificationFilterSpec, P parameter);
 
 }

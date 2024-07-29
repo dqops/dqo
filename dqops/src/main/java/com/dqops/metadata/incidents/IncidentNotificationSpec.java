@@ -49,6 +49,7 @@ import java.util.Objects;
 public class IncidentNotificationSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("filtered_notification_map", o -> o.filteredNotificationMap);
         }
     };
 
@@ -63,6 +64,9 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
+
+    // todo:
+    private FilteredNotificationSpecMap filteredNotificationMap = new FilteredNotificationSpecMap();
 
     @JsonIgnore
     private String yamlParsingError;
@@ -155,6 +159,24 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         this.incidentMutedAddresses = incidentMutedAddresses;
     }
 
+    /**
+     * Returns a hashtable of filtered notification specs, indexed by the name.
+     * @return Dictionary of filtered notification spec.
+     */
+    public FilteredNotificationSpecMap getFilteredNotificationMap() {
+        return filteredNotificationMap;
+    }
+
+    /**
+     * Sets a new collection of filtered notification spec.
+     * @param filteredNotificationMap New dictionary of filtered notification spec.
+     */
+    public void setFilteredNotificationMap(FilteredNotificationSpecMap filteredNotificationMap) {
+        setDirtyIf(!Objects.equals(this.filteredNotificationMap, filteredNotificationMap));
+        this.filteredNotificationMap = filteredNotificationMap;
+        propagateHierarchyIdToField(filteredNotificationMap, "filteredNotificationMap");
+    }
+
     @Override
     /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
@@ -237,6 +259,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     @Override
     public IncidentNotificationSpec deepClone() {
         IncidentNotificationSpec cloned = (IncidentNotificationSpec) super.deepClone();
+        // todo filteredNotificationMap?
         return cloned;
     }
 
@@ -252,6 +275,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         cloned.incidentAcknowledgedAddresses = secretValueProvider.expandValue(cloned.incidentAcknowledgedAddresses, lookupContext);
         cloned.incidentResolvedAddresses = secretValueProvider.expandValue(cloned.incidentResolvedAddresses, lookupContext);
         cloned.incidentMutedAddresses = secretValueProvider.expandValue(cloned.incidentMutedAddresses, lookupContext);
+    // todo filteredNotificationMap?
         return cloned;
     }
 
@@ -278,6 +302,8 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         if(clonedIncidentNotification.getIncidentMutedAddresses() == null){
             clonedIncidentNotification.setIncidentMutedAddresses(defaultIncidentNotification.getIncidentMutedAddresses());
         }
+
+        // todo filteredNotificationMap?
 
         return clonedIncidentNotification;
     }

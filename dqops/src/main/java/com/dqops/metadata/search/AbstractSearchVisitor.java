@@ -60,9 +60,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
+import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.labels.LabelSetSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -1181,6 +1179,42 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(SmtpServerConfigurationSpec smtpServerConfigurationSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a filtered notification.
+     *
+     * @param filteredNotificationSpec Filtered notification specification.
+     * @param parameter                   Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FilteredNotificationSpec filteredNotificationSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map (hashtable) of filtered notification mappings.
+     *
+     * @param filteredNotificationSpecMap Filtered notification mappings map.
+     * @param parameter                   Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FilteredNotificationSpecMap filteredNotificationSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a notification filter.
+     *
+     * @param notificationFilterSpec Notification filter specification.
+     * @param parameter                   Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(NotificationFilterSpec notificationFilterSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
