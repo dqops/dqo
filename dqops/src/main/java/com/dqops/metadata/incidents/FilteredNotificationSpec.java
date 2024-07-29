@@ -33,10 +33,10 @@ public class FilteredNotificationSpec extends AbstractSpec {
     private IncidentNotificationSpec notificationTarget;
 
     // todo
-    private Integer priority;
+    private Integer priority = 1000;
 
     // todo
-    private Boolean processAdditionalFilters;
+    private Boolean processAdditionalFilters = false;
 
     // todo: getters, setters
 
