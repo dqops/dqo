@@ -18620,6 +18620,38 @@
         "copy_failed_profiling_checks" : {
           "type" : "boolean",
           "description" : "Copy also the configuration of profiling checks that failed."
+        },
+        "propose_minimum_row_count" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'."
+        },
+        "propose_timeliness_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'."
+        },
+        "propose_null_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'."
+        },
+        "propose_uniqueness_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'."
+        },
+        "propose_numeric_ranges" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'."
+        },
+        "propose_text_length_ranges" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of the text length checks. The default value of this parameter is 'true'."
+        },
+        "propose_column_count_check" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of the column count check. The default value of this parameter is 'true'."
+        },
+        "propose_accepted_values_checks" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'."
         }
       },
       "description" : "Data quality check rule mining parameters. Configure what type of checks should be configured."
@@ -18627,6 +18659,10 @@
     "CheckMiningProposalModel" : {
       "type" : "object",
       "properties" : {
+        "missing_current_statistics" : {
+          "type" : "boolean",
+          "description" : "A boolean flag to inform the caller that the rule mining engine failed to propose relevant data quality rules because there are no current statistics. The user should schedule a 'collect statistics' job to analyze the table."
+        },
         "table_checks" : {
           "description" : "Proposed configuration of table-level data quality checks, such as volume, timeliness or schema.",
           "$ref" : "#/definitions/CheckContainerModel"
@@ -18787,13 +18823,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."

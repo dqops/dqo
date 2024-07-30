@@ -118,8 +118,14 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             DataAssetProfilingResults columnProfilingResults = tableProfilingResults.getColumnProfilingResults(columnName);
             CheckContainerModel proposedColumnChecks = this.proposeChecksForContainer(columnCheckRootContainer, columnProfilingResults,
                     tableProfilingResults, connectionSpec, clonedTableSpec, executionContext, miningParameters);
-            checkProposalModel.getColumnChecks().put(columnName, proposedColumnChecks);
+
+            if (!proposedColumnChecks.getCategories().isEmpty()) {
+                checkProposalModel.getColumnChecks().put(columnName, proposedColumnChecks);
+            }
         }
+
+        checkProposalModel.setMissingCurrentStatistics(tableProfilingResults.getStatistics() == null ||
+                tableProfilingResults.getStatistics().isEmpty());
 
         return checkProposalModel;
     }
