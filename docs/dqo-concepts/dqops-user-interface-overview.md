@@ -258,7 +258,7 @@ In the **Profiling** section you can access:
 - **Table preview:** Provides a summary preview of the table. 
 - **Table quality status:** Provides a summary of the results of the executed profiling checks.
 - **Profiling checks editor:** Gives access to the Check editor of profiling checks.
-- **Table comparison:** Enables you to [identify differences between two tables](../working-with-dqo/compare-tables-between-data-sources.md).
+- **Table comparison:** Enables you to [identify differences between two tables (accuracy issues)](../working-with-dqo/compare-tables-between-data-sources.md) using profiling checks.
 
 ![Main workspace tabs - Monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-monitoring2.png){ loading=lazy; width="1200px" }
 
@@ -270,7 +270,7 @@ In the **Monitoring Checks** section you can access
 - **Data quality checks editor:** Provides access to the Check editor for monitoring checks. 
     * Free version: Limited to running daily monitoring checks.
     * Paid versions: Enables running both daily and monthly monitoring checks. 
-- **Table comparisons:** Enables you to [identify differences between two tables using monitoring checks](../working-with-dqo/compare-tables-between-data-sources.md).
+- **Table comparisons:** Enables you to [identify differences between two tables (accuracy issues)](../working-with-dqo/compare-tables-between-data-sources.md) using monitoring checks.
 
 ![Main workspace tabs - Partition](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-tabs-partition2.png){ loading=lazy; width="1200px" }
 
@@ -282,45 +282,83 @@ In the **Partition Checks** section you can access
 - **Data quality checks editor:** Provides access to the Check editor for partition checks.
     * Free version: Limited to running daily partition checks.
     * Paid versions: Enables running both daily and monthly partition checks.
-- **Table comparisons:** Enables you to [identify differences between two tables using partition checks](../working-with-dqo/compare-tables-between-data-sources.md).
+- **Table comparisons:** Enables you to [identify differences between two tables (accuracy issues) using partition checks](../working-with-dqo/compare-tables-between-data-sources.md) using partition checks.
 
 ### **Check editor**
 
-The Check editor screen allows you to work with checks. There are two types of checks editors simplified and advanced. 
+The Check editor screen allows you to work with checks. There are two types of checks editors **Simplified** and **Advanced**.
+Both types of editors share the same core functionalities, such as activation, deactivation and run of table and column-level
+checks, viewing results, and accessing additional settings.
 
-![Main workspace tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor3.png){ loading=lazy; width="1200px" }
+The primary difference lies in the ability to define multiple severity levels in the Advanced mode. [Learn more about threshold levels ](definition-of-data-quality-checks/index.md#issue-severity-levels)
 
-Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
-section, there is additional information about the date partitioning column.
+To open the check editor, simply click on the **Profiling**, **Monitoring Checks**, or **Partition Checks** section. 
+Then, select a table from the tree view on the left, and choose the **Data quality checks editor** tab in the workspace. 
+To access the check editor for the column-level checks, click on the column in the tree view, and the check editor will open in the workspace.
 
-The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories](../checks/index.md).
-By clicking on the **Show advanced checks** checkbox you can view all checks available in DQOps. 
+**Simplified check editor (Default)**
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](definition-of-data-quality-checks/index.md#issue-severity-levels)
+The Simplified check editor is the default view when you open the DQOps platform. It provides the basic check configuration allowing you to activate
+checks with a single issue severity level (warning, error, or fatal) from a dropdown menu and access essential check settings and actions.
 
-On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
-dimension category to which this check was categorized.
+![Simplified check editor](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-simplified-check-editor.png){ loading=lazy; width="1200px" }
 
-![Check buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-buttons.png)
+To change the issue severity level, simply click on the dropdown menu and choose the desired severity level.
+If you select the "Multiple levels" option, you will switch to the Advanced check editor.
 
-The buttons and icons allow you to:
+![Simplified check editor - issue severity level selection](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/simplified-check-editor-issue-severity-level-selection.png){ loading=lazy; width="1200px" }
 
-- Activate and deactivate checks by using the toggle button. The toggle button next to the name of the activated default checks will have a light green color. If the check has
-    been activated manually, the toggle button will have a darker green color. Learn more about [monitoring data quality with default check here](../working-with-dqo/daily-monitoring-of-data-quality.md). 
-- Disable checks by using the Disable button
-- Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
 
-    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png){ loading=lazy; width="1200px" }
+**Advanced check editor**
 
-- Check schedule status. 
-- Run data quality checks
-- View detailed results for checks, Sensor readouts, and Execution errors
+In the advanced mode, you can configure different thresholds for warning, error, and fatal error severity levels.
 
-    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results.png){ loading=lazy; width="1200px" }
+To access the Advanced mode, select the "Multiple levels" option from the Issue severity level dropdown menu in 
+the simplified data check editor, as shown above. Once you have made this selection, you will receive a prompt 
+informing you that the editor will switch to an advanced mode.
 
-- View detailed information about check. 
-- Check the results of the run check shown as a color square
+![Advanced check editor](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-advanced-check-editor.png){ loading=lazy; width="1200px" }
+
+
+**Common Check editor features**
+
+Both the advanced and simplified checks editors share the following elements: 
+
+At the top of the check editor, you will find information about the type of checks (profiling, monitoring, or partition),
+and the full path name containing connection, schema, table name, and column name for the column-level check editor.
+
+Below this, you will find information about the schedule configuration with the time of the next check execution. 
+Additionally, in the **Partition Checks** section, there is additional information about the configuration of the date 
+partitioning column.
+
+The table with data quality checks contains a list of checks divided into different data quality subcategories.
+You can expand and collapse these categories by clicking on an arrow. [Learn more about the different check subcategories](../checks/index.md).
+By clicking on the **Show advanced checks** checkbox, located at the top of the table,
+you can view all checks available in DQOps. 
+
+On the left of the name of each check, there are several buttons and icons. Under the name of the check, there is a
+technical check name, and in brackets, the data quality dimension category to which this check belongs.
+
+![Check buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-buttons2.png)
+
+The buttons and icons located on the left side of each check name allow you to perform various actions:
+
+- **Activate/Deactivate checks:** A Toggle button (light green for activated default checks and darker green for manually
+    activated checks) enables activating or deactivating checks. You can learn more about [monitoring data quality with default check here](../working-with-dqo/daily-monitoring-of-data-quality.md). 
+- **Disable checks:** Use the Disable button to disable checks.
+- **Check Settings:** Access check settings to configure custom data groupings, modify inclusion/exclusion in KPI and SLA, 
+    rename data quality dimension, add SQL WHERE conditions, modify scheduling settings, or add labels.
+    
+    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings2.png){ loading=lazy; width="1200px" }
+
+- **Check schedule status:** Gives information about the status of the check schedule status (disabled or enabled schedule).
+- **Run data quality checks:** Trigger manual execution of checks.
+- **View Check Results:** Access detailed results for checks, sensor readouts, and execution errors, as well as error sampling for column checks
+
+    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results2.png){ loading=lazy; width="1200px" }
+
+- **Check Information:** View tooltip with detailed information about the specific check. 
+- **Check results colored square:** Indicates the result of the last check run:
     - Green for a valid result
     - Yellow for a warning
     - Orange for an error
