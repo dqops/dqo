@@ -135,7 +135,8 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @Override
     public FilteredNotificationSpec deepClone() {
         FilteredNotificationSpec cloned = (FilteredNotificationSpec) super.deepClone();
-        // todo
+        cloned.notificationFilter = cloned.notificationFilter.deepClone();
+        cloned.notificationTarget = cloned.notificationTarget.deepClone();
         return cloned;
     }
 

@@ -65,7 +65,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
 
-    // todo:
+    @JsonPropertyDescription("Filtered notifications map with filter configuration and notification addresses treated with higher priority than those from the current class.")
     private FilteredNotificationSpecMap filteredNotificationMap = new FilteredNotificationSpecMap();
 
     @JsonIgnore
@@ -259,7 +259,7 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     @Override
     public IncidentNotificationSpec deepClone() {
         IncidentNotificationSpec cloned = (IncidentNotificationSpec) super.deepClone();
-        // todo filteredNotificationMap?
+        cloned.filteredNotificationMap = cloned.filteredNotificationMap.deepClone();
         return cloned;
     }
 
@@ -275,7 +275,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         cloned.incidentAcknowledgedAddresses = secretValueProvider.expandValue(cloned.incidentAcknowledgedAddresses, lookupContext);
         cloned.incidentResolvedAddresses = secretValueProvider.expandValue(cloned.incidentResolvedAddresses, lookupContext);
         cloned.incidentMutedAddresses = secretValueProvider.expandValue(cloned.incidentMutedAddresses, lookupContext);
-    // todo filteredNotificationMap?
         return cloned;
     }
 
@@ -302,8 +301,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         if(clonedIncidentNotification.getIncidentMutedAddresses() == null){
             clonedIncidentNotification.setIncidentMutedAddresses(defaultIncidentNotification.getIncidentMutedAddresses());
         }
-
-        // todo filteredNotificationMap?
 
         return clonedIncidentNotification;
     }

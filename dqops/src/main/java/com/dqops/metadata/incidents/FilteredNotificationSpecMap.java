@@ -5,7 +5,9 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 
 import java.util.Map;
 
-// todo description
+/**
+ * The map for the filtered notification specification.
+ */
 public class FilteredNotificationSpecMap extends AbstractDirtyTrackingSpecMap<FilteredNotificationSpec> {
 
     /**
