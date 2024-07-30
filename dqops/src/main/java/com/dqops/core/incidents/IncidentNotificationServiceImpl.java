@@ -160,16 +160,16 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                 .filter(stringFilteredNotificationSpecEntry -> {
                     NotificationFilterSpec filter = stringFilteredNotificationSpecEntry.getValue().getNotificationFilter();
 
-                    return (filter.getConnection() == null || message.getConnection().equals(filter.getConnection())) &&
-                           (filter.getSchema() == null || message.getSchema().equals(filter.getSchema())) &&
-                           (filter.getTable() == null || message.getTable().equals(filter.getTable())) &&
-                           (filter.getTablePriority() == null || message.getTablePriority().equals(filter.getTablePriority())) &&
-                           (filter.getDataGroupName() == null || message.getDataGroupName().equals(filter.getDataGroupName())) &&
-                           (filter.getQualityDimension() == null || message.getQualityDimension().equals(filter.getQualityDimension())) &&
-                           (filter.getCheckCategory() == null || message.getCheckCategory().equals(filter.getCheckCategory())) &&
-                           (filter.getCheckType() == null || message.getCheckType().equals(filter.getCheckType())) &&
-                           (filter.getCheckName() == null || message.getCheckName().equals(filter.getCheckName())) &&
-                           (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity()));
+                    return (filter.getConnection() == null || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
+                           (filter.getSchema() == null || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
+                           (filter.getTable() == null || filter.getTableNameSearchPattern().match(message.getTable())) &&
+                           (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&
+                           (filter.getDataGroupName() == null || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
+                           (filter.getQualityDimension() == null || filter.getQualityDimension().equals(message.getQualityDimension())) &&
+                           (filter.getCheckCategory() == null || filter.getCheckCategory().equals(message.getCheckCategory())) &&
+                           (filter.getCheckType() == null || filter.getCheckType().equals(message.getCheckType())) &&
+                           (filter.getCheckName() == null || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
+                           (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity())));
                 })
                 .sorted(Comparator.comparing(value -> value.getValue().getPriority()))
                 .collect(Collectors.toList());

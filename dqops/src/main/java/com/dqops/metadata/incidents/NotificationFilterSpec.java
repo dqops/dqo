@@ -4,9 +4,11 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -19,31 +21,32 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
         }
     };
 
-    @JsonPropertyDescription("Connection name.")
+    @JsonPropertyDescription("Connection name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
     private String connection;
 
-    @JsonPropertyDescription("Schema name.")
+    @JsonPropertyDescription("Schema name. This field accepts search patterns in the format: 'schema_name_\\*', '\\*_schema', 'prefix\\*suffix'.")
     private String schema;
 
-    @JsonPropertyDescription("Table name.")
+    @JsonPropertyDescription("Table name. This field accepts search patterns in the format: 'table_name_\\*', '\\*table', 'prefix\\*suffix'.")
     private String table;
 
     @JsonPropertyDescription("Table priority.")
     private Integer tablePriority;
 
-    @JsonPropertyDescription("Data group name.")
+    @JsonPropertyDescription("Data group name. This field accepts search patterns in the format: 'group_name_\\*', '\\*group', 'prefix\\*suffix'.")
     private String dataGroupName;
 
     @JsonPropertyDescription("Quality dimension.")
     private String qualityDimension;
 
-    @JsonPropertyDescription("Check category.")
+    @JsonPropertyDescription("The target check category, for example: *nulls*, *volume*, *anomaly*.")
     private String checkCategory;
 
-    @JsonPropertyDescription("Check type.")
+    @JsonPropertyDescription("The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.")
     private String checkType;
 
-    @JsonPropertyDescription("Check name.")
+    @JsonPropertyDescription("The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. " +
+                             "This field supports search patterns such as: 'profiling_\\*', '\\*_count', 'profiling_\\*_percent'.")
     private String checkName;
 
     @JsonPropertyDescription("Highest severity.")
@@ -52,7 +55,16 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
     @JsonIgnore
     private String yamlParsingError;
 
-    // todo: add search patterns?, see CheckSearchFilters
+    @JsonIgnore
+    private SearchPattern connectionNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern schemaNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern tableNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern dataGroupNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern checkNameSearchPattern;
 
     /**
      * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
@@ -242,6 +254,76 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
     public void setHighestSeverity(Integer highestSeverity) {
         this.setDirtyIf(!Objects.equals(this.highestSeverity, highestSeverity));
         this.highestSeverity = highestSeverity;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>columnName</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>connectionName</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getConnectionNameSearchPattern() {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connection)) {
+            connectionNameSearchPattern = SearchPattern.create(false, connection);
+        }
+
+        return connectionNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>schema</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>schema</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getSchemaNameSearchPattern() {
+        if (schemaNameSearchPattern == null && !Strings.isNullOrEmpty(schema)) {
+            schemaNameSearchPattern = SearchPattern.create(false, schema);
+        }
+
+        return schemaNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>table</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>table</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getTableNameSearchPattern() {
+        if (tableNameSearchPattern == null && !Strings.isNullOrEmpty(table)) {
+            tableNameSearchPattern = SearchPattern.create(false, table);
+        }
+
+        return tableNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>dataGroupName</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>dataGroupName</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getDataGroupNameSearchPattern() {
+        if (dataGroupNameSearchPattern == null && !Strings.isNullOrEmpty(dataGroupName)) {
+            dataGroupNameSearchPattern = SearchPattern.create(false, dataGroupName);
+        }
+
+        return dataGroupNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>checkName</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>checkName</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getCheckNameSearchPattern() {
+        if (checkNameSearchPattern == null && !Strings.isNullOrEmpty(checkName)) {
+            checkNameSearchPattern = SearchPattern.create(false, checkName);
+        }
+
+        return checkNameSearchPattern;
     }
 
     /**
