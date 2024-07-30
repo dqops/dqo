@@ -166,7 +166,7 @@ public class ColumnNotNullsPercentCheckSpec
     @Override
     @JsonIgnore
     public String getFriendlyName() {
-        return "Minimum percentage of rows containing non-null values (find empty column)";
+        return "Minimum percentage of rows containing non-null values";
     }
 
     /**

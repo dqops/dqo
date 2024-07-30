@@ -60,6 +60,9 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> collectorsHierarchyIds;
 
+    @JsonPropertyDescription("The default limit of column samples that are collected.")
+    private Integer samplesLimit;
+
     @JsonIgnore
     private List<SearchPattern> columnNameSearchPatterns;
     @JsonIgnore
@@ -168,6 +171,22 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     public void setCollectorsHierarchyIds(Set<HierarchyId> collectorsHierarchyIds) {
         this.collectorsHierarchyIds = collectorsHierarchyIds;
+    }
+
+    /**
+     * Returns the default limit of the number of samples to collect.
+     * @return The default limit of the number of samples to collect.
+     */
+    public Integer getSamplesLimit() {
+        return samplesLimit;
+    }
+
+    /**
+     * Sets the default limit of the number of samples to collect.
+     * @param samplesLimit The default limit of samples to collect.
+     */
+    public void setSamplesLimit(Integer samplesLimit) {
+        this.samplesLimit = samplesLimit;
     }
 
     /**

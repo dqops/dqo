@@ -90,6 +90,18 @@ public class QualityCategoryModel {
         this.category = category;
     }
 
+    /**
+     * Iterates over checks and removes checks that are already configured. This method is used by the rule mining module.
+     */
+    public void dropConfiguredChecks() {
+        ArrayList<CheckModel> copyOfChecks = new ArrayList<>(this.checks);
+        for (CheckModel checkModel : copyOfChecks) {
+            if (checkModel.isConfigured()) {
+                this.checks.remove(checkModel);
+            }
+        }
+    }
+
     public static class QualityCategoryModelSampleFactory implements SampleValueFactory<QualityCategoryModel> {
         @Override
         public QualityCategoryModel createSample() {

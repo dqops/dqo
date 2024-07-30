@@ -225,6 +225,8 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         StatisticsResultDataType statisticsResultDataType = StatisticsResultDataType.fromName(resultTypeString);
         result.setResultDataType(statisticsResultDataType);
         result.setCollectedAt(row.getDateTime(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME));
+        result.setExecutedAt(row.getInstant(StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME));
+
         if (!row.isMissing(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME)) {
             result.setSampleCount(row.getLong(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME));
         }

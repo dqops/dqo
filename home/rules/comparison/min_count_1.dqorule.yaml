@@ -5,11 +5,3 @@ spec:
   type: python
   java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
-  fields:
-  - field_name: min_count
-    display_name: min_count
-    help_text: Minimum accepted value for the actual_value returned by the sensor
-      (inclusive).
-    data_type: long
-    required: true
-    default_value: 1

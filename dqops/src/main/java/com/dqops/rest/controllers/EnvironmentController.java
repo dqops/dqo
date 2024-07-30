@@ -104,6 +104,7 @@ public class EnvironmentController {
                     .flatMap(Arrays::stream)
                     .distinct()
                     .filter(propertyName -> !(propertyName.toLowerCase(Locale.ROOT).contains("credentials") ||
+                            propertyName.toLowerCase(Locale.ROOT).contains("username") ||
                             propertyName.toLowerCase(Locale.ROOT).contains("password") ||
                             propertyName.toLowerCase(Locale.ROOT).contains("key") ||
                             propertyName.toLowerCase(Locale.ROOT).contains("token")))

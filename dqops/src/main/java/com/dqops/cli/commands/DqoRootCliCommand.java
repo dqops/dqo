@@ -307,6 +307,26 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "When not configured, DQOps will generate a secure random key and store it in the .localsettings.dqosettings.yaml file.")
     private String dqoInstanceSignatureKey;
 
+    @CommandLine.Option(names = {"--dqo.smtp-server.host"},
+            description = "Sets the  host name of the SMTP server that is used to send email notifications.")
+    private String dqoSmtpServerHost;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.port"},
+            description = "Sets the port number of the SMTP server that is used to send email notifications.")
+    private Long dqoSmtpServerPort;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.use-ssl"},
+            description = "Configures if the SMTP server that is used to send email notifications uses SSL protocol.")
+    private Boolean dqoSmtpServerUseSsl;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.username"},
+            description = "Sets the username of the SMTP server that is used to send email notifications.")
+    private String dqoSmtpServerUsername;
+
+    @CommandLine.Option(names = {"--dqo.smtp-server.password"},
+            description = "Sets the password of the SMTP server that is used to send email notifications.")
+    private String dqoSmtpServerPassword;
+
     @CommandLine.Option(names = {"--dqo.queue.max-concurrent-jobs"},
             description = "Sets the maximum number of concurrent jobs that the job queue can process at once (running data quality checks, importing metadata, etc.). " +
                     "The maximum number of threads is also limited by the DQOps license.")
@@ -445,6 +465,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The maximum age (in months) of the basic statistics that are shown on the basic statistics screen. " +
                     "Statistics values captured earlier are still stored, but are not shown in the DQOps UI.", defaultValue = "3")
     private int dqoStatisticsViewedStatisticsAgeMonths;
+
+    @CommandLine.Option(names = {"--dqo.statistics.samples-limit"},
+            description = "The limit of column value samples that are collected when the basic table statistics are gathered. " +
+                    "DQOps collects only the most popular values, which is determined by the number of value occurrences.", defaultValue = "100")
+    private int dqoStatisticsSamplesLimit;
 
     @CommandLine.Option(names = {"--dqo.error-sampling.truncated-strings-length"},
             description = "The maximum length of error samples captured from text columns (varchar, string, text, etc.) that are stored as error samples table. " +

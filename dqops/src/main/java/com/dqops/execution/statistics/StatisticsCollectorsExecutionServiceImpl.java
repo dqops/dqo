@@ -15,6 +15,7 @@
  */
 package com.dqops.execution.statistics;
 
+import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
@@ -44,6 +45,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
     private TableStatisticsCollectorsExecutionService tableStatisticsCollectorsExecutionService;
+    private DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties;
 
     /**
      * Creates a statistics collectors execution service with given dependencies.
@@ -51,16 +53,19 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param dqoQueueJobFactory DQOps job factory to create a child job.
      * @param dqoJobQueue DQOps job queue where the child job is started.
      * @param tableStatisticsCollectorsExecutionService Statistics collector execution service that collects statistics on a single table.
+     * @param statisticsCollectorConfigurationProperties Statistics configuration properties.
      */
     @Autowired
     public StatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
                                                     DqoQueueJobFactory dqoQueueJobFactory,
                                                     DqoJobQueue dqoJobQueue,
-                                                    TableStatisticsCollectorsExecutionService tableStatisticsCollectorsExecutionService) {
+                                                    TableStatisticsCollectorsExecutionService tableStatisticsCollectorsExecutionService,
+                                                    DqoStatisticsCollectorConfigurationProperties statisticsCollectorConfigurationProperties) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.tableStatisticsCollectorsExecutionService = tableStatisticsCollectorsExecutionService;
+        this.statisticsCollectorConfigurationProperties = statisticsCollectorConfigurationProperties;
     }
 
     /**
@@ -92,6 +97,11 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         LocalDateTime profilingSessionStartAt = LocalDateTime.now();
         jobCancellationToken.throwIfCancelled();
 
+        StatisticsCollectorSearchFilters searchFiltersWithLimit = statisticsCollectorSearchFilters.clone();
+        if (searchFiltersWithLimit.getSamplesLimit() == null) {
+            searchFiltersWithLimit.setSamplesLimit(this.statisticsCollectorConfigurationProperties.getSamplesLimit());
+        }
+
         if (startChildJobsPerTable) {
             List<DqoQueueJob<StatisticsCollectionExecutionSummary>> childTableJobs = new ArrayList<>();
 
@@ -102,7 +112,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                     setConnection(connectionWrapper.getName());
                     setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelJobsLimit());
                     setTable(targetTable.getPhysicalTableName());
-                    setStatisticsCollectorSearchFilters(statisticsCollectorSearchFilters);
+                    setStatisticsCollectorSearchFilters(searchFiltersWithLimit);
                     setDataScope(statisticsDataScope);
                     setProgressListener(progressListener);
                     setDummySensorExecution(dummySensorExecution);
@@ -123,7 +133,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
             for (TableWrapper targetTable : targetTables) {
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
                 statisticsCollectorExecutionSummary = this.tableStatisticsCollectorsExecutionService.executeCollectorsOnTable(executionContext, userHome,
-                        connectionWrapper, targetTable, statisticsCollectorSearchFilters, progressListener,
+                        connectionWrapper, targetTable, searchFiltersWithLimit, progressListener,
                         dummySensorExecution, profilingSessionStartAt, statisticsDataScope, jobCancellationToken);
             }
         }

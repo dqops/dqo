@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.DefaultRuleSeverityLevel;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.rules.change.ChangePercent7DaysRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercent7DaysRule20ParametersSpec;
@@ -192,7 +193,7 @@ public class TableRowCountChange7DaysCheckSpec
      */
     @Override
     @JsonIgnore
-    public RuleSeverityLevel getDefaultSeverity() {
-        return RuleSeverityLevel.warning;
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
+        return DefaultRuleSeverityLevel.warning;
     }
 }

@@ -25,10 +25,20 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.rules.DefaultRuleSeverityLevel;
 import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.services.check.mining.CheckMiningParametersModel;
+import com.dqops.services.check.mining.DataAssetProfilingResults;
+import com.dqops.services.check.mining.ProfilingCheckResult;
+import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.utils.reflection.ClassInfo;
+import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -416,8 +426,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
      */
     @JsonIgnore
-    public RuleSeverityLevel getDefaultSeverity() {
-        return RuleSeverityLevel.error;
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
+        return DefaultRuleSeverityLevel.error;
     }
 
     /**
@@ -509,5 +519,81 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 this.getWarning().decreaseRuleSensitivity(checkResultsSingleCheck);
             }
         }
+    }
+
+    /**
+     * Proposes the configuration of this check by using information from all related sources.
+     * @param sourceProfilingCheck Previous results captured by a similar profiling check. Used to copy configuration to monitoring checks.
+     * @param dataAssetProfilingResults Profiling results from the basic statistics and profiling checks for the data asset (table or column).
+     * @param tableProfilingResults All profiling results for the table, including table-level profiling results (such as row counts) and results for all columns. Used by rule mining functions that must look into other values.
+     * @param tableSpec Parent table specification for reference.
+     * @param parentCheckRootContainer Parent check container, to identify the type of checks.
+     * @param myCheckModel Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
+     * @param miningParameters Additional rule mining parameters given by the user.
+     * @param jsonSerializer JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
+     * @return True when the check was configured, false when the function decided not to configure the check.
+     */
+    public boolean proposeCheckConfiguration(
+            ProfilingCheckResult sourceProfilingCheck,
+            DataAssetProfilingResults dataAssetProfilingResults,
+            TableProfilingResults tableProfilingResults,
+            TableSpec tableSpec,
+            AbstractRootChecksContainerSpec parentCheckRootContainer,
+            CheckModel myCheckModel,
+            CheckMiningParametersModel miningParameters,
+            JsonSerializer jsonSerializer) {
+        if (sourceProfilingCheck == null) {
+            return false; // no profiling check to copy information from
+        }
+
+        if (parentCheckRootContainer.getCheckType() == CheckType.profiling) {
+            return false; // a profiling check cannot copy from itself
+        }
+
+        if (!miningParameters.isCopyFailedProfilingChecks() &&
+                sourceProfilingCheck.getSeverityLevel() != null &&
+                sourceProfilingCheck.getSeverityLevel().getSeverity() >= 1) {
+            return false; // do not copy configuration of failed profiling checks, they were tested for data quality assessment only
+        }
+
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+        AbstractCheckSpec<?, ?, ?, ?> profilingCheckSpec = sourceProfilingCheck.getProfilingCheckModel().getCheckSpec();
+        AbstractSensorParametersSpec sensorParametersFromProfilingCheck = profilingCheckSpec.getParameters();
+        if (sensorParametersFromProfilingCheck != null) {
+            FieldInfo parametersFieldInfo = reflectionClassInfo.getFieldByYamlName("parameters");
+            String serializedSensorParameters = jsonSerializer.serialize(sensorParametersFromProfilingCheck);
+            Object convertedSensorParameters = jsonSerializer.deserialize(serializedSensorParameters, parametersFieldInfo.getClazz());
+            //noinspection unchecked
+            this.setParameters((S) convertedSensorParameters);
+        }
+
+        AbstractRuleParametersSpec profilingWarningRule = profilingCheckSpec.getWarning();
+        if (profilingWarningRule != null) {
+            FieldInfo warningFieldInfo = reflectionClassInfo.getFieldByYamlName("warning");
+            String serializedWarningParameters = jsonSerializer.serialize(profilingWarningRule);
+            Object convertedWarningParameters = jsonSerializer.deserialize(serializedWarningParameters, warningFieldInfo.getClazz());
+            //noinspection unchecked
+            this.setWarning((RWarning) convertedWarningParameters);
+        }
+
+        AbstractRuleParametersSpec profilingErrorRule = profilingCheckSpec.getError();
+        if (profilingErrorRule != null) {
+            FieldInfo errorFieldInfo = reflectionClassInfo.getFieldByYamlName("error");
+            String serializedErrorParameters = jsonSerializer.serialize(profilingErrorRule);
+            Object convertedErrorParameters = jsonSerializer.deserialize(serializedErrorParameters, errorFieldInfo.getClazz());
+            //noinspection unchecked
+            this.setError((RError) convertedErrorParameters);
+        }
+
+        AbstractRuleParametersSpec profilingFatalRule = profilingCheckSpec.getFatal();
+        if (profilingFatalRule != null) {
+            FieldInfo fatalFieldInfo = reflectionClassInfo.getFieldByYamlName("fatal");
+            String serializedFatalParameters = jsonSerializer.serialize(profilingFatalRule);
+            Object convertedFatalParameters = jsonSerializer.deserialize(serializedFatalParameters, fatalFieldInfo.getClazz());
+            //noinspection unchecked
+            this.setFatal((RFatal) convertedFatalParameters);
+        }
+
+        return true;
     }
 }

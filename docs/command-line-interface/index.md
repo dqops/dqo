@@ -96,6 +96,9 @@ All command-line commands supported from the DQOps shell or directly from the sy
  | <span class="no-wrap-code">[`dqo settings timezone set`](./settings.md#dqo-settings-timezone-set)</span> | Set the default time zone used by the DQOps. |
  | <span class="no-wrap-code">[`dqo settings timezone remove`](./settings.md#dqo-settings-timezone-remove)</span> | Remove the custom time zone from your settings. Once removed, the time zone for your account will be set to the system default. |
  | <span class="no-wrap-code">[`dqo settings timezone show`](./settings.md#dqo-settings-timezone-show)</span> | Displays the default time zone that is currently set in your settings. This time zone will be used to display all date and time values in the application. |
+ | <span class="no-wrap-code">[`dqo settings smtp set`](./settings.md#dqo-settings-smtp-set)</span> | Set SMTP server configuration for incident notifications. |
+ | <span class="no-wrap-code">[`dqo settings smtp remove`](./settings.md#dqo-settings-smtp-remove)</span> | Remove the API key used for accessing external services. |
+ | <span class="no-wrap-code">[`dqo settings smtp show`](./settings.md#dqo-settings-smtp-show)</span> | Display the current SMTP server configuration for incident notifications. |
 
 
 

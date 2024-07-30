@@ -14,6 +14,7 @@ T = TypeVar("T", bound="IncidentCountsModel")
 class IncidentCountsModel:
     """
     Attributes:
+        total_count (Union[Unset, int]): Number of incidents in total.
         count_from_last_24_h (Union[Unset, int]): Number of incidents from the last 24h from now.
         count_from_last_7_days (Union[Unset, int]): Number of incidents from the last 7 days, the number of 7 * 24 hours
             from now.
@@ -23,6 +24,7 @@ class IncidentCountsModel:
         previous_month_date (Union[Unset, datetime.date]): The first day of the previous month date.
     """
 
+    total_count: Union[Unset, int] = UNSET
     count_from_last_24_h: Union[Unset, int] = UNSET
     count_from_last_7_days: Union[Unset, int] = UNSET
     current_month_count: Union[Unset, int] = UNSET
@@ -32,6 +34,7 @@ class IncidentCountsModel:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        total_count = self.total_count
         count_from_last_24_h = self.count_from_last_24_h
         count_from_last_7_days = self.count_from_last_7_days
         current_month_count = self.current_month_count
@@ -47,6 +50,8 @@ class IncidentCountsModel:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if total_count is not UNSET:
+            field_dict["totalCount"] = total_count
         if count_from_last_24_h is not UNSET:
             field_dict["countFromLast24h"] = count_from_last_24_h
         if count_from_last_7_days is not UNSET:
@@ -65,6 +70,8 @@ class IncidentCountsModel:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        total_count = d.pop("totalCount", UNSET)
+
         count_from_last_24_h = d.pop("countFromLast24h", UNSET)
 
         count_from_last_7_days = d.pop("countFromLast7days", UNSET)
@@ -88,6 +95,7 @@ class IncidentCountsModel:
             previous_month_date = isoparse(_previous_month_date).date()
 
         incident_counts_model = cls(
+            total_count=total_count,
             count_from_last_24_h=count_from_last_24_h,
             count_from_last_7_days=count_from_last_7_days,
             current_month_count=current_month_count,

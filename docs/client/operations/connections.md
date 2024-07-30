@@ -560,7 +560,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -610,7 +610,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -660,7 +660,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -713,7 +713,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -3601,11 +3601,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		  "divide_by_data_groups" : true,
 		  "max_incident_length_days" : 60,
 		  "mute_for_days" : 60,
-		  "webhooks" : {
-		    "incident_opened_webhook_url" : "https://sample_url.com/opened",
-		    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-		    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-		    "incident_muted_webhook_url" : "https://sample_url.com/muted"
+		  "incident_notification" : {
+		    "incident_opened_addresses" : "https://sample_url.com/opened",
+		    "incident_acknowledged_addresses" : "https://sample_url.com/acknowledged",
+		    "incident_resolved_addresses" : "https://sample_url.com/resolved",
+		    "incident_muted_addresses" : "https://sample_url.com/muted"
 		  }
 		}
         ```
@@ -3643,11 +3643,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			max_incident_length_days=60,
 			mute_for_days=60,
 			disabled=False,
-			webhooks=IncidentWebhookNotificationsSpec(
-				incident_opened_webhook_url='https://sample_url.com/opened',
-				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-				incident_resolved_webhook_url='https://sample_url.com/resolved',
-				incident_muted_webhook_url='https://sample_url.com/muted'
+			incident_notification=IncidentNotificationSpec(
+				incident_opened_addresses='https://sample_url.com/opened',
+				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+				incident_resolved_addresses='https://sample_url.com/resolved',
+				incident_muted_addresses='https://sample_url.com/muted'
 			)
 		)
         ```
@@ -3686,11 +3686,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			max_incident_length_days=60,
 			mute_for_days=60,
 			disabled=False,
-			webhooks=IncidentWebhookNotificationsSpec(
-				incident_opened_webhook_url='https://sample_url.com/opened',
-				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-				incident_resolved_webhook_url='https://sample_url.com/resolved',
-				incident_muted_webhook_url='https://sample_url.com/muted'
+			incident_notification=IncidentNotificationSpec(
+				incident_opened_addresses='https://sample_url.com/opened',
+				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+				incident_resolved_addresses='https://sample_url.com/resolved',
+				incident_muted_addresses='https://sample_url.com/muted'
 			)
 		)
         ```
@@ -3732,11 +3732,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			max_incident_length_days=60,
 			mute_for_days=60,
 			disabled=False,
-			webhooks=IncidentWebhookNotificationsSpec(
-				incident_opened_webhook_url='https://sample_url.com/opened',
-				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-				incident_resolved_webhook_url='https://sample_url.com/resolved',
-				incident_muted_webhook_url='https://sample_url.com/muted'
+			incident_notification=IncidentNotificationSpec(
+				incident_opened_addresses='https://sample_url.com/opened',
+				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+				incident_resolved_addresses='https://sample_url.com/resolved',
+				incident_muted_addresses='https://sample_url.com/muted'
 			)
 		)
         ```
@@ -3778,11 +3778,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			max_incident_length_days=60,
 			mute_for_days=60,
 			disabled=False,
-			webhooks=IncidentWebhookNotificationsSpec(
-				incident_opened_webhook_url='https://sample_url.com/opened',
-				incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-				incident_resolved_webhook_url='https://sample_url.com/resolved',
-				incident_muted_webhook_url='https://sample_url.com/muted'
+			incident_notification=IncidentNotificationSpec(
+				incident_opened_addresses='https://sample_url.com/opened',
+				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+				incident_resolved_addresses='https://sample_url.com/resolved',
+				incident_muted_addresses='https://sample_url.com/muted'
 			)
 		)
         ```
@@ -4254,7 +4254,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -4304,7 +4304,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -4354,7 +4354,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -4407,7 +4407,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
 	                                PostgresqlParametersSpec, \
 	                                PostgresqlSslMode, \
@@ -5282,7 +5282,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"grouping_level\":\"table_dimension\",\"minimum_severity\":\"warning\",\"divide_by_data_groups\":true,\"max_incident_length_days\":60,\"mute_for_days\":60,\"webhooks\":{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}}"
+		"{\"grouping_level\":\"table_dimension\",\"minimum_severity\":\"warning\",\"divide_by_data_groups\":true,\"max_incident_length_days\":60,\"mute_for_days\":60,\"incident_notification\":{\"incident_opened_addresses\":\"https://sample_url.com/opened\",\"incident_acknowledged_addresses\":\"https://sample_url.com/acknowledged\",\"incident_resolved_addresses\":\"https://sample_url.com/resolved\",\"incident_muted_addresses\":\"https://sample_url.com/muted\"}}"
 	
     ```
 
@@ -5297,7 +5297,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
 	
 	dqops_client = client.Client(
@@ -5311,11 +5311,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		max_incident_length_days=60,
 		mute_for_days=60,
 		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+		incident_notification=IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
 	)
 	
@@ -5338,7 +5338,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
 	
 	dqops_client = client.Client(
@@ -5352,11 +5352,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		max_incident_length_days=60,
 		mute_for_days=60,
 		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+		incident_notification=IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
 	)
 	
@@ -5379,7 +5379,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
@@ -5396,11 +5396,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		max_incident_length_days=60,
 		mute_for_days=60,
 		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+		incident_notification=IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
 	)
 	
@@ -5423,7 +5423,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                IncidentGroupingLevel, \
-	                                IncidentWebhookNotificationsSpec, \
+	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
@@ -5440,11 +5440,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		max_incident_length_days=60,
 		mute_for_days=60,
 		disabled=False,
-		webhooks=IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+		incident_notification=IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
 	)
 	

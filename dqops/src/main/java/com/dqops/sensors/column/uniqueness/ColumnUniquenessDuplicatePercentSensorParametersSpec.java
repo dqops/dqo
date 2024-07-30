@@ -37,6 +37,11 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpec extends Abstra
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/uniqueness/duplicate_percent";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,6 +58,6 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpec extends Abstra
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/uniqueness/duplicate_percent";
+        return SENSOR_NAME;
     }
 }

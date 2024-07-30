@@ -265,7 +265,7 @@ const CheckEditor = ({
             placeholder={defaultSeverity}
             options={
               [
-                { label: 'Disabled', value: undefined },
+                { label: 'disabled', value: undefined },
                 ...Object.values(CheckDefinitionModelDefaultSeverityEnum).map(
                   (x) => ({
                     label: x,

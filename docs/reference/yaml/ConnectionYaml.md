@@ -508,25 +508,25 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`max_incident_length_days`</span>|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|*integer*| | | |
 |<span class="no-wrap-code ">`mute_for_days`</span>|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|*integer*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables data quality incident creation for failed data quality checks on the data source.|*boolean*| | | |
-|<span class="no-wrap-code ">[`webhooks`](./ConnectionYaml.md#incidentwebhooknotificationsspec)</span>|Configuration of Webhook URLs for new or updated incident notifications.|*[IncidentWebhookNotificationsSpec](./ConnectionYaml.md#incidentwebhooknotificationsspec)*| | | |
+|<span class="no-wrap-code ">[`incident_notification`](./ConnectionYaml.md#incidentnotificationspec)</span>|Configuration of addresses for new or updated incident notifications.|*[IncidentNotificationSpec](./ConnectionYaml.md#incidentnotificationspec)*| | | |
 
 
 
 ___
 
-## IncidentWebhookNotificationsSpec
-Configuration of Webhook URLs used for new or updated incident&#x27;s notifications.
- Specifies the URLs of webhooks where the notification messages are sent.
+## IncidentNotificationSpec
+Configuration of addresses used for new or updated incident&#x27;s notifications.
+ Specifies the webhook URLs or email addresses where the notification messages are sent.
 
 
 The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`incident_opened_webhook_url`</span>|Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
-|<span class="no-wrap-code ">`incident_acknowledged_webhook_url`</span>|Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
-|<span class="no-wrap-code ">`incident_resolved_webhook_url`</span>|Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
-|<span class="no-wrap-code ">`incident_muted_webhook_url`</span>|Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_opened_addresses`</span>|Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_acknowledged_addresses`</span>|Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_resolved_addresses`</span>|Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_muted_addresses`</span>|Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
 
 
 

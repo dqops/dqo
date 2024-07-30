@@ -94,9 +94,7 @@ public class CheckResultsOverviewDataModel {
                              Double actualValue,
                              String dataGroup,
                              int resultsCount) {
-        assert this.timePeriods.size() == 0 || !this.timePeriods.get(this.timePeriods.size() - 1).isAfter(timePeriod);
-
-        if (this.timePeriods.size() == 0) {
+        if (this.timePeriods.isEmpty()) {
             this.timePeriods.add(timePeriod);
             this.timePeriodsUtc.add(timePeriodUtc);
             this.executedAtTimestamps.add(executedAt);
@@ -107,17 +105,9 @@ public class CheckResultsOverviewDataModel {
             return;
         }
 
-        if (this.timePeriodsUtc.get(this.timePeriodsUtc.size() - 1).equals(timePeriodUtc)) {
-            if (severity != 4 && severity > this.statuses.get(this.statuses.size() - 1).getSeverity()) {
-                // another result with a higher severity, replacing the current one, we found a bigger issue, but we are ignoring errors
-                this.executedAtTimestamps.set(this.statuses.size() - 1, executedAt);
-                this.timePeriodDisplayTexts.set(this.statuses.size() - 1, makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
-                this.statuses.set(this.statuses.size() - 1, CheckResultStatus.fromSeverity(severity));
-                this.dataGroups.set(this.dataGroups.size() - 1, dataGroup);
-                this.results.set(this.dataGroups.size() - 1, actualValue);
-            }
-        }
-        else {
+        if (this.timePeriodsUtc.get(this.timePeriodsUtc.size() - 1).isAfter(timePeriodUtc)) {
+            // append result at the end
+
             if (this.timePeriods.size() >= resultsCount) {
                 return;
             }
@@ -129,6 +119,47 @@ public class CheckResultsOverviewDataModel {
             this.statuses.add(CheckResultStatus.fromSeverity(severity));
             this.dataGroups.add(dataGroup);
             this.results.add(actualValue);
+        } else {
+            // replace or inject result in the middle
+
+            int targetIndex = this.timePeriodsUtc.size() - 1;
+            for (; targetIndex >= 0; targetIndex--) {
+                if (this.timePeriodsUtc.get(targetIndex).equals(timePeriodUtc)) {
+                    if (severity != 4 && severity > this.statuses.get(targetIndex).getSeverity()) {
+                        // another result with a higher severity, replacing the current one, we found a bigger issue, but we are ignoring execution errors
+                        this.executedAtTimestamps.set(targetIndex, executedAt);
+                        this.timePeriodDisplayTexts.set(targetIndex, makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
+                        this.statuses.set(targetIndex, CheckResultStatus.fromSeverity(severity));
+                        this.dataGroups.set(targetIndex, dataGroup);
+                        this.results.set(targetIndex, actualValue);
+                    }
+
+                    return;
+                }
+
+                if (this.timePeriodsUtc.get(targetIndex).isAfter(timePeriodUtc)) {
+                    break;
+                }
+            }
+
+            this.timePeriods.add(targetIndex + 1, timePeriod);
+            this.timePeriodsUtc.add(targetIndex + 1, timePeriodUtc);
+            this.executedAtTimestamps.add(targetIndex + 1 ,executedAt);
+            this.timePeriodDisplayTexts.add(targetIndex + 1, makeTimePeriodDisplayText(timePeriod, timePeriodUtc, checkTimeScale));
+            this.statuses.add(targetIndex + 1, CheckResultStatus.fromSeverity(severity));
+            this.dataGroups.add(targetIndex + 1, dataGroup);
+            this.results.add(targetIndex + 1, actualValue);
+
+            if (this.timePeriods.size() > resultsCount) {
+                // remove the oldest (last) result, because we have too many results
+                this.timePeriods.remove(this.timePeriods.size() - 1);
+                this.timePeriodsUtc.remove(this.timePeriodsUtc.size() - 1);
+                this.executedAtTimestamps.remove(this.executedAtTimestamps.size() - 1);
+                this.timePeriodDisplayTexts.remove(this.timePeriodDisplayTexts.size() - 1);
+                this.statuses.remove(this.statuses.size() - 1);
+                this.dataGroups.remove(this.dataGroups.size() - 1);
+                this.results.remove(this.results.size() - 1);
+            }
         }
     }
 

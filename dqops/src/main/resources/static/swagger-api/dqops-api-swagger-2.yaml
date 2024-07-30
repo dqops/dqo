@@ -78,6 +78,9 @@ tags:
 - name: "LogShipping"
   description: "Log shipping controller that accepts logs sent from a web application\
     \ or external tools and aggregates them in the local DQOps instance logs."
+- name: "RuleMining"
+  description: "Performs rule mining and proposes the configuration of data quality\
+    \ checks and their rule thresholds for tables."
 - name: "Rules"
   description: "Operations for managing custom data quality rule definitions in DQOps.\
     \ The custom rules are stored in the DQOps user home folder."
@@ -6222,6 +6225,68 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedMonitoringChecks"
+      description: "Applies the proposed configuration of data quality monitoring\
+        \ checks on a table."
+      operationId: "applyProposedMonitoringChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality monitoring checks successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   ? /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/comparisons/{tableComparisonConfigurationName}/results
   : get:
       tags:
@@ -6727,6 +6792,63 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTableMonitoringChecks"
+      description: "Proposes the configuration of monitoring checks on a table by\
+        \ generating suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTableMonitoringChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality monitoring checks\
+            \ on a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts:
     get:
       tags:
@@ -7080,6 +7202,68 @@ paths:
         204:
           description: "Monthly table level data quality partitioned checks successfully\
             \ updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedPartitionedChecks"
+      description: "Applies the proposed configuration of data quality partitioned\
+        \ checks on a table."
+      operationId: "applyProposedPartitionedChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality partitioned checks successfully updated"
         400:
           description: "Bad request, adjust before retrying"
         404:
@@ -7597,6 +7781,63 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTablePartitionedChecks"
+      description: "Proposes the configuration of partitioned checks on a table by\
+        \ generating suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTablePartitionedChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - name: "timeScale"
+        in: "path"
+        description: "Time scale"
+        required: true
+        type: "string"
+        enum:
+        - "daily"
+        - "monthly"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality partitioned checks\
+            \ on a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts:
     get:
       tags:
@@ -7944,6 +8185,60 @@ paths:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
           description: "Table level data quality profiling checks successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Table not found"
+        406:
+          description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/applyproposal:
+    put:
+      tags:
+      - "RuleMining"
+      summary: "applyProposedProfilingChecks"
+      description: "Applies the proposed configuration of data quality profiling checks\
+        \ on a table."
+      operationId: "applyProposedProfilingChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Proposed configuration of data quality checks to be applied\
+          \ on the table and its columns."
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningProposalModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Data quality profiling checks successfully updated"
         400:
           description: "Bad request, adjust before retrying"
         404:
@@ -8388,6 +8683,55 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CheckResultsOverviewDataModel"
+        404:
+          description: "Connection or table not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/propose:
+    post:
+      tags:
+      - "RuleMining"
+      summary: "proposeTableProfilingChecks"
+      description: "Proposes the configuration of profiling checks on a table by generating\
+        \ suggested configuration of checks and their rule thresholds."
+      operationId: "proposeTableProfilingChecks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "schemaName"
+        in: "path"
+        description: "Schema name"
+        required: true
+        type: "string"
+      - name: "tableName"
+        in: "path"
+        description: "Table name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Data quality check mining parameters which configure which rules\
+          \ are analyzed and proposed"
+        required: false
+        schema:
+          $ref: "#/definitions/CheckMiningParametersModel"
+      responses:
+        200:
+          description: "Proposition of table level data quality profiling checks on\
+            \ a table returned"
+          schema:
+            $ref: "#/definitions/CheckContainerModel"
         404:
           description: "Connection or table not found"
         500:
@@ -11903,7 +12247,8 @@ paths:
       tags:
       - "Defaults"
       summary: "getDefaultWebhooks"
-      description: "Returns spec to show and edit the default configuration of webhooks."
+      description: "Returns spec to show and edit the default configuration of addresses\
+        \ for incident notifications."
       operationId: "getDefaultWebhooks"
       produces:
       - "application/json"
@@ -11912,7 +12257,7 @@ paths:
         200:
           description: "OK"
           schema:
-            $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+            $ref: "#/definitions/IncidentNotificationSpec"
         500:
           description: "Internal Server Error"
           schema:
@@ -11923,7 +12268,7 @@ paths:
       tags:
       - "Defaults"
       summary: "updateDefaultWebhooks"
-      description: "New configuration of the default webhooks."
+      description: "New configuration of the default addresses."
       operationId: "updateDefaultWebhooks"
       consumes:
       - "application/json"
@@ -11932,18 +12277,18 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Spec with default notification webhooks changes to be applied\
+        description: "Spec with default notification addresses changes to be applied\
           \ to the default configuration"
         required: false
         schema:
-          $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+          $ref: "#/definitions/IncidentNotificationSpec"
       responses:
         200:
           description: "successful operation"
           schema:
             $ref: "#/definitions/MonoResponseEntityMonoVoid"
         204:
-          description: "The default configuration of notification webhooks successfully\
+          description: "The default configuration of notification addresses successfully\
             \ updated."
         400:
           description: "Bad request, adjust before retrying"
@@ -15385,7 +15730,6 @@ definitions:
         description: "The severity level (warning, error, fatal) for the default rule\
           \ that is activated in the data quality check editor when the check is enabled."
         enum:
-        - "valid"
         - "warning"
         - "error"
         - "fatal"
@@ -15425,6 +15769,48 @@ definitions:
           \ storing the check."
     description: "Simplistic model that returns a single data quality check, its name\
       \ and \"configured\" flag"
+  CheckMiningParametersModel:
+    type: "object"
+    properties:
+      severity_level:
+        type: "string"
+        description: "The default severity level for rules that are proposed by the\
+          \ rule mining engine. The default value is 'error'."
+        enum:
+        - "warning"
+        - "error"
+        - "fatal"
+      category_filter:
+        type: "string"
+        description: "Optional filter for the check category names, supports filtering\
+          \ with prefixes and suffixes defined as a '*' character."
+      check_name_filter:
+        type: "string"
+        description: "Optional filter for the check names, supports filtering with\
+          \ prefixes and suffixes defined as a '*' character."
+      column_name_filter:
+        type: "string"
+        description: "Optional filter for the column names, supports filtering with\
+          \ prefixes and suffixes defined as a '*' character."
+      copy_failed_profiling_checks:
+        type: "boolean"
+        description: "Copy also the configuration of profiling checks that failed."
+    description: "Data quality check rule mining parameters. Configure what type of\
+      \ checks should be configured."
+  CheckMiningProposalModel:
+    type: "object"
+    properties:
+      table_checks:
+        description: "Proposed configuration of table-level data quality checks, such\
+          \ as volume, timeliness or schema."
+        $ref: "#/definitions/CheckContainerModel"
+      column_checks:
+        type: "object"
+        description: "Dictionary of proposed data quality checks for each column."
+        additionalProperties:
+          $ref: "#/definitions/CheckContainerModel"
+    description: "Model that has a proposed configuration of checks on a table and\
+      \ its columns generated by a data quality check mining service."
   CheckModel:
     type: "object"
     properties:
@@ -15482,7 +15868,6 @@ definitions:
         description: "The severity level (warning, error, fatal) for the default rule\
           \ that is activated in the data quality check editor when the check is enabled."
         enum:
-        - "valid"
         - "warning"
         - "error"
         - "fatal"
@@ -15589,6 +15974,8 @@ definitions:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -23468,8 +23855,9 @@ definitions:
           \ decreases too much during the last 90 days."
         $ref: "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
       daily_not_nulls_count:
-        description: "Detects empty columns that contain only null values. Counts\
-          \ the number of rows that have non-null values. Raises a data quality issue\
+        description: "Verifies that a column contains a minimum number of non-null\
+          \ values. The default value of the *min_count* parameter is 1 to detect\
+          \ at least one value in a monitored column. Raises a data quality issue\
           \ when the count of non-null values is below min_count. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
@@ -23480,6 +23868,12 @@ definitions:
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
+      daily_empty_column_found:
+        description: "Detects empty columns that contain only null values. Counts\
+          \ the number of rows that have non-null values. Raises a data quality issue\
+          \ when the column is empty. Stores the most recent captured value for each\
+          \ day when the data quality check was evaluated."
+        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
       daily_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since the last readout."
@@ -23525,8 +23919,9 @@ definitions:
           \ decreases too much during the last 90 days."
         $ref: "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
       daily_partition_not_nulls_count:
-        description: "Detects empty columns that contain only null values. Counts\
-          \ the number of rows that have non-null values. Raises a data quality issue\
+        description: "Verifies that a column contains a minimum number of non-null\
+          \ values. The default value of the *min_count* parameter is 1 to detect\
+          \ at least one value in a monitored column. Raises a data quality issue\
           \ when the count of non-null values is below min_count. Stores a separate\
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
@@ -23536,6 +23931,12 @@ definitions:
           \ quality issue when the percentage of non-null values is below min_percentage.\
           \ Stores a separate data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
+      daily_partition_empty_column_found:
+        description: "Detects empty columns that contain only null values. Counts\
+          \ the number of rows that have non-null values. Raises a data quality issue\
+          \ when the column is empty. Stores a separate data quality check result\
+          \ for each daily partition."
+        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
       daily_partition_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since last readout."
@@ -23578,8 +23979,9 @@ definitions:
           \ was evaluated."
         $ref: "#/definitions/ColumnNullsPercentCheckSpec"
       monthly_not_nulls_count:
-        description: "Detects empty columns that contain only null values. Counts\
-          \ the number of rows that have non-null values. Raises a data quality issue\
+        description: "Verifies that a column contains a minimum number of non-null\
+          \ values. The default value of the *min_count* parameter is 1 to detect\
+          \ at least one value in a monitored column. Raises a data quality issue\
           \ when the count of non-null values is below min_count. Stores the most\
           \ recent check result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
@@ -23590,6 +23992,12 @@ definitions:
           \ Stores the most recent check result for each month when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
+      monthly_empty_column_found:
+        description: "Detects empty columns that contain only null values. Counts\
+          \ the number of rows that have non-null values. Raises a data quality issue\
+          \ when the column is empty. Stores the most recent check result for each\
+          \ month when the data quality check was evaluated."
+        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
   ColumnNullsMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -23614,8 +24022,9 @@ definitions:
           \ a separate data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNullsPercentCheckSpec"
       monthly_partition_not_nulls_count:
-        description: "Detects empty columns that contain only null values. Counts\
-          \ the number of rows that have non-null values. Raises a data quality issue\
+        description: "Verifies that a column contains a minimum number of non-null\
+          \ values. The default value of the *min_count* parameter is 1 to detect\
+          \ at least one value in a monitored column. Raises a data quality issue\
           \ when the count of non-null values is below min_count. Stores a separate\
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
@@ -23625,6 +24034,12 @@ definitions:
           \ quality issue when the percentage of non-null values is below min_percentage.\
           \ Stores a separate data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
+      monthly_partition_empty_column_found:
+        description: "Detects empty columns that contain only null values. Counts\
+          \ the number of rows that have non-null values. Raises a data quality issue\
+          \ when the column is empty. Stores a separate data quality check result\
+          \ for each monthly partition."
+        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
   ColumnNullsNotNullsCountSensorParametersSpec:
     type: "object"
     properties:
@@ -23781,8 +24196,9 @@ definitions:
           \ decreases too much during the last 90 days."
         $ref: "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
       profile_not_nulls_count:
-        description: "Detects empty columns that contain only null values. Counts\
-          \ the number of rows that have non-null values. Raises a data quality issue\
+        description: "Verifies that a column contains a minimum number of non-null\
+          \ values. The default value of the *min_count* parameter is 1 to detect\
+          \ at least one value in a monitored column. Raises a data quality issue\
           \ when the count of non-null values is below min_count."
         $ref: "#/definitions/ColumnNotNullsCountCheckSpec"
       profile_not_nulls_percent:
@@ -23790,6 +24206,11 @@ definitions:
           \ Measures the percentage of rows that have non-null values. Raises a data\
           \ quality issue when the percentage of non-null values is below min_percentage."
         $ref: "#/definitions/ColumnNotNullsPercentCheckSpec"
+      profile_empty_column_found:
+        description: "Detects empty columns that contain only null values. Counts\
+          \ the number of rows that have non-null values. Raises a data quality issue\
+          \ when the column is empty."
+        $ref: "#/definitions/EmptyColumnFoundCheckSpec"
       profile_nulls_percent_change:
         description: "Verifies that the null percent value in a column changed in\
           \ a fixed rate since last readout."
@@ -26864,7 +27285,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "The limit of results that are returned. The default value is\
-          \ 10 sample values with the highest count (the most popular)."
+          \ 100 sample values with the highest count (the most popular)."
   ColumnSamplingColumnSamplesStatisticsCollectorSpec:
     type: "object"
     properties:
@@ -31398,9 +31819,9 @@ definitions:
         type: "boolean"
         description: "Disables data quality incident creation for failed data quality\
           \ checks on the data source."
-      webhooks:
-        description: "Configuration of Webhook URLs for new or updated incident notifications."
-        $ref: "#/definitions/IncidentWebhookNotificationsSpec"
+      incident_notification:
+        description: "Configuration of addresses for new or updated incident notifications."
+        $ref: "#/definitions/IncidentNotificationSpec"
   ConnectionModel:
     type: "object"
     properties:
@@ -32949,6 +33370,67 @@ definitions:
     description: "Model of a configured schedule (enabled on connection or table)\
       \ or schedule override (on check). Describes the CRON expression and the time\
       \ of the upcoming execution, as well as the duration until this time."
+  EmptyColumnFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNullsNotNullsCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with not\
+          \ null values in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinCountRuleConstant1ParametersSpec"
   Equals1RuleParametersSpec:
     type: "object"
   EqualsIntegerRuleParametersSpec:
@@ -33405,6 +33887,10 @@ definitions:
   IncidentCountsModel:
     type: "object"
     properties:
+      totalCount:
+        type: "integer"
+        format: "int32"
+        description: "Number of incidents in total."
       countFromLast24h:
         type: "integer"
         format: "int32"
@@ -33601,6 +34087,33 @@ definitions:
         - "acknowledged"
         - "resolved"
         - "muted"
+  IncidentNotificationSpec:
+    type: "object"
+    properties:
+      incident_opened_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ new incidents are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_acknowledged_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ acknowledged messages are pushed using a HTTP POST request (for webhook\
+          \ address) or an SMTP (for email address). The format of the JSON message\
+          \ is documented in the IncidentNotificationMessage object."
+      incident_resolved_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ resolved messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_muted_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ muted messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
   IncidentSeverityLevelCountsModel:
     type: "object"
     properties:
@@ -33613,29 +34126,6 @@ definitions:
       fatalCounts:
         description: "Counts for the fatal severity level."
         $ref: "#/definitions/IncidentCountsModel"
-  IncidentWebhookNotificationsSpec:
-    type: "object"
-    properties:
-      incident_opened_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing new incidents\
-          \ are pushed using a HTTP POST request. The format of the JSON message is\
-          \ documented in the IncidentNotificationMessage object."
-      incident_acknowledged_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing acknowledged\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
-      incident_resolved_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing resolved\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
-      incident_muted_webhook_url:
-        type: "string"
-        description: "Webhook URL where the notification messages describing muted\
-          \ messages are pushed using a HTTP POST request. The format of the JSON\
-          \ message is documented in the IncidentNotificationMessage object."
   IncidentsPerConnectionModel:
     type: "object"
     properties:
@@ -33899,6 +34389,8 @@ definitions:
         format: "int64"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
+  MinCountRuleConstant1ParametersSpec:
+    type: "object"
   MinPercentRule100ErrorParametersSpec:
     type: "object"
     properties:
@@ -33999,7 +34491,7 @@ definitions:
         type: "boolean"
       present:
         type: "boolean"
-  OptionalIncidentWebhookNotificationsSpec:
+  OptionalIncidentNotificationSpec:
     type: "object"
     properties:
       empty:
@@ -35403,6 +35895,10 @@ definitions:
         enum:
         - "table"
         - "column"
+      samplesLimit:
+        type: "integer"
+        format: "int32"
+        description: "The default limit of column samples that are collected."
       collectorsHierarchyIdsModels:
         type: "array"
         items:
@@ -35439,6 +35935,10 @@ definitions:
         type: "string"
         format: "date-time"
         description: "The local timestamp when the metric was collected"
+      executedAt:
+        type: "integer"
+        format: "int64"
+        description: "The UTC timestamp when the metric was collected (executed)"
       sampleCount:
         type: "integer"
         format: "int64"

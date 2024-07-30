@@ -30,6 +30,7 @@ if TYPE_CHECKING:
         ColumnNullsDailyPartitionedChecksSpecCustomChecks,
     )
     from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+    from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
 
 T = TypeVar("T", bound="ColumnNullsDailyPartitionedChecksSpec")
@@ -47,6 +48,7 @@ class ColumnNullsDailyPartitionedChecksSpec:
         daily_partition_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         daily_partition_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         daily_partition_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
+        daily_partition_empty_column_found (Union[Unset, EmptyColumnFoundCheckSpec]):
         daily_partition_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         daily_partition_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         daily_partition_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -67,6 +69,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
     daily_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
+    daily_partition_empty_column_found: Union[Unset, "EmptyColumnFoundCheckSpec"] = (
+        UNSET
+    )
     daily_partition_nulls_percent_change: Union[
         Unset, "ColumnNullPercentChangeCheckSpec"
     ] = UNSET
@@ -110,6 +115,12 @@ class ColumnNullsDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_not_nulls_percent, Unset):
             daily_partition_not_nulls_percent = (
                 self.daily_partition_not_nulls_percent.to_dict()
+            )
+
+        daily_partition_empty_column_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_empty_column_found, Unset):
+            daily_partition_empty_column_found = (
+                self.daily_partition_empty_column_found.to_dict()
             )
 
         daily_partition_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
@@ -161,6 +172,10 @@ class ColumnNullsDailyPartitionedChecksSpec:
             field_dict["daily_partition_not_nulls_percent"] = (
                 daily_partition_not_nulls_percent
             )
+        if daily_partition_empty_column_found is not UNSET:
+            field_dict["daily_partition_empty_column_found"] = (
+                daily_partition_empty_column_found
+            )
         if daily_partition_nulls_percent_change is not UNSET:
             field_dict["daily_partition_nulls_percent_change"] = (
                 daily_partition_nulls_percent_change
@@ -208,6 +223,7 @@ class ColumnNullsDailyPartitionedChecksSpec:
             ColumnNullsDailyPartitionedChecksSpecCustomChecks,
         )
         from ..models.column_nulls_percent_check_spec import ColumnNullsPercentCheckSpec
+        from ..models.empty_column_found_check_spec import EmptyColumnFoundCheckSpec
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -274,6 +290,17 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 ColumnNotNullsPercentCheckSpec.from_dict(
                     _daily_partition_not_nulls_percent
                 )
+            )
+
+        _daily_partition_empty_column_found = d.pop(
+            "daily_partition_empty_column_found", UNSET
+        )
+        daily_partition_empty_column_found: Union[Unset, EmptyColumnFoundCheckSpec]
+        if isinstance(_daily_partition_empty_column_found, Unset):
+            daily_partition_empty_column_found = UNSET
+        else:
+            daily_partition_empty_column_found = EmptyColumnFoundCheckSpec.from_dict(
+                _daily_partition_empty_column_found
             )
 
         _daily_partition_nulls_percent_change = d.pop(
@@ -343,6 +370,7 @@ class ColumnNullsDailyPartitionedChecksSpec:
             daily_partition_nulls_percent_anomaly=daily_partition_nulls_percent_anomaly,
             daily_partition_not_nulls_count=daily_partition_not_nulls_count,
             daily_partition_not_nulls_percent=daily_partition_not_nulls_percent,
+            daily_partition_empty_column_found=daily_partition_empty_column_found,
             daily_partition_nulls_percent_change=daily_partition_nulls_percent_change,
             daily_partition_nulls_percent_change_1_day=daily_partition_nulls_percent_change_1_day,
             daily_partition_nulls_percent_change_7_days=daily_partition_nulls_percent_change_7_days,

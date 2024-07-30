@@ -37,6 +37,11 @@ public class ColumnNullsNotNullsPercentSensorParametersSpec extends AbstractSens
     };
 
     /**
+     * Sensor name used by this sensor parameters.
+     */
+    public static final String SENSOR_NAME = "column/nulls/not_null_percent";
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -53,7 +58,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpec extends AbstractSens
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/nulls/not_null_percent";
+        return SENSOR_NAME;
     }
 
 }

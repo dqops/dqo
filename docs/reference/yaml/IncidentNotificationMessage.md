@@ -28,7 +28,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`failed_checks_count`</span>|The total number of failed data quality checks that were seen when the incident was raised for the first time.|*integer*| | | |
 |<span class="no-wrap-code ">`issue_url`</span>|The link (url) to a ticket in an external system that is tracking this incident.|*string*| | | |
 |<span class="no-wrap-code ">`status`</span>|Incident status.|*enum*|*open*<br/>*acknowledged*<br/>*resolved*<br/>*muted*<br/>| | |
-|<span class="no-wrap-code ">`text`</span>|Notification text in Markdown format that contains the most important fields from the class.|*string*| | | |
+|<span class="no-wrap-code ">`text`</span>|Notification text that contains the most important fields from the class.|*string*| | | |
 
 
 

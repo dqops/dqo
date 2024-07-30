@@ -42,6 +42,11 @@ public class ColumnTextTextDatatypeDetectStatisticsCollectorSpec extends Abstrac
         }
     };
 
+    /**
+     * Sensor name used by this collector.
+     */
+    public static final String SENSOR_NAME = ColumnDatatypeStringDatatypeDetectSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

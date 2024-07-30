@@ -42,6 +42,11 @@ public class TableVolumeRowCountStatisticsCollectorSpec extends AbstractStatisti
         }
     };
 
+    /**
+     * Sensor name used by this collector.
+     */
+    public static final String SENSOR_NAME = TableVolumeRowCountSensorParametersSpec.SENSOR_NAME;
+
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

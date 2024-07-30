@@ -207,7 +207,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 ___
 ## get_default_webhooks
-Returns spec to show and edit the default configuration of webhooks.
+Returns spec to show and edit the default configuration of addresses for incident notifications.
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_webhooks.py) to see the source code on GitHub.
 
@@ -221,7 +221,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`incident_webhook_notifications_spec`](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)</span>||*[IncidentWebhookNotificationsSpec](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)*|
+|<span class="no-wrap-code">[`incident_notification_spec`](../../reference/yaml/ConnectionYaml.md#incidentnotificationspec)</span>||*[IncidentNotificationSpec](../../reference/yaml/ConnectionYaml.md#incidentnotificationspec)*|
 
 
 
@@ -248,10 +248,10 @@ http://localhost:8888/api/defaults/defaultwebhooks
     
         ```
         {
-		  "incident_opened_webhook_url" : "https://sample_url.com/opened",
-		  "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-		  "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-		  "incident_muted_webhook_url" : "https://sample_url.com/muted"
+		  "incident_opened_addresses" : "https://sample_url.com/opened",
+		  "incident_acknowledged_addresses" : "https://sample_url.com/acknowledged",
+		  "incident_resolved_addresses" : "https://sample_url.com/resolved",
+		  "incident_muted_addresses" : "https://sample_url.com/muted"
 		}
         ```
     
@@ -280,11 +280,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
         ```
     
@@ -314,11 +314,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
         ```
     
@@ -351,11 +351,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
         ```
     
@@ -388,11 +388,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ??? example "Expand to see the returned result"
     
         ```
-        IncidentWebhookNotificationsSpec(
-			incident_opened_webhook_url='https://sample_url.com/opened',
-			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-			incident_resolved_webhook_url='https://sample_url.com/resolved',
-			incident_muted_webhook_url='https://sample_url.com/muted'
+        IncidentNotificationSpec(
+			incident_opened_addresses='https://sample_url.com/opened',
+			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+			incident_resolved_addresses='https://sample_url.com/resolved',
+			incident_muted_addresses='https://sample_url.com/muted'
 		)
         ```
     
@@ -576,7 +576,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 ___
 ## update_default_webhooks
-New configuration of the default webhooks.
+New configuration of the default addresses.
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_webhooks.py) to see the source code on GitHub.
 
@@ -594,7 +594,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default notification webhooks changes to be applied to the default configuration|*[IncidentWebhookNotificationsSpec](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)*| |
+|Spec with default notification addresses changes to be applied to the default configuration|*[IncidentNotificationSpec](../../reference/yaml/ConnectionYaml.md#incidentnotificationspec)*| |
 
 
 
@@ -610,7 +610,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}"
+		"{\"incident_opened_addresses\":\"https://sample_url.com/opened\",\"incident_acknowledged_addresses\":\"https://sample_url.com/acknowledged\",\"incident_resolved_addresses\":\"https://sample_url.com/resolved\",\"incident_muted_addresses\":\"https://sample_url.com/muted\"}"
 	
     ```
 
@@ -623,17 +623,17 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentWebhookNotificationsSpec
+	from dqops.client.models import IncidentNotificationSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = IncidentWebhookNotificationsSpec(
-		incident_opened_webhook_url='https://sample_url.com/opened',
-		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-		incident_resolved_webhook_url='https://sample_url.com/resolved',
-		incident_muted_webhook_url='https://sample_url.com/muted'
+	request_body = IncidentNotificationSpec(
+		incident_opened_addresses='https://sample_url.com/opened',
+		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+		incident_resolved_addresses='https://sample_url.com/resolved',
+		incident_muted_addresses='https://sample_url.com/muted'
 	)
 	
 	call_result = update_default_webhooks.sync(
@@ -652,17 +652,17 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentWebhookNotificationsSpec
+	from dqops.client.models import IncidentNotificationSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
 	
-	request_body = IncidentWebhookNotificationsSpec(
-		incident_opened_webhook_url='https://sample_url.com/opened',
-		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-		incident_resolved_webhook_url='https://sample_url.com/resolved',
-		incident_muted_webhook_url='https://sample_url.com/muted'
+	request_body = IncidentNotificationSpec(
+		incident_opened_addresses='https://sample_url.com/opened',
+		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+		incident_resolved_addresses='https://sample_url.com/resolved',
+		incident_muted_addresses='https://sample_url.com/muted'
 	)
 	
 	call_result = await update_default_webhooks.asyncio(
@@ -681,7 +681,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentWebhookNotificationsSpec
+	from dqops.client.models import IncidentNotificationSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -690,11 +690,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    token=token
 	)
 	
-	request_body = IncidentWebhookNotificationsSpec(
-		incident_opened_webhook_url='https://sample_url.com/opened',
-		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-		incident_resolved_webhook_url='https://sample_url.com/resolved',
-		incident_muted_webhook_url='https://sample_url.com/muted'
+	request_body = IncidentNotificationSpec(
+		incident_opened_addresses='https://sample_url.com/opened',
+		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+		incident_resolved_addresses='https://sample_url.com/resolved',
+		incident_muted_addresses='https://sample_url.com/muted'
 	)
 	
 	call_result = update_default_webhooks.sync(
@@ -713,7 +713,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentWebhookNotificationsSpec
+	from dqops.client.models import IncidentNotificationSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -722,11 +722,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    token=token
 	)
 	
-	request_body = IncidentWebhookNotificationsSpec(
-		incident_opened_webhook_url='https://sample_url.com/opened',
-		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
-		incident_resolved_webhook_url='https://sample_url.com/resolved',
-		incident_muted_webhook_url='https://sample_url.com/muted'
+	request_body = IncidentNotificationSpec(
+		incident_opened_addresses='https://sample_url.com/opened',
+		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
+		incident_resolved_addresses='https://sample_url.com/resolved',
+		incident_muted_addresses='https://sample_url.com/muted'
 	)
 	
 	call_result = await update_default_webhooks.asyncio(
