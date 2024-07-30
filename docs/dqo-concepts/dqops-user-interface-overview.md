@@ -370,7 +370,7 @@ The buttons and icons located on the left side of each check name allow you to p
 In the **Profiling**, **Monitoring Checks**, and **Partition Checks**, there is a tab called **Table quality status**.
 This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
 
-![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status.png){ loading=lazy; width="1200px" }
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status2.png){ loading=lazy; width="1200px" }
 
 
 By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
@@ -380,19 +380,19 @@ and the **Highest severity status**.
 There are two tables on the left-hand side of the screen, which show the **Current table status** and the summary of the
 **Total checks executed**. 
 
-Below these tables, there is a table with the Current severity statuses divided by the check category or data quality 
+Below these tables, there is a table with the severity statuses divided by the check category or data quality 
 dimension, depending on the selected option. The first row displays the results from the table-level checks executed 
 on the table, while the following rows show the column names and the results from the executed column-level checks. 
 The color indicate the current or the highest severity status:
 
-- green for a valid result
-- yellow for a warning
-- orange for an error
-- red for a fatal error
+- Green for a valid result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
 
-You can view the list of executed checks by clicking on the arrow. Hovering over a check name will display more details.
+You can view the list of executed checks by clicking on the arrow on the right. Hovering over a check name will display more details.
 
-![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view.png){ loading=lazy; width="1200px" }
+![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view2.png){ loading=lazy; width="1200px" }
 
 ## Notifications
 
