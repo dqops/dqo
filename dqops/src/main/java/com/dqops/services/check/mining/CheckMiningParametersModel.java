@@ -61,4 +61,52 @@ public class CheckMiningParametersModel {
      */
     @JsonPropertyDescription("Copy also the configuration of profiling checks that failed.")
     private boolean copyFailedProfilingChecks;
+
+    /**
+     * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
+    private boolean proposeMinimumRowCount = true;
+
+    /**
+     * Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.")
+    private boolean proposeTimelinessChecks = true;
+
+    /**
+     * Proposes the default configuration null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.")
+    private boolean proposeNullChecks = true;
+
+    /**
+     * Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.")
+    private boolean proposeUniquenessChecks = true;
+
+    /**
+     * Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.")
+    private boolean proposeNumericRanges = true;
+
+    /**
+     * Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.")
+    private boolean proposeTextLengthRanges = true;
+
+    /**
+     * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
+    private boolean proposeColumnCountCheck = true;
+
+    /**
+     * Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.")
+    private boolean proposeAcceptedValuesChecks = true;
 }
