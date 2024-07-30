@@ -17,8 +17,7 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
-import com.dqops.rules.DefaultRuleSeverityLevel;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -79,7 +78,7 @@ public class CheckDefinitionModel {
      * The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.
      */
     @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
-    private DefaultRuleSeverityLevel defaultSeverity = DefaultRuleSeverityLevel.error;
+    private TargetRuleSeverityLevel defaultSeverity = TargetRuleSeverityLevel.error;
 
     /**
      * True when the check is a custom check or is customized by the user.
@@ -197,7 +196,7 @@ public class CheckDefinitionModel {
                 setSensorName(SampleStringsRegistry.getFullSensorName());
                 setRuleName(SampleStringsRegistry.getFullRuleName());
                 setHelpText(SampleStringsRegistry.getHelpText());
-                setDefaultSeverity(DefaultRuleSeverityLevel.error);
+                setDefaultSeverity(TargetRuleSeverityLevel.error);
                 setStandard(false);
                 setCustom(true);
                 setBuiltIn(false);

@@ -104,4 +104,12 @@ public class RuleThresholdsModel implements Cloneable {
             this.fatal.applySampleValues();
         }
     }
+
+    /**
+     * Checks if any rule at any severity level is configured (enabled).
+     * @return One of the rules is enabled.
+     */
+    public boolean hasAnyRulesConfigured() {
+        return this.warning.isConfigured() || this.error.isConfigured() || this.fatal.isConfigured();
+    }
 }

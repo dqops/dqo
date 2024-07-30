@@ -16,6 +16,8 @@
 package com.dqops.checks;
 
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.data.checkresults.normalization.CheckResultsNormalizedResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -27,8 +29,9 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.SchedulingRootNode;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.rules.AbstractRuleParametersSpec;
-import com.dqops.rules.DefaultRuleSeverityLevel;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
+import com.dqops.rules.comparison.MaxPercentRuleParametersSpec;
+import com.dqops.rules.comparison.MinPercentRuleParametersSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mining.CheckMiningParametersModel;
@@ -426,8 +429,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
      */
     @JsonIgnore
-    public DefaultRuleSeverityLevel getDefaultSeverity() {
-        return DefaultRuleSeverityLevel.error;
+    public TargetRuleSeverityLevel getDefaultSeverity() {
+        return TargetRuleSeverityLevel.error;
     }
 
     /**
@@ -530,6 +533,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @param parentCheckRootContainer Parent check container, to identify the type of checks.
      * @param myCheckModel Check model of this check. This information can be used to get access to the custom check configuration (for custom checks).
      * @param miningParameters Additional rule mining parameters given by the user.
+     * @param columnTypeCategory Column type category for column checks.
+     * @param checkMiningConfigurationProperties Check mining configuration properties.
      * @param jsonSerializer JSON serializer used to convert sensor parameters and rule parameters to the target class type by serializing and deserializing.
      * @return True when the check was configured, false when the function decided not to configure the check.
      */
@@ -541,13 +546,51 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             AbstractRootChecksContainerSpec parentCheckRootContainer,
             CheckModel myCheckModel,
             CheckMiningParametersModel miningParameters,
+            DataTypeCategory columnTypeCategory,
+            DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties,
             JsonSerializer jsonSerializer) {
-        if (sourceProfilingCheck == null) {
+        if (sourceProfilingCheck == null || sourceProfilingCheck.getProfilingCheckModel() == null) {
             return false; // no profiling check to copy information from
+        }
+
+        if (sourceProfilingCheck.getActualValue() != null && !sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
+            // profiling check that has no rules configured is not a good source to copy from, unless it is a percentage or count check, which we can automatically configure
+
+            String ruleName = sourceProfilingCheck.getProfilingCheckModel().getRule().findFirstNotNullRule().getRuleName();
+            if (Objects.equals(ruleName, MinPercentRuleParametersSpec.RULE_NAME)) {
+                double differenceTo100Pct = 100.0 - sourceProfilingCheck.getActualValue();
+                double expectedMinPercent = sourceProfilingCheck.getActualValue() -
+                        (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+
+                if (differenceTo100Pct < miningParameters.getFailPercentChecksAtErrorPct()) {
+                    expectedMinPercent = 100.0;
+                }
+
+                setRule(miningParameters.getSeverityLevel(), new MinPercentRuleParametersSpec(expectedMinPercent), jsonSerializer);
+                return true;
+            }
+
+            if (Objects.equals(ruleName, MaxPercentRuleParametersSpec.RULE_NAME)) {
+                double expectedMaxPercent = sourceProfilingCheck.getActualValue() +
+                        (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
+
+                if (sourceProfilingCheck.getActualValue() < miningParameters.getFailPercentChecksAtErrorPct()) {
+                    expectedMaxPercent = 0.0;
+                }
+
+                setRule(miningParameters.getSeverityLevel(), new MaxPercentRuleParametersSpec(expectedMaxPercent), jsonSerializer);
+                return true;
+            }
+
+            // TODO: the same for max count checks, but look at the count of not-null values, the count must be a fraction of not null count
         }
 
         if (parentCheckRootContainer.getCheckType() == CheckType.profiling) {
             return false; // a profiling check cannot copy from itself
+        }
+
+        if (sourceProfilingCheck.getProfilingCheckModel().getCheckSpec().isDefaultCheck()) {
+            return false; // do not copy the configuration of default checks, the user should configure a check pattern for a different check type
         }
 
         if (!miningParameters.isCopyFailedProfilingChecks() &&
@@ -569,31 +612,72 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
         AbstractRuleParametersSpec profilingWarningRule = profilingCheckSpec.getWarning();
         if (profilingWarningRule != null) {
-            FieldInfo warningFieldInfo = reflectionClassInfo.getFieldByYamlName("warning");
-            String serializedWarningParameters = jsonSerializer.serialize(profilingWarningRule);
-            Object convertedWarningParameters = jsonSerializer.deserialize(serializedWarningParameters, warningFieldInfo.getClazz());
-            //noinspection unchecked
-            this.setWarning((RWarning) convertedWarningParameters);
+            setRule(TargetRuleSeverityLevel.warning, profilingWarningRule, jsonSerializer);
         }
 
         AbstractRuleParametersSpec profilingErrorRule = profilingCheckSpec.getError();
         if (profilingErrorRule != null) {
-            FieldInfo errorFieldInfo = reflectionClassInfo.getFieldByYamlName("error");
-            String serializedErrorParameters = jsonSerializer.serialize(profilingErrorRule);
-            Object convertedErrorParameters = jsonSerializer.deserialize(serializedErrorParameters, errorFieldInfo.getClazz());
-            //noinspection unchecked
-            this.setError((RError) convertedErrorParameters);
+            setRule(TargetRuleSeverityLevel.error, profilingErrorRule, jsonSerializer);
         }
 
         AbstractRuleParametersSpec profilingFatalRule = profilingCheckSpec.getFatal();
         if (profilingFatalRule != null) {
-            FieldInfo fatalFieldInfo = reflectionClassInfo.getFieldByYamlName("fatal");
-            String serializedFatalParameters = jsonSerializer.serialize(profilingFatalRule);
-            Object convertedFatalParameters = jsonSerializer.deserialize(serializedFatalParameters, fatalFieldInfo.getClazz());
-            //noinspection unchecked
-            this.setFatal((RFatal) convertedFatalParameters);
+            setRule(TargetRuleSeverityLevel.fatal, profilingFatalRule, jsonSerializer);
         }
 
         return true;
+    }
+
+    /**
+     * Sets a rule by performing serialization to JSON and deserialization back to the expected rule class type.
+     * @param severityLevel Target rule severity level.
+     * @param sourceRuleParameters Source rule parameters object to convert and store in the rule.
+     * @param jsonSerializer Json serializer instance that will be used for this operation.
+     */
+    public void setRule(TargetRuleSeverityLevel severityLevel, AbstractRuleParametersSpec sourceRuleParameters, JsonSerializer jsonSerializer) {
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+
+        switch (severityLevel) {
+            case warning: {
+                if (sourceRuleParameters == null) {
+                    this.setWarning((RWarning) null);
+                    return;
+                }
+                FieldInfo warningFieldInfo = reflectionClassInfo.getFieldByYamlName("warning");
+                String serializedWarningParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedWarningParameters = jsonSerializer.deserialize(serializedWarningParameters, warningFieldInfo.getClazz());
+                //noinspection unchecked
+                this.setWarning((RWarning) convertedWarningParameters);
+                break;
+            }
+
+            case error: {
+                if (sourceRuleParameters == null) {
+                    this.setError((RError) null);
+                    return;
+                }
+
+                FieldInfo errorFieldInfo = reflectionClassInfo.getFieldByYamlName("error");
+                String serializedErrorParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedErrorParameters = jsonSerializer.deserialize(serializedErrorParameters, errorFieldInfo.getClazz());
+                //noinspection unchecked
+                this.setError((RError) convertedErrorParameters);
+                break;
+            }
+
+            case fatal: {
+                if (sourceRuleParameters == null) {
+                    this.setFatal((RFatal) null);
+                    return;
+                }
+
+                FieldInfo fatalFieldInfo = reflectionClassInfo.getFieldByYamlName("fatal");
+                String serializedFatalParameters = jsonSerializer.serialize(sourceRuleParameters);
+                Object convertedFatalParameters = jsonSerializer.deserialize(serializedFatalParameters, fatalFieldInfo.getClazz());
+                //noinspection unchecked
+                this.setFatal((RFatal) convertedFatalParameters);
+                break;
+            }
+        }
     }
 }
