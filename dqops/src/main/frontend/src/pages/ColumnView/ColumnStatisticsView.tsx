@@ -233,7 +233,7 @@ const ColumnStatisticsView = ({
   };
 
   return (
-    <div className="p-4 text-sm">
+    <div className="p-4 text-sm overflow-auto">
       <div className="flex w-full h-15">
         {[
           ...tableStatistics,
@@ -251,21 +251,24 @@ const ColumnStatisticsView = ({
             key={index}
             title={renderCategory(column)}
             className="text-sm bg-white rounded-lg p-4 border border-gray-200 min-w-100"
+            titleClassName="!z-[999]"
           >
-            {columnStatistics[column].map((item, jIndex) => (
-              <div
-                key={jIndex}
-                className="h-10 flex justify-between items-center"
-              >
-                <div className="ml-2 font-light">{renderKey(item)}</div>
-                <div className="mr-2 font-bold flex items-center">
-                  {renderColumnStatisticsValue(item)}
-                  {item.sampleCount
-                    ? renderSampleIndicator(item.sampleCount)
-                    : null}
+            <div className="!max-h-120 overflow-auto">
+              {columnStatistics[column].map((item, jIndex) => (
+                <div
+                  key={jIndex}
+                  className="h-10 flex justify-between items-center"
+                >
+                  <div className="ml-2 font-light">{renderKey(item)}</div>
+                  <div className="mr-2 font-bold flex items-center">
+                    {renderColumnStatisticsValue(item)}
+                    {item.sampleCount
+                      ? renderSampleIndicator(item.sampleCount)
+                      : null}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </SectionWrapper>
         ))}
       </div>
