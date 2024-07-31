@@ -184,23 +184,23 @@ const RuleMiningChecksContainer = ({
         <RuleMiningChecksContainerHeader
           ruleParamenterConfigured={!!ruleParametersConfigured}
         />
-        {!isExtendedArray.includes('Table level checks') &&
-          (checksUI?.table_checks?.categories ?? []).map((category, index) => (
-            <tbody key={index}>
-              <div
-                onClick={() => onChangeIsExtended('Table level checks')}
-                className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
-              >
-                <SvgIcon
-                  name={
-                    !isExtendedArray.includes('Table level checks')
-                      ? 'chevron-right'
-                      : 'chevron-down'
-                  }
-                  className="w-5 h-5 text-gray-700"
-                />
-                Table level checks
-              </div>
+        {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
+          <tbody key={index}>
+            <div
+              onClick={() => onChangeIsExtended('Table level checks')}
+              className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
+            >
+              <SvgIcon
+                name={
+                  isExtendedArray.includes('Table level checks')
+                    ? 'chevron-right'
+                    : 'chevron-down'
+                }
+                className="w-5 h-5 text-gray-700"
+              />
+              Table level checks
+            </div>
+            {!isExtendedArray.includes('Table level checks') && (
               <RuleMiningChecksContainerCategory
                 category={category}
                 timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
@@ -221,8 +221,9 @@ const RuleMiningChecksContainer = ({
                   onChangeRuleParametersConfigured
                 }
               />
-            </tbody>
-          ))}
+            )}
+          </tbody>
+        ))}
         {Object.entries(checksUI?.column_checks ?? {}).length > 0 && (
           <tr className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4">
             Column level checks
