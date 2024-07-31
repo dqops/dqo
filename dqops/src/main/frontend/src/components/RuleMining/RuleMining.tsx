@@ -2,7 +2,7 @@ import { Tabs } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  CheckContainerListModel,
+  CheckContainerModel,
   CheckMiningParametersModel,
   CheckMiningProposalModel
 } from '../../api';
@@ -44,8 +44,10 @@ export default function RuleMining({
     useState<CheckMiningParametersModel>({});
   const [proposalConfiguration, setProposalConfiguration] =
     useState<CheckMiningProposalModel>({});
-  const [checksUI, setChecksUI] = useState<CheckContainerListModel>({});
-  const onChangeConfiguration = (conf: Partial<CheckMiningParametersModel>) => {
+
+  const [checksUI, setChecksUI] = useState<CheckContainerModel>({});
+
+  const onChangeConfiguration = (conf: any) => {
     setConfiguration((prev) => ({ ...prev, ...conf }));
   };
 
@@ -121,7 +123,7 @@ export default function RuleMining({
         });
     }
   };
-
+  console.log('checksUI', checksUI);
   useEffect(() => {
     proposeChecks();
   }, []);
@@ -152,7 +154,7 @@ export default function RuleMining({
       </div>
       <RuleMiningChecksContainer
         onUpdate={() => undefined}
-        checksUI={checksUI}
+        checksUI={(checksUI as any).table_checks}
         onChange={setChecksUI}
         loading={false}
         timePartitioned={timePartitioned}
