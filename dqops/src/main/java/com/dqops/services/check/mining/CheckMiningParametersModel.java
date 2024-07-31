@@ -63,10 +63,22 @@ public class CheckMiningParametersModel {
     private boolean copyFailedProfilingChecks;
 
     /**
+     * Copy also the configuration of profiling checks that are disabled.
+     */
+    @JsonPropertyDescription("Copy also the configuration of profiling checks that are disabled.")
+    private boolean copyDisabledProfilingChecks;
+
+    /**
      * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
     private boolean proposeMinimumRowCount = true;
+
+    /**
+     * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
+    private boolean proposeColumnCountCheck = true;
 
     /**
      * Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
@@ -97,12 +109,6 @@ public class CheckMiningParametersModel {
      */
     @JsonPropertyDescription("Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.")
     private boolean proposeTextLengthRanges = true;
-
-    /**
-     * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
-     */
-    @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
-    private boolean proposeColumnCountCheck = true;
 
     /**
      * Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.

@@ -232,6 +232,10 @@ public class TableDataFreshnessCheckSpec extends AbstractCheckSpec<TableTimeline
             return false;
         }
 
+        if (!miningParameters.isProposeTimelinessChecks()) {
+            return false;
+        }
+
         CheckType checkType = parentCheckRootContainer.getCheckType();
         if (checkType == CheckType.monitoring && sourceProfilingCheck.getProfilingCheckModel() != null &&
                 sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {

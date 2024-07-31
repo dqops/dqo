@@ -28,6 +28,16 @@ import java.util.Map;
  */
 public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
     /**
+     * The maximum number of different characters between the current column and the compared column.
+     */
+    public static final int COLUMN_MAPPING_DIFFERENT_CHARACTERS = 5;
+
+    /**
+     * The minimum length of a column that is used for similarity search.
+     */
+    public static final int COLUMN_MAPPING_MINIMUM_SIMILAR_COLUMN_LENGTH = 3;
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
@@ -106,8 +116,22 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
             }
         }
 
+        if (columnNameToFind.length() < COLUMN_MAPPING_MINIMUM_SIMILAR_COLUMN_LENGTH) {
+            return null;
+        }
+
         for (String columnName : this.keySet()) {
-            if (StringUtils.containsIgnoreCase(columnName, columnNameToFind) || StringUtils.containsIgnoreCase(columnNameToFind, columnName)) {
+            if (columnName.length() < COLUMN_MAPPING_MINIMUM_SIMILAR_COLUMN_LENGTH) {
+                continue;
+            }
+
+            if (columnName.length() <= columnNameToFind.length() + COLUMN_MAPPING_DIFFERENT_CHARACTERS &&
+                    StringUtils.containsIgnoreCase(columnName, columnNameToFind)) {
+                return this.get(columnName);
+            }
+
+            if (columnNameToFind.length() <= columnName.length() + COLUMN_MAPPING_DIFFERENT_CHARACTERS &&
+                    StringUtils.containsIgnoreCase(columnNameToFind, columnName)) {
                 return this.get(columnName);
             }
         }

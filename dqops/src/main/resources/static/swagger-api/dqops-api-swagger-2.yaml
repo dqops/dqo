@@ -15796,11 +15796,18 @@ definitions:
       copy_failed_profiling_checks:
         type: "boolean"
         description: "Copy also the configuration of profiling checks that failed."
+      copy_disabled_profiling_checks:
+        type: "boolean"
+        description: "Copy also the configuration of profiling checks that are disabled."
       propose_minimum_row_count:
         type: "boolean"
         description: "Proposes the default configuration of the minimum row count\
           \ for monitoring checks (full table scans). The default value of this parameter\
           \ is 'true'."
+      propose_column_count_check:
+        type: "boolean"
+        description: "Proposes the default configuration of the column count check.\
+          \ The default value of this parameter is 'true'."
       propose_timeliness_checks:
         type: "boolean"
         description: "Proposes the default configuration of the timeliness checks,\
@@ -15825,10 +15832,6 @@ definitions:
       propose_text_length_ranges:
         type: "boolean"
         description: "Proposes the default configuration of the text length checks.\
-          \ The default value of this parameter is 'true'."
-      propose_column_count_check:
-        type: "boolean"
-        description: "Proposes the default configuration of the column count check.\
           \ The default value of this parameter is 'true'."
       propose_accepted_values_checks:
         type: "boolean"

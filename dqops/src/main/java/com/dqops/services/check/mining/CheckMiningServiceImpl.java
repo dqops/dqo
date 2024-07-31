@@ -191,6 +191,10 @@ public class CheckMiningServiceImpl implements CheckMiningService {
                     }
                 }
 
+                if (checkModel.isDisabled() && !miningParameters.isCopyDisabledProfilingChecks()) {
+                    continue; // skip proposing checks that are disabled, they are disabled for a reason, even if they are disabled by policies
+                }
+
                 AbstractCheckSpec<?, ?, ?, ?> checkSpec = checkModel.getCheckSpec();
                 SimilarCheckModel similarProfilingCheck = checkModel.getSimilarProfilingCheck();
                 ProfilingCheckResult profilingCheckByCheckName = similarProfilingCheck != null ?
