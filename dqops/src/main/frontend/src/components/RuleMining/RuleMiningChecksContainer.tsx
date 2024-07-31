@@ -223,9 +223,11 @@ const RuleMiningChecksContainer = ({
               />
             </tbody>
           ))}
-        <tr className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4">
-          Column level checks
-        </tr>
+        {Object.entries(checksUI?.column_checks ?? {}).length > 0 && (
+          <tr className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4">
+            Column level checks
+          </tr>
+        )}
         {Object.entries(checksUI?.column_checks ?? {}).map(
           ([key, category], index) => (
             <tbody key={index}>

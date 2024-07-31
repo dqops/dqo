@@ -177,14 +177,24 @@ export default function RuleMining({
           isUpdatedFilters={isUpdatedFilters}
         />
       </div>
-      <RuleMiningChecksContainer
-        onUpdate={() => undefined}
-        checksUI={checksUI}
-        onChange={onChangeChecksUI}
-        loading={false}
-        timePartitioned={timePartitioned}
-        setTimePartitioned={setTimePartitioned}
-      />{' '}
+      {checksUI &&
+      checksUI.table_checks?.categories?.length === 0 &&
+      Object.keys(checksUI?.column_checks ?? {}).length === 0 ? (
+        <div className="p-4">
+          No new data quality checks are suggested. Please configure additional
+          profiling checks manually to detect other data quality issues and get
+          a new rule proposal
+        </div>
+      ) : (
+        <RuleMiningChecksContainer
+          onUpdate={() => undefined}
+          checksUI={checksUI}
+          onChange={onChangeChecksUI}
+          loading={false}
+          timePartitioned={timePartitioned}
+          setTimePartitioned={setTimePartitioned}
+        />
+      )}
     </div>
   );
 }
