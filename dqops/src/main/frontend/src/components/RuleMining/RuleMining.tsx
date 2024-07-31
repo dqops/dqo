@@ -2,7 +2,6 @@ import { Tabs } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  CheckContainerModel,
   CheckMiningParametersModel,
   CheckMiningProposalModel
 } from '../../api';
@@ -45,7 +44,7 @@ export default function RuleMining({
   const [proposalConfiguration, setProposalConfiguration] =
     useState<CheckMiningProposalModel>({});
 
-  const [checksUI, setChecksUI] = useState<CheckContainerModel>({});
+  const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
 
   const onChangeConfiguration = (conf: any) => {
     setConfiguration((prev) => ({ ...prev, ...conf }));
@@ -123,10 +122,22 @@ export default function RuleMining({
         });
     }
   };
-  console.log('checksUI', checksUI);
   useEffect(() => {
     proposeChecks();
   }, []);
+
+  const getCategories = async (checks: CheckMiningProposalModel) => {
+    const tableCategories = [checks.table_checks];
+
+    const columnCategories =
+      checks.column_checks &&
+      Object.entries(checks.column_checks).map(([key, value]) => {
+        return {
+          [key]: value
+        };
+      });
+  };
+  console.log(getCategories(checksUI));
   return (
     <div>
       {' '}
@@ -154,8 +165,8 @@ export default function RuleMining({
       </div>
       <RuleMiningChecksContainer
         onUpdate={() => undefined}
-        checksUI={(checksUI as any).table_checks}
-        onChange={setChecksUI}
+        checksUI={checksUI}
+        onChange={setChecksUI as any}
         loading={false}
         timePartitioned={timePartitioned}
         setTimePartitioned={setTimePartitioned}
