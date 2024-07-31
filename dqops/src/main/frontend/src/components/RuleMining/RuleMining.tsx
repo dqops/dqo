@@ -106,6 +106,7 @@ export default function RuleMining({
           setChecksUI(response.data);
         });
     }
+    setIsUpdatedFilters(false);
   };
 
   const applyChecks = async () => {

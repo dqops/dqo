@@ -235,7 +235,7 @@ const RuleMiningChecksContainer = ({
               >
                 <SvgIcon
                   name={
-                    !isExtendedArray.includes(key)
+                    isExtendedArray.includes(key)
                       ? 'chevron-right'
                       : 'chevron-down'
                   }

@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -133,39 +132,7 @@ const RuleMiningChecksContainerCategory = ({
           </div>
         </td>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2} />
-        <td className="py-2 px-4 bg-gray-50 border-b border-t">
-          {isDefaultEditing !== true && (
-            <div className="flex justify-end gap-x-3">
-              <div className="group relative">
-                <SvgIcon
-                  name="delete"
-                  width={20}
-                  className="cursor-pointer"
-                  onClick={() => setDeleteDataDialogOpened(true)}
-                />
-                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                  Delete data quality results for the category
-                </div>
-              </div>
-              <div className="group relative">
-                <SvgIcon
-                  name="play"
-                  width={20}
-                  className={clsx(
-                    'text-primary',
-                    userProfile.can_run_checks !== true
-                      ? 'pointer-events-none cursor-not-allowed'
-                      : 'cursor-pointer'
-                  )}
-                  onClick={onRunChecks}
-                />
-                <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                  Run checks for the category
-                </div>
-              </div>
-            </div>
-          )}
-        </td>
+        <td className="py-2 px-4 bg-gray-50 border-b border-t"></td>
       </tr>
       {category.checks &&
         isExtended &&
