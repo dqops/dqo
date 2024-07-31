@@ -126,8 +126,7 @@ const RuleMiningChecksContainer = ({
         }
       }
     };
-    console.log(columnName);
-    console.log(newChecksUI);
+
     onChange(newChecksUI);
   };
   const changeCopyUI = (

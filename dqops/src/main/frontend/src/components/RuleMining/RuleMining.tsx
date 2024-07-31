@@ -41,13 +41,15 @@ export default function RuleMining({
   } = useDecodedParams();
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>({});
-  const [proposalConfiguration, setProposalConfiguration] =
-    useState<CheckMiningProposalModel>({});
-
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
-
+  const [isUpdated, setIsUpdated] = useState(false);
   const onChangeConfiguration = (conf: any) => {
     setConfiguration((prev) => ({ ...prev, ...conf }));
+  };
+
+  const onChangeChecksUI = (checks: CheckMiningProposalModel) => {
+    setChecksUI(checks);
+    setIsUpdated(true);
   };
 
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
@@ -94,10 +96,8 @@ export default function RuleMining({
           connection,
           schema,
           table,
-          proposalConfiguration
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+          checksUI
+        );
         break;
       case CheckTypes.PARTITIONED:
         await RuleMiningApiClient.applyProposedPartitionedChecks(
@@ -105,10 +105,8 @@ export default function RuleMining({
           schema,
           table,
           timePartitioned ?? 'daily',
-          proposalConfiguration
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+          checksUI
+        );
         break;
       case CheckTypes.MONITORING:
         await RuleMiningApiClient.applyProposedMonitoringChecks(
@@ -116,28 +114,15 @@ export default function RuleMining({
           schema,
           table,
           timePartitioned ?? 'daily',
-          proposalConfiguration
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+          checksUI
+        );
     }
+    setIsUpdated(false);
   };
   useEffect(() => {
     proposeChecks();
   }, []);
 
-  const getCategories = async (checks: CheckMiningProposalModel) => {
-    const tableCategories = [checks.table_checks];
-
-    const columnCategories =
-      checks.column_checks &&
-      Object.entries(checks.column_checks).map(([key, value]) => {
-        return {
-          [key]: value
-        };
-      });
-  };
-  console.log(getCategories(checksUI));
   return (
     <div>
       {' '}
@@ -161,12 +146,13 @@ export default function RuleMining({
           onChangeConfiguration={onChangeConfiguration}
           proposeChecks={proposeChecks}
           applyChecks={applyChecks}
+          isUpdated={isUpdated}
         />
       </div>
       <RuleMiningChecksContainer
         onUpdate={() => undefined}
         checksUI={checksUI}
-        onChange={setChecksUI as any}
+        onChange={onChangeChecksUI}
         loading={false}
         timePartitioned={timePartitioned}
         setTimePartitioned={setTimePartitioned}
