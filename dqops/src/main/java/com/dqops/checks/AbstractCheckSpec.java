@@ -429,8 +429,8 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @return The default rule severity level that is activated when a check is enabled in the check editor. The default value is an "error" severity rule.
      */
     @JsonIgnore
-    public TargetRuleSeverityLevel getDefaultSeverity() {
-        return TargetRuleSeverityLevel.error;
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
+        return DefaultRuleSeverityLevel.error;
     }
 
     /**

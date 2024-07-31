@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.definitions.checks;
 
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -78,7 +79,7 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     private boolean standard;
 
     @JsonPropertyDescription("The severity level (warning, error, fatal) for the default rule that is activated in the data quality check editor when the check is enabled.")
-    private TargetRuleSeverityLevel defaultSeverity = TargetRuleSeverityLevel.error;
+    private DefaultRuleSeverityLevel defaultSeverity = DefaultRuleSeverityLevel.error;
 
     @JsonIgnore
     private String yamlParsingError;
@@ -192,7 +193,7 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
      * Returns the default severity level of a rule that is activated when a check is enabled.
      * @return Default everity level.
      */
-    public TargetRuleSeverityLevel getDefaultSeverity() {
+    public DefaultRuleSeverityLevel getDefaultSeverity() {
         return this.defaultSeverity;
     }
 
@@ -200,7 +201,7 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
      * Sets the default severity level to pick the rule that is enabled when a check is turned on.
      * @param defaultSeverity Default severity level.
      */
-    public void setDefaultSeverity(TargetRuleSeverityLevel defaultSeverity) {
+    public void setDefaultSeverity(DefaultRuleSeverityLevel defaultSeverity) {
         this.setDirtyIf(!Objects.equals(this.defaultSeverity, defaultSeverity));
         this.defaultSeverity = defaultSeverity;
     }

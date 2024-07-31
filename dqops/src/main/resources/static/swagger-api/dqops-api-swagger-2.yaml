@@ -15730,6 +15730,7 @@ definitions:
         description: "The severity level (warning, error, fatal) for the default rule\
           \ that is activated in the data quality check editor when the check is enabled."
         enum:
+        - "none"
         - "warning"
         - "error"
         - "fatal"
@@ -15919,6 +15920,7 @@ definitions:
         description: "The severity level (warning, error, fatal) for the default rule\
           \ that is activated in the data quality check editor when the check is enabled."
         enum:
+        - "none"
         - "warning"
         - "error"
         - "fatal"

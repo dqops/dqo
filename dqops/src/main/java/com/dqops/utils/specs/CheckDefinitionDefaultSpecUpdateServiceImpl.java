@@ -16,6 +16,7 @@
 
 package com.dqops.utils.specs;
 
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
@@ -73,7 +74,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
                 String ruleName = checkModel.getRule().getError().getRuleName();
                 String helpText = checkModel.getHelpText();
                 String friendlyName = checkModel.getFriendlyName();
-                TargetRuleSeverityLevel defaultSeverity = checkModel.getDefaultSeverity();
+                DefaultRuleSeverityLevel defaultSeverity = checkModel.getDefaultSeverity();
                 boolean isStandard = checkModel.isStandard();
 
                 CheckDefinitionWrapper checkDefinitionWrapper = dqoHomeChecksList.getByObjectName(fullCheckName, true);
