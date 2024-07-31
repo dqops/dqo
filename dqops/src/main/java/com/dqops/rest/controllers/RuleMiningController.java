@@ -138,8 +138,8 @@ public class RuleMiningController {
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
 
-            if (checkMiningParameters.getFailPercentChecksAtErrorPct() == null) {
-                checkMiningParameters.setFailPercentChecksAtErrorPct(this.checkMiningConfigurationProperties.getFailPercentChecksAtErrorPct());
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
             }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
@@ -295,8 +295,8 @@ public class RuleMiningController {
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
 
-            if (checkMiningParameters.getFailPercentChecksAtErrorPct() == null) {
-                checkMiningParameters.setFailPercentChecksAtErrorPct(this.checkMiningConfigurationProperties.getFailPercentChecksAtErrorPct());
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
             }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
@@ -453,8 +453,8 @@ public class RuleMiningController {
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
 
-            if (checkMiningParameters.getFailPercentChecksAtErrorPct() == null) {
-                checkMiningParameters.setFailPercentChecksAtErrorPct(this.checkMiningConfigurationProperties.getFailPercentChecksAtErrorPct());
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
             }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(

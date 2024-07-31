@@ -48,7 +48,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.freshness-max-days-multiplier"},
+    @CommandLine.Option(names = {"--dqo.check-mining.staleness-max-days-multiplier"},
             description = "The multiplier of the last known table staleness that is used to propose the configuration of the table staleness rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
     private double stalenessMaxDaysMultiplier = 2.0;
@@ -56,7 +56,7 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
     /**
      * The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine.
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.freshness-max-days-multiplier"},
+    @CommandLine.Option(names = {"--dqo.check-mining.ingestion-delay-max-days-multiplier"},
             description = "The multiplier of the last known table ingestion delay that is used to propose the configuration of the table ingestion delay rule threshold by the rule mining engine." +
                     "The default value is 2.0x the last known delay.", defaultValue = "2.0")
     private double ingestionDelayMaxDaysMultiplier = 2.0;
@@ -74,11 +74,11 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
      * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that
      * will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).
      */
-    @CommandLine.Option(names = {"--dqo.check-mining.fail-percent-checks-at-error-pct"},
+    @CommandLine.Option(names = {"--dqo.check-mining.fail-checks-at-percent-error-rows"},
             description = "The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) " +
                     "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%)." +
                     "The default value is 0.1.", defaultValue = "0.1")
-    private double failPercentChecksAtErrorPct = 0.1;
+    private double failChecksAtPercentErrorRows = 0.1;
 
     /**
      * Creates a clone of the object.

@@ -562,7 +562,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 double expectedMinPercent = sourceProfilingCheck.getActualValue() -
                         (differenceTo100Pct * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
 
-                if (differenceTo100Pct < miningParameters.getFailPercentChecksAtErrorPct()) {
+                if (differenceTo100Pct < miningParameters.getFailChecksAtPercentErrorRows()) {
                     expectedMinPercent = 100.0;
                 }
 
@@ -574,7 +574,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
                 double expectedMaxPercent = sourceProfilingCheck.getActualValue() +
                         (sourceProfilingCheck.getActualValue() * checkMiningConfigurationProperties.getPercentCheckDeltaRate());
 
-                if (sourceProfilingCheck.getActualValue() < miningParameters.getFailPercentChecksAtErrorPct()) {
+                if (sourceProfilingCheck.getActualValue() < miningParameters.getFailChecksAtPercentErrorRows()) {
                     expectedMaxPercent = 0.0;
                 }
 

@@ -18653,7 +18653,7 @@
           "type" : "boolean",
           "description" : "Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'."
         },
-        "fail_percent_checks_at_error_pct" : {
+        "fail_checks_at_percent_error_rows" : {
           "type" : "number",
           "format" : "double",
           "description" : "The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%)."

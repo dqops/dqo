@@ -114,5 +114,5 @@ public class CheckMiningParametersModel {
      * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).
      */
     @JsonPropertyDescription("The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).")
-    private Double failPercentChecksAtErrorPct;
+    private Double failChecksAtPercentErrorRows;
 }
