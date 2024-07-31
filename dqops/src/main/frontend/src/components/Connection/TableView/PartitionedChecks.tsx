@@ -24,6 +24,7 @@ import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import { useDecodedParams } from '../../../utils';
 import DataQualityChecks from '../../DataQualityChecks';
+import RuleMining from '../../RuleMining/RuleMining';
 import Tabs from '../../Tabs';
 import TableActionGroup from './TableActionGroup';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
@@ -41,6 +42,10 @@ const initTabs = [
   {
     label: 'Table comparisons',
     value: 'table-comparisons'
+  },
+  {
+    label: 'Rule mining',
+    value: 'rule-mining'
   }
 ];
 
@@ -292,6 +297,22 @@ const TablePartitionedChecksView = () => {
           timePartitioned={secondTab}
           setTimePartitioned={setTimePartitioned}
         />
+      )}
+      {activeTab === 'rule-mining' && (
+        <>
+          {secondTab === 'daily' && (
+            <RuleMining
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+          {secondTab === 'monthly' && (
+            <RuleMining
+              timePartitioned={secondTab}
+              setTimePartitioned={setTimePartitioned}
+            />
+          )}
+        </>
       )}
     </div>
   );

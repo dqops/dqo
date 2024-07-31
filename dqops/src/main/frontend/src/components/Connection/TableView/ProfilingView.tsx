@@ -42,6 +42,7 @@ import {
 } from '../../../services/apiClient';
 import { TABLE_LEVEL_TABS } from '../../../shared/constants';
 import { useDecodedParams } from '../../../utils';
+import RuleMining from '../../RuleMining/RuleMining';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
@@ -311,6 +312,7 @@ const ProfilingView = () => {
           onUpdateChecks={onUpdate}
         />
       )}
+      {activeTab === 'rule-mining' && <RuleMining />}
     </div>
   );
 };

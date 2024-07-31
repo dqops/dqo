@@ -37,6 +37,7 @@ import {
   JobsApiFactory,
   LabelsApiFactory,
   LogShippingApiFactory,
+  RuleMiningApiFactory,
   RulesApiFactory,
   SchemasApiFactory,
   SearchApiFactory,
@@ -168,6 +169,12 @@ export const SearchApiClient = SearchApiFactory(new Configuration(), '', axios);
 export const LabelsApiClient = LabelsApiFactory(new Configuration(), '', axios);
 
 export const ErrorSamplesApiClient = ErrorSamplesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const RuleMiningApiClient = RuleMiningApiFactory(
   new Configuration(),
   '',
   axios
