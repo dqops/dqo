@@ -148,7 +148,7 @@ export default function RuleMining({
   };
   useEffect(() => {
     proposeChecks();
-  }, []);
+  }, [checkTypes, connection, schema, table, timePartitioned]);
 
   return (
     <div>
