@@ -34,6 +34,7 @@ import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
 import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.logging.UserErrorLogger;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -116,6 +117,12 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
             return new SensorExecutionResult(sensorRunParameters, groupedSensorExecutionResult.getException());
         }
 
+        if (!Strings.isNullOrEmpty(sensorRunParameters.getColumn().getSqlExpression())) {
+            Table table = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
+            return new SensorExecutionResult(sensorRunParameters, table);
+        }
+
         try {
             TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
 
@@ -156,6 +163,12 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
                                                JobCancellationToken jobCancellationToken) {
         SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
         String renderedSensorSql = sensorPrepareResult.getRenderedSensorSql();
+
+        if (!Strings.isNullOrEmpty(sensorRunParameters.getColumn().getSqlExpression())) {
+            Table table = GenericSensorResultsFactory.createResultTableWithResult(1.0,
+                    this.defaultTimeZoneProvider.getDefaultTimeZoneId(), sensorPrepareResult.getSensorRunParameters().getTimePeriodGradient());
+            return new SensorExecutionResult(sensorRunParameters, table);
+        }
 
         try {
             if (!dummySensorExecution) {
