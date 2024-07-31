@@ -63,6 +63,12 @@ public class CheckMiningParametersModel {
     private boolean copyFailedProfilingChecks;
 
     /**
+     * Copy also the configuration of profiling checks that are disabled.
+     */
+    @JsonPropertyDescription("Copy also the configuration of profiling checks that are disabled.")
+    private boolean copyDisabledProfilingChecks;
+
+    /**
      * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
      */
     @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
