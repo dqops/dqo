@@ -6840,7 +6840,7 @@ paths:
           description: "Proposition of table level data quality monitoring checks\
             \ on a table returned"
           schema:
-            $ref: "#/definitions/CheckContainerModel"
+            $ref: "#/definitions/CheckMiningProposalModel"
         404:
           description: "Connection or table not found"
         500:
@@ -7829,7 +7829,7 @@ paths:
           description: "Proposition of table level data quality partitioned checks\
             \ on a table returned"
           schema:
-            $ref: "#/definitions/CheckContainerModel"
+            $ref: "#/definitions/CheckMiningProposalModel"
         404:
           description: "Connection or table not found"
         500:
@@ -8731,7 +8731,7 @@ paths:
           description: "Proposition of table level data quality profiling checks on\
             \ a table returned"
           schema:
-            $ref: "#/definitions/CheckContainerModel"
+            $ref: "#/definitions/CheckMiningProposalModel"
         404:
           description: "Connection or table not found"
         500:

@@ -100,7 +100,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality profiling checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -256,7 +256,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality monitoring checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -414,7 +414,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality partitioned checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
