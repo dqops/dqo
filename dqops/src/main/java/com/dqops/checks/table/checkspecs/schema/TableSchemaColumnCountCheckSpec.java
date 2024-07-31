@@ -228,6 +228,10 @@ public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColu
             return false;
         }
 
+        if (!miningParameters.isProposeColumnCountCheck()) {
+            return false;
+        }
+
         CheckType checkType = parentCheckRootContainer.getCheckType();
         if (checkType == CheckType.monitoring && sourceProfilingCheck.getProfilingCheckModel() != null &&
                 sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {

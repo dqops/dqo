@@ -18629,6 +18629,10 @@
           "type" : "boolean",
           "description" : "Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'."
         },
+        "propose_column_count_check" : {
+          "type" : "boolean",
+          "description" : "Proposes the default configuration of the column count check. The default value of this parameter is 'true'."
+        },
         "propose_timeliness_checks" : {
           "type" : "boolean",
           "description" : "Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'."
@@ -18648,10 +18652,6 @@
         "propose_text_length_ranges" : {
           "type" : "boolean",
           "description" : "Proposes the default configuration of the text length checks. The default value of this parameter is 'true'."
-        },
-        "propose_column_count_check" : {
-          "type" : "boolean",
-          "description" : "Proposes the default configuration of the column count check. The default value of this parameter is 'true'."
         },
         "propose_accepted_values_checks" : {
           "type" : "boolean",
@@ -18832,13 +18832,13 @@
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
         },
+        "similar_profiling_check" : {
+          "$ref" : "#/definitions/SimilarCheckModel"
+        },
         "check_hash" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The check hash code that identifies the check instance."
-        },
-        "similar_profiling_check" : {
-          "$ref" : "#/definitions/SimilarCheckModel"
         }
       },
       "description" : "Model that returns the form definition and the form data to edit a single data quality check."

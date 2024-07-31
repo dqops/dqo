@@ -232,6 +232,10 @@ public class TableRowCountCheckSpec
             return false;
         }
 
+        if (!miningParameters.isProposeMinimumRowCount()) {
+            return false;
+        }
+
         CheckType checkType = parentCheckRootContainer.getCheckType();
         if (checkType == CheckType.monitoring && sourceProfilingCheck.getProfilingCheckModel() != null &&
             sourceProfilingCheck.getProfilingCheckModel().getRule().hasAnyRulesConfigured()) {
