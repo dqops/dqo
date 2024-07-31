@@ -36,11 +36,17 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
+public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec implements MaxPercentRule {
     private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
+
+    /**
+     * The rule name from the DQOps home folder that is used by this rule.
+     */
+    public static final String RULE_NAME = "comparison/max_percent";
+
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     @SampleValues(values = "0.5")
@@ -95,7 +101,7 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/max_percent";
+        return RULE_NAME;
     }
 
     /**

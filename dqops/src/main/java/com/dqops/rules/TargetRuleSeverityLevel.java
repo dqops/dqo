@@ -18,7 +18,7 @@ package com.dqops.rules;
 /**
  * Default rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
  */
-public enum DefaultRuleSeverityLevel {
+public enum TargetRuleSeverityLevel {
     warning(1),
     error(2),
     fatal(3);
@@ -28,7 +28,7 @@ public enum DefaultRuleSeverityLevel {
      */
     public final int level;
 
-    DefaultRuleSeverityLevel(int level) {
+    TargetRuleSeverityLevel(int level) {
         this.level = level;
     }
 
@@ -45,7 +45,7 @@ public enum DefaultRuleSeverityLevel {
      * @param severity Rule severity level.
      * @return Severity level enum instance.
      */
-    public static DefaultRuleSeverityLevel fromSeverityLevel(int severity) {
+    public static TargetRuleSeverityLevel fromSeverityLevel(int severity) {
         switch (severity) {
             case 1:
                 return warning;

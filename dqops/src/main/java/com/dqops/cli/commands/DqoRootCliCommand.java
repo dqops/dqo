@@ -30,6 +30,7 @@ import com.dqops.cli.commands.settings.SettingsCliCommand;
 import com.dqops.cli.commands.table.TableCliCommand;
 import com.dqops.cli.commands.utility.ClearScreenCliCommand;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.utils.logging.DqoConsoleLoggingMode;
 import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.scheduler.JobSchedulerService;
@@ -470,6 +471,12 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The limit of column value samples that are collected when the basic table statistics are gathered. " +
                     "DQOps collects only the most popular values, which is determined by the number of value occurrences.", defaultValue = "100")
     private int dqoStatisticsSamplesLimit;
+
+    /**
+     * Check mining mixin - to configure parameters there.
+     */
+    @CommandLine.Mixin
+    private DqoCheckMiningConfigurationProperties dqoCheckMining = new DqoCheckMiningConfigurationProperties();
 
     @CommandLine.Option(names = {"--dqo.error-sampling.truncated-strings-length"},
             description = "The maximum length of error samples captured from text columns (varchar, string, text, etc.) that are stored as error samples table. " +

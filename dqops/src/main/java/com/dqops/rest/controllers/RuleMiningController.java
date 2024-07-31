@@ -20,6 +20,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
+import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.ExecutionContext;
@@ -58,6 +59,7 @@ public class RuleMiningController {
     private final CheckMiningService checkMiningService;
     private final ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
+    private final DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties;
 
     /**
      * Dependency injection constructor.
@@ -65,17 +67,20 @@ public class RuleMiningController {
      * @param checkMiningService Check mining service.
      * @param modelToSpecCheckMappingService Check model to specification mapping service, used to save proposed configuration.'
      * @param defaultObservabilityConfigurationService Default data observability check configuration service.
+     * @param checkMiningConfigurationProperties Check mining configuration parameters with the default values.
      */
     @Autowired
     public RuleMiningController(
             ExecutionContextFactory executionContextFactory,
             CheckMiningService checkMiningService,
             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService,
+            DqoCheckMiningConfigurationProperties checkMiningConfigurationProperties) {
         this.executionContextFactory = executionContextFactory;
         this.checkMiningService = checkMiningService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
+        this.checkMiningConfigurationProperties = checkMiningConfigurationProperties;
     }
 
     /**
@@ -95,7 +100,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality profiling checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -132,6 +137,10 @@ public class RuleMiningController {
             TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
+            }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),
@@ -247,7 +256,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality monitoring checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -285,6 +294,10 @@ public class RuleMiningController {
             TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
+            }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),
@@ -401,7 +414,7 @@ public class RuleMiningController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Proposition of table level data quality partitioned checks on a table returned",
-                    response = CheckContainerModel.class),
+                    response = CheckMiningProposalModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -439,6 +452,10 @@ public class RuleMiningController {
             TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
             this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(
                     connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
+
+            if (checkMiningParameters.getFailChecksAtPercentErrorRows() == null) {
+                checkMiningParameters.setFailChecksAtPercentErrorRows(this.checkMiningConfigurationProperties.getFailChecksAtPercentErrorRows());
+            }
 
             CheckMiningProposalModel checkMiningProposalModel = this.checkMiningService.proposeChecks(
                     connectionWrapper.getSpec(),

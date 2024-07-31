@@ -16,6 +16,7 @@
 package com.dqops.data.statistics.models;
 
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -54,4 +55,13 @@ public class StatisticsResultsForTableModel {
      */
     @JsonPropertyDescription("Statistics metrics of columns")
     private Map<String, StatisticsResultsForColumnModel> columns = new LinkedHashMap<>();
+
+    /**
+     * Checks if the statistics are missing. Returns true when no current statistics were found.
+     * @return True when no statistics are present, false when the results are present.
+     */
+    @JsonIgnore
+    public boolean isEmpty() {
+        return this.metrics.isEmpty() && this.columns.isEmpty();
+    }
 }
