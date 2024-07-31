@@ -73,13 +73,27 @@ export default function RuleMining({
 
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const proposeChecks = async () => {
+    const addPrefix = (key: string) => {
+      if (key.includes('*') || key.length === 0) {
+        return key;
+      } else {
+        return `*${key}*`;
+      }
+    };
+
+    const configurationWithPrefix: CheckMiningParametersModel = {
+      ...configuration,
+      category_filter: addPrefix(configuration.category_filter ?? ''),
+      column_name_filter: addPrefix(configuration.column_name_filter ?? ''),
+      check_name_filter: addPrefix(configuration.check_name_filter ?? '')
+    };
     switch (checkTypes) {
       case CheckTypes.PROFILING:
         await RuleMiningApiClient.proposeTableProfilingChecks(
           connection,
           schema,
           table,
-          configuration
+          configurationWithPrefix
         ).then((response) => {
           setChecksUI(response.data);
         });
@@ -90,7 +104,7 @@ export default function RuleMining({
           schema,
           table,
           timePartitioned ?? 'daily',
-          configuration
+          configurationWithPrefix
         ).then((response) => {
           setChecksUI(response.data);
         });
@@ -101,7 +115,7 @@ export default function RuleMining({
           schema,
           table,
           timePartitioned ?? 'daily',
-          configuration
+          configurationWithPrefix
         ).then((response) => {
           setChecksUI(response.data);
         });

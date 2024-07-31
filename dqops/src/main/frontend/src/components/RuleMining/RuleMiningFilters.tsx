@@ -60,15 +60,23 @@ export default function RuleMiningFilters({
           value={configuration.severity_level}
           onChange={(e) => onChangeConfiguration({ severity_level: e })}
           menuClassName="!top-14"
+          className="text-sm"
         />
       </div>
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center gap-x-5">
           <Checkbox
             label="Copy failed profiling checks"
             checked={configuration.copy_failed_profiling_checks}
             onChange={(e) =>
               onChangeConfiguration({ copy_failed_profiling_checks: e })
+            }
+          />
+          <Checkbox
+            label="Copy disabled profiling checks"
+            checked={configuration.copy_disabled_profiling_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ copy_disabled_profiling_checks: e })
             }
           />
         </div>
@@ -84,11 +92,6 @@ export default function RuleMiningFilters({
             color={isUpdated ? 'primary' : 'secondary'}
           />
         </div>
-        {/* <Checkbox
-          label="Copy disabled profiling checks"
-          checked={configuration.}
-          onChange={() => undefined}
-        /> */}
       </div>
     </div>
   );
