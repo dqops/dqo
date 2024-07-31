@@ -117,7 +117,9 @@ export default function RuleMining({
           schema,
           table,
           checksUI
-        );
+        ).then(() => {
+          proposeChecks();
+        });
         break;
       case CheckTypes.PARTITIONED:
         await RuleMiningApiClient.applyProposedPartitionedChecks(
@@ -126,7 +128,9 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           checksUI
-        );
+        ).then(() => {
+          proposeChecks();
+        });
         break;
       case CheckTypes.MONITORING:
         await RuleMiningApiClient.applyProposedMonitoringChecks(
@@ -135,9 +139,11 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           checksUI
-        );
+        ).then(() => {
+          proposeChecks();
+        });
     }
-    await proposeChecks();
+
     setIsUpdated(false);
   };
   useEffect(() => {

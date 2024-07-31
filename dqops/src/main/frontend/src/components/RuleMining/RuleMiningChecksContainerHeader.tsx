@@ -36,28 +36,28 @@ export default function RuleMiningChecksContainerHeader({
         <th className="text-start whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"></th>
         {ruleParamenterConfigured ? (
           <>
-            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-yellow-100 relative pl-1 min-w-44">
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-yellow-100 relative pl-1 min-w-44">
               Warning threshold
               <div className="w-4 bg-white absolute h-full right-0 top-0"></div>
             </td>
-            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-orange-100">
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-orange-100">
               Error threshold
             </td>
-            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-red-100">
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-red-100">
               Fatal threshold
             </td>
           </>
         ) : (
           <>
-            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+            <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-gray-400">
               <div className="flex items-center !w-40">
                 Issue severity level
               </div>
             </td>
-            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-gray-400">
               <div className="flex items-center">Rule thresholds</div>
             </td>
-            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 border-b font-semibold bg-gray-400">
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4   font-semibold bg-gray-400">
               <div className="w-38 h-full bg-gray-400"></div>
             </td>
           </>
