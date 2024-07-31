@@ -13,7 +13,8 @@ export default function RuleMiningFilters({
   onChangeConfiguration,
   proposeChecks,
   applyChecks,
-  isUpdated
+  isUpdated,
+  isUpdatedFilters
 }: {
   configuration: CheckMiningParametersModel;
   onChangeConfiguration: (
@@ -22,6 +23,7 @@ export default function RuleMiningFilters({
   proposeChecks: () => Promise<void>;
   applyChecks: () => Promise<void>;
   isUpdated: boolean;
+  isUpdatedFilters: boolean;
 }) {
   return (
     <div className="p-4">
@@ -71,7 +73,11 @@ export default function RuleMiningFilters({
           />
         </div>
         <div className="flex items-center gap-x-4">
-          <Button label="Propose" onClick={proposeChecks} color="primary" />
+          <Button
+            label="Propose"
+            onClick={proposeChecks}
+            color={isUpdatedFilters ? 'primary' : 'secondary'}
+          />
           <Button
             label="Apply"
             onClick={applyChecks}

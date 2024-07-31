@@ -21,6 +21,19 @@ const tabs = [
     value: 'monthly'
   }
 ];
+
+const getRuleMiningConfigurationLocalStorage = () => {
+  const configuration = localStorage.getItem('ruleMiningConfiguration');
+  return configuration ? JSON.parse(configuration) : null;
+};
+const setRuleMiningConfigurationLocalStorage = (
+  configuration: CheckMiningParametersModel
+) => {
+  localStorage.setItem(
+    'ruleMiningConfiguration',
+    JSON.stringify(configuration)
+  );
+};
 export default function RuleMining({
   timePartitioned,
   setTimePartitioned
@@ -40,11 +53,17 @@ export default function RuleMining({
     table: string;
   } = useDecodedParams();
   const [configuration, setConfiguration] =
-    useState<CheckMiningParametersModel>({});
+    useState<CheckMiningParametersModel>(
+      getRuleMiningConfigurationLocalStorage() ?? { severity_level: 'error' }
+    );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);
+  const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
   const onChangeConfiguration = (conf: any) => {
-    setConfiguration((prev) => ({ ...prev, ...conf }));
+    const newConfiguration = { ...configuration, ...conf };
+    setConfiguration(newConfiguration);
+    setRuleMiningConfigurationLocalStorage(newConfiguration);
+    setIsUpdatedFilters(true);
   };
 
   const onChangeChecksUI = (checks: CheckMiningProposalModel) => {
@@ -117,6 +136,7 @@ export default function RuleMining({
           checksUI
         );
     }
+    await proposeChecks();
     setIsUpdated(false);
   };
   useEffect(() => {
@@ -147,6 +167,7 @@ export default function RuleMining({
           proposeChecks={proposeChecks}
           applyChecks={applyChecks}
           isUpdated={isUpdated}
+          isUpdatedFilters={isUpdatedFilters}
         />
       </div>
       <RuleMiningChecksContainer
