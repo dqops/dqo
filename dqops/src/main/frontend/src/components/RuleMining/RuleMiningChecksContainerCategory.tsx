@@ -23,7 +23,8 @@ interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
   handleChangeDataGroupingConfiguration: (
     check: CheckModel,
-    index: number
+    index: number,
+    columnName?: string
   ) => void;
   onUpdate: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
@@ -173,14 +174,6 @@ const RuleMiningChecksContainerCategory = ({
             const checkIndexPair: CheckIndexTuple = [check, index];
             return checkIndexPair;
           })
-          .filter(
-            (tuple) =>
-              showAdvanced ||
-              tuple[0].standard ||
-              tuple[0].configured ||
-              isAlreadyDeleted ||
-              isFiltered
-          )
           .map((tuple) => (
             <RuleMiningChecksContainerListItem
               check={tuple[0]}

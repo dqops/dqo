@@ -17,12 +17,13 @@ import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
 import Loader from '../Loader';
+import SvgIcon from '../SvgIcon';
 import RuleMiningChecksContainerCategory from './RuleMiningChecksContainerCategory';
 import RuleMiningChecksContainerHeader from './RuleMiningChecksContainerHeader';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckMiningProposalModel;
-  onChange: (ui: CheckContainerModel) => void;
+  onChange: (ui: CheckMiningProposalModel) => void;
   className?: string;
   onUpdate: () => void;
   loading?: boolean;
@@ -58,34 +59,77 @@ const RuleMiningChecksContainer = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(
     isFiltered === true
   );
+  const [isExtendedArray, setIsExtendedArray] = useState<string[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { ruleParametersConfigured } = useSelector(
     getFirstLevelState(checkTypes)
   );
 
+  const onChangeIsExtended = (category: string) => {
+    if (isExtendedArray.includes(category)) {
+      setIsExtendedArray(isExtendedArray.filter((x) => x !== category));
+    } else {
+      setIsExtendedArray([...isExtendedArray, category]);
+    }
+  };
+
   const { sidebarWidth } = useTree();
-  const handleChangeDataGrouping = (
+
+  const handleChangeTableDataGrouping = (
     check: CheckModel,
     idx: number,
     jdx: number
   ) => {
-    // if (!checksUI) return;
-    // const newChecksUI = {
-    //   ...checksUI,
-    //   categories: checksUI?.categories?.map((category, index) =>
-    //     index !== idx
-    //       ? category
-    //       : {
-    //           ...category,
-    //           checks: category?.checks?.map((item, jindex) =>
-    //             jindex !== jdx ? item : check
-    //           )
-    //         }
-    //   )
-    // };
-    // onChange(newChecksUI);
+    if (!checksUI) return;
+    const newChecksUI = {
+      ...checksUI,
+      table_checks: {
+        ...checksUI.table_checks,
+        categories: checksUI.table_checks?.categories?.map((category, index) =>
+          index !== idx
+            ? category
+            : {
+                ...category,
+                checks: category?.checks?.map((item, jindex) =>
+                  jindex !== jdx ? item : check
+                )
+              }
+        )
+      }
+    };
+    onChange(newChecksUI);
   };
-
+  const handleChangeColumnDataGrouping = (
+    check: CheckModel,
+    idx: number,
+    jdx: number,
+    columnName: string
+  ) => {
+    if (!checksUI) return;
+    const newChecksUI = {
+      ...checksUI,
+      column_checks: {
+        ...checksUI.column_checks,
+        [columnName]: {
+          ...checksUI?.column_checks?.[columnName],
+          categories: checksUI.column_checks?.[columnName]?.categories?.map(
+            (category, index) =>
+              index !== idx
+                ? category
+                : {
+                    ...category,
+                    checks: category?.checks?.map((item, jindex) =>
+                      jindex !== jdx ? item : check
+                    )
+                  }
+          )
+        }
+      }
+    };
+    console.log(columnName);
+    console.log(newChecksUI);
+    onChange(newChecksUI);
+  };
   const changeCopyUI = (
     category: string,
     checkName: string,
@@ -143,12 +187,25 @@ const RuleMiningChecksContainer = ({
         />
         {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
           <tbody key={index}>
-            <div>Table level checks</div>
+            <div
+              onClick={() => onChangeIsExtended('Table level checks')}
+              className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
+            >
+              <SvgIcon
+                name={
+                  isExtendedArray.includes('Table level checks')
+                    ? 'chevron-right'
+                    : 'chevron-down'
+                }
+                className="w-5 h-5 text-gray-700"
+              />
+              Table level checks
+            </div>
             <RuleMiningChecksContainerCategory
               category={category}
               timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
               handleChangeDataGroupingConfiguration={(check, jIndex) =>
-                handleChangeDataGrouping(check, index, jIndex)
+                handleChangeTableDataGrouping(check, index, jIndex)
               }
               onUpdate={onUpdate}
               mode={mode}
@@ -169,30 +226,44 @@ const RuleMiningChecksContainer = ({
         {Object.entries(checksUI?.column_checks ?? {}).map(
           ([key, category], index) => (
             <tbody key={index}>
-              <div className="w-full">{key}</div>
-              {category?.categories?.map((x, jindex) => (
-                <RuleMiningChecksContainerCategory
-                  key={x.category && x?.category + jindex}
-                  category={x}
-                  timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
-                  handleChangeDataGroupingConfiguration={(check, jIndex) =>
-                    handleChangeDataGrouping(check, index, jIndex)
+              <div
+                className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
+                onClick={() => onChangeIsExtended(key)}
+              >
+                <SvgIcon
+                  name={
+                    isExtendedArray.includes(key)
+                      ? 'chevron-right'
+                      : 'chevron-down'
                   }
-                  onUpdate={onUpdate}
-                  mode={mode}
-                  changeCopyUI={changeCopyUI}
-                  copyCategory={copyUI?.categories?.find(
-                    (item) => item.category === category
-                  )}
-                  isDefaultEditing={isDefaultEditing}
-                  showAdvanced={showAdvanced}
-                  isFiltered={isFiltered}
-                  ruleParamenterConfigured={ruleParametersConfigured}
-                  onChangeRuleParametersConfigured={
-                    onChangeRuleParametersConfigured
-                  }
+                  className="w-5 h-5 text-gray-700"
                 />
-              ))}
+                {key}
+              </div>
+              {isExtendedArray.includes(key) &&
+                category?.categories?.map((x, jindex) => (
+                  <RuleMiningChecksContainerCategory
+                    key={x.category && x?.category + jindex}
+                    category={x}
+                    timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+                    handleChangeDataGroupingConfiguration={(check, jIndex) =>
+                      handleChangeColumnDataGrouping(check, index, jIndex, key)
+                    }
+                    onUpdate={onUpdate}
+                    mode={mode}
+                    changeCopyUI={changeCopyUI}
+                    copyCategory={copyUI?.categories?.find(
+                      (item) => item.category === category
+                    )}
+                    isDefaultEditing={isDefaultEditing}
+                    showAdvanced={showAdvanced}
+                    isFiltered={isFiltered}
+                    ruleParamenterConfigured={ruleParametersConfigured}
+                    onChangeRuleParametersConfigured={
+                      onChangeRuleParametersConfigured
+                    }
+                  />
+                ))}
             </tbody>
           )
         )}
