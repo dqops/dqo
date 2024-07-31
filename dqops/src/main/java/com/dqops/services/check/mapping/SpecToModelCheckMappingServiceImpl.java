@@ -680,10 +680,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             }
         }
 
-        String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
+        String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() :
+                (customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getCheckName() : checkSpec.getCheckName());
         checkModel.setCheckName(checkName);
         checkModel.setHelpText(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getHelpText() :
-                (checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText()));
+                (checkFieldInfo != null ? checkFieldInfo.getHelpText() : null));
         checkModel.setDisplayName(checkSpec.getDisplayName());
         checkModel.setFriendlyName(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.getFriendlyName() : checkSpec.getFriendlyName());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());

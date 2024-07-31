@@ -104,6 +104,14 @@ public class ProfilingCheckResult {
     }
 
     /**
+     * Sets the severity level of the last check. Should be used only from unit tests, because we are importing this value using dedicated methods.
+     * @param severityLevel Severity level.
+     */
+    public void setSeverityLevel(CheckResultStatus severityLevel) {
+        this.severityLevel = severityLevel;
+    }
+
+    /**
      * Returns the most recent actual value (the sensor readout), retrieved from the sensor. It is the value of the profiling check, or alternatively the value of a similar statistics.
      * @return The most recent actual value.
      */
