@@ -54,7 +54,20 @@ export default function RuleMining({
   } = useDecodedParams();
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>(
-      getRuleMiningConfigurationLocalStorage() ?? { severity_level: 'error' }
+      getRuleMiningConfigurationLocalStorage() ?? {
+        severity_level: 'error',
+        fail_checks_at_percent_error_rows: 0.1,
+        copy_failed_profiling_checks: false,
+        copy_disabled_profiling_checks: false,
+        propose_minimum_row_count: true,
+        propose_column_count_check: true,
+        propose_timeliness_checks: true,
+        propose_null_checks: true,
+        propose_uniqueness_checks: true,
+        propose_numeric_ranges: true,
+        propose_text_length_ranges: true,
+        propose_accepted_values_checks: true
+      }
     );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);

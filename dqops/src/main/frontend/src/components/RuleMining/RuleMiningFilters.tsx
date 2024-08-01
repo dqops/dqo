@@ -62,10 +62,24 @@ export default function RuleMiningFilters({
           menuClassName="!top-14"
           className="text-sm"
         />
+        <Input
+          label="The percentage value captured by a profiling check"
+          value={configuration.fail_checks_at_percent_error_rows}
+          type="number"
+          onChange={(e) =>
+            onChangeConfiguration({
+              fail_checks_at_percent_error_rows:
+                isNaN(Number(e.target.value)) || e.target.value === ''
+                  ? undefined
+                  : Number(e.target.value)
+            })
+          }
+        />
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-5">
+      <div className="flex justify-between">
+        <div className="flex flex-wrap gap-x-5 mb-4">
           <Checkbox
+            className="p-2"
             label="Copy failed profiling checks"
             checked={configuration.copy_failed_profiling_checks}
             onChange={(e) =>
@@ -73,24 +87,89 @@ export default function RuleMiningFilters({
             }
           />
           <Checkbox
+            className="p-2"
             label="Copy disabled profiling checks"
             checked={configuration.copy_disabled_profiling_checks}
             onChange={(e) =>
               onChangeConfiguration({ copy_disabled_profiling_checks: e })
             }
           />
+          <Checkbox
+            className="p-2"
+            label="Propose minimum row count"
+            checked={configuration.propose_minimum_row_count}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_minimum_row_count: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose column count check"
+            checked={configuration.propose_column_count_check}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_column_count_check: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose timeliness checks"
+            checked={configuration.propose_timeliness_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_timeliness_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose null checks"
+            checked={configuration.propose_null_checks}
+            onChange={(e) => onChangeConfiguration({ propose_null_checks: e })}
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose uniqueness checks"
+            checked={configuration.propose_uniqueness_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_uniqueness_checks: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose numeric ranges"
+            checked={configuration.propose_numeric_ranges}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_numeric_ranges: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose text length ranges"
+            checked={configuration.propose_text_length_ranges}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_text_length_ranges: e })
+            }
+          />
+          <Checkbox
+            className="p-2"
+            label="Propose accepted values checks"
+            checked={configuration.propose_accepted_values_checks}
+            onChange={(e) =>
+              onChangeConfiguration({ propose_accepted_values_checks: e })
+            }
+          />
         </div>
-        <div className="flex items-center gap-x-4">
-          <Button
-            label="Propose"
-            onClick={proposeChecks}
-            color={isUpdatedFilters ? 'primary' : 'secondary'}
-          />
-          <Button
-            label="Apply"
-            onClick={applyChecks}
-            color={isUpdated ? 'primary' : 'secondary'}
-          />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-x-4">
+            <Button
+              label="Propose"
+              onClick={proposeChecks}
+              color={isUpdatedFilters ? 'primary' : 'secondary'}
+            />
+            <Button
+              label="Apply"
+              onClick={applyChecks}
+              color={isUpdated ? 'primary' : 'secondary'}
+            />
+          </div>
         </div>
       </div>
     </div>
