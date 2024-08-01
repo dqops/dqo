@@ -86,7 +86,7 @@ const ErrorSamplesTab = ({
 
   return (
     <div
-      className="py-3 overflow-auto"
+      className="pt-3 overflow-auto"
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
     >
       <div className="flex space-x-8 items-center">
@@ -116,7 +116,7 @@ const ErrorSamplesTab = ({
         <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {errorSamples.map((result, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-2">
           <Table
             className="mt-4 w-full"
             columns={columns}

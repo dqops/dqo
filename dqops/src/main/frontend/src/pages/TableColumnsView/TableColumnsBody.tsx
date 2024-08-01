@@ -66,7 +66,7 @@ export default function TableColumnsBody({
   const dispatch = useDispatch();
   const [jobId, setJobId] = useState<number>();
   const [lastRefreshedJobId, setLastRefreshedJobId] = useState<number>();
-
+  const [items, setItems] = useState<Array<string>>([]);
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   useEffect(() => {
@@ -151,7 +151,7 @@ export default function TableColumnsBody({
     );
   };
 
-  const getMidSectionItemsBasedOnWidth = (column: MyData) => {
+  const getMidSectionItemsBasedOnWidth = () => {
     const width = window.innerWidth;
     const excludedItems: string[] = [];
 
@@ -173,34 +173,16 @@ export default function TableColumnsBody({
       excludedItems.push('Nulls count');
     }
 
-    const items = [
-      { label: 'Length', value: column.length },
-      { label: 'Scale', value: column.scale },
-      {
-        label: 'Min value',
-        value: column.minimalValue
-          ? dateToString(String(column.minimalValue))
-            ? dateToString(String(column.minimalValue))
-            : cutString(String(column.minimalValue))
-          : ''
-      },
-      {
-        label: 'Max value',
-        value: column.maximumValue
-          ? dateToString(String(column.maximumValue))
-            ? dateToString(String(column.maximumValue))
-            : cutString(String(column.maximumValue))
-          : ''
-      },
-      {
-        label: 'Nulls count',
-        value: isNaN(Number(column.null_count)) ? '' : column.null_count
-      }
-    ];
-
-    const arr = items.filter((item) => !excludedItems.includes(item.label));
-    return arr;
+    setItems(excludedItems);
   };
+
+  useEffect(() => {
+    getMidSectionItemsBasedOnWidth();
+    window.addEventListener('resize', getMidSectionItemsBasedOnWidth);
+    return () => {
+      window.removeEventListener('resize', getMidSectionItemsBasedOnWidth);
+    };
+  }, []);
 
   return (
     <tbody className="text-sm">
@@ -210,7 +192,7 @@ export default function TableColumnsBody({
             <div className="flex items-center gap-x-2">
               {' '}
               {column.id ? (
-                <SvgIcon name="key" className="w-4 h-4 cursor-move" />
+                <SvgIcon name="key" className="w-4 h-4 cursor-default" />
               ) : (
                 <div className="w-4 h-4" />
               )}
@@ -309,15 +291,45 @@ export default function TableColumnsBody({
           <td className="border-b border-gray-100 text-left px-4 py-2">
             {limitTextLength(column.importedDatatype, 15)}
           </td>
-          {getMidSectionItemsBasedOnWidth(column).map((item, jIndex) => (
-            <td
-              key={jIndex}
-              className="border-b border-gray-100 text-left px-4 py-2"
-            >
-              <div className="text-right float-right">{item.value}</div>
+          {!items.includes('Length') && (
+            <td className="border-b border-gray-100 text-right px-4 py-2">
+              <span className="float-right">{column.length}</span>
             </td>
-          ))}
-
+          )}
+          {!items.includes('Scale') && (
+            <td className="border-b border-gray-100 text-left px-4 py-2">
+              <span className="float-right">{column.scale}</span>
+            </td>
+          )}
+          {!items.includes('Min value') && (
+            <td className="border-b border-gray-100 text-left px-4 py-2">
+              <div key={index} className="text-right float-right">
+                {column.minimalValue
+                  ? dateToString(String(column.minimalValue))
+                    ? dateToString(String(column.minimalValue))
+                    : cutString(String(column.minimalValue))
+                  : ''}
+              </div>
+            </td>
+          )}
+          {!items.includes('Max value') && (
+            <td className="border-b border-gray-100 text-left px-4 py-2">
+              <div key={index} className="text-right float-right">
+                {column.maximumValue
+                  ? dateToString(String(column.maximumValue))
+                    ? dateToString(String(column.maximumValue))
+                    : cutString(String(column.maximumValue))
+                  : ''}
+              </div>
+            </td>
+          )}
+          {!items.includes('Nulls count') && (
+            <td className="border-b border-gray-100 text-left px-4 py-2">
+              <div key={index} className="text-right float-right">
+                {isNaN(Number(column.null_count)) ? '' : column.null_count}
+              </div>
+            </td>
+          )}
           <td className="border-b border-gray-100 text-right px-4 py-2">
             <div className="flex justify-center items-center">
               <div className="flex justify-center items-center">
