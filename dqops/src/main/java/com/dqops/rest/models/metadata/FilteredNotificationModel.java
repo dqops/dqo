@@ -48,10 +48,10 @@ public class FilteredNotificationModel {
 
     public FilteredNotificationSpec toSpec() {
         return new FilteredNotificationSpec(){{
-            setFilter(getFilter());
-            setTarget(getTarget());
-            setPriority(getPriority());
-            setProcessAdditionalFilters(getProcessAdditionalFilters());
+            setFilter(filter);
+            setTarget(target);
+            setPriority(priority);
+            setProcessAdditionalFilters(processAdditionalFilters);
         }};
     }
 

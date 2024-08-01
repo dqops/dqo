@@ -87,7 +87,7 @@ public class FilteredNotificationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getConnectionFilteredNotificationsConfiguration(
+    public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getConnectionFilteredNotificationsConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
@@ -322,7 +322,7 @@ public class FilteredNotificationsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getDefaultFilteredNotificationsConfiguration(
+    public Mono<ResponseEntity<Flux<FilteredNotificationModel>>> getDefaultFilteredNotificationsConfigurations(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         return Mono.fromFuture(CompletableFuture.supplyAsync(() -> {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity(), true);
