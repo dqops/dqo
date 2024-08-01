@@ -152,9 +152,11 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotifications()
                 .entrySet().stream()
                 .filter(stringFilteredNotificationSpecEntry -> {
-                    NotificationFilterSpec filter = stringFilteredNotificationSpecEntry.getValue().getFilter();
+                    FilteredNotificationSpec notification = stringFilteredNotificationSpecEntry.getValue();
+                    NotificationFilterSpec filter = notification.getFilter();
 
-                    return (filter.getConnection() == null || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
+                    return !notification.getDisabled() &&
+                           (filter.getConnection() == null || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
                            (filter.getSchema() == null || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
                            (filter.getTable() == null || filter.getTableNameSearchPattern().match(message.getTable())) &&
                            (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&

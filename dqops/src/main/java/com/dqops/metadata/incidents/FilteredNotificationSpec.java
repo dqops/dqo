@@ -41,6 +41,14 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean processAdditionalFilters = false;
 
+    @JsonPropertyDescription("Flag to turn off the notification filter.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean disabled = false;
+
+    @JsonPropertyDescription("Description.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String description;
+
     /**
      * Returns a notification filter.
      * @return Notification filter.
@@ -79,7 +87,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Returns a notification priority.
      * @return Notification priority.
      */
-    public Integer getPriority() {
+    public int getPriority() {
         return priority;
     }
 
@@ -87,16 +95,16 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Sets a notification priority.
      * @param priority Notification priority.
      */
-    public void setPriority(Integer priority) {
+    public void setPriority(int priority) {
         setDirtyIf(!Objects.equals(this.priority, priority));
         this.priority = priority;
     }
 
     /**
      * Returns a process additional filters flag.
-     * @return process additional filters flag.
+     * @return Process additional filters flag.
      */
-    public Boolean getProcessAdditionalFilters() {
+    public boolean getProcessAdditionalFilters() {
         return processAdditionalFilters;
     }
 
@@ -107,6 +115,40 @@ public class FilteredNotificationSpec extends AbstractSpec {
     public void setProcessAdditionalFilters(Boolean processAdditionalFilters) {
         setDirtyIf(!Objects.equals(this.processAdditionalFilters, processAdditionalFilters));
         this.processAdditionalFilters = processAdditionalFilters;
+    }
+
+    /**
+     * Returns a disabled flag.
+     * @return Disabled flag.
+     */
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    /**
+     * Sets a disabled flag.
+     * @param disabled Disabled flag.
+     */
+    public void setDisabled(Boolean disabled) {
+        setDirtyIf(!Objects.equals(this.disabled, disabled));
+        this.disabled = disabled;
+    }
+
+    /**
+     * Returns a description.
+     * @return Description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets a description.
+     * @param description Description.
+     */
+    public void setDescription(String description) {
+        setDirtyIf(!Objects.equals(this.description, description));
+        this.description = description;
     }
 
     /**

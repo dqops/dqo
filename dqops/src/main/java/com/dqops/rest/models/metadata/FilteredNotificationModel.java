@@ -34,6 +34,12 @@ public class FilteredNotificationModel {
     @JsonPropertyDescription("Flag to break sending next notifications. Setting to true allows to send next notification from the list in priority order that matches the filter.")
     private Boolean processAdditionalFilters;
 
+    @JsonPropertyDescription("Flag to turn off the notification filter.")
+    private Boolean disabled;
+
+    @JsonPropertyDescription("Description.")
+    private String description;
+
     public static FilteredNotificationModel fromFilteredNotificationMapEntry(
             String filteredNotificationName,
             FilteredNotificationSpec filteredNotificationSpec) {
@@ -43,6 +49,8 @@ public class FilteredNotificationModel {
             setTarget(filteredNotificationSpec.getTarget());
             setPriority(filteredNotificationSpec.getPriority());
             setProcessAdditionalFilters(filteredNotificationSpec.getProcessAdditionalFilters());
+            setDisabled(filteredNotificationSpec.getDisabled());
+            setDescription(filteredNotificationSpec.getDescription());
         }};
     }
 
@@ -52,6 +60,8 @@ public class FilteredNotificationModel {
             setTarget(target);
             setPriority(priority);
             setProcessAdditionalFilters(processAdditionalFilters);
+            setDisabled(disabled);
+            setDescription(description);
         }};
     }
 
