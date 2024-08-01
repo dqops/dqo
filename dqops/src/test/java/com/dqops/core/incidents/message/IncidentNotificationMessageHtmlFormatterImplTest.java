@@ -1,9 +1,7 @@
-package com.dqops.core.incidents;
+package com.dqops.core.incidents.message;
 
 import com.dqops.BaseTest;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginServiceObjectMother;
-import com.dqops.core.incidents.message.IncidentNotificationHtmlMessageFormatterImpl;
-import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderStub;
@@ -34,27 +32,6 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 defaultTimeZoneProvider);
     }
 
-    IncidentNotificationMessage createSampleIncidentMessage(Instant instant, IncidentStatus incidentStatus){
-        IncidentNotificationMessage notificationMessage = new IncidentNotificationMessage();
-        notificationMessage.setIncidentId("1");
-        notificationMessage.setConnection("connection_name");
-        notificationMessage.setSchema("schema_here");
-        notificationMessage.setTable("table_name_here");
-        notificationMessage.setTablePriority(2);
-        notificationMessage.setIncidentHash(3L);
-        notificationMessage.setFirstSeen(instant);
-        notificationMessage.setLastSeen(instant);
-        notificationMessage.setIncidentUntil(instant);
-        notificationMessage.setQualityDimension("Reasonableness");
-        notificationMessage.setCheckCategory("volume");
-        notificationMessage.setCheckType("");
-        notificationMessage.setCheckName("");
-        notificationMessage.setIssueUrl("");
-        notificationMessage.setHighestSeverity(3);
-        notificationMessage.setFailedChecksCount(10);
-        notificationMessage.setStatus(incidentStatus);
-        return notificationMessage;
-    }
 
     @Test
     void prepareText_fromNotificationMessageParametersOfOpenedIncident_generatesValidMessage() {
@@ -64,7 +41,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.open);
+        IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.open);
 
         String message = sut.prepareText(notificationMessage);
 
@@ -148,7 +125,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
+        IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
 
         String message = sut.prepareText(notificationMessage);
 
@@ -232,7 +209,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
+        IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
         notificationMessage.setIssueUrl("https://www.google.com");
         String message = sut.prepareText(notificationMessage);
 
@@ -317,7 +294,7 @@ class IncidentNotificationMessageHtmlFormatterImplTest extends BaseTest {
                 .of(2023, 9, 1, 12, 30, 20)
                 .toInstant(ZoneOffset.UTC);
 
-        IncidentNotificationMessage notificationMessage = createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
+        IncidentNotificationMessage notificationMessage = SampleIncidentMessages.createSampleIncidentMessage(instant, IncidentStatus.acknowledged);
 
         String message = sut.prepareText(notificationMessage);
 

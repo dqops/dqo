@@ -25,15 +25,10 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
-import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.dqops.utils.serialization.InvalidYamlStatusHolder;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -48,10 +43,9 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentNotificationSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
-    private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class IncidentNotificationTargetSpec extends AbstractSpec implements Cloneable {
+    private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationTargetSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("filtered_notifications", o -> o.filteredNotifications);
         }
     };
 
@@ -66,34 +60,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
-
-    @JsonPropertyDescription("Filtered notifications map with filter configuration and notification addresses treated with higher priority than those from the current class.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private FilteredNotificationSpecMap filteredNotifications = new FilteredNotificationSpecMap();
-
-    @JsonIgnore
-    private String yamlParsingError;
-
-    /**
-     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
-     *
-     * @param yamlParsingError YAML parsing error.
-     */
-    @Override
-    public void setYamlParsingError(String yamlParsingError) {
-        this.yamlParsingError = yamlParsingError;
-    }
-
-    /**
-     * Returns the YAML parsing error that was captured.
-     *
-     * @return YAML parsing error.
-     */
-    @Override
-    public String getYamlParsingError() {
-        return this.yamlParsingError;
-    }
 
     /**
      * Returns the addresses where notifications of new incidents are sent.
@@ -164,55 +130,6 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
     }
 
     /**
-     * Returns a hashtable of filtered notification specs, indexed by the name.
-     * @return Dictionary of filtered notification spec.
-     */
-    public FilteredNotificationSpecMap getFilteredNotifications() {
-        return filteredNotifications;
-    }
-
-    /**
-     * Sets a new collection of filtered notification spec.
-     * @param filteredNotifications New dictionary of filtered notification spec.
-     */
-    public void setFilteredNotifications(FilteredNotificationSpecMap filteredNotifications) {
-        setDirtyIf(!Objects.equals(this.filteredNotifications, filteredNotifications));
-        this.filteredNotifications = filteredNotifications;
-        propagateHierarchyIdToField(filteredNotifications, "filtered_notifications");
-    }
-
-    @Override
-    /**
-     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
-     * @param name Undeclared (and ignored) property name.
-     * @param value Property value.
-     */
-    @JsonAnySetter
-    public void handleUndeclaredProperty(String name, Object value) {
-        if (value instanceof String) {
-            String valueString = String.valueOf(value);
-            switch (name) {
-                case "incident_opened_webhook_url":
-                    this.setIncidentOpenedAddresses(valueString);
-                    return;
-
-                case "incident_acknowledged_webhook_url":
-                    this.setIncidentAcknowledgedAddresses(valueString);
-                    return;
-
-                case "incident_resolved_webhook_url":
-                    this.setIncidentResolvedAddresses(valueString);
-                    return;
-
-                case "incident_muted_webhook_url":
-                    this.setIncidentMutedAddresses(valueString);
-                    return;
-            }
-        }
-        super.handleUndeclaredProperty(name, value);
-    }
-
-    /**
      * Returns a notification address for an incident status.
      * @param incidentStatus Incident status.
      * @return Notification address for incident status.
@@ -261,9 +178,8 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * Creates and returns a copy of this object.
      */
     @Override
-    public IncidentNotificationSpec deepClone() {
-        IncidentNotificationSpec cloned = (IncidentNotificationSpec) super.deepClone();
-        cloned.filteredNotifications = cloned.filteredNotifications.deepClone();
+    public IncidentNotificationTargetSpec deepClone() {
+        IncidentNotificationTargetSpec cloned = (IncidentNotificationTargetSpec) super.deepClone();
         return cloned;
     }
 
@@ -273,8 +189,8 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @param lookupContext Secret lookup context.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentNotificationSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        IncidentNotificationSpec cloned = this.deepClone();
+    public IncidentNotificationTargetSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        IncidentNotificationTargetSpec cloned = this.deepClone();
         cloned.incidentOpenedAddresses = secretValueProvider.expandValue(cloned.incidentOpenedAddresses, lookupContext);
         cloned.incidentAcknowledgedAddresses = secretValueProvider.expandValue(cloned.incidentAcknowledgedAddresses, lookupContext);
         cloned.incidentResolvedAddresses = secretValueProvider.expandValue(cloned.incidentResolvedAddresses, lookupContext);
@@ -287,8 +203,8 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
      * @param defaultIncidentNotification Default incident notification spec.
      * @return Combined IncidentNotificationSpec object with default addresses.
      */
-    public IncidentNotificationSpec combineWithDefaults(IncidentNotificationSpec defaultIncidentNotification){
-        IncidentNotificationSpec clonedIncidentNotification = this.deepClone();
+    public IncidentNotificationTargetSpec combineWithDefaults(IncidentNotificationTargetSpec defaultIncidentNotification){
+        IncidentNotificationTargetSpec clonedIncidentNotification = this.deepClone();
 
         if(clonedIncidentNotification.getIncidentOpenedAddresses() == null){
             clonedIncidentNotification.setIncidentOpenedAddresses(defaultIncidentNotification.getIncidentOpenedAddresses());
@@ -309,10 +225,39 @@ public class IncidentNotificationSpec extends AbstractSpec implements Cloneable,
         return clonedIncidentNotification;
     }
 
-    public static class IncidentNotificationSpecSampleFactory implements SampleValueFactory<IncidentNotificationSpec> {
+    /**
+     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
+     * @param incidentNotificationSpec The incident notification spec.
+     * @return IncidentNotificationTargetSpec object.
+     */
+    public static IncidentNotificationTargetSpec from(IncidentNotificationSpec incidentNotificationSpec){
+        return new IncidentNotificationTargetSpec(){{
+            setIncidentOpenedAddresses(incidentNotificationSpec.getIncidentOpenedAddresses());
+            setIncidentAcknowledgedAddresses(incidentNotificationSpec.getIncidentAcknowledgedAddresses());
+            setIncidentResolvedAddresses(incidentNotificationSpec.getIncidentResolvedAddresses());
+            setIncidentMutedAddresses(incidentNotificationSpec.getIncidentMutedAddresses());
+        }};
+    }
+
+    /**
+     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
+     * @param filteredNotificationSpec The filtered notification spec.
+     * @return IncidentNotificationTargetSpec object.
+     */
+    public static IncidentNotificationTargetSpec from(FilteredNotificationSpec filteredNotificationSpec){
+        IncidentNotificationTargetSpec incidentNotificationTargetSpec = filteredNotificationSpec.getTarget();
+        return new IncidentNotificationTargetSpec(){{
+            setIncidentOpenedAddresses(incidentNotificationTargetSpec.getIncidentOpenedAddresses());
+            setIncidentAcknowledgedAddresses(incidentNotificationTargetSpec.getIncidentAcknowledgedAddresses());
+            setIncidentResolvedAddresses(incidentNotificationTargetSpec.getIncidentResolvedAddresses());
+            setIncidentMutedAddresses(incidentNotificationTargetSpec.getIncidentMutedAddresses());
+        }};
+    }
+
+    public static class IncidentNotificationSpecSampleFactory implements SampleValueFactory<IncidentNotificationTargetSpec> {
         @Override
-        public IncidentNotificationSpec createSample() {
-            return new IncidentNotificationSpec() {{
+        public IncidentNotificationTargetSpec createSample() {
+            return new IncidentNotificationTargetSpec() {{
                 setIncidentOpenedAddresses(SampleStringsRegistry.getSampleUrl() + "/opened");
                 setIncidentAcknowledgedAddresses(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
                 setIncidentResolvedAddresses(SampleStringsRegistry.getSampleUrl() + "/resolved");
