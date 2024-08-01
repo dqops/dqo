@@ -1,14 +1,17 @@
-import { Tabs } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   CheckMiningParametersModel,
   CheckMiningProposalModel
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setRuleParametersConfigured } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { RuleMiningApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { getRuleParametersConfigured, useDecodedParams } from '../../utils';
+import Tabs from '../Tabs';
 import RuleMiningChecksContainer from './RuleMiningChecksContainer';
 import RuleMiningFilters from './RuleMiningFilters';
 const tabs = [
@@ -54,11 +57,28 @@ export default function RuleMining({
   } = useDecodedParams();
   const [configuration, setConfiguration] =
     useState<CheckMiningParametersModel>(
-      getRuleMiningConfigurationLocalStorage() ?? { severity_level: 'error' }
+      getRuleMiningConfigurationLocalStorage() ?? {
+        severity_level: 'error',
+        fail_checks_at_percent_error_rows: 0.1,
+        copy_failed_profiling_checks: false,
+        copy_disabled_profiling_checks: false,
+        propose_minimum_row_count: true,
+        propose_column_count_check: true,
+        propose_timeliness_checks: true,
+        propose_null_checks: true,
+        propose_uniqueness_checks: true,
+        propose_numeric_ranges: true,
+        propose_text_length_ranges: true,
+        propose_accepted_values_checks: true
+      }
     );
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
+  const dispatch = useActionDispatch();
   const onChangeConfiguration = (conf: any) => {
     const newConfiguration = { ...configuration, ...conf };
     setConfiguration(newConfiguration);
@@ -81,12 +101,36 @@ export default function RuleMining({
       }
     };
 
+    const getRuleParametersConfiguredChecks = (
+      checks: CheckMiningProposalModel
+    ) => {
+      setChecksUI(checks);
+      const tableChecksChecked = getRuleParametersConfigured(
+        checks.table_checks
+      );
+      let columnChecksChecked = false;
+
+      Object.values(checks.column_checks ?? {}).forEach((columnCheck) => {
+        if (getRuleParametersConfigured(columnCheck)) {
+          columnChecksChecked = true;
+        }
+      });
+      dispatch(
+        setRuleParametersConfigured(
+          checkTypes,
+          firstLevelActiveTab,
+          tableChecksChecked || columnChecksChecked
+        )
+      );
+    };
+
     const configurationWithPrefix: CheckMiningParametersModel = {
       ...configuration,
       category_filter: addPrefix(configuration.category_filter ?? ''),
       column_name_filter: addPrefix(configuration.column_name_filter ?? ''),
       check_name_filter: addPrefix(configuration.check_name_filter ?? '')
     };
+    setLoading(true);
     switch (checkTypes) {
       case CheckTypes.PROFILING:
         await RuleMiningApiClient.proposeTableProfilingChecks(
@@ -94,9 +138,13 @@ export default function RuleMining({
           schema,
           table,
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            getRuleParametersConfiguredChecks(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
         break;
       case CheckTypes.PARTITIONED:
         await RuleMiningApiClient.proposeTablePartitionedChecks(
@@ -105,9 +153,13 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            getRuleParametersConfiguredChecks(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
         break;
       case CheckTypes.MONITORING:
         await RuleMiningApiClient.proposeTablePartitionedChecks(
@@ -116,9 +168,13 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            getRuleParametersConfiguredChecks(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
     }
     setIsUpdatedFilters(false);
   };
@@ -166,7 +222,6 @@ export default function RuleMining({
 
   return (
     <div>
-      {' '}
       {timePartitioned &&
         userProfile &&
         userProfile.license_type &&
@@ -204,7 +259,7 @@ export default function RuleMining({
           onUpdate={() => undefined}
           checksUI={checksUI}
           onChange={onChangeChecksUI}
-          loading={false}
+          loading={loading}
           timePartitioned={timePartitioned}
           setTimePartitioned={setTimePartitioned}
         />
