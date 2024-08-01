@@ -40,6 +40,12 @@ public class FilteredNotificationModel {
     @JsonPropertyDescription("Description.")
     private String description;
 
+    /**
+     * Creates a FilteredNotificationModel that represents a single entry of the FilteredNotificationSpecMap.
+     * @param filteredNotificationName The map key.
+     * @param filteredNotificationSpec The map value.
+     * @return FilteredNotificationModel
+     */
     public static FilteredNotificationModel fromFilteredNotificationMapEntry(
             String filteredNotificationName,
             FilteredNotificationSpec filteredNotificationSpec) {
@@ -54,6 +60,10 @@ public class FilteredNotificationModel {
         }};
     }
 
+    /**
+     * Creates a FilteredNotificationSpec from the FilteredNotificationModel.
+     * @return FilteredNotificationSpec
+     */
     public FilteredNotificationSpec toSpec() {
         return new FilteredNotificationSpec(){{
             setFilter(filter);

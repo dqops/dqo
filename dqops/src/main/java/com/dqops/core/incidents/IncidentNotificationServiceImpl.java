@@ -148,6 +148,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         return allNotificationsSent;
     }
 
+    /**
+     * Builds the list of message and address pairs for notifications based on the filters available in incident notification filters configuration.
+     * @param message The incident notification message with its details.
+     * @param notificationSpec The notification spec with the default notification setup and map of filtered notifications used for filtering.
+     * @return The notification message and address pair.
+     */
     public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationSpec notificationSpec) {
         List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotifications()
                 .entrySet().stream()
@@ -156,15 +162,15 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                     NotificationFilterSpec filter = notification.getFilter();
 
                     return !notification.getDisabled() &&
-                           (filter.getConnection() == null || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
-                           (filter.getSchema() == null || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
-                           (filter.getTable() == null || filter.getTableNameSearchPattern().match(message.getTable())) &&
+                           (Strings.isNullOrEmpty(filter.getConnection()) || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
+                           (Strings.isNullOrEmpty(filter.getSchema()) || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
+                           (Strings.isNullOrEmpty(filter.getTable()) || filter.getTableNameSearchPattern().match(message.getTable())) &&
                            (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&
-                           (filter.getDataGroupName() == null || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
-                           (filter.getQualityDimension() == null || filter.getQualityDimension().equals(message.getQualityDimension())) &&
-                           (filter.getCheckCategory() == null || filter.getCheckCategory().equals(message.getCheckCategory())) &&
-                           (filter.getCheckType() == null || filter.getCheckType().equals(message.getCheckType())) &&
-                           (filter.getCheckName() == null || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
+                           (Strings.isNullOrEmpty(filter.getDataGroupName()) || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
+                           (Strings.isNullOrEmpty(filter.getQualityDimension()) || filter.getQualityDimension().equals(message.getQualityDimension())) &&
+                           (Strings.isNullOrEmpty(filter.getCheckCategory()) || filter.getCheckCategory().equals(message.getCheckCategory())) &&
+                           (Strings.isNullOrEmpty(filter.getCheckType()) || filter.getCheckType().equals(message.getCheckType())) &&
+                           (Strings.isNullOrEmpty(filter.getCheckName()) || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
                            (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity())));
                 })
                 .sorted(Comparator.comparing(value -> value.getValue().getPriority()))

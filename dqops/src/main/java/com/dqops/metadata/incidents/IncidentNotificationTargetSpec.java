@@ -25,8 +25,6 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
-import com.dqops.utils.serialization.InvalidYamlStatusHolder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -45,7 +43,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentNotificationTargetSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
+public class IncidentNotificationTargetSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentNotificationTargetSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -62,29 +60,6 @@ public class IncidentNotificationTargetSpec extends AbstractSpec implements Clon
 
     @JsonPropertyDescription("Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedAddresses;
-
-    @JsonIgnore
-    private String yamlParsingError;
-
-    /**
-     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
-     *
-     * @param yamlParsingError YAML parsing error.
-     */
-    @Override
-    public void setYamlParsingError(String yamlParsingError) {
-        this.yamlParsingError = yamlParsingError;
-    }
-
-    /**
-     * Returns the YAML parsing error that was captured.
-     *
-     * @return YAML parsing error.
-     */
-    @Override
-    public String getYamlParsingError() {
-        return this.yamlParsingError;
-    }
 
     /**
      * Returns the addresses where notifications of new incidents are sent.
@@ -250,6 +225,11 @@ public class IncidentNotificationTargetSpec extends AbstractSpec implements Clon
         return clonedIncidentNotification;
     }
 
+    /**
+     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
+     * @param incidentNotificationSpec The incident notification spec.
+     * @return IncidentNotificationTargetSpec object.
+     */
     public static IncidentNotificationTargetSpec from(IncidentNotificationSpec incidentNotificationSpec){
         return new IncidentNotificationTargetSpec(){{
             setIncidentOpenedAddresses(incidentNotificationSpec.getIncidentOpenedAddresses());
@@ -259,6 +239,11 @@ public class IncidentNotificationTargetSpec extends AbstractSpec implements Clon
         }};
     }
 
+    /**
+     * Creates a IncidentNotificationTargetSpec from the corresponding incident status addresses from IncidentNotificationSpec object.
+     * @param filteredNotificationSpec The filtered notification spec.
+     * @return IncidentNotificationTargetSpec object.
+     */
     public static IncidentNotificationTargetSpec from(FilteredNotificationSpec filteredNotificationSpec){
         IncidentNotificationTargetSpec incidentNotificationTargetSpec = filteredNotificationSpec.getTarget();
         return new IncidentNotificationTargetSpec(){{

@@ -5,7 +5,6 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.search.pattern.SearchPattern;
-import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -16,7 +15,7 @@ import java.util.Objects;
 /**
  * Filter for filtered notifications.
  */
-public class NotificationFilterSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
+public class NotificationFilterSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<NotificationFilterSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -64,9 +63,6 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
     private Integer highestSeverity;
 
     @JsonIgnore
-    private String yamlParsingError;
-
-    @JsonIgnore
     private SearchPattern connectionNameSearchPattern;
     @JsonIgnore
     private SearchPattern schemaNameSearchPattern;
@@ -76,26 +72,6 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
     private SearchPattern dataGroupNameSearchPattern;
     @JsonIgnore
     private SearchPattern checkNameSearchPattern;
-
-    /**
-     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
-     *
-     * @param yamlParsingError YAML parsing error.
-     */
-    @Override
-    public void setYamlParsingError(String yamlParsingError) {
-        this.yamlParsingError = yamlParsingError;
-    }
-
-    /**
-     * Returns the YAML parsing error that was captured.
-     *
-     * @return YAML parsing error.
-     */
-    @Override
-    public String getYamlParsingError() {
-        return this.yamlParsingError;
-    }
 
     /**
      * Returns a connection name

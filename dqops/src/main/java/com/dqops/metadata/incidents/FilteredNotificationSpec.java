@@ -64,6 +64,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
     public void setFilter(NotificationFilterSpec filter) {
         setDirtyIf(!Objects.equals(this.filter, filter));
         this.filter = filter;
+        propagateHierarchyIdToField(filter, "filter");
     }
 
     /**
@@ -81,6 +82,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
     public void setTarget(IncidentNotificationTargetSpec target) {
         setDirtyIf(!Objects.equals(this.target, target));
         this.target = target;
+        propagateHierarchyIdToField(target, "target");
     }
 
     /**
