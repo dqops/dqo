@@ -20,6 +20,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
+import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.execution.ExecutionContext;
@@ -101,8 +102,7 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         }
 
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
-                tableSpec.getPhysicalTableName(), null, true, userDomainIdentity);
-
+                tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
         tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
 

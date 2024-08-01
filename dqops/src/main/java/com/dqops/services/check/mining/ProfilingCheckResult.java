@@ -142,9 +142,11 @@ public class ProfilingCheckResult {
     public void importCheckResultsOverview(CheckResultsOverviewDataModel checkResultsOverviewModel) {
         this.checkHash = checkResultsOverviewModel.getCheckHash();
         this.checkResultsOverviewModel = checkResultsOverviewModel;
-        this.actualValue = checkResultsOverviewModel.getResults().get(checkResultsOverviewModel.getResults().size() - 1);
-        this.severityLevel = checkResultsOverviewModel.getStatuses().get(checkResultsOverviewModel.getStatuses().size() - 1);
-        this.executedAt = checkResultsOverviewModel.getExecutedAtTimestamps().get(checkResultsOverviewModel.getExecutedAtTimestamps().size() - 1);
+        if (!checkResultsOverviewModel.getResults().isEmpty()) {
+            this.actualValue = checkResultsOverviewModel.getResults().get(checkResultsOverviewModel.getResults().size() - 1);
+            this.severityLevel = checkResultsOverviewModel.getStatuses().get(checkResultsOverviewModel.getStatuses().size() - 1);
+            this.executedAt = checkResultsOverviewModel.getExecutedAtTimestamps().get(checkResultsOverviewModel.getExecutedAtTimestamps().size() - 1);
+        }
     }
 
     /**
@@ -163,8 +165,10 @@ public class ProfilingCheckResult {
      */
     public void importStatistics(StatisticsMetricModel statisticsMetricModel) {
         if (this.actualValue == null) {
-            this.actualValue = NumericTypeConverter.toDouble(statisticsMetricModel.getResult());
-            this.executedAt = statisticsMetricModel.getExecutedAt();
+            this.actualValue = NumericTypeConverter.tryConvertToDouble(statisticsMetricModel.getResult());
+            if (this.actualValue != null) {
+                this.executedAt = statisticsMetricModel.getExecutedAt();
+            }
         }
     }
 }

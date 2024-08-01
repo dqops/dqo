@@ -123,10 +123,6 @@ public class DataAssetProfilingResults {
             List<CheckModel> checkModels = categoryModel.getChecks();
 
             for (CheckModel checkModel : checkModels) {
-                if (!checkModel.isConfigured() && !checkModel.isDefaultCheck()) {
-                    continue;
-                }
-
                 ProfilingCheckResult profilingCheckResult = getProfilingCheckByCheckName(checkModel.getCheckName(), true);
                 profilingCheckResult.importCheckModel(checkModel);
             }
