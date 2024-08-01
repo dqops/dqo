@@ -16,6 +16,7 @@
 package com.dqops.execution.sensors;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -33,6 +34,8 @@ import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -45,8 +48,12 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Factory for {@link SensorExecutionRunParameters} objects. Expands all parameters in the form ${ENV_VAR} or ${sm://secret-name}
@@ -307,7 +314,16 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             }
         }
 
-        CheckType checkType = CheckType.profiling; // no matter what is the real check type, we run them like they were profiling checks
+        HierarchyId checkHierarchyId = check.getHierarchyId();
+        List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(table));
+
+        Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> n instanceof AbstractRootChecksContainerSpec)
+                .findFirst();
+        assert checkCategoryRootProvider.isPresent();
+        AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec) checkCategoryRootProvider.get();
+        CheckType checkType = rootChecksContainerSpec.getCheckType();
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
