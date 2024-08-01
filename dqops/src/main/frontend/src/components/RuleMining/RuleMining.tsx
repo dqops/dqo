@@ -1,4 +1,3 @@
-import { Tabs } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -9,6 +8,7 @@ import { IRootState } from '../../redux/reducers';
 import { RuleMiningApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
 import { useDecodedParams } from '../../utils';
+import Tabs from '../Tabs';
 import RuleMiningChecksContainer from './RuleMiningChecksContainer';
 import RuleMiningFilters from './RuleMiningFilters';
 const tabs = [
@@ -193,7 +193,6 @@ export default function RuleMining({
 
   return (
     <div>
-      {' '}
       {timePartitioned &&
         userProfile &&
         userProfile.license_type &&
