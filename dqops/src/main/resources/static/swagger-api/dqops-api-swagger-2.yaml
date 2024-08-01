@@ -61,6 +61,9 @@ tags:
   description: "Operations that return the error samples collected when data quality\
     \ checks were executed on data sources from the check editor, and rules failed\
     \ with an error."
+- name: "FilteredNotificationsConfigurations"
+  description: "Operations for managing the configuration of filtered notifications\
+    \ on a connection level in DQOps."
 - name: "Healthcheck"
   description: "Health check operations for checking if the DQOps service is up and\
     \ operational. Used for monitoring by load balancers."
@@ -799,6 +802,198 @@ paths:
             \ updated"
         400:
           description: "Bad request, adjust before retrying"
+        404:
+          description: "Connection not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/filterednotification:
+    post:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "createConnectionFilteredNotificationConfiguration"
+      description: "Creates a new filtered notification configuration on a connection\
+        \ level"
+      operationId: "createConnectionFilteredNotificationConfiguration"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Filtered notification model"
+        required: false
+        schema:
+          $ref: "#/definitions/FilteredNotificationModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New data filtered notification successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Filtered notification configuration with the same name already\
+            \ exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/filterednotification/{filteredNotificationName}:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getConnectionFilteredNotificationConfiguration"
+      description: "Returns a model of the filtered notification configuration"
+      operationId: "getConnectionFilteredNotificationConfiguration"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/FilteredNotificationModel"
+        404:
+          description: "Connection or filtered notification not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "updateConnectionFilteredNotificationConfiguration"
+      description: "Updates a filtered notification configuration according to the\
+        \ provided model"
+      operationId: "updateConnectionFilteredNotificationConfiguration"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Filtered notification model"
+        required: false
+        schema:
+          $ref: "#/definitions/FilteredNotificationModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Filtered notification configuration successfully updated"
+        404:
+          description: "Connection or filtered notification not found"
+        406:
+          description: "Incorrect request"
+        409:
+          description: "Filtered notification configuration with the same name already\
+            \ exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "deleteConnectionFilteredNotificationConfiguration"
+      description: "Deletes a filtered notification configuration from a connection"
+      operationId: "deleteConnectionFilteredNotificationConfiguration"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Filtered notification configuration removed"
+        404:
+          description: "Connection or filtered notification not found"
+        406:
+          description: "Invalid request"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/connections/{connectionName}/filterednotifications:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getConnectionFilteredNotificationsConfigurations"
+      description: "Returns the list of filtered notification configurations on a\
+        \ connection"
+      operationId: "getConnectionFilteredNotificationsConfigurations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectionName"
+        in: "path"
+        description: "Connection name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FilteredNotificationModel"
         404:
           description: "Connection not found"
         500:
@@ -12164,6 +12359,172 @@ paths:
             $ref: "#/definitions/SpringErrorPayload"
       security:
       - authorization_bearer_api_key: []
+  /api/default/filterednotification:
+    post:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "createDefaultFilteredNotificationConfiguration"
+      description: "Creates a new filtered notification configuration at default notifications"
+      operationId: "createDefaultFilteredNotificationConfiguration"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Filtered notification model"
+        required: false
+        schema:
+          $ref: "#/definitions/FilteredNotificationModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        201:
+          description: "New data filtered notification successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Filtered notification configuration with the same name already\
+            \ exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/filterednotification/{filteredNotificationName}:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getDefaultFilteredNotificationConfiguration"
+      description: "Returns a model of the filtered notification from default notifications"
+      operationId: "getDefaultFilteredNotificationConfiguration"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/FilteredNotificationModel"
+        404:
+          description: "Connection or filtered notification not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "updateDefaultFilteredNotificationConfiguration"
+      description: "Updates a filtered notification configuration on default notifications\
+        \ according to the provided model"
+      operationId: "updateDefaultFilteredNotificationConfiguration"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Filtered notification model"
+        required: false
+        schema:
+          $ref: "#/definitions/FilteredNotificationModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Filtered notification configuration successfully updated"
+        404:
+          description: "Connection or filtered notification not found"
+        406:
+          description: "Incorrect request"
+        409:
+          description: "Filtered notification configuration with the same name already\
+            \ exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "deleteDefaultFilteredNotificationConfiguration"
+      description: "Deletes a filtered notification configuration from default notifications"
+      operationId: "deleteDefaultFilteredNotificationConfiguration"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filteredNotificationName"
+        in: "path"
+        description: "Filtered notification name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoResponseEntityMonoVoid"
+        204:
+          description: "Filtered notification configuration removed"
+        404:
+          description: "Connection not found"
+        406:
+          description: "Invalid request"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/filterednotifications:
+    get:
+      tags:
+      - "FilteredNotificationsConfigurations"
+      summary: "getDefaultFilteredNotificationsConfigurations"
+      description: "Returns the list of filtered notification configurations on default\
+        \ notifications"
+      operationId: "getDefaultFilteredNotificationsConfigurations"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FilteredNotificationModel"
+        404:
+          description: "Connection not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
   /api/defaults/defaultschedule/{schedulingGroup}:
     get:
       tags:
@@ -16036,12 +16397,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      similar_profiling_check:
+        $ref: "#/definitions/SimilarCheckModel"
       check_hash:
         type: "integer"
         format: "int64"
         description: "The check hash code that identifies the check instance."
-      similar_profiling_check:
-        $ref: "#/definitions/SimilarCheckModel"
     description: "Model that returns the form definition and the form data to edit\
       \ a single data quality check."
   CheckResultEntryModel:
@@ -33862,6 +34223,64 @@ definitions:
         description: "The list of paths to files with data that are used as a source."
         items:
           type: "string"
+  FilteredNotificationModel:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the filtered notification."
+      filter:
+        description: "Notification filter specification for filtering the incident\
+          \ by the values of its fields."
+        $ref: "#/definitions/NotificationFilterSpec"
+      target:
+        description: "Notification target addresses for each of the status."
+        $ref: "#/definitions/IncidentNotificationTargetSpec"
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the notification. Notifications are sent to\
+          \ the first notification targets that matches the filters when processAdditionalFilters\
+          \ is not set."
+      process_additional_filters:
+        type: "boolean"
+        description: "Flag to break sending next notifications. Setting to true allows\
+          \ to send next notification from the list in priority order that matches\
+          \ the filter."
+      disabled:
+        type: "boolean"
+        description: "Flag to turn off the notification filter."
+      description:
+        type: "string"
+        description: "Description."
+    description: "Filtered notification list model."
+  FilteredNotificationSpec:
+    type: "object"
+    properties:
+      filter:
+        description: "Notification filter specification for filtering the incident\
+          \ by the values of its fields."
+        $ref: "#/definitions/NotificationFilterSpec"
+      target:
+        description: "Notification target addresses for each of the status."
+        $ref: "#/definitions/IncidentNotificationTargetSpec"
+      priority:
+        type: "integer"
+        format: "int32"
+        description: "The priority of the notification. Notifications are sent to\
+          \ the first notification targets that matches the filters when processAdditionalFilters\
+          \ is not set."
+      process_additional_filters:
+        type: "boolean"
+        description: "Flag to break sending next notifications. Setting to true allows\
+          \ to send next notification from the list in priority order that matches\
+          \ the filter."
+      disabled:
+        type: "boolean"
+        description: "Flag to turn off the notification filter."
+      description:
+        type: "string"
+        description: "Description."
   HierarchyIdModel:
     type: "object"
     properties:
@@ -34154,6 +34573,39 @@ definitions:
         - "resolved"
         - "muted"
   IncidentNotificationSpec:
+    type: "object"
+    properties:
+      incident_opened_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ new incidents are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_acknowledged_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ acknowledged messages are pushed using a HTTP POST request (for webhook\
+          \ address) or an SMTP (for email address). The format of the JSON message\
+          \ is documented in the IncidentNotificationMessage object."
+      incident_resolved_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ resolved messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      incident_muted_addresses:
+        type: "string"
+        description: "Notification address(es) where the notification messages describing\
+          \ muted messages are pushed using a HTTP POST request (for webhook address)\
+          \ or an SMTP (for email address). The format of the JSON message is documented\
+          \ in the IncidentNotificationMessage object."
+      filtered_notifications:
+        type: "object"
+        description: "Filtered notifications map with filter configuration and notification\
+          \ addresses treated with higher priority than those from the current class."
+        additionalProperties:
+          $ref: "#/definitions/FilteredNotificationSpec"
+  IncidentNotificationTargetSpec:
     type: "object"
     properties:
       incident_opened_addresses:
@@ -34550,6 +35002,49 @@ definitions:
           \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
+  NotificationFilterSpec:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "Connection name. Supports search patterns in the format: 'source\\\
+          *', '\\*_prod', 'prefix\\*suffix'."
+      schema:
+        type: "string"
+        description: "Schema name. This field accepts search patterns in the format:\
+          \ 'schema_name_\\*', '\\*_schema', 'prefix\\*suffix'."
+      table:
+        type: "string"
+        description: "Table name. This field accepts search patterns in the format:\
+          \ 'table_name_\\*', '\\*table', 'prefix\\*suffix'."
+      tablePriority:
+        type: "integer"
+        format: "int32"
+        description: "Table priority."
+      dataGroupName:
+        type: "string"
+        description: "Data group name. This field accepts search patterns in the format:\
+          \ 'group_name_\\*', '\\*group', 'prefix\\*suffix'."
+      qualityDimension:
+        type: "string"
+        description: "Quality dimension."
+      checkCategory:
+        type: "string"
+        description: "The target check category, for example: *nulls*, *volume*, *anomaly*."
+      checkType:
+        type: "string"
+        description: "The target type of checks to run. Supported values are *profiling*,\
+          \ *monitoring* and *partitioned*."
+      checkName:
+        type: "string"
+        description: "The target check name to run only this named check. Uses the\
+          \ short check name which is the name of the deepest folder in the *checks*\
+          \ folder. This field supports search patterns such as: 'profiling_\\*',\
+          \ '\\*_count', 'profiling_\\*_percent'."
+      highestSeverity:
+        type: "integer"
+        format: "int32"
+        description: "Highest severity."
   Optional:
     type: "object"
     properties:

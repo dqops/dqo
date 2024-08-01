@@ -16,6 +16,7 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,7 +26,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,4 +65,21 @@ public class CheckMiningProposalModel {
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order run checks for the table.")
     private CheckSearchFilters runChecksJob;
+
+    /**
+     * Collects the list of hierarchy ids that identify all proposed checks. It is used to generate a very specific run check job object that will run only proposed checks.
+     * @return A list of hierarchy ids that identify proposed checks.
+     */
+    public List<HierarchyIdModel> collectChecksHierarchyIds() {
+        List<HierarchyIdModel> allHierarchyIds = new ArrayList<>();
+        if (this.tableChecks != null) {
+            allHierarchyIds.addAll(tableChecks.collectConfiguredChecksHierarchyIds());
+        }
+
+        for (CheckContainerModel columnChecks : this.columnChecks.values()) {
+            allHierarchyIds.addAll(columnChecks.collectConfiguredChecksHierarchyIds());
+        }
+
+        return allHierarchyIds;
+    }
 }

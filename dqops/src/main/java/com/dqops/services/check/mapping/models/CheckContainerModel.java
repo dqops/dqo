@@ -17,6 +17,7 @@ package com.dqops.services.check.mapping.models;
 
 import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -108,6 +109,25 @@ public class CheckContainerModel {
                 checkModel.setDefaultSeverity(defaultRuleSeverityLevel);
             }
         }
+    }
+
+    /**
+     * Collects the hierarchy ids of all configured checks in the model.
+     * @return Hierarchy ids of all configured checks.
+     */
+    public List<HierarchyIdModel> collectConfiguredChecksHierarchyIds() {
+        List<HierarchyIdModel> resultList = new ArrayList<>();
+
+        for (QualityCategoryModel categoryModel : this.getCategories()) {
+            for (CheckModel checkModel : categoryModel.getChecks()) {
+                if (checkModel.isConfigured() && checkModel.getCheckSpec() != null && checkModel.getCheckSpec().getHierarchyId() != null) {
+                    HierarchyIdModel hierarchyIdModel = checkModel.getCheckSpec().getHierarchyId().toHierarchyIdModel();
+                    resultList.add(hierarchyIdModel);
+                }
+            }
+        }
+
+        return resultList;
     }
 
     public static class CheckContainerModelSampleFactory implements SampleValueFactory<CheckContainerModel> {
