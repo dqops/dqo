@@ -23,14 +23,6 @@ public class MessageAddressPair {
     private final String notificationAddress;
 
     /**
-     * Creates an empty instance.
-     */
-    public MessageAddressPair() {
-        this.incidentNotificationMessage = null;
-        this.notificationAddress = null;
-    }
-
-    /**
      * Creates an incident notification info with the target address.
      * @param incidentNotificationMessage Notification message.
      * @param notificationAddress Notification address.
