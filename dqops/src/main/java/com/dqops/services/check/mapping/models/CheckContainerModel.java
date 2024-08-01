@@ -16,6 +16,7 @@
 package com.dqops.services.check.mapping.models;
 
 import com.dqops.checks.DefaultRuleSeverityLevel;
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -29,6 +30,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Model that returns the form definition and the form data to edit all data quality checks divided by categories.
@@ -128,6 +130,13 @@ public class CheckContainerModel {
         }
 
         return resultList;
+    }
+
+    /**
+     * Removes the "comparisons" category, because we cannot copy these checks without creating a new comparison configuration.
+     */
+    public void removeComparisonCategory() {
+        this.categories.removeIf(categoryModel -> Objects.equals(categoryModel.getCategory(), AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME));
     }
 
     public static class CheckContainerModelSampleFactory implements SampleValueFactory<CheckContainerModel> {

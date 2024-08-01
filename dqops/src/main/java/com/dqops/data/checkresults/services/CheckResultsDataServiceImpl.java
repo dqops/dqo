@@ -216,6 +216,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel = makeCheckResultsOverviewDataModelsForContainer(
                 tableProfilingChecksContainer, checkResultsList, null, null, resultsCountLimit);
+
         DataAssetProfilingResults tableAssetProfilingResultsContainer = tableProfilingResults.getTableProfilingResults();
         tableAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewTableLevel);
 
@@ -229,8 +230,6 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
             columnAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewColumnLevel);
         }
-
-
 
         return tableProfilingResults;
     }

@@ -16,6 +16,7 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.data.checkresults.models.CheckResultsOverviewDataModel;
 import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
@@ -100,6 +101,11 @@ public class DataAssetProfilingResults {
      */
     public void importProfilingChecksResults(CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel) {
         for (CheckResultsOverviewDataModel checkResultsOverviewDataModel : checkResultsOverviewTableLevel) {
+            String categoryName = checkResultsOverviewDataModel.getCheckCategory();
+            if (Objects.equals(categoryName, AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
+                continue;
+            }
+
             String checkName = checkResultsOverviewDataModel.getCheckName();
             ProfilingCheckResult profilingCheckByCheckName = this.getProfilingCheckByCheckName(checkName, true);
             profilingCheckByCheckName.importCheckResultsOverview(checkResultsOverviewDataModel);

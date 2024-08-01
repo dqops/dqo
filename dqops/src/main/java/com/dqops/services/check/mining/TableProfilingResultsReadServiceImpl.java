@@ -78,6 +78,7 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
                 CheckType.profiling, null, false, true);
         CheckContainerModel tableChecksModel = this.specToModelCheckMappingService.createModel(tableProfilingChecksContainer, checkSearchFilters,
                 connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
+        tableChecksModel.removeComparisonCategory();
         DataAssetProfilingResults tableAssetProfilingResults = tableProfilingResults.getTableProfilingResults();
         if (tableAssetProfilingResults.hasAnyProfilingChecksResults()) {
             tableProfilingResults.setMissingProfilingChecksResults(false);
@@ -90,6 +91,7 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
 
             CheckContainerModel columnChecksModel = this.specToModelCheckMappingService.createModel(columnProfilingChecksContainer, checkSearchFilters,
                     connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
+            columnChecksModel.removeComparisonCategory();
 
             DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
             if (columnAssetProfilingResultsContainer.hasAnyProfilingChecksResults()) {
