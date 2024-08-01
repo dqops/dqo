@@ -72,6 +72,7 @@ export default function RuleMining({
   const [checksUI, setChecksUI] = useState<CheckMiningProposalModel>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
+  const [loading, setLoading] = useState(false);
   const onChangeConfiguration = (conf: any) => {
     const newConfiguration = { ...configuration, ...conf };
     setConfiguration(newConfiguration);
@@ -100,6 +101,7 @@ export default function RuleMining({
       column_name_filter: addPrefix(configuration.column_name_filter ?? ''),
       check_name_filter: addPrefix(configuration.check_name_filter ?? '')
     };
+    setLoading(true);
     switch (checkTypes) {
       case CheckTypes.PROFILING:
         await RuleMiningApiClient.proposeTableProfilingChecks(
@@ -107,9 +109,13 @@ export default function RuleMining({
           schema,
           table,
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            setChecksUI(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
         break;
       case CheckTypes.PARTITIONED:
         await RuleMiningApiClient.proposeTablePartitionedChecks(
@@ -118,9 +124,13 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            setChecksUI(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
         break;
       case CheckTypes.MONITORING:
         await RuleMiningApiClient.proposeTablePartitionedChecks(
@@ -129,9 +139,13 @@ export default function RuleMining({
           table,
           timePartitioned ?? 'daily',
           configurationWithPrefix
-        ).then((response) => {
-          setChecksUI(response.data);
-        });
+        )
+          .then((response) => {
+            setChecksUI(response.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
     }
     setIsUpdatedFilters(false);
   };
@@ -217,7 +231,7 @@ export default function RuleMining({
           onUpdate={() => undefined}
           checksUI={checksUI}
           onChange={onChangeChecksUI}
-          loading={false}
+          loading={loading}
           timePartitioned={timePartitioned}
           setTimePartitioned={setTimePartitioned}
         />
