@@ -36,11 +36,17 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
+public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec implements MinPercentRule {
     private static final ChildHierarchyNodeFieldMapImpl<MinPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
+
+    /**
+     * The rule name from the DQOps home folder that is used by this rule.
+     */
+    public static final String RULE_NAME = "comparison/min_percent";
+
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
     @SampleValues(values = "2.5")
@@ -95,7 +101,7 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_percent";
+        return RULE_NAME;
     }
 
     /**

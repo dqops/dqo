@@ -17,6 +17,7 @@ package com.dqops.services.check.mapping.models;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
@@ -24,8 +25,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.rules.DefaultRuleSeverityLevel;
-import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;

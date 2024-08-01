@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRule100ErrorParametersSpec extends AbstractRuleParametersSpec {
+public class MinPercentRule100ErrorParametersSpec extends AbstractRuleParametersSpec implements MinPercentRule {
     private static final ChildHierarchyNodeFieldMapImpl<MinPercentRule100ErrorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }

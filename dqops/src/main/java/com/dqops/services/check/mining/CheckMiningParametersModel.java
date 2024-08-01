@@ -16,7 +16,7 @@
 
 package com.dqops.services.check.mining;
 
-import com.dqops.rules.DefaultRuleSeverityLevel;
+import com.dqops.rules.TargetRuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,7 +36,7 @@ public class CheckMiningParametersModel {
      * The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.
      */
     @JsonPropertyDescription("The default severity level for rules that are proposed by the rule mining engine. The default value is 'error'.")
-    private DefaultRuleSeverityLevel severityLevel = DefaultRuleSeverityLevel.error;
+    private TargetRuleSeverityLevel severityLevel = TargetRuleSeverityLevel.error;
 
     /**
      * Optional filter for the check category names, supports filtering with prefixes and suffixes defined as a '*' character.
@@ -61,4 +61,64 @@ public class CheckMiningParametersModel {
      */
     @JsonPropertyDescription("Copy also the configuration of profiling checks that failed.")
     private boolean copyFailedProfilingChecks;
+
+    /**
+     * Copy also the configuration of profiling checks that are disabled.
+     */
+    @JsonPropertyDescription("Copy also the configuration of profiling checks that are disabled.")
+    private boolean copyDisabledProfilingChecks;
+
+    /**
+     * Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the minimum row count for monitoring checks (full table scans). The default value of this parameter is 'true'.")
+    private boolean proposeMinimumRowCount = true;
+
+    /**
+     * Proposes the default configuration of the column count check. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the column count check. The default value of this parameter is 'true'.")
+    private boolean proposeColumnCountCheck = true;
+
+    /**
+     * Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the timeliness checks, including an accepted freshness delay. The default value of this parameter is 'true'.")
+    private boolean proposeTimelinessChecks = true;
+
+    /**
+     * Proposes the default configuration null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the null checks that validate the count and percentage of nulls. The default value of this parameter is 'true'.")
+    private boolean proposeNullChecks = true;
+
+    /**
+     * Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the uniqueness checks that validate the number of distinct and duplicate values. The default value of this parameter is 'true'.")
+    private boolean proposeUniquenessChecks = true;
+
+    /**
+     * Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of numeric checks that validate the ranges of numeric values, and aggregated measures such as minimum, maximum, mean and sum of values. The default value of this parameter is 'true'.")
+    private boolean proposeNumericRanges = true;
+
+    /**
+     * Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration of the text length checks. The default value of this parameter is 'true'.")
+    private boolean proposeTextLengthRanges = true;
+
+    /**
+     * Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.
+     */
+    @JsonPropertyDescription("Proposes the default configuration the accepted values checks. The default value of this parameter is 'true'.")
+    private boolean proposeAcceptedValuesChecks = true;
+
+    /**
+     * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).
+     */
+    @JsonPropertyDescription("The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).")
+    private Double failChecksAtPercentErrorRows;
 }

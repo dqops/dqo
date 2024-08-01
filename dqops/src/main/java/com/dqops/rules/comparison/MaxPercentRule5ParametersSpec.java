@@ -35,7 +35,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
+public class MaxPercentRule5ParametersSpec extends AbstractRuleParametersSpec implements MaxPercentRule {
     private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRule5ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }

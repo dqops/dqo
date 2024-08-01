@@ -15,6 +15,7 @@
  */
 package com.dqops.services.check.mapping.models;
 
+import com.dqops.checks.DefaultRuleSeverityLevel;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -92,6 +93,19 @@ public class CheckContainerModel {
         for (QualityCategoryModel categoryModel : copyOfCategories) {
             if (categoryModel.getChecks().isEmpty()) {
                 this.categories.remove(categoryModel);
+            }
+        }
+    }
+
+    /**
+     * Changes the default rule severity that is proposed in the check editor to a given severity level.
+     * It is used by the profiling default checks to disable proposing rule configuration, and focus on data quality assessment.
+     * @param defaultRuleSeverityLevel Default rule severity level to assign to all checks.
+     */
+    public void changeDefaultSeverityLevel(DefaultRuleSeverityLevel defaultRuleSeverityLevel) {
+        for (QualityCategoryModel categoryModel : this.getCategories()) {
+            for (CheckModel checkModel : categoryModel.getChecks()) {
+                checkModel.setDefaultSeverity(defaultRuleSeverityLevel);
             }
         }
     }

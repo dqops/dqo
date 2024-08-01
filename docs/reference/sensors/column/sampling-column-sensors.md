@@ -23,7 +23,7 @@ The column samples sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`limit`</span>|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`limit`</span>|The limit of results that are returned. The default value is 100 sample values with the highest count (the most popular).|*integer*|:material-check-bold:||
 
 
 

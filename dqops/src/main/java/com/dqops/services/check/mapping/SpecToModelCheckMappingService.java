@@ -16,6 +16,7 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.checks.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;

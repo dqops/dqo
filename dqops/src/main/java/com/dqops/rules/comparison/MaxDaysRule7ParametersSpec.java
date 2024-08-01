@@ -41,6 +41,17 @@ public class MaxDaysRule7ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    public MaxDaysRule7ParametersSpec() {
+    }
+
+    /**
+     * Constructor with a parameter.
+     * @param maxDays Maximum number of days of delay.
+     */
+    public MaxDaysRule7ParametersSpec(Double maxDays) {
+        this.maxDays = maxDays;
+    }
+
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     @RequiredField
     private Double maxDays = 1.0;

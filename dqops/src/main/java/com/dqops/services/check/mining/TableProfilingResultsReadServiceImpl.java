@@ -94,6 +94,7 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
                 tableSpec.getPhysicalTableName(), null, true, userDomainIdentity);
 
+
         tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
 
         return tableProfilingResults;
