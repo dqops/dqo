@@ -4,10 +4,13 @@ import {
   CheckMiningParametersModel,
   CheckMiningProposalModel
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setRuleParametersConfigured } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { RuleMiningApiClient } from '../../services/apiClient';
 import { CheckTypes } from '../../shared/routes';
-import { useDecodedParams } from '../../utils';
+import { getRuleParametersConfigured, useDecodedParams } from '../../utils';
 import Tabs from '../Tabs';
 import RuleMiningChecksContainer from './RuleMiningChecksContainer';
 import RuleMiningFilters from './RuleMiningFilters';
@@ -73,6 +76,9 @@ export default function RuleMining({
   const [isUpdated, setIsUpdated] = useState(false);
   const [isUpdatedFilters, setIsUpdatedFilters] = useState(false);
   const [loading, setLoading] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
+  const dispatch = useActionDispatch();
   const onChangeConfiguration = (conf: any) => {
     const newConfiguration = { ...configuration, ...conf };
     setConfiguration(newConfiguration);
@@ -95,6 +101,29 @@ export default function RuleMining({
       }
     };
 
+    const getRuleParametersConfiguredChecks = (
+      checks: CheckMiningProposalModel
+    ) => {
+      setChecksUI(checks);
+      const tableChecksChecked = getRuleParametersConfigured(
+        checks.table_checks
+      );
+      let columnChecksChecked = false;
+
+      Object.values(checks.column_checks ?? {}).forEach((columnCheck) => {
+        if (getRuleParametersConfigured(columnCheck)) {
+          columnChecksChecked = true;
+        }
+      });
+      dispatch(
+        setRuleParametersConfigured(
+          checkTypes,
+          firstLevelActiveTab,
+          tableChecksChecked || columnChecksChecked
+        )
+      );
+    };
+
     const configurationWithPrefix: CheckMiningParametersModel = {
       ...configuration,
       category_filter: addPrefix(configuration.category_filter ?? ''),
@@ -111,7 +140,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            setChecksUI(response.data);
+            getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {
             setLoading(false);
@@ -126,7 +155,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            setChecksUI(response.data);
+            getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {
             setLoading(false);
@@ -141,7 +170,7 @@ export default function RuleMining({
           configurationWithPrefix
         )
           .then((response) => {
-            setChecksUI(response.data);
+            getRuleParametersConfiguredChecks(response.data);
           })
           .finally(() => {
             setLoading(false);
