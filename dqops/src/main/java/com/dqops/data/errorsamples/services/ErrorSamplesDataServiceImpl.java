@@ -315,12 +315,6 @@ public class ErrorSamplesDataServiceImpl implements ErrorSamplesDataService {
 
         Selection rowSelection = sourceTable.textColumn(ErrorSamplesColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
-        if (timeScale != null) {
-            TextColumn timeGradientColumn = sourceTable.textColumn(ErrorSamplesColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
-            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
-        }
-
         TextColumn columnNameColumn = sourceTable.textColumn(ErrorSamplesColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
