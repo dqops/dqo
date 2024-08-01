@@ -30,6 +30,8 @@ public class TableProfilingResults {
     private DataAssetProfilingResults tableProfilingResults = new DataAssetProfilingResults();
     private Map<String, DataAssetProfilingResults> columns = new LinkedHashMap<>();
     private StatisticsResultsForTableModel statistics;
+    private boolean missingStatisticsResults;
+    private boolean missingProfilingChecksResults;
 
     /**
      * Returns data profiling results for the table-level statistics and profiling checks.
@@ -37,6 +39,30 @@ public class TableProfilingResults {
      */
     public DataAssetProfilingResults getTableProfilingResults() {
         return this.tableProfilingResults;
+    }
+
+    /**
+     * Returns true if there are no current basic statistics on the table and the rule mining engine failed to find relevant results.
+     * @return True when no current statistics are available.
+     */
+    public boolean isMissingStatisticsResults() {
+        return missingStatisticsResults;
+    }
+
+    /**
+     * Returns true if there are no present results of profiling checks.
+     * @return No results for profiling checks.
+     */
+    public boolean isMissingProfilingChecksResults() {
+        return missingProfilingChecksResults;
+    }
+
+    /**
+     * Sets a flag which says that the table has no current profiling check results, so the rule mining will be limited to using basic statistics, and will not be able to copy the configuration of profiling checks.
+     * @param missingProfilingChecksResults Missing profiling checks results.
+     */
+    public void setMissingProfilingChecksResults(boolean missingProfilingChecksResults) {
+        this.missingProfilingChecksResults = missingProfilingChecksResults;
     }
 
     /**
@@ -67,6 +93,7 @@ public class TableProfilingResults {
      */
     public void importStatistics(StatisticsResultsForTableModel mostRecentStatisticsForTable) {
         this.statistics = mostRecentStatisticsForTable;
+        this.missingStatisticsResults = mostRecentStatisticsForTable == null || mostRecentStatisticsForTable.isEmpty();
         this.tableProfilingResults.importStatistics(mostRecentStatisticsForTable.getMetrics());
 
         Map<String, StatisticsResultsForColumnModel> columnStatistics = mostRecentStatisticsForTable.getColumns();

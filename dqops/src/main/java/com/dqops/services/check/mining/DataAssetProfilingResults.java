@@ -47,6 +47,24 @@ public class DataAssetProfilingResults {
     private List<Object> sampleValues = new ArrayList<>();
 
     /**
+     * Verifies if any results for profiling checks are present.
+     * @return True when there are any results from profiling checks, false when no results.
+     */
+    public boolean hasAnyProfilingChecksResults() {
+        if (profilingCheckResults.isEmpty()) {
+            return false;
+        }
+
+        for (ProfilingCheckResult profilingCheckResult : this.profilingCheckResults.values()) {
+            if (profilingCheckResult.getActualValue() != null || profilingCheckResult.getSeverityLevel() != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns a list of statistic values for a given sensor name, if a statistics collector has results for that sensor.
      * @param sensorName Sensor name.
      * @param createWhenMissing When the value of this parameter is true and the statistics are not present, creates and stores a new list that the caller can use to append results.

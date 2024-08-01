@@ -142,8 +142,17 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             }
         }
 
-        checkProposalModel.setMissingCurrentStatistics(tableProfilingResults.getStatistics() == null ||
-                tableProfilingResults.getStatistics().isEmpty());
+        checkProposalModel.setMissingCurrentStatistics(tableProfilingResults.isMissingStatisticsResults());
+        checkProposalModel.setMissingCurrentProfilingCheckResults(tableProfilingResults.isMissingProfilingChecksResults());
+
+        CheckSearchFilters runChecksJob = new CheckSearchFilters() {{
+            setConnection(connectionSpec.getConnectionName());
+            setEnabled(true);
+            setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checkType);
+            setTimeScale(checkTimeScale);
+        }};
+        checkProposalModel.setRunChecksJob(runChecksJob);
 
         return checkProposalModel;
     }

@@ -207,6 +207,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
         List<Table> checkResultsList = loadCheckResultsPartitions(checkResultsOverviewParameters, connectionName, physicalTableName, userDomainIdentity);
         if (checkResultsList.isEmpty()) {
+            tableProfilingResults.setMissingProfilingChecksResults(true);
             return tableProfilingResults;
         }
 
@@ -228,6 +229,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
             columnAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewColumnLevel);
         }
+
+
 
         return tableProfilingResults;
     }

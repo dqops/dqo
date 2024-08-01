@@ -127,6 +127,27 @@ public class TableRowCountCheckSpecTests extends BaseTest {
     }
 
     @Test
+    void proposeCheckConfiguration_whenRowCountPresentFromProfilingCheckThatHasNoRulesAndOldRowCountWas0_thenProposesRulesWithRowCount1() {
+        CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+        this.profilingCheckResult.importCheckModel(profilingCheckModel);
+
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(0.0);
+        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+
+        Assertions.assertTrue(proposed);
+        Assertions.assertNotNull(this.sut.getError());
+        Assertions.assertEquals(1L, this.sut.getError().getMinCount());
+    }
+
+    @Test
     void proposeCheckConfiguration_whenRowCountPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
         this.profilingSut = new TableRowCountCheckSpec();
         this.tableSpec.getProfilingChecks().getVolume().setProfileRowCount(this.profilingSut);

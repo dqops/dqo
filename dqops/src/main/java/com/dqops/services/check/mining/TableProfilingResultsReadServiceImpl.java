@@ -71,6 +71,7 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         UserDomainIdentity userDomainIdentity = executionContext.getUserHomeContext().getUserIdentity();
         TableProfilingResults tableProfilingResults = this.checkResultsDataService.loadProfilingChecksResultsForTable(
                 tableSpec, userDomainIdentity);
+        tableProfilingResults.setMissingProfilingChecksResults(true); // we will change it to false when we find any profiling results
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         AbstractRootChecksContainerSpec tableProfilingChecksContainer = tableSpec.getTableCheckRootContainer(
@@ -78,6 +79,9 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         CheckContainerModel tableChecksModel = this.specToModelCheckMappingService.createModel(tableProfilingChecksContainer, checkSearchFilters,
                 connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
         DataAssetProfilingResults tableAssetProfilingResults = tableProfilingResults.getTableProfilingResults();
+        if (tableAssetProfilingResults.hasAnyProfilingChecksResults()) {
+            tableProfilingResults.setMissingProfilingChecksResults(false);
+        }
         tableAssetProfilingResults.importChecksModels(tableChecksModel);
 
         for (ColumnSpec columnSpec : tableSpec.getColumns().values()) {
@@ -88,6 +92,9 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
                     connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
 
             DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
+            if (columnAssetProfilingResultsContainer.hasAnyProfilingChecksResults()) {
+                tableProfilingResults.setMissingProfilingChecksResults(false);
+            }
             columnAssetProfilingResultsContainer.importChecksModels(columnChecksModel);
         }
 
