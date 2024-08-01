@@ -23,55 +23,56 @@ import java.util.Objects;
 public class FilteredNotificationSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<FilteredNotificationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("notification_filter", o -> o.notificationFilter);
-            put("notification_target", o -> o.notificationTarget);
+            put("filter", o -> o.filter);
+            put("target", o -> o.target);
         }
     };
 
     @JsonPropertyDescription("Notification filter specification for filtering the incident by the values of its fields.")
-    private NotificationFilterSpec notificationFilter;
+    private NotificationFilterSpec filter;
 
     @JsonPropertyDescription("Notification target addresses for each of the status.")
-    private IncidentNotificationSpec notificationTarget;
+    private IncidentNotificationTargetSpec target;
 
     @JsonPropertyDescription("The priority of the notification. Notifications are sent to the first notification targets that matches the filters when processAdditionalFilters is not set.")
-    private Integer priority = 1000;
+    private int priority = 1000;
 
     @JsonPropertyDescription("Flag to break sending next notifications. Setting to true allows to send next notification from the list in priority order that matches the filter.")
-    private Boolean processAdditionalFilters = false;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean processAdditionalFilters = false;
 
     /**
      * Returns a notification filter.
      * @return Notification filter.
      */
-    public NotificationFilterSpec getNotificationFilter() {
-        return notificationFilter;
+    public NotificationFilterSpec getFilter() {
+        return filter;
     }
 
     /**
      * Sets a notification filter.
-     * @param notificationFilter Notification filter.
+     * @param filter Notification filter.
      */
-    public void setNotificationFilter(NotificationFilterSpec notificationFilter) {
-        setDirtyIf(!Objects.equals(this.notificationFilter, notificationFilter));
-        this.notificationFilter = notificationFilter;
+    public void setFilter(NotificationFilterSpec filter) {
+        setDirtyIf(!Objects.equals(this.filter, filter));
+        this.filter = filter;
     }
 
     /**
      * Returns an incident notification target.
      * @return Incident notification target.
      */
-    public IncidentNotificationSpec getNotificationTarget() {
-        return notificationTarget;
+    public IncidentNotificationTargetSpec getTarget() {
+        return target;
     }
 
     /**
      * Sets an incident notification target.
-     * @param notificationTarget Incident notification target.
+     * @param target Incident notification target.
      */
-    public void setNotificationTarget(IncidentNotificationSpec notificationTarget) {
-        setDirtyIf(!Objects.equals(this.notificationTarget, notificationTarget));
-        this.notificationTarget = notificationTarget;
+    public void setTarget(IncidentNotificationTargetSpec target) {
+        setDirtyIf(!Objects.equals(this.target, target));
+        this.target = target;
     }
 
     /**
@@ -135,8 +136,8 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @Override
     public FilteredNotificationSpec deepClone() {
         FilteredNotificationSpec cloned = (FilteredNotificationSpec) super.deepClone();
-        cloned.notificationFilter = cloned.notificationFilter.deepClone();
-        cloned.notificationTarget = cloned.notificationTarget.deepClone();
+        cloned.filter = cloned.filter.deepClone();
+        cloned.target = cloned.target.deepClone();
         return cloned;
     }
 

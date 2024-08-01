@@ -5,10 +5,7 @@ import com.dqops.core.incidents.message.IncidentNotificationMessage;
 import com.dqops.core.incidents.message.MessageAddressPair;
 import com.dqops.core.incidents.message.SampleIncidentMessages;
 import com.dqops.data.incidents.factory.IncidentStatus;
-import com.dqops.metadata.incidents.FilteredNotificationSpec;
-import com.dqops.metadata.incidents.FilteredNotificationSpecMap;
-import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.incidents.NotificationFilterSpec;
+import com.dqops.metadata.incidents.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,21 +60,21 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         notificationSpec.setIncidentOpenedAddresses("default@email.com");
 
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec();
-        filteredNotificationSpec.setNotificationTarget(new IncidentNotificationSpec(){{
+        filteredNotificationSpec.setTarget(new IncidentNotificationTargetSpec(){{
             setIncidentOpenedAddresses("1_filtered@email.com");
         }});
         filteredNotificationSpec.setProcessAdditionalFilters(true);
-        filteredNotificationSpec.setNotificationFilter(new NotificationFilterSpec(){{
+        filteredNotificationSpec.setFilter(new NotificationFilterSpec(){{
             setConnection("connection_name");
         }});
 
 
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec();
-        secondFilteredNotificationSpec.setNotificationTarget(new IncidentNotificationSpec(){{
+        secondFilteredNotificationSpec.setTarget(new IncidentNotificationTargetSpec(){{
             setIncidentOpenedAddresses("2_filtered@email.com");
         }});
         secondFilteredNotificationSpec.setProcessAdditionalFilters(true);
-        secondFilteredNotificationSpec.setNotificationFilter(new NotificationFilterSpec(){{
+        secondFilteredNotificationSpec.setFilter(new NotificationFilterSpec(){{
             setConnection("connection_not_matching_name");
         }});
 
@@ -86,7 +83,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
         filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
 
-        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
@@ -105,10 +102,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
             setProcessAdditionalFilters(true);
             setPriority(2);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("1_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -116,10 +113,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec(){{
             setProcessAdditionalFilters(true);
             setPriority(3);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("2_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -127,10 +124,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpec thirdFilteredNotificationSpec = new FilteredNotificationSpec(){{
             setProcessAdditionalFilters(true);
             setPriority(1);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("3_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -140,7 +137,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
         filteredNotificationSpecMap.put("third_filtered_notification", thirdFilteredNotificationSpec);
 
-        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
@@ -161,30 +158,30 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(1);
             setProcessAdditionalFilters(true);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("1_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
 
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(2);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("2_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
 
         FilteredNotificationSpec thirdFilteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(3);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("3_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -194,7 +191,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
         filteredNotificationSpecMap.put("third_filtered_notification", thirdFilteredNotificationSpec);
 
-        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
@@ -212,10 +209,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(1);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("1_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -223,10 +220,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpec secondFilteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(2);
             setProcessAdditionalFilters(true);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("2_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -235,7 +232,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
         filteredNotificationSpecMap.put("second_filtered_notification", secondFilteredNotificationSpec);
 
-        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 
@@ -252,10 +249,10 @@ class IncidentNotificationServiceImplTest extends BaseTest {
 
         FilteredNotificationSpec filteredNotificationSpec = new FilteredNotificationSpec(){{
             setPriority(1);
-            setNotificationTarget(new IncidentNotificationSpec(){{
+            setTarget(new IncidentNotificationTargetSpec(){{
                 setIncidentOpenedAddresses("1_filtered@email.com, 2_filtered@email.com");
             }});
-            setNotificationFilter(new NotificationFilterSpec(){{
+            setFilter(new NotificationFilterSpec(){{
                 setConnection("connection_name");
             }});
         }};
@@ -263,7 +260,7 @@ class IncidentNotificationServiceImplTest extends BaseTest {
         FilteredNotificationSpecMap filteredNotificationSpecMap = new FilteredNotificationSpecMap();
         filteredNotificationSpecMap.put("one_filtered_notification", filteredNotificationSpec);
 
-        notificationSpec.setFilteredNotificationMap(filteredNotificationSpecMap);
+        notificationSpec.setFilteredNotifications(filteredNotificationSpecMap);
 
         List<MessageAddressPair> messageAddressPairs = sut.filterNotifications(message, notificationSpec);
 

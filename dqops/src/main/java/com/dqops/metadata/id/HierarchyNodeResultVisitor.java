@@ -922,4 +922,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      */
     R accept(NotificationFilterSpec notificationFilterSpec, P parameter);
 
+    /**
+     * Accept a filtered notification target.
+     * @param incidentNotificationTargetSpec Filtered notification target specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(IncidentNotificationTargetSpec incidentNotificationTargetSpec, P parameter);
+
 }

@@ -26,10 +26,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.incidents.FilteredNotificationSpec;
-import com.dqops.metadata.incidents.IncidentNotificationSpec;
-import com.dqops.metadata.incidents.NotificationFilterSpec;
+import com.dqops.metadata.incidents.*;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -152,10 +149,10 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     }
 
     public List<MessageAddressPair> filterNotifications(IncidentNotificationMessage message, IncidentNotificationSpec notificationSpec) {
-        List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotificationMap()
+        List<Map.Entry<String, FilteredNotificationSpec>> filteredNotifications = notificationSpec.getFilteredNotifications()
                 .entrySet().stream()
                 .filter(stringFilteredNotificationSpecEntry -> {
-                    NotificationFilterSpec filter = stringFilteredNotificationSpecEntry.getValue().getNotificationFilter();
+                    NotificationFilterSpec filter = stringFilteredNotificationSpecEntry.getValue().getFilter();
 
                     return (filter.getConnection() == null || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
                            (filter.getSchema() == null || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
@@ -172,22 +169,26 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                 .collect(Collectors.toList());
 
         List<FilteredNotificationSpec> filteredNotificationsList = filteredNotifications.stream().map(Map.Entry::getValue).collect(Collectors.toList());
-        List<IncidentNotificationSpec> notificationsToSend = new ArrayList<>();
+        List<FilteredNotificationSpec> filteredNotificationsToSend = new ArrayList<>();
         int processAdditionalFiltersNumber = 0;
         for (FilteredNotificationSpec filteredNotification : filteredNotificationsList) {
-            notificationsToSend.add(filteredNotification.getNotificationTarget());
+            filteredNotificationsToSend.add(filteredNotification);
             if (!filteredNotification.getProcessAdditionalFilters()) {
                 break;
             }
             processAdditionalFiltersNumber++;
         }
 
+        List<IncidentNotificationTargetSpec> allNotificationsToSend = filteredNotificationsToSend.stream()
+                .map(filteredNotificationSpec -> IncidentNotificationTargetSpec.from(filteredNotificationSpec))
+                .collect(Collectors.toList());
+
         // all filtered notifications got ProcessAdditionalFilters flag
-        if (notificationsToSend.isEmpty() || filteredNotificationsList.size() == processAdditionalFiltersNumber) {
-            notificationsToSend.add(notificationSpec);
+        if (filteredNotificationsToSend.isEmpty() || filteredNotificationsList.size() == processAdditionalFiltersNumber) {
+            allNotificationsToSend.add(IncidentNotificationTargetSpec.from(notificationSpec));
         }
 
-        List<String> compoundAddressesList = notificationsToSend.stream().map(notificationTarget -> {
+        List<String> compoundAddressesList = allNotificationsToSend.stream().map(notificationTarget -> {
             String notificationAddress = notificationTarget.getNotificationAddressForStatus(message.getStatus());
             return notificationAddress != null ? notificationAddress : "";
         }).collect(Collectors.toList());

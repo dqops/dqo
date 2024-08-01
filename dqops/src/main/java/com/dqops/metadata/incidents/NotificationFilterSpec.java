@@ -7,6 +7,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import org.apache.parquet.Strings;
 
@@ -22,34 +23,44 @@ public class NotificationFilterSpec extends AbstractSpec implements Cloneable, I
     };
 
     @JsonPropertyDescription("Connection name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String connection;
 
     @JsonPropertyDescription("Schema name. This field accepts search patterns in the format: 'schema_name_\\*', '\\*_schema', 'prefix\\*suffix'.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String schema;
 
     @JsonPropertyDescription("Table name. This field accepts search patterns in the format: 'table_name_\\*', '\\*table', 'prefix\\*suffix'.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String table;
 
     @JsonPropertyDescription("Table priority.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer tablePriority;
 
     @JsonPropertyDescription("Data group name. This field accepts search patterns in the format: 'group_name_\\*', '\\*group', 'prefix\\*suffix'.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dataGroupName;
 
     @JsonPropertyDescription("Quality dimension.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String qualityDimension;
 
     @JsonPropertyDescription("The target check category, for example: *nulls*, *volume*, *anomaly*.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String checkCategory;
 
     @JsonPropertyDescription("The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String checkType;
 
     @JsonPropertyDescription("The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. " +
                              "This field supports search patterns such as: 'profiling_\\*', '\\*_count', 'profiling_\\*_percent'.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String checkName;
 
     @JsonPropertyDescription("Highest severity.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer highestSeverity;
 
     @JsonIgnore

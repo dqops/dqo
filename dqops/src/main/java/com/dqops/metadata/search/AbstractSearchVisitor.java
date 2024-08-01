@@ -1218,4 +1218,16 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
+    /**
+     * Accepts a filtered notification target.
+     *
+     * @param incidentNotificationTargetSpec Filtered notification target specification.
+     * @param parameter                   Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentNotificationTargetSpec incidentNotificationTargetSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
 }
