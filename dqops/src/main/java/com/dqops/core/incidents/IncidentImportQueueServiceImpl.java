@@ -27,8 +27,10 @@ import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshot;
 import com.dqops.data.incidents.snapshot.IncidentsSnapshotFactory;
-import com.dqops.metadata.incidents.IncidentGroupingLevel;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
+import com.dqops.metadata.incidents.IncidentGroupingLevel;
+import com.dqops.metadata.incidents.IncidentNotificationSpec;
+import com.dqops.metadata.incidents.NotificationFilterSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -37,6 +39,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.scheduler.Schedulers;
@@ -66,26 +69,31 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private final DqoIncidentsConfigurationProperties incidentsConfigurationProperties;
     private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
+    private final IncidentNotificationsConfigurationLoader incidentNotificationsConfigurationLoader;
+
     /**
      * Creates an incident import queue service.
      *
-     * @param incidentsSnapshotFactory               Incident snapshot factory.
-     * @param incidentNotificationService            Incident notification service. Sends notifications to addresses.
-     * @param userDomainIdentityFactory              User data domain identity factory.
-     * @param incidentsConfigurationProperties       Incidents configuration parameters.
-     * @param defaultTimeZoneProvider                Default time zone provider.
+     * @param incidentsSnapshotFactory                 Incident snapshot factory.
+     * @param incidentNotificationService              Incident notification service. Sends notifications to addresses.
+     * @param userDomainIdentityFactory                User data domain identity factory.
+     * @param incidentsConfigurationProperties         Incidents configuration parameters.
+     * @param defaultTimeZoneProvider                  Default time zone provider.
+     * @param incidentNotificationsConfigurationLoader Incident configuration configuration loader.
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                           IncidentNotificationService incidentNotificationService,
                                           UserDomainIdentityFactory userDomainIdentityFactory,
                                           DqoIncidentsConfigurationProperties incidentsConfigurationProperties,
-                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                          IncidentNotificationsConfigurationLoader incidentNotificationsConfigurationLoader) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
         this.userDomainIdentityFactory = userDomainIdentityFactory;
         this.incidentsConfigurationProperties = incidentsConfigurationProperties;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.incidentNotificationsConfigurationLoader = incidentNotificationsConfigurationLoader;
     }
 
     /**
@@ -290,7 +298,8 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                         }
 
                         if (nextTableImportBatch != null) {
-                            List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
+                            List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(
+                                    nextTableImportBatch, this.domainIdentity);
                             if (newIncidentsNotificationMessages != null) {
                                 // sending notifications
                                 incidentNotificationService.sendNotifications(
@@ -341,8 +350,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          * NOTE: This method assumes that the new check results are sorted by the executedAt, so it is a new batch of recently
          * executed checks, not just an old list of checks for which we are creating incidents.
          * @param nextTableImportBatch Next table incident batch that should be loaded.
+         * @param userIdentity  User identity that specifies the data domain where the notification addresses are defined.
          */
-        public List<IncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch) {
+        public List<IncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch,
+                                                             UserDomainIdentity userIdentity) {
             ConnectionSpec connection = nextTableImportBatch.getConnection();
             ConnectionIncidentGroupingSpec incidentGroupingAtConnection = connection.getIncidentGrouping();
             if (incidentGroupingAtConnection == null || incidentGroupingAtConnection.isDisabled()) {
@@ -466,6 +477,30 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
                 if (existingOpenIncidentRowIndex == null) {
                     // this is a new incident, we don't know anything about it
+
+                    PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
+                    Integer tablePriority = nextTableImportBatch.getTable().getPriority();
+
+                    IncidentNotificationSpec incidentNotificationSpec = incidentNotificationsConfigurationLoader
+                            .loadConfiguration(incidentGroupingAtConnection, userIdentity);
+                    IncidentNotificationMessage notificationMessageForFilterCheck = new IncidentNotificationMessage(){{
+                        setConnection(connectionName);
+                        setSchema(physicalTableName.getSchemaName());
+                        setTable(physicalTableName.getTableName());
+                        setTablePriority(tablePriority);
+                        setDataGroupName(newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME));
+                        setQualityDimension(newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME));
+                        setCheckCategory(newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME));
+                        setCheckType(newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME));
+                        setCheckName(newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME));
+                        setHighestSeverity(severity);
+                    }};
+
+                    boolean shouldExcludeIncident = filterIncidents(notificationMessageForFilterCheck, incidentNotificationSpec);
+                    if(shouldExcludeIncident){
+                        continue;
+                    }
+
                     Row newIncidentRow = this.allNewIncidentRows.appendRow();
                     int newIncidentRowIndex = newIncidentRow.getRowNumber();
                     if (newOrUpdatedIncidentRowIndexes != null) {
@@ -486,11 +521,9 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     newIncidentRow.setLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, incidentHash);
                     newIncidentRow.setInt(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME, minimumSeverityLevel);
 
-                    PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getSchemaName());
                     newIncidentRow.setString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, physicalTableName.getTableName());
 
-                    Integer tablePriority = nextTableImportBatch.getTable().getPriority();
                     if (tablePriority != null) {
                         newIncidentRow.setInt(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, tablePriority);
                     }
@@ -562,6 +595,36 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     .collect(Collectors.toList());
 
             return incidentNotificationMessages;
+        }
+
+        /**
+         * Verifies whether the incident should be excluded based on the filters from incident notification configuration with the doNotCreateIncidents flag set.
+         * @param message The incident notification message with its details.
+         * @param notificationSpec The notification spec with the default notification setup and map of filtered notifications used for filtering.
+         * @return Whether the specific incident should be excluded.
+         */
+        private boolean filterIncidents(IncidentNotificationMessage message, IncidentNotificationSpec notificationSpec) {
+            long exclusionFiltersMatchCount = notificationSpec.getFilteredNotifications()
+                    .values().stream()
+                    .filter(notification -> {
+                        NotificationFilterSpec filter = notification.getFilter();
+
+                        return !notification.getDisabled() &&
+                               !notification.getDoNotCreateIncidents() &&
+                               (Strings.isNullOrEmpty(filter.getConnection()) || filter.getConnectionNameSearchPattern().match(message.getConnection()) &&
+                               (Strings.isNullOrEmpty(filter.getSchema()) || filter.getSchemaNameSearchPattern().match(message.getSchema())) &&
+                               (Strings.isNullOrEmpty(filter.getTable()) || filter.getTableNameSearchPattern().match(message.getTable())) &&
+                               (filter.getTablePriority() == null || filter.getTablePriority().equals(message.getTablePriority())) &&
+                               (Strings.isNullOrEmpty(filter.getDataGroupName()) || filter.getDataGroupNameSearchPattern().match(message.getDataGroupName())) &&
+                               (Strings.isNullOrEmpty(filter.getQualityDimension()) || filter.getQualityDimension().equals(message.getQualityDimension())) &&
+                               (Strings.isNullOrEmpty(filter.getCheckCategory()) || filter.getCheckCategory().equals(message.getCheckCategory())) &&
+                               (Strings.isNullOrEmpty(filter.getCheckType()) || filter.getCheckType().equals(message.getCheckType())) &&
+                               (Strings.isNullOrEmpty(filter.getCheckName()) || filter.getCheckNameSearchPattern().match(message.getCheckName())) &&
+                               (filter.getHighestSeverity() == null || filter.getHighestSeverity().equals(message.getHighestSeverity())));
+                    })
+                    .count();
+
+            return exclusionFiltersMatchCount == 0;
         }
 
         /**

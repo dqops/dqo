@@ -49,6 +49,10 @@ public class FilteredNotificationSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
 
+    @JsonPropertyDescription("Flag to remove incident that match the filters.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean doNotCreateIncidents = false;
+
     /**
      * Returns a notification filter.
      * @return Notification filter.
@@ -151,6 +155,23 @@ public class FilteredNotificationSpec extends AbstractSpec {
     public void setDescription(String description) {
         setDirtyIf(!Objects.equals(this.description, description));
         this.description = description;
+    }
+
+    /**
+     * Returns a doNotCreateIncidents flag.
+     * @return doNotCreateIncidents flag.
+     */
+    public boolean getDoNotCreateIncidents() {
+        return doNotCreateIncidents;
+    }
+
+    /**
+     * Sets a doNotCreateIncidents flag.
+     * @param doNotCreateIncidents doNotCreateIncidents flag.
+     */
+    public void setDoNotCreateIncidents(Boolean doNotCreateIncidents) {
+        setDirtyIf(!Objects.equals(this.doNotCreateIncidents, doNotCreateIncidents));
+        this.doNotCreateIncidents = doNotCreateIncidents;
     }
 
     /**

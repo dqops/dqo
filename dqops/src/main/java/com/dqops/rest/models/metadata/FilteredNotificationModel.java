@@ -40,6 +40,9 @@ public class FilteredNotificationModel {
     @JsonPropertyDescription("Description.")
     private String description;
 
+    @JsonPropertyDescription("The doNotCreateIncidents flag that excludes from the creation of incidents that match the filters.")
+    private Boolean doNotCreateIncidents;
+
     /**
      * Creates a FilteredNotificationModel that represents a single entry of the FilteredNotificationSpecMap.
      * @param filteredNotificationName The map key.
@@ -57,6 +60,7 @@ public class FilteredNotificationModel {
             setProcessAdditionalFilters(filteredNotificationSpec.getProcessAdditionalFilters());
             setDisabled(filteredNotificationSpec.getDisabled());
             setDescription(filteredNotificationSpec.getDescription());
+            setDoNotCreateIncidents(filteredNotificationSpec.getDoNotCreateIncidents());
         }};
     }
 
@@ -72,6 +76,7 @@ public class FilteredNotificationModel {
             setProcessAdditionalFilters(processAdditionalFilters);
             setDisabled(disabled);
             setDescription(description);
+            setDoNotCreateIncidents(doNotCreateIncidents);
         }};
     }
 
