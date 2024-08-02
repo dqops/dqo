@@ -186,7 +186,7 @@ dqo:
     synchronized-folders: locally_changed
     enable-cloud-sync: true
     default-schedules:
-      profiling: "0 12 1 * *"  # 12PM on the first day of the month
+      profiling: "0 1 1 * *"  # 1AM on the first day of the month
       monitoring-daily: "0 12 * * *"  # 12PM every day (noon)
       monitoring-monthly: "0 12 * * *"  # 12PM every day (noon)
       partitioned-daily: "0 12 * * *"  # 12PM every day (noon)
