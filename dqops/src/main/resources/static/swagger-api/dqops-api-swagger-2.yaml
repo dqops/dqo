@@ -35115,6 +35115,10 @@ definitions:
       description:
         type: "string"
         description: "Description."
+      do_not_create_incidents:
+        type: "boolean"
+        description: "The doNotCreateIncidents flag that excludes from the creation\
+          \ of incidents that match the filters."
     description: "Filtered notification list model."
   FilteredNotificationSpec:
     type: "object"
@@ -35143,6 +35147,9 @@ definitions:
       description:
         type: "string"
         description: "Description."
+      do_not_create_incidents:
+        type: "boolean"
+        description: "Flag to remove incident that match the filters."
   HierarchyIdModel:
     type: "object"
     properties:
