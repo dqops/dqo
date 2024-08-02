@@ -71,7 +71,7 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Verifies that a column contains a minimum number of non-null values. The default value of the *min_count* parameter is 1 to detect at least one value in a monitored column. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
 
     @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the column is empty. Stores a separate data quality check result for each daily partition.")
