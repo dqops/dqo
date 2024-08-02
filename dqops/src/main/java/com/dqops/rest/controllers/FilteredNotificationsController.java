@@ -544,7 +544,7 @@ public class FilteredNotificationsController {
         }
         IncidentNotificationSpec incidentNotification = incidentGrouping.getIncidentNotification();
         if(incidentNotification == null){
-            return null;
+            incidentNotification = new IncidentNotificationSpec();
         }
         FilteredNotificationSpecMap filteredNotificationMap = incidentNotification.getFilteredNotifications();
         return filteredNotificationMap;

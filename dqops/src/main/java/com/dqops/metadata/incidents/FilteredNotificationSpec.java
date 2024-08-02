@@ -118,7 +118,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Sets a process additional filters flag.
      * @param processAdditionalFilters Process additional filters flag.
      */
-    public void setProcessAdditionalFilters(Boolean processAdditionalFilters) {
+    public void setProcessAdditionalFilters(boolean processAdditionalFilters) {
         setDirtyIf(!Objects.equals(this.processAdditionalFilters, processAdditionalFilters));
         this.processAdditionalFilters = processAdditionalFilters;
     }
@@ -135,7 +135,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Sets a disabled flag.
      * @param disabled Disabled flag.
      */
-    public void setDisabled(Boolean disabled) {
+    public void setDisabled(boolean disabled) {
         setDirtyIf(!Objects.equals(this.disabled, disabled));
         this.disabled = disabled;
     }
@@ -169,7 +169,7 @@ public class FilteredNotificationSpec extends AbstractSpec {
      * Sets a doNotCreateIncidents flag.
      * @param doNotCreateIncidents doNotCreateIncidents flag.
      */
-    public void setDoNotCreateIncidents(Boolean doNotCreateIncidents) {
+    public void setDoNotCreateIncidents(boolean doNotCreateIncidents) {
         setDirtyIf(!Objects.equals(this.doNotCreateIncidents, doNotCreateIncidents));
         this.doNotCreateIncidents = doNotCreateIncidents;
     }

@@ -69,15 +69,25 @@ public class FilteredNotificationModel {
      * @return FilteredNotificationSpec
      */
     public FilteredNotificationSpec toSpec() {
-        return new FilteredNotificationSpec(){{
+        FilteredNotificationSpec spec = new FilteredNotificationSpec(){{
             setFilter(filter);
             setTarget(target);
-            setPriority(priority);
-            setProcessAdditionalFilters(processAdditionalFilters);
-            setDisabled(disabled);
             setDescription(description);
-            setDoNotCreateIncidents(doNotCreateIncidents);
         }};
+
+        if(priority != null){
+            setPriority(priority);
+        }
+        if(processAdditionalFilters != null){
+            setProcessAdditionalFilters(processAdditionalFilters);
+        }
+        if(disabled != null){
+            setDisabled(disabled);
+        }
+        if(doNotCreateIncidents != null){
+            setDoNotCreateIncidents(doNotCreateIncidents);
+        }
+        return spec;
     }
 
 }
