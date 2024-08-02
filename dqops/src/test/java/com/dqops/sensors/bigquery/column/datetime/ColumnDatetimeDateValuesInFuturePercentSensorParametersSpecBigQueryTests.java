@@ -103,7 +103,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -133,7 +133,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%1$s AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(%1$s AS TIMESTAMP) > TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -167,7 +167,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                         WHEN COUNT(%1$s) = 0 THEN 0.0
                         ELSE 100.0 * SUM(
                             CASE
-                                WHEN %1$s > CURRENT_DATETIME()
+                                WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                     THEN 1
                                 ELSE 0
                             END
@@ -200,7 +200,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -229,7 +229,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -269,7 +269,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -304,7 +304,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -339,7 +339,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -385,7 +385,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -424,7 +424,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END
@@ -461,7 +461,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %1$s > CURRENT_DATETIME()
+                            WHEN %1$s > DATETIME_ADD(CURRENT_DATETIME(), INTERVAL CAST(0.0 * 86400 AS INT64) SECOND)
                                 THEN 1
                             ELSE 0
                         END

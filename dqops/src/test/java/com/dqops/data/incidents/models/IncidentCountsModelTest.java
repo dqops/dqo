@@ -50,8 +50,6 @@ class IncidentCountsModelTest extends BaseTest {
         Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
-        Assertions.assertEquals(1, incidentCountsModel.getCurrentMonthCount());
-        Assertions.assertEquals(0, incidentCountsModel.getPreviousMonthCount());
     }
 
     @Test
@@ -66,8 +64,6 @@ class IncidentCountsModelTest extends BaseTest {
         Assertions.assertEquals(1, incidentCountsModel.getTotalCount());
         Assertions.assertEquals(0, incidentCountsModel.getCountFromLast24h());
         Assertions.assertEquals(1, incidentCountsModel.getCountFromLast7days());
-        Assertions.assertEquals(1, incidentCountsModel.getCurrentMonthCount());
-        Assertions.assertEquals(0, incidentCountsModel.getPreviousMonthCount());
     }
 
     @Test

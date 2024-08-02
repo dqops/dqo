@@ -27,7 +27,6 @@ import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.*;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentNotificationsWrapper;
 import com.dqops.metadata.settings.SmtpServerConfigurationSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -60,13 +59,14 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class IncidentNotificationServiceImpl implements IncidentNotificationService {
-    private SharedHttpClientProvider sharedHttpClientProvider;
-    private JsonSerializer jsonSerializer;
-    private ExecutionContextFactory executionContextFactory;
-    private EmailSenderProvider emailSenderProvider;
+    private final SharedHttpClientProvider sharedHttpClientProvider;
+    private final JsonSerializer jsonSerializer;
+    private final ExecutionContextFactory executionContextFactory;
+    private final EmailSenderProvider emailSenderProvider;
     private final IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter;
     private final IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter;
     private final SmtpServerConfigurationProperties smtpServerConfigurationProperties;
+    private final IncidentNotificationsConfigurationLoader incidentNotificationsConfigurationLoader;
 
     /**
      * Creates an incident notification service.
@@ -76,7 +76,8 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param executionContextFactory                      Execution context factory.
      * @param incidentNotificationMessageMarkdownFormatter Incident notification message formatter that creates a markdown formatted message.
      * @param incidentNotificationHtmlMessageFormatter     Incident notification message formatter that creates an HTML formatted message.
-     * @param smtpServerConfigurationProperties            SMTP
+     * @param smtpServerConfigurationProperties            SMTP server configuration.
+     * @param incidentNotificationsConfigurationLoader     Incident configuration configuration loader.
      */
     @Autowired
     public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
@@ -85,7 +86,8 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                                            EmailSenderProvider emailSenderProvider,
                                            IncidentNotificationMessageMarkdownFormatter incidentNotificationMessageMarkdownFormatter,
                                            IncidentNotificationHtmlMessageFormatter incidentNotificationHtmlMessageFormatter,
-                                           SmtpServerConfigurationProperties smtpServerConfigurationProperties) {
+                                           SmtpServerConfigurationProperties smtpServerConfigurationProperties,
+                                           IncidentNotificationsConfigurationLoader incidentNotificationsConfigurationLoader) {
         this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.jsonSerializer = jsonSerializer;
         this.executionContextFactory = executionContextFactory;
@@ -93,6 +95,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
         this.incidentNotificationMessageMarkdownFormatter = incidentNotificationMessageMarkdownFormatter;
         this.incidentNotificationHtmlMessageFormatter = incidentNotificationHtmlMessageFormatter;
         this.smtpServerConfigurationProperties = smtpServerConfigurationProperties;
+        this.incidentNotificationsConfigurationLoader = incidentNotificationsConfigurationLoader;
     }
 
     /**
@@ -106,7 +109,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     public void sendNotifications(List<IncidentNotificationMessage> newMessages,
                                   ConnectionIncidentGroupingSpec incidentGrouping,
                                   UserDomainIdentity userIdentity) {
-        IncidentNotificationSpec incidentNotificationSpec = prepareIncidentNotifications(incidentGrouping, userIdentity);
+        IncidentNotificationSpec incidentNotificationSpec = incidentNotificationsConfigurationLoader.loadConfiguration(incidentGrouping, userIdentity);
         Mono<Void> finishedSendMono = sendAllNotifications(newMessages, incidentNotificationSpec);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
@@ -267,30 +270,6 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
                 }
         ).then();
         return responseSent.retry(3).thenReturn(messageAddressPair);
-    }
-
-    /**
-     * Returns a combined list of web hooks, combining the default notification channels with the notification settings on a connection.
-     * @param incidentGrouping Incident grouping and notification settings from a connection.
-     * @param userIdentity User identity that also specifies the data domain where the webhooks are defined.
-     * @return Effective notification settings with addresses that could be the default values.
-     */
-    protected IncidentNotificationSpec prepareIncidentNotifications(ConnectionIncidentGroupingSpec incidentGrouping,
-                                                                    UserDomainIdentity userIdentity){
-        ExecutionContext executionContext = executionContextFactory.create(userIdentity);
-        UserHomeContext userHomeContext = executionContext.getUserHomeContext();
-        UserHome userHome = userHomeContext.getUserHome();
-        DefaultIncidentNotificationsWrapper defaultIncidentNotificationsWrapper = userHome.getDefaultIncidentNotifications();
-        IncidentNotificationSpec defaultIncidentNotifications = defaultIncidentNotificationsWrapper.getSpec();
-        if (defaultIncidentNotifications == null) {
-            defaultIncidentNotifications = new IncidentNotificationSpec();
-        }
-
-        if (incidentGrouping == null || incidentGrouping.getIncidentNotification() == null){
-            return defaultIncidentNotifications.deepClone();
-        } else {
-            return incidentGrouping.getIncidentNotification().combineWithDefaults(defaultIncidentNotifications);
-        }
     }
 
     /**
