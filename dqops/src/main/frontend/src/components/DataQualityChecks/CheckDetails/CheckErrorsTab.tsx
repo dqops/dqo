@@ -1,11 +1,11 @@
+import moment from 'moment/moment';
 import React, { useMemo } from 'react';
 import { ErrorsListModel } from '../../../api';
-import Select from '../../Select';
-import { Table } from '../../Table';
 import { useTree } from '../../../contexts/treeContext';
-import moment from 'moment/moment';
-import ErrorText from './ErrorText';
 import { getLocalDateInUserTimeZone } from '../../../utils';
+import { Table } from '../../Table';
+import ErrorText from './ErrorText';
+import SelectTailwind from '../../Select/SelectTailwind';
 
 interface CheckErrorsTabProps {
   errors: ErrorsListModel[];
@@ -71,8 +71,8 @@ const CheckErrorsTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
-            value={ dataGroup || errors[0]?.dataGroup}
+          <SelectTailwind
+            value={dataGroup || errors[0]?.dataGroup}
             options={
               (errors[0]?.dataGroupsNames || []).map((item) => ({
                 label: item,
@@ -84,14 +84,16 @@ const CheckErrorsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
           />
         </div>
       </div>
-      {errors.length === 0 && <div className="text-gray-700 mt-5 text-sm">No Data</div>}
+      {errors.length === 0 && (
+        <div className="text-gray-700 mt-5 text-sm">No Data</div>
+      )}
       {errors.map((result, index) => (
         <div key={index} className="mb-4">
           <Table
@@ -100,7 +102,9 @@ const CheckErrorsTab = ({
             data={(result.errorEntries || []).map((item) => ({
               ...item,
               checkName: result.checkName,
-              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
+              executedAt: moment(
+                getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+              ).format('YYYY-MM-DD HH:mm:ss')
             }))}
             emptyMessage="No Data"
           />

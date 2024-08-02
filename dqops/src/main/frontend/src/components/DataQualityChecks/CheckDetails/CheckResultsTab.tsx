@@ -10,7 +10,7 @@ import { getCheckResults } from '../../../redux/actions/source.actions';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
-import Select from '../../Select';
+import SelectTailwind from '../../Select/SelectTailwind';
 import SvgIcon from '../../SvgIcon';
 import { Table } from '../../Table';
 import { ChartView } from './ChartView';
@@ -304,7 +304,7 @@ const CheckResultsTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
+          <SelectTailwind
             value={dataGroup || results[0]?.dataGroup}
             options={
               (results[0]?.dataGroups || []).map((item) => ({
@@ -317,7 +317,7 @@ const CheckResultsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
