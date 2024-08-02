@@ -252,6 +252,9 @@ public class TableRowCountCheckSpec
             }
 
             long minimumRowCount = (long)(actualValue * checkMiningConfigurationProperties.getMinimumRowCountRate());
+            if (minimumRowCount < 1L) {
+                minimumRowCount = 1L;
+            }
 
             switch (miningParameters.getSeverityLevel()) {
                 case warning:

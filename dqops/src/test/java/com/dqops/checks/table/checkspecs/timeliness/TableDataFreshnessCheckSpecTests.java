@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.table.checkspecs.volume;
+package com.dqops.checks.table.checkspecs.timeliness;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
+import com.dqops.checks.table.profiling.TableTimelinessProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationPropertiesObjectMother;
@@ -30,6 +33,8 @@ import com.dqops.metadata.sources.ConnectionSpecObjectMother;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableSpecObjectMother;
 import com.dqops.rules.TargetRuleSeverityLevel;
+import com.dqops.rules.comparison.MaxDaysRule1ParametersSpec;
+import com.dqops.rules.comparison.MaxDaysRule2ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.models.CheckModelObjectMother;
@@ -44,11 +49,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TableRowCountCheckSpecTests extends BaseTest {
-    private TableRowCountCheckSpec sut;
+public class TableDataFreshnessCheckSpecTests extends BaseTest {
+    private TableDataFreshnessCheckSpec sut;
     private TableSpec tableSpec;
     private ConnectionSpec connectionSpec;
-    private TableRowCountCheckSpec profilingSut;
+    private TableDataFreshnessCheckSpec profilingSut;
     private ProfilingCheckResult profilingCheckResult;
     private DataAssetProfilingResults dataAssetProfilingResults;
     private TableProfilingResults tableProfilingResults;
@@ -57,12 +62,12 @@ public class TableRowCountCheckSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new TableRowCountCheckSpec();
+        this.sut = new TableDataFreshnessCheckSpec();
         this.profilingSut = this.sut;
         this.tableSpec = TableSpecObjectMother.create("public", "tab");
         this.connectionSpec = ConnectionSpecObjectMother.createSampleConnectionSpec(this.tableSpec.getHierarchyId().getConnectionName());
-        this.tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
-        this.tableSpec.getProfilingChecks().getVolume().setProfileRowCount(this.profilingSut);
+        this.tableSpec.getProfilingChecks().setTimeliness(new TableTimelinessProfilingChecksSpec());
+        this.tableSpec.getProfilingChecks().getTimeliness().setProfileDataFreshness(this.profilingSut);
         this.profilingCheckResult = new ProfilingCheckResult();
         this.dataAssetProfilingResults = new DataAssetProfilingResults();
         this.tableProfilingResults = new TableProfilingResults();
@@ -70,32 +75,18 @@ public class TableRowCountCheckSpecTests extends BaseTest {
         this.checkMiningParametersModel = new CheckMiningParametersModel();
         this.checkMiningParametersModel.setSeverityLevel(TargetRuleSeverityLevel.error);
     }
-
     @Test
-    void proposeCheckConfiguration_whenRowCountPresentFromStatisticsButNoProfilingCheck_thenProposesRules() {
+    void proposeCheckConfiguration_whenTableFreshnessPresentFromCheckButMiningParametersDisabledCheck_thenNotProposesRules() {
+        CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+        this.profilingCheckResult.importCheckModel(profilingCheckModel);
+
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
-
-        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
-                tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
-                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
-
-        Assertions.assertTrue(proposed);
-        Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(99L, this.sut.getError().getMinCount());
-    }
-
-    @Test
-    void proposeCheckConfiguration_whenRowCountPresentFromStatisticsButMiningParametersDisabledCheck_thenNotProposesRules() {
-        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
-                this.connectionSpec, this.tableSpec);
-
-        this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
-        this.checkMiningParametersModel.setProposeMinimumRowCount(false);
+        this.profilingCheckResult.setActualValue(10.0);
+        this.checkMiningConfiguration.setFreshnessMaxDaysMultiplier(2.0);
+        this.checkMiningParametersModel.setProposeTimelinessChecks(false);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -106,7 +97,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
     }
 
     @Test
-    void proposeCheckConfiguration_whenRowCountPresentFromProfilingCheckThatHasNoRules_thenProposesRules() {
+    void proposeCheckConfiguration_whenTableFreshnessPresentFromProfilingCheckThatHasNoRules_thenProposesRules() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -114,8 +105,9 @@ public class TableRowCountCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(100.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.profilingCheckResult.setActualValue(10.0);
+        this.checkMiningConfiguration.setFreshnessMaxDaysMultiplier(2.0);
+        this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -123,11 +115,11 @@ public class TableRowCountCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(99L, this.sut.getError().getMinCount());
+        Assertions.assertEquals(20.0, this.sut.getError().getMaxDays());
     }
 
     @Test
-    void proposeCheckConfiguration_whenRowCountPresentFromProfilingCheckThatHasNoRulesAndOldRowCountWas0_thenProposesRulesWithRowCount1() {
+    void proposeCheckConfiguration_whenTableFreshnessPresentFromProfilingCheckThatHasNoRulesAndValueIsNotRound_thenProposesRulesWithRoundedValue() {
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
@@ -135,8 +127,9 @@ public class TableRowCountCheckSpecTests extends BaseTest {
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(0.0);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.profilingCheckResult.setActualValue(11.1234567);
+        this.checkMiningConfiguration.setFreshnessMaxDaysMultiplier(2.0);
+        this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
@@ -144,29 +137,51 @@ public class TableRowCountCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(1L, this.sut.getError().getMinCount());
+        Assertions.assertEquals(22.2, this.sut.getError().getMaxDays());
+    }
+
+    @Test
+    void proposeCheckConfiguration_whenTableDelayPresentFromProfilingCheckThatHasNoRulesAndMeasuredDelayIsNegative_thenNotProposed() {
+        CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+        this.profilingCheckResult.importCheckModel(profilingCheckModel);
+
+        CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, this.tableSpec.getProfilingChecks(),
+                this.connectionSpec, this.tableSpec);
+
+        this.profilingCheckResult.setActualValue(-10.0);
+        this.checkMiningConfiguration.setFreshnessMaxDaysMultiplier(2.0);
+        this.checkMiningParametersModel.setProposeTimelinessChecks(true);
+
+        boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
+                tableSpec, this.tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false),
+                myCheckModel, this.checkMiningParametersModel, null, this.checkMiningConfiguration, JsonSerializerObjectMother.getDefault());
+
+        Assertions.assertFalse(proposed);
+        Assertions.assertNull(this.sut.getError());
     }
 
     @Test
     void proposeCheckConfiguration_whenRowCountPresentAndProfilingCheckHasRulesAndTargetIsMonitoringCheck_thenCopiesRules() {
-        this.profilingSut = new TableRowCountCheckSpec();
-        this.tableSpec.getProfilingChecks().getVolume().setProfileRowCount(this.profilingSut);
-        this.profilingSut.setWarning(new MinCountRule1ParametersSpec(50));
-        this.profilingSut.setError(new MinCountRule1ParametersSpec(30));
+        this.profilingSut = new TableDataFreshnessCheckSpec();
+        this.tableSpec.getProfilingChecks().getTimeliness().setProfileDataFreshness(this.profilingSut);
+        this.profilingSut.setWarning(new MaxDaysRule1ParametersSpec(50.0));
+        this.profilingSut.setError(new MaxDaysRule2ParametersSpec(30.0));
 
         CheckModel profilingCheckModel = CheckModelObjectMother.createCheckModel(this.profilingSut, this.tableSpec.getProfilingChecks(),
                 this.connectionSpec, this.tableSpec);
         this.profilingCheckResult.importCheckModel(profilingCheckModel);
 
         AbstractRootChecksContainerSpec targetCheckRootContainer = this.tableSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-        this.tableSpec.getMonitoringChecks().getDaily().setVolume(new TableVolumeDailyMonitoringChecksSpec());
-        this.tableSpec.getMonitoringChecks().getDaily().getVolume().setDailyRowCount(this.sut);
+        this.tableSpec.getMonitoringChecks().getDaily().setTimeliness(new TableTimelinessDailyMonitoringChecksSpec());
+        this.tableSpec.getMonitoringChecks().getDaily().getTimeliness().setDailyDataFreshness(this.sut);
         CheckModel myCheckModel = CheckModelObjectMother.createCheckModel(this.sut, targetCheckRootContainer,
                 this.connectionSpec, this.tableSpec);
 
-        this.profilingCheckResult.setActualValue(100.0);
+        this.profilingCheckResult.setActualValue(10.0);
         this.profilingCheckResult.setSeverityLevel(CheckResultStatus.valid);
-        this.checkMiningConfiguration.setMinimumRowCountRate(0.99);
+        this.checkMiningConfiguration.setFreshnessMaxDaysMultiplier(2.0);
+        this.checkMiningParametersModel.setProposeTimelinessChecks(true);
 
         boolean proposed = this.sut.proposeCheckConfiguration(this.profilingCheckResult, this.dataAssetProfilingResults, this.tableProfilingResults,
                 tableSpec, targetCheckRootContainer,
@@ -174,7 +189,7 @@ public class TableRowCountCheckSpecTests extends BaseTest {
 
         Assertions.assertTrue(proposed);
         Assertions.assertNotNull(this.sut.getError());
-        Assertions.assertEquals(50L, this.sut.getWarning().getMinCount());
-        Assertions.assertEquals(30L, this.sut.getError().getMinCount());
+        Assertions.assertEquals(50.0, this.sut.getWarning().getMaxDays());
+        Assertions.assertEquals(30.0, this.sut.getError().getMaxDays());
     }
 }

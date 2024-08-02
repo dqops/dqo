@@ -16,6 +16,7 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.data.checkresults.models.CheckResultsOverviewDataModel;
 import com.dqops.data.statistics.models.StatisticsMetricModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
@@ -45,6 +46,24 @@ public class DataAssetProfilingResults {
      * A list of sample values for the data asset. Provided only for column data assets, and filled from the results of the column sampling sensor.
      */
     private List<Object> sampleValues = new ArrayList<>();
+
+    /**
+     * Verifies if any results for profiling checks are present.
+     * @return True when there are any results from profiling checks, false when no results.
+     */
+    public boolean hasAnyProfilingChecksResults() {
+        if (profilingCheckResults.isEmpty()) {
+            return false;
+        }
+
+        for (ProfilingCheckResult profilingCheckResult : this.profilingCheckResults.values()) {
+            if (profilingCheckResult.getActualValue() != null || profilingCheckResult.getSeverityLevel() != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Returns a list of statistic values for a given sensor name, if a statistics collector has results for that sensor.
@@ -82,6 +101,11 @@ public class DataAssetProfilingResults {
      */
     public void importProfilingChecksResults(CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel) {
         for (CheckResultsOverviewDataModel checkResultsOverviewDataModel : checkResultsOverviewTableLevel) {
+            String categoryName = checkResultsOverviewDataModel.getCheckCategory();
+            if (Objects.equals(categoryName, AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME)) {
+                continue;
+            }
+
             String checkName = checkResultsOverviewDataModel.getCheckName();
             ProfilingCheckResult profilingCheckByCheckName = this.getProfilingCheckByCheckName(checkName, true);
             profilingCheckByCheckName.importCheckResultsOverview(checkResultsOverviewDataModel);
@@ -99,10 +123,6 @@ public class DataAssetProfilingResults {
             List<CheckModel> checkModels = categoryModel.getChecks();
 
             for (CheckModel checkModel : checkModels) {
-                if (!checkModel.isConfigured() && !checkModel.isDefaultCheck()) {
-                    continue;
-                }
-
                 ProfilingCheckResult profilingCheckResult = getProfilingCheckByCheckName(checkModel.getCheckName(), true);
                 profilingCheckResult.importCheckModel(checkModel);
             }

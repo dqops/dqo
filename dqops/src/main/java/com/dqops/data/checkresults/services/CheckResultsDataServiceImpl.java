@@ -207,6 +207,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
         List<Table> checkResultsList = loadCheckResultsPartitions(checkResultsOverviewParameters, connectionName, physicalTableName, userDomainIdentity);
         if (checkResultsList.isEmpty()) {
+            tableProfilingResults.setMissingProfilingChecksResults(true);
             return tableProfilingResults;
         }
 
@@ -215,6 +216,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         CheckResultsOverviewDataModel[] checkResultsOverviewTableLevel = makeCheckResultsOverviewDataModelsForContainer(
                 tableProfilingChecksContainer, checkResultsList, null, null, resultsCountLimit);
+
         DataAssetProfilingResults tableAssetProfilingResultsContainer = tableProfilingResults.getTableProfilingResults();
         tableAssetProfilingResultsContainer.importProfilingChecksResults(checkResultsOverviewTableLevel);
 

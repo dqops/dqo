@@ -16,6 +16,8 @@
 
 package com.dqops.services.check.mining;
 
+import com.dqops.metadata.id.HierarchyIdModel;
+import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -24,7 +26,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +46,12 @@ public class CheckMiningProposalModel {
     private boolean missingCurrentStatistics;
 
     /**
+     * A boolean flag to inform the caller that the rule mining engine failed to propose relevant data quality rules because there are no current results from profiling checks. The user should run profiling checks to analyze the table.
+     */
+    @JsonPropertyDescription("A boolean flag to inform the caller that the rule mining engine failed to propose relevant data quality rules because there are no current results from profiling checks. The user should run profiling checks to analyze the table.")
+    private boolean missingCurrentProfilingCheckResults;
+
+    /**
      * Proposed configuration of table-level data quality checks, such as volume, timeliness or schema.
      */
     @JsonPropertyDescription("Proposed configuration of table-level data quality checks, such as volume, timeliness or schema.")
@@ -52,4 +62,24 @@ public class CheckMiningProposalModel {
      */
     @JsonPropertyDescription("Dictionary of proposed data quality checks for each column.")
     private Map<String, CheckContainerModel> columnChecks = new LinkedHashMap<>();
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order run checks for the table.")
+    private CheckSearchFilters runChecksJob;
+
+    /**
+     * Collects the list of hierarchy ids that identify all proposed checks. It is used to generate a very specific run check job object that will run only proposed checks.
+     * @return A list of hierarchy ids that identify proposed checks.
+     */
+    public List<HierarchyIdModel> collectChecksHierarchyIds() {
+        List<HierarchyIdModel> allHierarchyIds = new ArrayList<>();
+        if (this.tableChecks != null) {
+            allHierarchyIds.addAll(tableChecks.collectConfiguredChecksHierarchyIds());
+        }
+
+        for (CheckContainerModel columnChecks : this.columnChecks.values()) {
+            allHierarchyIds.addAll(columnChecks.collectConfiguredChecksHierarchyIds());
+        }
+
+        return allHierarchyIds;
+    }
 }

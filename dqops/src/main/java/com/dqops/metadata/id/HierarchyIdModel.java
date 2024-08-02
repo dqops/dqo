@@ -51,8 +51,9 @@ public class HierarchyIdModel {
                 fixedPath[i] = (int) ((Long)currentPathElement).longValue();
             } else if (currentPathElement instanceof String) {
                 fixedPath[i] = currentPathElement;
-            }
-            else if (currentPathElement instanceof Map) {
+            } else if (currentPathElement instanceof PhysicalTableName) {
+                fixedPath[i] = currentPathElement;
+            } else if (currentPathElement instanceof Map) {
                 Map map = (Map)currentPathElement;
                 if (map.containsKey("schema_name") && map.containsKey("table_name")) {
                     String schemaName = map.get("schema_name").toString();

@@ -184,11 +184,11 @@ const RuleMiningChecksContainer = ({
         <RuleMiningChecksContainerHeader
           ruleParamenterConfigured={!!ruleParametersConfigured}
         />
-        {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
-          <tbody key={index}>
+        {checksUI?.table_checks?.categories &&
+          checksUI?.table_checks?.categories?.length > 0 && (
             <div
               onClick={() => onChangeIsExtended('Table level checks')}
-              className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4"
+              className="w-full flex items-center gap-x-3 font-bold text-md py-4 pl-4"
             >
               <SvgIcon
                 name={
@@ -200,6 +200,9 @@ const RuleMiningChecksContainer = ({
               />
               Table level checks
             </div>
+          )}
+        {(checksUI?.table_checks?.categories ?? []).map((category, index) => (
+          <tbody key={index}>
             {!isExtendedArray.includes('Table level checks') && (
               <RuleMiningChecksContainerCategory
                 category={category}
@@ -225,7 +228,7 @@ const RuleMiningChecksContainer = ({
           </tbody>
         ))}
         {Object.entries(checksUI?.column_checks ?? {}).length > 0 && (
-          <tr className="w-full flex items-center gap-x-3 font-bold text-md py-2 pl-4">
+          <tr className="w-full flex items-center gap-x-3 font-bold text-md py-4 pl-4">
             Column level checks
           </tr>
         )}

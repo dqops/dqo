@@ -148,6 +148,20 @@ public class NumericTypeConverter {
     }
 
     /**
+     * Tries to converts a given object to a double value.
+     * @param obj Object that could be of any numeric type or a string.
+     * @return Double value or null.
+     */
+    public static Double tryConvertToDouble(Object obj) {
+        try {
+            return toDouble(obj);
+        }
+        catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    /**
      * Tries to parse a string value to an integer (int 32 bit) value.
      * Captures exceptions and returns null when the value is not parsable to an integer.
      * @param value String value to parse.

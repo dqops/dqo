@@ -20,6 +20,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
+import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.models.StatisticsResultsForTableModel;
 import com.dqops.data.statistics.services.StatisticsDataService;
 import com.dqops.execution.ExecutionContext;
@@ -71,13 +72,18 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
         UserDomainIdentity userDomainIdentity = executionContext.getUserHomeContext().getUserIdentity();
         TableProfilingResults tableProfilingResults = this.checkResultsDataService.loadProfilingChecksResultsForTable(
                 tableSpec, userDomainIdentity);
+        tableProfilingResults.setMissingProfilingChecksResults(true); // we will change it to false when we find any profiling results
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         AbstractRootChecksContainerSpec tableProfilingChecksContainer = tableSpec.getTableCheckRootContainer(
                 CheckType.profiling, null, false, true);
         CheckContainerModel tableChecksModel = this.specToModelCheckMappingService.createModel(tableProfilingChecksContainer, checkSearchFilters,
                 connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
+        tableChecksModel.removeComparisonCategory();
         DataAssetProfilingResults tableAssetProfilingResults = tableProfilingResults.getTableProfilingResults();
+        if (tableAssetProfilingResults.hasAnyProfilingChecksResults()) {
+            tableProfilingResults.setMissingProfilingChecksResults(false);
+        }
         tableAssetProfilingResults.importChecksModels(tableChecksModel);
 
         for (ColumnSpec columnSpec : tableSpec.getColumns().values()) {
@@ -86,14 +92,17 @@ public class TableProfilingResultsReadServiceImpl implements TableProfilingResul
 
             CheckContainerModel columnChecksModel = this.specToModelCheckMappingService.createModel(columnProfilingChecksContainer, checkSearchFilters,
                     connectionSpec, tableSpec, executionContext, connectionSpec.getProviderType(), true);
+            columnChecksModel.removeComparisonCategory();
 
             DataAssetProfilingResults columnAssetProfilingResultsContainer = tableProfilingResults.getColumnProfilingResults(columnSpec.getColumnName());
+            if (columnAssetProfilingResultsContainer.hasAnyProfilingChecksResults()) {
+                tableProfilingResults.setMissingProfilingChecksResults(false);
+            }
             columnAssetProfilingResultsContainer.importChecksModels(columnChecksModel);
         }
 
         StatisticsResultsForTableModel mostRecentStatisticsForTable = this.statisticsDataService.getMostRecentStatisticsForTable(connectionSpec.getConnectionName(),
-                tableSpec.getPhysicalTableName(), null, true, userDomainIdentity);
-
+                tableSpec.getPhysicalTableName(), CommonTableNormalizationService.NO_GROUPING_DATA_GROUP_NAME, true, userDomainIdentity);
 
         tableProfilingResults.importStatistics(mostRecentStatisticsForTable);
 

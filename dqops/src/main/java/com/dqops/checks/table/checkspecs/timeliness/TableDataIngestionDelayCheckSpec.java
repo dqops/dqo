@@ -33,6 +33,7 @@ import com.dqops.services.check.mining.CheckMiningParametersModel;
 import com.dqops.services.check.mining.DataAssetProfilingResults;
 import com.dqops.services.check.mining.ProfilingCheckResult;
 import com.dqops.services.check.mining.TableProfilingResults;
+import com.dqops.utils.conversion.DoubleRounding;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -235,11 +236,11 @@ public class TableDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTim
         }
 
         Double actualValue = sourceProfilingCheck.getActualValue();
-        if (actualValue == null) {
+        if (actualValue == null || actualValue <= 0.0) {
             return false;
         }
 
-        Double maxDelay = actualValue * checkMiningConfigurationProperties.getIngestionDelayMaxDaysMultiplier();
+        Double maxDelay = DoubleRounding.roundToKeepEffectiveDigits(actualValue * checkMiningConfigurationProperties.getIngestionDelayMaxDaysMultiplier());
 
         switch (miningParameters.getSeverityLevel()) {
             case warning:

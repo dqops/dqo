@@ -23,6 +23,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.*;
 import com.dqops.core.configuration.DqoCheckMiningConfigurationProperties;
 import com.dqops.execution.ExecutionContext;
+import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StringPatternComparer;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -142,8 +143,20 @@ public class CheckMiningServiceImpl implements CheckMiningService {
             }
         }
 
-        checkProposalModel.setMissingCurrentStatistics(tableProfilingResults.getStatistics() == null ||
-                tableProfilingResults.getStatistics().isEmpty());
+        checkProposalModel.setMissingCurrentStatistics(tableProfilingResults.isMissingStatisticsResults());
+        checkProposalModel.setMissingCurrentProfilingCheckResults(tableProfilingResults.isMissingProfilingChecksResults());
+
+        CheckSearchFilters runChecksJob = new CheckSearchFilters() {{
+            setConnection(connectionSpec.getConnectionName());
+            setEnabled(true);
+            setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checkType);
+            setTimeScale(checkTimeScale);
+        }};
+
+        List<HierarchyIdModel> newChecksHierarchyIds = checkProposalModel.collectChecksHierarchyIds();
+        runChecksJob.setCheckHierarchyIdsModels(newChecksHierarchyIds);
+        checkProposalModel.setRunChecksJob(runChecksJob);
 
         return checkProposalModel;
     }
