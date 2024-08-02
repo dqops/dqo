@@ -1,6 +1,8 @@
 import { Tooltip } from '@material-tailwind/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { setJobAllert } from '../../redux/actions/job.actions';
 import { IRootState } from '../../redux/reducers';
 import SvgIcon from '../SvgIcon';
 
@@ -21,6 +23,7 @@ export interface TabProps {
 
 const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
   const { job_allert } = useSelector((state: IRootState) => state.job || {});
+  const dispatch = useActionDispatch();
   const handleClose = (e: any) => {
     e.stopPropagation();
     if (onClose) {
@@ -28,6 +31,14 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
     }
   };
   console.log(job_allert);
+  const handleClick = () => {
+    if (onChange) {
+      onChange(tab);
+    }
+    if (!active) {
+      dispatch(setJobAllert({}));
+    }
+  };
   return (
     <Tooltip
       content={job_allert.tooltipMessage}
@@ -48,7 +59,7 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
         }
      `}
         style={active ? { backgroundColor: '#E4F7F4' } : {}}
-        onClick={() => !tab.isDisabled && onChange && onChange(tab)}
+        onClick={() => !tab.isDisabled && handleClick()}
       >
         <div className="text-center truncate">
           {tab.label}
