@@ -45,7 +45,8 @@ const DeleteOnlyDataDialog = ({
     deleteErrors: true,
     deleteStatistics: false,
     deleteCheckResults: true,
-    deleteSensorReadouts: true
+    deleteSensorReadouts: true,
+    deleteErrorSamples: true
   });
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -172,6 +173,14 @@ const DeleteOnlyDataDialog = ({
                 checked={params.deleteErrors}
                 onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
                 label="Execution errors"
+                checkClassName="bg-teal-500"
+              />
+              <Checkbox
+                checked={params.deleteErrorSamples}
+                onChange={(deleteErrorSamples) =>
+                  onChangeParams({ deleteErrorSamples })
+                }
+                label="Error sampling"
                 checkClassName="bg-teal-500"
               />
             </div>

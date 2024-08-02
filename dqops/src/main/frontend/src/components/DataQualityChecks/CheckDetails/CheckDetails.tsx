@@ -374,7 +374,7 @@ const CheckDetails = ({
           !!sensorErrors.length ||
           !!sensorReadouts.length) && (
           <IconButton
-            className="absolute right-16 top-1.5 w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-700"
+            className="absolute right-13 top-1.5 w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-700"
             onClick={openDeleteDialog}
           >
             <SvgIcon name="delete" className="w-4" />

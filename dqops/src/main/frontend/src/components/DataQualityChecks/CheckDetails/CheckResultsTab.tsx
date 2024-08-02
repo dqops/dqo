@@ -108,10 +108,15 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Issue Severity Level',
+      header: () => (
+        <span>
+          Issue
+          <br />
+          Severity Level
+        </span>
+      ),
       value: 'severity',
-      className:
-        'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left',
       render: (value: number) => {
         let name = '';
         switch (value) {
@@ -232,7 +237,7 @@ const CheckResultsTab = ({
     {
       label: 'Data Group',
       value: 'dataGroup',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right'
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left'
     },
     {
       label: 'Id',
