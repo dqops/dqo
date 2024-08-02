@@ -2,7 +2,10 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { setJobAllert } from '../../../../redux/actions/job.actions';
 import { IRootState } from '../../../../redux/reducers';
+import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { CheckResultApi } from '../../../../services/apiClient';
 import { CheckTypes } from '../../../../shared/routes';
 import { useDecodedParams } from '../../../../utils';
@@ -65,6 +68,8 @@ export default function TableQualityStatus({
   const [since, setSince] = useState<Date | undefined>(
     new Date(moment().subtract(30, 'days').format('YYYY-MM-DD'))
   );
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const dispatch = useActionDispatch();
 
   const getTableDataQualityStatus = (month?: number, since?: Date) => {
     CheckResultApi.getTableDataQualityStatus(
@@ -77,7 +82,23 @@ export default function TableQualityStatus({
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,
       timePartitioned
-    ).then((res) => setTableDataQualityStatus(res.data));
+    ).then((res) => {
+      console.log(res.data);
+      if (
+        (!res.data.checks || Object.keys(res.data.checks).length === 0) &&
+        (!res.data.columns || Object.keys(res.data.columns).length === 0)
+      ) {
+        dispatch(
+          setJobAllert({
+            activeTab: firstLevelActiveTab,
+            action: timePartitioned ? 'check-editor' : 'advanced',
+            tooltipMessage:
+              'The table has no data recent data quality results. Please configure and run additional data quality checks to see the table quality status.'
+          })
+        );
+      }
+      setTableDataQualityStatus(res.data);
+    });
   };
 
   useEffect(() => {

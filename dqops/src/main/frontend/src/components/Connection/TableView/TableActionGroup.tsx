@@ -74,7 +74,6 @@ const TableActionGroup = ({
 
     deleteData(fullPath);
   };
-  console.log(job_allert);
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
