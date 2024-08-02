@@ -591,6 +591,8 @@ http://localhost:8888/api/search/tables
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -637,6 +639,8 @@ http://localhost:8888/api/search/tables
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -683,6 +687,8 @@ http://localhost:8888/api/search/tables
 		    "schema_name" : "sample_schema",
 		    "table_name" : "sample_table"
 		  },
+		  "do_not_collect_error_samples_in_profiling" : false,
+		  "always_collect_error_samples_in_monitoring" : false,
 		  "has_any_configured_checks" : true,
 		  "has_any_configured_profiling_checks" : true,
 		  "run_checks_job_template" : {
@@ -760,6 +766,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -811,6 +819,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -862,6 +872,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -944,6 +956,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -995,6 +1009,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1046,6 +1062,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1131,6 +1149,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1182,6 +1202,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1233,6 +1255,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1318,6 +1342,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1369,6 +1395,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,
@@ -1420,6 +1448,8 @@ http://localhost:8888/api/search/tables
 					table_name='sample_table'
 				),
 				disabled=False,
+				do_not_collect_error_samples_in_profiling=False,
+				always_collect_error_samples_in_monitoring=False,
 				has_any_configured_checks=True,
 				has_any_configured_profiling_checks=True,
 				has_any_configured_monitoring_checks=False,

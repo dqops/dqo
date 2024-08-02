@@ -2179,6 +2179,8 @@ http://localhost:8888/api/jobs/importtables
 				source_table_specs=[
 					TableSpec(
 						disabled=False,
+						do_not_collect_error_samples_in_profiling=False,
+						always_collect_error_samples_in_monitoring=False,
 						timestamp_columns=TimestampColumnsSpec(
 							event_timestamp_column='col1',
 							ingestion_timestamp_column='col2',
@@ -2198,7 +2200,8 @@ http://localhost:8888/api/jobs/importtables
 									error=MinCountRule1ParametersSpec(min_count=1),
 									disabled=False,
 									exclude_from_kpi=False,
-									include_in_sla=False
+									include_in_sla=False,
+									always_collect_error_samples=False
 								)
 							)
 						),
@@ -2256,6 +2259,8 @@ http://localhost:8888/api/jobs/importtables
 				source_table_specs=[
 					TableSpec(
 						disabled=False,
+						do_not_collect_error_samples_in_profiling=False,
+						always_collect_error_samples_in_monitoring=False,
 						timestamp_columns=TimestampColumnsSpec(
 							event_timestamp_column='col1',
 							ingestion_timestamp_column='col2',
@@ -2275,7 +2280,8 @@ http://localhost:8888/api/jobs/importtables
 									error=MinCountRule1ParametersSpec(min_count=1),
 									disabled=False,
 									exclude_from_kpi=False,
-									include_in_sla=False
+									include_in_sla=False,
+									always_collect_error_samples=False
 								)
 							)
 						),
@@ -2336,6 +2342,8 @@ http://localhost:8888/api/jobs/importtables
 				source_table_specs=[
 					TableSpec(
 						disabled=False,
+						do_not_collect_error_samples_in_profiling=False,
+						always_collect_error_samples_in_monitoring=False,
 						timestamp_columns=TimestampColumnsSpec(
 							event_timestamp_column='col1',
 							ingestion_timestamp_column='col2',
@@ -2355,7 +2363,8 @@ http://localhost:8888/api/jobs/importtables
 									error=MinCountRule1ParametersSpec(min_count=1),
 									disabled=False,
 									exclude_from_kpi=False,
-									include_in_sla=False
+									include_in_sla=False,
+									always_collect_error_samples=False
 								)
 							)
 						),
@@ -2416,6 +2425,8 @@ http://localhost:8888/api/jobs/importtables
 				source_table_specs=[
 					TableSpec(
 						disabled=False,
+						do_not_collect_error_samples_in_profiling=False,
+						always_collect_error_samples_in_monitoring=False,
 						timestamp_columns=TimestampColumnsSpec(
 							event_timestamp_column='col1',
 							ingestion_timestamp_column='col2',
@@ -2435,7 +2446,8 @@ http://localhost:8888/api/jobs/importtables
 									error=MinCountRule1ParametersSpec(min_count=1),
 									disabled=False,
 									exclude_from_kpi=False,
-									include_in_sla=False
+									include_in_sla=False,
+									always_collect_error_samples=False
 								)
 							)
 						),
@@ -2630,7 +2642,7 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"collect_error_samples\":false}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
 	
     ```
 
@@ -2681,7 +2693,6 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2739,7 +2750,6 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2800,7 +2810,6 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		collect_error_samples=False,
 		dummy_execution=False
 	)
 	
@@ -2861,7 +2870,6 @@ http://localhost:8888/api/jobs/runchecks
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		collect_error_samples=False,
 		dummy_execution=False
 	)
 	

@@ -263,6 +263,23 @@ Operations that return the execution errors captured when data quality checks we
 |<span class="no-wrap-code">[`get_table_profiling_errors`</span>](./errors.md#get_table_profiling_errors)|GET|Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table|
 
 
+## filtered_notifications_configurations
+Operations for managing the configuration of filtered notifications on a connection level in DQOps.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`create_connection_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#create_connection_filtered_notification_configuration)|POST|Creates a new filtered notification configuration on a connection level|
+|<span class="no-wrap-code">[`create_default_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#create_default_filtered_notification_configuration)|POST|Creates a new filtered notification configuration at default notifications|
+|<span class="no-wrap-code">[`delete_connection_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#delete_connection_filtered_notification_configuration)|DELETE|Deletes a filtered notification configuration from a connection|
+|<span class="no-wrap-code">[`delete_default_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#delete_default_filtered_notification_configuration)|DELETE|Deletes a filtered notification configuration from default notifications|
+|<span class="no-wrap-code">[`get_connection_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#get_connection_filtered_notification_configuration)|GET|Returns a model of the filtered notification configuration|
+|<span class="no-wrap-code">[`get_connection_filtered_notifications_configurations`</span>](./filtered_notifications_configurations.md#get_connection_filtered_notifications_configurations)|GET|Returns the list of filtered notification configurations on a connection|
+|<span class="no-wrap-code">[`get_default_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#get_default_filtered_notification_configuration)|GET|Returns a model of the filtered notification from default notifications|
+|<span class="no-wrap-code">[`get_default_filtered_notifications_configurations`</span>](./filtered_notifications_configurations.md#get_default_filtered_notifications_configurations)|GET|Returns the list of filtered notification configurations on default notifications|
+|<span class="no-wrap-code">[`update_connection_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#update_connection_filtered_notification_configuration)|PUT|Updates a filtered notification configuration according to the provided model|
+|<span class="no-wrap-code">[`update_default_filtered_notification_configuration`</span>](./filtered_notifications_configurations.md#update_default_filtered_notification_configuration)|PUT|Updates a filtered notification configuration on default notifications according to the provided model|
+
+
 ## healthcheck
 Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.
 
@@ -331,6 +348,19 @@ Log shipping controller that accepts logs sent from a web application or externa
 |<span class="no-wrap-code">[`log_error`</span>](./log_shipping.md#log_error)|POST|Logs an information message in the server&#x27;s logs as an error severity log entry.|
 |<span class="no-wrap-code">[`log_info`</span>](./log_shipping.md#log_info)|POST|Logs an information message in the server&#x27;s logs as an info severity log entry.|
 |<span class="no-wrap-code">[`log_warn`</span>](./log_shipping.md#log_warn)|POST|Logs an information message in the server&#x27;s logs as a warn severity log entry.|
+
+
+## rule_mining
+Performs rule mining and proposes the configuration of data quality checks and their rule thresholds for tables.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`apply_proposed_monitoring_checks`</span>](./rule_mining.md#apply_proposed_monitoring_checks)|PUT|Applies the proposed configuration of data quality monitoring checks on a table.|
+|<span class="no-wrap-code">[`apply_proposed_partitioned_checks`</span>](./rule_mining.md#apply_proposed_partitioned_checks)|PUT|Applies the proposed configuration of data quality partitioned checks on a table.|
+|<span class="no-wrap-code">[`apply_proposed_profiling_checks`</span>](./rule_mining.md#apply_proposed_profiling_checks)|PUT|Applies the proposed configuration of data quality profiling checks on a table.|
+|<span class="no-wrap-code">[`propose_table_monitoring_checks`</span>](./rule_mining.md#propose_table_monitoring_checks)|POST|Proposes the configuration of monitoring checks on a table by generating suggested configuration of checks and their rule thresholds.|
+|<span class="no-wrap-code">[`propose_table_partitioned_checks`</span>](./rule_mining.md#propose_table_partitioned_checks)|POST|Proposes the configuration of partitioned checks on a table by generating suggested configuration of checks and their rule thresholds.|
+|<span class="no-wrap-code">[`propose_table_profiling_checks`</span>](./rule_mining.md#propose_table_profiling_checks)|POST|Proposes the configuration of profiling checks on a table by generating suggested configuration of checks and their rule thresholds.|
 
 
 ## rules

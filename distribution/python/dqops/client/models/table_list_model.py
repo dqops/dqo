@@ -38,6 +38,13 @@ class TableListModel:
             executed.
         stage (Union[Unset, str]): Stage name.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries.
+        do_not_collect_error_samples_in_profiling (Union[Unset, bool]): Disable automatic collection of error samples in
+            the profiling section. The profiling checks by default always collect error samples for failed data quality
+            checks.
+        always_collect_error_samples_in_monitoring (Union[Unset, bool]): Always collect error samples for failed
+            monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a
+            scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks
+            are run from the check editor.
         priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The
             table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of
             more and less important tables during a data quality improvement project, when the data quality issues on higher
@@ -86,6 +93,8 @@ class TableListModel:
     disabled: Union[Unset, bool] = UNSET
     stage: Union[Unset, str] = UNSET
     filter_: Union[Unset, str] = UNSET
+    do_not_collect_error_samples_in_profiling: Union[Unset, bool] = UNSET
+    always_collect_error_samples_in_monitoring: Union[Unset, bool] = UNSET
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
     profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriodTruncation] = (
@@ -127,6 +136,12 @@ class TableListModel:
         disabled = self.disabled
         stage = self.stage
         filter_ = self.filter_
+        do_not_collect_error_samples_in_profiling = (
+            self.do_not_collect_error_samples_in_profiling
+        )
+        always_collect_error_samples_in_monitoring = (
+            self.always_collect_error_samples_in_monitoring
+        )
         priority = self.priority
         owner: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.owner, Unset):
@@ -206,6 +221,14 @@ class TableListModel:
             field_dict["stage"] = stage
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
+        if do_not_collect_error_samples_in_profiling is not UNSET:
+            field_dict["do_not_collect_error_samples_in_profiling"] = (
+                do_not_collect_error_samples_in_profiling
+            )
+        if always_collect_error_samples_in_monitoring is not UNSET:
+            field_dict["always_collect_error_samples_in_monitoring"] = (
+                always_collect_error_samples_in_monitoring
+            )
         if priority is not UNSET:
             field_dict["priority"] = priority
         if owner is not UNSET:
@@ -304,6 +327,14 @@ class TableListModel:
         stage = d.pop("stage", UNSET)
 
         filter_ = d.pop("filter", UNSET)
+
+        do_not_collect_error_samples_in_profiling = d.pop(
+            "do_not_collect_error_samples_in_profiling", UNSET
+        )
+
+        always_collect_error_samples_in_monitoring = d.pop(
+            "always_collect_error_samples_in_monitoring", UNSET
+        )
 
         priority = d.pop("priority", UNSET)
 
@@ -441,6 +472,8 @@ class TableListModel:
             disabled=disabled,
             stage=stage,
             filter_=filter_,
+            do_not_collect_error_samples_in_profiling=do_not_collect_error_samples_in_profiling,
+            always_collect_error_samples_in_monitoring=always_collect_error_samples_in_monitoring,
             priority=priority,
             owner=owner,
             profiling_checks_result_truncation=profiling_checks_result_truncation,

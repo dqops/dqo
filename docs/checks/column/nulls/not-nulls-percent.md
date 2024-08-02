@@ -3,9 +3,9 @@ title: not nulls percent data quality checks
 ---
 # not nulls percent data quality checks
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
- Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
- The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
+Verifies that a column contains some null values by measuring the maximum percentage of rows that have non-null values.
+ Raises a data quality issue when the percentage of non-null values is above *max_percentage*, which means that a column that is expected to have null values is
+ The default value of the *max_percentage* parameter is 0.0, but DQOps supports setting a higher value to verify that the percentage of null values is not above a threshold.
 
 
 ___
@@ -18,11 +18,11 @@ The **not nulls percent** data quality check has the following variants for each
 
 **Check description**
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage.
+Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage.
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_not_nulls_percent`</span>|Minimum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_not_nulls_percent`</span>|Maximum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -49,7 +49,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_not_nulls_percent --enable-warning
-                            -Wmin_percent=value
+                            -Wmax_percent=value
         ```
 
 
@@ -72,7 +72,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_not_nulls_percent --enable-error
-                            -Emin_percent=value
+                            -Emax_percent=value
         ```
 
 
@@ -115,11 +115,11 @@ spec:
         nulls:
           profile_not_nulls_percent:
             warning:
-              min_percent: 100.0
+              max_percent: 0.0
             error:
-              min_percent: 99.0
+              max_percent: 1.0
             fatal:
-              min_percent: 95.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -528,11 +528,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             nulls:
               profile_not_nulls_percent:
                 warning:
-                  min_percent: 100.0
+                  max_percent: 0.0
                 error:
-                  min_percent: 99.0
+                  max_percent: 1.0
                 fatal:
-                  min_percent: 95.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -967,11 +967,11 @@ ___
 
 **Check description**
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
+Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage.
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_not_nulls_percent`</span>|Minimum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_not_nulls_percent`</span>|Maximum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -998,7 +998,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_not_nulls_percent --enable-warning
-                            -Wmin_percent=value
+                            -Wmax_percent=value
         ```
 
 
@@ -1021,7 +1021,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_not_nulls_percent --enable-error
-                            -Emin_percent=value
+                            -Emax_percent=value
         ```
 
 
@@ -1065,11 +1065,11 @@ spec:
           nulls:
             daily_not_nulls_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1479,11 +1479,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 daily_not_nulls_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1918,11 +1918,11 @@ ___
 
 **Check description**
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent check result for each month when the data quality check was evaluated.
+Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_not_nulls_percent`</span>|Minimum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_not_nulls_percent`</span>|Maximum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1949,7 +1949,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_not_nulls_percent --enable-warning
-                            -Wmin_percent=value
+                            -Wmax_percent=value
         ```
 
 
@@ -1972,7 +1972,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_not_nulls_percent --enable-error
-                            -Emin_percent=value
+                            -Emax_percent=value
         ```
 
 
@@ -2016,11 +2016,11 @@ spec:
           nulls:
             monthly_not_nulls_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -2430,11 +2430,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 monthly_not_nulls_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2869,11 +2869,11 @@ ___
 
 **Check description**
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.
+Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>|Minimum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>|Maximum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2900,7 +2900,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_not_nulls_percent --enable-warning
-                            -Wmin_percent=value
+                            -Wmax_percent=value
         ```
 
 
@@ -2923,7 +2923,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_not_nulls_percent --enable-error
-                            -Emin_percent=value
+                            -Emax_percent=value
         ```
 
 
@@ -2972,11 +2972,11 @@ spec:
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -3452,11 +3452,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 daily_partition_not_nulls_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -3924,11 +3924,11 @@ ___
 
 **Check description**
 
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.
+Detects columns that contain too many non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is above max_percentage. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Friendly name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|-------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>|Minimum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>|Maximum percentage of rows containing non-null values|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|[Completeness](../../../dqo-concepts/data-quality-dimensions.md#data-completeness)|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3955,7 +3955,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_not_nulls_percent --enable-warning
-                            -Wmin_percent=value
+                            -Wmax_percent=value
         ```
 
 
@@ -3978,7 +3978,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_not_nulls_percent --enable-error
-                            -Emin_percent=value
+                            -Emax_percent=value
         ```
 
 
@@ -4027,11 +4027,11 @@ spec:
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                min_percent: 100.0
+                max_percent: 0.0
               error:
-                min_percent: 99.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -4507,11 +4507,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 monthly_partition_not_nulls_percent:
                   warning:
-                    min_percent: 100.0
+                    max_percent: 0.0
                   error:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

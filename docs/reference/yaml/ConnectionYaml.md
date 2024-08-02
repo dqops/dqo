@@ -527,6 +527,81 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`incident_acknowledged_addresses`</span>|Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
 |<span class="no-wrap-code ">`incident_resolved_addresses`</span>|Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
 |<span class="no-wrap-code ">`incident_muted_addresses`</span>|Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">[`filtered_notifications`](./ConnectionYaml.md#filterednotificationspecmap)</span>|Filtered notifications map with filter configuration and notification addresses treated with higher priority than those from the current class.|*[FilteredNotificationSpecMap](./ConnectionYaml.md#filterednotificationspecmap)*| | | |
+
+
+
+___
+
+## FilteredNotificationSpecMap
+The map for the filtered notification specification.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*Dict[string, [FilteredNotificationSpec](./ConnectionYaml.md#filterednotificationspec)]*| | | |
+
+
+
+___
+
+## FilteredNotificationSpec
+Notification with filters that is sent only if values in notification message match the filters.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`filter`](./ConnectionYaml.md#notificationfilterspec)</span>|Notification filter specification for filtering the incident by the values of its fields.|*[NotificationFilterSpec](./ConnectionYaml.md#notificationfilterspec)*| | | |
+|<span class="no-wrap-code ">[`target`](./ConnectionYaml.md#incidentnotificationtargetspec)</span>|Notification target addresses for each of the status.|*[IncidentNotificationTargetSpec](./ConnectionYaml.md#incidentnotificationtargetspec)*| | | |
+|<span class="no-wrap-code ">`priority`</span>|The priority of the notification. Notifications are sent to the first notification targets that matches the filters when processAdditionalFilters is not set.|*integer*| | | |
+|<span class="no-wrap-code ">`process_additional_filters`</span>|Flag to break sending next notifications. Setting to true allows to send next notification from the list in priority order that matches the filter.|*boolean*| | | |
+|<span class="no-wrap-code ">`disabled`</span>|Flag to turn off the notification filter.|*boolean*| | | |
+|<span class="no-wrap-code ">`description`</span>|Description.|*string*| | | |
+
+
+
+___
+
+## NotificationFilterSpec
+Filter for filtered notifications.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`connection`</span>|Connection name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`schema`</span>|Schema name. This field accepts search patterns in the format: &#x27;schema_name_\*&#x27;, &#x27;\*_schema&#x27;, &#x27;prefix\*suffix&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`table`</span>|Table name. This field accepts search patterns in the format: &#x27;table_name_\*&#x27;, &#x27;\*table&#x27;, &#x27;prefix\*suffix&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`table_priority`</span>|Table priority.|*integer*| | | |
+|<span class="no-wrap-code ">`data_group_name`</span>|Data group name. This field accepts search patterns in the format: &#x27;group_name_\*&#x27;, &#x27;\*group&#x27;, &#x27;prefix\*suffix&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`quality_dimension`</span>|Quality dimension.|*string*| | | |
+|<span class="no-wrap-code ">`check_category`</span>|The target check category, for example: *nulls*, *volume*, *anomaly*.|*string*| | | |
+|<span class="no-wrap-code ">`check_type`</span>|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|*string*| | | |
+|<span class="no-wrap-code ">`check_name`</span>|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: &#x27;profiling_\*&#x27;, &#x27;\*_count&#x27;, &#x27;profiling_\*_percent&#x27;.|*string*| | | |
+|<span class="no-wrap-code ">`highest_severity`</span>|Highest severity.|*integer*| | | |
+
+
+
+___
+
+## IncidentNotificationTargetSpec
+Configuration of addresses used for new or updated incident&#x27;s notifications.
+ Specifies the webhook URLs or email addresses where the notification messages are sent.
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`incident_opened_addresses`</span>|Notification address(es) where the notification messages describing new incidents are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_acknowledged_addresses`</span>|Notification address(es) where the notification messages describing acknowledged messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_resolved_addresses`</span>|Notification address(es) where the notification messages describing resolved messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
+|<span class="no-wrap-code ">`incident_muted_addresses`</span>|Notification address(es) where the notification messages describing muted messages are pushed using a HTTP POST request (for webhook address) or an SMTP (for email address). The format of the JSON message is documented in the IncidentNotificationMessage object.|*string*| | | |
 
 
 

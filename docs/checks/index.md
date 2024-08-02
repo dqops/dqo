@@ -714,9 +714,9 @@ Verifies that a column contains a minimum number of non-null values.
 
 
 ### [not nulls percent](./column/nulls/not-nulls-percent.md)
-Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
- Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
- The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
+Verifies that a column contains some null values by measuring the maximum percentage of rows that have non-null values.
+ Raises a data quality issue when the percentage of non-null values is above *max_percentage*, which means that a column that is expected to have null values is
+ The default value of the *max_percentage* parameter is 0.0, but DQOps supports setting a higher value to verify that the percentage of null values is not above a threshold.
 
 
 

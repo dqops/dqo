@@ -445,7 +445,7 @@ The templates used to generate the SQL query for each data source supported by D
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                             {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + INTERVAL ({{(parameters.max_future_days)}} * 1) DAY
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                         {% else -%}
                             ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + INTERVAL ({{(parameters.max_future_days)}} * 86400) SECOND
                         {% endif -%}
@@ -547,7 +547,7 @@ The templates used to generate the SQL query for each data source supported by D
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                             {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% else -%}
                             ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% endif -%}
@@ -622,7 +622,7 @@ The templates used to generate the SQL query for each data source supported by D
                         {% elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                             {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE + make_interval(days => ({{(parameters.max_future_days)}})::int)
                         {% elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
+                            {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% else -%}
                             ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP + make_interval(secs => ({{(parameters.max_future_days)}} * 86400)::int)
                         {% endif -%}

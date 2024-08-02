@@ -3,11 +3,10 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/nulls/not_null_percent
-  rule_name: comparison/min_percent
-  help_text: Detects incomplete columns that contain too few non-null values. Measures
-    the percentage of rows that have non-null values. Raises a data quality issue
-    when the percentage of non-null values is below min_percentage. Stores the most
-    recent captured value for each day when the data quality check was evaluated.
-  friendly_name: Minimum percentage of rows containing non-null values
+  rule_name: comparison/max_percent
+  help_text: Detects columns that contain too many non-null values. Measures the percentage
+    of rows that have non-null values. Raises a data quality issue when the percentage
+    of non-null values is above max_percentage.
+  friendly_name: Maximum percentage of rows containing non-null values
   standard: true
   default_severity: error

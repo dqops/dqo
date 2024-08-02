@@ -66,17 +66,17 @@ public class DqoCheckMiningConfigurationProperties implements Cloneable {
      */
     @CommandLine.Option(names = {"--dqo.check-mining.percent-check-delta-rate"},
             description = "The multiplier of the last known percent that is extended by this delta (as a rate/proportion of the percentage) to configure a passing percentage check." +
-                    "The default value is 0.3. For this value and when the last known max_percent was 10%, DQOps rule mining engine will propose a save max_count 13%. " +
-                    "The additional 3% of the delta is 0.3 * 10%.", defaultValue = "0.3")
+                    "The default value is 0.3. For this value and when the last known max_percent was 10%%, DQOps rule mining engine will propose a save max_count 13%%. " +
+                    "The additional 3%% of the delta is 0.3 * 10%%.", defaultValue = "0.3")
     private double percentCheckDeltaRate = 0.3;
 
     /**
-     * The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) that is used to propose a percentage rule that
-     * will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%).
+     * The percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) that is used to propose a percentage rule that
+     * will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%).
      */
     @CommandLine.Option(names = {"--dqo.check-mining.fail-checks-at-percent-error-rows"},
-            description = "The percentage value captured by a profiling check (for example 0.03% of errors or 99.97% of valid) " +
-                    "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%, or min_percent = 100%)." +
+            description = "The percentage value captured by a profiling check (for example 0.03%% of errors or 99.97%% of valid) " +
+                    "that is used to propose a percentage rule that will treat the values as errors (i.e., max_percent = 0%%, or min_percent = 100%%)." +
                     "The default value is 0.1.", defaultValue = "0.1")
     private double failChecksAtPercentErrorRows = 0.1;
 

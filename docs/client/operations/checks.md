@@ -62,7 +62,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import create_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -74,7 +74,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -98,7 +98,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import create_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -110,7 +110,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -134,7 +134,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import create_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -149,7 +149,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -173,7 +173,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import create_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -188,7 +188,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -708,7 +708,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -748,7 +748,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -791,7 +791,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -834,7 +834,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 			rule_name='sample_target/sample_category/sample_rule',
 			help_text='Sample help text',
 			standard=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			custom=True,
 			built_in=False,
 			can_edit=True
@@ -1090,7 +1090,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import update_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -1102,7 +1102,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1126,7 +1126,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import update_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -1138,7 +1138,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1162,7 +1162,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import update_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1177,7 +1177,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True
@@ -1201,7 +1201,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     from dqops import client
 	from dqops.client.api.checks import update_check
 	from dqops.client.models import CheckDefinitionModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1216,7 +1216,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
 		standard=False,
-		default_severity=RuleSeverityLevel.ERROR,
+		default_severity=DefaultRuleSeverityLevel.ERROR,
 		custom=True,
 		built_in=False,
 		can_edit=True

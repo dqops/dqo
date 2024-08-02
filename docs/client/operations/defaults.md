@@ -284,7 +284,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
         ```
     
@@ -318,7 +319,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
         ```
     
@@ -355,7 +357,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
         ```
     
@@ -392,7 +395,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
         ```
     
@@ -623,7 +627,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentNotificationSpec
+	from dqops.client.models import FilteredNotificationSpecMap, \
+	                                IncidentNotificationSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -633,7 +638,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_opened_addresses='https://sample_url.com/opened',
 		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 		incident_resolved_addresses='https://sample_url.com/resolved',
-		incident_muted_addresses='https://sample_url.com/muted'
+		incident_muted_addresses='https://sample_url.com/muted',
+		filtered_notifications=FilteredNotificationSpecMap()
 	)
 	
 	call_result = update_default_webhooks.sync(
@@ -652,7 +658,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentNotificationSpec
+	from dqops.client.models import FilteredNotificationSpecMap, \
+	                                IncidentNotificationSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -662,7 +669,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_opened_addresses='https://sample_url.com/opened',
 		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 		incident_resolved_addresses='https://sample_url.com/resolved',
-		incident_muted_addresses='https://sample_url.com/muted'
+		incident_muted_addresses='https://sample_url.com/muted',
+		filtered_notifications=FilteredNotificationSpecMap()
 	)
 	
 	call_result = await update_default_webhooks.asyncio(
@@ -681,7 +689,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentNotificationSpec
+	from dqops.client.models import FilteredNotificationSpecMap, \
+	                                IncidentNotificationSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -694,7 +703,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_opened_addresses='https://sample_url.com/opened',
 		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 		incident_resolved_addresses='https://sample_url.com/resolved',
-		incident_muted_addresses='https://sample_url.com/muted'
+		incident_muted_addresses='https://sample_url.com/muted',
+		filtered_notifications=FilteredNotificationSpecMap()
 	)
 	
 	call_result = update_default_webhooks.sync(
@@ -713,7 +723,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
-	from dqops.client.models import IncidentNotificationSpec
+	from dqops.client.models import FilteredNotificationSpecMap, \
+	                                IncidentNotificationSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -726,7 +737,8 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_opened_addresses='https://sample_url.com/opened',
 		incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 		incident_resolved_addresses='https://sample_url.com/resolved',
-		incident_muted_addresses='https://sample_url.com/muted'
+		incident_muted_addresses='https://sample_url.com/muted',
+		filtered_notifications=FilteredNotificationSpecMap()
 	)
 	
 	call_result = await update_default_webhooks.asyncio(

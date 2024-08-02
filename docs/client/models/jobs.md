@@ -369,7 +369,7 @@ ___
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
-|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks.|*boolean*|
+|<span class="no-wrap-code">`collect_error_samples`</span>|Set the value to true to collect error samples for failed data quality checks. Set the value to false to disable error sampling collection despite any other settings on the table or check level.|*boolean*|
 |<span class="no-wrap-code">`dummy_execution`</span>|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|*boolean*|
 |<span class="no-wrap-code">[`run_checks_result`](#runchecksresult)</span>|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|*[RunChecksResult](#runchecksresult)*|
 
@@ -424,6 +424,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`collector_category`</span>|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|*string*|
 |<span class="no-wrap-code">[`target`](#statisticscollectortarget)</span>|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|*[StatisticsCollectorTarget](#statisticscollectortarget)*|
+|<span class="no-wrap-code">`samples_limit`</span>|The default limit of column samples that are collected.|*integer*|
 |<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
 |<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|

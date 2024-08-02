@@ -75,6 +75,11 @@ from .check_definition_folder_model_folders import CheckDefinitionFolderModelFol
 from .check_definition_list_model import CheckDefinitionListModel
 from .check_definition_model import CheckDefinitionModel
 from .check_list_model import CheckListModel
+from .check_mining_parameters_model import CheckMiningParametersModel
+from .check_mining_proposal_model import CheckMiningProposalModel
+from .check_mining_proposal_model_column_checks import (
+    CheckMiningProposalModelColumnChecks,
+)
 from .check_model import CheckModel
 from .check_result_entry_model import CheckResultEntryModel
 from .check_result_sort_order import CheckResultSortOrder
@@ -1359,6 +1364,7 @@ from .default_column_checks_pattern_list_model import (
     DefaultColumnChecksPatternListModel,
 )
 from .default_column_checks_pattern_model import DefaultColumnChecksPatternModel
+from .default_rule_severity_level import DefaultRuleSeverityLevel
 from .default_schedules_spec import DefaultSchedulesSpec
 from .default_table_checks_pattern_list_model import DefaultTableChecksPatternListModel
 from .default_table_checks_pattern_model import DefaultTableChecksPatternModel
@@ -1420,6 +1426,8 @@ from .external_log_entry import ExternalLogEntry
 from .field_model import FieldModel
 from .file_format_spec import FileFormatSpec
 from .file_synchronization_direction import FileSynchronizationDirection
+from .filtered_notification_model import FilteredNotificationModel
+from .filtered_notification_spec import FilteredNotificationSpec
 from .folder_synchronization_status import FolderSynchronizationStatus
 from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
@@ -1439,6 +1447,10 @@ from .incident_issue_histogram_model_columns import IncidentIssueHistogramModelC
 from .incident_issue_histogram_model_days import IncidentIssueHistogramModelDays
 from .incident_model import IncidentModel
 from .incident_notification_spec import IncidentNotificationSpec
+from .incident_notification_spec_filtered_notifications import (
+    IncidentNotificationSpecFilteredNotifications,
+)
+from .incident_notification_target_spec import IncidentNotificationTargetSpec
 from .incident_severity_level_counts_model import IncidentSeverityLevelCountsModel
 from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
@@ -1493,6 +1505,7 @@ from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .new_line_character_type import NewLineCharacterType
+from .notification_filter_spec import NotificationFilterSpec
 from .optional import Optional
 from .optional_incident_notification_spec import OptionalIncidentNotificationSpec
 from .optional_monitoring_schedule_spec import OptionalMonitoringScheduleSpec
@@ -1936,6 +1949,7 @@ from .table_volume_row_count_statistics_collector_spec import (
 )
 from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
 from .target_column_pattern_spec import TargetColumnPatternSpec
+from .target_rule_severity_level import TargetRuleSeverityLevel
 from .target_table_pattern_spec import TargetTablePatternSpec
 from .temporal_unit import TemporalUnit
 from .text_built_in_date_formats import TextBuiltInDateFormats
@@ -1992,6 +2006,9 @@ __all__ = (
     "CheckDefinitionListModel",
     "CheckDefinitionModel",
     "CheckListModel",
+    "CheckMiningParametersModel",
+    "CheckMiningProposalModel",
+    "CheckMiningProposalModelColumnChecks",
     "CheckModel",
     "CheckResultEntryModel",
     "CheckResultsListModel",
@@ -2508,6 +2525,7 @@ __all__ = (
     "DatetimeBuiltInDateFormats",
     "DefaultColumnChecksPatternListModel",
     "DefaultColumnChecksPatternModel",
+    "DefaultRuleSeverityLevel",
     "DefaultSchedulesSpec",
     "DefaultTableChecksPatternListModel",
     "DefaultTableChecksPatternModel",
@@ -2559,6 +2577,8 @@ __all__ = (
     "FieldModel",
     "FileFormatSpec",
     "FileSynchronizationDirection",
+    "FilteredNotificationModel",
+    "FilteredNotificationSpec",
     "FolderSynchronizationStatus",
     "HierarchyIdModel",
     "HierarchyIdModelPathItem",
@@ -2578,6 +2598,8 @@ __all__ = (
     "IncidentIssueHistogramModelDays",
     "IncidentModel",
     "IncidentNotificationSpec",
+    "IncidentNotificationSpecFilteredNotifications",
+    "IncidentNotificationTargetSpec",
     "IncidentSeverityLevelCountsModel",
     "IncidentSortOrder",
     "IncidentsPerConnectionModel",
@@ -2620,6 +2642,7 @@ __all__ = (
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
     "NewLineCharacterType",
+    "NotificationFilterSpec",
     "Optional",
     "OptionalIncidentNotificationSpec",
     "OptionalMonitoringScheduleSpec",
@@ -2845,6 +2868,7 @@ __all__ = (
     "TableVolumeRowCountStatisticsCollectorSpec",
     "TableVolumeStatisticsCollectorsSpec",
     "TargetColumnPatternSpec",
+    "TargetRuleSeverityLevel",
     "TargetTablePatternSpec",
     "TemporalUnit",
     "TextBuiltInDateFormats",

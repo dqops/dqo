@@ -10,14 +10,14 @@ if TYPE_CHECKING:
         ColumnNullsNotNullsPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
+    from ..models.max_percent_rule_0_error_parameters_spec import (
+        MaxPercentRule0ErrorParametersSpec,
     )
-    from ..models.min_percent_rule_100_error_parameters_spec import (
-        MinPercentRule100ErrorParametersSpec,
+    from ..models.max_percent_rule_0_warning_parameters_spec import (
+        MaxPercentRule0WarningParametersSpec,
     )
-    from ..models.min_percent_rule_100_warning_parameters_spec import (
-        MinPercentRule100WarningParametersSpec,
+    from ..models.max_percent_rule_5_parameters_spec import (
+        MaxPercentRule5ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -50,10 +50,13 @@ class ColumnNotNullsPercentCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
+        always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
+            fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
+            error samples will impose additional load on the data source.
         parameters (Union[Unset, ColumnNullsNotNullsPercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
-        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0WarningParametersSpec]):
+        error (Union[Unset, MaxPercentRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -64,10 +67,11 @@ class ColumnNotNullsPercentCheckSpec:
     quality_dimension: Union[Unset, str] = UNSET
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
+    always_collect_error_samples: Union[Unset, bool] = UNSET
     parameters: Union[Unset, "ColumnNullsNotNullsPercentSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -89,6 +93,7 @@ class ColumnNotNullsPercentCheckSpec:
         quality_dimension = self.quality_dimension
         display_name = self.display_name
         data_grouping = self.data_grouping
+        always_collect_error_samples = self.always_collect_error_samples
         parameters: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.parameters, Unset):
             parameters = self.parameters.to_dict()
@@ -124,6 +129,8 @@ class ColumnNotNullsPercentCheckSpec:
             field_dict["display_name"] = display_name
         if data_grouping is not UNSET:
             field_dict["data_grouping"] = data_grouping
+        if always_collect_error_samples is not UNSET:
+            field_dict["always_collect_error_samples"] = always_collect_error_samples
         if parameters is not UNSET:
             field_dict["parameters"] = parameters
         if warning is not UNSET:
@@ -141,14 +148,14 @@ class ColumnNotNullsPercentCheckSpec:
             ColumnNullsNotNullsPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
+        from ..models.max_percent_rule_0_error_parameters_spec import (
+            MaxPercentRule0ErrorParametersSpec,
         )
-        from ..models.min_percent_rule_100_error_parameters_spec import (
-            MinPercentRule100ErrorParametersSpec,
+        from ..models.max_percent_rule_0_warning_parameters_spec import (
+            MaxPercentRule0WarningParametersSpec,
         )
-        from ..models.min_percent_rule_100_warning_parameters_spec import (
-            MinPercentRule100WarningParametersSpec,
+        from ..models.max_percent_rule_5_parameters_spec import (
+            MaxPercentRule5ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -179,6 +186,8 @@ class ColumnNotNullsPercentCheckSpec:
 
         data_grouping = d.pop("data_grouping", UNSET)
 
+        always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
         _parameters = d.pop("parameters", UNSET)
         parameters: Union[Unset, ColumnNullsNotNullsPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
@@ -189,25 +198,25 @@ class ColumnNotNullsPercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
+        warning: Union[Unset, MaxPercentRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
+        error: Union[Unset, MaxPercentRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
+            error = MaxPercentRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, MaxPercentRule5ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = MaxPercentRule5ParametersSpec.from_dict(_fatal)
 
         column_not_nulls_percent_check_spec = cls(
             schedule_override=schedule_override,
@@ -218,6 +227,7 @@ class ColumnNotNullsPercentCheckSpec:
             quality_dimension=quality_dimension,
             display_name=display_name,
             data_grouping=data_grouping,
+            always_collect_error_samples=always_collect_error_samples,
             parameters=parameters,
             warning=warning,
             error=error,

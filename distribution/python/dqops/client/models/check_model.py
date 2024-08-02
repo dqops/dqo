@@ -4,7 +4,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.check_target_model import CheckTargetModel
-from ..models.rule_severity_level import RuleSeverityLevel
+from ..models.default_rule_severity_level import DefaultRuleSeverityLevel
 from ..models.schedule_enabled_status_model import ScheduleEnabledStatusModel
 from ..types import UNSET, Unset
 
@@ -50,7 +50,7 @@ class CheckModel:
             shown when the user decides to expand the list of checks.
         default_check (Union[Unset, bool]): This is a check that was applied on-the-fly, because it is configured as a
             default data observability check and can be run, but it is not configured in the table YAML.
-        default_severity (Union[Unset, RuleSeverityLevel]):
+        default_severity (Union[Unset, DefaultRuleSeverityLevel]):
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
@@ -78,6 +78,9 @@ class CheckModel:
         data_clean_job_template (Union[Unset, DeleteStoredDataQueueJobParameters]):
         data_grouping_configuration (Union[Unset, str]): The name of a data grouping configuration defined at a table
             that should be used for this check.
+        always_collect_error_samples (Union[Unset, bool]): Forces collecting error samples for this check whenever it
+            fails, even if it is a monitoring check that is run by a scheduler, and running an additional query to collect
+            error samples will impose additional load on the data source.
         check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[str]]): List of configuration errors that must be fixed
             before the data quality check can be executed.
@@ -86,6 +89,8 @@ class CheckModel:
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
+        similar_profiling_check (Union[Unset, SimilarCheckModel]): Model that identifies a similar check in another
+            category or another type of check (monitoring, partition).
         check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
     """
 
@@ -101,7 +106,7 @@ class CheckModel:
     supports_grouping: Union[Unset, bool] = UNSET
     standard: Union[Unset, bool] = UNSET
     default_check: Union[Unset, bool] = UNSET
-    default_severity: Union[Unset, RuleSeverityLevel] = UNSET
+    default_severity: Union[Unset, DefaultRuleSeverityLevel] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
@@ -115,12 +120,14 @@ class CheckModel:
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     data_clean_job_template: Union[Unset, "DeleteStoredDataQueueJobParameters"] = UNSET
     data_grouping_configuration: Union[Unset, str] = UNSET
+    always_collect_error_samples: Union[Unset, bool] = UNSET
     check_target: Union[Unset, CheckTargetModel] = UNSET
     configuration_requirements_errors: Union[Unset, List[str]] = UNSET
     similar_checks: Union[Unset, List["SimilarCheckModel"]] = UNSET
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
+    similar_profiling_check: Union[Unset, "SimilarCheckModel"] = UNSET
     check_hash: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -189,6 +196,7 @@ class CheckModel:
             data_clean_job_template = self.data_clean_job_template.to_dict()
 
         data_grouping_configuration = self.data_grouping_configuration
+        always_collect_error_samples = self.always_collect_error_samples
         check_target: Union[Unset, str] = UNSET
         if not isinstance(self.check_target, Unset):
             check_target = self.check_target.value
@@ -208,6 +216,10 @@ class CheckModel:
         can_edit = self.can_edit
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
+        similar_profiling_check: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.similar_profiling_check, Unset):
+            similar_profiling_check = self.similar_profiling_check.to_dict()
+
         check_hash = self.check_hash
 
         field_dict: Dict[str, Any] = {}
@@ -265,6 +277,8 @@ class CheckModel:
             field_dict["data_clean_job_template"] = data_clean_job_template
         if data_grouping_configuration is not UNSET:
             field_dict["data_grouping_configuration"] = data_grouping_configuration
+        if always_collect_error_samples is not UNSET:
+            field_dict["always_collect_error_samples"] = always_collect_error_samples
         if check_target is not UNSET:
             field_dict["check_target"] = check_target
         if configuration_requirements_errors is not UNSET:
@@ -279,6 +293,8 @@ class CheckModel:
             field_dict["can_run_checks"] = can_run_checks
         if can_delete_data is not UNSET:
             field_dict["can_delete_data"] = can_delete_data
+        if similar_profiling_check is not UNSET:
+            field_dict["similar_profiling_check"] = similar_profiling_check
         if check_hash is not UNSET:
             field_dict["check_hash"] = check_hash
 
@@ -336,11 +352,11 @@ class CheckModel:
         default_check = d.pop("default_check", UNSET)
 
         _default_severity = d.pop("default_severity", UNSET)
-        default_severity: Union[Unset, RuleSeverityLevel]
+        default_severity: Union[Unset, DefaultRuleSeverityLevel]
         if isinstance(_default_severity, Unset):
             default_severity = UNSET
         else:
-            default_severity = RuleSeverityLevel(_default_severity)
+            default_severity = DefaultRuleSeverityLevel(_default_severity)
 
         _data_grouping_override = d.pop("data_grouping_override", UNSET)
         data_grouping_override: Union[Unset, DataGroupingConfigurationSpec]
@@ -411,6 +427,8 @@ class CheckModel:
 
         data_grouping_configuration = d.pop("data_grouping_configuration", UNSET)
 
+        always_collect_error_samples = d.pop("always_collect_error_samples", UNSET)
+
         _check_target = d.pop("check_target", UNSET)
         check_target: Union[Unset, CheckTargetModel]
         if isinstance(_check_target, Unset):
@@ -434,6 +452,15 @@ class CheckModel:
         can_run_checks = d.pop("can_run_checks", UNSET)
 
         can_delete_data = d.pop("can_delete_data", UNSET)
+
+        _similar_profiling_check = d.pop("similar_profiling_check", UNSET)
+        similar_profiling_check: Union[Unset, SimilarCheckModel]
+        if isinstance(_similar_profiling_check, Unset):
+            similar_profiling_check = UNSET
+        else:
+            similar_profiling_check = SimilarCheckModel.from_dict(
+                _similar_profiling_check
+            )
 
         check_hash = d.pop("check_hash", UNSET)
 
@@ -464,12 +491,14 @@ class CheckModel:
             run_checks_job_template=run_checks_job_template,
             data_clean_job_template=data_clean_job_template,
             data_grouping_configuration=data_grouping_configuration,
+            always_collect_error_samples=always_collect_error_samples,
             check_target=check_target,
             configuration_requirements_errors=configuration_requirements_errors,
             similar_checks=similar_checks,
             can_edit=can_edit,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
+            similar_profiling_check=similar_profiling_check,
             check_hash=check_hash,
         )
 

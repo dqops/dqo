@@ -65,8 +65,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	from dqops.client.models import AllChecksPatchParameters, \
 	                                CheckModel, \
 	                                CheckSearchFilters, \
-	                                FieldModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel, \
+	                                FieldModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -92,11 +92,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
 			configured=False,
+			always_collect_error_samples=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -125,8 +126,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	from dqops.client.models import AllChecksPatchParameters, \
 	                                CheckModel, \
 	                                CheckSearchFilters, \
-	                                FieldModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel, \
+	                                FieldModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -152,11 +153,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
 			configured=False,
+			always_collect_error_samples=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -185,8 +187,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	from dqops.client.models import AllChecksPatchParameters, \
 	                                CheckModel, \
 	                                CheckSearchFilters, \
-	                                FieldModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel, \
+	                                FieldModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -215,11 +217,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
 			configured=False,
+			always_collect_error_samples=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -248,8 +251,8 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	from dqops.client.models import AllChecksPatchParameters, \
 	                                CheckModel, \
 	                                CheckSearchFilters, \
-	                                FieldModel, \
-	                                RuleSeverityLevel
+	                                DefaultRuleSeverityLevel, \
+	                                FieldModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -278,11 +281,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 			supports_grouping=False,
 			standard=False,
 			default_check=False,
-			default_severity=RuleSeverityLevel.ERROR,
+			default_severity=DefaultRuleSeverityLevel.ERROR,
 			disabled=False,
 			exclude_from_kpi=False,
 			include_in_sla=False,
 			configured=False,
+			always_collect_error_samples=False,
 			can_edit=False,
 			can_run_checks=False,
 			can_delete_data=False
@@ -559,6 +563,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import create_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -609,6 +614,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import create_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -659,6 +665,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import create_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -712,6 +719,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import create_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -3647,7 +3655,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 				incident_opened_addresses='https://sample_url.com/opened',
 				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 				incident_resolved_addresses='https://sample_url.com/resolved',
-				incident_muted_addresses='https://sample_url.com/muted'
+				incident_muted_addresses='https://sample_url.com/muted',
+				filtered_notifications=FilteredNotificationSpecMap()
 			)
 		)
         ```
@@ -3690,7 +3699,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 				incident_opened_addresses='https://sample_url.com/opened',
 				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 				incident_resolved_addresses='https://sample_url.com/resolved',
-				incident_muted_addresses='https://sample_url.com/muted'
+				incident_muted_addresses='https://sample_url.com/muted',
+				filtered_notifications=FilteredNotificationSpecMap()
 			)
 		)
         ```
@@ -3736,7 +3746,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 				incident_opened_addresses='https://sample_url.com/opened',
 				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 				incident_resolved_addresses='https://sample_url.com/resolved',
-				incident_muted_addresses='https://sample_url.com/muted'
+				incident_muted_addresses='https://sample_url.com/muted',
+				filtered_notifications=FilteredNotificationSpecMap()
 			)
 		)
         ```
@@ -3782,7 +3793,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 				incident_opened_addresses='https://sample_url.com/opened',
 				incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 				incident_resolved_addresses='https://sample_url.com/resolved',
-				incident_muted_addresses='https://sample_url.com/muted'
+				incident_muted_addresses='https://sample_url.com/muted',
+				filtered_notifications=FilteredNotificationSpecMap()
 			)
 		)
         ```
@@ -4253,6 +4265,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import update_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -4303,6 +4316,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import update_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -4353,6 +4367,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import update_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -4406,6 +4421,7 @@ http://localhost:8888/api/connections/{connectionName}
 	from dqops.client.api.connections import update_connection
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
 	                                ConnectionSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel, \
@@ -5296,6 +5312,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
@@ -5315,7 +5332,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
 	)
 	
@@ -5337,6 +5355,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
@@ -5356,7 +5375,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
 	)
 	
@@ -5378,6 +5398,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
@@ -5400,7 +5421,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
 	)
 	
@@ -5422,6 +5444,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
 	from dqops.client.models import ConnectionIncidentGroupingSpec, \
+	                                FilteredNotificationSpecMap, \
 	                                IncidentGroupingLevel, \
 	                                IncidentNotificationSpec, \
 	                                MinimumGroupingSeverityLevel
@@ -5444,7 +5467,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 			incident_opened_addresses='https://sample_url.com/opened',
 			incident_acknowledged_addresses='https://sample_url.com/acknowledged',
 			incident_resolved_addresses='https://sample_url.com/resolved',
-			incident_muted_addresses='https://sample_url.com/muted'
+			incident_muted_addresses='https://sample_url.com/muted',
+			filtered_notifications=FilteredNotificationSpecMap()
 		)
 	)
 	

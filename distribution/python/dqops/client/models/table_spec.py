@@ -49,6 +49,13 @@ class TableSpec:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to
             replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed
             table or {column} to replace the content with the analyzed column name.
+        do_not_collect_error_samples_in_profiling (Union[Unset, bool]): Disable automatic collection of error samples in
+            the profiling section. The profiling checks by default always collect error samples for failed data quality
+            checks.
+        always_collect_error_samples_in_monitoring (Union[Unset, bool]): Always collect error samples for failed
+            monitoring checks. DQOps will not collect error samples automatically when the checks are executed by a
+            scheduler or by running checks from the metadata tree. Error samples are always collected only when the checks
+            are run from the check editor.
         timestamp_columns (Union[Unset, TimestampColumnsSpec]):
         incremental_time_window (Union[Unset, PartitionIncrementalTimeWindowSpec]):
         default_grouping_name (Union[Unset, str]): The name of the default data grouping configuration that is applied
@@ -91,6 +98,8 @@ class TableSpec:
     stage: Union[Unset, str] = UNSET
     priority: Union[Unset, int] = UNSET
     filter_: Union[Unset, str] = UNSET
+    do_not_collect_error_samples_in_profiling: Union[Unset, bool] = UNSET
+    always_collect_error_samples_in_monitoring: Union[Unset, bool] = UNSET
     timestamp_columns: Union[Unset, "TimestampColumnsSpec"] = UNSET
     incremental_time_window: Union[Unset, "PartitionIncrementalTimeWindowSpec"] = UNSET
     default_grouping_name: Union[Unset, str] = UNSET
@@ -114,6 +123,12 @@ class TableSpec:
         stage = self.stage
         priority = self.priority
         filter_ = self.filter_
+        do_not_collect_error_samples_in_profiling = (
+            self.do_not_collect_error_samples_in_profiling
+        )
+        always_collect_error_samples_in_monitoring = (
+            self.always_collect_error_samples_in_monitoring
+        )
         timestamp_columns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.timestamp_columns, Unset):
             timestamp_columns = self.timestamp_columns.to_dict()
@@ -190,6 +205,14 @@ class TableSpec:
             field_dict["priority"] = priority
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
+        if do_not_collect_error_samples_in_profiling is not UNSET:
+            field_dict["do_not_collect_error_samples_in_profiling"] = (
+                do_not_collect_error_samples_in_profiling
+            )
+        if always_collect_error_samples_in_monitoring is not UNSET:
+            field_dict["always_collect_error_samples_in_monitoring"] = (
+                always_collect_error_samples_in_monitoring
+            )
         if timestamp_columns is not UNSET:
             field_dict["timestamp_columns"] = timestamp_columns
         if incremental_time_window is not UNSET:
@@ -260,6 +283,14 @@ class TableSpec:
         priority = d.pop("priority", UNSET)
 
         filter_ = d.pop("filter", UNSET)
+
+        do_not_collect_error_samples_in_profiling = d.pop(
+            "do_not_collect_error_samples_in_profiling", UNSET
+        )
+
+        always_collect_error_samples_in_monitoring = d.pop(
+            "always_collect_error_samples_in_monitoring", UNSET
+        )
 
         _timestamp_columns = d.pop("timestamp_columns", UNSET)
         timestamp_columns: Union[Unset, TimestampColumnsSpec]
@@ -378,6 +409,8 @@ class TableSpec:
             stage=stage,
             priority=priority,
             filter_=filter_,
+            do_not_collect_error_samples_in_profiling=do_not_collect_error_samples_in_profiling,
+            always_collect_error_samples_in_monitoring=always_collect_error_samples_in_monitoring,
             timestamp_columns=timestamp_columns,
             incremental_time_window=incremental_time_window,
             default_grouping_name=default_grouping_name,

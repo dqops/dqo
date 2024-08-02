@@ -228,7 +228,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -287,7 +288,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -349,7 +351,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -411,7 +414,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -1197,7 +1201,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 								error=MaxCountRule0ErrorParametersSpec(max_count=0),
 								disabled=False,
 								exclude_from_kpi=False,
-								include_in_sla=False
+								include_in_sla=False,
+								always_collect_error_samples=False
 							)
 						),
 						comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -1251,7 +1256,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 								error=MaxCountRule0ErrorParametersSpec(max_count=0),
 								disabled=False,
 								exclude_from_kpi=False,
-								include_in_sla=False
+								include_in_sla=False,
+								always_collect_error_samples=False
 							)
 						),
 						comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -1308,7 +1314,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 								error=MaxCountRule0ErrorParametersSpec(max_count=0),
 								disabled=False,
 								exclude_from_kpi=False,
-								include_in_sla=False
+								include_in_sla=False,
+								always_collect_error_samples=False
 							)
 						),
 						comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -1365,7 +1372,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 								error=MaxCountRule0ErrorParametersSpec(max_count=0),
 								disabled=False,
 								exclude_from_kpi=False,
-								include_in_sla=False
+								include_in_sla=False,
+								always_collect_error_samples=False
 							)
 						),
 						comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -1730,11 +1738,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1793,11 +1802,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1859,11 +1869,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -1925,11 +1936,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2069,11 +2081,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2132,11 +2145,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2198,11 +2212,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2264,11 +2279,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2408,11 +2424,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2471,11 +2488,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2537,11 +2555,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2603,11 +2622,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2747,11 +2767,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2810,11 +2831,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2876,11 +2898,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -2942,11 +2965,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -3086,11 +3110,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -3149,11 +3174,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -3215,11 +3241,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -3281,11 +3308,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 							supports_grouping=False,
 							standard=False,
 							default_check=False,
-							default_severity=RuleSeverityLevel.ERROR,
+							default_severity=DefaultRuleSeverityLevel.ERROR,
 							disabled=False,
 							exclude_from_kpi=False,
 							include_in_sla=False,
 							configured=False,
+							always_collect_error_samples=False,
 							can_edit=False,
 							can_run_checks=False,
 							can_delete_data=False
@@ -3391,7 +3419,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -3450,7 +3479,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -3512,7 +3542,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -3574,7 +3605,8 @@ http://localhost:8888/api/default/checks/column/{patternName}
 							error=MaxCountRule0ErrorParametersSpec(max_count=0),
 							disabled=False,
 							exclude_from_kpi=False,
-							include_in_sla=False
+							include_in_sla=False,
+							always_collect_error_samples=False
 						)
 					),
 					comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
@@ -3852,9 +3884,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -3878,11 +3910,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3914,9 +3947,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -3940,11 +3973,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -3976,9 +4010,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4005,11 +4039,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4041,9 +4076,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4070,11 +4105,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4157,9 +4193,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4183,11 +4219,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4219,9 +4256,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4245,11 +4282,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4281,9 +4319,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4310,11 +4348,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4346,9 +4385,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 	from dqops.client.api.default_column_check_patterns import update_default_monitoring_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4375,11 +4414,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/monitoring/monthly
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4462,9 +4502,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4488,11 +4528,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4524,9 +4565,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4550,11 +4591,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4586,9 +4628,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4615,11 +4657,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4651,9 +4694,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_daily_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4680,11 +4723,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/daily
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4767,9 +4811,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4793,11 +4837,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4829,9 +4874,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4855,11 +4900,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4891,9 +4937,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4920,11 +4966,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -4956,9 +5003,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 	from dqops.client.api.default_column_check_patterns import update_default_partitioned_monthly_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4985,11 +5032,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/partitioned/monthl
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -5072,9 +5120,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.api.default_column_check_patterns import update_default_profiling_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5098,11 +5146,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -5134,9 +5183,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.api.default_column_check_patterns import update_default_profiling_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5160,11 +5209,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -5196,9 +5246,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.api.default_column_check_patterns import update_default_profiling_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5225,11 +5275,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
@@ -5261,9 +5312,9 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 	from dqops.client.api.default_column_check_patterns import update_default_profiling_column_checks_pattern
 	from dqops.client.models import CheckContainerModel, \
 	                                CheckModel, \
+	                                DefaultRuleSeverityLevel, \
 	                                FieldModel, \
-	                                QualityCategoryModel, \
-	                                RuleSeverityLevel
+	                                QualityCategoryModel
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5290,11 +5341,12 @@ http://localhost:8888/api/default/checks/column/{patternName}/profiling
 						supports_grouping=False,
 						standard=False,
 						default_check=False,
-						default_severity=RuleSeverityLevel.ERROR,
+						default_severity=DefaultRuleSeverityLevel.ERROR,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
 						configured=False,
+						always_collect_error_samples=False,
 						can_edit=False,
 						can_run_checks=False,
 						can_delete_data=False
