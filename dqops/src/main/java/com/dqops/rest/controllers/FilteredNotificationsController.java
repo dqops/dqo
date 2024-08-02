@@ -539,14 +539,18 @@ public class FilteredNotificationsController {
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         ConnectionIncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
-        if(incidentGrouping == null){
+        if (incidentGrouping == null) {
             return null;
         }
         IncidentNotificationSpec incidentNotification = incidentGrouping.getIncidentNotification();
-        if(incidentNotification == null){
+        if (incidentNotification == null) {
             incidentNotification = new IncidentNotificationSpec();
+            incidentGrouping.setIncidentNotification(incidentNotification);
         }
         FilteredNotificationSpecMap filteredNotificationMap = incidentNotification.getFilteredNotifications();
+        if (filteredNotificationMap == null) {
+            incidentNotification.setFilteredNotifications(new FilteredNotificationSpecMap());
+        }
         return filteredNotificationMap;
     }
 
