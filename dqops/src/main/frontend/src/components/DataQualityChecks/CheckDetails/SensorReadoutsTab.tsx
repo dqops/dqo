@@ -4,7 +4,7 @@ import { SensorReadoutsListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { CheckTypes } from '../../../shared/routes';
 import { getLocalDateInUserTimeZone, useDecodedParams } from '../../../utils';
-import Select from '../../Select';
+import SelectTailwind from '../../Select/SelectTailwind';
 import { Table } from '../../Table';
 
 interface SensorReadoutsTabProps {
@@ -103,8 +103,8 @@ const SensorReadoutsTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
-            value={ dataGroup || sensorReadouts[0]?.dataGroup}
+          <SelectTailwind
+            value={dataGroup || sensorReadouts[0]?.dataGroup}
             options={
               (sensorReadouts[0]?.dataGroupNames || []).map((item) => ({
                 label: item,
@@ -116,7 +116,7 @@ const SensorReadoutsTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
@@ -131,10 +131,14 @@ const SensorReadoutsTab = ({
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.sensorReadoutEntries?.map((item) => ({
-              ...item,
-              executedAt: moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')
-            })) || []}
+            data={
+              result.sensorReadoutEntries?.map((item) => ({
+                ...item,
+                executedAt: moment(
+                  getLocalDateInUserTimeZone(new Date(String(item.executedAt)))
+                ).format('YYYY-MM-DD HH:mm:ss')
+              })) || []
+            }
           />
         </div>
       ))}

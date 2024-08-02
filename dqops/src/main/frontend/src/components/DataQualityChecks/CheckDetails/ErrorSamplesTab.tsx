@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { ErrorSamplesListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
-import Select from '../../Select';
 import { Table } from '../../Table';
+import SelectTailwind from '../../Select/SelectTailwind';
 
 interface ErrorSamplesTabProps {
   errorSamples: ErrorSamplesListModel[];
@@ -92,7 +92,7 @@ const ErrorSamplesTab = ({
       <div className="flex space-x-8 items-center">
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Data group (time series)</div>
-          <Select
+          <SelectTailwind
             value={dataGroup || errorSamples[0]?.dataGroup}
             options={
               (errorSamples[0]?.dataGroupsNames || []).map((item) => ({
@@ -105,7 +105,7 @@ const ErrorSamplesTab = ({
         </div>
         <div className="flex space-x-4 items-center">
           <div className="text-sm">Month</div>
-          <Select
+          <SelectTailwind
             value={month}
             options={monthOptions}
             onChange={onChangeMonth}
