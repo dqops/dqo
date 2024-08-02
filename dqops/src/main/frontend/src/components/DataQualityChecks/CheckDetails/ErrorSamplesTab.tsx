@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { ErrorSamplesListModel } from '../../../api';
 import { useTree } from '../../../contexts/treeContext';
 import { getLocalDateInUserTimeZone } from '../../../utils';
-import { Table } from '../../Table';
 import SelectTailwind from '../../Select/SelectTailwind';
+import { Table } from '../../Table';
 
 interface ErrorSamplesTabProps {
   errorSamples: ErrorSamplesListModel[];
@@ -17,9 +17,9 @@ const getRowIds = () => {
   const idColumns = [];
   for (let i = 1; i <= 5; i++) {
     idColumns.push({
-      label: `ID ${i}`,
+      label: `ID Column ${i}`,
       value: `rowId${i}`,
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50 text-right'
     });
   }
   return idColumns;
@@ -36,9 +36,15 @@ const ErrorSamplesTab = ({
 
   const columns = [
     {
-      label: 'Sample index',
+      header: () => (
+        <span>
+          Sample
+          <br />
+          index
+        </span>
+      ),
       value: 'sampleIndex',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30'
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-30 text-right'
     },
     {
       label: 'Collected at',
@@ -47,21 +53,22 @@ const ErrorSamplesTab = ({
     },
 
     {
-      label: 'Result',
-      value: 'result',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
-    },
-    {
-      label: 'Result data type',
+      header: () => (
+        <span>
+          Result
+          <br />
+          data type
+        </span>
+      ),
       value: 'resultDataType',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
     },
-    ...getRowIds(),
     {
-      label: 'Data grouping',
-      value: 'dataGroup',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50'
+      label: 'Result',
+      value: 'result',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50 text-right'
     },
+    ...getRowIds(),
     {
       label: 'Id',
       value: 'id',
@@ -100,6 +107,7 @@ const ErrorSamplesTab = ({
                 value: item
               })) || []
             }
+            disabled={true}
             onChange={onChangeDataGroup}
           />
         </div>
